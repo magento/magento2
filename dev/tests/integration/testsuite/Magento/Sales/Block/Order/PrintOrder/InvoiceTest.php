@@ -14,9 +14,9 @@ use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
-use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
@@ -52,6 +52,9 @@ class InvoiceTest extends TestCase
     /** @var CountryFactory */
     private $countryFactory;
 
+    /** @var OrderPaymentInterfaceFactory */
+    private $orderPaymentFactory;
+
     /**
      * @inheritdoc
      */
@@ -66,6 +69,7 @@ class InvoiceTest extends TestCase
         $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->countryFactory = $this->objectManager->get(CountryFactory::class);
+        $this->orderPaymentFactory = $this->objectManager->create(OrderPaymentInterfaceFactory::class);
     }
 
     /**
@@ -88,7 +92,7 @@ class InvoiceTest extends TestCase
     {
         $order = $this->orderFactory->create();
         $this->registerOrder($order);
-        $payment = $this->objectManager->get(OrderPaymentInterfaceFactory::class)->create();
+        $payment = $this->orderPaymentFactory->create();
         $payment->setMethod('checkmo');
         $order->setPayment($payment);
         $block = $this->layout->createBlock(Invoice::class, 'block');
@@ -121,11 +125,11 @@ class InvoiceTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Invoice #') . (int)$invoice->getIncrementId()
+                    __('Invoice #%1', (int)$invoice->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Invoice #') . (int)$invoice->getIncrementId())
+            sprintf('Title for %s was not found.', __('Invoice #%1', (int)$invoice->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
@@ -135,28 +139,29 @@ class InvoiceTest extends TestCase
      *
      * @return void
      */
-    public function testOrderStatus(): void
+    public function testOrderInformation(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Invoice::class)->setTemplate('Magento_Sales::order/order_status.phtml');
-        $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
-     *
-     * @return void
-     */
-    public function testOrderDate(): void
-    {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
-        $this->registerOrder($order);
-        $block = $this->layout->createBlock(Invoice::class)->setTemplate('Magento_Sales::order/order_date.phtml');
-        $this->assertContains(
-            (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
-            strip_tags($block->toHtml())
-        );
+        $block = $this->layout->createBlock(Invoice::class);
+        $orderDate = $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG);
+        $templates = [
+            'Order status' => [
+                'template' => 'Magento_Sales::order/order_status.phtml',
+                'expected_data' => (string)__($order->getStatusLabel()),
+            ],
+            'Order date' => [
+                'template' => 'Magento_Sales::order/order_date.phtml',
+                'expected_data' => (string)__('Order Date: %1', $orderDate),
+            ],
+        ];
+        foreach ($templates as $key => $data) {
+            $this->assertContains(
+                $data['expected_data'],
+                strip_tags($block->setTemplate($data['template'])->toHtml()),
+                sprintf('%s wasn\'t found.', $key)
+            );
+        }
     }
 
     /**
@@ -171,11 +176,11 @@ class InvoiceTest extends TestCase
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                "//div[contains(@class, 'block-order-details-view')]/div[contains(@class, 'block-title')]"
-                . "/strong[contains(text(), '" . __('Order Information') . "')]",
+                "//div[contains(@class, 'block-order-details-view')]"
+                . "//strong[contains(text(), '" . __('Order Information') . "')]",
                 $html
             ),
-            __('Order Information') . 'title wasn\'t found.'
+            __('Order Information') . ' title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
             $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
@@ -258,6 +263,7 @@ class InvoiceTest extends TestCase
         ]);
         $page->getLayout()->generateXml();
         $printInvoiceBlock = $page->getLayout()->getBlock('sales.order.print.invoice');
+        $this->assertNotFalse($printInvoiceBlock);
 
         return $printInvoiceBlock->toHtml();
     }

@@ -91,11 +91,11 @@ class ShipmentTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Shipment #') . $shipment->getIncrementId()
+                    __('Shipment #%1', $shipment->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Shipment #') . $shipment->getIncrementId())
+            sprintf('Title for %s was not found.', __('Shipment #%1', $shipment->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
@@ -105,28 +105,29 @@ class ShipmentTest extends TestCase
      *
      * @return void
      */
-    public function testOrderStatus(): void
+    public function testOrderInformation(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Shipment::class)->setTemplate('Magento_Sales::order/order_status.phtml');
-        $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/shipment_for_order_with_customer.php
-     *
-     * @return void
-     */
-    public function testOrderDate(): void
-    {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
-        $this->registerOrder($order);
-        $block = $this->layout->createBlock(Shipment::class)->setTemplate('Magento_Sales::order/order_date.phtml');
-        $this->assertContains(
-            (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
-            strip_tags($block->toHtml())
-        );
+        $block = $this->layout->createBlock(Shipment::class);
+        $orderDate = $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG);
+        $templates = [
+            'Order status' => [
+                'template' => 'Magento_Sales::order/order_status.phtml',
+                'expected_data' => (string)__($order->getStatusLabel()),
+            ],
+            'Order date' => [
+                'template' => 'Magento_Sales::order/order_date.phtml',
+                'expected_data' => (string)__('Order Date: %1', $orderDate),
+            ],
+        ];
+        foreach ($templates as $key => $data) {
+            $this->assertContains(
+                $data['expected_data'],
+                strip_tags($block->setTemplate($data['template'])->toHtml()),
+                sprintf('%s wasn\'t found.', $key)
+            );
+        }
     }
 
     /**
@@ -141,11 +142,11 @@ class ShipmentTest extends TestCase
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                "//div[contains(@class, 'block-order-details-view')]/div[contains(@class, 'block-title')]"
-                . "/strong[contains(text(), '" . __('Order Information') . "')]",
+                "//div[contains(@class, 'block-order-details-view')]"
+                . "//strong[contains(text(), '" . __('Order Information') . "')]",
                 $html
             ),
-            __('Order Information') . 'title wasn\'t found.'
+            __('Order Information') . ' title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
             $addressBoxXpath = ($address->getAddressType() == 'shipping')
@@ -229,6 +230,7 @@ class ShipmentTest extends TestCase
         ]);
         $page->getLayout()->generateXml();
         $printShipmentBlock = $page->getLayout()->getBlock('sales.order.print.shipment');
+        $this->assertNotFalse($printShipmentBlock);
 
         return $printShipmentBlock->toHtml();
     }

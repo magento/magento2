@@ -124,8 +124,9 @@ class DefaultRendererTest extends TestCase
         $this->registerOrder($order);
         $item = $order->getItemsCollection()->getFirstItem();
         $this->assertNotNull($item->getId());
-        $blockHtml = $this->renderBlock('sales_order_print', 'sales.order.print.renderers.default')
-            ->setItem($item)->toHtml();
+        $block = $this->getBlock('sales_order_print', 'sales.order.print.renderers.default');
+        $this->assertNotFalse($block);
+        $blockHtml = $block->setItem($item)->toHtml();
         $fieldsToCheck = [
             'name' => "//td[contains(@class, 'name')]/strong[contains(text(), '%s')]",
             'sku' => "//td[contains(@class, 'sku') and contains(text(), '%s')]",
@@ -156,8 +157,9 @@ class DefaultRendererTest extends TestCase
         $this->assertNotNull($invoice->getId());
         $item = $invoice->getItemsCollection()->getFirstItem();
         $this->assertNotNull($item->getId());
-        $blockHtml = $this->renderBlock('sales_order_printinvoice', 'sales.order.print.invoice.renderers.default')
-            ->setItem($item)->toHtml();
+        $block = $this->getBlock('sales_order_printinvoice', 'sales.order.print.invoice.renderers.default');
+        $this->assertNotFalse($block);
+        $blockHtml = $block->setItem($item)->toHtml();
         $additionalFields = [
             'price' => "//td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
             'qty' => "//td[contains(@class, 'qty')]/span[contains(text(), '%d')]",
@@ -186,12 +188,13 @@ class DefaultRendererTest extends TestCase
         $this->assertNotNull($shipment->getId());
         $item = $shipment->getAllItems()[0] ?? null;
         $this->assertNotNull($item);
-        $html = $this->renderBlock('sales_order_printshipment', 'sales.order.print.shipment.renderers.default')
-            ->setItem($item)->toHtml();
+        $block = $this->getBlock('sales_order_printshipment', 'sales.order.print.shipment.renderers.default');
+        $this->assertNotFalse($block);
+        $blockHtml = $block->setItem($item)->toHtml();
         foreach ($this->defaultFieldsToCheck as $key => $xpath) {
             $this->assertEquals(
                 1,
-                Xpath::getElementsCountForXpath(sprintf($xpath, $item->getData($key)), $html),
+                Xpath::getElementsCountForXpath(sprintf($xpath, $item->getData($key)), $blockHtml),
                 sprintf('Item %s wasn\'t found or not equals to %s.', $key, $item->getData($key))
             );
         }
@@ -210,8 +213,9 @@ class DefaultRendererTest extends TestCase
         $this->assertNotNull($creditmemo->getId());
         $item = $creditmemo->getItemsCollection()->getFirstItem();
         $this->assertNotNull($item->getId());
-        $html = $this->renderBlock('sales_order_printcreditmemo', 'sales.order.print.creditmemo.renderers.default')
-            ->setItem($item)->toHtml();
+        $block = $this->getBlock('sales_order_printcreditmemo', 'sales.order.print.creditmemo.renderers.default');
+        $this->assertNotFalse($block);
+        $blockHtml = $block->setItem($item)->toHtml();
         $additionalFields = [
             'price' => "//td[contains(@class, 'price')]//span[contains(text(), '%01.2f')]",
             'row_total' => "//td[contains(@class, 'subtotal')]//span[contains(text(), '%01.2f')]",
@@ -221,7 +225,7 @@ class DefaultRendererTest extends TestCase
         foreach ($this->defaultFieldsToCheck as $key => $xpath) {
             $this->assertEquals(
                 1,
-                Xpath::getElementsCountForXpath(sprintf($xpath, $item->getData($key)), $html),
+                Xpath::getElementsCountForXpath(sprintf($xpath, $item->getData($key)), $blockHtml),
                 sprintf('Item %s wasn\'t found or not equals to %s.', $key, $item->getData($key))
             );
         }
@@ -232,20 +236,20 @@ class DefaultRendererTest extends TestCase
                     "//td[contains(@class, 'total')]/span[contains(text(), '%01.2f')]",
                     $this->block->getTotalAmount($item)
                 ),
-                $html
+                $blockHtml
             ),
             sprintf('Item total wasn\'t found or not equals to %s.', $this->block->getTotalAmount($item))
         );
     }
 
     /**
-     * Render block.
+     * Get block.
      *
      * @param string $handle
      * @param string $blockName
      * @return AbstractBlock
      */
-    private function renderBlock(string $handle, string $blockName): AbstractBlock
+    private function getBlock(string $handle, string $blockName): AbstractBlock
     {
         $page = $this->pageFactory->create();
         $page->addHandle(['default', $handle]);

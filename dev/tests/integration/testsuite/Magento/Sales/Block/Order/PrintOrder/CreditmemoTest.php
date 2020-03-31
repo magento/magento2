@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\CreditmemoInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +52,9 @@ class CreditmemoTest extends TestCase
     /** @var CountryFactory */
     private $countryFactory;
 
+    /** @var OrderPaymentInterfaceFactory */
+    private $orderPaymentFactory;
+
     /**
      * @inheritdoc
      */
@@ -66,6 +69,7 @@ class CreditmemoTest extends TestCase
         $this->creditmemoFactory = $this->objectManager->get(CreditmemoInterfaceFactory::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->countryFactory = $this->objectManager->get(CountryFactory::class);
+        $this->orderPaymentFactory = $this->objectManager->create(OrderPaymentInterfaceFactory::class);
     }
 
     /**
@@ -88,7 +92,7 @@ class CreditmemoTest extends TestCase
     {
         $order = $this->orderFactory->create();
         $this->registerOrder($order);
-        $payment = $this->objectManager->create(Payment::class);
+        $payment = $this->orderPaymentFactory->create();
         $payment->setMethod('checkmo');
         $order->setPayment($payment);
         $block = $this->layout->createBlock(Creditmemo::class, 'block');
@@ -121,11 +125,11 @@ class CreditmemoTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Refund #') . $creditmemo->getIncrementId()
+                    __('Refund #%1', $creditmemo->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Refund #') . $creditmemo->getIncrementId())
+            sprintf('Title for %s was not found.', __('Refund #%1', $creditmemo->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
@@ -135,28 +139,29 @@ class CreditmemoTest extends TestCase
      *
      * @return void
      */
-    public function testOrderStatus(): void
+    public function testOrderInformation(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Creditmemo::class)->setTemplate('Magento_Sales::order/order_status.phtml');
-        $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/refunds_for_items.php
-     *
-     * @return void
-     */
-    public function testOrderDate(): void
-    {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
-        $this->registerOrder($order);
-        $block = $this->layout->createBlock(Creditmemo::class)->setTemplate('Magento_Sales::order/order_date.phtml');
-        $this->assertContains(
-            (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
-            strip_tags($block->toHtml())
-        );
+        $block = $this->layout->createBlock(Creditmemo::class);
+        $orderDate = $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG);
+        $templates = [
+            'Order status' => [
+                'template' => 'Magento_Sales::order/order_status.phtml',
+                'expected_data' => (string)__($order->getStatusLabel()),
+            ],
+            'Order date' => [
+                'template' => 'Magento_Sales::order/order_date.phtml',
+                'expected_data' => (string)__('Order Date: %1', $orderDate),
+            ],
+        ];
+        foreach ($templates as $key => $data) {
+            $this->assertContains(
+                $data['expected_data'],
+                strip_tags($block->setTemplate($data['template'])->toHtml()),
+                sprintf('%s wasn\'t found.', $key)
+            );
+        }
     }
 
     /**
@@ -171,11 +176,11 @@ class CreditmemoTest extends TestCase
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                "//div[contains(@class, 'block-order-details-view')]/div[contains(@class, 'block-title')]"
-                . "/strong[contains(text(), '" . __('Order Information') . "')]",
+                "//div[contains(@class, 'block-order-details-view')]"
+                . "//strong[contains(text(), '" . __('Order Information') . "')]",
                 $html
             ),
-            __('Order Information') . 'title wasn\'t found.'
+            __('Order Information') . ' title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
             $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
@@ -258,6 +263,7 @@ class CreditmemoTest extends TestCase
         ]);
         $page->getLayout()->generateXml();
         $printCreditmemoBlock = $page->getLayout()->getBlock('sales.order.print.creditmemo');
+        $this->assertNotFalse($printCreditmemoBlock);
 
         return $printCreditmemoBlock->toHtml();
     }

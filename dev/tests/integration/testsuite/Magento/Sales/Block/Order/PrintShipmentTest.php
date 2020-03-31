@@ -54,30 +54,29 @@ class PrintShipmentTest extends TestCase
      *
      * @return void
      */
-    public function testOrderStatus(): void
+    public function testOrderInformation(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(PrintShipment::class)
-            ->setTemplate('Magento_Sales::order/order_status.phtml');
-        $this->assertContains((string)__($order->getStatusLabel()), strip_tags($block->toHtml()));
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/shipment_for_order_with_customer.php
-     *
-     * @return void
-     */
-    public function testOrderDate(): void
-    {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
-        $this->registerOrder($order);
-        $block = $this->layout->createBlock(PrintShipment::class)
-            ->setTemplate('Magento_Sales::order/order_date.phtml');
-        $this->assertContains(
-            (string)__('Order Date: %1', $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG)),
-            strip_tags($block->toHtml())
-        );
+        $block = $this->layout->createBlock(PrintShipment::class);
+        $orderDate = $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG);
+        $templates = [
+            'Order status' => [
+                'template' => 'Magento_Sales::order/order_status.phtml',
+                'expected_data' => (string)__($order->getStatusLabel()),
+            ],
+            'Order date' => [
+                'template' => 'Magento_Sales::order/order_date.phtml',
+                'expected_data' => (string)__('Order Date: %1', $orderDate),
+            ],
+        ];
+        foreach ($templates as $key => $data) {
+            $this->assertContains(
+                $data['expected_data'],
+                strip_tags($block->setTemplate($data['template'])->toHtml()),
+                sprintf('%s wasn\'t found.', $key)
+            );
+        }
     }
 
     /**
