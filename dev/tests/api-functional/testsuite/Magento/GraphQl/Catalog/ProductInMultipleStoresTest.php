@@ -8,10 +8,13 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class ProductInMultipleStoresTest
+ * Class for ProductInMultipleStoresTest
+ *
+ * @magentoAppIsolation enabled
  */
 class ProductInMultipleStoresTest extends GraphQlAbstract
 {
@@ -74,6 +77,13 @@ QUERY;
             'Product name in fixture store is invalid.'
         );
 
+        // use case for invalid storeCode
+        $nonExistingStoreCode = "non_existent_store";
+        $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('Requested store is not found');
+        $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
+
         //use case for default storeCode
         $nameInDefaultStore = 'Simple Product';
         $headerMapDefault = ['Store' => 'default'];
@@ -92,12 +102,5 @@ QUERY;
             $response['products']['items'][0]['name'],
             'Product in the default store should be returned'
         );
-
-        // use case for invalid storeCode
-        $nonExistingStoreCode = "non_existent_store";
-        $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Requested store is not found');
-        $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
     }
 }
