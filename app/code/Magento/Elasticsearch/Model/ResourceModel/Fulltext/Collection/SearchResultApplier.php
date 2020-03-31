@@ -70,12 +70,11 @@ class SearchResultApplier implements SearchResultApplierInterface
             $ids[] = (int)$item->getId();
         }
         $this->collection->getSelect()
-            ->where('e.entity_id IN (?)', $ids);
-        $this->collection->getSelect()
+            ->where('e.entity_id IN (?)', $ids)
             ->reset(\Magento\Framework\DB\Select::ORDER);
         $sortOrder = $this->searchResult->getSearchCriteria()
             ->getSortOrders();
-        if (is_array($sortOrder) && array_key_exists('price', $sortOrder)) {
+        if (!empty($sortOrder['price']) && $this->collection->getLimitationFilters()->isUsingPriceIndex()) {
             $sortDirection = $sortOrder['price'];
             $this->collection->getSelect()
                 ->order(
