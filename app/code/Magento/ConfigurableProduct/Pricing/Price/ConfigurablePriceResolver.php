@@ -67,6 +67,52 @@ class ConfigurablePriceResolver implements PriceResolverInterface
             $price = isset($price) ? min($price, $productPrice) : $productPrice;
         }
 
+        if ($this->hasTierPrice($product)) {
+            $tierPrice = $this->getMinimalTierPrice($product);
+            $price = isset($price) ? min($price, $tierPrice) : $price;
+        }
+
         return (float)$price;
+    }
+
+    /**
+     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    private function hasTierPrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    {
+        foreach ($product->getTypeInstance()->getUsedProducts($product) as $subProduct) {
+            $tierPriceList = $subProduct->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)->getTierPriceList();
+            if (!empty($tierPriceList)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * @return float
+     */
+    private function getMinimalTierPrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    {
+        $tierPrices = [];
+        foreach ($product->getTypeInstance()->getUsedProducts($product) as $subProduct) {
+            $tierPriceList = $subProduct->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)->getTierPriceList();
+            if (!empty($tierPriceList)) {
+                foreach ($tierPriceList as $tierPriceItem) {
+                    /** @var Magento\Framework\Pricing\Amount\AmountInterface $price */
+                    $tierPrice = $tierPriceItem['price'];
+                    $tierPrices[] = $tierPrice->getValue();
+                }
+            }
+        }
+
+        if (!empty($tierPrices)) {
+            return min($tierPrices);
+        }
+
+        return (float) 0;
     }
 }
