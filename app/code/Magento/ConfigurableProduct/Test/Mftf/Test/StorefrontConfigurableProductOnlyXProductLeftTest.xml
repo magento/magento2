@@ -17,77 +17,26 @@
             <severity value="AVERAGE"/>
             <group value="ConfigurableProduct"/>
         </annotations>
-
         <before>
-            <!--Set Stock Threshold Qty -->
-            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 2020 " stepKey="setStockThresholdQty"/>
-            <!--Create Default Category -->
+            <magentoCLI command="config:set cataloginventory/options/stock_threshold_qty 10000" stepKey="setStockThresholdQty"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <!-- Create an attribute with two options to be used in the first child product -->
-            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
-            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-            </createData>
-            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-            </createData>
-            <!-- Add the attribute just created to default attribute set -->
-            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-            </createData>
-            <!-- Get the first option of the attribute created -->
-            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-            </getData>
-            <!-- Get the second option of the attribute created -->
-            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-            </getData>
-            <!-- Create Configurable product -->
-            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <!-- Create a simple product and give it the attribute with the first option -->
-            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-            </createData>
-            <!--Create a simple product and give it the attribute with the second option -->
-            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption2"/>
-            </createData>
-            <!-- Create the configurable product -->
-            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
-                <requiredEntity createDataKey="createConfigProduct"/>
-                <requiredEntity createDataKey="createConfigProductAttribute"/>
-                <requiredEntity createDataKey="getConfigAttributeOption1"/>
-                <requiredEntity createDataKey="getConfigAttributeOption2"/>
-            </createData>
-            <!-- Add the first simple product to the configurable product -->
-            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
-                <requiredEntity createDataKey="createConfigProduct"/>
-                <requiredEntity createDataKey="createConfigChildProduct1"/>
-            </createData>
-            <!-- Add the second simple product to the configurable product -->
-            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
-                <requiredEntity createDataKey="createConfigProduct"/>
-                <requiredEntity createDataKey="createConfigChildProduct2"/>
-            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
         </before>
         <after>
-            <!--Delete Created Data-->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
-
-        <!--Open Product on Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <!--Check Visible Only X Product Left on Front Page -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.onlyXProductsLeft}}" stepKey="seeBlockLeftXProductOnly"/>
-        <click selector="{{StorefrontProductInfoMainSection.onlyXProductsLeft}}" stepKey="clickBlockLeftXProductOnly"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.onlyXProductsLeftDetailed}}" stepKey="seeBlockLeftXProductOnlyDetailed"/>
     </test>
 </tests>
