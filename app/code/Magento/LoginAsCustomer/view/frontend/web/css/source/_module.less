@@ -12,8 +12,11 @@
 
         .lac-notification-icon {
             float:left;
-            margin-right: 25px;
-            padding-top: 5px;
+            margin: 10px 25px 10px 10px;
+
+            .logo-img {
+                display: block
+            }
         }
 
         .lac-notification-text {
@@ -24,25 +27,20 @@
         .lac-notification-links {
             float: right;
             padding: 15px 0;
-            a {color:#fff}
+            a {
+                color:#fff;
+                font-size: 14px;
+            }
 
             .lac-notification-close-link {
                 &:after {
-                    -webkit-font-smoothing: antialiased;
-                    -moz-osx-font-smoothing: grayscale;
-                    font-size: 14px;
-                    line-height: 24px;
-                    color: #fff;
-                    content: '\e616';
-                    font-family: 'luma-icons';
-                    margin: 0;
-                    vertical-align: top;
+                    content: ' ';
+                    vertical-align: middle;
                     display: inline-block;
-                    font-weight: normal;
-                    overflow: hidden;
-                    speak: none;
-                    text-align: center;
-                    padding-left: 5px;
+                    background: url('../Magento_LoginAsCustomer/images/close.svg');
+                    height: 12px;
+                    width: 12px;
+                    margin-left: 5px;
                 }
             }
         }
