@@ -33,6 +33,7 @@ class RedisTest extends \PHPUnit\Framework\TestCase
         $clientMock = $this->createMock(\Credis_Client::class);
         $this->clientMock = $clientMock;
         \Closure::bind(function () use ($clientMock) {
+            // phpstan:ignore "Access to protected property"
             $this->_redis = $clientMock;
         }, $this->model, get_class($this->model))->__invoke();
     }
