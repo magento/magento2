@@ -5,51 +5,60 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
-class SecurityTest extends \PHPUnit\Framework\TestCase
+use Magento\AdminNotification\Model\System\Message\Security;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\Adapter\Curl;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SecurityTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_curlFactoryMock;
 
     /**
-     * @var \Magento\AdminNotification\Model\System\Message\Security
+     * @var Security
      */
     protected $_messageModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->_cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_cacheMock = $this->createMock(CacheInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_curlFactoryMock = $this->createPartialMock(
-            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
+            CurlFactory::class,
             ['create']
         );
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $arguments = [
             'cache' => $this->_cacheMock,
             'scopeConfig' => $this->_scopeConfigMock,
             'curlFactory' => $this->_curlFactoryMock,
         ];
         $this->_messageModel = $objectManagerHelper->getObject(
-            \Magento\AdminNotification\Model\System\Message\Security::class,
+            Security::class,
             $arguments
         );
     }
@@ -67,7 +76,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
 
-        $httpAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
+        $httpAdapterMock = $this->createMock(Curl::class);
         $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
         $this->_curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
 
