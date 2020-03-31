@@ -339,6 +339,7 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
+//        $script[] = ['Installing core configuration...', 'installCoreConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
@@ -1104,6 +1105,10 @@ class Installer
             $configModel->setDataByPath($key, $val);
             $configModel->save();
         }
+
+        /** @var SearchConfig $searchConfig */
+        $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
+        $searchConfig->saveConfiguration($data);
     }
 
     /**
