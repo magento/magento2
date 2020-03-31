@@ -33,6 +33,7 @@ class Navigation extends AbstractActionController
      * @var ViewModel
      */
     protected $view;
+
     /**
      * @var ObjectManagerInterface
      */
