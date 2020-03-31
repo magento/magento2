@@ -48,7 +48,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block
                 'strong' => true,
                 'value' => $this->getSource()->getTotalDue(),
                 'base_value' => $this->getSource()->getBaseTotalDue(),
-                'label' => __('Total Due'),
+                'label' => $this->getSource()->getTotalDueCancelLabel(),
                 'area' => 'footer',
             ]
         );
