@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CategoryProductUrlPathGeneratorTest
+ * Class test generate product url path
  */
 class CategoryProductUrlPathGeneratorTest extends TestCase
 {

@@ -10,9 +10,7 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Class ProductUrlRewriteGenerator
- *
- * @package Magento\CatalogUrlRewrite\Model
+ * Class to generate product url path
  */
 class CategoryProductUrlPathGenerator
 {
