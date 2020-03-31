@@ -55,7 +55,7 @@ $ordersData = [
         'base_grand_total' => 140.00,
         'grand_total' => 140.00,
         'subtotal' => 140.00,
-        'created_at' => $dateTime->modify('-1 month')->format(DateTime::DATETIME_PHP_FORMAT),
+        'created_at' => $dateTime->modify('first day of -1 month')->format(DateTime::DATETIME_PHP_FORMAT),
     ],
     [
         'increment_id' => '100000005',
