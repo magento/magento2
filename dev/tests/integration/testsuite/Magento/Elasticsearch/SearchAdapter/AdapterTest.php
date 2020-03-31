@@ -5,6 +5,9 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+
 /**
  * Class AdapterTest
  *
@@ -17,6 +20,7 @@ namespace Magento\Elasticsearch\SearchAdapter;
  *
  * In ElasticSearch, a reindex is required if the test includes a new data fixture with new items to search, see
  * testAdvancedSearchDateField().
+ * phpstan:ignore
  *
  */
 class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
@@ -24,7 +28,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @var string
      */
-    protected $searchEngine = 'elasticsearch6';
+    protected $searchEngine;
 
     /**
      * Get request config path
@@ -41,13 +45,22 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     protected function createAdapter()
     {
-        return $this->objectManager->create(\Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter::class);
+        return $this->objectManager->create(\Magento\Search\Model\AdapterFactory::class)->create();
+    }
+
+    /**
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions()
+    {
+        $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
     }
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testMatchQuery()
     {
@@ -56,7 +69,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testMatchOrderedQuery()
@@ -68,7 +80,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testAggregationsQuery()
@@ -78,8 +89,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testMatchQueryFilters()
     {
@@ -90,8 +101,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithAllFields()
     {
@@ -102,8 +113,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithoutFromField()
     {
@@ -114,8 +125,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithoutToField()
     {
@@ -126,8 +137,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testTermFilter()
     {
@@ -138,8 +149,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testTermFilterArray()
     {
@@ -150,8 +161,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testWildcardFilter()
     {
@@ -162,8 +173,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Request limits test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testSearchLimit()
     {
@@ -174,8 +185,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Bool filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilter()
     {
@@ -186,8 +197,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Test bool filter with nested negative bool filter
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilterWithNestedNegativeBoolFilter()
     {
@@ -198,8 +209,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * Test range inside nested negative bool filter
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilterWithNestedRangeInNegativeBoolFilter()
     {
@@ -211,12 +222,12 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      *
      * @dataProvider elasticSearchAdvancedSearchDataProvider
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @param string $nameQuery
      * @param string $descriptionQuery
      * @param array $rangeFilter
      * @param int $expectedRecordsCount
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -257,7 +268,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testCustomFilterableAttribute()
@@ -272,7 +282,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @dataProvider filterByAttributeValuesDataProvider
      * @param string $requestName
@@ -292,7 +301,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @param $rangeFilter
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @magentoAppIsolation enabled
      * @dataProvider dateDataProvider
@@ -307,8 +315,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
@@ -318,7 +326,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
@@ -331,7 +338,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testSearchQueryBoost()
@@ -380,5 +386,20 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
         ];
 
         return $variations;
+    }
+
+    /**
+     * Returns installed on server search service
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine()
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = $this->objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = 'elasticsearch' . $version;
+        }
+        return $this->searchEngine;
     }
 }

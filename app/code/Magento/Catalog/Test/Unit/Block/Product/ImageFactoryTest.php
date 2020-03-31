@@ -145,7 +145,7 @@ class ImageFactoryTest extends \PHPUnit\Framework\TestCase
                     'height' => 100,
                     'label' => 'test_image_label',
                     'ratio' => 1,
-                    'custom_attributes' => '',
+                    'custom_attributes' => [],
                     'product_id' => null,
                     'class' => 'product-image-photo'
                 ],
@@ -203,7 +203,10 @@ class ImageFactoryTest extends \PHPUnit\Framework\TestCase
                     'height' => 50,
                     'label' => 'test_product_name',
                     'ratio' => 0.5, // <==
-                    'custom_attributes' => 'name_1="value_1" name_2="value_2"',
+                    'custom_attributes' => [
+                        'name_1' => 'value_1',
+                        'name_2' => 'value_2',
+                    ],
                     'product_id' => null,
                     'class' => 'my-class'
                 ],
