@@ -10,6 +10,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Abstract controller for notifying.
+ */
 abstract class Add extends Action
 {
     /**
