@@ -278,8 +278,8 @@ QUERY;
         //Check base category products
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -294,8 +294,8 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $firstChildCategory['description']);
 
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
