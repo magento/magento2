@@ -12,7 +12,7 @@ define([
             template: 'ui/grid/sortBy',
             options: [],
             applied: {},
-            sorting: 'desc',
+            sorting: 'asc',
             columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             selectedOption: '',
             isVisible: true,
