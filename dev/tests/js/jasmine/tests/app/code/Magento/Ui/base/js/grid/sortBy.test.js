@@ -70,7 +70,7 @@ define([
             it('return applied options for sorting column', function () {
                 var applied = {
                     field: 'selectedOption',
-                    direction: 'desc'
+                    direction: 'asc'
                 };
 
                 spyOn(sortByObj, 'selectedOption').and.returnValue('selectedOption');
