@@ -243,4 +243,25 @@
         </arguments>
     </type>
     <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
+    <type name="Magento\Cms\Observer\MediaContent\Block">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Observer\MediaContent\Page">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface">
+        <arguments>
+            <argument name="searchPatterns" xsi:type="array">
+                <item name="media_gallery" xsi:type="string">/{{media url="?(.*?)"?}}/</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

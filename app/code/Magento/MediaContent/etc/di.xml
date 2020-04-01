@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaContentApi\Api\AssignAssetInterface" type="Magento\MediaContent\Model\AssignAsset"/>
+    <preference for="Magento\MediaContentApi\Api\UnassignAssetInterface" type="Magento\MediaContent\Model\UnassignAsset"/>
+    <preference for="Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetsUsedInContent"/>
+    <preference for="Magento\MediaContentApi\Api\GetContentWithAssetInterface" type="Magento\MediaContent\Model\GetContentWithAsset"/>
+    <preference for="Magento\MediaContentApi\Api\ModelProcessorInterface" type="Magento\MediaContent\Model\ModelProcessor"/>
+    <preference for="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetFromContent"/>
+</config>

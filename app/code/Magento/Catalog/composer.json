@@ -20,6 +20,7 @@
         "magento/module-directory": "*",
         "magento/module-eav": "*",
         "magento/module-indexer": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-media-storage": "*",
         "magento/module-msrp": "*",
         "magento/module-page-cache": "*",

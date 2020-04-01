@@ -10,6 +10,7 @@
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-email": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",

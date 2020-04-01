@@ -1,0 +1,14 @@
+{
+    "media_content_asset": {
+        "column": {
+            "asset_id": true,
+            "type": true,
+            "entity_id": true,
+            "field": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MEDIA_CONTENT_ASSET_ASSET_ID_MEDIA_GALLERY_ASSET_ID": true
+        }
+    }
+}
