@@ -3,65 +3,81 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 
+use Exception;
+use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
+use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json as ResultJson;
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
+class UpdateItemQtyTest extends TestCase
 {
-    /** @var \Magento\Checkout\Controller\Sidebar\UpdateItemQty */
-    protected $updateItemQty;
+    /**
+     * @var UpdateItemQty
+     */
+    private $action;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
 
-    /** @var \Magento\Checkout\Model\Sidebar|\PHPUnit_Framework_MockObject_MockObject */
-    protected $sidebarMock;
+    /**
+     * @var ResultJsonFactory|MockObject
+     */
+    private $resultJsonFactoryMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $loggerMock;
+    /**
+     * @var Sidebar|MockObject
+     */
+    private $sidebarMock;
 
-    /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $jsonHelperMock;
-
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $requestMock;
-
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $responseMock;
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
 
     protected function setUp()
     {
-        $this->sidebarMock = $this->createMock(\Magento\Checkout\Model\Sidebar::class);
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->responseMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ResponseInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['representJson']
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->resultJsonFactoryMock = $this->createPartialMock(
+            ResultJsonFactory::class,
+            ['create']
         );
+        $this->sidebarMock = $this->createMock(Sidebar::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->updateItemQty = $this->objectManagerHelper->getObject(
-            \Magento\Checkout\Controller\Sidebar\UpdateItemQty::class,
+        $objectManager = new ObjectManager($this);
+        $this->action = $objectManager->getObject(
+            UpdateItemQty::class,
             [
-                'sidebar' => $this->sidebarMock,
-                'logger' => $this->loggerMock,
-                'jsonHelper' => $this->jsonHelperMock,
                 'request' => $this->requestMock,
-                'response' => $this->responseMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'sidebar' => $this->sidebarMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
 
     public function testExecute()
     {
+        $responseData = [
+            'data' => [
+                'summary_qty' => 2,
+                'summary_text' => __(' items'),
+                'subtotal' => 12.34,
+            ],
+        ];
+
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('item_id', null)
@@ -82,39 +98,28 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
             ->with('')
-            ->willReturn(
-                [
-                    'data' => [
-                        'summary_qty' => 2,
-                        'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
-                ]
-            );
+            ->willReturn($responseData);
 
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with(
-                [
-                    'data' => [
-                        'summary_qty' => 2,
-                        'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
-                ]
-            )
-            ->willReturn('json encoded');
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
-
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame($resultJson, $this->action->execute());
     }
 
     public function testExecuteWithLocalizedException()
     {
+        $errorMessage = 'Error!';
+        $responseData = [
+            'success' => false,
+            'error_message' => $errorMessage
+        ];
+
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('item_id', null)
@@ -127,38 +132,33 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
             ->with(1)
-            ->willThrowException(new LocalizedException(__('Error!')));
+            ->willThrowException(new LocalizedException(__($errorMessage)));
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
-            ->with('Error!')
-            ->willReturn(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!',
-                ]
-            );
+            ->with($errorMessage)
+            ->willReturn($responseData);
 
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!',
-                ]
-            )
-            ->willReturn('json encoded');
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
-
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame($resultJson, $this->action->execute());
     }
 
     public function testExecuteWithException()
     {
+        $errorMessage = 'Error!';
+        $responseData = [
+            'success' => false,
+            'error_message' => $errorMessage
+        ];
+
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('item_id', null)
@@ -168,7 +168,7 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
             ->with('item_qty', null)
             ->willReturn('2');
 
-        $exception = new \Exception('Error!');
+        $exception = new Exception($errorMessage);
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -182,29 +182,18 @@ class UpdateItemQtyTest extends \PHPUnit\Framework\TestCase
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
-            ->with('Error!')
-            ->willReturn(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!',
-                ]
-            );
+            ->with($errorMessage)
+            ->willReturn($responseData);
 
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!',
-                ]
-            )
-            ->willReturn('json encoded');
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
-
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertSame($resultJson, $this->action->execute());
     }
 }

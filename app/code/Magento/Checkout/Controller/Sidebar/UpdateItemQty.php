@@ -3,82 +3,80 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Controller\Sidebar;
 
+use Exception;
 use Magento\Checkout\Model\Sidebar;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
-class UpdateItemQty extends Action
+class UpdateItemQty implements HttpPostActionInterface
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ResultJsonFactory
+     */
+    private $resultJsonFactory;
+
     /**
      * @var Sidebar
      */
-    protected $sidebar;
+    private $sidebar;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
-     * @var Data
-     */
-    protected $jsonHelper;
-
-    /**
-     * @param Context $context
+     * @param RequestInterface $request
+     * @param ResultJsonFactory $resultJsonFactory
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
-     * @param Data $jsonHelper
-     * @codeCoverageIgnore
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
+        ResultJsonFactory $resultJsonFactory,
         Sidebar $sidebar,
-        LoggerInterface $logger,
-        Data $jsonHelper
+        LoggerInterface $logger
     ) {
+        $this->request = $request;
         $this->sidebar = $sidebar;
         $this->logger = $logger;
-        $this->jsonHelper = $jsonHelper;
-        parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     public function execute()
     {
-        $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
+        $itemId = (int)$this->request->getParam('item_id');
+        $itemQty = $this->request->getParam('item_qty') * 1;
+        $error = '';
 
         try {
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->updateQuoteItem($itemId, $itemQty);
-            return $this->jsonResponse();
         } catch (LocalizedException $e) {
-            return $this->jsonResponse($e->getMessage());
-        } catch (\Exception $e) {
+            $error = $e->getMessage();
+        } catch (Exception $e) {
             $this->logger->critical($e);
-            return $this->jsonResponse($e->getMessage());
+            $error = $e->getMessage();
         }
-    }
 
-    /**
-     * Compile JSON response
-     *
-     * @param string $error
-     * @return Http
-     */
-    protected function jsonResponse($error = '')
-    {
-        return $this->getResponse()->representJson(
-            $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
-        );
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setData($this->sidebar->getResponseData($error));
+
+        return $resultJson;
     }
 }
