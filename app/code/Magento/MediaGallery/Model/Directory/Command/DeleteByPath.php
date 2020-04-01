@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Delete folder by provided path
+ * Delete directory from media storage by path
  */
 class DeleteByPath implements DeleteByPathInterface
 {
@@ -40,7 +40,7 @@ class DeleteByPath implements DeleteByPathInterface
     }
 
     /**
-     * Deletes the existing folder
+     * Removes directory and corresponding thumbnails directory from media storage if not in blacklist
      *
      * @param string $path
      * @throws CouldNotDeleteException
@@ -51,8 +51,7 @@ class DeleteByPath implements DeleteByPathInterface
             $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('Failed to delete the folder: %error', ['error' => $exception->getMessage()]);
-            throw new CouldNotDeleteException($message, $exception);
+            throw new CouldNotDeleteException(__('Failed to delete the folder'), $exception);
         }
     }
 }

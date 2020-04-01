@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaGalleryApi\Model\Directory\BlacklistInterface" type="Magento\MediaGalleryApi\Model\Directory\Blacklist"/>
+    <type name="Magento\MediaGalleryApi\Model\Directory\Blacklist">
+        <arguments>
+            <argument name="patterns" xsi:type="array">
+                <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
+                <item name="catalog" xsi:type="string">/pub\/media\/catalog\/product/</item>
+                <item name="customer" xsi:type="string">/pub\/media\/customer/</item>
+                <item name="downloadable" xsi:type="string">/pub\/media\/downloadable/</item>
+                <item name="import" xsi:type="string">/pub\/media\/import/</item>
+                <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
+                <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
+                <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

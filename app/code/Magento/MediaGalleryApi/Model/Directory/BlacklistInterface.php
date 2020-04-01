@@ -8,16 +8,16 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\Directory;
 
 /**
- * Directory paths that should not be included in the media gallery
+ * Directory paths that are reserved by system and not be included in the media gallery
  * @api
  */
-interface ExcludedInterface
+interface BlacklistInterface
 {
     /**
-     * Check if the path is excluded from displaying in the media gallery
+     * Check if the path is excluded from displaying and processing in the media gallery
      *
      * @param string $path
      * @return bool
      */
-    public function isExcluded(string $path): bool;
+    public function isBlacklisted(string $path): bool;
 }

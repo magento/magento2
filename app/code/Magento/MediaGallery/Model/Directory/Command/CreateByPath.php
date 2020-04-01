@@ -40,7 +40,7 @@ class CreateByPath implements CreateByPathInterface
     }
 
     /**
-     * Create new directory by provided path
+     * Create new directory by the provided path in the media storage
      *
      * @param string $path
      * @param string $name
@@ -52,8 +52,7 @@ class CreateByPath implements CreateByPathInterface
             $this->storage->createDirectory($name, $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('Failed to create the folder: %error', ['error' => $exception->getMessage()]);
-            throw new CouldNotSaveException($message, $exception);
+            throw new CouldNotSaveException(__('Failed to create the folder'), $exception);
         }
     }
 }

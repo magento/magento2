@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\File\Command;
 
 /**
- * Load Media Asset path from database by id and delete the file
+ * Remove the media asset file from the media storage
  * @api
  */
 interface DeleteByAssetIdInterface
 {
     /**
-     * Delete the file by asset ID
+     * Remove the file of the media asset identified by the passed id from the media storage
      *
      * @param int $assetId
      * @return void

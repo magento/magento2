@@ -5,14 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\Directory;
-
-use Magento\MediaGalleryApi\Model\Directory\ExcludedInterface;
+namespace Magento\MediaGalleryApi\Model\Directory;
 
 /**
- * Directory paths that should not be included in the media gallery
+ * Directories blacklisted for media gallery. This class should be used for DI configuration.
+ *
+ * Please use the interface in the code (for constructor injection) instead of this implementation.
+ *
+ * @api
  */
-class Excluded implements ExcludedInterface
+class Blacklist implements BlacklistInterface
 {
     /**
      * @var array
@@ -29,14 +31,17 @@ class Excluded implements ExcludedInterface
     }
 
     /**
-     * Check if the path is excluded from displaying in the media gallery
+     * Check if the directory path can be used in the media gallery operations
      *
      * @param string $path
      * @return bool
      */
-    public function isExcluded(string $path): bool
+    public function isBlacklisted(string $path): bool
     {
         foreach ($this->patterns as $pattern) {
+            if (empty($pattern)) {
+                continue;
+            }
             preg_match($pattern, $path, $result);
 
             if ($result) {
