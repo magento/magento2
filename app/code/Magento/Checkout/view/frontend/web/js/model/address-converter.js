@@ -64,6 +64,15 @@ define([
                 addressData['custom_attributes'] = _.map(
                     addressData['custom_attributes'],
                     function (value, key) {
+                        
+                        var hasAlreadyBeenMapped = value instanceof Object
+                            && value.hasOwnProperty('attribute_code')
+                            && value.hasOwnProperty('value');
+
+                        if (hasAlreadyBeenMapped) {
+                            return value;
+                        }
+
                         return {
                             'attribute_code': key,
                             'value': value
