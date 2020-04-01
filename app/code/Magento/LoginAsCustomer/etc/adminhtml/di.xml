@@ -9,4 +9,7 @@
     <type name="Magento\Backend\Block\Widget\Button\Toolbar">
         <plugin name="Magento_LoginAsCustomer::toolbar_button" type="Magento\LoginAsCustomer\Plugin\Button\ToolbarPlugin" />
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="lac-admin-order-placement-comment" type="Magento\LoginAsCustomer\Plugin\AdminAddCommentOnOrderPlacementPlugin"/>
+    </type>
 </config>
