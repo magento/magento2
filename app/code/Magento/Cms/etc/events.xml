@@ -39,10 +39,4 @@
     <event name="cms_page_prepare_save">
         <observer name="validate_cms_page" instance="Magento\Cms\Observer\PageValidatorObserver" />
     </event>
-    <event name="cms_page_save_after">
-        <observer name="media_content_cms_page_save_after" instance="\Magento\Cms\Observer\MediaContent\Page" />
-    </event>
-    <event name="cms_block_save_after">
-        <observer name="media_content_cms_block_save_after" instance="\Magento\Cms\Observer\MediaContent\Block" />
-    </event>
 </config>

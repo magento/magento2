@@ -11,18 +11,20 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaContentApi\Api\AssignAssetInterface;
+use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
 use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
 use Magento\MediaContentApi\Api\UnassignAssetInterface;
+use Magento\MediaContentApi\Api\UpdateRelationsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Process relation managing between media asset and content: assign or unassign relation if exists.
  */
-class ContentProcessor
+class UpdateRelations implements UpdateRelationsInterface
 {
     /**
-     * @var ExtractAssetFromContent
+     * @var ExtractAssetFromContentInterface
      */
     private $extractAssetFromContent;
 
@@ -47,16 +49,14 @@ class ContentProcessor
     private $logger;
 
     /**
-     * ContentProcessor constructor.
-     *
-     * @param ExtractAssetFromContent $extractAssetFromContent
+     * @param ExtractAssetFromContentInterface $extractAssetFromContent
      * @param AssignAssetInterface $assignAsset
      * @param GetAssetsUsedInContentInterface $getAssetsUsedInContent
      * @param UnassignAssetInterface $unassignAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ExtractAssetFromContent $extractAssetFromContent,
+        ExtractAssetFromContentInterface $extractAssetFromContent,
         AssignAssetInterface $assignAsset,
         GetAssetsUsedInContentInterface $getAssetsUsedInContent,
         UnassignAssetInterface $unassignAsset,

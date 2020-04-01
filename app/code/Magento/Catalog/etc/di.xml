@@ -1333,27 +1333,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Observer\MediaContent\Category">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="image" xsi:type="string">image</item>
-                <item name="description" xsi:type="string">description</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Observer\MediaContent\Product">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="description" xsi:type="string">description</item>
-                <item name="short_description" xsi:type="string">short_description</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface">
-        <arguments>
-            <argument name="searchPatterns" xsi:type="array">
-                <item name="catalog_image" xsi:type="string">/^\/?media\/(.*)/</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

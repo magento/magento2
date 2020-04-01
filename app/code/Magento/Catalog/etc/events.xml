@@ -67,10 +67,4 @@
     <event name="catalog_category_prepare_save">
         <observer name="additional_authorization" instance="Magento\Catalog\Observer\CategoryDesignAuthorization" />
     </event>
-    <event name="catalog_category_save_after">
-        <observer name="media_content_catalog_category_save_after" instance="Magento\Catalog\Observer\MediaContent\Category" />
-    </event>
-    <event name="catalog_product_save_after">
-        <observer name="media_content_catalog_product_save_after" instance="Magento\Catalog\Observer\MediaContent\Product" />
-    </event>
 </config>

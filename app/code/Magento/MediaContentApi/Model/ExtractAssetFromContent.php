@@ -5,16 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContent\Model;
+namespace Magento\MediaContentApi\Model;
 
+use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Used for extracting media asset list from a media content by the search pattern.
+ *
+ * This class should be used for DI configuration only, please use the interface in the code
+ *
+ * @api
  */
-class ExtractAssetFromContent
+class ExtractAssetFromContent implements ExtractAssetFromContentInterface
 {
     /**
      * @var string
