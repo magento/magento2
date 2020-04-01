@@ -197,6 +197,8 @@
         "magento/module-instant-purchase": "*",
         "magento/module-integration": "*",
         "magento/module-layered-navigation": "*",
+        "magento/module-media-content": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-media-gallery": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-storage": "*",
