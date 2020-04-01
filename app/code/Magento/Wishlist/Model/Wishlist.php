@@ -457,8 +457,10 @@ class Wishlist extends AbstractModel implements IdentityInterface
             throw new LocalizedException(__('Cannot specify product.'));
         }
 
-        if ($this->isInStock($productId)) {
-            throw new LocalizedException(__('Cannot add product without stock to wishlist.'));
+        if ($product->isSaleable()) {
+            if ($this->isInStock($productId)) {
+                throw new LocalizedException(__('Cannot add product without stock to wishlist.'));
+            }
         }
 
         if ($buyRequest instanceof DataObject) {
