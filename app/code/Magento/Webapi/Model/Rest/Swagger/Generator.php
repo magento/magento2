@@ -45,6 +45,11 @@ class Generator extends AbstractSchemaGenerator
     private const XML_SCHEMA_PARAMWRAPPER = 'request';
 
     /**
+     * Node value for collectionFormat option for query parameters
+     */
+    private const XML_SCHEMA_QUERY_COLLECTION_FORMAT_VALUE = 'multi';
+
+    /**
      * Swagger factory instance.
      *
      * @var SwaggerFactory
@@ -399,6 +404,14 @@ class Generator extends AbstractSchemaGenerator
         if (isset($required)) {
             $param['required'] = $required;
         }
+
+        // array types require collectionFormat = multi and '[]' appended to name, in order to properly send
+        // multiple values
+        if (!$this->getSimpleType($type)) {
+            $param['name'] .= '[]';
+            $param['collectionFormat'] = self::XML_SCHEMA_QUERY_COLLECTION_FORMAT_VALUE;
+        }
+
         return $param;
     }
 
