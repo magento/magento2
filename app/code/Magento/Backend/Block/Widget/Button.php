@@ -162,7 +162,8 @@ class Button extends \Magento\Backend\Block\Widget
     {
         parent::_beforeToHtml();
 
-        $this->setData('backend_button_widget_hook_id', $buttonId = 'buttonId' .$this->random->getRandomString(32));
+        $buttonId = 'buttonId' .$this->random->getRandomString(32);
+        $this->setData('backend_button_widget_hook_id', $buttonId);
 
         $afterHtml = $this->getAfterHtml();
         if ($this->getOnClick()) {

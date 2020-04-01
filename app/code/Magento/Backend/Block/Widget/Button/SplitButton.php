@@ -232,17 +232,16 @@ class SplitButton extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Set and return "id" attribute value for an option.
+     * Retrieve "id" attribute value for an option.
      *
      * @param array $option
      * @return string
      */
-    private function identifyOption(array &$option): string
+    private function identifyOption(array $option): string
     {
         $id = isset($option['id'])
             ? $option['id']
             : (isset($option['id_attribute']) ? $option['id_attribute'] : 'optId' .$this->random->getRandomString(32));
-        $option['id_attribute'] = $id;
 
         return $this->getId() .'-' .$id;
     }
@@ -302,7 +301,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
         /** @var array|null $options */
         $options = $this->getOptions() ?? [];
         foreach ($options as &$option) {
-            $id = $this->identifyOption($option);
+            $id = $option['id_attribute'] = $this->identifyOption($option);
             if (!empty($option['onclick'])) {
                 $afterHtml .= $this->secureRenderer->renderEventListenerAsTag('onclick', $option['onclick'], "#$id");
             }

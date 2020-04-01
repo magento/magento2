@@ -200,17 +200,16 @@ class SplitButton extends Button
     }
 
     /**
-     * Set and return "id" attribute value for an option.
+     * Retrieve "id" attribute value for an option.
      *
      * @param array $option
      * @return string
      */
-    private function identifyOption(array &$option): string
+    private function identifyOption(array $option): string
     {
         $id = isset($option['id'])
             ? $option['id']
             : (isset($option['id_attribute']) ? $option['id_attribute'] : 'topId' .$this->random->getRandomString(32));
-        $option['id_attribute'] = $id;
 
         return $this->getId() .'-' .$id;
     }
@@ -280,7 +279,7 @@ class SplitButton extends Button
         /** @var array|null $options */
         $options = $this->getOptions() ?? [];
         foreach ($options as &$option) {
-            $this->identifyOption($option);
+            $option['id_attribute'] = $this->identifyOption($option);
         }
         $this->setOptions($options);
 

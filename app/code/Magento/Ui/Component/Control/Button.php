@@ -111,7 +111,7 @@ class Button extends Template implements ControlInterface
     public function getOnClick()
     {
         if ($this->hasData('on_click')) {
-            return $this->getData('on_click');//No onclick
+            return $this->getData('on_click');
         } else {
             $url = $this->hasData('url') ? $this->getData('url') : $this->getUrl();
             if (!empty($url)) {
