@@ -6,8 +6,12 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaInterface;
+use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Psr\Log\LoggerInterface;
@@ -57,6 +61,21 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
      */
     private $logger;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|AreaList
+     */
+    private $areaListMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|State
+     */
+    private $appStateMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|AreaInterface
+     */
+    private $areaMock;
+
     protected function setUp()
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -70,12 +89,19 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->requestValidator = $this->createMock(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $this->appStateMock  = $this->getMockBuilder(State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->areaListMock = $this->createMock(AreaList::class);
+        $this->areaMock = $this->createMock(AreaInterface::class);
         $this->model = new \Magento\Framework\App\FrontController(
             $this->routerList,
             $this->response,
             $this->requestValidator,
             $this->messages,
-            $this->logger
+            $this->logger,
+            $this->appStateMock,
+            $this->areaListMock
         );
     }
 
@@ -114,6 +140,10 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $exceptionMessage = 'exception_message';
         $exception = new InvalidRequestException($exceptionMessage);
 
+        $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
+        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
         $this->routerList->expects($this->any())
             ->method('valid')
             ->will($this->returnValue(true));
