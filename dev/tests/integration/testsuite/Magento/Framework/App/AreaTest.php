@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App;
 
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 class AreaTest extends \PHPUnit\Framework\TestCase
 {

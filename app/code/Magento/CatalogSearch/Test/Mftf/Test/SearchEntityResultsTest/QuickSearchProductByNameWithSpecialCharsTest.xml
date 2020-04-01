@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchProductByNameWithSpecialCharsTest" extends="QuickSearchProductBySkuTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="Quick Search can find products with names that contain special characters"/>
+            <description value="Use Quick Search to find a product by name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14792"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="productWithSpecialCharacters" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <!-- Overwrite search to use name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

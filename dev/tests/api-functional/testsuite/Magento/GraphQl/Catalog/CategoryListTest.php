@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -17,11 +19,22 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryListTest extends GraphQlAbstract
 {
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider filterSingleCategoryDataProvider
-     * @param $field
-     * @param $condition
-     * @param $value
+     * @param string $field
+     * @param string $condition
+     * @param string $value
+     * @param array $expectedResult
      */
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {
@@ -333,7 +346,7 @@ QUERY;
     }
 }
 QUERY;
-        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $storeRootCategoryId = $storeManager->getStore()->getRootCategoryId();
 
         $result = $this->graphQlQuery($query);
@@ -347,6 +360,8 @@ QUERY;
      * Filtering with match value less than minimum query should return empty result
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {
@@ -363,10 +378,155 @@ QUERY;
     }
 }
 QUERY;
-        $result = $this->graphQlQuery($query);
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('categoryList', $result);
-        $this->assertEquals([], $result['categoryList']);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Test category image full name is returned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_long_image_name.php
+     */
+    public function testCategoryImageName()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
+        $query = <<<QUERY
+    {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
+  id
+  name
+  image
+ }
+}
+QUERY;
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeBaseUrl = $storeManager->getStore()->getBaseUrl('media');
+
+        $expected = "catalog/category/magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg";
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . $expected;
+
+        $response = $this->graphQlQuery($query);
+        $categoryList = $response['categoryList'];
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categoryList']);
+        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathTopLevelCategory()
+    {
+        $urlPath = 'category-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNestedCategory()
+    {
+        $urlPath = 'category-1/category-1-1/category-1-1-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1.1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathMultipleCategories()
+    {
+        $urlPaths = ['category-1/category-1-1', 'inactive', 'movable-position-2'];
+        $urlPathsString = '"' . implode('", "', $urlPaths) . '"';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: [$urlPathsString]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(2, $categoryList);
+        $this->assertEquals($urlPaths[0], $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1', $categoryList[0]['name']);
+        $this->assertEquals($urlPaths[2], $categoryList[1]['url_path']);
+        $this->assertEquals('Movable Position 2', $categoryList[1]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNoResults()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: ["not-a-category url path"]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(0, $categoryList);
     }
 
     /**
