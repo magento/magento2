@@ -391,7 +391,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage The bundle product can't contain another composite product.
      */
     public function testAddChildLinkedProductIsComposite()
@@ -449,7 +449,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testAddChildProductAlreadyExistsInOption()
     {
@@ -525,7 +525,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testAddChildCouldNotSave()
     {
@@ -759,7 +759,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSaveChildFailedToSave()
     {
@@ -842,7 +842,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithoutId()
     {
@@ -874,7 +874,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage The product link with the "12345" ID field wasn't found. Verify the ID and try again.
      */
     public function testSaveChildWithInvalidId()
@@ -925,7 +925,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithCompositeProductLink()
     {
@@ -954,7 +954,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testSaveChildWithSimpleProduct()
     {
@@ -1016,7 +1016,7 @@ class LinkManagementTest extends TestCase
     }
 
     /**
-     * @ex@expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testRemoveChildForbidden()
     {
