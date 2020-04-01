@@ -236,7 +236,7 @@ class SessionManager implements SessionManagerInterface
         }
         //When we renew cookie, we should aware, that any other session client do not
         //change cookie too
-        $cookieValue = $sid ?: $this->cookieManager->getCookie($this->getName());
+        $cookieValue = $sid ?: $this->cookieManager->getCookie($this->getName()) ?: session_id();
         if ($cookieValue) {
             $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $metadata->setPath($this->sessionConfig->getCookiePath());
