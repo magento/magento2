@@ -62,7 +62,12 @@ class ExtractAssetFromContent implements ExtractAssetFromContentInterface
         $paths = [];
 
         foreach ($this->searchPatterns as $pattern) {
+            if (empty($pattern)) {
+                continue;
+            }
+
             preg_match_all($pattern, $content, $matches, PREG_PATTERN_ORDER);
+
             if (!empty($matches[1])) {
                 $paths += array_unique($matches[1]);
             }
