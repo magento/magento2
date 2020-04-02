@@ -12,6 +12,9 @@ use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
+/**
+ * Search engine configuration options for install
+ */
 class SearchConfigOptionsList
 {
     const AVAILABLE_SEARCH_ENGINES = ['elasticsearch5', 'elasticsearch6', 'elasticsearch7'];
@@ -32,7 +35,7 @@ class SearchConfigOptionsList
     /**
      * Default values
      */
-    const DEFAULT_SEARCH_ENGINE = 'elasticsearch6';
+    const DEFAULT_SEARCH_ENGINE = 'elasticsearch7';
     const DEFAULT_ELASTICSEARCH_HOST = 'localhost';
     const DEFAULT_ELASTICSEARCH_PORT = '9200';
     const DEFAULT_ELASTICSEARCH_INDEX_PREFIX = 'magento2';

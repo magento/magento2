@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Setup;
 
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\Setup\Model\SearchConfigOptionsList;
 
 /**
  * Validate Elasticsearch connection
@@ -31,23 +30,13 @@ class ConnectionValidator
     /**
      * Checks Elasticsearch Connection
      *
-     * @param array $configuration
+     * @param string $searchEngine
      * @return bool true if the connection succeeded, false otherwise
      */
-    public function validate($configuration)
+    public function validate(string $searchEngine): bool
     {
-        $configOptions = [
-            'hostname' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_HOST] ?? null,
-            'port' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PORT] ?? null,
-            'index' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX] ?? null,
-            'enableAuth' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] ?? false,
-            'username' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_USERNAME] ?? null,
-            'password' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PASSWORD] ?? null,
-            'timeout' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_TIMEOUT] ?? null
-        ];
-
         try {
-            $client = $this->clientResolver->create($configuration['search-engine'], $configOptions);
+            $client = $this->clientResolver->create($searchEngine);
             return $client->testConnection();
         } catch (\Exception $e) {
             return false;

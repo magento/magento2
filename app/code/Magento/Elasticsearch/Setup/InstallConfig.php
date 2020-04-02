@@ -56,18 +56,23 @@ class InstallConfig implements InstallConfigInterface
      */
     public function configure(array $inputOptions)
     {
-        if ($this->doValidation($inputOptions)) {
-            if (!$this->validator->validate($inputOptions)) {
-                throw new InputException(__('Could not connect to Elasticsearch server.'));
-            }
-        }
-
         foreach ($inputOptions as $inputKey => $inputValue) {
             if (null === $inputValue || !isset($this->searchConfigMapping[$inputKey])) {
                 continue;
             }
             $configKey = $this->searchConfigMapping[$inputKey];
             $this->configWriter->save(self::CATALOG_SEARCH . $configKey, $inputValue);
+        }
+
+        if ($this->doValidation($inputOptions)) {
+            if (!$this->validator->validate($inputOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
+                throw new InputException(
+                    __(
+                        'Connection to Elasticsearch cannot be established. '
+                        . 'Please check the configuration and try again.'
+                    )
+                );
+            }
         }
     }
 
@@ -77,7 +82,7 @@ class InstallConfig implements InstallConfigInterface
      * @param array $inputOptions
      * @return bool
      */
-    private function doValidation(array $inputOptions)
+    private function doValidation(array $inputOptions): bool
     {
         if (isset($inputOptions[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION])) {
             return !$inputOptions[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION];

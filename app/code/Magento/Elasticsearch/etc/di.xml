@@ -508,7 +508,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Elasticsearch\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">
@@ -522,7 +521,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Search\Setup\CompositeInstallConfig">
         <arguments>
             <argument name="installConfigList" xsi:type="array">

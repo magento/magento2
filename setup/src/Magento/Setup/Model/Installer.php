@@ -339,7 +339,6 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
-//        $script[] = ['Installing core configuration...', 'installCoreConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {

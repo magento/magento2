@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class CompositeInstallConfigTest extends TestCase
 {
-
     public function testConfigure()
     {
         $firstInstallConfig = $this->getMockBuilder(InstallConfigInterface::class)->getMock();

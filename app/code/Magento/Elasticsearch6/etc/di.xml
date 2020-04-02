@@ -219,7 +219,6 @@
             </argument>
         </arguments>
     </type>
-
     <virtualType name="Magento\Elasticsearch6\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">

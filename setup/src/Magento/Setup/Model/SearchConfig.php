@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Search\Setup\InstallConfigInterface;
 use Magento\Setup\Exception as SetupException;
@@ -49,7 +50,11 @@ class SearchConfig
         $searchConfigOptions = $this->extractSearchOptions($inputOptions);
         $this->validateSearchEngineSelection($searchConfigOptions);
 
-        $this->installConfig->configure($searchConfigOptions);
+        try {
+            $this->installConfig->configure($searchConfigOptions);
+        } catch (InputException $e) {
+            throw new SetupException($e->getMessage());
+        }
     }
 
     /**

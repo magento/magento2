@@ -11,14 +11,24 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Elasticsearch\Setup\ConnectionValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConnectionValidatorTest extends TestCase
 {
+    /**
+     * @var ConnectionValidator
+     */
     private $connectionValidator;
 
+    /**
+     * @var ClientResolver|MockObject
+     */
     private $clientResolverMock;
 
+    /**
+     * @var Elasticsearch|MockObject
+     */
     private $elasticsearchClientMock;
 
     protected function setUp()
@@ -41,61 +51,29 @@ class ConnectionValidatorTest extends TestCase
 
     public function testValidate()
     {
-        $configuration = [
-            'search-engine' => 'elasticsearch5',
-            'elasticsearch-host' => 'localhost',
-            'elasticsearch-port' => '9200',
-            'elasticsearch-index-prefix' => 'm2',
-            'elasticsearch-enable-auth' => false,
-            'elasticsearch-timeout' => 20
-        ];
-        $mappedConfig = [
-            'hostname' => 'localhost',
-            'port' => '9200',
-            'index' => 'm2',
-            'enableAuth' => false,
-            'username' => null,
-            'password' => null,
-            'timeout' => 20
-        ];
+        $searchEngine = 'elasticsearch5';
 
         $this->clientResolverMock
             ->expects($this->once())
             ->method('create')
-            ->with($configuration['search-engine'], $mappedConfig)
+            ->with($searchEngine)
             ->willReturn($this->elasticsearchClientMock);
         $this->elasticsearchClientMock->expects($this->once())->method('testConnection')->willReturn(true);
 
-        $this->assertTrue($this->connectionValidator->validate($configuration));
+        $this->assertTrue($this->connectionValidator->validate($searchEngine));
     }
 
     public function testValidateFail()
     {
-        $configuration = [
-            'search-engine' => 'elasticsearch5',
-            'elasticsearch-host' => 'localhost',
-            'elasticsearch-port' => '9200',
-            'elasticsearch-index-prefix' => 'm2',
-            'elasticsearch-enable-auth' => true,
-            'elasticsearch-timeout' => 20
-        ];
-        $mappedConfig = [
-            'hostname' => 'localhost',
-            'port' => '9200',
-            'index' => 'm2',
-            'enableAuth' => true,
-            'username' => null,
-            'password' => null,
-            'timeout' => 20
-        ];
+        $searchEngine = 'elasticsearch5';
 
         $this->clientResolverMock
             ->expects($this->once())
             ->method('create')
-            ->with($configuration['search-engine'], $mappedConfig)
+            ->with($searchEngine)
             ->willReturn($this->elasticsearchClientMock);
         $this->elasticsearchClientMock->expects($this->once())->method('testConnection')->willReturn(false);
 
-        $this->assertFalse($this->connectionValidator->validate($configuration));
+        $this->assertFalse($this->connectionValidator->validate($searchEngine));
     }
 }

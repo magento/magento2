@@ -11,14 +11,24 @@ use Magento\Elasticsearch\Setup\ConnectionValidator;
 use Magento\Elasticsearch\Setup\InstallConfig;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class InstallConfigTest extends TestCase
 {
+    /**
+     * @var InstallConfig
+     */
     private $installConfig;
 
+    /**
+     * @var ConnectionValidator|MockObject
+     */
     private $validatorMock;
 
+    /**
+     * @var WriterInterface|MockObject
+     */
     private $configWriterMock;
 
     protected function setup()
@@ -27,7 +37,6 @@ class InstallConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMockForAbstractClass();
-
 
         $objectManager = new ObjectManager($this);
         $this->installConfig = $objectManager->getObject(
@@ -56,7 +65,6 @@ class InstallConfigTest extends TestCase
             'elasticsearch-port' => '9200'
         ];
 
-        $this->validatorMock->expects($this->once())->method('validate')->with($inputOptions)->willReturn(true);
         $this->configWriterMock
             ->expects($this->at(0))
             ->method('save')
@@ -70,12 +78,14 @@ class InstallConfigTest extends TestCase
             ->method('save')
             ->with('catalog/search/elasticsearch5_server_port', '9200');
 
+        $this->validatorMock->expects($this->once())->method('validate')->with('elasticsearch5')->willReturn(true);
+
         $this->installConfig->configure($inputOptions);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Could not connect to Elasticsearch server.
+     * @expectedExceptionMessage Connection to Elasticsearch cannot be established. Please check the configuration and try again.
      */
     public function testConfigureValidateFail()
     {
@@ -85,8 +95,20 @@ class InstallConfigTest extends TestCase
             'elasticsearch-port' => '9200'
         ];
 
-        $this->validatorMock->expects($this->once())->method('validate')->with($inputOptions)->willReturn(false);
-        $this->configWriterMock->expects($this->never())->method('save');
+        $this->configWriterMock
+            ->expects($this->at(0))
+            ->method('save')
+            ->with('catalog/search/engine', 'elasticsearch5');
+        $this->configWriterMock
+            ->expects($this->at(1))
+            ->method('save')
+            ->with('catalog/search/elasticsearch5_server_hostname', 'es.domain.com');
+        $this->configWriterMock
+            ->expects($this->at(2))
+            ->method('save')
+            ->with('catalog/search/elasticsearch5_server_port', '9200');
+
+        $this->validatorMock->expects($this->once())->method('validate')->with('elasticsearch5')->willReturn(false);
 
         $this->installConfig->configure($inputOptions);
     }
@@ -100,7 +122,6 @@ class InstallConfigTest extends TestCase
             'skip-elasticsearch-validation' => true
         ];
 
-        $this->validatorMock->expects($this->never())->method('validate');
         $this->configWriterMock
             ->expects($this->at(0))
             ->method('save')
@@ -113,6 +134,7 @@ class InstallConfigTest extends TestCase
             ->expects($this->at(2))
             ->method('save')
             ->with('catalog/search/elasticsearch5_server_port', '9200');
+        $this->validatorMock->expects($this->never())->method('validate');
 
         $this->installConfig->configure($inputOptions);
     }
