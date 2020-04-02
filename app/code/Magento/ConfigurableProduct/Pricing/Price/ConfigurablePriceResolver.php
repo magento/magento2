@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -94,13 +93,28 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     {
         /** @var ProductInterface $subProduct */
         foreach ($this->getChildProducts($product) as $subProduct) {
-            $tierPriceList = $subProduct->getTierPrices();
+            $tierPriceList = $this->getTierPriceList($subProduct);
             if (!empty($tierPriceList)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Returns tier price list for product
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getTierPriceList(ProductInterface $product)
+    {
+        $productInfo = $product->getPriceInfo();
+        /** @var TierPrice $tierPrice*/
+        $tierPrice = $productInfo->getPrice(TierPrice::PRICE_CODE);
+
+        return $tierPrice->getTierPriceList();
     }
 
     /**
@@ -129,7 +143,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     {
         $tierPrices = [];
         foreach ($this->getChildProducts($product) as $subProduct) {
-            $tierPriceList = $subProduct->getTierPrices();
+            $tierPriceList = $this->getTierPriceList($subProduct);
             if (!empty($tierPriceList)) {
                 foreach ($tierPriceList as $tierPriceItem) {
                     /** @var AmountInterface $price */
