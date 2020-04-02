@@ -19,20 +19,19 @@ jobs:
       with:
         php-version: 7.1
         extensions: mbstring, dom, cli, xml
-      
+
     - name: Configure Composer
       run: composer config -g github-oauth.github.com ${GITHUB_TOKEN}
 
     - name: Create working directory
       run: mkdir ${TESTS_DIR}
-      
+
     - name: Installing toolkit for static tests
       run: |
         cp .github/static-tests/composer.json ${TESTS_DIR}
-        cp .github/static-tests/grumphp.yml ${TESTS_DIR}
         cd ${TESTS_DIR}
         composer install -n
-        
+
     - name: Execute tests
       run: |
         chmod +x ${TESTS_DIR}/vendor/atwix/ci-scripts/runCodeSniffer.sh
