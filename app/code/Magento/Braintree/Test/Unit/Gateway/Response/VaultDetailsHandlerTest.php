@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * VaultDetailsHandler Test
+ * Verify class VaultDetailsHandler
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -216,7 +216,12 @@ class VaultDetailsHandlerTest extends TestCase
     private function initPaymentExtensionAttributesMock()
     {
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->setMethods([
+                'setVaultPaymentToken',
+                'getVaultPaymentToken',
+                'setNotificationMessage',
+                'getNotificationMessage'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
