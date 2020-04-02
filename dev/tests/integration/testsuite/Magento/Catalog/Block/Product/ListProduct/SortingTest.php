@@ -320,8 +320,7 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
-     * @magentoDataFixture Magento/Elasticsearch6/_files/full_reindex.php
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
