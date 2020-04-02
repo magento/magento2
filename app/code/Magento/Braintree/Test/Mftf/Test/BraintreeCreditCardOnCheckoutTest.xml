@@ -30,6 +30,7 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
             <createData entity="CustomBraintreeConfigurationData" stepKey="CustomBraintreeConfigurationData"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
