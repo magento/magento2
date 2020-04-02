@@ -24,12 +24,12 @@
             <!--Create user role-->
             <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
                 <argument name="User" value="adminRole"/>
-                <argument name="restrictedRole" value="Media Gallery"/>
+                <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>
             <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
             <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
                 <argument name="User" value="adminRole"/>
-                <argument name="restrictedRole" value="Media Gallery"/>
+                <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>
             <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
             <!--Create user and assign role to it-->
