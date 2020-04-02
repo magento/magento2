@@ -1,0 +1,72 @@
+parameters:
+    git_dir: "."
+    magento_dir: "."
+    bin_dir: ./vendor/bin
+    hide_circumvention_tip: true
+    process_timeout: 120
+    ascii: ~
+    tasks:
+      composer:
+        file: ./composer.json
+        no_check_all: true
+        no_check_lock: false
+        no_check_publish: false
+        with_dependencies: false
+        strict: false
+      git_blacklist:
+        keywords:
+          - "die("
+          - "var_dump("
+          - "exit;"
+          - "console.log("
+          - "bravo.atwix.com"
+      phpmd:
+        ruleset:
+          - ./dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml
+        triggered_by: ["php"]
+        whitelist_patterns:
+          - /^app\/code\/Atwix\/(.*)/
+          - /^app\/code\/Magento\/(.*)/
+        exclude: []
+      phpcs:
+        standard: "./dev/tests/static/framework/Magento/ruleset.xml"
+        severity: ~
+        error_severity: ~
+        warning_severity: 6
+        tab_width: ~
+        report: full
+        report_width: ~
+        whitelist_patterns:
+          - /^app\/code\/Atwix\/(.*)/
+          - /^app\/code\/Magento\/(.*)/
+        encoding: ~
+        ignore_patterns: []
+        sniffs: []
+        triggered_by: ["php"]
+      file_size:
+        max_size: 5M
+        ignore_patterns:
+          - /^dev\/(.*)/
+          - /^pub\/media\/(.*)/
+      git_branch_name:
+        whitelist:
+          - /(DEVOPS)-\d+/
+        additional_modifiers: ''
+        allow_detached_head: true
+      git_commit_message:
+        allow_empty_message: false
+        enforce_capitalized_subject: true
+        enforce_no_subject_trailing_period: true
+        enforce_single_lined_subject: true
+        max_subject_width: 0
+        max_body_width: 0
+        matchers:
+          Must contain JIRA issue number: /(DEVOPS)-\d+/
+        case_insensitive: true
+        multiline: true
+        additional_modifiers: ''
+      jsonlint:
+        ignore_patterns:
+          - /^dev\/(.*)/
+          - /^update\/(.*)/
+        detect_key_conflicts: true

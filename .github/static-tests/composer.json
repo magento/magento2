@@ -1,0 +1,25 @@
+{
+  "name": "atwix/static-code-test",
+  "description": "Project contains a list of dependencies required for static code check",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "git@github.com:Atwix/ci-scripts.git"
+    }
+  ],
+  "require": {
+    "atwix/ci-scripts": "dev-master",
+    "phpro/grumphp": "^0.18.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+    "friendsofphp/php-cs-fixer": "~2.14.0",
+    "lusitanian/oauth": "~0.8.10",
+    "magento/magento-coding-standard": "*",
+    "pdepend/pdepend": "2.5.2",
+    "phpcompatibility/php-compatibility": "^9.3",
+    "phpmd/phpmd": "@stable",
+    "phpstan/phpstan": "^0.12.3",
+    "phpunit/phpunit": "~6.5.0",
+    "sebastian/phpcpd": "~3.0.0",
+    "squizlabs/php_codesniffer": "~3.4.0"
+  }
+}
