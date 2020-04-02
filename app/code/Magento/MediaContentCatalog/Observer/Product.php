@@ -49,28 +49,19 @@ class Product implements ObserverInterface
     {
         /** @var CatalogProduct $model */
         $model = $observer->getEvent()->getData('product');
-        if ($model instanceof AbstractModel) {
-            $this->updateRelations($model);
-        }
-    }
 
-    /**
-     * Update relations for the model
-     *
-     * @param AbstractModel $model
-     */
-    private function updateRelations(AbstractModel $model): void
-    {
-        foreach ($this->fields as $field) {
-            if (!$model->dataHasChangedFor($field)) {
-                continue;
+        if ($model instanceof AbstractModel) {
+            foreach ($this->fields as $field) {
+                if (!$model->dataHasChangedFor($field)) {
+                    continue;
+                }
+                $this->processor->execute(
+                    self::CONTENT_TYPE,
+                    $field,
+                    (string) $model->getId(),
+                    (string) $model->getData($field)
+                );
             }
-            $this->processor->execute(
-                self::CONTENT_TYPE,
-                $field,
-                (string) $model->getId(),
-                (string) $model->getData($field)
-            );
         }
     }
 }

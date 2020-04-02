@@ -50,27 +50,17 @@ class Category implements ObserverInterface
         /** @var CatalogCategory $model */
         $model = $observer->getEvent()->getData('category');
         if ($model instanceof AbstractModel) {
-            $this->updateRelations($model);
-        }
-    }
-
-    /**
-     * Update relations for the model
-     *
-     * @param AbstractModel $model
-     */
-    private function updateRelations(AbstractModel $model): void
-    {
-        foreach ($this->fields as $field) {
-            if (!$model->dataHasChangedFor($field)) {
-                continue;
+            foreach ($this->fields as $field) {
+                if (!$model->dataHasChangedFor($field)) {
+                    continue;
+                }
+                $this->processor->execute(
+                    self::CONTENT_TYPE,
+                    $field,
+                    (string) $model->getId(),
+                    (string) $model->getData($field)
+                );
             }
-            $this->processor->execute(
-                self::CONTENT_TYPE,
-                $field,
-                (string) $model->getId(),
-                (string) $model->getData($field)
-            );
         }
     }
 }
