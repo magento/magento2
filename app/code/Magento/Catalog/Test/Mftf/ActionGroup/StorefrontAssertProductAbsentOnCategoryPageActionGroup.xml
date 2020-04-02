@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertProductAbsentOnCategoryPageActionGroup">
         <annotations>
-            <description>Navigate to category page and verify product is absent.</description>
+            <description>DEPRECATED. Please use AssertStorefrontProductAbsentOnCategoryPageActionGroup instead.
+                Navigate to category page and verify product is absent.</description>
         </annotations>
         <arguments>
             <argument name="category" defaultValue="_defaultCategory"/>
