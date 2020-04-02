@@ -51,7 +51,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_urlBuilder;
 
     /**
-     * @var \Zend\Uri\Uri|null
+     * @var \Laminas\Uri\Uri|null
      */
     private $uri;
 
@@ -64,7 +64,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Zend\Uri\Uri|null $uri
+     * @param \Laminas\Uri\Uri|null $uri
      * @param bool $canUseSessionIdInParam
      */
     public function __construct(
@@ -74,7 +74,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Zend\Uri\Uri $uri = null,
+        \Laminas\Uri\Uri $uri = null,
         $canUseSessionIdInParam = true
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
@@ -84,7 +84,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $this->_session = $session;
         $this->_sidResolver = $sidResolver;
         $this->_urlBuilder = $urlBuilder;
-        $this->uri = $uri ?: ObjectManager::getInstance()->get(\Zend\Uri\Uri::class);
+        $this->uri = $uri ?: ObjectManager::getInstance()->get(\Laminas\Uri\Uri::class);
     }
 
     /**

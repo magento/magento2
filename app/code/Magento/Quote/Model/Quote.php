@@ -876,7 +876,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->setUpdatedAt(null);
         }
 
-        return parent::beforeSave();
+        parent::beforeSave();
+
+        return $this;
     }
 
     /**
@@ -957,11 +959,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
-                    //phpcs:disable
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
                 }
-                //phpcs:enable
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
                     $billingAddress = $this->_quoteAddressFactory->create();
@@ -973,11 +973,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
-                    //phpcs:disable
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
                 }
-                //phpcs:enable
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
                     $shippingAddress = $this->_quoteAddressFactory->create();
@@ -1695,12 +1693,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
+                $this->deleteItem($item);
                 foreach ($item->getMessage(false) as $message) {
                     if (!in_array($message, $errors)) {
                         // filter duplicate messages
                         $errors[] = $message;
                     }
                 }
+                break;
             }
         }
         if (!empty($errors)) {

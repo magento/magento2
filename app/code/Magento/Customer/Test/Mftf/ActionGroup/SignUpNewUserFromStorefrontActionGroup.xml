@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SignUpNewUserFromStorefrontActionGroup">
+    <actionGroup name="SignUpNewUserFromStorefrontActionGroup" deprecated="Avoid using super-ActionGroups. See StorefrontCreateCustomerTest for replacement.">
         <annotations>
             <description>Goes to the Storefront. Clicks on 'Create Account'. Fills in the provided Customer details, excluding Newsletter Sign-Up. Clicks on 'Create Account' button. Validate that the Customer details are present and correct.</description>
         </annotations>
