@@ -20,6 +20,8 @@
 "var store_email":"Store Email",
 "var invoice": "Invoice",
 "var order": "Order",
+"var order_id": "Order DB Id",
+"var invoice_id": "Invoice DB Id",
 "var order_data.is_not_virtual": "Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -79,7 +81,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout area="frontend" handle="sales_email_order_invoice_items" invoice=$invoice order=$order}}
+            {{layout area="frontend" handle="sales_email_order_invoice_items" invoice_id=$invoice_id order_id=$order_id}}
         </td>
     </tr>
 </table>
