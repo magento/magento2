@@ -90,6 +90,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Visibility|null $catalogProductVisibility
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -507,6 +508,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Get products count using catalog_category_entity table
+     *
      * @param Category $item
      * @param string $websiteId
      * @return int
@@ -547,6 +550,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get query for retrieve count of products per category
      *
      * @param array $categoryIds
+     * @param bool $addVisibilityFilter
      * @return Select
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
