@@ -22,14 +22,14 @@ parameters:
           - "bravo.atwix.com"
       phpmd:
         ruleset:
-          - ./dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml
+          - ["%magento_dir%/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"]
         triggered_by: ["php"]
         whitelist_patterns:
           - /^app\/code\/Atwix\/(.*)/
           - /^app\/code\/Magento\/(.*)/
         exclude: []
       phpcs:
-        standard: "./dev/tests/static/framework/Magento/ruleset.xml"
+        standard: "%magento_dir%/dev/tests/static/framework/Magento/ruleset.xml"
         severity: ~
         error_severity: ~
         warning_severity: 6
