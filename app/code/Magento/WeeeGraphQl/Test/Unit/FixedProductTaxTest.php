@@ -58,7 +58,7 @@ class FixedProductTaxTest extends TestCase
             ->getMock();
 
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(['getStore'])
+            ->setMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
             ->getMock();
 
         $this->contextMock->method('getExtensionAttributes')

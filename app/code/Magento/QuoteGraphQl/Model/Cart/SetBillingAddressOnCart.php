@@ -56,11 +56,42 @@ class SetBillingAddressOnCart
     {
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
+
+        if (!$customerAddressId && !isset($billingAddressInput['address']['save_in_address_book']) && $addressInput) {
+            $addressInput['save_in_address_book'] = true;
+        }
+
         // Need to keep this for BC of `use_for_shipping` field
         $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
             ? (bool)$billingAddressInput['use_for_shipping'] : false;
         $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
             ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
+
+        $this->checkForInputExceptions($billingAddressInput);
+
+        $addresses = $cart->getAllShippingAddresses();
+        if ($sameAsShipping && count($addresses) > 1) {
+            throw new GraphQlInputException(
+                __('Using the "same_as_shipping" option with multishipping is not possible.')
+            );
+        }
+
+        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
+
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
+    }
+
+    /**
+     * Check for the input exceptions
+     *
+     * @param array $billingAddressInput
+     * @throws GraphQlInputException
+     */
+    private function checkForInputExceptions(
+        ?array $billingAddressInput
+    ) {
+        $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $billingAddressInput['address'] ?? null;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
@@ -73,17 +104,6 @@ class SetBillingAddressOnCart
                 __('The billing address cannot contain "customer_address_id" and "address" at the same time.')
             );
         }
-
-        $addresses = $cart->getAllShippingAddresses();
-        if ($sameAsShipping && count($addresses) > 1) {
-            throw new GraphQlInputException(
-                __('Using the "same_as_shipping" option with multishipping is not possible.')
-            );
-        }
-
-        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
-
-        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
     }
 
     /**
