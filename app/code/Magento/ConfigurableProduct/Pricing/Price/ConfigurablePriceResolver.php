@@ -6,14 +6,21 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
     /**
-     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var PriceResolverInterface
      */
     protected $priceResolver;
 
@@ -54,11 +61,13 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     }
 
     /**
-     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * Returns minimal price
+     *
+     * @param SaleableInterface|Product $product
      * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    public function resolvePrice(SaleableInterface $product)
     {
         $price = null;
 
@@ -76,13 +85,16 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     }
 
     /**
-     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * Check if at least one child product has tier price
+     *
+     * @param SaleableInterface|Product $product
      * @return bool
      */
-    private function hasTierPrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    private function hasTierPrice(SaleableInterface $product)
     {
-        foreach ($product->getTypeInstance()->getUsedProducts($product) as $subProduct) {
-            $tierPriceList = $subProduct->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)->getTierPriceList();
+        /** @var ProductInterface $subProduct */
+        foreach ($this->getChildProducts($product) as $subProduct) {
+            $tierPriceList = $subProduct->getTierPrices();
             if (!empty($tierPriceList)) {
                 return true;
             }
@@ -92,17 +104,35 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     }
 
     /**
-     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * Returns children products for configurable
+     *
+     * @param SaleableInterface|Product $product
+     * @return ProductInterface[]
+     */
+    private function getChildProducts(SaleableInterface $product)
+    {
+        $configurableProduct = $product->getTypeInstance();
+        if ($configurableProduct instanceof Configurable) {
+            return $configurableProduct->getUsedProducts($product);
+        }
+
+        return [];
+    }
+
+    /**
+     * Provides minimal tier price
+     *
+     * @param SaleableInterface|Product $product
      * @return float
      */
-    private function getMinimalTierPrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    private function getMinimalTierPrice(SaleableInterface $product)
     {
         $tierPrices = [];
-        foreach ($product->getTypeInstance()->getUsedProducts($product) as $subProduct) {
-            $tierPriceList = $subProduct->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE)->getTierPriceList();
+        foreach ($this->getChildProducts($product) as $subProduct) {
+            $tierPriceList = $subProduct->getTierPrices();
             if (!empty($tierPriceList)) {
                 foreach ($tierPriceList as $tierPriceItem) {
-                    /** @var Magento\Framework\Pricing\Amount\AmountInterface $price */
+                    /** @var AmountInterface $price */
                     $tierPrice = $tierPriceItem['price'];
                     $tierPrices[] = $tierPrice->getValue();
                 }
