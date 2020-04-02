@@ -17,7 +17,8 @@ class GarbageCleanup implements TestListener
     use \PHPUnit\Framework\TestListenerDefaultImplementation;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function endTestSuite(TestSuite $suite): void
