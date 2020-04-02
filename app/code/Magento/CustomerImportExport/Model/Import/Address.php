@@ -13,6 +13,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\Store\Model\Store;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\Customer\Model\Indexer\Processor;
 
 /**
  * Customer address import
@@ -255,6 +256,11 @@ class Address extends AbstractCustomer
     private $addressStorage;
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -274,6 +280,7 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
+     * @param Processor $indexerProcessor
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -296,8 +303,9 @@ class Address extends AbstractCustomer
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = [],
-        CountryWithWebsitesSource $countryWithWebsites = null,
-        AddressStorage $addressStorage = null
+        ?CountryWithWebsitesSource $countryWithWebsites = null,
+        ?AddressStorage $addressStorage = null,
+        ?Processor $indexerProcessor = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -347,6 +355,9 @@ class Address extends AbstractCustomer
         );
         $this->addressStorage = $addressStorage
             ?: ObjectManager::getInstance()->get(AddressStorage::class);
+
+        $this->indexerProcessor = $indexerProcessor
+            ?: ObjectManager::getInstance()->get(Processor::class);
 
         $this->_initAttributes();
         $this->_initCountryRegions();
@@ -562,6 +573,7 @@ class Address extends AbstractCustomer
 
             $this->_deleteAddressEntities($deleteRowIds);
         }
+        $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }
 

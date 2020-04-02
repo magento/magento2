@@ -9,7 +9,6 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -37,9 +36,9 @@ class Delete extends ExportController implements HttpPostActionInterface
     private $filesystem;
 
     /**
-     * @var WriteFactory
+     * @var DriverInterface
      */
-    private $writeFactory;
+    private $file;
 
     /**
      * Delete constructor.
@@ -61,30 +60,36 @@ class Delete extends ExportController implements HttpPostActionInterface
     /**
      * Controller basic method implementation.
      *
-     * @return ResponseInterface|ResultInterface
+     * @return ResultInterface
      * @throws LocalizedException
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('adminhtml/export/index');
         try {
             if (empty($fileName = $this->getRequest()->getParam('filename'))) {
-                throw new LocalizedException(__('Please provide export file name'));
+                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+                return $resultRedirect;
             }
             $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_EXPORT);
             try {
                 $directoryWrite->delete($directoryWrite->getAbsolutePath($fileName));
+                $this->messageManager->addSuccessMessage(__('File %1 deleted', $fileName));
             } catch (ValidatorException $exception) {
-                throw new LocalizedException(__('Sorry, but the data is invalid or the file is not uploaded.'));
+                $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
             } catch (FileSystemException $exception) {
+                $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
                 throw new LocalizedException(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
-            /** @var Redirect $resultRedirect */
-            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            $resultRedirect->setPath('adminhtml/export/index');
 
             return $resultRedirect;
         } catch (FileSystemException $exception) {
+            $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
             throw new LocalizedException(__('There are no export file with such name %1', $fileName));
+            return $resultRedirect;
         }
     }
 }
