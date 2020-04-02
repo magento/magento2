@@ -14,6 +14,7 @@
             <stories value="Add product to cart through ajax in Product List widget"/>
             <title value="Add product through ajax"/>
             <description value="Add product to cart through ajax in Product List widget on Cms page"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -37,7 +38,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <actionGroup ref="AddToCartFromCmsPageUsingAjaxActionGroup" stepKey="addProductToCartAndCheck">
+        <actionGroup ref="StorefrontAddToCartFromCmsPageUsingAjaxActionGroup" stepKey="addProductToCartAndCheck">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
     </test>
