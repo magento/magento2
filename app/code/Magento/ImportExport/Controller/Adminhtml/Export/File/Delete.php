@@ -33,9 +33,9 @@ class Delete extends ExportController implements HttpPostActionInterface
     private $filesystem;
 
     /**
-     * @var DriverInterface
+     * @var WriteFactory
      */
-    private $file;
+    private $writeFactory;
 
     /**
      * Delete constructor.
