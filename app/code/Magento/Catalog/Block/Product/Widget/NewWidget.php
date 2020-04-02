@@ -400,7 +400,7 @@ class NewWidget extends NewProduct implements BlockInterface
      *
      * @return bool
      */
-    public function getAllowedWishList()
+    public function hasAllowedWishList()
     {
         return $this->wishlistDataHelper->isAllow();
     }

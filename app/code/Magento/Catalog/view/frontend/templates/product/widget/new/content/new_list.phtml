@@ -109,7 +109,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                             <?php endif; ?>
                                             <?php if ($showWishlist || $showCompare): ?>
                                                 <div class="actions-secondary" data-role="add-to-links">
-                                                    <?php if ($block->getAllowedWishList() && $showWishlist): ?>
+                                                    <?php if ($block->hasAllowedWishList() && $showWishlist): ?>
                                                         <a href="#"
                                                            data-post='<?=
                                                            /* @noEscape */$block->getAddToWishlistParams($_item) ?>'
