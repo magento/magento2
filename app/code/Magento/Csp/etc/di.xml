@@ -18,10 +18,10 @@
     <type name="Magento\Csp\Model\CompositePolicyCollector">
         <arguments>
             <argument name="collectors" xsi:type="array">
-                <item name="1" xsi:type="object">Magento\Csp\Model\Collector\ConfigCollector\Proxy</item>
-                <item name="2" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXmlCollector\Proxy</item>
-                <item name="3" xsi:type="object">Magento\Csp\Model\Collector\DynamicCollector\Proxy</item>
-                <item name="100" xsi:type="object">Magento\Csp\Model\Collector\ControllerCollector\Proxy</item>
+                <item name="config" xsi:type="object">Magento\Csp\Model\Collector\ConfigCollector\Proxy</item>
+                <item name="whitelist" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXmlCollector\Proxy</item>
+                <item name="dynamic" xsi:type="object">Magento\Csp\Model\Collector\DynamicCollector\Proxy</item>
+                <item name="controller" xsi:type="object">Magento\Csp\Model\Collector\ControllerCollector\Proxy</item>
             </argument>
             <argument name="mergers" xsi:type="array">
                 <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>

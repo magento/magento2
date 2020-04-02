@@ -19,7 +19,7 @@
 
         <?php if (!$block->getDisabled()): ?>
             <ul class="dropdown-menu" <?= /* @noEscape */ $block->getUiId("dropdown-menu") ?>>
-                <?php foreach ($block->getOptions() as $key => &$option): ?>
+                <?php foreach ($block->getOptions() as $key => $option): ?>
                 <li>
                     <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
                         <?= $block->escapeHtml($option['label']) ?>

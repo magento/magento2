@@ -207,11 +207,11 @@ class SplitButton extends Button
      */
     private function identifyOption(array $option): string
     {
-        $id = isset($option['id'])
-            ? $option['id']
-            : (isset($option['id_attribute']) ? $option['id_attribute'] : 'topId' .$this->random->getRandomString(32));
-
-        return $this->getId() .'-' .$id;
+        return isset($option['id'])
+            ? $this->getId() .'-' .$option['id']
+            : (isset($option['id_attribute']) ?
+                $option['id_attribute']
+                : $this->getId() .'-optId' .$this->random->getRandomString(32));
     }
 
     /**
