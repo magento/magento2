@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Csp\Model\Collector;
 
 use Magento\Csp\Api\CspAwareActionInterface;
+use Magento\Csp\Api\PolicyCollectorInterface;
 
 /**
  * Asks for route-specific policies from a compatible controller.
  */
-class ControllerCollector implements PrioritizedPolicyCollectorInterface
+class ControllerCollector implements PolicyCollectorInterface
 {
     /**
      * @var CspAwareActionInterface|null
@@ -40,13 +41,5 @@ class ControllerCollector implements PrioritizedPolicyCollectorInterface
         }
 
         return $defaultPolicies;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPriority(): int
-    {
-        return -100;
     }
 }

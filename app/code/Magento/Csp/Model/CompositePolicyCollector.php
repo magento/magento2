@@ -10,7 +10,6 @@ namespace Magento\Csp\Model;
 use Magento\Csp\Api\Data\PolicyInterface;
 use Magento\Csp\Api\PolicyCollectorInterface;
 use Magento\Csp\Model\Collector\MergerInterface;
-use Magento\Csp\Model\Collector\PrioritizedPolicyCollectorInterface;
 
 /**
  * Delegates collecting to multiple collectors.
@@ -33,15 +32,6 @@ class CompositePolicyCollector implements PolicyCollectorInterface
      */
     public function __construct(array $collectors, array $mergers)
     {
-        usort(
-            $collectors,
-            function (PolicyCollectorInterface $a, PolicyCollectorInterface $b): int {
-                $priorityA = ($a instanceof PrioritizedPolicyCollectorInterface) ? $a->getPriority() : 0;
-                $priorityB = ($b instanceof PrioritizedPolicyCollectorInterface) ? $b->getPriority() : 0;
-
-                return $priorityB <=> $priorityA;
-            }
-        );
         $this->collectors = $collectors;
         $this->mergers = $mergers;
     }
