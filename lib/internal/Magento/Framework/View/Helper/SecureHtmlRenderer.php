@@ -111,7 +111,13 @@ class SecureHtmlRenderer
             }
             let {$elementName} = document.querySelector("{$elementSelector}");
             if ({$elementName}) {
-                {$elementName}.{$eventName} = (event) => {$listenerFunction}.apply(event.target);
+                {$elementName}.{$eventName} = (event) => {
+                    let targetElement = {$elementName};
+                    if (event && event.target) {
+                        targetElement = event.target;
+                    }
+                    {$listenerFunction}.apply(targetElement);
+                }
             }
 script;
 
