@@ -9,6 +9,9 @@ namespace Magento\Search\Setup;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Composite object uses the proper InstallConfigInterface implementation for the engine being configured
+ */
 class CompositeInstallConfig implements InstallConfigInterface
 {
     /**
@@ -33,7 +36,7 @@ class CompositeInstallConfig implements InstallConfigInterface
 
         if (!isset($this->installConfigList[$searchEngine])) {
             //TODO better exception handling
-            throw new InputException(__('Unable to configure search engine ' . $searchEngine));
+            throw new InputException(__('Unable to configure search engine: ' . $searchEngine));
         }
         $installConfig = $this->installConfigList[$searchEngine];
 

@@ -9,6 +9,9 @@ namespace Magento\Search\Setup;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Configure search engine from installation input
+ */
 interface InstallConfigInterface
 {
     /**

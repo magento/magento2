@@ -36,20 +36,14 @@ class ConnectionValidator
      */
     public function validate($configuration)
     {
-        if (isset($configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION])
-            && $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION]
-        ) {
-            return true;
-        }
-
         $configOptions = [
-            'hostname' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_HOST],
-            'port' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PORT],
-            'index' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX],
-            'enableAuth' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH],
+            'hostname' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_HOST] ?? null,
+            'port' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PORT] ?? null,
+            'index' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX] ?? null,
+            'enableAuth' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] ?? false,
             'username' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_USERNAME] ?? null,
             'password' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PASSWORD] ?? null,
-            'timeout' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_TIMEOUT]
+            'timeout' => $configuration[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_TIMEOUT] ?? null
         ];
 
         try {

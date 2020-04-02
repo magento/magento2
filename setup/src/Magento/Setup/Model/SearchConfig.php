@@ -78,9 +78,9 @@ class SearchConfig
         $installOptions = $this->searchConfigOptionsList->getOptionsList();
         /** @var AbstractConfigOption $option */
         foreach ($installOptions as $option) {
-            $installOption = $option->getName();
-            if (isset($inputOptions[$installOption])) {
-                $searchOptions[$installOption] = $inputOptions[$installOption];
+            $optionName = $option->getName();
+            if (isset($inputOptions[$optionName])) {
+                $searchOptions[$optionName] = $inputOptions[$optionName];
             }
         }
         return $searchOptions;
