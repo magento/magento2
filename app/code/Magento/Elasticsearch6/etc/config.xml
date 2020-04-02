@@ -9,6 +9,7 @@
     <default>
         <catalog>
             <search>
+                <engine>elasticsearch6</engine>
                 <elasticsearch6_server_hostname>localhost</elasticsearch6_server_hostname>
                 <elasticsearch6_server_port>9200</elasticsearch6_server_port>
                 <elasticsearch6_index_prefix>magento2</elasticsearch6_index_prefix>
