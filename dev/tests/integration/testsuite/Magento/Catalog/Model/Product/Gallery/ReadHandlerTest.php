@@ -338,7 +338,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     {
         /** @var ProductInterface $product */
         $product = $this->productFactory->create();
-        $product->setId($this->getProduct()->getId());
+        $product->setData(
+            $this->productLinkField,
+            $this->getProduct()->getData($this->productLinkField)
+        );
+
         if ($storeId) {
             $product->setStoreId($storeId);
         }

@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch\ProductCollectionSearchCriteriaBuilder;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -49,24 +50,32 @@ class ProductSearch
     private $searchResultApplierFactory;
 
     /**
+     * @var ProductCollectionSearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface $collectionPreProcessor
      * @param CollectionPostProcessor $collectionPostProcessor
      * @param SearchResultApplierFactory $searchResultsApplierFactory
+     * @param ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionPreProcessor,
         CollectionPostProcessor $collectionPostProcessor,
-        SearchResultApplierFactory $searchResultsApplierFactory
+        SearchResultApplierFactory $searchResultsApplierFactory,
+        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionPreProcessor = $collectionPreProcessor;
         $this->collectionPostProcessor = $collectionPostProcessor;
         $this->searchResultApplierFactory = $searchResultsApplierFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -85,15 +94,21 @@ class ProductSearch
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
 
-        //Join search results
-        $this->getSearchResultsApplier($searchResult, $collection, $this->getSortOrderArray($searchCriteria))->apply();
+        //Create a copy of search criteria without filters to preserve the results from search
+        $searchCriteriaForCollection = $this->searchCriteriaBuilder->build($searchCriteria);
+        //Apply CatalogSearch results from search and join table
+        $this->getSearchResultsApplier(
+            $searchResult,
+            $collection,
+            $this->getSortOrderArray($searchCriteriaForCollection)
+        )->apply();
 
-        $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes);
+        $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes);
         $collection->load();
         $this->collectionPostProcessor->process($collection, $attributes);
 
         $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setSearchCriteria($searchCriteriaForCollection);
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($searchResult->getTotalCount());
         return $searchResults;

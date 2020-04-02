@@ -8,6 +8,7 @@
             "content_type": true,
             "width": true,
             "height": true,
+            "size": true,
             "created_at": true,
             "updated_at": true
         },
