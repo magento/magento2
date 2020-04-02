@@ -85,7 +85,7 @@ class InstallConfigTest extends TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Connection to Elasticsearch cannot be established. Please check the configuration and try again.
+     * @expectedExceptionMessage Connection to Elasticsearch cannot be established.
      */
     public function testConfigureValidateFail()
     {

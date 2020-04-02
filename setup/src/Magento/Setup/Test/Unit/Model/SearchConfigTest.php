@@ -127,5 +127,4 @@ class SearchConfigTest extends TestCase
             ]
         ];
     }
-
 }
