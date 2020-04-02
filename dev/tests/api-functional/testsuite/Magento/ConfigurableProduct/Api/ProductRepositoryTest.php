@@ -254,7 +254,6 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals([$productId1], $resultConfigurableProductLinks);
 
         //adding back the product links, the option value should be restored
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links']
             = [$productId1, $productId2];
         //set the value for required attribute
@@ -286,7 +285,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $nonExistingId
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'Product with id "%1" does not exist.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -362,7 +361,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'Product with id "%1" does not exist.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
