@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteActiveTextTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Delete active text checkout agreement"/>
+            <description value="Admin should be able to delete active text checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value=""/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+            <createData entity="SimpleTwo" stepKey="createdProduct"/>
+            <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
+                <argument name="term" value="activeTextTerm"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTermAbsentInGridActionGroup" stepKey="assertTermAbsentInGrid">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToTheCart">
+            <argument name="product" value="$$createdProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
+        <actionGroup ref="StorefrontAssertTermAbsentInCheckoutActionGroup" stepKey="assertTermAbsentInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
+        </actionGroup>
+    </test>
+</tests>
