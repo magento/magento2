@@ -10,6 +10,6 @@
     <preference for="Magento\MediaContentApi\Api\UnassignAssetInterface" type="Magento\MediaContent\Model\UnassignAsset"/>
     <preference for="Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetsUsedInContent"/>
     <preference for="Magento\MediaContentApi\Api\GetContentWithAssetInterface" type="Magento\MediaContent\Model\GetContentWithAsset"/>
-    <preference for="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetFromContent"/>
+    <preference for="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface" type="Magento\MediaContentApi\Model\ExtractAssetFromContent"/>
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
 </config>
