@@ -8,18 +8,20 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface;
+use Magento\MediaGallery\Model\File\Command\DeleteByAssetId;
+use Magento\MediaGalleryApi\Model\File\Command\DeleteByAssetIdInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 
 /**
  * Test methods of class DeleteByPath
  */
-class DeleteByPathTest extends \PHPUnit\Framework\TestCase
+class DeleteByAssertIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test directory name
      */
-    private CONST TEST_DIRECTORY_NAME = 'testDeleteDirectory';
+    private CONST TEST_DIRECTORY_NAME = 'testDirectory';
 
     /**
      * Absolute path to the media direcrory
@@ -27,9 +29,9 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
     private static $_mediaPath;
 
     /**
-     * @var DeleteByPathInterface
+     * @var DeleteByAssetId
      */
-    private $deleteByPath;
+    private $deleteByAssetId;
 
     /**
      * @inheritdoc
@@ -40,6 +42,7 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
         $directory = Bootstrap::getObjectManager()->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
         self::$_mediaPath = $directory->getAbsolutePath();
         $directory->create(self::TEST_DIRECTORY_NAME);
+        $directory->touch(self::TEST_DIRECTORY_NAME . '/path.jpg');
     }
 
     /**
@@ -47,39 +50,37 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->deleteByPath = Bootstrap::getObjectManager()->create(DeleteByPathInterface::class);
+        $this->deleteByAssetId = Bootstrap::getObjectManager()->create(DeleteByAssetIdInterface::class);
     }
 
     /**
+     * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testDeleteDirectoryWithExistingDirectoryAndCorrectAbsolutePath(): void
+    public function testDeleteByAssetIdWithExistingAsset(): void
     {
-        $fullPath = self::$_mediaPath . self::TEST_DIRECTORY_NAME;
+        $fullPath = self::$_mediaPath . self::TEST_DIRECTORY_NAME . '/path.jpg';
+        $getById = Bootstrap::getObjectManager()->get(GetByIdInterface::class);
         $this->assertFileExists($fullPath);
-        $this->deleteByPath->execute(self::TEST_DIRECTORY_NAME);
+        $this->assertEquals(1, $getById->execute(1)->getId());
+        $this->deleteByAssetId->execute(1);
         $this->assertFileNotExists($fullPath);
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $getById->execute(1);
     }
 
     /**
+     * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
-    public function testDeleteDirectoryWithRelativePathUnderMediaFolder(): void
+    public function testDeleteByAssetIdWithoutAsset(): void
     {
-        $this->deleteByPath->execute('../../pub/media');
-    }
-
-    /**
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     */
-    public function testDeleteDirectoryThatIsNotAllowed(): void
-    {
-        $this->deleteByPath->execute('theme');
+        $fullPath = self::$_mediaPath . self::TEST_DIRECTORY_NAME . '/path.jpg';
+        $this->assertFileNotExists($fullPath);
+        $this->deleteByAssetId->execute(1);
     }
 
     /**
