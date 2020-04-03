@@ -8,8 +8,14 @@
  * @var $block \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
  */
 ?>
-<?php if ($block->isMsgVisible()) : ?>
-    <div class="availability only" title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>">
-        <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
-    </div>
-<?php endif ?>
+<?php if($block->getThresholdQty() != 0): ?>
+    <?php if($block->getStockQtyLeft() > 0): ?>
+        <div class="availability only" title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>">
+            <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
+        </div>
+    <?php else: ?>
+        <div class="cart item message notice">
+            <div>We don't have as many quantity as you requested, but we'll back order.</div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

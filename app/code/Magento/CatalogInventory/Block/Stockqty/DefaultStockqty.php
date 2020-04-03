@@ -19,19 +19,6 @@ namespace Magento\CatalogInventory\Block\Stockqty;
 class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * Render block HTML
-     *
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        if (!$this->isMsgVisible()) {
-            return '';
-        }
-        return parent::_toHtml();
-    }
-
-    /**
      * Return identifiers for produced content
      *
      * @return array
