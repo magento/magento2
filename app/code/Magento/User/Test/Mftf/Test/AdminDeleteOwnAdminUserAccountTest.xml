@@ -25,17 +25,17 @@
             <createData entity="NewAdminUser" stepKey="user">
                 <field key="current_password">{$adminPassword}</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
                 <argument name="adminUser" value="$$user$$"/>
             </actionGroup>
         </before>
         <after>
             <!-- Delete New Admin User -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
             <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteUser">
                 <argument name="user" value="$$user$$" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Assert Impossible Delete Your Own Account-->
@@ -48,6 +48,6 @@
         <actionGroup ref="AssertAdminUserInGridActionGroup" stepKey="assertUserInGrid">
             <argument name="userName" value="$$user.username$$"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logOutAsNewUser"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutAsNewUser"/>
     </test>
 </tests>

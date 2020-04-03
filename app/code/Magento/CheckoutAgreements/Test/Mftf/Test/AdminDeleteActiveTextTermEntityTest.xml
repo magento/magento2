@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
             <createData entity="SimpleTwo" stepKey="createdProduct"/>
             <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
                 <argument name="term" value="activeTextTerm"/>
@@ -30,7 +30,7 @@
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">

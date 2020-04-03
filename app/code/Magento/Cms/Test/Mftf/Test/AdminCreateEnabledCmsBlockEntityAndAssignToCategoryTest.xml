@@ -21,12 +21,12 @@
         <before>
             <createData entity="_defaultCategory" stepKey="newDefaultCategory"/>
             <createData entity="_defaultBlock" stepKey="newDefaultBlock"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="newDefaultCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="newDefaultBlock" stepKey="deleteBlock"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminOpenCategoriesPageActionGroup" stepKey="openCategoriesPage"/>

@@ -29,7 +29,7 @@
             <actionGroup ref="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" stepKey="createConfigurableProduct2">
                 <argument name="productName" value="config2"/>
             </actionGroup>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--  Assign config1 and the associated  child products to CAT1 -->
             <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignConfigurableProduct1ToCategory">
                 <argument name="productId" value="$$createConfigProductCreateConfigurableProduct1.id$$"/>

@@ -20,7 +20,7 @@
             <group value="currency"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <!--Set price scope website-->

@@ -25,11 +25,11 @@
                 <field key="current_password">{{DefaultAdminUser.password}}</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Delete New Admin User-->
