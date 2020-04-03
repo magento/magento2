@@ -94,7 +94,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetDetail()
     {
         $origDetail = "This\nis\na\nstring";
-        $expected = "This<br />" . "\n" . "is<br />" . "\n" . "a<br />" . "\n" . "string";
+        $expected = "This<br />"."\n"."is<br />"."\n"."a<br />"."\n"."string";
 
         $this->filter->expects($this->any())->method('truncate')
             ->with($origDetail, ['length' => 50])
@@ -110,7 +110,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $origDetail = "<span>This\nis\na\nstring</span>";
         $origDetailEscapeHtml = "This\nis\na\nstring";
-        $expected = "This<br />" . "\n" . "is<br />" . "\n" . "a<br />" . "\n" . "string";
+        $expected = "This<br />"."\n"."is<br />"."\n"."a<br />"."\n"."string";
 
         $this->escaper->expects($this->any())->method('escapeHtml')
             ->with($origDetail)
@@ -124,24 +124,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test isEnableReview() function
-     */
-    public function testIsEnableReview()
-    {
-        $this->scopeConfig->expects($this->any())->method('isSetFlag')
-            ->with(\Magento\Review\Helper\Data::XML_PATH_REVIEW_ACTIVE, ScopeInterface::SCOPE_STORE)
-            ->willReturn('1');
-
-        $this->assertEquals(true, $this->helper->isEnableReview());
-    }
-
-    /**
      * Test getIsGuestAllowToWrite() function
      */
     public function testGetIsGuestAllowToWrite()
     {
         $this->scopeConfig->expects($this->any())->method('isSetFlag')
-            ->with(\Magento\Review\Helper\Data::XML_REVIEW_GUEST_ALLOW, ScopeInterface::SCOPE_STORE)
+            ->with('catalog/review/allow_guest', ScopeInterface::SCOPE_STORE)
             ->willReturn('1');
 
         $this->assertEquals(true, $this->helper->getIsGuestAllowToWrite());

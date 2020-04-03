@@ -7,7 +7,7 @@ namespace Magento\Review\Test\Unit\Controller\Product;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Review\Helper\Data as ReviewHelper;
+use Magento\Review\Helper\Review as ReviewHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -202,6 +202,11 @@ class PostTest extends \PHPUnit\Framework\TestCase
                 'messageManager' => $this->messageManager
             ]
         );
+
+        $this->helperMock = $this->createPartialMock(
+            ReviewHelper::class,
+            ['isEnableReview', 'getDefaultNoRouteUrl']
+        );
         $this->model = $objectManagerHelper->getObject(
             \Magento\Review\Controller\Product\Post::class,
             [
@@ -216,33 +221,10 @@ class PostTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSession,
                 'ratingFactory' => $this->ratingFactory,
                 'storeManager' => $this->storeManager,
-                'context' => $this->context
+                'context' => $this->context,
+                'helperReview' => $this->helperMock
             ]
         );
-
-        $this->initObjectManager();
-
-        $this->helperMock = $this->createPartialMock(
-            ReviewHelper::class,
-            ['isEnableReview']
-        );
-        $this->objectManager->expects($this->once())->method('get')
-            ->with(ReviewHelper::class)
-            ->will($this->returnValue($this->helperMock));
-    }
-
-    /**
-     * Init object manager
-     *
-     * @throws \ReflectionException
-     */
-    private function initObjectManager()
-    {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
-        $postController = new \ReflectionClass($this->model);
-        $objectManagerProp = $postController->getProperty('_objectManager');
-        $objectManagerProp->setAccessible(true);
-        $objectManagerProp->setValue($this->model, $this->objectManager);
     }
 
     /**
@@ -257,6 +239,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
             ->method('isEnableReview')
             ->willReturn(false);
         $this->reviewSession->expects($this->never())->method('getFormData');
+        $this->helperMock->expects($this->once())->method('getDefaultNoRouteUrl');
         $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 

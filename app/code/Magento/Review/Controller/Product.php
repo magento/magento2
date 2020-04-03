@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Controller;
 
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Review\Model\Review;
+use Magento\Review\Helper\Review as HelperReview;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Review controller
@@ -95,6 +98,13 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     protected $formKeyValidator;
 
     /**
+     * @var HelperReview
+     */
+    protected $helperReview;
+
+    /**
+     * Product constructor.
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -107,6 +117,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Session\Generic $reviewSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param HelperReview|null $helperReview
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -121,7 +132,8 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Framework\Session\Generic $reviewSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        HelperReview $helperReview = null
     ) {
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
@@ -134,6 +146,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         $this->ratingFactory = $ratingFactory;
         $this->catalogDesign = $catalogDesign;
         $this->formKeyValidator = $formKeyValidator;
+        $this->helperReview = $helperReview ?: ObjectManager::getInstance()->get(HelperReview::class);
 
         parent::__construct($context);
     }

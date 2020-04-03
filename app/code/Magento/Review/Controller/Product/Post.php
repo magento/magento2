@@ -31,10 +31,9 @@ class Post extends ProductController implements HttpPostActionInterface
             return $resultRedirect;
         }
 
-        $isReviewEnable = $this->_objectManager->get(\Magento\Review\Helper\Data::class)->isEnableReview();
-        if (!$isReviewEnable) {
-            $resultRedirect->setUrl($this->_redirect->getRefererUrl());
-            $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
+        if (!$this->helperReview->isEnableReview()) {
+            $defaultNoRouteUrl = $this->helperReview->getDefaultNoRouteUrl();
+            $resultRedirect->setPath($defaultNoRouteUrl);
             return $resultRedirect;
         }
 
