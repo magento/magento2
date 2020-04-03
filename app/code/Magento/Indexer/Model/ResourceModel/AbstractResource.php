@@ -11,6 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Abstract resource model. Can be used as base for indexer resources
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -22,6 +23,11 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      * @var \Magento\Framework\Indexer\Table\StrategyInterface
      */
     protected $tableStrategy;
+
+    /**
+     * @var bool
+     */
+    private $isIsolationLevelSet = false;
 
     /**
      * Class constructor
@@ -58,6 +64,20 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     protected function _getIndexAdapter()
     {
         return $this->getConnection();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        $connection = parent::getConnection();
+        if (!$this->isIsolationLevelSet) {
+            $connection->query('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;');
+            $this->isIsolationLevelSet = true;
+        }
+
+        return $connection;
     }
 
     /**
@@ -120,8 +140,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     }
 
     /**
-     * Insert data from select statement of read adapter to
-     * destination table related with index adapter
+     * Insert data from select statement of read adapter to destination table related with index adapter
      *
      * @param Select $select
      * @param string $destTable
