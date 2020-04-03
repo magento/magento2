@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
 
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
