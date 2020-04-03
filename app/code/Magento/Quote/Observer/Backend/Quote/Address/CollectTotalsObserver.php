@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Quote\Observer\Backend\Quote\Address;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
