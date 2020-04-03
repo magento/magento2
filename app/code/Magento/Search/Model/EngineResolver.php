@@ -19,7 +19,7 @@ class EngineResolver implements EngineResolverInterface
 {
     /**
      * MySQL search engine
-     * @deprecated Use di.xml for default setting
+     * @deprecated Use config.xml for default setting
      */
     const CATALOG_SEARCH_MYSQL_ENGINE = 'mysql';
 
