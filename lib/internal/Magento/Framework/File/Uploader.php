@@ -613,15 +613,11 @@ class Uploader
 
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $sysTmpFolder = sys_get_temp_dir();
-                $sysTmpFolderTarget = '';
-                /* check for symlinks */
-                if (is_link($sysTmpFolder)) {
-                    $sysTmpFolderTarget = readlink($link);
-                }
-
+                $sysTmpFolderRealPath = realpath($sysTmpFolder);
+                
                 $allowedFolders = [
                     $sysTmpFolder,
-                    $sysTmpFolderTarget,
+                    $sysTmpFolderRealPath,
                     $this->directoryList->getPath(DirectoryList::MEDIA),
                     $this->directoryList->getPath(DirectoryList::VAR_DIR),
                     $this->directoryList->getPath(DirectoryList::TMP),
