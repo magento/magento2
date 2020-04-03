@@ -19,7 +19,7 @@ class EngineResolver implements EngineResolverInterface
 {
     /**
      * MySQL search engine
-     * @deprecated
+     * @deprecated Use di.xml for default setting
      */
     const CATALOG_SEARCH_MYSQL_ENGINE = 'mysql';
 
@@ -62,18 +62,12 @@ class EngineResolver implements EngineResolverInterface
     private $logger;
 
     /**
-     * @var string
-     */
-    private $defaultEngine;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param array $engines
      * @param LoggerInterface $logger
      * @param string $path
      * @param string $scopeType
      * @param string|null $scopeCode
-     * @param string|null $defaultEngine
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -81,8 +75,7 @@ class EngineResolver implements EngineResolverInterface
         LoggerInterface $logger,
         $path,
         $scopeType,
-        $scopeCode = null,
-        $defaultEngine = null
+        $scopeCode = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->path = $path;
@@ -90,7 +83,6 @@ class EngineResolver implements EngineResolverInterface
         $this->scopeCode = $scopeCode;
         $this->engines = $engines;
         $this->logger = $logger;
-        $this->defaultEngine = $defaultEngine;
     }
 
     /**
@@ -113,11 +105,15 @@ class EngineResolver implements EngineResolverInterface
         if (in_array($engine, $this->engines)) {
             return $engine;
         } else {
-            if ($this->defaultEngine !== null) {
+            //get default engine from default scope
+            $defaultEngine = $this->scopeConfig->getValue(
+                $this->path
+            );
+            if ($defaultEngine) {
                 $this->logger->error(
-                    $engine . ' search engine doesn\'t exist. Falling back to ' . $this->defaultEngine
+                    $engine . ' search engine doesn\'t exist. Falling back to ' . $defaultEngine
                 );
-                return $this->defaultEngine;
+                return $defaultEngine;
             } else {
                 throw new \Exception($engine . ' search engine doesn\'t exist');
             }
