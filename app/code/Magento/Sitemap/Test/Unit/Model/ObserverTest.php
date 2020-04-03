@@ -133,7 +133,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->emailNotificationMock->expects($this->once())
             ->method('sendErrors')
-            ->with(['Sitemap Exception']);
+            ->with([$exception]);
 
         $this->observer->scheduledGenerateSitemaps();
     }
