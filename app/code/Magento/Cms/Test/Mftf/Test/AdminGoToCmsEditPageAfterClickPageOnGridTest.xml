@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGoToCmsEditPageAfterClickPageOnGridTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Go to CMS Edit Page"/>
+            <title value="Go to CMS Edit Page after choosing page on the grid."/>
+            <description value="Go to CMS Edit Page after choosing page on the grid."/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <click selector="{{CmsPagesPageActionsSection.homePage}}" stepKey="navigateToHomePage"/>
+        <waitForPageLoad stepKey="waitForCmsHomePageLoad"/>
+        <seeInCurrentUrl url="cms/page/edit/page_id/2" stepKey="seeInHomePage"/>
+    </test>
+</tests>
