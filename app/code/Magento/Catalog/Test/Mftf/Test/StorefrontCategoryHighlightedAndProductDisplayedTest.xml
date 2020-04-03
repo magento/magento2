@@ -51,8 +51,7 @@
         </after>
         <!--Open Storefront home page-->
         <comment userInput="Open Storefront home page" stepKey="openStorefrontHomePage"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontHomePage"/>
-        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
         <!--Click on first category-->
         <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category1.name$$)}}" stepKey="clickCategory1Name"/>
