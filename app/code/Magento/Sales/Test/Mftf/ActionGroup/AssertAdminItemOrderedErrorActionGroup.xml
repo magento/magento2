@@ -16,6 +16,6 @@
             <argument name="messageType" defaultValue="error" type="string"/>
             <argument name="message" defaultValue="The requested qty is not available" type="string"/>
         </arguments>
-        <see userInput="{{message}}" selector="{{AdminOrderFormItemsOrderedSection.flashMessage(messageType)}}" stepKey="assertItemErrorVisible"/>
+        <see userInput="{{message}}" selector="{{AdminOrderFormItemsOrderedSection.productMessage(productName, messageType)}}" stepKey="assertItemErrorVisible"/>
     </actionGroup>
 </actionGroups>
