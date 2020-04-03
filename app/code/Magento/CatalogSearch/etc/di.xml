@@ -258,13 +258,6 @@
             <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Engine</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Search\Model\Autocomplete">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
