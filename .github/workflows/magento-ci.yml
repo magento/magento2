@@ -3,7 +3,6 @@ env:
   GITHUB_TOKEN: ${{ secrets.GIT_ACCESS_TOKEN }}
   DEBIAN_FRONTEND: noninteractive
   TESTS_DIR: static-tests
-  MAGENTO_TESTS_DIR: static-tests/vendor/atwix/magento-coding-standard
 
 on: [pull_request]
 
@@ -20,16 +19,16 @@ jobs:
         php-version: 7.2
         extensions: mbstring, dom, xml
 
-    - name: Get Composer Cache Directory
+    - name: Get composer cache directory
       id: composer-cache
-      run: |
-            echo "::set-output name=dir::$(composer config cache-files-dir)"
-    - uses: actions/cache@v1
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+    - name: Cache dependencies
+      uses: actions/cache@v1
       with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-              ${{ runner.os }}-composer-
+          restore-keys: ${{ runner.os }}-composer-
 
     - name: Configure Composer
       run: composer config -g github-oauth.github.com ${GITHUB_TOKEN}
