@@ -12,13 +12,24 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Setup PHP, with composer and extensions
       uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
       with:
         php-version: 7.2
         extensions: mbstring, dom, xml
+
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: |
+            echo "::set-output name=dir::$(composer config cache-files-dir)"
+    - uses: actions/cache@v1
+      with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-composer-
 
     - name: Configure Composer
       run: composer config -g github-oauth.github.com ${GITHUB_TOKEN}
