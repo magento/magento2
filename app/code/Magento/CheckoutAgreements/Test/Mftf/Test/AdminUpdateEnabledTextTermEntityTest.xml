@@ -15,7 +15,7 @@
             <title value="Update enabled Text checkout agreement"/>
             <description value="Admin should be able to update enabled Text checkout agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-14666"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>

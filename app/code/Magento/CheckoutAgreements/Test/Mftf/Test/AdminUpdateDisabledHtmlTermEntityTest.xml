@@ -15,7 +15,7 @@
             <title value="Update disabled HTML checkout agreement"/>
             <description value="Admin should be able to update disabled HTML checkout agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-14664"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
