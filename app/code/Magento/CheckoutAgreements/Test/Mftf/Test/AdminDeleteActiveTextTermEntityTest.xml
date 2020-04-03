@@ -23,9 +23,11 @@
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
             <createData entity="SimpleTwo" stepKey="createdProduct"/>
-            <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="createTerm">
                 <argument name="term" value="activeTextTerm"/>
             </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
@@ -33,9 +35,11 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
-            <argument name="term" value="activeTextTerm"/>
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
+        <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
         <actionGroup ref="AdminAssertTermAbsentInGridActionGroup" stepKey="assertTermAbsentInGrid">
             <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
@@ -44,7 +48,7 @@
             <argument name="product" value="$$createdProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
-        <actionGroup ref="StorefrontAssertTermAbsentInCheckoutActionGroup" stepKey="assertTermAbsentInCheckout">
+        <actionGroup ref="AssertStorefrontTermAbsentInCheckoutActionGroup" stepKey="assertTermAbsentInCheckout">
             <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
         </actionGroup>
     </test>
