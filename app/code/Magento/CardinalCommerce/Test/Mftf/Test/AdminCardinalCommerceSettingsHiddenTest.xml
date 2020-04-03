@@ -17,7 +17,7 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set three_d_secure/cardinal/enabled_authorizenet 1" stepKey="enableCardinalCommerce"/>
         </before>
 

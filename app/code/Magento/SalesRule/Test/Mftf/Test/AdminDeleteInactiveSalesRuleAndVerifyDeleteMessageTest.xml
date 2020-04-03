@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
             <!--Create inactive cart price rule-->
             <actionGroup ref="AdminInactiveCartPriceRuleActionGroup" stepKey="createInactiveCartPriceRule">

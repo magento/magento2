@@ -20,7 +20,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create category-->
             <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
