@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
+namespace Magento\Quote\Test\Unit\Observer\Backend\Quote\Address;
+
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 
 /**
  * Class CollectTotalsTest
@@ -14,7 +17,7 @@ namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver
+     * @var \Magento\Quote\Observer\Backend\Quote\Address\CollectTotalsObserver
      */
     protected $model;
 
@@ -89,6 +92,11 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
     protected $groupInterfaceMock;
 
     /**
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stateMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -149,6 +157,11 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ['getId']
         );
 
+        $this->stateMock = $this->createPartialMock(
+            State::class,
+            ['getAreaCode']
+        );
+
         $shippingAssignmentMock = $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
         $shippingMock = $this->createMock(\Magento\Quote\Api\Data\ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
@@ -170,14 +183,15 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
 
-        $this->model = new \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver(
+        $this->model = new \Magento\Quote\Observer\Backend\Quote\Address\CollectTotalsObserver(
             $this->customerAddressMock,
             $this->customerVatMock,
             $this->vatValidatorMock,
             $this->customerDataFactoryMock,
             $this->groupManagementMock,
             $this->addressRepository,
-            $this->customerSession
+            $this->customerSession,
+            $this->stateMock
         );
     }
 
@@ -231,8 +245,53 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         $this->model->execute($this->observerMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testDispatchWithNotLoggedCustomerInGroupAndInAdminArea()
+    {
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')->will($this->returnValue(Area::AREA_ADMINHTML));
+        $this->groupManagementMock->expects($this->exactly(2))
+            ->method('getNotLoggedInGroup')
+            ->will($this->returnValue($this->groupInterfaceMock));
+        $this->groupInterfaceMock->expects($this->exactly(2))
+            ->method('getId')->will($this->returnValue(0));
+        $this->vatValidatorMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->quoteAddressMock, $this->storeId)
+            ->will($this->returnValue(true));
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->will($this->returnValue('customerCountryCode'));
+        $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue('vatId'));
+
+        $this->customerVatMock->expects(
+            $this->once()
+        )->method(
+            'isCountryInEU'
+        )->with(
+            'customerCountryCode'
+        )->will(
+            $this->returnValue(false)
+        );
+
+        $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+
+        /** Assertions */
+        $this->quoteAddressMock->expects($this->never())->method('setPrevQuoteCustomerGroupId');
+        $this->customerDataFactoryMock->expects($this->never())->method('mergeDataObjectWithArray');
+        $this->quoteMock->expects($this->never())->method('setCustomerGroupId');
+
+        /** SUT execution */
+        $this->model->execute($this->observerMock);
+    }
+
     public function testDispatchWithDefaultCustomerGroupId()
     {
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')->will($this->returnValue(Area::AREA_FRONTEND));
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -269,6 +328,8 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatchWithCustomerCountryInEU()
     {
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')->will($this->returnValue(Area::AREA_FRONTEND));
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -353,6 +414,8 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatchWithEmptyShippingAddress()
     {
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')->will($this->returnValue(Area::AREA_FRONTEND));
         $customerCountryCode = "DE";
         $customerVat = "123123123";
         $defaultShipping = 1;

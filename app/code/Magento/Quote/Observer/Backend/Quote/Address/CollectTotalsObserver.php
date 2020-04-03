@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Observer\Frontend\Quote\Address;
+declare(strict_types=1);
 
+namespace Magento\Quote\Observer\Backend\Quote\Address;
+
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 
 /**
  * Handle customer VAT number on collect_totals_before event of quote address.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CollectTotalsObserver implements ObserverInterface
 {
@@ -52,6 +59,11 @@ class CollectTotalsObserver implements ObserverInterface
     protected $groupManagement;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Customer\Helper\Address $customerAddressHelper
@@ -61,6 +73,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param State $state
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
@@ -69,7 +82,8 @@ class CollectTotalsObserver implements ObserverInterface
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        State $state
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
@@ -78,6 +92,7 @@ class CollectTotalsObserver implements ObserverInterface
         $this->groupManagement = $groupManagement;
         $this->addressRepository = $addressRepository;
         $this->customerSession = $customerSession;
+        $this->state = $state;
     }
 
     /**
@@ -131,7 +146,12 @@ class CollectTotalsObserver implements ObserverInterface
             );
         }
 
-        if ($groupId !== null) {
+        // Do not update customer group as not logged in when doing process in admin area
+        if ($groupId !== null
+            && !(
+                $this->state->getAreaCode() == Area::AREA_ADMINHTML
+                && $groupId == $this->groupManagement->getNotLoggedInGroup()->getId()
+            )) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);

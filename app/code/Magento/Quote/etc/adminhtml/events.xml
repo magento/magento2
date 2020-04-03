@@ -9,4 +9,7 @@
     <event name="customer_save_after_data_object">
         <observer name="customer" instance="Magento\Quote\Observer\Backend\CustomerQuoteObserver" />
     </event>
+    <event name="sales_quote_address_collect_totals_before">
+        <observer name="sales_customer_validate_vat_number" instance="Magento\Quote\Observer\Backend\Quote\Address\CollectTotalsObserver" />
+    </event>
 </config>
