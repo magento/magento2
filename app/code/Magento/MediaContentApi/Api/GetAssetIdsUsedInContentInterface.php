@@ -8,21 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Api;
 
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+
 /**
  * Get media asset ids used in the content
  * @api
  */
-interface GetAssetsUsedInContentInterface
+interface GetAssetIdsUsedInContentInterface
 {
     /**
      * Get media asset ids used in the content
      *
-     * @param string $contentType
-     * @param string|null $contentEntityId
-     * @param string|null $contentField
-     *
+     * @param ContentIdentityInterface $contentIdentity
      * @return int[]
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array;
+    public function execute(ContentIdentityInterface $contentIdentity): array;
 }

@@ -8,14 +8,15 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\MediaContentApi\Api\UnassignAssetsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to return media asset id list which is used in the specified media content
+ * Used to unassign relation of the media asset to the media content where the media asset is used
  */
-class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
+class UnassignAssets implements UnassignAssetsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
@@ -46,31 +47,27 @@ class GetAssetsUsedInContent implements GetAssetsUsedInContentInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function execute(string $contentType, string $contentEntityId = null, string $contentField = null): array
+    public function execute(ContentIdentityInterface $contentIdentity, array $assetIds): void
     {
         try {
             $connection = $this->resourceConnection->getConnection();
-            $select = $connection->select()
-                ->from(
-                    $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
-                    self::ASSET_ID
-                )->where(self::TYPE . ' = ?', $contentType);
-
-            if (null !== $contentEntityId) {
-                $select = $select->where(self::ENTITY_ID . '= ?', $contentEntityId);
-            }
-
-            if (null !== $contentField) {
-                $select = $select->where(self::FIELD . '= ?', $contentField);
-            }
-
-            return $connection->fetchAssoc($select);
+            $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
+            $connection->delete(
+                $tableName,
+                [
+                    self::ASSET_ID . ' IN (?)' => $assetIds,
+                    self::TYPE . ' = ?' => $contentIdentity->getEntityType(),
+                    self::ENTITY_ID . ' = ?' => $contentIdentity->getEntityId(),
+                    self::FIELD . ' = ?' => $contentIdentity->getField()
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred at getting asset used in content information.');
-            throw new IntegrationException($message);
+            throw new CouldNotDeleteException(
+                __('An error occurred at unassign relation between the media asset and media content.')
+            );
         }
     }
 }

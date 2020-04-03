@@ -9,16 +9,20 @@ namespace Magento\MediaContent\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\GetContentWithAssetInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to return media asset list for the specified asset.
+ * Used to return media asset id list which is used in the specified media content
  */
-class GetContentWithAsset implements GetContentWithAssetInterface
+class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
+    private const TYPE = 'type';
+    private const ENTITY_ID = 'entity_id';
+    private const FIELD = 'field';
 
     /**
      * @var ResourceConnection
@@ -43,20 +47,31 @@ class GetContentWithAsset implements GetContentWithAssetInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function execute(int $assetId): array
+    public function execute(ContentIdentityInterface $contentIdentity): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from($this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME))
-                ->where(self::ASSET_ID . '= ?', $assetId);
+                ->from(
+                    $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
+                    self::ASSET_ID
+                )->where(
+                    self::TYPE . ' = ?',
+                    $contentIdentity->getEntityType()
+                )->where(
+                    self::ENTITY_ID . '= ?',
+                    $contentIdentity->getEntityId()
+                )->where(
+                    self::FIELD . '= ?',
+                    $contentIdentity->getField()
+                );
 
             return $connection->fetchAssoc($select);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred at getting media asset to content relation by media asset id.');
+            $message = __('An error occurred at getting asset used in content information.');
             throw new IntegrationException($message);
         }
     }

@@ -6,16 +6,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaContentApi\Api\AssignAssetInterface" type="Magento\MediaContent\Model\AssignAsset"/>
-    <preference for="Magento\MediaContentApi\Api\UnassignAssetInterface" type="Magento\MediaContent\Model\UnassignAsset"/>
-    <preference for="Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetsUsedInContent"/>
-    <preference for="Magento\MediaContentApi\Api\GetContentWithAssetInterface" type="Magento\MediaContent\Model\GetContentWithAsset"/>
-    <preference for="Magento\MediaContentApi\Api\ExtractAssetFromContentInterface" type="Magento\MediaContentApi\Model\ExtractAssetFromContent"/>
+    <preference for="Magento\MediaContentApi\Api\AssignAssetsInterface" type="Magento\MediaContent\Model\AssignAssets"/>
+    <preference for="Magento\MediaContentApi\Api\UnassignAssetsInterface" type="Magento\MediaContent\Model\UnassignAssets"/>
+    <preference for="Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetIdsUsedInContent"/>
+    <preference for="Magento\MediaContentApi\Api\GetContentWithAssetsInterface" type="Magento\MediaContent\Model\GetContentWithAssets"/>
+    <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContentApi\Model\ExtractAssetsFromContent"/>
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
+    <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\Content"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByPath" />
     </type>
-    <type name="\Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
+    <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
     </type>
 </config>

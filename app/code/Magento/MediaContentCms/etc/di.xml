@@ -20,7 +20,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentApi\Model\ExtractAssetFromContent">
+    <type name="Magento\MediaContentApi\Model\ExtractAssetsFromContent">
         <arguments>
             <argument name="searchPatterns" xsi:type="array">
                 <item name="media_gallery" xsi:type="string">/{{media url="?(.*?)"?}}/</item>

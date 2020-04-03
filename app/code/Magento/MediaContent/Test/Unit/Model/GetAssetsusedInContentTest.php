@@ -11,7 +11,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContent\Model\GetAssetsUsedInContent;
+use Magento\MediaContent\Model\GetAssetIdsUsedInContent;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -32,7 +33,7 @@ class GetAssetsusedInContentTest extends TestCase
     private $loggerMock;
 
     /**
-     * @var GetAssetsUsedInContent
+     * @var GetAssetIdsUsedInContent
      */
     private $getAssetsUsedInContent;
 
@@ -43,7 +44,10 @@ class GetAssetsusedInContentTest extends TestCase
     {
         $this->resourceConnectionStub  = $this->createMock(ResourceConnection::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->getAssetsUsedInContent = new GetAssetsUsedInContent($this->resourceConnectionStub, $this->loggerMock);
+        $this->getAssetsUsedInContent = new GetAssetIdsUsedInContent(
+            $this->resourceConnectionStub,
+            $this->loggerMock
+        );
     }
 
     /**
@@ -59,9 +63,11 @@ class GetAssetsusedInContentTest extends TestCase
     ): void {
         $this->configureResourceConnectionStub($expectedAssetIdList);
         $assetList = $this->getAssetsUsedInContent->execute(
-            $requestParameters['type'],
-            $requestParameters['entity_id'],
-            $requestParameters['field']
+            $this->getContentIdentity(
+                $requestParameters['type'],
+                $requestParameters['field'],
+                $requestParameters['entity_id']
+            )
         );
 
         $this->assertEquals($expectedAssetIdList, $assetList);
@@ -78,7 +84,7 @@ class GetAssetsusedInContentTest extends TestCase
             ->method('critical')
             ->willReturnSelf();
 
-        $this->getAssetsUsedInContent->execute('cms_page', '1', 'content');
+        $this->getAssetsUsedInContent->execute($this->createMock(ContentIdentityInterface::class));
     }
 
     /**
@@ -104,6 +110,30 @@ class GetAssetsusedInContentTest extends TestCase
     }
 
     /**
+     * Get content identity mock
+     *
+     * @param string $type
+     * @param string $field
+     * @param string $id
+     * @return MockObject|ContentIdentityInterface
+     */
+    private function getContentIdentity(string $type, string $field, string $id): MockObject
+    {
+        $contentIdentity = $this->createMock(ContentIdentityInterface::class);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($id);
+        $contentIdentity->expects($this->once())
+            ->method('getField')
+            ->willReturn($field);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($type);
+
+        return $contentIdentity;
+    }
+
+    /**
      * Media asset to media content relation data
      *
      * @return array
@@ -118,30 +148,6 @@ class GetAssetsusedInContentTest extends TestCase
                     'field' => 'content'
                 ],
                 [1234123]
-            ],
-            [
-                [
-                    'type' => 'cms_page',
-                    'entity_id' => null,
-                    'field' => 'content'
-                ],
-                [1234123, 2425168]
-            ],
-            [
-                [
-                    'type' => 'catalog_category',
-                    'entity_id' => '1',
-                    'field' => null
-                ],
-                [1234123]
-            ],
-            [
-                [
-                    'type' => 'cbm_block',
-                    'entity_id' => null,
-                    'field' => null
-                ],
-                [1234123, 2425168]
             ]
         ];
     }

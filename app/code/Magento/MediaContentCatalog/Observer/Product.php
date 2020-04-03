@@ -10,8 +10,8 @@ namespace Magento\MediaContentCatalog\Observer;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Model\AbstractModel;
 use Magento\MediaContentApi\Api\UpdateRelationsInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -19,6 +19,9 @@ use Magento\MediaContentApi\Api\UpdateRelationsInterface;
 class Product implements ObserverInterface
 {
     private const CONTENT_TYPE = 'catalog_product';
+    private const TYPE = 'entity_type';
+    private const ENTITY_ID = 'entity_id';
+    private const FIELD = 'field';
 
     /**
      * @var UpdateRelationsInterface
@@ -31,11 +34,21 @@ class Product implements ObserverInterface
     private $fields;
 
     /**
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $contentIdentityFactory;
+
+    /**
+     * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateRelationsInterface $processor
      * @param array $fields
      */
-    public function __construct(UpdateRelationsInterface $processor, array $fields)
-    {
+    public function __construct(
+        ContentIdentityInterfaceFactory $contentIdentityFactory,
+        UpdateRelationsInterface $processor,
+        array $fields
+    ) {
+        $this->contentIdentityFactory = $contentIdentityFactory;
         $this->processor = $processor;
         $this->fields = $fields;
     }
@@ -47,18 +60,23 @@ class Product implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        /** @var CatalogProduct $model */
         $model = $observer->getEvent()->getData('product');
 
-        if ($model instanceof AbstractModel) {
+        if ($model instanceof CatalogProduct) {
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
                 $this->processor->execute(
-                    self::CONTENT_TYPE,
-                    $field,
-                    (string) $model->getId(),
+                    $this->contentIdentityFactory->create(
+                        [
+                            'data' => [
+                                self::TYPE => self::CONTENT_TYPE,
+                                self::FIELD => $field,
+                                self::ENTITY_ID => (string) $model->getId(),
+                            ]
+                        ]
+                    ),
                     (string) $model->getData($field)
                 );
             }

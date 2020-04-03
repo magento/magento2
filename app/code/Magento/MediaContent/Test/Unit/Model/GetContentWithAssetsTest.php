@@ -11,7 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContent\Model\GetContentWithAsset;
+use Magento\MediaContent\Model\GetContentWithAssets;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -19,21 +21,8 @@ use Psr\Log\LoggerInterface;
 /**
  * Test for the GetContentWithAsset command.
  */
-class GetContentWithAssetTest extends TestCase
+class GetContentWithAssetsTest extends TestCase
 {
-    /**
-     * Expected list of assets for the return statement.
-     */
-    private const EXPECTED_LIST_OF_ASSETS =
-        [
-            1234123 => [
-                1234123,
-                'cms_page',
-                '1',
-                'content',
-            ]
-        ];
-
     /**
      * @var ResourceConnection | MockObject
      */
@@ -45,9 +34,14 @@ class GetContentWithAssetTest extends TestCase
     private $loggerMock;
 
     /**
-     * @var GetContentWithAsset
+     * @var GetContentWithAssets
      */
     private $getContentWithAsset;
+
+    /**
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $factory;
 
     /**
      * @inheritdoc
@@ -56,7 +50,12 @@ class GetContentWithAssetTest extends TestCase
     {
         $this->resourceConnectionStub  = $this->createMock(ResourceConnection::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->getContentWithAsset = new GetContentWithAsset($this->resourceConnectionStub, $this->loggerMock);
+        $this->factory = $this->createMock(ContentIdentityInterfaceFactory::class);
+        $this->getContentWithAsset = new GetContentWithAssets(
+            $this->factory,
+            $this->resourceConnectionStub,
+            $this->loggerMock
+        );
     }
 
     /**
@@ -65,10 +64,20 @@ class GetContentWithAssetTest extends TestCase
     public function testSuccessfulGetContentWithAsset(): void
     {
         $assetId = 1234123;
-        $this->configureResourceConnectionStub();
-        $assetList = $this->getContentWithAsset->execute($assetId);
+        $contentIdentityData = [
+            'entity_type' => 'catalog_product',
+            'entity_id' => 42,
+            'field' => 'desctiption'
+        ];
+        $this->configureResourceConnectionStub($contentIdentityData);
 
-        $this->assertEquals(self::EXPECTED_LIST_OF_ASSETS, $assetList);
+        $contentIdentity = $this->createMock(ContentIdentityInterface::class);
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with(['data' => $contentIdentityData])
+            ->willReturn($contentIdentity);
+
+        $this->assertEquals([$contentIdentity], $this->getContentWithAsset->execute([$assetId]));
     }
 
     /**
@@ -82,13 +91,15 @@ class GetContentWithAssetTest extends TestCase
             ->method('critical')
             ->willReturnSelf();
 
-        $this->getContentWithAsset->execute(1);
+        $this->getContentWithAsset->execute([1]);
     }
 
     /**
      * Configure resource connection for the command. Based on the current implementation.
+     *
+     * @param array $contentIdentityData
      */
-    private function configureResourceConnectionStub(): void
+    private function configureResourceConnectionStub(array $contentIdentityData): void
     {
         $selectStub = $this->createMock(Select::class);
         $selectStub->method('from')->willReturnSelf();
@@ -99,7 +110,7 @@ class GetContentWithAssetTest extends TestCase
         $connectionMock->expects($this->any())
             ->method('fetchAssoc')
             ->with($selectStub)
-            ->willReturn(self::EXPECTED_LIST_OF_ASSETS);
+            ->willReturn([$contentIdentityData]);
         $this->resourceConnectionStub->expects($this->any())
             ->method('getConnection')
             ->willReturn($connectionMock);

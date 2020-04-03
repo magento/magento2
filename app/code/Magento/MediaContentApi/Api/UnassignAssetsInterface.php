@@ -8,21 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Api;
 
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+
 /**
  * Unassign relation between the media asset and media content where the media asset is used
  * @api
  */
-interface UnassignAssetInterface
+interface UnassignAssetsInterface
 {
     /**
      * Remove relation between the media asset and media content.
      *
-     * @param int $assetId
-     * @param string $contentType
-     * @param string $contentEntityId
-     * @param string $contentField
-     *
+     * @param int[] $assetIds
+     * @param ContentIdentityInterface $contentIdentity
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function execute(int $assetId, string $contentType, string $contentEntityId, string $contentField): void;
+    public function execute(ContentIdentityInterface $contentIdentity, array $assetIds): void;
 }

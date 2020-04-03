@@ -10,10 +10,11 @@ namespace Magento\MediaContent\Model;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\AssignAssetInterface;
-use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
-use Magento\MediaContentApi\Api\GetAssetsUsedInContentInterface;
-use Magento\MediaContentApi\Api\UnassignAssetInterface;
+use Magento\MediaContentApi\Api\AssignAssetsInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
+use Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface;
+use Magento\MediaContentApi\Api\UnassignAssetsInterface;
 use Magento\MediaContentApi\Api\UpdateRelationsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Psr\Log\LoggerInterface;
@@ -24,22 +25,22 @@ use Psr\Log\LoggerInterface;
 class UpdateRelations implements UpdateRelationsInterface
 {
     /**
-     * @var ExtractAssetFromContentInterface
+     * @var ExtractAssetsFromContentInterface
      */
     private $extractAssetFromContent;
 
     /**
-     * @var AssignAssetInterface
+     * @var AssignAssetsInterface
      */
     private $assignAsset;
 
     /**
-     * @var GetAssetsUsedInContentInterface
+     * @var GetAssetIdsUsedInContentInterface
      */
     private $getAssetsUsedInContent;
 
     /**
-     * @var UnassignAssetInterface
+     * @var UnassignAssetsInterface
      */
     private $unassignAsset;
 
@@ -49,17 +50,17 @@ class UpdateRelations implements UpdateRelationsInterface
     private $logger;
 
     /**
-     * @param ExtractAssetFromContentInterface $extractAssetFromContent
-     * @param AssignAssetInterface $assignAsset
-     * @param GetAssetsUsedInContentInterface $getAssetsUsedInContent
-     * @param UnassignAssetInterface $unassignAsset
+     * @param ExtractAssetsFromContentInterface $extractAssetFromContent
+     * @param AssignAssetsInterface $assignAsset
+     * @param GetAssetIdsUsedInContentInterface $getAssetsUsedInContent
+     * @param UnassignAssetsInterface $unassignAsset
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ExtractAssetFromContentInterface $extractAssetFromContent,
-        AssignAssetInterface $assignAsset,
-        GetAssetsUsedInContentInterface $getAssetsUsedInContent,
-        UnassignAssetInterface $unassignAsset,
+        ExtractAssetsFromContentInterface $extractAssetFromContent,
+        UnassignAssetsInterface $assignAsset,
+        GetAssetIdsUsedInContentInterface $getAssetsUsedInContent,
+        UnassignAssetsInterface $unassignAsset,
         LoggerInterface $logger
     ) {
         $this->extractAssetFromContent = $extractAssetFromContent;
@@ -72,15 +73,13 @@ class UpdateRelations implements UpdateRelationsInterface
     /**
      * Create new relation between media asset and content or updated existing
      *
-     * @param string $type
-     * @param string $field
-     * @param string $entityId
+     * @param ContentIdentityInterface $contentIdentity
      * @param string $data
      */
-    public function execute(string $type, string $field, string $entityId, string $data): void
+    public function execute(ContentIdentityInterface $contentIdentity, string $data): void
     {
         try {
-            $this->updateRelation($type, $field, $entityId, $data);
+            $this->updateRelation($contentIdentity, $data);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
@@ -89,28 +88,26 @@ class UpdateRelations implements UpdateRelationsInterface
     /**
      * Records a relation for the newly added asset
      *
-     * @param string $type
-     * @param string $field
-     * @param string $entityId
+     * @param ContentIdentityInterface $contentIdentity
      * @param string $data
      * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
      * @throws IntegrationException
      */
-    private function updateRelation(string $type, string $field, string $entityId, string $data)
+    private function updateRelation(ContentIdentityInterface $contentIdentity, string $data)
     {
-        $relations = $this->getAssetsUsedInContent->execute($type, $entityId, $field);
-        $assetsInContent = $this->extractAssetFromContent->execute($data);
+        $existingAssetIds = $this->getAssetsUsedInContent->execute($contentIdentity);
+        $currentAssets = $this->extractAssetFromContent->execute($data);
         /** @var AssetInterface $asset */
-        foreach ($assetsInContent as $asset) {
-            if (!isset($relations[$asset->getId()])) {
-                $this->assignAsset->execute($asset->getId(), $type, $entityId, $field);
+        foreach ($currentAssets as $asset) {
+            if (!in_array($asset->getId(), $existingAssetIds)) {
+                $this->assignAsset->execute($contentIdentity, [$asset->getId()]);
             }
         }
 
-        foreach (array_keys($relations) as $assetId) {
-            if (!isset($assetsInContent[$assetId])) {
-                $this->unassignAsset->execute($assetId, $type, $entityId, $field);
+        foreach ($existingAssetIds as $assetId) {
+            if (!isset($currentAssets[$assetId])) {
+                $this->unassignAsset->execute($contentIdentity, [$assetId]);
             }
         }
     }

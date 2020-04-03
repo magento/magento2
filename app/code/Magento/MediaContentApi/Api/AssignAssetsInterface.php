@@ -8,21 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Api;
 
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+
 /**
  * Saving data represents relation between the media asset and media content
  * @api
  */
-interface AssignAssetInterface
+interface AssignAssetsInterface
 {
     /**
      * Save relation between media asset and media content.
      *
-     * @param int $assetId
-     * @param string $contentType
-     * @param string $contentEntityId
-     * @param string $contentField
-     *
+     * @param ContentIdentityInterface $contentIdentity
+     * @param int[] $assetIds
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(int $assetId, string $contentType, string $contentEntityId, string $contentField): void;
+    public function execute(ContentIdentityInterface $contentIdentity, array $assetIds): void;
 }

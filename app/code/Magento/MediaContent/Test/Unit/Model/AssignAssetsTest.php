@@ -12,7 +12,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaContent\Model\AssignAsset;
+use Magento\MediaContent\Model\AssignAssets;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -20,7 +21,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Tests for the AssignAsset command.
  */
-class AssignAssetTest extends TestCase
+class AssignAssetsTest extends TestCase
 {
     /**
      * Media content relation data storage table name
@@ -73,7 +74,7 @@ class AssignAssetTest extends TestCase
     private $loggerMock;
 
     /**
-     * @var AssignAsset
+     * @var AssignAssets
      */
     private $assignAsset;
 
@@ -93,7 +94,7 @@ class AssignAssetTest extends TestCase
         );
 
         $this->assignAsset = (new ObjectManager($this))->getObject(
-            AssignAsset::class,
+            AssignAssets::class,
             [
                 'resourceConnection' => $this->resourceConnectionMock,
                 'logger'             => $this->loggerMock
@@ -125,29 +126,24 @@ class AssignAssetTest extends TestCase
         ];
         $this->adapterMock
             ->expects(self::once())
-            ->method('insert')
-            ->with(self::PREFIXED_TABLE_MEDIA_CONTENT_ASSET, $saveData)
+            ->method('insertMultiple')
+            ->with(self::PREFIXED_TABLE_MEDIA_CONTENT_ASSET, [$saveData])
             ->willReturn(self::AFFECTED_ROWS);
 
-        $this->assignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
+        $this->assignAsset->execute(
+            $this->getContentIdentity($contentType, $contentField, $contentEntityId),
+            [
+                $assetId
+            ]
+        );
     }
 
     /**
      * Tests with exception scenario for saving relation between media asset and media content.
-     *
-     * @param int $assetId
-     * @param string $contentType
-     * @param string $contentEntityId
-     * @param string $contentField
-     * @dataProvider assignAssetDataProvider
      */
-    public function testExceptionExecute(
-        int $assetId,
-        string $contentType,
-        string $contentEntityId,
-        string $contentField
-    ): void {
-        $this->resourceConnectionMock->method('getConnection')->willThrowException((new \Exception()));
+    public function testExceptionExecute(): void {
+        $this->resourceConnectionMock->method('getConnection')
+            ->willThrowException((new \Exception()));
 
         $this->loggerMock
             ->expects(self::once())
@@ -155,7 +151,36 @@ class AssignAssetTest extends TestCase
             ->willReturnSelf();
 
         $this->expectException(CouldNotSaveException::class);
-        $this->assignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
+        $this->assignAsset->execute(
+            $this->createMock(ContentIdentityInterface::class),
+            [
+                '42'
+            ]
+        );
+    }
+
+    /**
+     * Get content identity mock
+     *
+     * @param string $type
+     * @param string $field
+     * @param string $id
+     * @return MockObject|ContentIdentityInterface
+     */
+    private function getContentIdentity(string $type, string $field, string $id): MockObject
+    {
+        $contentIdentity = $this->createMock(ContentIdentityInterface::class);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($id);
+        $contentIdentity->expects($this->once())
+            ->method('getField')
+            ->willReturn($field);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($type);
+
+        return $contentIdentity;
     }
 
     /**
@@ -165,6 +190,7 @@ class AssignAssetTest extends TestCase
      */
     public function assignAssetDataProvider(): array
     {
+
         return [
             [
                 '18976345',

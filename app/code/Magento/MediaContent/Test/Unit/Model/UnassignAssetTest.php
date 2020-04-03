@@ -12,7 +12,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\MediaContent\Model\UnassignAsset;
+use Magento\MediaContent\Model\UnassignAssets;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -68,7 +69,7 @@ class UnassignAssetTest extends TestCase
     private $loggerMock;
 
     /**
-     * @var UnassignAsset
+     * @var UnassignAssets
      */
     private $unassignAsset;
 
@@ -88,7 +89,7 @@ class UnassignAssetTest extends TestCase
         );
 
         $this->unassignAsset = (new ObjectManager($this))->getObject(
-            UnassignAsset::class,
+            UnassignAssets::class,
             [
                 'resourceConnection' => $this->resourceConnectionMock,
                 'logger'             => $this->loggerMock
@@ -117,39 +118,66 @@ class UnassignAssetTest extends TestCase
             ->with(
                 self::PREFIXED_TABLE_MEDIA_CONTENT_ASSET,
                 [
-                    self::ASSET_ID . ' = ?' => $assetId,
+                    self::ASSET_ID . ' IN (?)' => [$assetId],
                     self::TYPE . ' = ?' => $contentType,
                     self::ENTITY_ID . ' = ?' => $contentEntityId,
                     self::FIELD . ' = ?' => $contentField
                 ]
             );
 
-        $this->unassignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
+        $this->unassignAsset->execute(
+            $this->getContentIdentity(
+                $contentType,
+                $contentField,
+                $contentEntityId
+            ),
+            [
+                $assetId
+            ]
+        );
     }
 
     /**
      * Test exception scenario for deleting relation between media asset and media content.
-     *
-     * @param int $assetId
-     * @param string $contentType
-     * @param string $contentEntityId
-     * @param string $contentField
-     * @dataProvider unassignAssetDataProvider
-     * @return void
      */
-    public function testUnassignAssetWithException(
-        int $assetId,
-        string $contentType,
-        string $contentEntityId,
-        string $contentField
-    ): void {
-        $this->resourceConnectionMock->method('getConnection')->willThrowException((new \Exception()));
+    public function testUnassignAssetWithException(): void {
+        $this->resourceConnectionMock->method('getConnection')
+            ->willThrowException((new \Exception()));
 
         $this->expectException(CouldNotDeleteException::class);
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
-        $this->unassignAsset->execute($assetId, $contentType, $contentEntityId, $contentField);
+        $this->unassignAsset->execute(
+            $this->createMock(ContentIdentityInterface::class),
+            [
+                '42'
+            ]
+        );
+    }
+
+    /**
+     * Get content identity mock
+     *
+     * @param string $type
+     * @param string $field
+     * @param string $id
+     * @return MockObject|ContentIdentityInterface
+     */
+    private function getContentIdentity(string $type, string $field, string $id): MockObject
+    {
+        $contentIdentity = $this->createMock(ContentIdentityInterface::class);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($id);
+        $contentIdentity->expects($this->once())
+            ->method('getField')
+            ->willReturn($field);
+        $contentIdentity->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($type);
+
+        return $contentIdentity;
     }
 
     /**

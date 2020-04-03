@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Model;
 
-use Magento\MediaContentApi\Api\ExtractAssetFromContentInterface;
+use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  */
-class ExtractAssetFromContent implements ExtractAssetFromContentInterface
+class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
 {
     /**
      * @var string

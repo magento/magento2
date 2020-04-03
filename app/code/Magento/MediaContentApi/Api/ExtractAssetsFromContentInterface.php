@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
  * Used for extracting media asset list from a media content by the search pattern.
  * @api
  */
-interface ExtractAssetFromContentInterface
+interface ExtractAssetsFromContentInterface
 {
     /**
      * Search for the media asset in content and extract it providing a list of media assets.

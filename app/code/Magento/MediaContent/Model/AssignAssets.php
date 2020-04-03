@@ -9,13 +9,14 @@ namespace Magento\MediaContent\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaContentApi\Api\AssignAssetInterface;
+use Magento\MediaContentApi\Api\AssignAssetsInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Used for saving relation between the media asset and media content where the media asset is used
  */
-class AssignAsset implements AssignAssetInterface
+class AssignAssets implements AssignAssetsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
@@ -34,8 +35,6 @@ class AssignAsset implements AssignAssetInterface
     private $logger;
 
     /**
-     * AssignAsset constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      */
@@ -46,20 +45,23 @@ class AssignAsset implements AssignAssetInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function execute(int $assetId, string $contentType, string $contentEntityId, string $contentField): void
+    public function execute(ContentIdentityInterface $contentIdentity, array $assetIds): void
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
-            $saveData = [
-                self::ASSET_ID => $assetId,
-                self::TYPE => $contentType,
-                self::ENTITY_ID => $contentEntityId,
-                self::FIELD => $contentField
-            ];
-            $connection->insert($tableName, $saveData);
+            $data = [];
+            foreach ($assetIds as $assetId) {
+                $data[] = [
+                    self::ASSET_ID => $assetId,
+                    self::TYPE => $contentIdentity->getEntityType(),
+                    self::ENTITY_ID => $contentIdentity->getEntityId(),
+                    self::FIELD => $contentIdentity->getField()
+                ];
+            }
+            $connection->insertMultiple($tableName, $data);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred while saving relation between media asset and media content.');
