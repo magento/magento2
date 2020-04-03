@@ -8,12 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="SecureChangingCustomerEmailTest">
+    <test name="StorefrontSecureChangingCustomerEmailTest">
         <annotations>
             <features value="Security"/>
             <stories value="Changing Customer's email"/>
             <title value="Changing Customer Email Test"/>
             <description value="Changing Customer's email with correct and wrong passwords"/>
+            <testCaseId value="MC-14385"/>
             <group value="security"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -48,7 +49,7 @@
         <!-- Checking Email checkbox, entering new email, saving with incorrect password -->
         <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailWrongAttempt">
             <argument name="email" value="$$customer.email$$"/>
-            <argument name="password" value="{incorrect.password}"/>
+            <argument name="password" value="WRONG_PASSWORD_123123q"/>
         </actionGroup>
         <!-- See Failure Message-->
         <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="seeFailureMessage">
