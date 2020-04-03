@@ -26,7 +26,8 @@
                 <field key="current_password">{$adminPassword}</field>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
-                <argument name="adminUser" value="$$user$$"/>
+                <argument name="username" value="$$user.username$$"/>
+                <argument name="password" value="$$user.password$$"/>
             </actionGroup>
         </before>
         <after>

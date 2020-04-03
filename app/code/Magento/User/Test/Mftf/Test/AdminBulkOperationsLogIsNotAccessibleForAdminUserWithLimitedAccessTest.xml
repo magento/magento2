@@ -48,7 +48,8 @@
 
         <!-- Login as user2 -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsUser">
-            <argument name="adminUser" value="NewAdminUser"/>
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
         <!-- Bulk operation menu item isn't visible( System > Action Logs > -Bulk Actions-) -->

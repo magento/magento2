@@ -32,17 +32,20 @@
         </after>
         
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeFirstLoginErrorMessage" />
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeSecondLoginErrorMessage" />
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeThirdLoginErrorMessage" />
 
