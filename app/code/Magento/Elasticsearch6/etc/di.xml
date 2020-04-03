@@ -17,7 +17,7 @@
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="string">Elasticsearch 6.x</item>
+                <item sortOrder="20" name="elasticsearch6" xsi:type="string">Elasticsearch 6.x</item>
             </argument>
         </arguments>
     </type>
@@ -29,23 +29,6 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy">
-        <arguments>
-            <argument name="dataMappers" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
-        <arguments>
-            <argument name="productFieldMappers" xsi:type="array">
-                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper</item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
@@ -114,8 +97,8 @@
     <type name="Magento\Elasticsearch6\Model\Client\Elasticsearch">
         <arguments>
             <argument name="fieldsMappingPreprocessors" xsi:type="array">
-                <item name="elasticsearch6_copy_searchable_fields_to_search_field" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField</item>
-                <item name="elasticsearch6_add_default_search_field" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField</item>
+                <item name="elasticsearch6_copy_searchable_fields_to_search_field" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField</item>
+                <item name="elasticsearch6_add_default_search_field" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField</item>
             </argument>
         </arguments>
     </type>
@@ -145,12 +128,18 @@
         </arguments>
     </type>
 
-    <type name="Magento\Elasticsearch6\Model\DataProvider\Suggestions">
+    <virtualType name="Magento\Elasticsearch6\Model\DataProvider\Suggestions" type="Magento\Elasticsearch\Model\DataProvider\Base\Suggestions">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
         </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+        <arguments>
+            <argument name="productFieldMappers" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper</item>
+            </argument>
+        </arguments>
     </type>
-
     <virtualType name="elasticsearch6FieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">

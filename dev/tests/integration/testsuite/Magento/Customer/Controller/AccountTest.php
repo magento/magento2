@@ -16,6 +16,7 @@ use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManager;
@@ -227,6 +228,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
+        $this->assertSessionMessages(
+            $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -612,6 +617,10 @@ EXPECTED_HTML;
      *
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function testRegisterCustomerWithEmailConfirmation(): void
     {
@@ -691,14 +700,14 @@ EXPECTED_HTML;
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        /** @var \Zend\Mime\Part $messageBodyPart */
+        /** @var \Laminas\Mime\Part $messageBodyPart */
         $messageBodyParts = $message->getBody()->getParts();
         $messageBodyPart = reset($messageBodyParts);
         $messageEncoding = $messageBodyPart->getCharset();
         $name = 'John Smith';
 
         if (strtoupper($messageEncoding) !== 'ASCII') {
-            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+            $name = \Laminas\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
         }
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
@@ -725,6 +734,10 @@ EXPECTED_HTML;
      * @magentoConfigFixture current_store customer/captcha/enable 0
      *
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testResetPasswordWhenEmailChanged(): void
     {
