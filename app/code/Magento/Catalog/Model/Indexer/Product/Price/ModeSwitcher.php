@@ -15,6 +15,8 @@ use Magento\Indexer\Model\DimensionMode;
 
 /**
  * Class to prepare new tables for new indexer mode
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
 {
@@ -98,7 +100,6 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
      * Create new tables
      *
      * @param string $currentMode
-     *
      * @return void
      * @throws \Zend_Db_Exception
      */
@@ -116,7 +117,6 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
      *
      * @param string $currentMode
      * @param string $previousMode
-     *
      * @return void
      */
     public function moveData(string $currentMode, string $previousMode)
@@ -125,17 +125,17 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
         $dimensionsArrayForPreviousMode = $this->getDimensionsArray($previousMode);
 
         foreach ($dimensionsArrayForCurrentMode as $dimensionsForCurrentMode) {
-            $newTable = $this->tableMaintainer->getMainTable($dimensionsForCurrentMode);
+            $newTable = $this->tableMaintainer->getMainTableByDimensions($dimensionsForCurrentMode);
             if (empty($dimensionsForCurrentMode)) {
                 // new mode is 'none'
                 foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
-                    $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
+                    $oldTable = $this->tableMaintainer->getMainTableByDimensions($dimensionsForPreviousMode);
                     $this->insertFromOldTablesToNew($newTable, $oldTable);
                 }
             } else {
                 // new mode is not 'none'
                 foreach ($dimensionsArrayForPreviousMode as $dimensionsForPreviousMode) {
-                    $oldTable = $this->tableMaintainer->getMainTable($dimensionsForPreviousMode);
+                    $oldTable = $this->tableMaintainer->getMainTableByDimensions($dimensionsForPreviousMode);
                     $this->insertFromOldTablesToNew($newTable, $oldTable, $dimensionsForCurrentMode);
                 }
             }
@@ -146,7 +146,6 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
      * Drop old tables
      *
      * @param string $previousMode
-     *
      * @return void
      */
     public function dropTables(string $previousMode)
@@ -164,7 +163,6 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
      * Get dimensions array
      *
      * @param string $mode
-     *
      * @return \Magento\Framework\Indexer\MultiDimensionProvider
      */
     private function getDimensionsArray(string $mode): \Magento\Framework\Indexer\MultiDimensionProvider
@@ -184,7 +182,6 @@ class ModeSwitcher implements \Magento\Indexer\Model\ModeSwitcherInterface
      * @param string $newTable
      * @param string $oldTable
      * @param Dimension[] $dimensions
-     *
      * @return void
      */
     private function insertFromOldTablesToNew(string $newTable, string $oldTable, array $dimensions = [])

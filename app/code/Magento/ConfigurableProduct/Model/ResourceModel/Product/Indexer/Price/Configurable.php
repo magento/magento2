@@ -134,8 +134,7 @@ class Configurable implements DimensionalIndexerInterface
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
             iterator_to_array($entityIds)
         );
-        $query = $select->insertFromSelect($temporaryPriceTable->getTableName(), [], false);
-        $this->tableMaintainer->getConnection()->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
 
         $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));
@@ -224,8 +223,7 @@ class Configurable implements DimensionalIndexerInterface
         if ($entityIds !== null) {
             $select->where('le.entity_id IN (?)', $entityIds);
         }
-        $query = $select->insertFromSelect($temporaryOptionsTableName);
-        $this->getConnection()->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $temporaryOptionsTableName, []);
     }
 
     /**
@@ -269,7 +267,7 @@ class Configurable implements DimensionalIndexerInterface
         if ($this->fullReindexAction) {
             return $this->tableMaintainer->getMainReplicaTable($dimensions);
         }
-        return $this->tableMaintainer->getMainTable($dimensions);
+        return $this->tableMaintainer->getMainTableByDimensions($dimensions);
     }
 
     /**

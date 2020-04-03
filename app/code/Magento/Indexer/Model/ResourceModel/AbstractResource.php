@@ -25,11 +25,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     protected $tableStrategy;
 
     /**
-     * @var bool
-     */
-    private $isIsolationLevelSet = false;
-
-    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -64,20 +59,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     protected function _getIndexAdapter()
     {
         return $this->getConnection();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getConnection()
-    {
-        $connection = parent::getConnection();
-        if (!$this->isIsolationLevelSet) {
-            $connection->query('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;');
-            $this->isIsolationLevelSet = true;
-        }
-
-        return $connection;
     }
 
     /**
@@ -160,6 +141,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
 
         if ($from === $to) {
             $query = $select->insertFromSelect($destTable, $columns);
+            $to->query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED;');
             $to->query($query);
         } else {
             $stmt = $from->query($select);
