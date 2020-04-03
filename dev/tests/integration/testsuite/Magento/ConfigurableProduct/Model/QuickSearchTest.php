@@ -55,8 +55,6 @@ class QuickSearchTest extends TestCase
     /**
      * Assert that configurable child products has not found by query using mysql search engine.
      *
-     * @magentoConfigFixture default/catalog/search/engine mysql
-     *
      * @return void
      */
     public function testChildProductsHasNotFoundedByQuery(): void

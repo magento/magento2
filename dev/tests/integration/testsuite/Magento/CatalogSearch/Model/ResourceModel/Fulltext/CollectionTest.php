@@ -11,6 +11,11 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped("MC-18948: Mysql Search Engine is deprecated");
+    }
+
     /**
      * @dataProvider filtersDataProviderSearch
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
