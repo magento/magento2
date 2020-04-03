@@ -99,6 +99,7 @@ class EngineResolver implements EngineResolverInterface
      * It returns string identifier of Search Engine that is currently chosen in configuration
      *
      * @return string
+     * @throws \Exception
      * @since 100.1.0
      */
     public function getCurrentSearchEngine()
