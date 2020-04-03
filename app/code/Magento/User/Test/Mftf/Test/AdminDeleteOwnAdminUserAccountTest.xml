@@ -14,6 +14,7 @@
             <stories value="Delete Admin User"/>
             <title value="Admin user is not able to delete the own account"/>
             <description value="Admin user is not able to delete the own account"/>
+            <testCaseId value="MC-14271"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
         </annotations>
