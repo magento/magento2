@@ -15,6 +15,8 @@ namespace Magento\MediaContentApi\Api;
 interface GetContentWithAssetInterface
 {
     /**
+     * Get media asset to content relation by media asset id.
+     *
      * @param int $assetId
      *
      * @return array

@@ -16,6 +16,5 @@
             <column name="type"/>
             <column name="field"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="MEDIA_CONTENT_ASSET_ID_MEDIA_GALLERY_ASSET_ID" table="media_content_asset" column="asset_id" referenceTable="media_gallery_asset" referenceColumn="id" onDelete="CASCADE"/>
     </table>
 </schema>

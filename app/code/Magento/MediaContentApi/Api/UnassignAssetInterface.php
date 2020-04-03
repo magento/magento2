@@ -15,6 +15,8 @@ namespace Magento\MediaContentApi\Api;
 interface UnassignAssetInterface
 {
     /**
+     * Remove relation between the media asset and media content.
+     *
      * @param int $assetId
      * @param string $contentType
      * @param string $contentEntityId
