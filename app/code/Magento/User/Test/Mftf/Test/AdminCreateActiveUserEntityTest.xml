@@ -14,7 +14,7 @@
             <stories value="Create Admin User"/>
             <title value="Admin user should be able to create active admin user"/>
             <description value="Admin user should be able to create active admin user"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-33044"/>
             <severity value="CRITICAL"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
