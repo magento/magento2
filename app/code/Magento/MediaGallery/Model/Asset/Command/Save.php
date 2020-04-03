@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,9 +27,9 @@ class Save implements SaveInterface
     private $resourceConnection;
 
     /**
-     * @var DataExtractorInterface
+     * @var DataObjectProcessor
      */
-    private $extractor;
+    private $objectProcessor;
 
     /**
      * @var LoggerInterface
@@ -40,16 +40,16 @@ class Save implements SaveInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataExtractorInterface $extractor
+     * @param DataObjectProcessor $objectProcessor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataExtractorInterface $extractor,
+        DataObjectProcessor $objectProcessor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->extractor = $extractor;
+        $this->objectProcessor = $objectProcessor;
         $this->logger = $logger;
     }
 
@@ -68,7 +68,10 @@ class Save implements SaveInterface
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
 
-            $connection->insertOnDuplicate($tableName, $this->extractor->extract($mediaAsset, AssetInterface::class));
+            $connection->insertOnDuplicate(
+                $tableName,
+                array_filter($this->objectProcessor->buildOutputDataArray($mediaAsset, AssetInterface::class))
+            );
             return (int) $connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
+use Magento\Eav\Helper\Data;
 use Magento\MediaGallery\Model\Asset\Command\Save;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -17,6 +17,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,14 +64,14 @@ class SaveTest extends TestCase
     private $resourceConnectionMock;
 
     /**
-     * @var MockObject | DataExtractorInterface
+     * @var MockObject | LoggerInterface
      */
     private $loggerMock;
 
     /**
-     * @var MockObject | LoggerInterface
+     * @var MockObject | DataObjectProcessor
      */
-    private $extractorMock;
+    private $objectProcessor;
 
     /**
      * @var MockObject | AdapterInterface
@@ -97,7 +98,7 @@ class SaveTest extends TestCase
         $this->mediaAssetMock = $this->createMock(AssetInterface::class);
 
         /* Save constructor mocks */
-        $this->extractorMock = $this->createMock(DataExtractorInterface::class);
+        $this->objectProcessor = $this->createMock(DataObjectProcessor::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->resourceConnectionMock = $this->createConfiguredMock(
             ResourceConnection::class,
@@ -112,7 +113,7 @@ class SaveTest extends TestCase
             Save::class,
             [
                 'resourceConnection' => $this->resourceConnectionMock,
-                'extractor'          => $this->extractorMock,
+                'objectProcessor'          => $this->objectProcessor,
                 'logger'             => $this->loggerMock
             ]
         );
@@ -126,9 +127,9 @@ class SaveTest extends TestCase
         $this->resourceConnectionMock->expects(self::once())->method('getConnection');
         $this->resourceConnectionMock->expects(self::once())->method('getTableName');
 
-        $this->extractorMock
+        $this->objectProcessor
             ->expects(self::once())
-            ->method('extract')
+            ->method('buildOutputDataArray')
             ->with($this->mediaAssetMock, AssetInterface::class)
             ->willReturn(self::IMAGE_DATA);
 
@@ -155,9 +156,9 @@ class SaveTest extends TestCase
         $this->resourceConnectionMock->expects(self::once())->method('getConnection');
         $this->resourceConnectionMock->expects(self::once())->method('getTableName');
 
-        $this->extractorMock
+        $this->objectProcessor
             ->expects(self::once())
-            ->method('extract')
+            ->method('buildOutputDataArray')
             ->with($this->mediaAssetMock, AssetInterface::class)
             ->willReturn(self::IMAGE_DATA);
 

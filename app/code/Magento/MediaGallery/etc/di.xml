@@ -19,8 +19,6 @@
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks"/>
 
-    <preference for="Magento\MediaGalleryApi\Model\DataExtractorInterface" type="Magento\MediaGallery\Model\DataExtractor"/>
-
     <preference for="Magento\MediaGalleryApi\Model\Directory\Command\CreateByPathInterface" type="Magento\MediaGallery\Model\Directory\Command\CreateByPath"/>
     <preference for="Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface" type="Magento\MediaGallery\Model\Directory\Command\DeleteByPath"/>
 
