@@ -12,9 +12,10 @@
             <stories value="Recently Viewed Product"/>
             <title value="Recently Viewed Product at store level"/>
             <description value="Recently Viewed Product should not be displayed on second store , if configured as, Per Store "/>
-            <testCaseId value="MC-32018"/>
+            <testCaseId value="MC-32226"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -127,7 +128,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
-        <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertNotSeeProduct3"/>
+        <assertNotContains stepKey="assertNotSeeProduct3">
+			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
+			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+        </assertNotContains>
 
         <!-- Switch Storeview-->
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
@@ -143,7 +147,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabStoreView2DontSeeHomeProduct3"/>
-        <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertStoreView2NotSeeProduct3"/>
+        <assertNotContains stepKey="assertStoreView2NotSeeProduct3">
+			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
+			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+        </assertNotContains>
 
         <!-- Switch to default store-->
 
@@ -160,7 +167,10 @@
             <argument name="productPosition" value="1"/>
         </actionGroup>
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
-        <assertNotContains expected="$$createSimpleProduct1.name$$" actual="$grabDontSeeHomeProduct1" stepKey="assertNotSeeProduct1"/>
+        <assertNotContains stepKey="assertNotSeeProduct1">
+			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
+			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
+        </assertNotContains>
 
     </test>
 </tests>
