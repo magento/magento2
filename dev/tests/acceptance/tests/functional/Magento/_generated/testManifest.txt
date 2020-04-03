@@ -1,0 +1,3 @@
+tests/functional/Magento/_generated/default/AdminUpdateEnabledTextTermEntityTestCest.php
+tests/functional/Magento/_generated/default/AdminUpdateDisabledTextTermEntityTestCest.php
+tests/functional/Magento/_generated/default/AdminUpdateDisabledHtmlTermEntityTestCest.php
