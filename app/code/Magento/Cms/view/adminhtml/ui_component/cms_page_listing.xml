@@ -115,22 +115,13 @@
     </listingToolbar>
     <columns name="cms_page_columns">
         <settings>
-            <editorConfig>
-                <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="cms/page/inlineEdit"/>
-                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                </param>
-                <param name="indexField" xsi:type="string">page_id</param>
-                <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</param>
-            </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns_editor</item>
-                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
                     <item name="params" xsi:type="array">
-                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                        <item name="1" xsi:type="boolean">true</item>
+                        <item name="0" xsi:type="string">edit</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                     </item>
                 </param>
             </childDefaults>
@@ -152,24 +143,12 @@
         <column name="title">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <validation>
-                        <rule name="required-entry" xsi:type="boolean">true</rule>
-                    </validation>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Title</label>
             </settings>
         </column>
         <column name="identifier">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <validation>
-                        <rule name="validate-identifier" xsi:type="boolean">true</rule>
-                    </validation>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">URL Key</label>
             </settings>
         </column>
@@ -177,9 +156,6 @@
             <settings>
                 <options class="Magento\Cms\Model\Page\Source\PageLayout"/>
                 <filter>select</filter>
-                <editor>
-                    <editorType>select</editorType>
-                </editor>
                 <dataType>select</dataType>
                 <label translate="true">Layout</label>
             </settings>
@@ -195,9 +171,6 @@
             <settings>
                 <options class="Magento\Cms\Model\Page\Source\IsActive"/>
                 <filter>select</filter>
-                <editor>
-                    <editorType>select</editorType>
-                </editor>
                 <dataType>select</dataType>
                 <label translate="true">Status</label>
             </settings>
@@ -221,9 +194,6 @@
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
                 <filter>dateRange</filter>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <dataType>date</dataType>
                 <label translate="true">Custom design from</label>
                 <visible>false</visible>
@@ -234,9 +204,6 @@
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
                 <filter>dateRange</filter>
-                <editor>
-                    <editorType>date</editorType>
-                </editor>
                 <dataType>date</dataType>
                 <label translate="true">Custom design to</label>
                 <visible>false</visible>
@@ -246,9 +213,6 @@
             <settings>
                 <options class="Magento\Cms\Model\Page\Source\Theme"/>
                 <filter>select</filter>
-                <editor>
-                    <editorType>select</editorType>
-                </editor>
                 <dataType>select</dataType>
                 <label translate="true">Custom Theme</label>
                 <visible>false</visible>
@@ -258,9 +222,6 @@
             <settings>
                 <options class="Magento\Cms\Model\Page\Source\CustomLayout"/>
                 <filter>select</filter>
-                <editor>
-                    <editorType>select</editorType>
-                </editor>
                 <dataType>select</dataType>
                 <label translate="true">Custom Layout</label>
                 <visible>false</visible>
@@ -269,9 +230,6 @@
         <column name="meta_title">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Meta Title</label>
                 <visible>false</visible>
             </settings>
@@ -279,9 +237,6 @@
         <column name="meta_keywords">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Meta Keywords</label>
                 <visible>false</visible>
             </settings>
@@ -289,9 +244,6 @@
         <column name="meta_description">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Meta Description</label>
                 <visible>false</visible>
             </settings>
