@@ -15,7 +15,7 @@
             <title value="Delete active text checkout agreement"/>
             <description value="Admin should be able to delete active text checkout agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-14663"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -39,7 +39,8 @@
         <actionGroup ref="AdminAssertTermAbsentInGridActionGroup" stepKey="assertTermAbsentInGrid">
             <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToTheCart">
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="openProductPage">
             <argument name="product" value="$$createdProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
