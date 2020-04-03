@@ -5,7 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Model\Directory;
+namespace Magento\MediaGallery\Model\Directory;
+
+use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
 
 /**
  * Directories blacklisted for media gallery. This class should be used for DI configuration.
@@ -14,7 +16,7 @@ namespace Magento\MediaGalleryApi\Model\Directory;
  *
  * @api
  */
-class Blacklist implements BlacklistInterface
+class IsBlacklisted implements IsBlacklistedInterface
 {
     /**
      * @var array
@@ -36,7 +38,7 @@ class Blacklist implements BlacklistInterface
      * @param string $path
      * @return bool
      */
-    public function isBlacklisted(string $path): bool
+    public function execute(string $path): bool
     {
         foreach ($this->patterns as $pattern) {
             if (empty($pattern)) {

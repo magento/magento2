@@ -11,7 +11,7 @@ namespace Magento\MediaGalleryApi\Model\Directory;
  * Directory paths that are reserved by system and not be included in the media gallery
  * @api
  */
-interface BlacklistInterface
+interface IsBlacklistedInterface
 {
     /**
      * Check if the path is excluded from displaying and processing in the media gallery
@@ -19,5 +19,5 @@ interface BlacklistInterface
      * @param string $path
      * @return bool
      */
-    public function isBlacklisted(string $path): bool;
+    public function execute(string $path): bool;
 }

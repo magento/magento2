@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Test\Unit\Model\Directory;
+namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\MediaGalleryApi\Model\Directory\Blacklist;
+use Magento\MediaGallery\Model\Directory\IsBlacklisted;
 
 /**
  * Test the Excluded model
  */
-class BlacklistTest extends TestCase
+class IsBlacklistedTest extends TestCase
 {
     /**
-     * @var Blacklist
+     * @var
      */
     private $object;
 
@@ -27,7 +27,7 @@ class BlacklistTest extends TestCase
     protected function setUp(): void
     {
         $this->object = (new ObjectManager($this))->getObject(
-            Blacklist::class,
+            IsBlacklisted::class,
             [
                 'patterns' => [
                     'tmp' => '/pub\/media\/tmp/',
@@ -44,9 +44,9 @@ class BlacklistTest extends TestCase
      * @param bool $isExcluded
      * @dataProvider pathsProvider
      */
-    public function testIsBlacklisted(string $path, bool $isExcluded): void
+    public function testExecute(string $path, bool $isExcluded): void
     {
-        $this->assertEquals($isExcluded, $this->object->isBlacklisted($path));
+        $this->assertEquals($isExcluded, $this->object->execute($path));
     }
 
     /**
