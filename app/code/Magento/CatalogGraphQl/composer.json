@@ -11,6 +11,7 @@
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/module-catalog-search": "*",
+        "magento/module-theme": "*",
         "magento/framework": "*"
     },
     "suggest": {
