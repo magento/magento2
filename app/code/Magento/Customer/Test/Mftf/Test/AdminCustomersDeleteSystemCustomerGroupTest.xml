@@ -12,14 +12,16 @@
             <features value="Customer"/>
             <title value="System Customer Groups"/>
             <description value="Admin should not be able to delete system customer groups"/>
+            <stories value="Delete System Customer Group" />
+            <testCaseId value="MC-14588" />
             <group value="customers"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Verify Not Logged In customer group-->
