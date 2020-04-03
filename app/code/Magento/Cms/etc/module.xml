@@ -12,6 +12,7 @@
             <module name="Magento_Theme"/>
             <module name="Magento_Variable"/>
             <module name="Magento_MediaContent"/>
+            <module name="Magento_MediaContentApi"/>
         </sequence>
     </module>
 </config>
