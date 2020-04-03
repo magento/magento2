@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddSwatchesForNewProductWidgetTest" >
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Check Swatches for New Products Widget"/>
+            <title value="Check visible swatches for New Products Widget on home page"/>
+            <description value="Check visible swatches for New Products Widget on home page"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateApiConfigurableProductWithHiddenChildActionGroup" stepKey="createConfigurableProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributePage"/>
+
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{productAttributeWithTwoOptions.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitAttributePageLoad"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Visual Swatch" stepKey="selectCatalogInputType"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+
+        <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="onAdminCmsHomePage">
+            <argument name="page_id" value="2" />
+        </actionGroup>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
+        <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContentActionGroup">
+            <argument name="widgetType" value="Catalog New Products List"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
+
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" stepKey="seeSwatchesOnNewProductsWidget"/>
+    </test>
+</tests>
