@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateDisabledTextTermEntityTest">
+    <test name="AdminUpdateDisabledHtmlTermEntityTest">
         <annotations>
             <features value="CheckoutAgreements"/>
             <stories value="Checkout agreements"/>
-            <title value="Create disabled text checkout agreement"/>
-            <description value="Admin should be able to create disabled text checkout agreement"/>
+            <title value="Update disabled HTML checkout agreement"/>
+            <description value="Admin should be able to update disabled HTML checkout agreement"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-14669"/>
+            <testCaseId value=""/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -33,7 +33,7 @@
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
             <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{disabledTextTerm.name}}"/>
+                <argument name="termName" value="{{activeTextTerm.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
 
@@ -42,13 +42,22 @@
 
         <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
-            <argument name="term" value="disabledTextTerm"/>
+            <argument name="term" value="disabledHtmlTerm"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
 
         <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGrid"/>
+        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openUpdateTerm">
+            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveUpdateTerm"/>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openNewTermsGrid"/>
         <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
-            <argument name="termName" value="{{disabledTextTerm.name}}"/>
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
 
         <openNewTab stepKey="openStorefrontTab"/>
@@ -56,8 +65,8 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
-        <actionGroup ref="AssertStorefrontTermAbsentInCheckoutActionGroup" stepKey="assertTermAbsentInCheckout">
-            <argument name="termCheckboxText" value="{{disabledTextTerm.checkboxText}}"/>
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
         </actionGroup>
         <closeTab stepKey="closeStorefrontTab"/>
     </test>
