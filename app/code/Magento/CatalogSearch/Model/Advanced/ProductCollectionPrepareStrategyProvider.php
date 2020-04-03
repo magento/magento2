@@ -38,11 +38,16 @@ class ProductCollectionPrepareStrategyProvider
      * Get strategy provider for product collection prepare process.
      *
      * @return ProductCollectionPrepareStrategyInterface
+     * @throws \Exception
      */
     public function getStrategy(): ProductCollectionPrepareStrategyInterface
     {
         if (!isset($this->strategies[$this->engineResolver->getCurrentSearchEngine()])) {
-            return $this->strategies['default'];
+            if ($this->strategies['default']) {
+                return $this->strategies['default'];
+            } else {
+                throw new \Exception('Default product collection strategy not found');
+            }
         }
         return $this->strategies[$this->engineResolver->getCurrentSearchEngine()];
     }
