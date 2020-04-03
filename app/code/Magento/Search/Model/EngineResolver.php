@@ -90,7 +90,7 @@ class EngineResolver implements EngineResolverInterface
         $this->scopeCode = $scopeCode;
         $this->engines = $engines;
         $this->logger = $logger;
-        $this->defaultEngine = $defaultEngine ?? self::CATALOG_SEARCH_MYSQL_ENGINE;
+        $this->defaultEngine = $defaultEngine;
     }
 
     /**
@@ -112,10 +112,14 @@ class EngineResolver implements EngineResolverInterface
         if (in_array($engine, $this->engines)) {
             return $engine;
         } else {
-            $this->logger->error(
-                $engine . ' search engine doesn\'t exists. Falling back to ' . $this->defaultEngine
-            );
-            return $this->defaultEngine;
+            if ($this->defaultEngine !== null) {
+                $this->logger->error(
+                    $engine . ' search engine doesn\'t exist. Falling back to ' . $this->defaultEngine
+                );
+                return $this->defaultEngine;
+            } else {
+                throw new \Exception($engine . ' search engine doesn\'t exist');
+            }
         }
     }
 }
