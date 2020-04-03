@@ -15,6 +15,7 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\SearchConfigOptionsList;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -111,23 +112,31 @@ class InstallCommand extends AbstractSetupCommand
     protected $adminUser;
 
     /**
+     * @var SearchConfigOptionsList
+     */
+    protected $searchConfigOptionsList;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
      * @param ConfigModel $configModel
      * @param InstallStoreConfigurationCommand $userConfig
      * @param AdminUserCreateCommand $adminUser
+     * @param SearchConfigOptionsList $searchConfigOptionsList
      */
     public function __construct(
         InstallerFactory $installerFactory,
         ConfigModel $configModel,
         InstallStoreConfigurationCommand $userConfig,
-        AdminUserCreateCommand $adminUser
+        AdminUserCreateCommand $adminUser,
+        SearchConfigOptionsList $searchConfigOptionsList
     ) {
         $this->installerFactory = $installerFactory;
         $this->configModel = $configModel;
         $this->userConfig = $userConfig;
         $this->adminUser = $adminUser;
+        $this->searchConfigOptionsList = $searchConfigOptionsList;
         parent::__construct();
     }
 
@@ -139,6 +148,7 @@ class InstallCommand extends AbstractSetupCommand
         $inputOptions = $this->configModel->getAvailableOptions();
         $inputOptions = array_merge($inputOptions, $this->userConfig->getOptionsList());
         $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList(InputOption::VALUE_OPTIONAL));
+        $inputOptions = array_merge($inputOptions, $this->searchConfigOptionsList->getOptionsList());
         $inputOptions = array_merge($inputOptions, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,
@@ -223,7 +233,7 @@ class InstallCommand extends AbstractSetupCommand
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
         $arrayInput->setInteractive($input->isInteractive());
-        $importConfigCommand->run($arrayInput, $output);
+        return $importConfigCommand->run($arrayInput, $output);
     }
 
     /**

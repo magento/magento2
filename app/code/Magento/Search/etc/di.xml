@@ -78,4 +78,5 @@
             <argument name="dataStorage" xsi:type="object">Magento\Search\Model\SearchEngine\Config\Data</argument>
         </arguments>
     </type>
+    <preference for="Magento\Search\Setup\InstallConfigInterface" type="Magento\Search\Setup\CompositeInstallConfig"/>
 </config>

@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Model\SearchConfigOptionsList;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -107,6 +108,8 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getOptionsList')
             ->will($this->returnValue($this->getOptionsListAdminUser()));
 
+        $searchConfigOptionsList = new SearchConfigOptionsList();
+
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
         $this->applicationMock = $this->getMockBuilder(Application::class)
@@ -140,7 +143,8 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
             $this->installerFactory,
             $configModel,
             $userConfig,
-            $this->adminUserMock
+            $this->adminUserMock,
+            $searchConfigOptionsList
         );
         $this->command->setApplication(
             $this->applicationMock
