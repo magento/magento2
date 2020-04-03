@@ -8,6 +8,7 @@ namespace Magento\Store\Test\Unit\App\Config\Source;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Framework\DB\Select;
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
 
@@ -54,8 +55,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->deploymentConfig->expects($this->any())
-            ->method('get')
-            ->with('db')
+            ->method('isDbAvailable')
             ->willReturn(true);
         $this->resourceConnection->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
@@ -63,7 +63,6 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connection->expects($this->any())->method('fetchAll')->willReturn([]);
-
         $this->assertEquals(
             [
                 'websites' => [],
@@ -74,13 +73,32 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGenWhenDbNotAvailable()
+    public function testGetWhenDbIsNotAvailable()
     {
         $this->deploymentConfig->expects($this->once())
-            ->method('get')
-            ->with('db')
+            ->method('isDbAvailable')
             ->willReturn(false);
-        $this->resourceConnection->expects($this->never())->method('getConnection');
+        $this->resourceConnection->expects($this->never())
+            ->method('getConnection');
+
+        $this->assertEquals([], $this->configSource->get());
+    }
+
+    public function testGetWhenDbIsEmpty()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isDbAvailable')
+            ->willReturn(true);
+        $this->connection->method('fetchAll')
+            ->willThrowException($this->createMock(TableNotFoundException::class));
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->method('from')
+            ->willReturnSelf();
+        $this->connection->method('select')
+            ->willReturn($selectMock);
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connection);
 
         $this->assertEquals([], $this->configSource->get());
     }

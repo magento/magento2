@@ -10,7 +10,7 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
- * Class ProfilerTest
+ * Test profiler on database queries
  */
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
@@ -140,7 +140,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
 
         try {
             $connection->select()->from('unknown_table')->query()->fetch();
-        } catch (\Zend_Db_Statement_Exception $exception) {
+        } catch (\Magento\Framework\DB\Adapter\TableNotFoundException $exception) {
             $this->assertNotEmpty($exception);
         }
 
