@@ -39,7 +39,7 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getTitle(): ?string;
 
     /**
-     * Get source of the file
+     * Get the name of the channel/stock/integration file was retrieved from. null if not identified.
      *
      * @return string|null
      */

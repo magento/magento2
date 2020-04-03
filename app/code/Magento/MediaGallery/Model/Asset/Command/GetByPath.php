@@ -59,22 +59,22 @@ class GetByPath implements GetByPathInterface
     /**
      * Return media asset asset list
      *
-     * @param string $mediaFilePath
+     * @param string $path
      *
      * @return AssetInterface
      * @throws IntegrationException
      */
-    public function execute(string $mediaFilePath): AssetInterface
+    public function execute(string $path): AssetInterface
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
-                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $mediaFilePath);
+                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $path);
             $data = $connection->query($select)->fetch();
 
             if (empty($data)) {
-                $message = __('There is no such media asset with path "%1"', $mediaFilePath);
+                $message = __('There is no such media asset with path "%1"', $path);
                 throw new NoSuchEntityException($message);
             }
 

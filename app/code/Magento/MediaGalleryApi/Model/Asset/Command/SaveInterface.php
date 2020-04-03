@@ -17,7 +17,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 interface SaveInterface
 {
     /**
-     * Save media asset
+     * Save media asset and return the media asset id
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface $mediaAsset
      * @return int

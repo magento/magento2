@@ -17,8 +17,8 @@ interface GetByPathInterface
     /**
      * Get media asset list
      *
-     * @param string $mediaFilePath
+     * @param string $path
      * @return \Magento\MediaGalleryApi\Api\Data\AssetInterface
      */
-    public function execute(string $mediaFilePath): \Magento\MediaGalleryApi\Api\Data\AssetInterface;
+    public function execute(string $path): \Magento\MediaGalleryApi\Api\Data\AssetInterface;
 }
