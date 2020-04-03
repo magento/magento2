@@ -48,12 +48,14 @@ class SearchConfig
     public function saveConfiguration(array $inputOptions)
     {
         $searchConfigOptions = $this->extractSearchOptions($inputOptions);
-        $this->validateSearchEngineSelection($searchConfigOptions);
+        if (!empty($searchConfigOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
+            $this->validateSearchEngineSelection($searchConfigOptions);
 
-        try {
-            $this->installConfig->configure($searchConfigOptions);
-        } catch (InputException $e) {
-            throw new SetupException($e->getMessage());
+            try {
+                $this->installConfig->configure($searchConfigOptions);
+            } catch (InputException $e) {
+                throw new SetupException($e->getMessage());
+            }
         }
     }
 
@@ -65,9 +67,11 @@ class SearchConfig
      */
     private function validateSearchEngineSelection(array $searchOptions)
     {
-        $selectedEngine = $searchOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE];
-        if (!in_array($selectedEngine, SearchConfigOptionsList::AVAILABLE_SEARCH_ENGINES)) {
-            throw new SetupException("Search engine '{$selectedEngine}' is not an available search engine.");
+        if (isset($searchOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
+            $selectedEngine = $searchOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE];
+            if (!in_array($selectedEngine, SearchConfigOptionsList::AVAILABLE_SEARCH_ENGINES)) {
+                throw new SetupException("Search engine '{$selectedEngine}' is not an available search engine.");
+            }
         }
     }
 
