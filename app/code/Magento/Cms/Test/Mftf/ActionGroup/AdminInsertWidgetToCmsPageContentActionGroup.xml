@@ -21,5 +21,6 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterClickOnInsertWidgetButton"/>
         <waitForElementVisible selector="{{WidgetSection.InsertWidgetTitle}}"  stepKey="waitForInsertWidgetTitle"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="{{widgetType}}" stepKey="selectWidgetType"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClickSelectWidgetType"/>
     </actionGroup>
 </actionGroups>
