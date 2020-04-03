@@ -21,10 +21,10 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
@@ -35,15 +35,15 @@
         <grabValueFrom selector="{{AdminNewUserFormSection.username}}" stepKey="grabUsername"/>
         <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
             <argument name="adminUser" value="{$grabUsername}"/>
             <argument name="adminPassword" value="{$grabPassword}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
 
-        <actionGroup ref="logout" stepKey="logoutAsUserWithValidExpiration"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsUserWithValidExpiration"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>

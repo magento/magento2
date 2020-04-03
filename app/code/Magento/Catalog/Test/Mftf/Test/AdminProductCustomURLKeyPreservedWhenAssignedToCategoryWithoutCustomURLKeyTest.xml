@@ -28,7 +28,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductSecond"/>
 
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="customStore" value="storeViewData"/>

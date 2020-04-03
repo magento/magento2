@@ -20,7 +20,7 @@
             <group value="Msrp"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>

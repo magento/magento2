@@ -19,7 +19,7 @@
         </annotations>
 
         <!--Login as admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         <!--Go to Captcha-->
         <actionGroup ref="CaptchaFormsDisplayingActionGroup" stepKey="CaptchaFormsDisplayingActionGroup"/>
         <waitForPageLoad stepKey="WaitForPageLoaded"/>
