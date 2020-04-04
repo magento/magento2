@@ -107,7 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->getRequest()->getParam('popup')) {
             $region = 'header';
         }
-        parent::addButton($buttonId, $data, $level, $sortOrder, $region);
+        return parent::addButton($buttonId, $data, $level, $sortOrder, $region);
     }
 
     /**
