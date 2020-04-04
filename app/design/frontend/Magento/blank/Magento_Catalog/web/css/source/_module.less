@@ -452,16 +452,31 @@
                     display: inline-block;
                 }
             }
+
+            .action {
+                &.delete {
+                    &:extend(.abs-remove-button-for-blocks all);
+                    position: absolute;
+                    right: 0;
+                    top: -1px;
+                }
+            }
         }
 
-        .action {
-            &.delete {
-                &:extend(.abs-remove-button-for-blocks all);
-                line-height: unset;
-                position: absolute;
-                right: 0;
-                top: -1px;
-                width: auto;
+        .block-wishlist {
+            .action {
+                &.delete {
+                    line-height: unset;
+                    width: auto;
+                }
+            }
+        }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    right: initial;
+                }
             }
         }
 
