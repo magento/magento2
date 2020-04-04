@@ -16,7 +16,7 @@
             <description value="Newsletter Template Successfully Created"/>
             <group value="newsletter"/>
             <group value="mtf_migrated"/>
-            <testCaseId value="MC-14315"/>
+            <testCaseId value="MC-29809"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
