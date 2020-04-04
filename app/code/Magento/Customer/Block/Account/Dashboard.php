@@ -7,6 +7,14 @@ namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Phrase;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
  * Customer dashboard block
@@ -14,20 +22,20 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  * @api
  * @since 100.0.2
  */
-class Dashboard extends \Magento\Framework\View\Element\Template
+class Dashboard extends Template
 {
     /**
-     * @var \Magento\Newsletter\Model\Subscriber
+     * @var Subscriber
      */
     protected $subscription;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @var SubscriberFactory
      */
     protected $subscriberFactory;
 
@@ -42,19 +50,17 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     protected $customerAccountManagement;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param Context $context
+     * @param Session $customerSession
+     * @param SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        Context $context,
+        Session $customerSession,
+        SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         array $data = []
@@ -69,7 +75,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Return the Customer given the customer Id stored in the session.
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
     public function getCustomer()
     {
@@ -99,7 +105,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve the Url for editing the specified address.
      *
-     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @param AddressInterface $address
      * @return string
      */
     public function getAddressEditUrl($address)
@@ -146,13 +152,14 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve the subscription object (i.e. the subscriber).
      *
-     * @return \Magento\Newsletter\Model\Subscriber
+     * @return Subscriber
      */
     public function getSubscriptionObject()
     {
         if ($this->subscription === null) {
-            $this->subscription =
-                $this->_createSubscriber()->loadByCustomerId($this->customerSession->getCustomerId());
+            $websiteId = (int)$this->_storeManager->getWebsite()->getId();
+            $this->subscription = $this->_createSubscriber();
+            $this->subscription->loadByCustomer((int)$this->getCustomer()->getId(), $websiteId);
         }
 
         return $this->subscription;
@@ -171,7 +178,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve subscription text, either subscribed or not.
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getSubscriptionText()
     {
@@ -185,7 +192,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve the customer's primary addresses (i.e. default billing and shipping).
      *
-     * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
+     * @return AddressInterface[]|bool
      */
     public function getPrimaryAddresses()
     {
@@ -230,7 +237,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Create an instance of a subscriber.
      *
-     * @return \Magento\Newsletter\Model\Subscriber
+     * @return Subscriber
      */
     protected function _createSubscriber()
     {

@@ -174,16 +174,13 @@ define(['squire', 'ko', 'jquery', 'uiRegistry', 'jquery/validate'], function (Sq
 
         describe('"validateShippingInformation" method', function () {
             it('Check method call on negative cases.', function () {
+                /* jscs:disable */
                 var country = {
-                    'indexedOptions': {
-                        'AD':
-                            {
-                                label: 'Andorra',
-                                labeltitle: 'Andorra',
-                                value: 'AD'
-                            }
-                    }
+                    on: function () {},
+                    get: function () {},
+                    set: function () {}
                 };
+                /* jscs:enable */
 
                 registry.set('test.shippingAddress.shipping-address-fieldset.country_id', country);
                 registry.set('checkout.errors', {});
@@ -202,9 +199,20 @@ define(['squire', 'ko', 'jquery', 'uiRegistry', 'jquery/validate'], function (Sq
                 expect(obj.validateShippingInformation()).toBeFalsy();
             });
             it('Check method call on positive case.', function () {
+                /* jscs:disable */
+                var country = {
+                    on: function () {},
+                    get: function () {},
+                    set: function () {}
+                };
+                /* jscs:enable */
+
                 $('body').append('<form data-role="email-with-possible-login">' +
                     '<input type="text" name="username" />' +
                     '</form>');
+
+                registry.set('test.shippingAddress.shipping-address-fieldset.country_id', country);
+                registry.set('checkout.errors', {});
                 obj.source = {
                     get: jasmine.createSpy().and.returnValue(true),
                     set: jasmine.createSpy(),

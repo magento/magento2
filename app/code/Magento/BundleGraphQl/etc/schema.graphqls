@@ -1,6 +1,50 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Mutation {
+    addBundleProductsToCart(input: AddBundleProductsToCartInput): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+input AddBundleProductsToCartInput {
+    cart_id: String!
+    cart_items: [BundleProductCartItemInput!]!
+}
+
+input BundleProductCartItemInput {
+    data: CartItemInput!
+    bundle_options:[BundleOptionInput!]!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input BundleOptionInput {
+    id: Int!
+    quantity: Float!
+    value: [String!]!
+}
+
+type AddBundleProductsToCartOutput {
+    cart: Cart!
+}
+
+type BundleCartItem implements CartItemInterface {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    bundle_options: [SelectedBundleOption!]! @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleOption")
+}
+
+type SelectedBundleOption {
+    id: Int!
+    label: String!
+    type: String!
+    values: [SelectedBundleOptionValue!]!
+}
+
+type SelectedBundleOptionValue {
+    id: Int!
+    label: String!
+    quantity: Float!
+    price: Float!
+}
+
 type BundleItem @doc(description: "BundleItem defines an individual item in a bundle product.") {
     option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product.")
     title: String @doc(description: "The display name of the item.")

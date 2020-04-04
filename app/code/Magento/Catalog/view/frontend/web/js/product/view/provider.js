@@ -90,7 +90,8 @@ define([
             _.each(this.data.items, function (item, key) {
                 result[key] = {
                     'added_at': new Date().getTime() / 1000,
-                    'product_id': key
+                    'product_id': key,
+                    'website_id': window.checkout.websiteId
                 };
             }, this);
 

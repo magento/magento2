@@ -457,9 +457,11 @@
         .action {
             &.delete {
                 &:extend(.abs-remove-button-for-blocks all);
+                line-height: unset;
                 position: absolute;
                 right: 0;
-                top: 0;
+                top: -1px;
+                width: auto;
             }
         }
 

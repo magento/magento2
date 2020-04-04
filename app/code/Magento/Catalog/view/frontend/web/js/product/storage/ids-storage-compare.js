@@ -72,7 +72,8 @@ define([
             _.each(data, function (item) {
                 result[item.id] = {
                     'added_at': new Date().getTime() / 1000,
-                    'product_id': item.id
+                    'product_id': item.id,
+                    'website_id': window.checkout.websiteId
                 };
             });
 

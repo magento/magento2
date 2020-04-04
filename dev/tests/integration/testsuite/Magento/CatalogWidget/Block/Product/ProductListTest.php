@@ -172,4 +172,29 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
                 . '`attribute`:`sku`,`operator`:`!^[^]`,`value`:`virtual`^]^]', 'product-with-xss']
         ];
     }
+
+    /**
+     * Check that collection returns correct result if use date attribute.
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
+     * @return void
+     */
+    public function testProductListWithDateAttribute()
+    {
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+            . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],'
+            . '`1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+            . '`attribute`:`date_attribute`,`operator`:`==`,`value`:`' . date('Y-m-d') . '`^]^]';
+        $this->block->setData('conditions_encoded', $encodedConditions);
+
+        // Load products collection filtered using specified conditions and perform assertions
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+        $this->assertEquals(
+            1,
+            $productCollection->count(),
+            "Product collection was not filtered according to the widget condition."
+        );
+    }
 }

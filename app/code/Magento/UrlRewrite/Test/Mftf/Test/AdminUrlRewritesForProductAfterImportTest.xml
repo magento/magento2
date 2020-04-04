@@ -16,6 +16,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-20229"/>
             <group value="urlRewrite"/>
+            <skip>
+                <issueId value="MC-30409"/>
+            </skip>
         </annotations>
         <before>
             <comment userInput="Set the configuration for Generate category/product URL Rewrites" stepKey="commentSetURLRewriteConfiguration" />

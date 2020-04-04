@@ -61,21 +61,25 @@ class ExtractQuoteAddressData
             return $addressData;
         }
 
-        $addressItemsData = [];
         foreach ($address->getAllItems() as $addressItem) {
             if ($addressItem instanceof \Magento\Quote\Model\Quote\Item) {
                 $itemId = $addressItem->getItemId();
             } else {
                 $itemId = $addressItem->getQuoteItemId();
             }
-
-            $addressItemsData[] = [
+            $productData = $addressItem->getProduct()->getData();
+            $productData['model'] = $addressItem->getProduct();
+            $addressData['cart_items'][] = [
                 'cart_item_id' => $itemId,
                 'quantity' => $addressItem->getQty()
             ];
+            $addressData['cart_items_v2'][] = [
+                'id' => $itemId,
+                'quantity' => $addressItem->getQty(),
+                'product' => $productData,
+                'model' => $addressItem,
+            ];
         }
-        $addressData['cart_items'] = $addressItemsData;
-
         return $addressData;
     }
 }

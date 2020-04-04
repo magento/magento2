@@ -178,7 +178,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Create price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
         <actionGroup ref="CatalogSelectCustomerGroupActionGroup" stepKey="addCustomerGroup">
@@ -258,7 +258,7 @@
         </actionGroup>
 
         <!--Assert products prices in the cart -->
-        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <see userInput="$210.69" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForFirstProductOption"/>
         <see userInput="$120.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForSecondProductOption"/>

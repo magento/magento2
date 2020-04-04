@@ -143,7 +143,8 @@ define([
             _.each(ids, function (id) {
                 if (
                     currentTime - id['added_at'] < ~~this.idsStorage.lifetime &&
-                    !_.contains(currentProductIds, id['product_id'])
+                    !_.contains(currentProductIds, id['product_id']) &&
+                    (!id.hasOwnProperty('website_id') || id['website_id'] === window.checkout.websiteId)
                 ) {
                     _ids[id['product_id']] = id;
 

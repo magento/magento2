@@ -85,6 +85,8 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
+            $totalPages = (int) ceil(count($items)/$size);
+            $currentPage = min($currentPage, $totalPages);
             $offset = ($currentPage - 1) * $size;
             if ($offset < 0) {
                 $offset = 0;

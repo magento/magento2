@@ -5,12 +5,13 @@
  */
 namespace Magento\CatalogRule\Model\Indexer\Product;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,6 +55,46 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\Product $confProduct */
         $confProduct = $collection->getFirstItem();
         $this->assertEquals($simpleProduct->getFinalPrice(), $confProduct->getMinimalPrice());
+    }
+
+    /**
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/simple_products.php
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/catalog_rule_50_percent_off.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testPriceForSecondStore()
+    {
+        $customerGroupId = 1;
+        $websiteId = 2;
+        /** @var ProductRepository $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepository::class
+        );
+        $simpleProduct = $productRepository->get('simple3');
+        $simpleProduct->setPriceCalculation(true);
+        $this->assertEquals('simple3', $simpleProduct->getSku());
+        $this->assertFalse(
+            $this->resourceRule->getRulePrice(
+                new \DateTime(),
+                $websiteId,
+                $customerGroupId,
+                $simpleProduct->getId()
+            )
+        );
+        $indexerBuilder = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogRule\Model\Indexer\IndexBuilder::class
+        );
+        $indexerBuilder->reindexById($simpleProduct->getId());
+        $this->assertEquals(
+            $this->resourceRule->getRulePrice(
+                new \DateTime(),
+                $websiteId,
+                $customerGroupId,
+                $simpleProduct->getId()
+            ),
+            25
+        );
     }
 
     /**

@@ -14,6 +14,7 @@
                 <elasticsearch6_index_prefix>magento2</elasticsearch6_index_prefix>
                 <elasticsearch6_enable_auth>0</elasticsearch6_enable_auth>
                 <elasticsearch6_server_timeout>15</elasticsearch6_server_timeout>
+                <elasticsearch6_minimum_should_match></elasticsearch6_minimum_should_match>
             </search>
         </catalog>
     </default>

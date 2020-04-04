@@ -184,7 +184,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             $output[$paramName] = array_shift($params);
         }
 
-        for ($i = 0, $l = sizeof($params); $i < $l; $i += 2) {
+        for ($i = 0, $l = count($params); $i < $l; $i += 2) {
             $output['variables'][$params[$i]] = isset($params[$i + 1]) ? urldecode($params[$i + 1]) : '';
         }
         return $output;

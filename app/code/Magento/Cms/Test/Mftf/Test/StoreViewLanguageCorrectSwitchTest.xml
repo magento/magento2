@@ -41,7 +41,7 @@
         </actionGroup>
 
         <!-- Add StoreView To Cms Page-->
-        <actionGroup ref="AddStoreViewToCmsPage" stepKey="gotToCmsPage">
+        <actionGroup ref="AddStoreViewToCmsPageActionGroup" stepKey="gotToCmsPage">
             <argument name="CMSPage" value="$$createSecondCmsPage$$"/>
             <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
         </actionGroup>

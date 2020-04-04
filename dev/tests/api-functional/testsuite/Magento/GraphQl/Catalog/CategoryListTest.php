@@ -210,6 +210,86 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories_disabled.php
+     */
+    public function testQueryCategoryWithDisabledChildren()
+    {
+        $query =  <<<QUERY
+{
+    categoryList(filters: {ids: {in: ["3"]}}){
+        id
+        name
+        image
+        url_key
+        url_path
+        description
+        products{
+          total_count
+          items{
+            name
+            sku
+          }
+        }
+        children{
+          name
+          image
+          url_key
+          description
+          products{
+            total_count
+            items{
+              name
+              sku
+            }
+          }
+          children{
+            name
+            image
+            children{
+              name
+              image
+            }
+          }
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $baseCategory = $result['categoryList'][0];
+
+        $this->assertEquals('Category 1', $baseCategory['name']);
+        $this->assertArrayHasKey('products', $baseCategory);
+        //Check base category products
+        $expectedBaseCategoryProducts = [
+            ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => '12345', 'name' => 'Simple Product Two'],
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+        ];
+        $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
+        //Check base category children
+        $expectedBaseCategoryChildren = [
+            ['name' => 'Category 1.2', 'description' => 'Its a description of Test Category 1.2']
+        ];
+        $this->assertCategoryChildren($baseCategory, $expectedBaseCategoryChildren);
+
+        //Check first child category
+        $firstChildCategory = $baseCategory['children'][0];
+        $this->assertEquals('Category 1.2', $firstChildCategory['name']);
+        $this->assertEquals('Its a description of Test Category 1.2', $firstChildCategory['description']);
+
+        $firstChildCategoryExpectedProducts = [
+            ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+        ];
+        $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
+        $firstChildCategoryChildren = [];
+        $this->assertCategoryChildren($firstChildCategory, $firstChildCategoryChildren);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testNoResultsFound()
