@@ -111,9 +111,9 @@ class ProductRenderList implements ProductRenderListInterface
         }
 
         $searchResult = $this->searchResultFactory->create();
-        $searchResult->setItems($items);
-        $searchResult->setTotalCount(count($items));
         $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setTotalCount($productCollection->getSize());
+        $searchResult->setItems($items);
 
         return $searchResult;
     }

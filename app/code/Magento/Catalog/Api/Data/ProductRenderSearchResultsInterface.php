@@ -7,10 +7,11 @@
 
 namespace Magento\Catalog\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
 /**
  * Dto that holds render information about products
  */
-interface ProductRenderSearchResultsInterface
+interface ProductRenderSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get list of products rendered information
