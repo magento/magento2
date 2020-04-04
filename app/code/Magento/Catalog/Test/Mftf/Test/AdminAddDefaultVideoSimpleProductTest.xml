@@ -14,13 +14,16 @@
             <stories value="Add/remove images and videos for all product types and category"/>
             <title value="Admin should be able to add default product video for a Simple Product"/>
             <description value="Admin should be able to add default product video for a Simple Product"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-111"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>

@@ -15,18 +15,19 @@
             <testCaseId value="MC-5344"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="urlRewrite"/>
         </annotations>
 
         <before>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{_defaultProduct.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->

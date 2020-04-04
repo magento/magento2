@@ -14,12 +14,12 @@
             <title value="Update Simple Product with Regular Price (In Stock), Disabled Product"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock), Disabled Product"/>
             <testCaseId value="MC-10816"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
@@ -30,7 +30,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductDisabled.sku}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default simple product in the grid page -->

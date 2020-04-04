@@ -23,7 +23,7 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="CustomerGroupChange" stepKey="createCustomerGroup"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created data-->
@@ -31,7 +31,7 @@
             <deleteData createDataKey="createCustomerGroup" stepKey="deleteCustomerGroup"/>
             <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>

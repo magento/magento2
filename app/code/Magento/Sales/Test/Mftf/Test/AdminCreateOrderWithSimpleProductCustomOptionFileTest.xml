@@ -22,18 +22,20 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer_CA" stepKey="customer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Clean up created test data.-->
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Add option to product.-->
-        <amOnPage url="{{AdminProductEditPage.url($simpleProduct.id$)}}" stepKey="navigateToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductEditPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
+        </actionGroup>
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addOption">
             <argument name="option" value="ProductOptionFile"/>
         </actionGroup>

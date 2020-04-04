@@ -14,13 +14,13 @@
             <stories value="Cancel Created Order"/>
             <title value="Cancel the created order with product quantity without stock decrease"/>
             <description value="Create an order with product quantity without stock decrease, cancel the order and verify product quantity in backend"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16071"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{DisableCatalogInventoryConfigData.path}} {{DisableCatalogInventoryConfigData.value}}" stepKey="disableDecreaseInQuantityAfterOrder"/>
 
             <!--Set default flat rate shipping method settings-->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->

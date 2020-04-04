@@ -38,14 +38,14 @@
             <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
             <deleteData createDataKey="createSimple2" stepKey="deleteSimple2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
                 <argument name="customerEmail" value="John_Smith_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnDoeCustomer">
                 <argument name="customerEmail" value="Simple_Customer_Without_Address.email"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- 1. Go to storefront and click the Create an Account link-->

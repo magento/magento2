@@ -35,7 +35,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
         </before>
 
@@ -330,7 +330,7 @@
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!--Do reindex and flush cache-->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>

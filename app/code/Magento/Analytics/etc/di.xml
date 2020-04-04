@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
+    <preference for="Magento\Analytics\ReportXml\ConfigInterface" type="Magento\Analytics\ReportXml\Config" />
     <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
     <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
     <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />

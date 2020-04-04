@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="UpdateTermActionGroup">
+        <arguments>
+            <argument name="term" />
+            <argument name="updateTermData" />
+        </arguments>
+        <amOnPage url="{{AdminTermsPage.url}}" stepKey="onTermGridPage"/>
+        <waitForPageLoad stepKey="waitForAdminTermsGridLoad"/>
+        <fillField selector="{{AdminTermGridSection.filterByTermName}}" userInput="{{term.name}}" stepKey="fillTermNameFilter"/>
+        <click selector="{{AdminTermGridSection.searchButton}}" stepKey="clickSearchButton"/>
+
+        <fillField selector="{{AdminNewTermFormSection.conditionName}}" userInput="{{updateTermData.name}}" stepKey="fillFieldConditionName"/>
+        <selectOption selector="{{AdminNewTermFormSection.isActive}}" userInput="{{updateTermData.isActive}}" stepKey="selectOptionIsActive"/>
+        <selectOption selector="{{AdminNewTermFormSection.isHtml}}" userInput="{{updateTermData.isHtml}}" stepKey="selectOptionIsHtml"/>
+        <selectOption selector="{{AdminNewTermFormSection.mode}}" userInput="{{updateTermData.mode}}" stepKey="selectOptionMode"/>
+        <selectOption selector="{{AdminNewTermFormSection.storeView}}" userInput="{{updateTermData.storeView}}" stepKey="selectOptionStoreView" />
+        <fillField selector="{{AdminNewTermFormSection.checkboxText}}" userInput="{{updateTermData.checkboxText}}" stepKey="fillFieldCheckboxText"/>
+        <fillField selector="{{AdminNewTermFormSection.content}}" userInput="{{updateTermData.content}}" stepKey="fillFieldContent"/>
+        <click selector="{{AdminNewTermFormSection.save}}" stepKey="saveTerm"/>
+        <see selector="{{AdminTermFormMessagesSection.successMessage}}" userInput="You saved the condition." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

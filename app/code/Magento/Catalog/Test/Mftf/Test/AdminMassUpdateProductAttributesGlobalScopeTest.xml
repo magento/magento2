@@ -20,7 +20,7 @@
             <group value="product_attributes"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -38,7 +38,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->

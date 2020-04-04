@@ -36,12 +36,12 @@
             <createData entity="NewRootCategory" stepKey="createNewRootCategoryA"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageCategoryLoadAfterNavigate"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createNewRootCategoryA.name$$)}}" stepKey="openNewRootCategory"/>

@@ -5,15 +5,17 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Navigation as NavModel;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\Navigation as NavModel;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
- * Class Navigation
- *
+ * Navigation controller
  */
 class Navigation extends AbstractActionController
 {
@@ -33,24 +35,33 @@ class Navigation extends AbstractActionController
     protected $view;
 
     /**
-     * @param NavModel $navigation
-     * @param Status $status
+     * @var ObjectManagerInterface
      */
-    public function __construct(NavModel $navigation, Status $status)
+    private $objectManagerProvider;
+
+    /**
+     * @param NavModel              $navigation
+     * @param Status                $status
+     * @param ObjectManagerProvider $objectManagerProvider
+     */
+    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
     {
         $this->navigation = $navigation;
         $this->status = $status;
-        $this->view = new ViewModel;
+        $this->objectManagerProvider = $objectManagerProvider->get();
+        $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
         $this->view->setVariable('main', $this->navigation->getMainItems());
     }
 
     /**
+     * Index action
+     *
      * @return JsonModel
      */
     public function indexAction()
     {
-        $json = new JsonModel;
+        $json = new JsonModel();
         $json->setVariable('nav', $this->navigation->getData());
         $json->setVariable('menu', $this->navigation->getMenuItems());
         $json->setVariable('main', $this->navigation->getMainItems());
@@ -59,6 +70,8 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Menu action
+     *
      * @return array|ViewModel
      */
     public function menuAction()
@@ -71,17 +84,24 @@ class Navigation extends AbstractActionController
     }
 
     /**
+     * Side menu action
+     *
      * @return array|ViewModel
      */
     public function sideMenuAction()
     {
+        /** @var UrlInterface $backendUrl */
+        $backendUrl = $this->objectManagerProvider->get(UrlInterface::class);
         $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
         $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
+        $this->view->setVariable('backendUrl', $backendUrl->getRouteUrl('adminhtml'));
         $this->view->setTerminal(true);
         return $this->view;
     }
 
     /**
+     * Head bar action
+     *
      * @return array|ViewModel
      */
     public function headerBarAction()

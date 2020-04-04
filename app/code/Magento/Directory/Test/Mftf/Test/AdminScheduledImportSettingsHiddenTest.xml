@@ -12,16 +12,16 @@
             <features value="Directory"/>
             <title value="Scheduled import settings hidden"/>
             <stories value="Fields visibility according to 'Enable' value"/>
-            <description value="Scheduled Import Settings' should hide fields when 'Enabled' is 'No'"/>
+            <description value="Scheduled Import Settings should hide fields when 'Enabled' is 'No'"/>
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set currency/import/enabled 1" stepKey="enableCurrencyImport"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set currency/import/enabled 0" stepKey="disableCurrencyImport"/>
         </after>
 

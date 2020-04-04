@@ -20,7 +20,7 @@
          </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Simple Product  -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -87,7 +87,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Delete products and category -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -98,7 +98,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Begin creating a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
