@@ -47,8 +47,7 @@
         </actionGroup>
 
         <!-- Go to storefront -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
 
         <!-- Assert created search term on storefront -->
         <actionGroup ref="AssertSearchTermOnFrontendActionGroup" stepKey="assertCreatedSearchTermOnFrontend">
