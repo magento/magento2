@@ -1530,7 +1530,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {
             $images = $this->getData('media_gallery_images');
-            foreach ($this->getMediaGallery('images') as $image) {
+            $mediaGallery = $this->getMediaGallery('images');
+            usort(
+                $mediaGallery,
+                function (array $media, array $compare): int {
+                    $posA = (int)$media['position'];
+                    $posB = (int)$compare['position'];
+
+                    return $posA <=> $posB;
+                }
+            );
+
+            foreach ($mediaGallery as $image) {
                 if (!empty($image['disabled'])
                     || !empty($image['removed'])
                     || empty($image['value_id'])
