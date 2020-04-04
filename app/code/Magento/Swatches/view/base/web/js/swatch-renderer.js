@@ -1405,7 +1405,7 @@ define([
                 selectedAttributes = {},
                 params;
 
-            if (hashIndex !== -1) {
+            if (hashIndex !== -1  && !_.isEmpty(window.location.hash)) {
                 params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
