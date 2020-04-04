@@ -64,17 +64,52 @@ class FilterProcessor implements CollectionProcessorInterface
         AbstractDb $collection
     ) {
         $fields = [];
+        $customFilters = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $isApplied = false;
+            $applyLater = false;
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
-                $isApplied = $customFilter->apply($filter, $collection);
+                if ($filter->getConditionType() == 'eq') {
+                    $customFilters = array_map(
+                        function ($customFilter) {
+                            if (count($values = $customFilter['values']) > 1) {
+                                $filter = reset($customFilter['filter']);
+                                $filter->setValue(implode(',', $values));
+                                $filter->setConditionType('in');
+                                $customFilter['filter'] = $filter;
+                            }
+
+                            return $customFilter;
+                        },
+                        array_merge_recursive(
+                            $customFilters,
+                            [$filter->getField() => [
+                                'filter' => [clone $filter],
+                                'values' => [$filter->getValue()]
+                            ]]
+                        )
+                    );
+
+                    $applyLater = true;
+                }
+
+                if (!$applyLater) {
+                    $isApplied = $customFilter->apply($filter, $collection);
+                }
             }
 
-            if (!$isApplied) {
+            if (!$isApplied && !$applyLater) {
                 $field = $this->getFieldMapping($filter->getField());
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
+            }
+        }
+
+        if ($applyLater && count($customFilters)) {
+            foreach ($customFilters as $field => $filter) {
+                $customFilter = $this->getCustomFilterForField($field);
+                $customFilter->apply($filter['filter'], $collection);
             }
         }
 
