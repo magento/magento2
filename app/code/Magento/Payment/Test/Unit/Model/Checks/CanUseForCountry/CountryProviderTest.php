@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
 
 use Magento\Directory\Helper\Data;
 use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * CountryProviderTest contains tests for CountryProvider class
- */
-class CountryProviderTest extends \PHPUnit\Framework\TestCase
+class CountryProviderTest extends TestCase
 {
     /**
      * @var CountryProvider
@@ -24,26 +23,26 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Data|MockObject
      */
-    private $directory;
+    private $directoryMock;
 
     /**
      * @var Quote|MockObject
      */
-    private $quote;
+    private $quoteMock;
 
     protected function setUp()
     {
-        $this->directory = $this->getMockBuilder(Data::class)
+        $this->directoryMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultCountry'])
             ->getMock();
 
-        $this->quote = $this->getMockBuilder(Quote::class)
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBillingAddress', 'getShippingAddress'])
             ->getMock();
 
-        $this->countryProvider = new CountryProvider($this->directory);
+        $this->countryProvider = new CountryProvider($this->directoryMock);
     }
 
     /**
@@ -56,20 +55,20 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::once())
+        $this->quoteMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn($address);
 
-        $this->quote->expects(static::never())
+        $this->quoteMock->expects(static::never())
             ->method('getShippingAddress');
 
         $address->expects(static::exactly(2))
             ->method('getCountry')
             ->willReturn('UK');
-        $this->directory->expects(static::never())
+        $this->directoryMock->expects(static::never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('UK', $this->countryProvider->getCountry($this->quote));
+        static::assertEquals('UK', $this->countryProvider->getCountry($this->quoteMock));
     }
 
     /**
@@ -82,19 +81,19 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::never())
+        $this->quoteMock->expects(static::never())
             ->method('getShippingAddress');
-        $this->quote->expects(static::once())
+        $this->quoteMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn($address);
 
         $address->expects(static::once())
             ->method('getCountry')
             ->willReturn(null);
-        $this->directory->expects(static::once())
+        $this->directoryMock->expects(static::once())
             ->method('getDefaultCountry')
             ->willReturn('US');
-        static::assertEquals('US', $this->countryProvider->getCountry($this->quote));
+        static::assertEquals('US', $this->countryProvider->getCountry($this->quoteMock));
     }
 
     /**
@@ -107,11 +106,11 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCountry'])
             ->getMock();
 
-        $this->quote->expects(static::once())
+        $this->quoteMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn(null);
 
-        $this->quote->expects(static::once())
+        $this->quoteMock->expects(static::once())
             ->method('getShippingAddress')
             ->willReturn($address);
 
@@ -119,9 +118,9 @@ class CountryProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getCountry')
             ->willReturn('CA');
 
-        $this->directory->expects(static::never())
+        $this->directoryMock->expects(static::never())
             ->method('getDefaultCountry');
 
-        static::assertEquals('CA', $this->countryProvider->getCountry($this->quote));
+        static::assertEquals('CA', $this->countryProvider->getCountry($this->quoteMock));
     }
 }

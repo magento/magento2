@@ -6,48 +6,69 @@
 
 namespace Magento\Payment\Test\Unit\Model\Method;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\Free;
+use Magento\Payment\Model\Method\Logger;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FreeTest extends \PHPUnit\Framework\TestCase
+class FreeTest extends TestCase
 {
-    /** @var \Magento\Payment\Model\Method\Free */
-    protected $methodFree;
+    /**
+     * @var Free
+     */
+    private $methodFree;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfig;
+    /**
+     * @var MockObject
+     */
+    private $scopeConfigMock;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $currencyPrice;
+    /**
+     * @var MockObject
+     */
+    private $currencyPriceMock;
 
     protected function setUp()
     {
-        $paymentData  = $this->createMock(\Magento\Payment\Helper\Data::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->currencyPrice = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $paymentData = $this->createMock(Data::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->currencyPriceMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
 
-        $context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
-        $registry = $this->createMock(\Magento\Framework\Registry::class);
-        $extensionAttributesFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
-        $customAttributeFactory = $this->createMock(\Magento\Framework\Api\AttributeValueFactory::class);
+        $registry = $this->createMock(Registry::class);
+        $extensionAttributesFactory = $this->createMock(ExtensionAttributesFactory::class);
+        $customAttributeFactory = $this->createMock(AttributeValueFactory::class);
 
-        $loggerMock = $this->getMockBuilder(\Magento\Payment\Model\Method\Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class)])
+        $loggerMock = $this->getMockBuilder(Logger::class)
+            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
 
-        $this->methodFree = new \Magento\Payment\Model\Method\Free(
+        $this->methodFree = new Free(
             $context,
             $registry,
             $extensionAttributesFactory,
             $customAttributeFactory,
             $paymentData,
-            $this->scopeConfig,
+            $this->scopeConfigMock,
             $loggerMock,
-            $this->currencyPrice
+            $this->currencyPriceMock
         );
     }
 
@@ -59,12 +80,12 @@ class FreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfigPaymentAction($orderStatus, $paymentAction, $result)
     {
-        $this->scopeConfig->expects($this->at(0))
+        $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->will($this->returnValue($orderStatus));
 
         if ($orderStatus != 'pending') {
-            $this->scopeConfig->expects($this->at(1))
+            $this->scopeConfigMock->expects($this->at(1))
                 ->method('getValue')
                 ->will($this->returnValue($paymentAction));
         }
@@ -82,18 +103,18 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+            $quote = $this->createMock(Quote::class);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))
                 ->will($this->returnValue($grandTotal));
         }
 
-        $this->currencyPrice->expects($this->any())
+        $this->currencyPriceMock->expects($this->any())
             ->method('round')
             ->willReturnArgument(0);
 
-        $this->scopeConfig->expects($this->any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($isActive));
 

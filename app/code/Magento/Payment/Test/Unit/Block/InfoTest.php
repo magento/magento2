@@ -3,55 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Block;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    protected $_object;
+    private $objectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|MockObject
      */
-    protected $_storeManager;
+    private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
-    protected $_eventManager;
+    private $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
-    protected $_escaper;
+    private $escaperMock;
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_storeManager = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManager::class
+        $helper = new ObjectManager($this);
+        $this->storeManagerMock = $this->getMockBuilder(
+            StoreManager::class
         )->setMethods(
             ['getStore']
         )->disableOriginalConstructor()->getMock();
-        $this->_eventManager = $this->getMockBuilder(
-            \Magento\Framework\Event\ManagerInterface::class
+        $this->eventManagerMock = $this->getMockBuilder(
+            ManagerInterface::class
         )->setMethods(
             ['dispatch']
         )->disableOriginalConstructor()->getMock();
-        $this->_escaper = $helper->getObject(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $helper->getObject(Escaper::class);
         $context = $helper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             [
-                'storeManager' => $this->_storeManager,
-                'eventManager' => $this->_eventManager,
-                'escaper' => $this->_escaper
+                'storeManager' => $this->storeManagerMock,
+                'eventManager' => $this->eventManagerMock,
+                'escaper' => $this->escaperMock
             ]
         );
-        $this->_object = $helper->getObject(\Magento\Payment\Block\Info::class, ['context' => $context]);
+        $this->objectMock = $helper->getObject(\Magento\Payment\Block\Info::class, ['context' => $context]);
     }
 
     /**
@@ -70,16 +82,16 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         if (isset($storeCode)) {
             $storeMock = $this->_getStoreMock($storeCode);
-            $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+            $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         }
 
-        $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+        $paymentInfo = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()->getMock();
         $paymentInfo->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
 
-        $this->_object->setData('info', $paymentInfo);
-        $this->_object->setData('is_secure_mode', $isSecureMode);
-        $result = $this->_object->getIsSecureMode();
+        $this->objectMock->setData('info', $paymentInfo);
+        $this->objectMock->setData('is_secure_mode', $isSecureMode);
+        $result = $this->objectMock->getIsSecureMode();
         $this->assertEquals($result, $expectedResult);
     }
 
@@ -100,12 +112,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $store
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getMethodInstanceMock($store)
     {
         $methodInstance = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\AbstractMethod::class
+            AbstractMethod::class
         )->setMethods(
             ['getStore']
         )->disableOriginalConstructor()->getMock();
@@ -115,31 +127,29 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $storeCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getStoreMock($storeCode)
     {
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
         $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
         return $storeMock;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testGetInfoThrowException()
     {
-        $this->_object->setData('info', new \Magento\Framework\DataObject([]));
-        $this->_object->getInfo();
+        $this->expectException(LocalizedException::class);
+        $this->objectMock->setData('info', new DataObject([]));
+        $this->objectMock->getInfo();
     }
 
     public function testGetSpecificInformation()
     {
-        $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+        $paymentInfo = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->_object->setData('info', $paymentInfo);
-        $result = $this->_object->getSpecificInformation();
+        $this->objectMock->setData('info', $paymentInfo);
+        $result = $this->objectMock->getSpecificInformation();
         $this->assertNotNull($result);
     }
 
@@ -148,7 +158,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetValueAsArray($value, $escapeHtml, $expected)
     {
-        $result = $this->_object->getValueAsArray($value, $escapeHtml);
+        $result = $this->objectMock->getValueAsArray($value, $escapeHtml);
         $this->assertEquals($expected, $result);
     }
 

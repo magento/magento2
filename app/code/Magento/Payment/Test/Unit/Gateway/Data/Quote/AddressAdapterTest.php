@@ -3,27 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Gateway\Data\Quote;
 
 use Magento\Payment\Gateway\Data\Quote\AddressAdapter;
 use Magento\Quote\Api\Data\AddressInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AddressAdapterTest
- */
-class AddressAdapterTest extends \PHPUnit\Framework\TestCase
+class AddressAdapterTest extends TestCase
 {
-    /** @var AddressAdapter */
-    protected $model;
+    /**
+     * @var AddressAdapter
+     */
+    private $model;
 
     /**
-     * @var AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface|MockObject
      */
-    protected $quoteAddressMock;
+    private $quoteAddressMock;
 
     protected function setUp()
     {
-        $this->quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Api\Data\AddressInterface::class)
+        $this->quoteAddressMock = $this->getMockBuilder(AddressInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new AddressAdapter($this->quoteAddressMock);

@@ -6,38 +6,54 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Method\Factory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConfigTest
- */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Payment\Model\Config */
-    protected $config;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
-
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfig;
-
-    /** @var \Magento\Payment\Model\Method\Factory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $paymentMethodFactory;
-
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $localeResolver;
-
-    /** @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dataStorage;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper
      */
-    protected $date;
+    private $objectManagerHelper;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * @var Factory|MockObject
+     */
+    private $paymentMethodFactoryMock;
+
+    /**
+     * @var ResolverInterface|MockObject
+     */
+    private $localeResolverMock;
+
+    /**
+     * @var DataInterface|MockObject
+     */
+    private $dataStorageMock;
+
+    /**
+     * @var DateTime|MockObject
+     */
+    private $dateMock;
 
     /**
      * Test payments list
@@ -51,31 +67,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * List of test month
-     *
-     * @var array
-     */
-    protected $monthList = [
-        1 => 'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ];
-
-    /**
      * Expected months list
      *
      * @var array
      */
-    protected $expectedMonthList = [
+    private $expectedMonthList = [
         1 => '01 - January',
         '02 - February',
         '03 - March',
@@ -97,38 +93,38 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->paymentMethodFactory = $this->createMock(\Magento\Payment\Model\Method\Factory::class);
-        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->dataStorage = $this->createMock(\Magento\Framework\Config\DataInterface::class);
-        $this->date = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->paymentMethodFactoryMock = $this->createMock(Factory::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->dataStorageMock = $this->createMock(DataInterface::class);
+        $this->dateMock = $this->createMock(DateTime::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
-            \Magento\Payment\Model\Config::class,
+            Config::class,
             [
-                'scopeConfig' => $this->scopeConfig,
-                'paymentMethodFactory' => $this->paymentMethodFactory,
-                'localeResolver' => $this->localeResolver,
-                'dataStorage' => $this->dataStorage,
-                'date' => $this->date
+                'scopeConfig' => $this->scopeConfigMock,
+                'paymentMethodFactory' => $this->paymentMethodFactoryMock,
+                'localeResolver' => $this->localeResolverMock,
+                'dataStorage' => $this->dataStorageMock,
+                'date' => $this->dateMock
             ]
         );
     }
 
     /**
-     * @covers \Magento\Payment\Model\Config::getActiveMethods
+     * @covers       \Magento\Payment\Model\Config::getActiveMethods
      * @param bool $isActive
      * @dataProvider getActiveMethodsDataProvider
      */
     public function testGetActiveMethods($isActive)
     {
         $adapter = $this->createMock(MethodInterface::class);
-        $this->scopeConfig->expects(static::once())
+        $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)
             ->willReturn($this->paymentMethodsList);
-        $this->paymentMethodFactory->expects(static::once())
+        $this->paymentMethodFactoryMock->expects(static::once())
             ->method('create')
             ->with($this->paymentMethodsList['active_method']['model'])
             ->willReturn($adapter);
@@ -153,7 +149,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCcTypes()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('credit_cards')->will(
+        $this->dataStorageMock->expects($this->once())->method('get')->with('credit_cards')->will(
             $this->returnValue($expected)
         );
         $this->assertEquals($expected, $this->config->getCcTypes());
@@ -162,7 +158,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetMethodsInfo()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('methods')->will(
+        $this->dataStorageMock->expects($this->once())->method('get')->with('methods')->will(
             $this->returnValue($expected)
         );
         $this->assertEquals($expected, $this->config->getMethodsInfo());
@@ -171,7 +167,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetGroups()
     {
         $expected = [];
-        $this->dataStorage->expects($this->once())->method('get')->with('groups')->will(
+        $this->dataStorageMock->expects($this->once())->method('get')->with('groups')->will(
             $this->returnValue($expected)
         );
         $this->assertEquals($expected, $this->config->getGroups());
@@ -179,13 +175,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMonths()
     {
-        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('en_US');
+        $this->localeResolverMock->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->assertEquals($this->expectedMonthList, $this->config->getMonths());
     }
 
     public function testGetYears()
     {
-        $this->date->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
+        $this->dateMock->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
         $this->assertEquals($this->_getPreparedYearsList(), $this->config->getYears());
     }
 

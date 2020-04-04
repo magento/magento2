@@ -3,70 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Plugin;
 
-/**
- * Class PaymentConfigurationProcessTest.
- */
-class PaymentConfigurationProcessTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Checkout\LayoutProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Payment\Plugin\PaymentConfigurationProcess;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PaymentConfigurationProcessTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    private $storeManager;
+    private $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
-    private $store;
+    private $storeMock;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentMethodListInterface|MockObject
      */
-    private $paymentMethodList;
+    private $paymentMethodListMock;
 
     /**
-     * @var \Magento\Checkout\Block\Checkout\LayoutProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutProcessor|MockObject
      */
-    private $layoutProcessor;
+    private $layoutProcessorMock;
 
     /**
-     * @var \Magento\Payment\Plugin\PaymentConfigurationProcess
+     * @var PaymentConfigurationProcess
      */
     private $plugin;
 
-    /**
-     * Set up
-     */
     protected function setUp()
     {
-        $this->storeManager = $this
-            ->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this
+            ->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore'])
             ->getMockForAbstractClass();
-        $this->store = $this
-            ->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->storeMock = $this
+            ->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
-        $this->paymentMethodList = $this
-            ->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
+        $this->paymentMethodListMock = $this
+            ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getActiveList'])
             ->getMockForAbstractClass();
-        $this->layoutProcessor =  $this
-            ->getMockBuilder(\Magento\Checkout\Block\Checkout\LayoutProcessor::class)
+        $this->layoutProcessorMock = $this
+            ->getMockBuilder(LayoutProcessor::class)
             ->disableOriginalConstructor()
             ->setMethods(['process'])
             ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->plugin = $objectManagerHelper->getObject(
-            \Magento\Payment\Plugin\PaymentConfigurationProcess::class,
+            PaymentConfigurationProcess::class,
             [
-                'paymentMethodList' => $this->paymentMethodList,
-                'storeManager' => $this->storeManager
+                'paymentMethodList' => $this->paymentMethodListMock,
+                'storeManager' => $this->storeManagerMock
             ]
         );
     }
@@ -79,14 +84,14 @@ class PaymentConfigurationProcessTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeProcess($jsLayout, $activePaymentList, $expectedResult)
     {
-        $this->store->expects($this->once())->method('getId')->willReturn(1);
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
-        $this->paymentMethodList->expects($this->once())
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->paymentMethodListMock->expects($this->once())
             ->method('getActiveList')
             ->with(1)
             ->willReturn($activePaymentList);
 
-        $result = $this->plugin->beforeProcess($this->layoutProcessor, $jsLayout);
+        $result = $this->plugin->beforeProcess($this->layoutProcessorMock, $jsLayout);
         $this->assertEquals($result[0], $expectedResult);
     }
 
@@ -125,12 +130,12 @@ class PaymentConfigurationProcessTest extends \PHPUnit\Framework\TestCase
         ];
 
         $braintreePaymentMethod = $this
-            ->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterface::class)
+            ->getMockBuilder(PaymentMethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
         $braintreePaypalPaymentMethod = $this
-            ->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterface::class)
+            ->getMockBuilder(PaymentMethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();

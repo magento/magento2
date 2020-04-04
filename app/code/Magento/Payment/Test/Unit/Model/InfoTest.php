@@ -6,44 +6,68 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
-use Magento\Payment\Model\Method;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method;
+use Magento\Payment\Model\MethodInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
-    /** @var \Magento\Payment\Model\InfoInterface */
-    protected $info;
+    /**
+     * @var InfoInterface
+     */
+    private $info;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $contextMock;
+    /**
+     * @var Context|MockObject
+     */
+    private $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $registryMock;
+    /**
+     * @var Registry|MockObject
+     */
+    private $registryMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $paymentHelperMock;
+    /**
+     * @var Data|MockObject
+     */
+    private $paymentHelperMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $encryptorInterfaceMock;
+    /**
+     * @var EncryptorInterface|MockObject
+     */
+    private $encryptorInterfaceMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $methodInstanceMock;
+    /**
+     * @var Data|MockObject
+     */
+    private $methodInstanceMock;
 
     protected function setUp()
     {
-        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->paymentHelperMock = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getMethodInstance']);
-        $this->encryptorInterfaceMock = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
-        $this->methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->paymentHelperMock = $this->createPartialMock(Data::class, ['getMethodInstance']);
+        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
+        $this->methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(
-            \Magento\Payment\Model\Info::class,
+            Info::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -123,12 +147,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->info->getMethodInstance();
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The payment method you requested is not available.
-     */
     public function testGetMethodInstanceWithNoMethod()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('The payment method you requested is not available.');
+
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
     }
@@ -171,11 +194,9 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data, $this->info->decrypt($encryptedData));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testSetAdditionalInformationException()
     {
+        $this->expectException(LocalizedException::class);
         $this->info->setAdditionalInformation('object', new \StdClass());
     }
 

@@ -6,35 +6,45 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Payment\Model\Checks\Composite;
+use Magento\Payment\Model\Checks\SpecificationFactory;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodList;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MethodListTest extends \PHPUnit\Framework\TestCase
+class MethodListTest extends TestCase
 {
     /**
      * @var MethodList
      */
-    protected $methodList;
+    private $methodList;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentMethodListInterface|MockObject
      */
-    private $paymentMethodList;
+    private $paymentMethodListMock;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstanceFactory|MockObject
      */
-    private $paymentMethodInstanceFactory;
+    private $paymentMethodInstanceFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SpecificationFactory|MockObject
      */
-    protected $specificationFactoryMock;
+    private $specificationFactoryMock;
 
     /**
      * @var array $additionalChecks
@@ -43,22 +53,22 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->paymentMethodList = $this->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
+        $this->paymentMethodListMock = $this->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->paymentMethodInstanceFactory = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\InstanceFactory::class
+        $this->paymentMethodInstanceFactoryMock = $this->getMockBuilder(
+            InstanceFactory::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->specificationFactoryMock = $this->createMock(\Magento\Payment\Model\Checks\SpecificationFactory::class);
+        $this->specificationFactoryMock = $this->createMock(SpecificationFactory::class);
 
         $this->additionalChecks = ['acme_custom_payment_method_check' => 'acme_custom_payment_method_check'];
 
         $this->methodList = $this->objectManager->getObject(
-            \Magento\Payment\Model\MethodList::class,
+            MethodList::class,
             [
                 'specificationFactory' => $this->specificationFactoryMock,
                 'additionalChecks' => $this->additionalChecks
@@ -68,12 +78,12 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->setBackwardCompatibleProperty(
             $this->methodList,
             'paymentMethodList',
-            $this->paymentMethodList
+            $this->paymentMethodListMock
         );
         $this->objectManager->setBackwardCompatibleProperty(
             $this->methodList,
             'paymentMethodInstanceFactory',
-            $this->paymentMethodInstanceFactory
+            $this->paymentMethodInstanceFactoryMock
         );
     }
 
@@ -83,18 +93,18 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
     public function testGetAvailableMethods()
     {
         $storeId = 1;
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
         $quoteMock->expects($this->atLeastOnce())
             ->method('getPayment')
-            ->will($this->returnValue($this->createMock(\Magento\Quote\Model\Quote\Payment::class)));
+            ->will($this->returnValue($this->createMock(Payment::class)));
 
-        $methodInstanceMock = $this->createMock(\Magento\Payment\Model\Method\AbstractMethod::class);
+        $methodInstanceMock = $this->createMock(AbstractMethod::class);
         $methodInstanceMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
 
-        $compositeMock = $this->createMock(\Magento\Payment\Model\Checks\Composite::class);
+        $compositeMock = $this->createMock(Composite::class);
         $compositeMock->expects($this->atLeastOnce())
             ->method('isApplicable')
             ->with($methodInstanceMock, $quoteMock)
@@ -102,29 +112,29 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
 
         $this->specificationFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-        ->with(
-            array_merge(
-                [
-                   AbstractMethod::CHECK_USE_CHECKOUT,
-                   AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                   AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                   AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
-                ],
-                $this->additionalChecks
-            )
-        )->will($this->returnValue($compositeMock));
+            ->with(
+                array_merge(
+                    [
+                        AbstractMethod::CHECK_USE_CHECKOUT,
+                        AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                        AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                        AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
+                    ],
+                    $this->additionalChecks
+                )
+            )->will($this->returnValue($compositeMock));
 
-        $methodMock = $this->getMockForAbstractClass(\Magento\Payment\Api\Data\PaymentMethodInterface::class);
-        $this->paymentMethodList->expects($this->once())
+        $methodMock = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $this->paymentMethodListMock->expects($this->once())
             ->method('getActiveList')
             ->willReturn([$methodMock]);
-        $this->paymentMethodInstanceFactory->expects($this->once())
+        $this->paymentMethodInstanceFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($methodInstanceMock);
 
         $methodInstanceMock->expects($this->atLeastOnce())
             ->method('setInfoInstance')
-            ->with($this->createMock(\Magento\Quote\Model\Quote\Payment::class))
+            ->with($this->createMock(Payment::class))
             ->will($this->returnSelf());
 
         $this->assertEquals([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));

@@ -6,38 +6,42 @@
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Allmethods;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Config\Source\Allmethods;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AllmethodsTest extends \PHPUnit\Framework\TestCase
+class AllmethodsTest extends TestCase
 {
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $_paymentData;
+    private $paymentDataMock;
 
     /**
      * @var Allmethods
      */
-    protected $_model;
+    private $model;
 
     protected function setUp()
     {
-        $this->_paymentData = $this->getMockBuilder(
-            \Magento\Payment\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->paymentDataMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
-        $this->_model = new Allmethods($this->_paymentData);
+        $this->model = new Allmethods($this->paymentDataMock);
     }
 
     public function testToOptionArray()
     {
         $expectedArray = ['key' => 'value'];
-        $this->_paymentData->expects($this->once())
+        $this->paymentDataMock->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true, true, true)
             ->will($this->returnValue($expectedArray));
-        $this->assertEquals($expectedArray, $this->_model->toOptionArray());
+        $this->assertEquals($expectedArray, $this->model->toOptionArray());
     }
 }

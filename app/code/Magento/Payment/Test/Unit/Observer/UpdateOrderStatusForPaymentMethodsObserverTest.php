@@ -7,29 +7,44 @@
 namespace Magento\Payment\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class UpdateOrderStatusForPaymentMethodsObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Payment\Observer\updateOrderStatusForPaymentMethodsObserver */
-    protected $updateOrderStatusForPaymentMethodsObserver;
+    /**
+     * @var \Magento\Payment\Observer\updateOrderStatusForPaymentMethodsObserver
+     */
+    private $updateOrderStatusForPaymentMethodsObserver;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
-    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $orderConfigMock;
+    /**
+     * @var \Magento\Sales\Model\Order\Config|MockObject
+     */
+    private $orderConfigMock;
 
-    /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $paymentConfigMock;
+    /**
+     * @var \Magento\Payment\Model\Config|MockObject
+     */
+    private $paymentConfigMock;
 
-    /** @var \Magento\Config\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $coreResourceConfigMock;
+    /**
+     * @var \Magento\Config\Model\ResourceModel\Config|MockObject
+     */
+    private $coreResourceConfigMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
-    protected $observerMock;
+    /**
+     * @var \Magento\Framework\Event\Observer|MockObject
+     */
+    private $observerMock;
 
-    /** @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject */
-    protected $eventMock;
+    /**
+     * @var \Magento\Framework\Event|MockObject
+     */
+    private $eventMock;
 
     const ORDER_STATUS = 'status';
 

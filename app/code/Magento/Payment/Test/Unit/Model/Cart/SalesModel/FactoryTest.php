@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
-{
-    /** @var \Magento\Payment\Model\Cart\SalesModel\Factory */
-    protected $_model;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Payment\Model\Cart\SalesModel\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_objectManagerMock;
+class FactoryTest extends TestCase
+{
+    /** @var Factory */
+    private $model;
+
+    /** @var ObjectManagerInterface|MockObject */
+    private $objectManagerMock;
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Factory($this->_objectManagerMock);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->model = new Factory($this->objectManagerMock);
     }
 
     /**
@@ -27,7 +33,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate($salesModelClass, $expectedType)
     {
         $salesModel = $this->createPartialMock($salesModelClass, ['__wakeup']);
-        $this->_objectManagerMock->expects(
+        $this->objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
@@ -37,7 +43,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('some value')
         );
-        $this->assertEquals('some value', $this->_model->create($salesModel));
+        $this->assertEquals('some value', $this->model->create($salesModel));
     }
 
     /**
@@ -56,6 +62,6 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInvalid()
     {
-        $this->_model->create('any invalid');
+        $this->model->create('any invalid');
     }
 }

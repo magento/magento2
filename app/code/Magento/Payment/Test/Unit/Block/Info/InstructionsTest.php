@@ -4,59 +4,63 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Payment\Block\Info\Instructions
- */
 namespace Magento\Payment\Test\Unit\Block\Info;
 
-class InstructionsTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Block\Info\Instructions;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\MethodInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InstructionsTest extends TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|MockObject
      */
-    protected $_info;
+    private $infoMock;
 
     /**
-     * @var \Magento\Payment\Block\Info\Instructions
+     * @var Instructions
      */
-    protected $_instructions;
+    private $instructions;
 
     protected function setUp()
     {
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->_instructions = new \Magento\Payment\Block\Info\Instructions($context);
-        $this->_info = $this->createMock(\Magento\Payment\Model\Info::class);
-        $this->_instructions->setData('info', $this->_info);
+        $context = $this->createMock(Context::class);
+        $this->instructions = new Instructions($context);
+        $this->infoMock = $this->createMock(Info::class);
+        $this->instructions->setData('info', $this->infoMock);
     }
 
     public function testGetInstructionAdditionalInformation()
     {
-        $this->_info->expects($this->once())
+        $this->infoMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with('instructions')
             ->willReturn('get the instruction here');
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertEquals('get the instruction here', $this->instructions->getInstructions());
 
         // And we get the already setted param $this->_instructions
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertEquals('get the instruction here', $this->instructions->getInstructions());
     }
 
     public function testGetInstruction()
     {
         $methodInstance = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
+            MethodInterface::class
         )->getMockForAbstractClass();
         $methodInstance->expects($this->once())
             ->method('getConfigData')
             ->with('instructions')
             ->willReturn('get the instruction here');
-        $this->_info->expects($this->once())
+        $this->infoMock->expects($this->once())
             ->method('getAdditionalInformation')
             ->with('instructions')
             ->willReturn(false);
-        $this->_info->expects($this->once())
+        $this->infoMock->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($methodInstance);
-        $this->assertEquals('get the instruction here', $this->_instructions->getInstructions());
+        $this->assertEquals('get the instruction here', $this->instructions->getInstructions());
     }
 }

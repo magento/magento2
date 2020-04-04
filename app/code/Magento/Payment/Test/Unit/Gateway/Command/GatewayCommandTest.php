@@ -14,13 +14,14 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayCommandTest extends \PHPUnit\Framework\TestCase
+class GatewayCommandTest extends TestCase
 {
     /**
      * @var GatewayCommand
@@ -30,32 +31,32 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @var BuilderInterface|MockObject
      */
-    private $requestBuilder;
+    private $requestBuilderMock;
 
     /**
      * @var TransferFactoryInterface|MockObject
      */
-    private $transferFactory;
+    private $transferFactoryMock;
 
     /**
      * @var ClientInterface|MockObject
      */
-    private $client;
+    private $clientMock;
 
     /**
      * @var HandlerInterface|MockObject
      */
-    private $responseHandler;
+    private $responseHandlerMock;
 
     /**
      * @var ValidatorInterface|MockObject
      */
-    private $validator;
+    private $validatorMock;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    private $logger;
+    private $loggerMock;
 
     /**
      * @var ErrorMessageMapperInterface|MockObject
@@ -64,21 +65,21 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->requestBuilder = $this->createMock(BuilderInterface::class);
-        $this->transferFactory = $this->createMock(TransferFactoryInterface::class);
-        $this->client = $this->createMock(ClientInterface::class);
-        $this->responseHandler = $this->createMock(HandlerInterface::class);
-        $this->validator = $this->createMock(ValidatorInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->requestBuilderMock = $this->createMock(BuilderInterface::class);
+        $this->transferFactoryMock = $this->createMock(TransferFactoryInterface::class);
+        $this->clientMock = $this->createMock(ClientInterface::class);
+        $this->responseHandlerMock = $this->createMock(HandlerInterface::class);
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->errorMessageMapper = $this->createMock(ErrorMessageMapperInterface::class);
 
         $this->command = new GatewayCommand(
-            $this->requestBuilder,
-            $this->transferFactory,
-            $this->client,
-            $this->logger,
-            $this->responseHandler,
-            $this->validator,
+            $this->requestBuilderMock,
+            $this->transferFactoryMock,
+            $this->clientMock,
+            $this->loggerMock,
+            $this->responseHandlerMock,
+            $this->validatorMock,
             $this->errorMessageMapper
         );
     }
@@ -88,7 +89,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
         $commandSubject = ['authorize'];
         $this->processRequest($commandSubject, true);
 
-        $this->responseHandler->method('handle')
+        $this->responseHandlerMock->method('handle')
             ->with($commandSubject, ['response_field1' => 'response_value1']);
 
         $this->command->execute($commandSubject);
@@ -110,7 +111,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->processRequest($commandSubject, false, $validationFailures);
 
-        $this->logger->expects(self::exactly(count($validationFailures)))
+        $this->loggerMock->expects(self::exactly(count($validationFailures)))
             ->method('critical')
             ->withConsecutive(
                 [self::equalTo('Payment Error: ' . $validationFailures[0])],
@@ -146,7 +147,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->logger->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
+        $this->loggerMock->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
             ->method('critical')
             ->withConsecutive(
                 [self::equalTo('Payment Error: Unauthorized')],
@@ -179,22 +180,22 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
         $transferO = $this->getMockBuilder(TransferInterface::class)
             ->getMockForAbstractClass();
 
-        $this->requestBuilder->method('build')
+        $this->requestBuilderMock->method('build')
             ->with($commandSubject)
             ->willReturn($request);
 
-        $this->transferFactory->method('create')
+        $this->transferFactoryMock->method('create')
             ->with($request)
             ->willReturn($transferO);
 
-        $this->client->method('placeRequest')
+        $this->clientMock->method('placeRequest')
             ->with($transferO)
             ->willReturn($response);
 
         $result = $this->getMockBuilder(ResultInterface::class)
             ->getMockForAbstractClass();
 
-        $this->validator->method('validate')
+        $this->validatorMock->method('validate')
             ->with(array_merge($commandSubject, ['response' => $response]))
             ->willReturn($result);
         $result->method('isValid')

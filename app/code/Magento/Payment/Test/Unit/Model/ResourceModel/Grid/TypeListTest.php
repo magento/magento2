@@ -6,22 +6,27 @@
 
 namespace Magento\Payment\Test\Unit\Model\ResourceModel\Grid;
 
-class TypeListTest extends \PHPUnit\Framework\TestCase
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\ResourceModel\Grid\TypeList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TypeListTest extends TestCase
 {
     /**
-     * @var \Magento\Payment\Model\ResourceModel\Grid\TypeList
+     * @var TypeList
      */
-    protected $typesArrayModel;
+    private $typesArrayModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $helperMock;
+    private $helperMock;
 
     protected function setUp()
     {
-        $this->helperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
-        $this->typesArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\TypeList($this->helperMock);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->typesArrayModel = new TypeList($this->helperMock);
     }
 
     public function testToOptionArray()

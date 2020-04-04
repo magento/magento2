@@ -3,27 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Gateway\Data\Order;
 
 use Magento\Payment\Gateway\Data\Order\AddressAdapter;
 use Magento\Sales\Api\Data\OrderAddressInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AddressAdapterTest
- */
-class AddressAdapterTest extends \PHPUnit\Framework\TestCase
+class AddressAdapterTest extends TestCase
 {
-    /** @var AddressAdapter */
-    protected $model;
+    /**
+     * @var AddressAdapter
+     */
+    private $model;
 
     /**
-     * @var OrderAddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAddressInterface|MockObject
      */
-    protected $orderAddressMock;
+    private $orderAddressMock;
 
     protected function setUp()
     {
-        $this->orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
+        $this->orderAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new AddressAdapter($this->orderAddressMock);

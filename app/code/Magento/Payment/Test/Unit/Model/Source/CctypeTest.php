@@ -6,75 +6,79 @@
 
 namespace Magento\Payment\Test\Unit\Model\Source;
 
-use \Magento\Payment\Model\Source\Cctype;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Source\Cctype;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CctypeTest extends \PHPUnit\Framework\TestCase
+class CctypeTest extends TestCase
 {
     /**
      * Payment config model
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
-    protected $_paymentConfig;
+    private $paymentConfigMock;
 
     /**
      * @var Cctype
      */
-    protected $_model;
+    private $model;
 
     /**
      * List of allowed Cc types
      *
      * @var array
      */
-    protected $_allowedTypes = ['allowed_cc_type'];
+    private $allowedTypes = ['allowed_cc_type'];
 
     /**
      * Cc type array
      *
      * @var array
      */
-    protected $_cctypesArray = ['allowed_cc_type' => 'name'];
+    private $cctypesArray = ['allowed_cc_type' => 'name'];
 
     /**
      * Expected cctype array after toOptionArray call
      *
      * @var array
      */
-    protected $_expectedToOptionsArray = [['value' => 'allowed_cc_type', 'label' => 'name']];
+    private $expectedToOptionsArray = [['value' => 'allowed_cc_type', 'label' => 'name']];
 
     protected function setUp()
     {
-        $this->_paymentConfig = $this->getMockBuilder(
-            \Magento\Payment\Model\Config::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->paymentConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
-        $this->_model = new Cctype($this->_paymentConfig);
+        $this->model = new Cctype($this->paymentConfigMock);
     }
 
     public function testSetAndGetAllowedTypes()
     {
-        $model = $this->_model->setAllowedTypes($this->_allowedTypes);
-        $this->assertEquals($this->_allowedTypes, $model->getAllowedTypes());
+        $model = $this->model->setAllowedTypes($this->allowedTypes);
+        $this->assertEquals($this->allowedTypes, $model->getAllowedTypes());
     }
 
     public function testToOptionArrayEmptyAllowed()
     {
         $this->_preparePaymentConfig();
-        $this->assertEquals($this->_expectedToOptionsArray, $this->_model->toOptionArray());
+        $this->assertEquals($this->expectedToOptionsArray, $this->model->toOptionArray());
     }
 
     public function testToOptionArrayNotEmptyAllowed()
     {
         $this->_preparePaymentConfig();
-        $this->_model->setAllowedTypes($this->_allowedTypes);
-        $this->assertEquals($this->_expectedToOptionsArray, $this->_model->toOptionArray());
+        $this->model->setAllowedTypes($this->allowedTypes);
+        $this->assertEquals($this->expectedToOptionsArray, $this->model->toOptionArray());
     }
 
     private function _preparePaymentConfig()
     {
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will(
-            $this->returnValue($this->_cctypesArray)
+        $this->paymentConfigMock->expects($this->once())->method('getCcTypes')->will(
+            $this->returnValue($this->cctypesArray)
         );
     }
 }

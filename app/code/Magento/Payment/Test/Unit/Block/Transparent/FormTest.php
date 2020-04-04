@@ -3,42 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Block\Transparent;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
-     * @var FormTesting | \PHPUnit_Framework_MockObject_MockObject
+     * @var FormTesting|MockObject
      */
-    private $form;
+    private $formMock;
 
     /**
-     * @var RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TransparentInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var TransparentInterface|MockObject
      */
     private $methodMock;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $checkoutSessionMock;
 
@@ -46,36 +55,36 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
 
         $context = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             [
                 'request' => $this->requestMock,
                 'urlBuilder' => $this->urlBuilderMock
             ]
         );
 
-        $this->methodMock = $this->getMockBuilder(\Magento\Payment\Model\Method\TransparentInterface::class)
+        $this->methodMock = $this->getMockBuilder(TransparentInterface::class)
             ->getMock();
 
-        $this->checkoutSessionMock = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
+        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentConfigMock = $this->getMockBuilder(\Magento\Payment\Model\Config::class)
+        $paymentConfigMock = $this->getMockBuilder(Config::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->form = new FormTesting(
+        $this->formMock = new FormTesting(
             $context,
             $paymentConfigMock,
             $this->checkoutSessionMock
@@ -89,8 +98,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with('isAjax')
             ->willReturnOnConsecutiveCalls(true, false);
 
-        $this->assertTrue($this->form->isAjaxRequest());
-        $this->assertFalse($this->form->isAjaxRequest());
+        $this->assertTrue($this->formMock->isAjaxRequest());
+        $this->assertFalse($this->formMock->isAjaxRequest());
     }
 
     /**
@@ -104,9 +113,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->initializeMethodWithConfigMock([[$fieldName, null, $fieldValue]]);
 
-        $this->form->setMethod($this->methodMock);
+        $this->formMock->setMethod($this->methodMock);
 
-        $this->assertEquals($expected, $this->form->getMethodConfigData($fieldName));
+        $this->assertEquals($expected, $this->formMock->getMethodConfigData($fieldName));
     }
 
     /**
@@ -116,7 +125,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private function initializeMethodWithConfigMock(array $configMap = [])
     {
-        $configInterface = $this->getMockBuilder(\Magento\Payment\Model\Method\ConfigInterface::class)
+        $configInterface = $this->getMockBuilder(ConfigInterface::class)
             ->getMock();
 
         $configInterface->expects($this->any())
@@ -131,12 +140,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for testGetMethodConfigData
      *
+     * @return array
      * @see testGetMethodConfigData
      *
      * @case #1 Set string value
      * @case #2 Set boolean value
      *
-     * @return array
      */
     public function getMethodConfigDataDataProvider()
     {
@@ -164,20 +173,20 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->form->setMethod($this->methodMock);
+        $this->formMock->setMethod($this->methodMock);
 
-        $this->assertEquals($expectedUrl, $this->form->getCgiUrl());
+        $this->assertEquals($expectedUrl, $this->formMock->getCgiUrl());
     }
 
     /**
      * Data provider for testGetCgiUrl
      *
+     * @return array
      * @see testGetCgiUrl
      *
      * @case #1 The sandboxFlag is 1 we expected cgi_url_test_mode_value
      * @case #2 The sandboxFlag is 0 we expected cgi_url_value
      *
-     * @return array
      */
     public function getCgiUrlDataProvider()
     {
@@ -208,9 +217,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($orderUrlPattern)
             ->willReturn($builtOrderUrl);
 
-        $this->form->setMethod($this->methodMock);
+        $this->formMock->setMethod($this->methodMock);
 
-        $this->assertEquals($builtOrderUrl, $this->form->getOrderUrl());
+        $this->assertEquals($builtOrderUrl, $this->formMock->getOrderUrl());
     }
 
     public function testGetDateDelim()
@@ -218,9 +227,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $dateDelimiter = '/';
         $this->initializeMethodWithConfigMock([['date_delim', null, $dateDelimiter]]);
 
-        $this->form->setMethod($this->methodMock);
+        $this->formMock->setMethod($this->methodMock);
 
-        $this->assertEquals($dateDelimiter, $this->form->getDateDelim());
+        $this->assertEquals($dateDelimiter, $this->formMock->getDateDelim());
     }
 
     public function testGetCardFieldsMap()
@@ -228,19 +237,19 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $ccfields = 'x_card_code,x_exp_date,x_card_num';
         $this->initializeMethodWithConfigMock([['ccfields', null, $ccfields]]);
 
-        $this->form->setMethod($this->methodMock);
+        $this->formMock->setMethod($this->methodMock);
 
         $expected = json_encode(['cccvv' => 'x_card_code', 'ccexpdate' => 'x_exp_date', 'ccnum' => 'x_card_num']);
 
-        $this->assertEquals($expected, $this->form->getCardFieldsMap());
+        $this->assertEquals($expected, $this->formMock->getCardFieldsMap());
     }
 
     public function testToHtmlShouldRender()
     {
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Payment::class)
+        $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -254,7 +263,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getMethodInstance')
             ->willReturn($this->methodMock);
 
-        $this->form->toHtml();
+        $this->formMock->toHtml();
     }
 
     public function testToHtmlShouldNotRenderEmptyQuote()
@@ -263,12 +272,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->willReturn(null);
 
-        $this->assertEmpty($this->form->toHtml());
+        $this->assertEmpty($this->formMock->toHtml());
     }
 
     public function testToHtmlShouldNotRenderEmptyPayment()
     {
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -279,24 +288,24 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->method('getPayment')
             ->willReturn(null);
 
-        $this->assertEmpty($this->form->toHtml());
+        $this->assertEmpty($this->formMock->toHtml());
     }
 
     public function testGetMethodSuccess()
     {
-        $this->form->setMethod($this->methodMock);
-        $this->assertSame($this->methodMock, $this->form->getMethod());
+        $this->formMock->setMethod($this->methodMock);
+        $this->assertSame($this->methodMock, $this->formMock->getMethod());
     }
 
     public function testGetMethodNotTransparentInterface()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage((string)__('We cannot retrieve the transparent payment method model object.'));
 
-        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
-        $this->form->setMethod($methodMock);
-        $this->form->getMethod();
+        $this->formMock->setMethod($methodMock);
+        $this->formMock->getMethod();
     }
 }

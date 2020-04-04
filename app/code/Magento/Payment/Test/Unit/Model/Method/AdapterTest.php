@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 use Magento\Framework\Event\ManagerInterface;
@@ -18,42 +19,44 @@ use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit\Framework\TestCase
+class AdapterTest extends TestCase
 {
     /**
      * @var MockObject|ManagerInterface
      */
-    private $eventManager;
+    private $eventManagerMock;
 
     /**
      * @var MockObject|ValueHandlerPoolInterface
      */
-    private $valueHandlerPool;
+    private $valueHandlerPoolMock;
 
     /**
      * @var MockObject|ValidatorPoolInterface
      */
-    private $validatorPool;
+    private $validatorPoolMock;
 
     /**
      * @var MockObject|CommandPoolInterface
      */
-    private $commandPool;
+    private $commandPoolMock;
 
     /**
      * @var MockObject|PaymentDataObjectFactory
      */
-    private $paymentDataObjectFactory;
+    private $paymentDataObjectFactoryMock;
 
     /**
-     * @var MockObject
+     * @var MockObject|LoggerInterface
      */
-    private $logger;
+    private $loggerMock;
 
     /**
      * @var string
@@ -77,11 +80,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
-        $this->validatorPool = $this->createMock(ValidatorPoolInterface::class);
-        $this->commandPool = $this->createMock(CommandPoolInterface::class);
-        $this->paymentDataObjectFactory = $this->getMockBuilder(PaymentDataObjectFactory::class)
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->valueHandlerPoolMock = $this->createMock(ValueHandlerPoolInterface::class);
+        $this->validatorPoolMock = $this->createMock(ValidatorPoolInterface::class);
+        $this->commandPoolMock = $this->createMock(CommandPoolInterface::class);
+        $this->paymentDataObjectFactoryMock = $this->getMockBuilder(PaymentDataObjectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -89,19 +92,19 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->formBlockType = '\FormBlock';
         $this->infoBlockType = '\InfoBlock';
 
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         $this->adapter = new Adapter(
-            $this->eventManager,
-            $this->valueHandlerPool,
-            $this->paymentDataObjectFactory,
+            $this->eventManagerMock,
+            $this->valueHandlerPoolMock,
+            $this->paymentDataObjectFactoryMock,
             $this->code,
             $this->formBlockType,
             $this->infoBlockType,
-            $this->commandPool,
-            $this->validatorPool,
+            $this->commandPoolMock,
+            $this->validatorPoolMock,
             null,
-            $this->logger
+            $this->loggerMock
         );
     }
 
@@ -117,7 +120,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
         $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->valueHandlerPool->method('get')
+        $this->valueHandlerPoolMock->method('get')
             ->with('can_fetch_transaction_information')
             ->willReturn($valueHandler);
         $valueHandler->expects($this->atLeastOnce())
@@ -125,11 +128,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with(['field' => 'can_fetch_transaction_information'])
             ->willReturn(true);
 
-        $this->paymentDataObjectFactory->method('create')
+        $this->paymentDataObjectFactoryMock->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
 
-        $this->commandPool->method('get')
+        $this->commandPoolMock->method('get')
             ->with('fetch_transaction_information')
             ->willReturn($command);
         $command->expects($this->atLeastOnce())
@@ -150,7 +153,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     {
         $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
 
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPoolMock->expects(static::once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
@@ -159,7 +162,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with(['field' => 'active'])
             ->willReturn(false);
 
-        $this->eventManager->expects(static::never())
+        $this->eventManagerMock->expects(static::never())
             ->method('dispatch');
 
         static::assertFalse($this->adapter->isAvailable(null));
@@ -176,7 +179,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $validationResult = $this->createMock(ResultInterface::class);
         $paymentInfo = $this->createMock(InfoInterface::class);
 
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPoolMock->expects(static::once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
@@ -185,11 +188,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with(['field' => 'active', 'payment' => $paymentDO])
             ->willReturn(true);
 
-        $this->validatorPool->expects(static::once())
+        $this->validatorPoolMock->expects(static::once())
             ->method('get')
             ->with('availability')
             ->willReturn($availabilityValidator);
-        $this->paymentDataObjectFactory->expects(static::exactly(2))
+        $this->paymentDataObjectFactoryMock->expects(static::exactly(2))
             ->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
@@ -200,7 +203,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willReturn(true);
 
-        $this->eventManager->expects(static::once())
+        $this->eventManagerMock->expects(static::once())
             ->method('dispatch');
 
         $this->adapter->setInfoInstance($paymentInfo);
@@ -213,7 +216,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     public function testIsAvailableWithEmptyInfoInstance()
     {
         $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
-        $this->valueHandlerPool->expects(static::once())
+        $this->valueHandlerPoolMock->expects(static::once())
             ->method('get')
             ->with('active')
             ->willReturn($activeValueHandler);
@@ -222,11 +225,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->with(['field' => 'active'])
             ->willReturn(true);
 
-        $this->validatorPool->expects(static::never())
+        $this->validatorPoolMock->expects(static::never())
             ->method('get')
             ->with('availability');
 
-        $this->eventManager->expects(static::once())
+        $this->eventManagerMock->expects(static::once())
             ->method('dispatch');
 
         static::assertTrue($this->adapter->isAvailable(null));
@@ -269,7 +272,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             null,
             null,
             $commandManager,
-            $this->logger
+            $this->loggerMock
         );
 
         $valueHandler = $this->createMock(ValueHandlerInterface::class);
@@ -325,7 +328,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             $commandPool,
             null,
             null,
-            $this->logger
+            $this->loggerMock
         );
 
         $valueHandler = $this->createMock(ValueHandlerInterface::class);

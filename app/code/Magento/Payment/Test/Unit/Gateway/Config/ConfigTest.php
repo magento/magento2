@@ -3,28 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
-use Magento\Payment\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Payment\Gateway\Config\Config;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ConfigTest
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Config */
-    protected $model;
+    /**
+     * @var Config
+     */
+    private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfigMock;
+    private $scopeConfigMock;
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
     }
 
