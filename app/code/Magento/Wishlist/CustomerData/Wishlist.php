@@ -68,7 +68,7 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
