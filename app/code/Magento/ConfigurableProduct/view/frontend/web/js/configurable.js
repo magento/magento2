@@ -117,7 +117,7 @@ define([
         _overrideDefaults: function () {
             var hashIndex = window.location.href.indexOf('#');
 
-            if (hashIndex !== -1  && window.location.hash !== '') {
+            if (hashIndex !== -1 && !_.isEmpty(window.location.hash)) {
                 this._parseQueryParams(window.location.href.substr(hashIndex + 1));
             }
 
