@@ -1,0 +1,27 @@
+type Query {
+    translate (
+        locale: String @doc(description: "Desired Locale eg: en_US or ca_FR")
+        phrases: [String] @doc(description: "List of phrases to translate")
+    ): Phrases
+    @resolver(class: "Magento\\TranslationGraphQl\\Model\\Resolver\\Translations")
+    @doc(description: "Retrieve translations")
+    @cache(cacheable: false)
+    availableLocales: Locales @resolver(class: "Magento\\TranslationGraphQl\\Model\\Resolver\\AvailableLocales") @doc(description: "Get list of available locales") @cache(cacheable: false)
+}
+
+type Phrases @doc(description: "Array of Phrases") {
+    items: [Phrase] @doc(description: "An array of Phrases to be translated")
+}
+
+type Phrase @doc(description: "Phrase defines original and translated phrases") {
+    original: String @doc(description: "Original Phrase")
+    translated: String @doc(description: "Translated Phrase")
+}
+
+type Locales @doc(description: "Array of Locales") {
+    items: [Locale] @doc(description: "An array of Locales available")
+}
+
+type Locale @doc(description: "Locale code provided from store views") {
+    locale: String @doc(description: "Locale code provided from store views")
+}
