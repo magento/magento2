@@ -32,7 +32,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create website, store and store view -->
             <comment userInput="Create website, store and store view" stepKey="createWebsite"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
