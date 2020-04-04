@@ -44,7 +44,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped ("MC-18948: Mysql Adapter and Search Engine is deprecated");
+        $this->markTestSkipped("MC-18948: Mysql Adapter and Search Engine is deprecated");
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
