@@ -88,10 +88,10 @@ class ImageUploader
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param $baseTmpPath
-     * @param $basePath
-     * @param $allowedExtensions
-     * @param array $allowedMimeTypes
+     * @param string $baseTmpPath
+     * @param string $basePath
+     * @param string[] $allowedExtensions
+     * @param string[] $allowedMimeTypes
      * @param Name|null $fileNameLookup
      */
     public function __construct(
@@ -104,7 +104,7 @@ class ImageUploader
         $basePath,
         $allowedExtensions,
         $allowedMimeTypes = [],
-        Name $fileNameLookup =  null
+        Name $fileNameLookup = null
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
