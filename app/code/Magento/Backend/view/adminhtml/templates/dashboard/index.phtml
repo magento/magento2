@@ -5,78 +5,17 @@
  */
 ?>
 
-<?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
-<script>
-require([
-    'Magento_Ui/js/modal/alert',
-    'prototype'
-], function(alert){
-
-window.changeDiagramsPeriod = function(periodObj) {
-    periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
-    <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId) : ?>
-    ajaxBlockParam = 'block/tab_<?= $block->escapeJs($tabId) ?>/';
-    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => ''])) ?>' + ajaxBlockParam + periodParam;
-    new Ajax.Request(ajaxBlockUrl, {
-        parameters: {isAjax: 'true', form_key: FORM_KEY},
-        onSuccess: function(transport) {
-            tabContentElementId = '<?= $block->escapeJs($block->getChildBlock('diagrams')->getId()) ?>_<?= $block->escapeJs($tabId) ?>_content';
-            try {
-                if (transport.responseText.isJSON()) {
-                    var response = transport.responseText.evalJSON()
-                    if (response.error) {
-                        alert({
-                            content: response.message
-                        });
-                    }
-                    if(response.ajaxExpired && response.ajaxRedirect) {
-                        setLocation(response.ajaxRedirect);
-                    }
-                } else {
-                    $(tabContentElementId).update(transport.responseText);
-                }
-            }
-            catch (e) {
-                $(tabContentElementId).update(transport.responseText);
-            }
-        }
-    });
-    <?php endforeach; ?>
-    ajaxBlockUrl = '<?= $block->escapeJs($block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => 'totals', 'period' => ''])) ?>' + periodParam;
-    new Ajax.Request(ajaxBlockUrl, {
-        parameters: {isAjax: 'true', form_key: FORM_KEY},
-        onSuccess: function(transport) {
-            tabContentElementId = 'dashboard_diagram_totals';
-            try {
-                if (transport.responseText.isJSON()) {
-                    var response = transport.responseText.evalJSON();
-                    if (response.error) {
-                        alert({
-                            content: response.message
-                        });
-                    }
-                    if(response.ajaxExpired && response.ajaxRedirect) {
-                        setLocation(response.ajaxRedirect);
-                    }
-                } else {
-                    $(tabContentElementId).replace(transport.responseText);
-                }
-            }
-            catch (e) {
-                $(tabContentElementId).replace(transport.responseText);
-            }
-        }
-    });
-}
-
-});
-</script>
-<?php endif; ?>
 <div class="dashboard-container row">
     <div class="dashboard-main col-m-8 col-m-push-4">
         <div class="dashboard-diagram-container">
+            <?= $block->getChildHtml('chartDisabled') ?>
             <?= $block->getChildHtml('diagrams') ?>
-            <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
+            <?php
+                $diagramsBlock = $block->getChildBlock('diagrams');
+                $tabsIds = $diagramsBlock ? $diagramsBlock->getTabsIds() : [];
+            ?>
+            <?php if (is_array($tabsIds)): ?>
+                <?= $block->getChildHtml('diagramsPeriod') ?>
                 <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
             <?php endif; ?>
         </div>

@@ -26,7 +26,7 @@
             <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <!--Go to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

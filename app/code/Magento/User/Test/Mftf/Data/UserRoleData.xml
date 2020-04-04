@@ -15,6 +15,13 @@
         <data key="access">1</data>
     </entity>
 
+    <entity name="roleDefaultAdministrator" type="role">
+        <data key="name">Administrators</data>
+        <data key="rolename">Administrators</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
+    </entity>
+
     <entity name="roleAdministrator" type="user_role">
         <data key="name" unique="suffix">Administrator </data>
         <data key="rolename" unique="suffix">Administrator </data>

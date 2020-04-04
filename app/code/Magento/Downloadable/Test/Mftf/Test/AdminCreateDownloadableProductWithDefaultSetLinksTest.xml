@@ -27,7 +27,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>

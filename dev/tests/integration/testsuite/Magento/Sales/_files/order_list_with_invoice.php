@@ -45,7 +45,8 @@ $ordersData = [
         'base_grand_total' => 130.00,
         'grand_total' => 130.00,
         'subtotal' => 130.00,
-        'created_at' => $dateTime->modify('-1 day')->format(DateTime::DATETIME_PHP_FORMAT),
+        'created_at' => max($dateTime->modify('-1 day'), $dateTime->modify('first day of this month'))
+            ->format(DateTime::DATETIME_PHP_FORMAT),
     ],
     [
         'increment_id' => '100000004',
@@ -55,7 +56,7 @@ $ordersData = [
         'base_grand_total' => 140.00,
         'grand_total' => 140.00,
         'subtotal' => 140.00,
-        'created_at' => $dateTime->modify('-1 month')->format(DateTime::DATETIME_PHP_FORMAT),
+        'created_at' => $dateTime->modify('first day of this month')->format(DateTime::DATETIME_PHP_FORMAT),
     ],
     [
         'increment_id' => '100000005',
@@ -65,7 +66,7 @@ $ordersData = [
         'base_grand_total' => 150.00,
         'grand_total' => 150.00,
         'subtotal' => 150.00,
-        'created_at' => $dateTime->modify('-1 year')->format(DateTime::DATETIME_PHP_FORMAT),
+        'created_at' => $dateTime->modify('first day of january this year')->format(DateTime::DATETIME_PHP_FORMAT),
     ],
     [
         'increment_id' => '100000006',
@@ -75,7 +76,7 @@ $ordersData = [
         'base_grand_total' => 160.00,
         'grand_total' => 160.00,
         'subtotal' => 160.00,
-        'created_at' => $dateTime->modify('-2 year')->format(DateTime::DATETIME_PHP_FORMAT),
+        'created_at' => $dateTime->modify('first day of january last year')->format(DateTime::DATETIME_PHP_FORMAT),
     ],
 ];
 
