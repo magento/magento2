@@ -15,6 +15,7 @@
             <title value="Updating System Integration Entity"/>
             <description value="Admin Updates Created Integration"/>
             <group value="integration"/>
+            <testCaseId value="MC-4624"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
