@@ -1283,15 +1283,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                     'value_id' => 1,
                     'file' => 'imageFile.jpg',
                     'media_type' => 'image',
+                    'position' => 1,
                 ],
                 [
                     'value_id' => 3,
                     'file' => 'imageFile.jpg',
+                    'position' => 2,
                 ],
                 [
                     'value_id' => 2,
                     'file' => 'smallImageFile.jpg',
                     'media_type' => 'image',
+                    'position' => 3,
                 ],
                 ]
             ];
