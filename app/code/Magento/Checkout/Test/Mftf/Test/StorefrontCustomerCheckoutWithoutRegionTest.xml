@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_GB_Customer" stepKey="createCustomer"/>
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
             <actionGroup ref="SelectCountriesWithRequiredRegionActionGroup" stepKey="setCustomCountryWithRequiredRegion">
                 <argument name="countries" value="CustomCountryWithRequiredRegion"/>
             </actionGroup>

@@ -30,9 +30,11 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Edit Simple Product -->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <!-- See 3 options are present -->
         <actionGroup ref="AdminAssertProductCustomOptionVisibleActionGroup" stepKey="assertCustomOptionsField">
             <argument name="option" value="ProductOptionField"/>
