@@ -214,7 +214,8 @@ class SampleDataDeployCommand extends Command
     private function updateMemoryLimit()
     {
         if (function_exists('ini_set')) {
-            $result = ini_alter('display_errors', 1);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $result = ini_set('display_errors', 1);
             if ($result === false) {
                 $error = error_get_last();
                 throw new InvalidArgumentException(__(
@@ -224,7 +225,8 @@ class SampleDataDeployCommand extends Command
             }
             $memoryLimit = trim(ini_get('memory_limit'));
             if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 756 * 1024 * 1024) {
-                $result = ini_alter('memory_limit', '756M');
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $result = ini_set('memory_limit', '756M');
                 if ($result === false) {
                     $error = error_get_last();
                     throw new InvalidArgumentException(__(
