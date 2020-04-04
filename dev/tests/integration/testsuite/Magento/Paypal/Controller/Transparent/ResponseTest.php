@@ -57,7 +57,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $quote = $this->getQuote($reservedOrderId);
         $this->getRequest()->setPostValue($postData);
-
+        $this->getRequest()->setMethod('POST');
         /** @var Session $checkoutSession */
         $checkoutSession = $this->_objectManager->get(GenericSession::class);
         $checkoutSession->setQuoteId($quote->getId());

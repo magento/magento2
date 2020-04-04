@@ -7,7 +7,8 @@ type Query {
 
 type CustomerOrder @doc(description: "Order mapping fields") {
     id: Int
-    increment_id: String
+    increment_id: String @deprecated(reason: "Use the order_number instead.")
+    order_number: String! @doc(description: "The order number")
     created_at: String
     grand_total: Float
     status: String
@@ -15,4 +16,27 @@ type CustomerOrder @doc(description: "Order mapping fields") {
 
 type CustomerOrders {
     items: [CustomerOrder] @doc(description: "Array of orders")
+}
+
+type Mutation {
+    reorderItems(orderNumber: String!): ReorderItemsOutput @doc(description:"Adds all products from a customer's previous order to the cart.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+}
+
+type ReorderItemsOutput {
+    cart: Cart! @doc(description:"Contains detailed information about the customer's cart.")
+    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of reordering errors.")
+}
+
+type CheckoutUserInputError @doc(description:"An error encountered while adding an item the the cart."){
+    message: String! @doc(description: "Localized error message")
+    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
+    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+}
+
+enum CheckoutUserInputErrorCodes {
+    REORDER_NOT_AVAILABLE
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
 }

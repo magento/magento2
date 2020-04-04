@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteProductURLRewriteEntityTest">
+        <annotations>
+            <stories value="Delete Product UrlRewrite"/>
+            <title value="Delete created product URL rewrite"/>
+            <description value="Login as admin, create product with category and UrlRewrite, delete created URL rewrite"/>
+            <testCaseId value="MC-5347"/>
+            <severity value="MAJOR"/>
+            <group value="urlRewrite"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Filter and Select the created Product -->
+        <actionGroup ref="AdminSearchUrlRewriteProductBySkuActionGroup" stepKey="searchProduct">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Update the Store, RequestPath, RedirectType and Description -->
+        <actionGroup ref="AdminAddUrlRewriteForProductActionGroup" stepKey="addUrlRewrite">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+            <argument name="redirectTypeValue" value="Temporary (302)"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!--Delete Created Rewrite, Assert Success Message -->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCreatedRewrite">
+            <argument name="requestPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+        </actionGroup>
+        <!-- Assert Deleted Rewrite is Not in Grid -->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedURLRewriteInGrid">
+            <argument name="requestPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+        </actionGroup>
+        <!-- Assert Page By Url Rewrite is Not Found -->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
+            <argument name="requestPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+        </actionGroup>
+    </test>
+</tests>

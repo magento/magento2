@@ -19,9 +19,9 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     /**
      * SOAP client initialized with different WSDLs.
      *
-     * @var \Zend\Soap\Client[]
+     * @var \Laminas\Soap\Client[]
      */
-    protected $_soapClients = [];
+    protected $_soapClients = ['custom' => [], 'default' => []];
 
     /**
      * @var \Magento\Webapi\Model\Soap\Config
@@ -46,7 +46,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
@@ -67,7 +67,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      *
      * @param string $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode
-     * @return \Zend\Soap\Client
+     * @return \Laminas\Soap\Client
      */
     protected function _getSoapClient($serviceInfo, $storeCode = null)
     {
@@ -75,12 +75,28 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             [$this->_getSoapServiceName($serviceInfo) . $this->_getSoapServiceVersion($serviceInfo)],
             $storeCode
         );
-        /** Check if there is SOAP client initialized with requested WSDL available */
-        if (!isset($this->_soapClients[$wsdlUrl])) {
-            $token = isset($serviceInfo['soap']['token']) ? $serviceInfo['soap']['token'] : null;
-            $this->_soapClients[$wsdlUrl] = $this->instantiateSoapClient($wsdlUrl, $token);
+        /** @var \Laminas\Soap\Client $soapClient */
+        $soapClient = null;
+        if (isset($serviceInfo['soap']['token'])) {
+            $token = $serviceInfo['soap']['token'];
+            if (array_key_exists($token, $this->_soapClients['custom'])
+                && array_key_exists($wsdlUrl, $this->_soapClients['custom'][$token])
+            ) {
+                $soapClient = $this->_soapClients['custom'][$token][$wsdlUrl];
+            } else {
+                if (!array_key_exists($token, $this->_soapClients['custom'])) {
+                    $this->_soapClients['custom'][$token] = [];
+                }
+                $soapClient = $this->_soapClients['custom'][$token][$wsdlUrl]
+                    = $this->instantiateSoapClient($wsdlUrl, $token);
+            }
+        } else {
+            if (!isset($this->_soapClients[$wsdlUrl])) {
+                $this->_soapClients['default'][$wsdlUrl] = $this->instantiateSoapClient($wsdlUrl, null);
+            }
+            $soapClient = $this->_soapClients['default'][$wsdlUrl];
         }
-        return $this->_soapClients[$wsdlUrl];
+        return $soapClient;
     }
 
     /**
@@ -88,7 +104,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      *
      * @param string $wsdlUrl
      * @param string $token Authentication token
-     * @return \Zend\Soap\Client
+     * @return \Laminas\Soap\Client
      */
     public function instantiateSoapClient($wsdlUrl, $token = null)
     {
@@ -97,7 +113,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             : \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
         $opts = ['http' => ['header' => "Authorization: Bearer " . $accessCredentials]];
         $context = stream_context_create($opts);
-        $soapClient = new \Zend\Soap\Client($wsdlUrl);
+        $soapClient = new \Laminas\Soap\Client($wsdlUrl);
         $soapClient->setSoapVersion(SOAP_1_2);
         $soapClient->setStreamContext($context);
         if (TESTS_XDEBUG_ENABLED) {

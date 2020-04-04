@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+   <test name="AdminCreateCustomerGroupAlreadyExistsTest">
+        <annotations>
+            <features value="Create customer group already exists"/>
+            <stories value="Create customer group"/>
+            <title value="Create customer group already exists"/>
+            <description value="Create customer group already exists"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5302"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Steps: 1. Log in to backend as admin user.
+                    2. Navigate to Stores > Other Settings > Customer Groups.
+                    3. Start to create new Customer Group.
+                    4. Fill in all data according to data set:  Group Name "General", Tax Class "Retail customer"
+                    5. Click "Save Customer Group" button. -->
+        <!--  Assert  "Customer Group already exists." error message displayed -->
+        <actionGroup ref="AdminAssertErrorMessageCustomerGroupAlreadyExists" stepKey="seeErrorMessageCustomerGroupAlreadyExists">
+            <argument name="groupName" value="{{GeneralCustomerGroup.code}}"/>
+            <argument name="taxClass" value="{{GeneralCustomerGroup.tax_class_name}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -355,6 +355,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
 
         foreach ($this->_getProductCollection() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
 
@@ -373,7 +374,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         return [
             'action' => $url,
             'data' => [
-                'product' => $product->getEntityId(),
+                'product' => (int) $product->getEntityId(),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
@@ -474,8 +475,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-
-        $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',

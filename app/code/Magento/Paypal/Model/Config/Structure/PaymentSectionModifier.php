@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model\Config\Structure;
 
 /**
@@ -60,9 +61,9 @@ class PaymentSectionModifier
                         unset($childData['children'][$moveInstruction['section']]);
                         unset($moveInstruction['data']['displayIn']);
                         $changedStructure
-                            [$moveInstruction['parent']]
-                                ['children']
-                                    [$moveInstruction['section']] = $moveInstruction['data'];
+                        [$moveInstruction['parent']]
+                        ['children']
+                        [$moveInstruction['section']] = $moveInstruction['data'];
                     }
                 }
                 if (!isset($moveInstructions[$childSection])) {
@@ -83,7 +84,7 @@ class PaymentSectionModifier
      */
     private function getMoveInstructions($section, $data)
     {
-        $moved = [];
+        $moved = [[]];
 
         if (array_key_exists('children', $data)) {
             foreach ($data['children'] as $childSection => $childData) {
@@ -91,23 +92,20 @@ class PaymentSectionModifier
                 if (isset($movedChildren[$childSection])) {
                     unset($data['children'][$childSection]);
                 }
-                $moved = array_merge($moved, $movedChildren);
+                $moved[] = $movedChildren;
             }
         }
 
         if (isset($data['displayIn']) && in_array($data['displayIn'], self::$specialGroups)) {
-            $moved = array_merge(
-                [
-                    $section => [
+            $moved[] = [
+                $section => [
                     'parent' => $data['displayIn'],
                     'section' => $section,
                     'data' => $data
-                    ]
-                ],
-                $moved
-            );
+                ]
+            ];
         }
 
-        return $moved;
+        return array_merge(...$moved);
     }
 }

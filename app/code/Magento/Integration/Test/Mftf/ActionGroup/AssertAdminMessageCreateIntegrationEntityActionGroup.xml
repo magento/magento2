@@ -13,7 +13,7 @@
             <argument name="message" type="string" defaultValue="The integration '{{name}}' has been saved."/>
             <argument name="messageType" type="string" defaultValue="success"/>
         </arguments>
-        <waitForElementVisible selector="{{IntegrationsGridSection.messageByType(messageType)}}" stepKey="waitForMessage"/>
-        <see userInput="{{message}}" selector="{{IntegrationsGridSection.messageByType(messageType)}}" stepKey="verifyMessage"/>
+        <waitForElementVisible selector="{{AdminIntegrationsGridSection.messageByType(messageType)}}" stepKey="waitForMessage"/>
+        <see userInput="{{message}}" selector="{{AdminIntegrationsGridSection.messageByType(messageType)}}" stepKey="verifyMessage"/>
     </actionGroup>
 </actionGroups>

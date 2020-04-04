@@ -4,36 +4,47 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Checkout\Block\Cart\Shipping */ ?>
 
-<div id="block-shipping" class="block shipping" data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'>
+<div id="block-shipping"
+     class="block shipping"
+     data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'
+>
     <div class="title" data-role="title">
         <strong id="block-shipping-heading" role="heading" aria-level="2">
-            <?= /* @escapeNotVerified */ $block->getQuote()->isVirtual() ? __('Estimate Tax') : __('Estimate Shipping and Tax') ?>
+            <?= $block->getQuote()->isVirtual()
+                ? $block->escapeHtml(__('Estimate Tax'))
+                : $block->escapeHtml(__('Estimate Shipping and Tax'))
+            ?>
         </strong>
     </div>
-    <div id="block-summary" data-bind="scope:'block-summary'" class="content" data-role="content" aria-labelledby="block-shipping-heading">
+    <div id="block-summary"
+         data-bind="scope:'block-summary'"
+         class="content"
+         data-role="content"
+         aria-labelledby="block-shipping-heading"
+    >
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
             {
                 "#block-summary": {
-                    "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
+                    "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
                 }
             }
         </script>
         <script>
-            window.checkoutConfig = <?= /* @escapeNotVerified */ $block->getSerializedCheckoutConfig() ?>;
+            window.checkoutConfig = <?= /* @noEscape */ $block->getSerializedCheckoutConfig() ?>;
             window.customerData = window.checkoutConfig.customerData;
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([
                 'mage/url',
                 'Magento_Ui/js/block-loader'
             ], function(url, blockLoader) {
-                blockLoader("<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>");
-                return url.setBaseUrl('<?= /* @escapeNotVerified */ $block->getBaseUrl() ?>');
+                blockLoader(
+                    "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+                );
+                return url.setBaseUrl('<?= $block->escapeJs($block->escapeUrl($block->getBaseUrl())) ?>');
             })
         </script>
     </div>

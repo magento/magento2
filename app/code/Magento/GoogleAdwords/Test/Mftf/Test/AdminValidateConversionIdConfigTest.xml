@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateConversionIdConfigTest">
+        <annotations>
+            <stories value="Admin validates the conversion ID when configuring the Google Adwords"/>
+            <title value="Admin validates the conversion ID when configuring the Google Adwords"/>
+            <description value="Testing for a required Conversion ID when configuring the Google Adwords"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToGoogleAdwordsConfigurationActionGroup" stepKey="goToConfigPage"/>
+        <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGoogleAdwordsSection">
+            <argument name="sectionName" value="Google AdWords"/>
+        </actionGroup>
+        <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+            <argument name="rowId" value="row_google_adwords_active"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleEnabledActionGroup" stepKey="enableGoogleAdwordsConfig">
+            <argument name="element" value="{{AdminGoogleAdwordsConfigSection.active}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveCustomVariable">
+            <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminValidationErrorActionGroup" stepKey="seeRequiredValidationErrorForConversionId">
+            <argument name="inputId" value="google_adwords_conversion_id"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -18,6 +18,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <!--Create Grouped product with three simple product -->
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2">
                 <field key="price">100.00</field>
@@ -62,7 +64,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Product1 items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">
@@ -94,8 +96,8 @@
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$1,400.00"/>
-            <argument name="shipping" value="$30.00"/>
-            <argument name="total" value="$1,430.00"/>
+            <argument name="shipping" value="30.00"/>
+            <argument name="total" value="1,430.00"/>
         </actionGroup>
 
         <!-- Assert product1 details in Mini Cart -->

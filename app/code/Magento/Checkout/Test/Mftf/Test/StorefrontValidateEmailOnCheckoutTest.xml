@@ -11,10 +11,12 @@
     <test name="StorefrontValidateEmailOnCheckoutTest">
         <annotations>
             <features value="Checkout"/>
-            <title value="Email validation for Guest on checkout flow"/>
-            <description value="Email validation for Guest on checkout flow"/>
+            <stories value="Guest Checkout e-mail validation"/>
+            <title value="Guest e-mail address validation on Checkout process"/>
+            <description value="Guest should not be able to place an order when invalid e-mail address provided"/>
             <stories value="Guest Checkout"/>
-            <testCaseId value="MC-14695" />
+            <testCaseId value="MC-14695"/>
+            <severity value="CRITICAL"/>
             <group value="checkout"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
@@ -28,27 +30,27 @@
         </after>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefront">
-            <argument name="productUrl" value="$$simpleProduct.custom_attributes[url_key]$$" />
+            <argument name="productUrl" value="$$simpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage" />
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
 
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage" />
-        <actionGroup ref="AssertStorefrontEmailTooltipContentOnCheckoutActionGroup" stepKey="assertEmailTooltipContent" />
-        <actionGroup ref="AssertStorefrontEmailNoteMessageOnCheckoutActionGroup" stepKey="assertEmailNoteMessage" />
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="AssertStorefrontEmailTooltipContentOnCheckoutActionGroup" stepKey="assertEmailTooltipContent"/>
+        <actionGroup ref="AssertStorefrontEmailNoteMessageOnCheckoutActionGroup" stepKey="assertEmailNoteMessage"/>
 
         <actionGroup ref="StorefrontFillEmailFieldOnCheckoutActionGroup" stepKey="fillIncorrectEmailFirstAttempt">
-            <argument name="email" value="John" />
+            <argument name="email" value="John"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageFirstAttempt" />
+        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageFirstAttempt"/>
 
         <actionGroup ref="StorefrontFillEmailFieldOnCheckoutActionGroup" stepKey="fillIncorrectEmailSecondAttempt">
-            <argument name="email" value="johndoe#example.com" />
+            <argument name="email" value="johndoe#example.com"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageSecondAttempt" />
+        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageSecondAttempt"/>
 
         <actionGroup ref="StorefrontFillEmailFieldOnCheckoutActionGroup" stepKey="fillIncorrectEmailThirdAttempt">
-            <argument name="email" value="johndoe@example.c" />
+            <argument name="email" value="johndoe@example.c"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageThirdAttempt" />
+        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageThirdAttempt"/>
     </test>
 </tests>

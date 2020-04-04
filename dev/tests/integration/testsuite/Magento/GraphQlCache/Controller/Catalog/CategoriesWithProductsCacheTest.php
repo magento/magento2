@@ -9,8 +9,6 @@ namespace Magento\GraphQlCache\Controller\Catalog;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Request\Http;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
@@ -23,30 +21,11 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 class CategoriesWithProductsCacheTest extends AbstractGraphqlCacheTest
 {
     /**
-     * @var GraphQl
-     */
-    private $graphqlController;
-
-    /**
-     * @var Http
-     */
-    private $request;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
-    }
-    /**
      * Test cache tags and debug header for category with products querying for products and category
      *
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
-    public function testToCheckRequestCacheTagsForCategoryWithProducts(): void
+    public function testRequestCacheTagsForCategoryWithProducts(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -91,10 +70,7 @@ QUERY;
             'operationName' => 'GetCategoryWithProducts'
         ];
 
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setParams($queryParams);
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->dispatchGraphQlGETRequest($queryParams);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $product->getId(),'FPC'];
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());

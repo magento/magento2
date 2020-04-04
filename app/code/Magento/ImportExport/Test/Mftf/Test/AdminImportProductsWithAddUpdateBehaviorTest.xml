@@ -14,7 +14,7 @@
             <stories value="Import Products"/>
             <features value="Import/Export"/>
             <title value="Verify Magento native import products with add/update behavior."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-14077"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
@@ -29,7 +29,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
@@ -65,14 +65,14 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Import products with add/update behavior -->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="catalog_import_products.csv"/>
-            <argument name="importMessage" value="Created: 2, Updated: 1, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 2, Updated: 1, Deleted: 0"/>
         </actionGroup>
 
         <!-- Assert Simple Product1 on grid-->
@@ -109,7 +109,7 @@
         <actionGroup ref="StoreFrontProductValidationActionGroup" stepKey="storeFrontSimpleProduct1Validation">
             <argument name="product" value="SimpleProductAfterImport1"/>
         </actionGroup>
-        
+
         <!-- Assert SimpleProduct2 on store front-->
         <actionGroup ref="StoreFrontProductValidationActionGroup" stepKey="storeFrontSimpleProduct2Validation">
             <argument name="product" value="SimpleProductAfterImport2"/>

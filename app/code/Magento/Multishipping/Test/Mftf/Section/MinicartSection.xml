@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="MinicartSection">
+        <element name="shippingMethodRadioButton" type="select" selector="//input[@class='radio'][position()=1]"/>
+        <element name="shippingMethodRadioText" type="text" selector="//label[@class='label'][position()=1]//span//span"/>
+        <element name="shippingMethodSubtotalPrice" type="text" selector="//tr[@class='totals shipping excl']//td[@class='amount']//span"/>
+        <element name="clickOnCollapsibleDiv" type="text" selector="//div[@class='title']"/>
+    </section>
+</sections>
+

@@ -11,30 +11,44 @@
     <test name="TransactionalEmailsLogoUploadTest">
         <annotations>
             <features value="Email"/>
-            <stories value="Email"/>
-            <title value="MC-13908: Uploading a Transactional Emails logo"/>
+            <stories value="Transactional Emails logo"/>
+            <title value="Uploading a Transactional Emails logo"/>
             <description value="Transactional Emails Logo should be able to be uploaded in the admin and previewed"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-13908"/>
-            <group value="LogoUpload"/>
+            <testCaseId value="MC-27620"/>
+            <useCaseId value="MC-10932"/>
+            <group value="theme"/>
+            <group value="email"/>
         </annotations>
-        <!--Login to Admin Area-->
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <!--Login to Admin Area-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-        <!--Logout from Admin Area-->
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!-- Clear filter on Design Config Page -->
+            <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+            <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <!--Logout from Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to content->Design->Config page-->
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
-        <waitForPageLoad stepKey="waitForPageloadToViewDesignConfigPage"/>
-        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
+        <actionGroup ref="AdminGridFilterSearchResultsBySelectActionGroup" stepKey="filterThemeDesignConfiguration">
+            <argument name="attributeSelector" value="store_id"/>
+            <argument name="attributeValue" value="{{_defaultStore.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminDesignConfigSection.scopeRow('1')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoadToOpenStoreViewEditPage"/>
-        <!--Click Upload logo in Transactional Emails and upload the image and preview it-->
-        <click selector="{{AdminDesignConfigSection.logoWrapperOpen}}" stepKey="openTab" />
-        <attachFile selector="{{AdminDesignConfigSection.logoUpload}}" userInput="{{MagentoLogo.file}}" stepKey="attachLogo"/>
-        <wait time="5" stepKey="waitingForLogoToUpload" />
-        <seeElement selector="{{AdminDesignConfigSection.logoPreview}}" stepKey="LogoPreviewIsVisible"/>
+        <!-- Upload Image -->
+        <actionGroup ref="AdminUploadTransactionEmailsImageActionGroup" stepKey="uploadImage">
+            <argument name="width" value="200"/>
+            <argument name="height" value="100"/>
+        </actionGroup>
+        <!--Save Design Configuration -->
+        <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveDesignConfiguration">
+            <argument name="message" value="You saved the configuration."/>
+        </actionGroup>
     </test>
 </tests>

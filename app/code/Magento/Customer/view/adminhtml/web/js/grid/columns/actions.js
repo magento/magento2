@@ -20,6 +20,11 @@ define([
             },
             listens: {
                 action: 'onAction'
+            },
+            ignoreTmpls: {
+                fieldAction: true,
+                options: true,
+                action: true
             }
         },
 

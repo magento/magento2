@@ -10,32 +10,44 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
-use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
-use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\OfflinePayments\Model\Checkmo;
+use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test class for \Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver
+ */
+class BeforeOrderPaymentSaveObserverTest extends TestCase
 {
+    private const STORE_ID = 1;
+
     /**
      * @var BeforeOrderPaymentSaveObserver
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var Payment|MockObject
      */
-    private $payment;
+    private $paymentMock;
 
     /**
      * @var Event|MockObject
      */
-    private $event;
+    private $eventMock;
 
     /**
      * @var Observer|MockObject
      */
-    private $observer;
+    private $observerMock;
+
+    /**
+     * @var Order|MockObject
+     */
+    private $orderMock;
 
     /**
      * @inheritdoc
@@ -43,40 +55,50 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->payment = $this->getMockBuilder(Payment::class)
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->event = $this->getMockBuilder(Event::class)
+        $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPayment'])
             ->getMock();
 
-        $this->event->expects(self::once())
+        $this->eventMock->expects(self::once())
             ->method('getPayment')
-            ->willReturn($this->payment);
+            ->willReturn($this->paymentMock);
 
-        $this->observer = $this->getMockBuilder(Observer::class)
+        $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->observer->expects(self::once())
+        $this->observerMock->expects(self::once())
             ->method('getEvent')
-            ->willReturn($this->event);
+            ->willReturn($this->eventMock);
 
-        $this->_model = $objectManagerHelper->getObject(BeforeOrderPaymentSaveObserver::class);
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderMock->method('getStoreId')
+            ->willReturn(static::STORE_ID);
+
+        $this->paymentMock->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->model = $objectManagerHelper->getObject(BeforeOrderPaymentSaveObserver::class);
     }
 
     /**
+     * Checks a case when payment method is either bank transfer or cash on delivery
      * @param string $methodCode
      * @dataProvider dataProviderBeforeOrderPaymentSaveWithInstructions
      */
     public function testBeforeOrderPaymentSaveWithInstructions($methodCode)
     {
-        $this->payment->expects(self::once())
+        $this->paymentMock->expects(self::once())
             ->method('getMethod')
             ->willReturn($methodCode);
-        $this->payment->expects(self::once())
+        $this->paymentMock->expects(self::once())
             ->method('setAdditionalInformation')
             ->with('instructions', 'payment configuration');
         $method = $this->getMockBuilder(Banktransfer::class)
@@ -84,13 +106,14 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $method->expects(self::once())
-            ->method('getInstructions')
+            ->method('getConfigData')
+            ->with('instructions', static::STORE_ID)
             ->willReturn('payment configuration');
-        $this->payment->expects(self::once())
+        $this->paymentMock->expects(self::once())
             ->method('getMethodInstance')
             ->willReturn($method);
 
-        $this->_model->execute($this->observer);
+        $this->model->execute($this->observerMock);
     }
 
     /**
@@ -106,33 +129,37 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Checks a case when payment method is Check Money
+     */
     public function testBeforeOrderPaymentSaveWithCheckmo()
     {
-        $this->payment->expects(self::exactly(2))
+        $this->paymentMock->expects(self::exactly(2))
             ->method('getMethod')
             ->willReturn(Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
-        $this->payment->expects(self::exactly(2))
+        $this->paymentMock->expects(self::exactly(2))
             ->method('setAdditionalInformation')
             ->willReturnMap(
                 [
-                    ['payable_to', 'payable to', $this->payment],
-                    ['mailing_address', 'mailing address', $this->payment],
+                    ['payable_to', 'payable to', $this->paymentMock],
+                    ['mailing_address', 'mailing address', $this->paymentMock],
                 ]
             );
 
         $method = $this->getMockBuilder(Checkmo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $method->expects(self::exactly(2))
-            ->method('getPayableTo')
-            ->willReturn('payable to');
-        $method->expects(self::exactly(2))
-            ->method('getMailingAddress')
-            ->willReturn('mailing address');
-        $this->payment->expects(self::once())
+        $method->method('getConfigData')
+            ->willReturnMap(
+                [
+                    ['payable_to', static::STORE_ID, 'payable to'],
+                    ['mailing_address', static::STORE_ID, 'mailing address']
+                ]
+            );
+        $this->paymentMock->expects(self::once())
             ->method('getMethodInstance')
             ->willReturn($method);
-        $this->_model->execute($this->observer);
+        $this->model->execute($this->observerMock);
     }
 
     /**
@@ -141,35 +168,58 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeOrderPaymentSaveWithCheckmoWithoutConfig()
     {
-        $this->payment->expects(self::exactly(2))
+        $this->paymentMock->expects(self::exactly(2))
             ->method('getMethod')
             ->willReturn(Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
-        $this->payment->expects(self::never())
+        $this->paymentMock->expects(self::never())
             ->method('setAdditionalInformation');
 
         $method = $this->getMockBuilder(Checkmo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $method->expects(self::once())
-            ->method('getPayableTo')
-            ->willReturn(null);
-        $method->expects(self::once())
-            ->method('getMailingAddress')
-            ->willReturn(null);
-        $this->payment->expects(self::once())
+        $method->method('getConfigData')
+            ->willReturnMap(
+                [
+                    ['payable_to', static::STORE_ID, null],
+                    ['mailing_address', static::STORE_ID, null]
+                ]
+            );
+        $this->paymentMock->expects(self::once())
             ->method('getMethodInstance')
             ->willReturn($method);
-        $this->_model->execute($this->observer);
+        $this->model->execute($this->observerMock);
     }
 
+    /**
+     * Checks a case with payment method not handled by observer
+     */
     public function testBeforeOrderPaymentSaveWithOthers()
     {
-        $this->payment->expects(self::exactly(2))
+        $this->paymentMock->expects(self::exactly(2))
             ->method('getMethod')
             ->willReturn('somepaymentmethod');
-        $this->payment->expects(self::never())
+        $this->paymentMock->expects(self::never())
             ->method('setAdditionalInformation');
 
-        $this->_model->execute($this->observer);
+        $this->model->execute($this->observerMock);
+    }
+
+    /**
+     * @param string $methodCode
+     * @dataProvider dataProviderBeforeOrderPaymentSaveWithInstructions
+     */
+    public function testBeforeOrderPaymentSaveWithInstructionsAlreadySet($methodCode)
+    {
+        $this->paymentMock->method('getMethod')
+            ->willReturn($methodCode);
+
+        $this->paymentMock->expects(self::once())
+            ->method('getAdditionalInformation')
+            ->willReturn('Test');
+
+        $this->paymentMock->expects(self::never())
+            ->method('setAdditionalInformation');
+
+        $this->model->execute($this->observerMock);
     }
 }

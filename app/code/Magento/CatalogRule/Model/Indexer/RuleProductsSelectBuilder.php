@@ -74,15 +74,12 @@ class RuleProductsSelectBuilder
      * Build select for indexer according passed parameters.
      *
      * @param int $websiteId
-     * @param \Magento\Catalog\Model\Product|null $product
+     * @param int|null $productId
      * @param bool $useAdditionalTable
      * @return \Zend_Db_Statement_Interface
      */
-    public function build(
-        $websiteId,
-        \Magento\Catalog\Model\Product $product = null,
-        $useAdditionalTable = false
-    ) {
+    public function build(int $websiteId, ?int $productId = null, bool $useAdditionalTable = false)
+    {
         $connection = $this->resource->getConnection();
         $indexTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
@@ -107,8 +104,8 @@ class RuleProductsSelectBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if ($product && $product->getEntityId()) {
-            $select->where('rp.product_id=?', $product->getEntityId());
+        if ($productId) {
+            $select->where('rp.product_id=?', $productId);
         }
 
         /**
@@ -159,9 +156,11 @@ class RuleProductsSelectBuilder
             sprintf($joinCondition, $tableAlias, $storeId),
             []
         );
-        $select->columns([
-            'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
-        ]);
+        $select->columns(
+            [
+                'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+            ]
+        );
 
         return $connection->query($select);
     }

@@ -164,7 +164,7 @@ class AddColumn implements OperationInterface
         }
         $statements = [$statement];
         /**
-         * If column has triggers, only than we need to create temporary index on it.
+         * If column has triggers, only then we need to create temporary index on it.
          * As triggers means, that we will not enable primary key until all data will be transferred,
          * so column can left without key (as primary key is disabled) and this cause an error.
          */

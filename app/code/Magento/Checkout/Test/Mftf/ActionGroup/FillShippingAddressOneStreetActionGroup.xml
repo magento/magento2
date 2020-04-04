@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillShippingAddressOneStreetActionGroup">
+        <annotations>
+            <description>Fills in the provided Address details in the 'Shipping Address' (Fills in Street Address 1 only) section of the Storefront Checkout page.</description>
+        </annotations>
         <arguments>
             <argument name="address" type="entity"/>
         </arguments>
+        
         <fillField stepKey="fillFirstName" selector="{{CheckoutShippingSection.firstName}}" userInput="{{address.firstname}}"/>
         <fillField stepKey="fillLastName" selector="{{CheckoutShippingSection.lastName}}" userInput="{{address.lastname}}"/>
         <fillField stepKey="fillCompany" selector="{{CheckoutShippingSection.company}}" userInput="{{address.company}}"/>

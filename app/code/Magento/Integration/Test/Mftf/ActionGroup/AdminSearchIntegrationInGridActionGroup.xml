@@ -15,9 +15,9 @@
         <!--Reset Search Filters -->
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <!--Fill Integration Name Field -->
-        <fillField selector="{{IntegrationsGridSection.name}}" userInput="{{name}}" stepKey="filterByName"/>
+        <fillField selector="{{AdminIntegrationsGridSection.name}}" userInput="{{name}}" stepKey="filterByName"/>
         <!--Click "Search" Button -->
-        <click selector="{{IntegrationsGridSection.search}}" stepKey="doFilter"/>
+        <click selector="{{AdminIntegrationsGridSection.search}}" stepKey="doFilter"/>
         <waitForPageLoad stepKey="waitForSitemapPageLoadedAfterFiltering"/>
     </actionGroup>
 </actionGroups>

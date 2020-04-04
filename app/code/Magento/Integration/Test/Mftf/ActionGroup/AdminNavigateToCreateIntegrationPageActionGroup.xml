@@ -12,7 +12,7 @@
     <!--Click the "Add New Integration" Button -->
 
     <actionGroup name="AdminNavigateToCreateIntegrationPageActionGroup">
-        <click stepKey="clickAddNewIntegrationButton" selector="{{IntegrationsGridSection.add}}"/>
+        <click stepKey="clickAddNewIntegrationButton" selector="{{AdminIntegrationsGridSection.add}}"/>
         <waitForPageLoad stepKey="waitForNewNIntegrationPageLoaded"/>
     </actionGroup>
 </actionGroups>

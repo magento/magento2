@@ -6,18 +6,18 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Setup\Model\Bootstrap;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\CommandListInterface;
-use Symfony\Component\Console\Command\Command;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\Bootstrap;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 
 /**
- * Class ObjectManagerProviderTest
+ * Test for \Magento\Setup\Model\ObjectManagerProvider
  */
 class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,6 +47,14 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $initParams = ['param' => 'value'];
+        $commands = [
+            new Command('setup:install'),
+            new Command('setup:upgrade'),
+        ];
+
+        $application = $this->getMockBuilder(Application::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->serviceLocatorMock
             ->expects($this->atLeastOnce())
@@ -56,16 +64,21 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
                     [InitParamListener::BOOTSTRAP_PARAM, $initParams],
                     [
                         Application::class,
-                        $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock(),
+                        $application,
                     ],
                 ]
             );
+
+        $commandListMock = $this->createMock(CommandListInterface::class);
+        $commandListMock->expects($this->once())
+            ->method('getCommands')
+            ->willReturn($commands);
 
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(CommandListInterface::class)
-            ->willReturn($this->getCommandListMock());
+            ->willReturn($commandListMock);
 
         $objectManagerFactoryMock = $this->getMockBuilder(ObjectManagerFactory::class)
             ->disableOriginalConstructor()
@@ -81,21 +94,9 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($objectManagerFactoryMock);
 
         $this->assertInstanceOf(ObjectManagerInterface::class, $this->model->get());
-    }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getCommandListMock()
-    {
-        $commandMock = $this->getMockBuilder(Command::class)->disableOriginalConstructor()->getMock();
-        $commandMock->expects($this->once())->method('setApplication');
-
-        $commandListMock = $this->createMock(CommandListInterface::class);
-        $commandListMock->expects($this->once())
-            ->method('getCommands')
-            ->willReturn([$commandMock]);
-
-        return $commandListMock;
+        foreach ($commands as $command) {
+            $this->assertSame($application, $command->getApplication());
+        }
     }
 }

@@ -51,7 +51,10 @@ foreach ($deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNE
 $cacheConfigs = $deploymentConfig->get(ConfigOptionsListConstants::KEY_CACHE_FRONTEND);
 if ($cacheConfigs) {
     foreach ($cacheConfigs as $cacheConfig) {
-        if (!isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND]) ||
+        // allow config if only available "id_prefix"
+        if (count($cacheConfig) === 1 && isset($cacheConfig['id_prefix'])) {
+            continue;
+        } elseif (!isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND]) ||
             !isset($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND_OPTIONS])) {
             http_response_code(500);
             $logger->error("Cache configuration is invalid");
@@ -60,8 +63,10 @@ if ($cacheConfigs) {
         }
         $cacheBackendClass = $cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND];
         try {
+            /** @var \Magento\Framework\App\Cache\Frontend\Factory $cacheFrontendFactory */
+            $cacheFrontendFactory = $objectManager->get(Magento\Framework\App\Cache\Frontend\Factory::class);
             /** @var \Zend_Cache_Backend_Interface $backend */
-            $backend = new $cacheBackendClass($cacheConfig[ConfigOptionsListConstants::CONFIG_PATH_BACKEND_OPTIONS]);
+            $backend = $cacheFrontendFactory->create($cacheConfig);
             $backend->test('test_cache_id');
         } catch (\Exception $e) {
             http_response_code(500);

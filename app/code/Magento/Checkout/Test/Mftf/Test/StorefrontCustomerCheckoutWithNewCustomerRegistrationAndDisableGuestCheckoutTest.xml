@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutWithNewCustomerRegistrationAndDisableGuestCheckoutTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify customer checkout by following new customer registration when guest checkout is disabled"/>
+            <description value="Customer is redirected to checkout on login, follow the new Customer registration when guest checkout is disabled"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-14704"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <magentoCLI command="config:set {{DisableGuestCheckoutConfigData.path}} {{DisableGuestCheckoutConfigData.value}}" stepKey="disableGuestCheckout"/>
+            <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableCustomerRedirect"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{EnableGuestCheckoutConfigData.path}} {{EnableGuestCheckoutConfigData.value}}" stepKey="enableGuestCheckout"/>
+            <magentoCLI command="config:set {{EnableCustomerRedirectToDashboardConfigData.path}} {{EnableCustomerRedirectToDashboardConfigData.value}}" stepKey="enableCustomerRedirect"/>
+
+            <!-- Sign out Customer from storefront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!--Create an account-->
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitForElementToBeVisible"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="clickOnCreateAnAccountButton"/>
+        <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
+
+        <!--Fill the registration form -->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
+            <argument name="customer" value="Simple_US_Customer" />
+        </actionGroup>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
+
+        <!--Assert customer information-->
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+        <see stepKey="seeFirstName" userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeLastName" userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        <see stepKey="seeEmail" userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+
+        <!--Fill Address details -->
+        <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
+        <fillField  stepKey="fillPhoneNumber" userInput="{{US_Address_TX.telephone}}" selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{US_Address_TX.street[0]}}" selector="{{StorefrontCustomerAddressFormSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{US_Address_TX.city}}" selector="{{StorefrontCustomerAddressFormSection.city}}"/>
+        <selectOption  stepKey="selectStateForAddress" userInput="{{CustomerAddressSimple.state}}" selector="{{StorefrontCustomerAddressFormSection.state}}"/>
+        <fillField  stepKey="fillZip" userInput="{{US_Address_TX.postcode}}" selector="{{StorefrontCustomerAddressFormSection.zip}}"/>
+        <selectOption  stepKey="selectCountryForAddress" userInput="{{US_Address_TX.country}}" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+
+        <!-- Open Edit and View  from cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openViewAndEditOption"/>
+
+        <!-- Proceed to checkout -->
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+
+        <!-- Verify order summary on payment page -->
+        <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
+            <argument name="orderSummarySubTotal" value="$50.00"/>
+            <argument name="orderSummaryShippingTotal" value="$5.00"/>
+            <argument name="orderSummaryTotal" value="$55.00"/>
+        </actionGroup>
+
+        <!-- Assert Shipping Address -->
+        <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="assertShippingAddressDetails">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Assert Billing Address -->
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="assertBillingAddressDetails">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+        </actionGroup>
+        <see userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertShippingMethodInformation"/>
+
+        <!-- Place order and Assert success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
+
+        <!-- Open Order Index Page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Filter Order using orderId and assert order-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Ship the order and assert the shipping status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+    </test>
+</tests>

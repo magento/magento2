@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="field number required">
-                    <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
+                    <label data-bind="afterRender: initHostedFields, attr: {for: getCode() + '_cc_number'}" class="label">
                         <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
                     </label>
                     <div class="control">

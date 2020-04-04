@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckRequiredFieldsNewOrderFormActionGroup">
+        <annotations>
+            <description>Clears the Email, First Name, Last Name, Street Line 1, City, Postal Code and Phone fields when adding an Order and then verifies that they are required after attempting to Save.</description>
+        </annotations>
+
+        <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
+        <seeElement selector="{{AdminOrderFormAccountSection.requiredEmail}}" stepKey="seeEmailRequired"/>
+        <clearField selector="{{AdminOrderFormAccountSection.email}}" stepKey="clearEmailField"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="clearFirstNameField"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="clearLastNameField"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" stepKey="clearStreetField"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.City}}" stepKey="clearCityField"/>
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.Country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Please select" stepKey="selectNoState"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" stepKey="clearPostalCodeField"/>
+        <clearField selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="clearPhoneField"/>
+        <seeElement selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="seeShippingMethodNotSelected"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}" userInput="This is a required field." stepKey="seeFirstNameRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.lastNameError}}" userInput="This is a required field." stepKey="seeLastNameRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.streetAddressError}}" userInput="This is a required field." stepKey="seeStreetRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.cityError}}" userInput="This is a required field." stepKey="seeCityRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.stateError}}" userInput="This is a required field." stepKey="seeStateRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.postalCodeError}}" userInput="This is a required field." stepKey="seePostalCodeRequired"/>
+        <see selector="{{AdminOrderFormBillingAddressSection.phoneError}}" userInput="This is a required field." stepKey="seePhoneRequired"/>
+        <see selector="{{AdminOrderFormPaymentSection.shippingError}}" userInput="This is a required field." stepKey="seeShippingMethodRequired"/>
+    </actionGroup>
+</actionGroups>

@@ -8,6 +8,7 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
@@ -50,6 +51,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
+     * @deprecated Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -165,14 +167,19 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $configVariables;
 
     /**
-     * @var \Magento\Email\Model\Template\Css\Processor
+     * @var Css\Processor
      */
     private $cssProcessor;
 
     /**
-     * @var ReadInterface
+     * @var Filesystem
      */
     private $pubDirectory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    private $pubDirectoryRead;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -190,7 +197,10 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
      * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
-     *
+     * @param array $directiveProcessors
+     * @param VariableResolverInterface|null $variableResolver
+     * @param Css\Processor|null $cssProcessor
+     * @param Filesystem|null $pubDirectory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -208,7 +218,11 @@ class Filter extends \Magento\Framework\Filter\Template
         \Pelago\Emogrifier $emogrifier,
         \Magento\Variable\Model\Source\Variables $configVariables,
         $variables = [],
-        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null
+        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
+        array $directiveProcessors = [],
+        VariableResolverInterface $variableResolver = null,
+        Css\Processor $cssProcessor = null,
+        Filesystem $pubDirectory = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -224,8 +238,12 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->emogrifier = $emogrifier;
         $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
+        $this->cssProcessor = $cssProcessor ?: ObjectManager::getInstance()
+            ->get(Css\Processor::class);
+        $this->pubDirectory = $pubDirectory ?: ObjectManager::getInstance()
+            ->get(Filesystem::class);
         $this->configVariables = $configVariables;
-        parent::__construct($string, $variables);
+        parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
     /**
@@ -321,28 +339,14 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated 100.1.2
-     * @return Css\Processor
-     */
-    private function getCssProcessor()
-    {
-        if (!$this->cssProcessor) {
-            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
-        }
-        return $this->cssProcessor;
-    }
-
-    /**
-     * @deprecated 100.1.2
+     * Sets pub directory
+     *
      * @param string $dirType
-     * @return ReadInterface
+     * @return void
      */
-    private function getPubDirectory($dirType)
+    private function setPubDirectory($dirType)
     {
-        if (!$this->pubDirectory) {
-            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
-        }
-        return $this->pubDirectory;
+        $this->pubDirectoryRead = $this->pubDirectory->getDirectoryRead($dirType);
     }
 
     /**
@@ -516,6 +520,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
@@ -523,6 +528,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Retrieve store URL directive
+     *
      * Support url and direct_url properties
      *
      * @param string[] $construction
@@ -607,7 +613,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
-
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $text = stripslashes($matches[2]);
 
         $params = [];
@@ -633,7 +639,10 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        list($directive, $modifiers) = $this->explodeModifiers(
+            $construction[2] . ($construction['filters'] ?? ''),
+            'escape'
+        );
         return $this->applyModifiers($this->getVariable($directive, ''), $modifiers);
     }
 
@@ -650,6 +659,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -668,6 +678,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -683,7 +694,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     $callback = $modifier;
                 }
                 array_unshift($params, $value);
-                $value = call_user_func_array($callback, $params);
+                $value = $callback(...$params);
             }
         }
         return $value;
@@ -695,12 +706,13 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     public function modifierEscape($value, $type = 'html')
     {
         switch ($type) {
             case 'html':
-                return htmlspecialchars($value, ENT_QUOTES);
+                return $this->_escaper->escapeHtml($value);
 
             case 'htmlentities':
                 return htmlentities($value, ENT_QUOTES);
@@ -838,7 +850,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->getCssProcessor()->process(
+        $css = $this->cssProcessor->process(
             $this->getCssFilesContent([$params['file']])
         );
 
@@ -849,7 +861,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $css;
         } else {
             // Return CSS comment for debugging purposes
-            return '/* ' . sprintf(__('Contents of %s could not be loaded or is empty'), $file) . ' */';
+            return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
     }
 
@@ -941,9 +953,9 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             foreach ($files as $file) {
                 $asset = $this->_assetRepo->createAsset($file, $designParams);
-                $pubDirectory = $this->getPubDirectory($asset->getContext()->getBaseDirType());
-                if ($pubDirectory->isExist($asset->getPath())) {
-                    $css .= $pubDirectory->readFile($asset->getPath());
+                $this->setPubDirectory($asset->getContext()->getBaseDirType());
+                if ($this->pubDirectoryRead->isExist($asset->getPath())) {
+                    $css .= $this->pubDirectoryRead->readFile($asset->getPath());
                 } else {
                     $css .= $asset->getContent();
                 }
@@ -958,6 +970,8 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * Apply Inline CSS
+     *
      * Merge HTML and CSS and return HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
@@ -971,7 +985,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
-        $cssToInline = $this->getCssProcessor()->process($cssToInline);
+        $cssToInline = $this->cssProcessor->process($cssToInline);
 
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {

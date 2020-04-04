@@ -4,27 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order   = $block->getOrder() ?>
-<?php if ($_invoice && $_order): ?>
+<?php if ($_invoice && $_order) : ?>
     <table class="email-items">
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= /* @escapeNotVerified */  __('Items') ?>
+                    <?= $block->escapeHtml(__('Items')) ?>
                 </th>
                 <th class="item-qty">
-                    <?= /* @escapeNotVerified */  __('Qty') ?>
+                    <?= $block->escapeHtml(__('Qty')) ?>
                 </th>
                 <th class="item-subtotal">
-                    <?= /* @escapeNotVerified */  __('Subtotal') ?>
+                    <?= $block->escapeHtml(__('Subtotal')) ?>
                 </th>
             </tr>
         </thead>
-        <?php foreach ($_invoice->getAllItems() as $_item): ?>
+        <?php foreach ($_invoice->getAllItems() as $_item) : ?>
             <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
                 <tbody>
                     <?= $block->getItemHtml($_item) ?>

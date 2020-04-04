@@ -5,11 +5,27 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = Bootstrap::getObjectManager()->get(Registry::class);
+/** @var RuleRepositoryInterface $ruleRepository */
+$ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
 
 /** @var Magento\SalesRule\Model\Rule $rule */
-$rule = $registry->registry('cart_rule_100_percent_off');
-if ($rule) {
-    $rule->delete();
+$ruleId = $registry->registry('Magento/SalesRule/_files/cart_rule_100_percent_off');
+
+if ($ruleId) {
+    try {
+        $ruleRepository->deleteById($ruleId);
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    } catch (NoSuchEntityException $e) {
+        /**
+         * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
+         */
+    }
 }

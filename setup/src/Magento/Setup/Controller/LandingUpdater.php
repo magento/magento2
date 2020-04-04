@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Controller for Updater Landing page
@@ -35,7 +35,7 @@ class LandingUpdater extends AbstractActionController
     {
         $welcomeMsg = "Welcome to Magento Module Manager.<br>"
             . "Click 'Agree and Update Magento' or read ";
-        $docRef = "https://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html";
+        $docRef = "https://devdocs.magento.com/guides/v2.3/install-gde/install/web/install-web.html";
         $agreeButtonText = "Agree and Update Magento";
         $view = new ViewModel();
         $view->setTerminal(true);

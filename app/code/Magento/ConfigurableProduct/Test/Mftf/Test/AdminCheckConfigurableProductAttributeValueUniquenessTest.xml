@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckConfigurableProductAttributeValueUniquenessTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Configurable Product"/>
+            <title value="Attribute value validation (check for uniqueness) in configurable products"/>
+            <description value="Attribute value validation (check for uniqueness) in configurable products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17450"/>
+            <useCaseId value="MAGETWO-99443"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="dropdownProductAttribute" stepKey="createProductAttribute"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="deleteCreatedData"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductAndOptions">
+                <argument name="product" value="$$createConfigProduct$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!--Create configurable product-->
+        <comment userInput="Create configurable product" stepKey="createConfProd"/>
+        <createData entity="ApiCategory" stepKey="createCategory"/>
+        <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <!--Go to created product page-->
+        <comment userInput="Go to created product page" stepKey="goToProdPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductGrid"/>
+        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterByName">
+            <argument name="name" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductName"/>
+        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
+        <!--Create configurations for the product-->
+        <comment userInput="Create configurations for the product" stepKey="createConfigurations"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations1"/>
+        <waitForPageLoad stepKey="waitForSelectAttributesPage1"/>
+        <actionGroup ref="SelectCreatedAttributeAndCreateTwoOptionsActionGroup" stepKey="selectCreatedAttributeAndCreateOptions">
+            <argument name="attribute" value="dropdownProductAttribute"/>
+            <argument name="firstOption" value="productAttributeOption1"/>
+            <argument name="secondOption" value="productAttributeOption1"/>
+        </actionGroup>
+        <!--Check that system does not allow to save 2 options with same name-->
+        <comment userInput="Check that system does not allow to save 2 options with same name" stepKey="checkOptionNameUniqueness"/>
+        <seeElement selector="{{AdminCreateProductConfigurationsPanel.attributeNameWithError}}" stepKey="seeThatOptionWithSameNameIsNotSaved"/>
+        <!--Click next and assert error message-->
+        <comment userInput="Click next and assert error message" stepKey="clickNextAndAssertErrMssg"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNext"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.attributeNameInTitle}}" stepKey="grabErrMsg"/>
+        <see userInput='The value of attribute "$grabErrMsg" must be unique' stepKey="verifyAttributesValueUniqueness"/>
+    </test>
+</tests>

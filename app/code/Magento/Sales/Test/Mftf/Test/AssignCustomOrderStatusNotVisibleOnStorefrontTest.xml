@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AssignCustomOrderStatusNotVisibleOnStorefrontTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Assign Custom Order Status"/>
+            <title value="Assign custom order status not visible on storefront test"/>
+            <description value="Assign custom order status not visible on storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16053"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable created order status -->
+            <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{EnableCheckmoOrderStatusPending.value}}" stepKey="rollbackNewOrderStatus"/>
+
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create order status -->
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
+        <waitForPageLoad stepKey="waitForOrderStatusPageLoad"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!-- Assign status to state -->
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.status}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
+        <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You assigned the order status." stepKey="seeSuccess"/>
+
+        <!-- Prepare data for constraints -->
+        <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{defaultOrderStatus.label}}" stepKey="enableNewOrderStatus"/>
+
+        <!-- Assert order status in grid -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
+            <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+            <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
+
+        <!-- Create order and grab order id -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createNewOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+
+        <!-- Assert order status is correct -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="seeOrderStatus"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCustomerLogin"/>
+
+        <!-- Open My Orders -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Assert order not visible on My Orders -->
+        <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
+
+        <!-- Cancel order -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToAdminOrdersPage"/>
+        <waitForPageLoad stepKey="waitForAdminOrdersPageLoad"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <checkOption selector="{{AdminOrdersGridSection.checkOrder}}" stepKey="selectOrder"/>
+        <actionGroup ref="SelectActionForOrdersActionGroup" stepKey="selectCancelOrderAction">
+            <argument name="action" value="{{OrderActions.cancel}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="We canceled 1 order(s)." stepKey="seeSuccessMessage"/>
+
+        <!-- Unassign order status -->
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatus"/>
+        <waitForPageLoad stepKey="waitForStatusPageLoad"/>
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+            <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+            <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You have unassigned the order status." stepKey="seeMessage"/>
+    </test>
+</tests>
