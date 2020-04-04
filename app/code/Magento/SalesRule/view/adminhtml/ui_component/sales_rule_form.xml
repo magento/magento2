@@ -47,14 +47,6 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general">
-        <settings>
-            <additionalClasses>
-                <class name="fieldset-schedule">true</class>
-            </additionalClasses>
-            <label translate="true">Currently Active</label>
-        </settings>
-    </fieldset>
     <fieldset name="rule_information" sortOrder="10">
         <settings>
             <collapsible>true</collapsible>
