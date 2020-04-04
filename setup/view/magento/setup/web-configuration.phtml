@@ -115,7 +115,7 @@ $hints = [
                         ng-pattern="/^[a-zA-Z0-9_]+$/"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
-                        ng-init="config.address.admin = '<?= $this->autoAdminPath ?>';"
+                        ng-init="(config.address.admin ? config.address.admin : config.address.admin = '<?= $this->autoAdminPath ?>');"
                         required
                         tooltip-placement="right"
                         tooltip-html-unsafe="<?= $hints['admin'] ?>"
