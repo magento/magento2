@@ -19,12 +19,12 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter the customer From grid-->
@@ -85,6 +85,7 @@
         <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{US_Address_CA.telephone}}" stepKey="seePhoneNumberInDefaultAddressSection"/>
 
         <!--Assert Customer Address Grid -->
+        <conditionalClick selector="{{AdminCustomerAddressesGridActionsSection.clearFilter}}" dependentSelector="{{AdminCustomerAddressesGridActionsSection.clearFilter}}" visible="true" stepKey="clearAddressesGridFilter"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.street}}" stepKey="seeStreetAddress"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.city}}" stepKey="seeCity"/>
         <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{US_Address_CA.country}}" stepKey="seeCountry"/>

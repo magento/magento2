@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\WebsiteRepository;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -22,6 +22,12 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -56,6 +62,49 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
+
+    /**
+     * @var RoleFactory
+     */
+    private $roleFactory;
+
+    /**
+     * @var RulesFactory
+     */
+    private $rulesFactory;
+
+    /**
+     * @var AdminTokenServiceInterface
+     */
+    private $adminTokens;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
+        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
+        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
+    }
 
     /**
      * Test get() method
@@ -333,6 +382,97 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Media gallery entries with external videos
+     *
+     * @return array
+     */
+    public function externalVideoDataProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'media_type' => 'external-video',
+                        'disabled' => false,
+                        'label' => 'Test Video Created',
+                        'types' => [],
+                        'position' => 1,
+                        'content' => [
+                            'type' => 'image/png',
+                            'name' => 'thumbnail.png',
+                            'base64_encoded_data' => 'iVBORw0KGgoAAAANSUhEUgAAAP8AAADGCAMAAAAqo6adAAAAA1BMVEUAAP79f'
+                                . '+LBAAAASElEQVR4nO3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+                                . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA+BsYAAAF7hZJ0AAAAAElFTkSuQmCC',
+                        ],
+                        'extension_attributes' => [
+                            'video_content' => [
+                                'media_type' => 'external-video',
+                                'video_provider' => 'youtube',
+                                'video_url' => 'https://www.youtube.com/',
+                                'video_title' => 'Video title',
+                                'video_description' => 'Video description',
+                                'video_metadata' => 'Video meta',
+                            ],
+                        ],
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'media_type' => 'external-video',
+                        'disabled' => false,
+                        'label' => 'Test Video Updated',
+                        'types' => [],
+                        'position' => 1,
+                        'content' => [
+                            'type' => 'image/png',
+                            'name' => 'thumbnail.png',
+                            'base64_encoded_data' => 'iVBORw0KGgoAAAANSUhEUgAAAP8AAADGCAMAAAAqo6adAAAAA1BMVEUAAP79f'
+                                . '+LBAAAASElEQVR4nO3BMQEAAADCoPVPbQwfoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+                                . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAA+BsYAAAF7hZJ0AAAAAElFTkSuQmCC',
+                        ],
+                        'extension_attributes' => [
+                            'video_content' => [
+                                'media_type' => 'external-video',
+                                'video_provider' => 'vimeo',
+                                'video_url' => 'https://www.vimeo.com/',
+                                'video_title' => 'Video title',
+                                'video_description' => 'Video description',
+                                'video_metadata' => 'Video meta',
+                            ],
+                        ],
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test create/ update product with external video media gallery entry
+     *
+     * @dataProvider externalVideoDataProvider
+     * @param array $mediaGalleryData
+     */
+    public function testCreateWithExternalVideo(array $mediaGalleryData)
+    {
+        $simpleProductBaseData = $this->getSimpleProductData(
+            [
+                ProductInterface::NAME => 'Product With Ext. Video',
+                ProductInterface::SKU => 'prod-with-ext-video'
+            ]
+        );
+
+        $simpleProductBaseData['media_gallery_entries'] = $mediaGalleryData;
+
+        $response = $this->saveProduct($simpleProductBaseData);
+        $this->assertEquals(
+            $simpleProductBaseData['media_gallery_entries'][0]['extension_attributes'],
+            $response["media_gallery_entries"][0]["extension_attributes"]
+        );
+    }
+
+    /**
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
@@ -442,7 +582,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'stock_item' => $this->getStockItemData()
@@ -638,6 +777,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // @codingStandardsIgnoreLine
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';
@@ -761,17 +901,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Update product
      *
      * @param array $product
+     * @param string|null $token
      * @return array|bool|float|int|string
      */
-    protected function updateProduct($product)
+    protected function updateProduct($product, ?string $token = null)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
-                ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+            foreach ($product['custom_attributes'] as &$attribute) {
+                if ($attribute['attribute_code'] == 'category_ids' && !is_array($attribute['value'])) {
+                    $attribute['value'] = [""];
                 }
             }
         }
@@ -791,6 +929,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['product' => $product];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
@@ -1207,17 +1348,17 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @param $product
      * @param string|null $storeCode
+     * @param string|null $token
      * @return mixed
      */
-    protected function saveProduct($product, $storeCode = null)
+    protected function saveProduct($product, $storeCode = null, ?string $token = null)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$attribute) {
+                if ($attribute['attribute_code'] == 'category_ids'
+                    && !is_array($attribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $attribute['value'] = [""];
                 }
             }
         }
@@ -1232,6 +1373,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
         $requestData = ['product' => $product];
 
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
@@ -1339,8 +1483,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response[self::KEY_TIER_PRICES] = [];
         $response = $this->updateProduct($response);
-        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
-        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
 
         // delete the product with tier prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -1564,7 +1706,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 0,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
         ];
 
@@ -1668,5 +1809,107 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             }
         }
         $this->assertEquals($expectedMultiselectValue, $multiselectValue);
+    }
+
+    /**
+     * Test design settings authorization
+     *
+     * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign(): void
+    {
+        //Updating our admin user's role to allow saving products but not their design settings.
+        /** @var Role $role */
+        $role = $this->roleFactory->create();
+        $role->load('test_custom_role', 'role_name');
+        /** @var Rules $rules */
+        $rules = $this->rulesFactory->create();
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products']);
+        $rules->saveRel();
+        //Using the admin user with custom role.
+        $token = $this->adminTokens->createAdminAccessToken(
+            'customRoleUser',
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => '1'];
+
+        //Creating new product with design settings.
+        $exceptionMessage = null;
+        try {
+            $this->saveProduct($productData, null, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have the permissions.
+        $this->assertEquals('Not allowed to edit the product\'s design attributes', $exceptionMessage);
+
+        //Updating the user role to allow access to design properties.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $rules->saveRel();
+        //Making the same request with design settings.
+        $result = $this->saveProduct($productData, null, $token);
+        $this->assertArrayHasKey('id', $result);
+        //Product must be saved.
+        $productSaved = $this->getProduct($productData[ProductInterface::SKU]);
+        $savedCustomDesign = null;
+        foreach ($productSaved['custom_attributes'] as $customAttribute) {
+            if ($customAttribute['attribute_code'] === 'custom_design') {
+                $savedCustomDesign = $customAttribute['value'];
+                break;
+            }
+        }
+        $this->assertEquals('1', $savedCustomDesign);
+        $productData = $productSaved;
+
+        //Updating our role to remove design properties access.
+        /** @var Rules $rules */
+        $rules = Bootstrap::getObjectManager()->create(Rules::class);
+        $rules->setRoleId($role->getId());
+        $rules->setResources(['Magento_Catalog::products']);
+        $rules->saveRel();
+        //Updating the product but with the same design properties values.
+        //Removing the design attribute and keeping existing value.
+        $attributes = $productData['custom_attributes'];
+        foreach ($attributes as $i => $attribute) {
+            if ($attribute['attribute_code'] === 'custom_design') {
+                unset($productData['custom_attributes'][$i]);
+                break;
+            }
+        }
+        unset($attributes, $attribute, $i);
+        $result = $this->updateProduct($productData, $token);
+        //We haven't changed the design so operation is successful.
+        $this->assertArrayHasKey('id', $result);
+
+        //Changing a design property.
+        $productData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => '2'];
+        $exceptionMessage = null;
+        try {
+            $this->updateProduct($productData, $token);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                //REST
+                $exceptionMessage = $restResponse['message'];
+            } else {
+                //SOAP
+                $exceptionMessage = $exception->getMessage();
+            }
+        }
+        //We don't have permissions to do that.
+        $this->assertEquals('Not allowed to edit the product\'s design attributes', $exceptionMessage);
     }
 }

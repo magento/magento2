@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Framework\Webapi\Rest\Request;
@@ -18,17 +20,17 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class ShipmentAddTrackTest extends WebapiAbstract
 {
     /**
-     * Service read name
+     * Read name of service
      */
     const SERVICE_READ_NAME = 'salesShipmentTrackRepositoryV1';
 
     /**
-     * Service version
+     * Version of service
      */
     const SERVICE_VERSION = 'V1';
 
     /**
-     * Shipment increment id
+     * Increment id for shipment
      */
     const SHIPMENT_INCREMENT_ID = '100000001';
 
@@ -74,6 +76,52 @@ class ShipmentAddTrackTest extends WebapiAbstract
         self::assertNotEmpty($result[ShipmentTrackInterface::ENTITY_ID]);
         self::assertEquals($shipment->getId(), $result[ShipmentTrackInterface::PARENT_ID]);
     }
+
+    /**
+     * Shipment Tracking throw an error if order doesn't exist.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/shipment.php
+     * @magentoApiDataFixture Magento/Sales/_files/order_list.php
+     */
+    public function testShipmentTrackWithFailedOrderId()
+    {
+        /** @var \Magento\Sales\Model\Order $order */
+        $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
+        $order = $orderCollection->getLastItem();
+        // Order ID from Magento/Sales/_files/order_list.php
+        $failedOrderId = $order->getId();
+        $shipmentCollection = $this->objectManager->get(Collection::class);
+        /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+        $shipment = $shipmentCollection->getFirstItem();
+        $trackData = [
+            ShipmentTrackInterface::ENTITY_ID => null,
+            ShipmentTrackInterface::ORDER_ID => $failedOrderId,
+            ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
+            ShipmentTrackInterface::WEIGHT => 20,
+            ShipmentTrackInterface::QTY => 5,
+            ShipmentTrackInterface::TRACK_NUMBER => 2,
+            ShipmentTrackInterface::DESCRIPTION => 'Shipment description',
+            ShipmentTrackInterface::TITLE => 'Shipment title',
+            ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
+        ];
+        $exceptionMessage = '';
+
+        try {
+            $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
+        } catch (\SoapFault $e) {
+            $exceptionMessage = $e->getMessage();
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $exceptionMessage = $errorObj['message'];
+        }
+
+        $this->assertContains(
+            $exceptionMessage,
+            'Could not save the shipment tracking.',
+            'SoapFault or CouldNotSaveException does not contain exception message.'
+        );
+    }
+
     /**
      * Returns details about API endpoints and services.
      *

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductVisibilityDifferentStoreViewsAfterImportTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Checking product visibility in different store views after product importing"/>
+            <description value="Checking product visibility in different store views after product importing"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-6406"/>
+            <useCaseId value="MAGETWO-59265"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create English and Chinese store views-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnglishStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createChineseStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="storeViewChinese"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete all imported products-->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
+                <argument name="perPage" value="100"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <!--Delete store views-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteEnglishStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteChineseStoreView">
+                <argument name="customStore" value="storeViewChinese"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Import products from file-->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProducts">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_productsoftwostoresdata.csv"/>
+            <argument name="importNoticeMessage" value="Created: 2, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+        <!--Open imported name4 product-->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openName4Product">
+            <argument name="productSku" value="name4"/>
+        </actionGroup>
+        <!--Switch Chinese store view and assert visibility field-->
+        <comment userInput="Switch Chinese store view and assert visibility field" stepKey="commentAssertVisibilityChineseView"/>
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeViewName" value="{{storeViewChinese.name}}"/>
+        </actionGroup>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="Catalog" stepKey="seeVisibilityFieldForChineseStore"/>
+        <!--Switch English store view and assert visibility field-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToCustomEnglishView">
+            <argument name="storeViewName" value="{{customStoreEN.name}}"/>
+        </actionGroup>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="Catalog" stepKey="seeVisibilityFieldForEnglishView"/>
+    </test>
+</tests>

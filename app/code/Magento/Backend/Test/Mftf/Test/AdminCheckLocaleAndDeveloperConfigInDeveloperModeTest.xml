@@ -11,6 +11,7 @@
     <test name="AdminCheckLocaleAndDeveloperConfigInDeveloperModeTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Menu Navigation"/>
             <title value="Check locale dropdown and developer configuration page are available in developer mode"/>
             <description value="Check locale dropdown and developer configuration page are available in developer mode"/>
             <group value="backend"/>
@@ -20,7 +21,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Go to the general configuration and make sure the locale dropdown is available and enabled -->

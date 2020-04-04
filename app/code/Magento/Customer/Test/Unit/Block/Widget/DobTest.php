@@ -9,13 +9,13 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Data\Form\FilterFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Block\Widget\Dob;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -29,6 +29,7 @@ use Zend_Cache_Core;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class DobTest extends TestCase
 {
@@ -354,7 +355,15 @@ class DobTest extends TestCase
     public function getDateFormatDataProvider(): array
     {
         return [
-            ['ar_SA', 'd/M/y'],
+            [
+                'ar_SA',
+                preg_replace(
+                    '/[^MmDdYy\/\.\-]/',
+                    '',
+                    (new \IntlDateFormatter('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE))
+                        ->getPattern()
+                )
+            ],
             [Resolver::DEFAULT_LOCALE, self::DATE_FORMAT],
         ];
     }
@@ -534,18 +543,30 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithoutRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"}}')
-            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+            ->with($validation)
+            ->will(
+                $this->returnValue($validation)
+            );
 
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
 
         $this->assertEquals(
-            $this->_block->getHtmlExtraParams(),
-            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"}}"'
+            "data-validate=\"$validation\"",
+            $this->_block->getHtmlExtraParams()
         );
     }
 
@@ -554,18 +575,31 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'required' => true,
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
-            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+            ->with($validation)
+            ->will(
+                $this->returnValue($validation)
+            );
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
-            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}"',
+            "data-validate=\"$validation\"",
             $this->_block->getHtmlExtraParams()
         );
     }

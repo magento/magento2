@@ -15,6 +15,8 @@
                 default="0" comment="Config Scope ID"/>
         <column xsi:type="varchar" name="path" nullable="false" length="255" default="general" comment="Config Path"/>
         <column xsi:type="text" name="value" nullable="true" comment="Config Value"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="config_id"/>
         </constraint>

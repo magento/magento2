@@ -17,6 +17,7 @@
         "magento/module-ui": "*"
     },
     "suggest": {
+        "magento/module-eav": "*",
         "magento/module-multishipping": "*"
     },
     "type": "magento2-module",

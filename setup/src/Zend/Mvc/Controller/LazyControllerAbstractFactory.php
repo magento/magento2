@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      http://github.com/zendframework/zend-mvc for the canonical source repository
+ * @link      http://github.com/laminas/laminas-mvc for the canonical source repository
  * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-mvc/blob/master/LICENSE.md New BSD License
+ * @license   https://github.com/laminas/laminas-mvc/blob/master/LICENSE.md New BSD License
  * @SuppressWarnings(PHPMD)
  */
 
@@ -11,22 +11,22 @@ declare(strict_types=1);
 namespace Zend\Mvc\Controller;
 
 use Interop\Container\ContainerInterface;
+use Laminas\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Laminas\Filter\FilterPluginManager;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\InputFilter\InputFilterPluginManager;
+use Laminas\Log\FilterPluginManager as LogFilterManager;
+use Laminas\Log\FormatterPluginManager as LogFormatterManager;
+use Laminas\Log\ProcessorPluginManager as LogProcessorManager;
+use Laminas\Log\WriterPluginManager as LogWriterManager;
+use Laminas\Serializer\AdapterPluginManager as SerializerAdapterManager;
+use Laminas\ServiceManager\AbstractFactoryInterface;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\DispatchableInterface;
+use Laminas\Validator\ValidatorPluginManager;
 use ReflectionClass;
 use ReflectionParameter;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
-use Zend\Filter\FilterPluginManager;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\InputFilter\InputFilterPluginManager;
-use Zend\Log\FilterPluginManager as LogFilterManager;
-use Zend\Log\FormatterPluginManager as LogFormatterManager;
-use Zend\Log\ProcessorPluginManager as LogProcessorManager;
-use Zend\Log\WriterPluginManager as LogWriterManager;
-use Zend\Serializer\AdapterPluginManager as SerializerAdapterManager;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\DispatchableInterface;
-use Zend\Validator\ValidatorPluginManager;
 
 /**
  * Reflection-based factory for controllers.
@@ -100,9 +100,10 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
     ];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return DispatchableInterface
+     * @throws \ReflectionException
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -127,7 +128,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
@@ -168,7 +169,7 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
             }
 
             if (! $parameter->getClass()) {
-                return;
+                return null;
             }
 
             $type = $parameter->getClass()->getName();
@@ -191,8 +192,10 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * Determine if we can create a service with name
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * phpcs:disable
      * @param $name
      * @param $requestedName
+     * phpcs:enable
      * @return bool
      * @SuppressWarnings("unused")
      */
@@ -205,10 +208,13 @@ class LazyControllerAbstractFactory implements AbstractFactoryInterface
      * Create service with name
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * phpcs:disable
      * @param $name
      * @param $requestedName
+     * phpcs:enable
      * @return mixed
      * @SuppressWarnings("unused")
+     * @throws \ReflectionException
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {

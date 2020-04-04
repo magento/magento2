@@ -87,7 +87,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var EmailMessageInterface
+     * @var MessageInterface
      */
     protected $message;
 
@@ -377,6 +377,7 @@ class TransportBuilder
     {
         $template = $this->getTemplate();
         $content = $template->processTemplate();
+
         switch ($template->getType()) {
             case TemplateTypesInterface::TYPE_TEXT:
                 $part['type'] = MimeInterface::TYPE_TEXT;
@@ -391,7 +392,10 @@ class TransportBuilder
                     new Phrase('Unknown template type')
                 );
         }
+
+        /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
         $mimePart = $this->mimePartInterfaceFactory->create(['content' => $content]);
+        $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
             ['parts' => [$mimePart]]
         );
@@ -400,6 +404,7 @@ class TransportBuilder
             (string)$template->getSubject(),
             ENT_QUOTES
         );
+
         $this->message = $this->emailMessageInterfaceFactory->create($this->messageData);
 
         return $this;
@@ -427,6 +432,8 @@ class TransportBuilder
                 $this->messageData[$addressType],
                 $convertedAddressArray
             );
+        } else {
+            $this->messageData[$addressType] = $convertedAddressArray;
         }
     }
 }

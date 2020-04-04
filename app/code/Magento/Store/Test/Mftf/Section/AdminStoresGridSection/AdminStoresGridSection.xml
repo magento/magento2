@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoresGridSection">
+        <element name="storeGrpFilterTextField" type="input" selector="#storeGrid_filter_group_title"/>
+        <element name="websiteFilterTextField" type="input" selector="#storeGrid_filter_website_title"/>
+        <element name="storeFilterTextField" type="input" selector="#storeGrid_filter_store_title" timeout="90"/>
+        <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]" timeout="30"/>
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']" timeout="30"/>
+        <element name="websiteNameInFirstRow" type="text" selector="tr:nth-of-type(1) &gt; .col-website_title &gt; a"/>
+        <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title&gt;a"/>
+        <element name="storeNameInFirstRow" type="text" selector=".col-store_title&gt;a"/>
+        <element name="firstRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[1]"/>
+        <element name="nthRow" type="textarea" selector="(//*[@id='storeGrid_table']/tbody/tr)[{{rownum}}]" parameterized="true"/>
+        <element name="successMessage" type="text" selector="//div[@class='message message-success success']/div"/>
+        <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
+        <element name="websiteName" type="text" selector="//td[@class='a-left col-website_title  ']/a[contains(.,'{{websiteName}}')]" parameterized="true"/>
+        <element name="gridCell" type="text" selector="//table[@class='data-grid']//tr[{{row}}]//td[count(//table[@class='data-grid']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+     </section>
+</sections>
