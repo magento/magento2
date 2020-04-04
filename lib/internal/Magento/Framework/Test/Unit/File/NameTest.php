@@ -21,6 +21,11 @@ class NameTest extends \PHPUnit\Framework\TestCase
     private $nonExistingFilePath;
 
     /**
+     * @var string
+     */
+    private $multipleExistingFilePath;
+
+    /**
      * @var Name
      */
     private $name;
@@ -29,15 +34,24 @@ class NameTest extends \PHPUnit\Framework\TestCase
     {
         $this->name = new Name();
         $this->existingFilePath = __DIR__ . '/../_files/source.txt';
+        $this->multipleExistingFilePath = __DIR__ . '/../_files/name.txt';
         $this->nonExistingFilePath = __DIR__ . '/../_files/file.txt';
     }
 
     /**
      * @test
      */
-    public function testGetNewFileNameWhenFileExists()
+    public function testGetNewFileNameWhenOneFileExists()
     {
         $this->assertEquals('source_1.txt', $this->name->getNewFileName($this->existingFilePath));
+    }
+
+    /**
+     * @test
+     */
+    public function testGetNewFileNameWhenTwoFileExists()
+    {
+        $this->assertEquals('name_2.txt', $this->name->getNewFileName($this->multipleExistingFilePath));
     }
 
     /**
