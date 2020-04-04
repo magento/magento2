@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInstantPurchaseFunctionalityNegativeScenarioTest">
+        <annotations>
+            <features value="InstantPurchase"/>
+            <stories value="Using Instant Purchase"/>
+            <title value="Checks negative Instant Purchase functionality scenario"/>
+            <description value="Checks that Instant Purchase button does not appear in a different situation"/>
+            <testCaseId value="MC-6462"/>
+            <severity value="CRITICAL"/>
+            <group value="instant_purchase"/>
+            <group value="vault"/>
+            <group value="braintree"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
+            <!-- Configure Braintree payment method -->
+            <createData entity="BraintreeConfig" stepKey="configureBraintreePayment"/>
+            <!-- Enable Braintree with Vault -->
+            <createData entity="CustomBraintreeConfigurationData" stepKey="enableBraintreeAndVault"/>
+            <!-- Create customers: without address, with address, with saved shipping and billing -->
+            <createData entity="Simple_Customer_Without_Address" stepKey="customerWithoutAddress"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customerWithAddress"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="customerWithDefaultAddress"/>
+            <!-- Create all product variations -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
+            <!-- Create Bundle Product -->
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- Create Downloadable Product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <!-- Create Grouped Product -->
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="createLinkForGroupedProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <!-- Log in as a customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
+                <argument name="Customer" value="$customerWithDefaultAddress$"/>
+            </actionGroup>
+            <!-- Customer placed order from storefront with payment method -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$createSimpleProduct$"/>
+            </actionGroup>
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
+            <!-- Fill Braintree card data -->
+            <click selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="selectBraintreePaymentMethod"/>
+            <waitForPageLoad stepKey="waitForBraintreeFormLoad"/>
+            <scrollTo selector="{{BraintreeConfigurationPaymentSection.creditCart}}" stepKey="scrollToCreditCardSection"/>
+            <actionGroup ref="StorefrontFillCartDataActionGroup" stepKey="fillCardData">
+                <argument name="cartData" value="VisaDefaultCard"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForFillCardData"/>
+            <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
+            <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+                <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+                <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="customerWithoutAddress" stepKey="deleteCustomerWithoutAddress"/>
+            <deleteData createDataKey="customerWithAddress" stepKey="deleteCustomerWithAddress"/>
+            <deleteData createDataKey="customerWithDefaultAddress" stepKey="deleteCustomerWithDefaultAddress"/>
+            <!-- Set configs to default -->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="restoreToDefaultFlatRate"/>
+            <magentoCLI command="config:set {{Disable3DSecureBraintree.path}} {{Disable3DSecureBraintree.value}}" stepKey="restoreToDefault3DSecureVerification"/>
+            <createData entity="DefaultBraintreeConfig" stepKey="defaultBraintreeConfig"/>
+            <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="rollBackCustomBraintreeConfigurationData"/>
+            <!-- Remove created products/attributes -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <!-- Remove Downloadable Product -->
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <!-- Remove Configurable Product -->
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndicesAfterTest"/>
+        </after>
+        <!-- 1. Ensure customer is a guest -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        <!-- 2. Browse all product pages and verify that the "Instant Purchase" button does not appear -->
+        <!-- Simple product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPage"/>
+        <!-- Virtual product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="productUrl" value="$createVirtualProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnVirtualProductPage"/>
+        <!-- Downloadable Product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openDownloadableProductPage">
+            <argument name="productUrl" value="$createDownloadableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnDownloadableProductPage"/>
+        <!-- Bundle Product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
+        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <waitForPageLoad stepKey="waitForBundleProductPageLoad"/>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnBundleProductPage"/>
+        <!-- Grouped product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openGroupedProductPage">
+            <argument name="productUrl" value="$createGroupedProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnGroupedProductPage"/>
+        <!-- Configurable Product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrl" value="$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnConfigurableProductPage"/>
+        <!-- 3. Log in as a customer without address -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithoutAddressLoginToStorefront">
+            <argument name="Customer" value="$customerWithoutAddress$"/>
+        </actionGroup>
+        <!-- 4. Browse simple product page and check that Instant Purchase button does not show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithoutAddress">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductAsCustomerWithoutAddress"/>
+        <!-- 5. Log in as a customer with address -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithoutAddress"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithAddressLoginToStorefront">
+            <argument name="Customer" value="$customerWithAddress$"/>
+        </actionGroup>
+        <!-- 6. Browse simple product page and check that Instant Purchase button does not show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithAddress">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageAsCustomerWithAddress"/>
+        <!-- 7. Log in as a customer with default address -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithAddress"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithDefaultAddressLoginToStorefront">
+            <argument name="Customer" value="$customerWithDefaultAddress$"/>
+        </actionGroup>
+        <!-- 8. Browse simple product page and check that Instant Purchase button show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithCustomerWithDefaultAddress">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButton"/>
+        <!-- 9-10. Configure Braintree Payment Method(without Vault). Configure 3d Secure Verification -->
+        <magentoCLI command="config:set {{DisableVaultBraintree.path}} {{DisableVaultBraintree.value}}" stepKey="disableVault"/>
+        <magentoCLI command="config:set {{Enable3DSecureBraintree.path}} {{Enable3DSecureBraintree.value}}" stepKey="enable3DSecureVerification"/>
+        <!-- New session should be started -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithDefaultAddressAfter3dSecureEnabled"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithDefaultAddressLoginToStorefrontAfter3dSecureEnabled">
+            <argument name="Customer" value="$customerWithDefaultAddress$"/>
+        </actionGroup>
+        <!-- 11. Browse simple product page and check that Instant Purchase button does not show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWith3dSecureEnabled">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageWith3dSecureEnabled"/>
+        <!-- 12. Disable all supported payment methods -->
+        <createData entity="DefaultBraintreeConfig" stepKey="restoreToDefaultBraintreeConfig"/>
+        <createData entity="RollBackCustomBraintreeConfigurationData" stepKey="restoreToDefaultBraintreeConfigurationData"/>
+        <!-- New session should be started -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithDefaultAddressAfterPaymentMethodDisabled"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithDefaultAddressLoginToStorefrontAfterPaymentMethodDisabled">
+            <argument name="Customer" value="$customerWithDefaultAddress$"/>
+        </actionGroup>
+        <!-- 13. Browse simple product page and check that Instant Purchase button does not show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWhilePaymentMethodDisabled">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductWhilePaymentMethodDisabled"/>
+        <!-- 14. Reenable supported payment method (without 3d secure for Braintree) -->
+        <magentoCLI command="config:set {{Disable3DSecureBraintree.path}} {{Disable3DSecureBraintree.value}}" stepKey="disable3DSecureVerification"/>
+        <createData entity="BraintreeConfig" stepKey="reenableBraintreePayment"/>
+        <createData entity="CustomBraintreeConfigurationData" stepKey="reenableBraintreeAndVault"/>
+        <!-- New session should be started -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithDefaultAddressAfterReenablePaymentMethod"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithDefaultAddressLoginToStorefrontAfterReenablePaymentMethod">
+            <argument name="Customer" value="$customerWithDefaultAddress$"/>
+        </actionGroup>
+        <!-- 15. Browse simple product page and check that Instant Purchase button show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWithReenabledPaymentMethod">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButtonWithReenabledPaymentMethod"/>
+        <!-- 16. Disable shipping method for customer with default address -->
+        <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+        <!-- New session should be started -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerWithDefaultAddressAfterFlatRateDisabled"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerWithDefaultAddressLoginToStorefrontAfterFlatRateDisabled">
+            <argument name="Customer" value="$customerWithDefaultAddress$"/>
+        </actionGroup>
+        <!-- 17. Browse simple product page and check that Instant Purchase button does not show up -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPageWhileFlatRateDisabled">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnSimpleProductPageWhileFlatRateDisabled"/>
+    </test>
+</tests>
