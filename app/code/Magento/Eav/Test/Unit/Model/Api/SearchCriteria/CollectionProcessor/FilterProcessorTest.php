@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor;
 
 use InvalidArgumentException;
@@ -19,21 +21,9 @@ use stdClass;
 class FilterProcessorTest extends TestCase
 {
     /**
-     * Return model
-     *
-     * @param CustomFilterInterface[] $customFilters
-     * @param array $fieldMapping
-     * @return FilterProcessor
-     */
-    private function getModel(array $customFilters, array $fieldMapping)
-    {
-        return new FilterProcessor($customFilters, $fieldMapping);
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testProcess()
+    public function testProcess(): void
     {
         /** @var CustomFilterInterface|MockObject $customFilterMock */
         $customFilterMock = $this->createPartialMock(
@@ -151,10 +141,8 @@ class FilterProcessorTest extends TestCase
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    public function testProcessWithException()
+    public function testProcessWithException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-
         /** @var stdClass|MockObject $customFilterMock */
         $customFilterMock = $this->createPartialMock(stdClass::class, ['apply']);
 
@@ -199,6 +187,21 @@ class FilterProcessorTest extends TestCase
         $collectionMock->expects($this->never())
             ->method('addFieldToFilter');
 
+        $this->expectException(InvalidArgumentException::class);
         $model->process($searchCriteriaMock, $collectionMock);
+    }
+
+    /**
+     * Returns model
+     *
+     * @param CustomFilterInterface[] $customFilters
+     * @param array $fieldMapping
+     * @return FilterProcessor
+     */
+    private function getModel(
+        array $customFilters,
+        array $fieldMapping
+    ): FilterProcessor {
+        return new FilterProcessor($customFilters, $fieldMapping);
     }
 }

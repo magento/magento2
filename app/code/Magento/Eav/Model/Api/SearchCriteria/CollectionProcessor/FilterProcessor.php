@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -58,6 +59,8 @@ class FilterProcessor implements CollectionProcessorInterface
      * @param FilterGroup $filterGroup
      * @param AbstractDb $collection
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,
@@ -70,7 +73,7 @@ class FilterProcessor implements CollectionProcessorInterface
             $applyLater = false;
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
-                if ($filter->getConditionType() == 'eq') {
+                if ($filter->getConditionType() === 'eq') {
                     $customFilters = array_map(
                         function ($customFilter) {
                             if (count($values = $customFilter['values']) > 1) {
@@ -109,7 +112,9 @@ class FilterProcessor implements CollectionProcessorInterface
         if ($applyLater && count($customFilters)) {
             foreach ($customFilters as $field => $filter) {
                 $customFilter = $this->getCustomFilterForField($field);
-                $customFilter->apply($filter['filter'], $collection);
+                /** @var Filter $filter */
+                $filter = $filter['filter'];
+                $customFilter->apply($filter, $collection);
             }
         }
 
