@@ -8,12 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMarketingCreateSitemapFailfFolderSaveTest">
+    <test name="AdminMarketingCreateSitemapFailFolderSaveTest">
         <annotations>
             <features value="Sitemap"/>
             <stories value="Admin Creates Sitemap Entity Fail Folder Save"/>
             <title value="Sitemap Creation Fail Folder Save"/>
             <description value="Sitemap Entity Creation Fail Folder Save"/>
+            <testCaseId value="MC-14314"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>

@@ -14,6 +14,7 @@
             <stories value="Admin Creates Sitemap Entity"/>
             <title value="Sitemap Creation"/>
             <description value="Sitemap Entity Creation"/>
+            <testCaseId value="MC-14312"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>
