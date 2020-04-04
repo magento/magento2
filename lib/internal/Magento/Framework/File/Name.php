@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -10,9 +12,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Validation\ValidationException;
 
 /**
- * Class Name
- *
- * @package Magento\Framework\File
+ * Utility for generating a unique file name
  */
 class Name
 {
