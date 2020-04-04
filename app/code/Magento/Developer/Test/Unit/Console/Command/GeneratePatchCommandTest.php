@@ -8,72 +8,76 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\GeneratePatchCommand;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\DirectoryList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class GeneratePatchCommandTest extends \PHPUnit\Framework\TestCase
+class GeneratePatchCommandTest extends TestCase
 {
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrar|MockObject
      */
-    private $componentRegistrar;
+    private $componentRegistrarMock;
 
     /**
-     * @var DirectoryList
+     * @var DirectoryList|MockObject
      */
-    private $directoryList;
+    private $directoryListMock;
 
     /**
-     * @var ReadFactory
+     * @var ReadFactory|MockObject
      */
-    private $readFactory;
+    private $readFactoryMock;
 
     /**
-     * @var WriteFactory
+     * @var WriteFactory|MockObject
      */
-    private $writeFactory;
+    private $writeFactoryMock;
 
     /**
-     * @var GeneratePatchCommand
+     * @var GeneratePatchCommand|MockObject
      */
     private $command;
 
     protected function setUp()
     {
-        $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
-        $this->directoryList = $this->createMock(DirectoryList::class);
-        $this->readFactory = $this->createMock(ReadFactory::class);
-        $this->writeFactory = $this->createMock(WriteFactory::class);
+        $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
+        $this->directoryListMock = $this->createMock(DirectoryList::class);
+        $this->readFactoryMock = $this->createMock(ReadFactory::class);
+        $this->writeFactoryMock = $this->createMock(WriteFactory::class);
 
         $this->command = new GeneratePatchCommand(
-            $this->componentRegistrar,
-            $this->directoryList,
-            $this->readFactory,
-            $this->writeFactory
+            $this->componentRegistrarMock,
+            $this->directoryListMock,
+            $this->readFactoryMock,
+            $this->writeFactoryMock
         );
     }
 
     public function testExecute()
     {
-        $this->componentRegistrar->expects($this->once())
+        $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
             ->with('module', 'Vendor_Module')
             ->willReturn('/long/path/to/Vendor/Module');
 
-        $read = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $read = $this->createMock(Read::class);
         $read->expects($this->at(0))
             ->method('readFile')
             ->with('patch_template.php.dist')
             ->willReturn('something');
-        $this->readFactory->method('create')->willReturn($read);
+        $this->readFactoryMock->method('create')->willReturn($read);
 
-        $write = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $write = $this->createMock(Write::class);
         $write->expects($this->once())->method('writeFile');
-        $this->writeFactory->method('create')->willReturn($write);
+        $this->writeFactoryMock->method('create')->willReturn($write);
 
-        $this->directoryList->expects($this->once())->method('getRoot')->willReturn('/some/path');
+        $this->directoryListMock->expects($this->once())->method('getRoot')->willReturn('/some/path');
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(
@@ -85,26 +89,24 @@ class GeneratePatchCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('successfully generated', $commandTester->getDisplay());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments
-     */
     public function testWrongParameter()
     {
+        $this->expectExceptionMessage('Not enough arguments');
+        $this->expectException(\RuntimeException::class);
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot find a registered module with name "Fake_Module"
-     */
     public function testBadModule()
     {
-        $this->componentRegistrar->expects($this->once())
+        $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
             ->with('module', 'Fake_Module')
             ->willReturn(null);
+
+        $this->expectExceptionMessage('Cannot find a registered module with name "Fake_Module"');
+        $this->expectException(\InvalidArgumentException::class);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(
@@ -113,6 +115,5 @@ class GeneratePatchCommandTest extends \PHPUnit\Framework\TestCase
                 GeneratePatchCommand::INPUT_KEY_PATCH_NAME => 'SomePatch'
             ]
         );
-        $this->assertContains('successfully generated', $commandTester->getDisplay());
     }
 }
