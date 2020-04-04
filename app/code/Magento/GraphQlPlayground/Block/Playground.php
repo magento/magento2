@@ -9,17 +9,17 @@ namespace Magento\GraphQlPlayground\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 
 /**
  * Class Playground
- *
- * @package Magento\GraphQlPlayground\Block
+ * Block providing GraphQL Playground Config
  */
 class Playground extends Template
 {
     /**
-     * @var \Magento\Framework\App\AreaList
+     * @var AreaList
      */
     private $areaList;
 
@@ -31,13 +31,13 @@ class Playground extends Template
     /**
      * Playground constructor.
      *
-     * @param \Magento\Framework\App\AreaList $areaList
-     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param AreaList $areaList
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
         AreaList $areaList,
-        Template\Context $context,
+        Context $context,
         array $data = []
     ) {
         $this->areaList = $areaList;

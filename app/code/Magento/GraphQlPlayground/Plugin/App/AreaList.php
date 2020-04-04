@@ -21,6 +21,10 @@ class AreaList
      */
     private $request;
 
+    /**
+     * AreaList constructor.
+     * @param RequestInterface $request
+     */
     public function __construct(
         RequestInterface $request
     ) {
@@ -41,6 +45,12 @@ class AreaList
         return $shouldRenderPlayground;
     }
 
+    /**
+     * @param \Magento\Framework\App\AreaList $subject
+     * @param $result
+     * @param $frontName
+     * @return string
+     */
     public function afterGetCodeByFrontName(
         \Magento\Framework\App\AreaList $subject,
         $result,
