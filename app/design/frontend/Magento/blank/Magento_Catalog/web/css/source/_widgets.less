@@ -111,6 +111,15 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .page-layout-1column .block.widget .products-grid .product-item {
+        margin-left: 2%;
+        width: calc(~'(100% - 4%)/3');
+
+        &:nth-child(3n + 1) {
+            margin-left: 0;
+        }
+    }
+
     .block.widget .products-grid .product-item {
         width: 100%/3;
 
