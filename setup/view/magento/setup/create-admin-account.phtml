@@ -43,9 +43,9 @@ $passwordWizard = sprintf(
 
 <div
     class="message message-success"
-    ng-show="validateCredentials.result.success && validateCredentials.pressed"
+    ng-show="validateCredentials.result.success && validateCredentials.result !== undefined"
 >
-    <span class="message-text">Credentials validation successfully passed.</span>
+    <span class="message-text">Credentials validation successfully passed. Please wait...</span>
 </div>
 <div
     class="message message-error"
@@ -58,6 +58,14 @@ $passwordWizard = sprintf(
     ng-show="validateCredentials.failed !== undefined"
 >
     <span class="message-text">{{validateCredentials.failed}}</span>
+</div>
+
+<div class="message message-spinner" ng-show="loading">
+    <span class="spinner">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </span>
+    <span class="message-text">Validating admin credentials...</span>
 </div>
 
 <p>

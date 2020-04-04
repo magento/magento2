@@ -49,16 +49,19 @@ angular.module('create-admin-account', ['ngStorage'])
                 'config': $localStorage.config
             };
             $scope.validate();
+            $scope.loading = true;
             if ($scope.valid) {
                 $http.post('index.php/validate-admin-credentials', data)
                     .then(function successCallback(resp) {
                         $scope.validateCredentials.result = resp.data;
 
                         if ($scope.validateCredentials.result.success) {
+                            $scope.loading = false;
                             $scope.nextState();
                         }
                     }, function errorCallback(resp) {
                         $scope.validateCredentials.failed = resp.data;
+                        $scope.loading = false;
                     });
             }
         };
@@ -98,7 +101,7 @@ angular.module('create-admin-account', ['ngStorage'])
                         isValid = typeof value === 'string' && minReg.test(value);
 
                     ctrl.$setValidity('checkPassword', isValid);
-                    
+
                     return value;
                 };
                 
