@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\File\Uploader;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\Name;
 
 /**
  * Catalog image uploader
@@ -74,17 +76,23 @@ class ImageUploader
     private $allowedMimeTypes;
 
     /**
-     * ImageUploader constructor
+     * @var \Magento\Framework\File\Name
+     */
+    private $fileNameLookup;
+
+    /**
+     * ImageUploader constructor.
      *
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Psr\Log\LoggerInterface $logger
-     * @param string $baseTmpPath
-     * @param string $basePath
-     * @param string[] $allowedExtensions
-     * @param string[] $allowedMimeTypes
+     * @param $baseTmpPath
+     * @param $basePath
+     * @param $allowedExtensions
+     * @param array $allowedMimeTypes
+     * @param Name|null $fileNameLookup
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
@@ -95,7 +103,8 @@ class ImageUploader
         $baseTmpPath,
         $basePath,
         $allowedExtensions,
-        $allowedMimeTypes = []
+        $allowedMimeTypes = [],
+        Name $fileNameLookup =  null
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
@@ -106,6 +115,7 @@ class ImageUploader
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
         $this->allowedMimeTypes = $allowedMimeTypes;
+        $this->fileNameLookup = $fileNameLookup ?? ObjectManager::getInstance()->get(Name::class);
     }
 
     /**
@@ -203,7 +213,7 @@ class ImageUploader
 
         $baseImagePath = $this->getFilePath(
             $basePath,
-            Uploader::getNewFileName(
+            $this->fileNameLookup->getNewFileName(
                 $this->mediaDirectory->getAbsolutePath(
                     $this->getFilePath($basePath, $imageName)
                 )
