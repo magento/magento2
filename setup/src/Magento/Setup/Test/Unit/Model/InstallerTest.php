@@ -366,7 +366,6 @@ class InstallerTest extends TestCase
         $cacheManagerMock = $this->createMock(Manager::class);
         $cacheManagerMock->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManagerMock->expects($this->exactly(3))->method('setEnabled')
-            // ->with(['foo', 'bar'], false)
             ->willReturn(['foo', 'bar']);
         $cacheManagerMock->expects($this->exactly(3))->method('clean');
         $cacheManagerMock->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
@@ -381,8 +380,15 @@ class InstallerTest extends TestCase
 
         $registryMock = $this->createMock(Registry::class);
 
-        $this->setupFactoryMock->expects($this->atLeastOnce())->method('create')->with($resourceMock)->willReturn($setupMock);
-        $this->dataSetupFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($dataSetupMock);
+        $this->setupFactoryMock->expects($this->atLeastOnce())
+                ->method('create')
+                ->with($resourceMock)
+                ->willReturn($setupMock);
+
+        $this->dataSetupFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($dataSetupMock);
+
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
