@@ -23,7 +23,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create product -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -126,7 +126,13 @@
         <seeElement selector="{{AdminShipmentTrackingInformationShippingSection.shippingNumber}}" stepKey="seeShippingNumberElement"/>
         <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.shippingMethod}}" stepKey="grabShippingMethod"/>
         <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.shippingMethodTitle}}" stepKey="grabShippingMethodTitle"/>
-        <assertEquals actual="$grabShippingMethod" expectedType="string" expected="Federal Express" stepKey="assertShippingMethodIsFedEx"/>
-        <assertEquals actual="$grabShippingMethodTitle" expectedType="string" expected="Federal Express" stepKey="assertShippingMethodTitleIsFedEx"/>
+        <assertEquals stepKey="assertShippingMethodIsFedEx">
+			<actualResult type="const">$grabShippingMethod</actualResult>
+			<expectedResult type="string">Federal Express</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertShippingMethodTitleIsFedEx">
+			<actualResult type="const">$grabShippingMethodTitle</actualResult>
+			<expectedResult type="string">Federal Express</expectedResult>
+        </assertEquals>
     </test>
 </tests>

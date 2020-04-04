@@ -21,7 +21,7 @@
 
         <before>
             <!-- log in as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- create new product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -89,6 +89,9 @@
         <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
 
         <!-- Compare canceled orders price -->
-        <assertEquals expected="{$grabCanceledOrdersSpecified}" expectedType="string" actual="{$grabCanceledOrdersAny}" actualType="string"  stepKey="assertEquals"/>
+        <assertEquals stepKey="assertEquals">
+			<actualResult type="string">{$grabCanceledOrdersAny}</actualResult>
+			<expectedResult type="string">{$grabCanceledOrdersSpecified}</expectedResult>
+        </assertEquals>
     </test>
 </tests>

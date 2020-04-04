@@ -111,6 +111,7 @@ define([
         _create: function () {
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
+            this.options.outerClickHandler = this.options.outerClickHandler || _.bind(this.closeModal, this, false);
             this._super();
             this.modal.find(this.options.modalContent).append(this.getFormTemplate());
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));

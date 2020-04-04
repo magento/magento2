@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
@@ -115,7 +115,10 @@
         <waitForElementVisible stepKey="waitForInfoDropdown2" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad4"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
-        <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
+        <assertNotEquals stepKey="assertNotEquals">
+			<actualResult type="string">{$grabTotalAfter}</actualResult>
+			<expectedResult type="string">{$grabTotalBefore}</expectedResult>
+        </assertNotEquals>
 
         <!-- Delete the bundled product -->
         <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">

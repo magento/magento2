@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductNegativePriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Admin should not be able to create a product with a negative price"/>
+            <description value="Admin should not be able to create a product with a negative price"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89912"/>
+            <group value="product"/>
+        </annotations>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="-42" stepKey="fillPrice"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="Please enter a number 0 or greater in this field." stepKey="seePriceValidationError"/>
+    </test>
+</tests>

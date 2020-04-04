@@ -18,7 +18,7 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
            <!--Create Simple Product and Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
@@ -63,7 +63,7 @@
             </actionGroup>
 
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
 
@@ -130,7 +130,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
-         <assertNotContains expected="$$createSimpleProduct3.name$$" actual="$grabDontSeeHomeProduct3" stepKey="assertNotSeeProduct3"/>
+         <assertNotContains stepKey="assertNotSeeProduct3">
+			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
+			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+        </assertNotContains>
 
         <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
 
@@ -145,6 +148,9 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
-        <assertNotContains expected="$$createSimpleProduct1.name$$" actual="$grabDontSeeHomeProduct1" stepKey="assertNotSeeProduct1"/>
+        <assertNotContains stepKey="assertNotSeeProduct1">
+			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
+			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
+        </assertNotContains>
     </test>
 </tests>

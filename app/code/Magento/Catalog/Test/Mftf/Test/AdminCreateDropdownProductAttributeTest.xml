@@ -17,7 +17,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
@@ -66,7 +66,9 @@
         <!-- Check attribute data -->
         <grabValueFrom selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('2')}}"
                        stepKey="secondOptionAdminLabel"/>
-        <assertEquals actual="$secondOptionAdminLabel" expected="'Fish &amp; Chips'"
-                      stepKey="assertSecondOption"/>
+        <assertEquals stepKey="assertSecondOption">
+			<actualResult type="const">$secondOptionAdminLabel</actualResult>
+			<expectedResult type="const">'Fish &amp; Chips'</expectedResult>
+        </assertEquals>
     </test>
 </tests>
