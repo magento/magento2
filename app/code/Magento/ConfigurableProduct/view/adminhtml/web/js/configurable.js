@@ -8,9 +8,10 @@
 define([
     'jquery',
     'mage/template',
+    'underscore',
     'mage/translate',
     'prototype'
-], function (jQuery, mageTemplate) {
+], function (jQuery, mageTemplate, _) {
     'use strict';
 
     if (typeof Product == 'undefined') {
@@ -55,7 +56,7 @@ define([
             // Overwrite defaults by url
             separatorIndex = window.location.href.indexOf('#');
 
-            if (separatorIndex !== -1 && window.location.hash !== '') { //eslint-disable-line eqeqeq
+            if (separatorIndex !== -1 && !_.isEmpty(window.location.hash)) { //eslint-disable-line eqeqeq
                 paramsStr = window.location.href.substr(separatorIndex + 1);
                 urlValues = paramsStr.toQueryParams();
 
