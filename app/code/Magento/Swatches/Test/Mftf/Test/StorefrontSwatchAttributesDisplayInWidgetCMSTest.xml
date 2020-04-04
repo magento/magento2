@@ -54,7 +54,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Login-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
          <!--Create a configurable swatch product via the UI -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
@@ -86,7 +86,7 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productSwatch(visualSwatchOption2.default_label)}}" stepKey="assertAddedWidgetM"/>
 
         <!--Login to delete CMS page-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
             <argument name="UrlKey" value="$grabTextFromUrlKey"/>
         </actionGroup>

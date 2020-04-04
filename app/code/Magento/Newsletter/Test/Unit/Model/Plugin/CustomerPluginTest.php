@@ -6,10 +6,10 @@
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Plugin\CustomerPlugin;
@@ -134,7 +134,13 @@ class CustomerPluginTest extends TestCase
         }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['getIsSubscribed']);
+        $customerExtension = $this->createPartialMock(
+            CustomerExtensionInterface::class,
+            [
+                'getIsSubscribed',
+                'CustomerExtensionInterface'
+            ]
+        );
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
@@ -152,7 +158,14 @@ class CustomerPluginTest extends TestCase
             $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
             $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
-        $resultExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['setIsSubscribed']);
+        $resultExtension = $this->createPartialMock(
+            CustomerExtensionInterface::class,
+            [
+                'setIsSubscribed',
+                'getIsSubscribed',
+                'CustomerExtensionInterface'
+            ]
+        );
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
         $result = $this->createMock(CustomerInterface::class);
@@ -291,7 +304,7 @@ class CustomerPluginTest extends TestCase
 
         $customerExtension = $this->createPartialMock(
             CustomerExtensionInterface::class,
-            ['getIsSubscribed', 'setIsSubscribed']
+            ['getIsSubscribed', 'setIsSubscribed','CustomerExtensionInterface']
         );
         $customerExtension->expects($this->once())->method('setIsSubscribed')->with($subscribed);
         $this->extensionFactory->expects($this->once())->method('create')->willReturn($customerExtension);
