@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Dependency\Reader;
 
+use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
+
 /**
  * Search classes in file by path.
  */
@@ -42,7 +44,7 @@ class ClassScanner
      */
     private function loadClassName(string $filePath): string
     {
-        $scanner = new \Magento\Setup\Module\Di\Code\Reader\FileClassScanner($filePath);
+        $scanner = new FileClassScanner($filePath);
         return $scanner->getClassName();
     }
 }

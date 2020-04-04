@@ -79,6 +79,7 @@ class PhpRule implements RuleInterface
      * @var array
      */
     private $whitelists;
+
     /**
      * @var ClassScanner
      */
@@ -102,7 +103,6 @@ class PhpRule implements RuleInterface
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
-        $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
         $this->pluginMap = $pluginMap ?: null;
         $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
