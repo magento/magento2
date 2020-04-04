@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Magento\GraphQlPlayground\Block\Playground $block */
+$graphqlEndpoint = $block->getGraphqlEndpoint();
+?>
+<div id="root" class="playgroundIn">
+</div>
+<script>
+    var root = document.getElementById('root');
+    GraphQLPlayground.init(root, {
+        "endpoint": "<?= $block->escapeUrl($graphqlEndpoint) ?>",
+        "canSaveConfig": true
+    })
+</script>

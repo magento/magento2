@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Graphql Playground</title>
+        <script src="Magento_GraphQlPlayground/js/playground.min.js"/>
+        <link src="Magento_GraphQlPlayground/js/playground.min.js.map"/>
+        <css src="Magento_GraphQlPlayground/css/playground.css"/>
+        <!--Remove require-js assets-->
+        <remove src="css/styles-m.css"/>
+        <remove src="css/styles-s.css"/>
+        <remove src="css/styles-l.css"/>
+        <remove src="css/print.css"/>
+        <remove src="requirejs/require.js"/>
+        <remove src="mage/requirejs/mixins.js"/>
+        <remove src="requirejs-config.js"/>
+    </head>
+    <body>
+        <!--Remove Magento page content-->
+        <!--Remove Magento page content-->
+        <referenceContainer name="page.wrapper" remove="true"/>
+        <referenceBlock name="translate" remove="true"/>
+        <referenceBlock name="requirejs-config" remove="true"/>
+        <referenceContainer name="root">
+            <block name="graphql"
+            class="Magento\GraphQlPlayground\Block\Playground"
+            template="Magento_GraphQlPlayground::playground.phtml" before="-">
+            </block>
+        </referenceContainer>
+    </body>
+</page>

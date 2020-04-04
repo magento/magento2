@@ -284,6 +284,7 @@
         <item type="file">Magento_Ui::js/form/element/file-uploader.js</item>
         <item type="file">Magento_Ui::js/form/components/insert.js</item>
         <item type="file">Magento_Ui::js/form/components/insert-listing.js</item>
+	<item type="file">Magento_GraphQlPlayground::js/playground.min.js</item>
         <item type="directory">Magento_Ui::js/timeline</item>
         <item type="directory">Magento_Ui::js/grid</item>
         <item type="directory">Magento_Ui::js/dynamic-rows</item>
