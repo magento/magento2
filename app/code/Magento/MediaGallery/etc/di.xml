@@ -29,14 +29,15 @@
     <type name="Magento\MediaGallery\Model\Directory\IsBlacklisted">
         <arguments>
             <argument name="patterns" xsi:type="array">
-                <item name="captcha" xsi:type="string">/pub\/media\/captcha/</item>
-                <item name="catalog" xsi:type="string">/pub\/media\/catalog\/product/</item>
-                <item name="customer" xsi:type="string">/pub\/media\/customer/</item>
-                <item name="downloadable" xsi:type="string">/pub\/media\/downloadable/</item>
-                <item name="import" xsi:type="string">/pub\/media\/import/</item>
-                <item name="theme" xsi:type="string">/pub\/media\/theme/</item>
-                <item name="theme_customization" xsi:type="string">/pub\/media\/theme_customization/</item>
-                <item name="tmp" xsi:type="string">/pub\/media\/tmp/</item>
+                <item name="captcha" xsi:type="string">/^captcha/</item>
+                <item name="catalog" xsi:type="string">/^catalog\/product/</item>
+                <item name="customer" xsi:type="string">/^customer/</item>
+                <item name="downloadable" xsi:type="string">/^downloadable/</item>
+                <item name="import" xsi:type="string">/^import/</item>
+                <item name="theme" xsi:type="string">/^theme/</item>
+                <item name="theme_customization" xsi:type="string">/^theme_customization/</item>
+                <item name="tmp" xsi:type="string">/^tmp/</item>
+                <item name="directories-with-dots" xsi:type="string">/^\./</item>
             </argument>
         </arguments>
     </type>
