@@ -8,14 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertTermInGridActionGroup">
+    <actionGroup name="AdminTermsConditionsFilterGridByNameActionGroup">
+        <annotations>
+            <description>Filters Terms and Conditions grid for name</description>
+        </annotations>
         <arguments>
             <argument name="termName" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminTermsPage.url}}" stepKey="onTermGridPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+
         <fillField selector="{{AdminTermGridSection.filterByTermName}}" userInput="{{termName}}" stepKey="fillTermNameFilter"/>
         <click selector="{{AdminTermGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <see selector="{{AdminTermGridSection.firstRowConditionName}}" userInput="{{termName}}" stepKey="assertTermInGrid"/>
     </actionGroup>
 </actionGroups>
