@@ -14,13 +14,13 @@
             <stories value="MAGETWO-91559 - Static blocks with same ID appear in place of correct block"/>
             <title value="Check static blocks: ID should be unique per Store View"/>
             <description value="Check static blocks: ID should be unique per Store View"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94229"/>
             <group value="Cms"/>
         </annotations>
         <before>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
                 <argument name="websiteCode" value="second_website"/>

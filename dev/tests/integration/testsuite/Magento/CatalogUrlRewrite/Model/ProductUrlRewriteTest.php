@@ -85,6 +85,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'sku' => 'test-product',
                         'name' => 'test product',
                         'price' => 150,
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [
                         [
@@ -104,6 +105,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'name' => 'test product',
                         'price' => 150,
                         'url_key' => 'test-product-url-key',
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [
                         [
@@ -123,6 +125,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'name' => 'test product',
                         'price' => 150,
                         'url_key' => 'test-product-url-key',
+                        'website_ids' => [1]
                     ],
                     'expected_data' => [],
                 ],

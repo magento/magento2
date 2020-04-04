@@ -23,7 +23,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>

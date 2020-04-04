@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set carriers/tablerate/active 1"  stepKey="setShippingMethodEnabled"/>
             <magentoCLI command="config:set carriers/tablerate/condition_name package_value"  stepKey="setShippingMethodConditionName"/>

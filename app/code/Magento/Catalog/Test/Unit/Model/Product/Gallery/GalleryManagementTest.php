@@ -59,6 +59,7 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
                 'getCustomAttribute',
                 'getMediaGalleryEntries',
                 'setMediaGalleryEntries',
+                'getMediaAttributes',
             ]
         );
         $this->mediaGalleryEntryMock =
@@ -99,6 +100,9 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $entryContentMock = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
@@ -107,6 +111,10 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(true);
+
+        $this->productMock->expects($this->any())
+            ->method('getMediaAttributes')
+            ->willReturn(['small_image' => $attributeMock]);
 
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Exception());
@@ -132,6 +140,8 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
             ->willReturn(true);
+
+        $this->mediaGalleryEntryMock->expects($this->any())->method('getTypes')->willReturn(['small_image']);
 
         $newEntryMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $newEntryMock->expects($this->exactly(2))->method('getId')->willReturn(42);

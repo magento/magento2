@@ -28,7 +28,7 @@
                 <field key="quantity">500</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

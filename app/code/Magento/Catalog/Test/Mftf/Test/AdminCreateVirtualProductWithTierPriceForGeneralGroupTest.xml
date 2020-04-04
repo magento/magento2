@@ -22,7 +22,7 @@
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
             <createData entity="Simple_US_CA_Customer" stepKey="customer" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="categoryEntity" stepKey="deleteSimpleSubCategory"/>

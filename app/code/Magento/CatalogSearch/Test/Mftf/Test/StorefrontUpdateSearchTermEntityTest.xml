@@ -48,7 +48,7 @@
             <argument name="phrase" value="$$createProduct1.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

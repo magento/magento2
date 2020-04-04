@@ -20,7 +20,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig"/>
         </before>
         <after>
