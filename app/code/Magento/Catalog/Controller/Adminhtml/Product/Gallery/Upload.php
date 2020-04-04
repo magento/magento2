@@ -5,15 +5,24 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Image\UploadResizeConfigInterface;
+use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Class Upload
  */
-class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Upload extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -23,7 +32,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
@@ -38,57 +47,68 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     ];
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory
+     * @var AdapterFactory
      */
     private $adapterFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config
+     * @var Config
      */
     private $productMediaConfig;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
+     * @var UploadResizeConfigInterface
+     */
+    private $imageUploadConfig;
+
+    /**
+     * @param Context $context
+     * @param RawFactory $resultRawFactory
+     * @param AdapterFactory $adapterFactory
+     * @param Filesystem $filesystem
+     * @param Config $productMediaConfig
+     * @param UploadResizeConfigInterface|null $imageUploadConfig
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Image\AdapterFactory $adapterFactory = null,
-        \Magento\Framework\Filesystem $filesystem = null,
-        \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
+        Context $context,
+        RawFactory $resultRawFactory,
+        AdapterFactory $adapterFactory = null,
+        Filesystem $filesystem = null,
+        Config $productMediaConfig = null,
+        UploadResizeConfigInterface $imageUploadConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->adapterFactory = $adapterFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Image\AdapterFactory::class);
+            ->get(AdapterFactory::class);
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Filesystem::class);
+            ->get(Filesystem::class);
         $this->productMediaConfig = $productMediaConfig ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+            ->get(Config::class);
+        $this->imageUploadConfig = $imageUploadConfig
+            ?: ObjectManager::getInstance()->get(UploadResizeConfigInterface::class);
     }
 
     /**
      * Upload image(s) to the product gallery.
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
         try {
+            /** @var Uploader $uploader */
             $uploader = $this->_objectManager->create(
-                \Magento\MediaStorage\Model\File\Uploader::class,
+                Uploader::class,
                 ['fileId' => 'image']
             );
             $uploader->setAllowedExtensions($this->getAllowedExtensions());
+            /** @var \Magento\Framework\Image\Adapter\AdapterInterface $imageAdapter */
             $imageAdapter = $this->adapterFactory->create();
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
@@ -97,6 +117,14 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             $result = $uploader->save(
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
+
+            list($imageWidth, $imageHeight) = getimagesize($result["path"] . $result["file"]);
+            if ($imageHeight > $this->getImageUploadMaxHeight() || $imageWidth > $this->getImageUploadMaxHeight()) {
+                $imageAdapter->open($result["path"] . $result["file"]);
+                $imageAdapter->keepAspectRatio(true);
+                $imageAdapter->resize($this->getImageUploadMaxWidth(), $this->getImageUploadMaxHeight());
+                $imageAdapter->save();
+            }
 
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',
@@ -108,11 +136,11 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
 
             $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
 
-        /** @var \Magento\Framework\Controller\Result\Raw $response */
+        /** @var Raw $response */
         $response = $this->resultRawFactory->create();
         $response->setHeader('Content-type', 'text/plain');
         $response->setContents(json_encode($result));
@@ -128,4 +156,25 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     {
         return array_keys($this->allowedMimeTypes);
     }
+
+    /**
+     * Get Image Upload Maximum Width Config.
+     *
+     * @return int
+     */
+    private function getImageUploadMaxWidth()
+    {
+        return $this->imageUploadConfig->getMaxWidth();
+    }
+
+    /**
+     * Get Image Upload Maximum Height Config.
+     *
+     * @return int
+     */
+    private function getImageUploadMaxHeight()
+    {
+        return $this->imageUploadConfig->getMaxHeight();
+    }
+
 }
