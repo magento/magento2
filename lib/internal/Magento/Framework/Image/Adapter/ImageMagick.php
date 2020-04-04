@@ -514,8 +514,6 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     {
         $colorspace = $this->_imageHandler->getColorspace();
         switch ($colorspace) {
-            case \Imagick::COLORSPACE_RGB:
-                return;
             case \Imagick::COLORSPACE_CMYK:
             case \Imagick::COLORSPACE_UNDEFINED:
                 $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
