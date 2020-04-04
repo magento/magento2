@@ -30,9 +30,9 @@
 
 <div
     class="message message-success"
-    ng-show="testConnection.result.success && testConnection.pressed"
+    ng-show="testConnection.result.success && testConnection.result !== undefined"
     >
-    <span class="message-text">Test connection successful.</span>
+    <span class="message-text">Test connection successful. Please wait...</span>
 </div>
 <div
     class="message message-error"
@@ -45,6 +45,14 @@
     ng-show="testConnection.failed !== undefined"
     >
     <span class="message-text">{{testConnection.failed}}</span>
+</div>
+
+<div class="message message-spinner" ng-show="loading">
+    <span class="spinner">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </span>
+    <span class="message-text">Checking database connection...</span>
 </div>
 
 <form

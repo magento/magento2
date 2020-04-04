@@ -19,15 +19,18 @@ angular.module('add-database', ['ngStorage'])
         }
 
         $scope.testConnection = function () {
+            $scope.loading = true;
             $http.post('index.php/database-check', $scope.db)
                 .then(function successCallback(resp) {
                     $scope.testConnection.result = resp.data;
 
                     if ($scope.testConnection.result.success) {
+                        $scope.loading = false;
                         $scope.nextState();
                     }
                 }, function errorCallback(resp) {
                     $scope.testConnection.failed = resp.data;
+                    $scope.loading = false;
                 });
         };
 
