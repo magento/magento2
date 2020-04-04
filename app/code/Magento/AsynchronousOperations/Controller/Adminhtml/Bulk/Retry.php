@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\App\Action;
-use Magento\AsynchronousOperations\Model\AccessValidator;
+use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
@@ -29,9 +29,9 @@ class Retry extends Action
     private $notificationManagement;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\AccessValidator
+     * @var AccessManager
      */
-    private $accessValidator;
+    private $accessManager;
 
     /**
      * Retry constructor.
@@ -39,18 +39,18 @@ class Retry extends Action
      * @param Context $context
      * @param BulkManagement $bulkManagement
      * @param BulkNotificationManagement $notificationManagement
-     * @param AccessValidator $accessValidator
+     * @param AccessManager $accessManager
      */
     public function __construct(
         Context $context,
         BulkManagement $bulkManagement,
         BulkNotificationManagement $notificationManagement,
-        AccessValidator $accessValidator
+        AccessManager $accessManager
     ) {
         parent::__construct($context);
         $this->bulkManagement = $bulkManagement;
         $this->notificationManagement = $notificationManagement;
-        $this->accessValidator = $accessValidator;
+        $this->accessManager = $accessManager;
     }
 
     /**
@@ -58,8 +58,7 @@ class Retry extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')
-            && $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
+        return $this->accessManager->isAllowedForBulkUuid($this->getRequest()->getParam('uuid'));
     }
 
     /**

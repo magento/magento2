@@ -6,15 +6,18 @@
 
 namespace Magento\AsynchronousOperations\Ui\Component\AdminNotification;
 
+use Magento\AdminNotification\Ui\Component\DataProvider\DataProvider;
+use Magento\AsynchronousOperations\Model\AccessManager;
+
 /**
  * Class Plugin to eliminate Bulk related links in the notification area
  */
 class Plugin
 {
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AccessManager
      */
-    private $authorization;
+    private $accessManager;
 
     /**
      * @var bool
@@ -23,30 +26,29 @@ class Plugin
 
     /**
      * Plugin constructor.
-     * @param \Magento\Framework\AuthorizationInterface $authorization
+     *
+     * @param AccessManager $accessManager
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization
+        AccessManager $accessManager
     ) {
-        $this->authorization = $authorization;
+        $this->accessManager = $accessManager;
     }
 
     /**
      * Prepares Meta
      *
-     * @param \Magento\AdminNotification\Ui\Component\DataProvider\DataProvider $dataProvider
+     * @param DataProvider $dataProvider
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetMeta(
-        \Magento\AdminNotification\Ui\Component\DataProvider\DataProvider $dataProvider,
+        DataProvider $dataProvider,
         $result
     ) {
         if (!isset($this->isAllowed)) {
-            $this->isAllowed = $this->authorization->isAllowed(
-                'Magento_Logging::system_magento_logging_bulk_operations'
-            );
+            $this->isAllowed = $this->accessManager->isOwnActionsAllowed();
         }
         $result['columns']['arguments']['data']['config']['isAllowed'] = $this->isAllowed;
         return $result;
