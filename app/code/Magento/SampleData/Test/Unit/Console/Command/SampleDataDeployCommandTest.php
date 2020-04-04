@@ -140,7 +140,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      *
      * @return array
      */
-    public function processDataProvider()
+    public function processDataProvider(): array
     {
         return [
             'No sample data found' => [
@@ -195,12 +195,14 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Error in writing Auth file path/to/auth.json. Please check permissions for writing.
      * @return void
      */
-    public function testExecuteWithException()
+    public function testExecuteWithException(): void
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Error in writing Auth file path/to/auth.json. Please check permissions for writing.'
+        );
         $this->directoryReadMock->expects($this->once())
             ->method('readFile')
             ->with('composer.json')
@@ -263,7 +265,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     protected function expectedComposerArgumentsSampleDataCommands(
         array $sampleDataPackages,
         string $pathToComposerJson
-    ) : array {
+    ): array {
         return [
             'command' => 'require',
             '--working-dir' => $pathToComposerJson,

@@ -77,7 +77,7 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
      *
      * @return array
      */
-    public function processDataProvider()
+    public function processDataProvider(): array
     {
         return [
             'No sample data found in require' => [
