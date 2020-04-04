@@ -125,6 +125,45 @@
         </div>
     </fieldset>
 
+    <div
+        class="message message-error"
+        ng-show="store.errorMessage !== ''&& store.errorMessage !== false"
+    >
+        <div class="message-text">
+            <p>
+                An error has occurred.
+                <a href="#"
+                   ng-click="expandError()"
+                   ng-class="{'expanded' : store.errorFlag}"
+                >
+                    {{store.errorFlag ? 'Hide' : 'Show';}} details
+                </a>
+            </p>
+            <p ng-show="store.errorMessage !== '' && store.errorFlag === true"
+               ng-bind-html="store.errorMessage">
+            </p>
+            <p class="advanced-modules-skip">
+                <input id="skipDependency"
+                       class="form-el-checkbox"
+                       type="checkbox"
+                       ng-model="store.force"
+                       ng-click="toggleForce()"
+                >
+                <label class="form-label" for="skipDependency">
+                    Skip dependency check for individual modules
+                </label>
+            </p>
+        </div>
+    </div>
+
+    <div class="message message-spinner" ng-show="loading">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+        <span class="message-text">Validating Constraints for enabling/disabling modules...</span>
+    </div>
+
     <fieldset class="form-fieldset customize-your-store-advanced" ng-show="store.showModulesControl">
         <legend
             class="form-legend-expand"
@@ -135,45 +174,6 @@
         </legend>
 
         <div ng-show="store.advanced.expanded">
-
-            <div
-                class="message message-error"
-                ng-show="store.errorMessage !== ''&& store.errorMessage !== false"
-                >
-                <div class="message-text">
-                    <p>
-                        An error has occurred.
-                        <a href="#"
-                           ng-click="expandError()"
-                           ng-class="{'expanded' : store.errorFlag}"
-                           >
-                            {{store.errorFlag ? 'Hide' : 'Show';}} details
-                        </a>
-                    </p>
-                    <p ng-show="store.errorMessage !== '' && store.errorFlag === true"
-                       ng-bind-html="store.errorMessage">
-                    </p>
-                    <p class="advanced-modules-skip">
-                        <input id="skipDependency"
-                               class="form-el-checkbox"
-                               type="checkbox"
-                               ng-model="store.force"
-                               ng-click="toggleForce()"
-                               >
-                        <label class="form-label" for="skipDependency">
-                            Skip dependency check for individual modules
-                        </label>
-                    </p>
-                </div>
-            </div>
-
-            <div class="message message-spinner" ng-show="loading">
-                <span class="spinner">
-                    <span></span><span></span><span></span><span></span>
-                    <span></span><span></span><span></span><span></span>
-                </span>
-                <span class="message-text">Validating Constraints for enabling/disabling modules...</span>
-            </div>
 
             <p class="advanced-modules-select">
                 <input id="selectAll" type="checkbox"
