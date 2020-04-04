@@ -12,7 +12,6 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
 
 /**
@@ -51,11 +50,6 @@ class Plugin
     private $bulkNotificationManagement;
 
     /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
      * @var StatusMapper
      */
     private $statusMapper;
@@ -68,7 +62,6 @@ class Plugin
      * @param BulkNotificationManagement $bulkNotificationManagement
      * @param UserContextInterface $userContext
      * @param Details $operationDetails
-     * @param AuthorizationInterface $authorization
      * @param StatusMapper $statusMapper
      * @param AccessManager $accessManager;
      */
@@ -78,7 +71,6 @@ class Plugin
         BulkNotificationManagement $bulkNotificationManagement,
         UserContextInterface $userContext,
         Details $operationDetails,
-        AuthorizationInterface $authorization,
         StatusMapper $statusMapper,
         AccessManager $accessManager
     ) {
@@ -87,7 +79,6 @@ class Plugin
         $this->userContext = $userContext;
         $this->operationDetails = $operationDetails;
         $this->bulkNotificationManagement = $bulkNotificationManagement;
-        $this->authorization = $authorization;
         $this->statusMapper = $statusMapper;
         $this->accessManager = $accessManager;
     }

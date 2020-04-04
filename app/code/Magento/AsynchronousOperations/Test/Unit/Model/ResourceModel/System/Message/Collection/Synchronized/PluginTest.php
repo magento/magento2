@@ -10,7 +10,6 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
-use Magento\Framework\AuthorizationInterface;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 
 /**
@@ -53,11 +52,6 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $authorizationMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $messageMock;
 
     /**
@@ -69,6 +63,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $statusMapper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $accessManager;
 
     /**
      * @var string
@@ -85,29 +84,28 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->operationsDetailsMock = $this->createMock(Details::class);
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->messageMock = $this->createMock(\Magento\AdminNotification\Model\System\Message::class);
         $this->collectionMock = $this->createMock(Synchronized::class);
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
         $this->statusMapper = $this->createMock(\Magento\AsynchronousOperations\Model\StatusMapper::class);
+        $this->accessManager = $this->createMock(\Magento\AsynchronousOperations\Model\AccessManager::class);
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
             $this->bulkNotificationMock,
             $this->userContextMock,
             $this->operationsDetailsMock,
-            $this->authorizationMock,
-            $this->statusMapper
+            $this->statusMapper,
+            $this->accessManager
         );
     }
 
     public function testAfterToArrayIfNotAllowed()
     {
         $result = [];
-        $this->authorizationMock
+        $this->accessManager
             ->expects($this->once())
-            ->method('isAllowed')
-            ->with($this->resourceName)
+            ->method('isOwnActionsAllowed')
             ->willReturn(false);
         $this->assertEquals($result, $this->plugin->afterToArray($this->collectionMock, $result));
     }
@@ -136,10 +134,9 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $bulkMock->expects($this->once())->method('getDescription')->willReturn('Bulk Description');
         $this->messagefactoryMock->expects($this->once())->method('create')->willReturn($this->messageMock);
         $this->messageMock->expects($this->once())->method('toArray')->willReturn($bulkArray);
-        $this->authorizationMock
+        $this->accessManager
             ->expects($this->once())
-            ->method('isAllowed')
-            ->with($this->resourceName)
+            ->method('isOwnActionsAllowed')
             ->willReturn(true);
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
         $this->bulkNotificationMock
@@ -148,7 +145,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->with($userId)
             ->willReturn([]);
         $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
-        $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
+        $this->bulkStatusMock->expects($this->once())->method('getBulksByUserAndType')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
         $this->assertEquals(2, $result2['totalRecords']);
     }

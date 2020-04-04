@@ -6,24 +6,27 @@
 namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\AdminNotification;
 
 use Magento\Framework\AuthorizationInterface;
+use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\AdminNotification\Ui\Component\DataProvider\DataProvider;
+use Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin;
 
 class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin
+     * @var Plugin
      */
     private $plugin;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $authorizationMock;
+    private $accessManagerMock;
 
     protected function setUp()
     {
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
-        $this->plugin = new \Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin(
-            $this->authorizationMock
+        $this->accessManagerMock = $this->createMock(AccessManager::class);
+        $this->plugin = new Plugin(
+            $this->accessManagerMock
         );
     }
 
@@ -41,8 +44,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $dataProviderMock = $this->createMock(\Magento\AdminNotification\Ui\Component\DataProvider\DataProvider::class);
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
+        $dataProviderMock = $this->createMock(DataProvider::class);
+        $this->accessManagerMock->expects($this->once())->method('isOwnActionsAllowed')->willReturn(true);
         $this->assertEquals($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));
     }
 }
