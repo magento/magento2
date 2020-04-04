@@ -6,10 +6,13 @@
 
 namespace Magento\Framework\Session\Config\Validator;
 
+/**
+ * Session cookie domain validator
+ */
 class CookieDomainValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isValid($value)
     {
@@ -19,7 +22,7 @@ class CookieDomainValidator extends \Magento\Framework\Validator\AbstractValidat
             return false;
         }
 
-        $validator = new \Zend\Validator\Hostname(\Zend\Validator\Hostname::ALLOW_ALL);
+        $validator = new \Laminas\Validator\Hostname(\Laminas\Validator\Hostname::ALLOW_ALL);
 
         if (!empty($value) && !$validator->isValid($value)) {
             $this->_addMessages($validator->getMessages());

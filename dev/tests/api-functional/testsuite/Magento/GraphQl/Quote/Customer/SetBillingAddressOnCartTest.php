@@ -858,7 +858,7 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
-        self::assertCount(1, $addresses);
+        self::assertCount(0, $addresses);
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
 
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -866,6 +866,171 @@ QUERY;
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertNewAddressFields($billingAddressResponse);
 
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+         address: {
+          firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "88776"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: true
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        self::assertCount(1, $addresses);
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressWithDefaultValueOfSaveInAddressBookAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+         address: {
+          firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "88776"
+            country_code: "US"
+            telephone: "88776655"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        $this->assertCount(1, $addresses);
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         foreach ($addresses as $address) {
             $this->customerAddressRepository->delete($address);
         }
@@ -1110,5 +1275,89 @@ QUERY;
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $shippingMethodCode
+     * @param string $shippingCarrierCode
+     * @return string
+     */
+    private function getSetShippingMethodsQuery(
+        string $maskedQuoteId,
+        string $shippingMethodCode,
+        string $shippingCarrierCode
+    ): string {
+        return <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:
+    {
+      cart_id: "$maskedQuoteId",
+      shipping_methods: [{
+        carrier_code: "$shippingCarrierCode"
+        method_code: "$shippingMethodCode"
+      }]
+    }) {
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+          method_code
+          carrier_title
+          method_title
+          amount {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $methodCode
+     * @return string
+     */
+    private function getSetPaymentMethodQuery(
+        string $maskedQuoteId,
+        string $methodCode
+    ) : string {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$maskedQuoteId"
+      payment_method: {
+          code: "$methodCode"
+      }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPlaceOrderQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerDashboardAccountInformationSection">
+        <element name="ContactInformation" type="textarea" selector=".box.box-information .box-content"/>
+        <element name="edit" type="block" selector=".action.edit" timeout="15"/>
+        <element name="changePassword" type="block" selector=".action.change-password" timeout="15"/>
+        <element name="editLink" type="text" selector=".box-information .edit"/>
+    </section>
+</sections>

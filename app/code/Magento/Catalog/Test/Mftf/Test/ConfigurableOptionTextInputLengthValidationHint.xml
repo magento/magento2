@@ -14,7 +14,7 @@
             <stories value="Customizable text option input-length validation hint changes dynamically"/>
             <title value="You should have a dynamic length validation hint when using text option has max char limit"/>
             <description value="You should have a dynamic length validation hint when using text option has max char limit"/>
-            <severity value="MINOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92229"/>
             <group value="product"/>
         </annotations>
@@ -26,7 +26,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminCreateSimpleProductWithTextOptionCharLimitActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>

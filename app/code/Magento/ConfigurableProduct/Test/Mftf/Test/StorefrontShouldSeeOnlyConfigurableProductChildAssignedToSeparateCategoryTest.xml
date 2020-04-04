@@ -84,7 +84,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
         </before>
 
         <after>
@@ -101,7 +101,7 @@
         </after>
 
         <!-- Go to the product page for the first product -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openConfigChildProduct1Page">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigChildProduct1Page">
             <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
         </actionGroup>
 

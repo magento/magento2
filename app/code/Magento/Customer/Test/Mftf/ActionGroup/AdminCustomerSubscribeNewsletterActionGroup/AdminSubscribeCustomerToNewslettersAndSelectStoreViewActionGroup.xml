@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSubscribeCustomerToNewslettersAndSelectStoreView" extends="AdminSubscribeCustomerToNewsletters">
+        <annotations>
+            <description>Set checkbox "Newsletter subscribed" and select Store View on "Newsletter" tab on customer edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeView"/>
+        </arguments>
+        <selectOption selector="{{AdminEditCustomerNewsletterSection.subscribedStore(websiteId)}}" userInput="{{storeView.name}}" stepKey="selectSubscribeStoreView" after="subscribeToNewsletter"/>
+    </actionGroup>
+</actionGroups>
