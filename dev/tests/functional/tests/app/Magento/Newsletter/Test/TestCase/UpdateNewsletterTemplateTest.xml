@@ -16,6 +16,7 @@
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterSuccessCreateMessage" />
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterInGrid" />
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterForm" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>

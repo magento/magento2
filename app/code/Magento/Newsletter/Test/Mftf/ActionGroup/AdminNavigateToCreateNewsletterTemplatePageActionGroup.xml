@@ -8,8 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
-    <!--Click "Add New Template" button-->
     <actionGroup name="AdminNavigateToCreateNewsletterTemplatePageActionGroup">
         <click stepKey="clickAddNewTemplateButton" selector="{{AdminNewsletterGridMainActionsSection.add}}"/>
         <waitForPageLoad stepKey="waitForNewNewsletterTemplatesPageLoaded"/>

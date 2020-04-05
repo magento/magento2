@@ -8,8 +8,6 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
-    <!--Open Newsletter Template -->
     <actionGroup name="AdminMarketingOpenNewsletterTemplateFromGridActionGroup">
         <click stepKey="openTemplate" selector="{{AdminNewsletterGridMainActionsSection.searchResultFirstRow}}"/>
     </actionGroup>
