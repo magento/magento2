@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
@@ -62,7 +66,7 @@ class EmailTemplateTest extends AbstractController
     }
 
     /**
-     * @covers Magento_Customer::view/frontend/email/change_email.html
+     * Covers Magento_Customer::view/frontend/email/change_email.html
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/captcha/enable 0
@@ -86,7 +90,7 @@ class EmailTemplateTest extends AbstractController
     }
 
     /**
-     * @covers Magento_Customer::view/frontend/email/change_email_and_password.html
+     * Covers Magento_Customer::view/frontend/email/change_email_and_password.html
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/captcha/enable 0
@@ -113,7 +117,7 @@ class EmailTemplateTest extends AbstractController
     }
 
     /**
-     * @covers Magento_Customer::view/frontend/email/change_password.html
+     * Covers Magento_Customer::view/frontend/email/change_password.html
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/captcha/enable 0
