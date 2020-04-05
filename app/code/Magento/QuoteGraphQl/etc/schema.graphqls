@@ -20,7 +20,7 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
-    mergeCarts(source_cart_id: String!, destination_cart_id: String!): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
+    mergeCarts(input: MergeCartsInput): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -128,6 +128,11 @@ input ShippingMethodInput {
 input SetPaymentMethodAndPlaceOrderInput {
     cart_id: String!
     payment_method: PaymentMethodInput!
+}
+
+input MergeCartsInput {
+    source_cart_id: String!
+    destination_cart_id: String!
 }
 
 input PlaceOrderInput {

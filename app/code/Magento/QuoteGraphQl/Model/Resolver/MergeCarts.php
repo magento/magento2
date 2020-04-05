@@ -48,11 +48,11 @@ class MergeCarts implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (empty($args['source_cart_id'])) {
+        if (empty($args['input']['source_cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "source_cart_id" is missing'));
         }
 
-        if (empty($args['destination_cart_id'])) {
+        if (empty($args['input']['destination_cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "destination_cart_id" is missing'));
         }
 
@@ -61,8 +61,8 @@ class MergeCarts implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
-        $guestMaskedCartId = $args['source_cart_id'];
-        $customerMaskedCartId = $args['destination_cart_id'];
+        $guestMaskedCartId = $args['input']['source_cart_id'];
+        $customerMaskedCartId = $args['input']['destination_cart_id'];
 
         $currentUserId = $context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
