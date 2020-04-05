@@ -147,7 +147,10 @@ class QueueTest extends TestCase
         $this->queue->setQueueStatus(1);
         $this->queue->setQueueStartAt(1);
         $this->subscribersCollectionMock->expects($this->once())->method('getQueueJoinedFlag')->willReturn(false);
-        $this->subscribersCollectionMock->expects($this->once())->method('useQueue')->with($this->queue)->willReturnSelf();
+        $this->subscribersCollectionMock->expects($this->once())
+            ->method('useQueue')
+            ->with($this->queue)
+            ->willReturnSelf();
         $this->subscribersCollectionMock->expects($this->once())->method('getSize')->willReturn(0);
         $this->dateMock->expects($this->once())->method('gmtDate')->willReturn('any_date');
 

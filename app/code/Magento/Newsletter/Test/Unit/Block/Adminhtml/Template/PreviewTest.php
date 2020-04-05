@@ -20,7 +20,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-
 /**
  * @covers \Magento\Newsletter\Block\Adminhtml\Template\Preview
  */
