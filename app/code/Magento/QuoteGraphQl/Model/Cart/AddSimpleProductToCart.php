@@ -14,9 +14,10 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
- * Add simple product to cart
+ * Adds simple product to cart while checking if it is not disabled
  */
 class AddSimpleProductToCart
 {
@@ -58,6 +59,22 @@ class AddSimpleProductToCart
             $product = $this->productRepository->get($sku, false, null, true);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
+        }
+
+        if (!empty($cartItemData['parent_sku'])) {
+            try {
+                $childSku = $cartItemData['data']['sku'];
+                $childProduct = $this->productRepository->get($childSku);
+            } catch (NoSuchEntityException $e) {
+                throw new GraphQlNoSuchEntityException(
+                    __('Could not find a product with SKU "%sku"', ['sku' => $childSku])
+                );
+            }
+            if ($childProduct->getStatus() == Status::STATUS_DISABLED) {
+                throw new GraphQlNoSuchEntityException(
+                    __('The product with SKU "%sku" is disabled.', ['sku' => $childSku])
+                );
+            }
         }
 
         try {
