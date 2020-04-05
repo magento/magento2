@@ -11,6 +11,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
+use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver as FrontendCollectTotalsObserver;
 
 /**
  * Handle customer VAT number on collect_totals_before event of quote address.
@@ -18,45 +19,8 @@ use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CollectTotalsObserver implements ObserverInterface
+class CollectTotalsObserver extends FrontendCollectTotalsObserver implements ObserverInterface
 {
-    /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $customerSession;
-
-    /**
-     * @var \Magento\Customer\Helper\Address
-     */
-    protected $customerAddressHelper;
-
-    /**
-     * @var \Magento\Customer\Model\Vat
-     */
-    protected $customerVat;
-
-    /**
-     * @var VatValidator
-     */
-    protected $vatValidator;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
-     */
-    protected $customerDataFactory;
-
-    /**
-     * Group Management
-     *
-     * @var \Magento\Customer\Api\GroupManagementInterface
-     */
-    protected $groupManagement;
-
     /**
      * @var State
      */
@@ -84,78 +48,34 @@ class CollectTotalsObserver implements ObserverInterface
         \Magento\Customer\Model\Session $customerSession,
         State $state
     ) {
-        $this->customerVat = $customerVat;
-        $this->customerAddressHelper = $customerAddressHelper;
-        $this->vatValidator = $vatValidator;
-        $this->customerDataFactory = $customerDataFactory;
-        $this->groupManagement = $groupManagement;
-        $this->addressRepository = $addressRepository;
-        $this->customerSession = $customerSession;
+        parent::__construct(
+            $customerAddressHelper,
+            $customerVat,
+            $vatValidator,
+            $customerDataFactory,
+            $groupManagement,
+            $addressRepository,
+            $customerSession
+        );
         $this->state = $state;
     }
 
     /**
-     * Handle customer VAT number if needed on collect_totals_before event of quote address
+     * Conditions to change customer group
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param int|null $groupId
+     * @return bool
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function assignCustomerGroupConditions($groupId)
     {
-        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
-        $shippingAssignment = $observer->getShippingAssignment();
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $observer->getQuote();
-        /** @var \Magento\Quote\Model\Quote\Address $address */
-        $address = $shippingAssignment->getShipping()->getAddress();
-
-        $customer = $quote->getCustomer();
-        $storeId = $customer->getStoreId();
-
-        if ($customer->getDisableAutoGroupChange()
-            || false == $this->vatValidator->isEnabled($address, $storeId)
-        ) {
-            return;
-        }
-        $customerCountryCode = $address->getCountryId();
-        $customerVatNumber = $address->getVatId();
-
-        /** try to get data from customer if quote address needed data is empty */
-        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) {
-            $customerAddress = $this->addressRepository->getById($customer->getDefaultShipping());
-
-            $customerCountryCode = $customerAddress->getCountryId();
-            $customerVatNumber = $customerAddress->getVatId();
-            $address->setCountryId($customerCountryCode);
-            $address->setVatId($customerVatNumber);
-        }
-
-        $groupId = null;
-        if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
-            $groupId = $customer->getId() ? $this->groupManagement->getDefaultGroup(
-                $storeId
-            )->getId() : $this->groupManagement->getNotLoggedInGroup()->getId();
-        } else {
-            // Magento always has to emulate group even if customer uses default billing/shipping address
-            $groupId = $this->customerVat->getCustomerGroupIdBasedOnVatNumber(
-                $customerCountryCode,
-                $this->vatValidator->validate($address, $storeId),
-                $storeId
-            );
-        }
-
-        // Do not update customer group as not logged in when doing process in admin area
         if ($groupId !== null
             && !(
                 $this->state->getAreaCode() == Area::AREA_ADMINHTML
                 && $groupId == $this->groupManagement->getNotLoggedInGroup()->getId()
             )) {
-            $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
-            $quote->setCustomerGroupId($groupId);
-            $this->customerSession->setCustomerGroupId($groupId);
-            $customer->setGroupId($groupId);
-            $quote->setCustomer($customer);
+            return true;
         }
+
+        return false;
     }
 }

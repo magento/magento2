@@ -131,12 +131,23 @@ class CollectTotalsObserver implements ObserverInterface
             );
         }
 
-        if ($groupId !== null) {
+        if ($this->assignCustomerGroupConditions($groupId)) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }
+    }
+
+    /**
+     * Conditions to change customer group
+     *
+     * @param int|null $groupId
+     * @return bool
+     */
+    public function assignCustomerGroupConditions($groupId)
+    {
+        return $groupId !== null ? true : false;
     }
 }

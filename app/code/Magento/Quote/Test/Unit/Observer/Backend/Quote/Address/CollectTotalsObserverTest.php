@@ -13,6 +13,7 @@ use Magento\Framework\App\State;
  * Class CollectTotalsTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 {
