@@ -7,8 +7,9 @@ define([
     'uiComponent',
     'jquery',
     'underscore',
+    'Magento_ConfigurableProduct/js/components/associted_product_list',
     'mage/translate'
-], function (Component, $, _) {
+], function (Component, $, _, productList ) {
     'use strict';
 
     /**
@@ -23,24 +24,30 @@ define([
     return Component.extend({
         attributesLabels: {},
         stepInitialized: false,
+        attributesCode: {},
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
-                attributeProvider: '${ $.providerName }'
+                attributeProvider: '${ $.providerName }',
+                variationsComponent: '${ $.variationsComponent }',
+                modalComponent: '${ $.modalComponent }'
             },
             listens: {
-                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
+                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels doSelectedAttributesCodes doShowAddProductButton',
                 '${ $.multiselectName }:rows': 'doSelectSavedAttributes'
             },
             notificationMessage: {
                 text: null,
                 error: null
             },
-            selectedAttributes: []
+            selectedAttributes: [],
+            attributes: [],
+            disabledButton : true
         },
 
         /** @inheritdoc */
         initialize: function () {
+            console.log("ggg");
             this._super();
             this.selected = [];
 
@@ -49,7 +56,7 @@ define([
 
         /** @inheritdoc */
         initObservable: function () {
-            this._super().observe(['selectedAttributes']);
+            this._super().observe('selectedAttributes attributes disabledButton');
 
             return this;
         },
@@ -115,6 +122,54 @@ define([
         },
 
         /**
+         * @param {*} selected
+         */
+        doSelectedAttributesCodes: function (selected) {
+            var code = [];
+            this.selected = selected;
+            _.each(selected, function (attributeId) {
+                var attribute;
+
+                if (!this.attributesCode[attributeId]) {
+                    attribute = _.findWhere(this.multiselect().rows(), {
+                        'attribute_id': attributeId
+                    });
+                    if (attribute) {
+                        var chosen = {
+                            'id': attribute.attribute_id,
+                            'attribute_code': attribute.attribute_code,
+                            'attribute_label': attribute.frontend_label,
+                            'label': '',
+                            'value': '0'
+                        }
+                        var chose = [];
+                        chose.push(chosen);
+                        var newatrr =  {
+                            'id': attribute.attribute_id,
+                            'code': attribute.attribute_code,
+                            'label': attribute.frontend_label,
+                            'chosen': chose,
+                            'position': 0
+                        }
+                        this.attributesCode[attribute['attribute_id']] = newatrr;
+                    }
+                }
+                code.push(this.attributesCode[attributeId]);
+
+            }.bind(this));
+            this.attributes(code);
+        },
+
+        doShowAddProductButton: function (selected) {
+            if(selected.length > 0){
+                this.disabledButton(false);
+            }else{
+                this.disabledButton(true);
+            }
+        },
+
+
+        /**
          * @param {Object} wizard
          */
         force: function (wizard) {
@@ -130,6 +185,13 @@ define([
          * Back.
          */
         back: function () {
+        },
+
+        addProductManualy: function (data, event) {
+            productList().isShowAddProductButton(true);
+            this.variationsComponent().render(null, this.attributes());
+            this.modalComponent().closeModal();
+            $("[data-index='add_products_manually_button']").trigger('click');
         }
     });
 });

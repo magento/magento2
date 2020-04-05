@@ -24,6 +24,7 @@ class ConfigurablePanel extends AbstractModifier
     const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
     const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
     const CONFIGURABLE_MATRIX = 'configurable-matrix';
+    const SHOW_PRODUCT_LISTING = 'show_product_listing';
 
     /**
      * @var string
@@ -255,6 +256,29 @@ class ConfigurablePanel extends AbstractModifier
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
             'configurable-matrix' => $this->getGrid(),
+            'show_product_listing' => $this->getProductListing(),
+        ];
+    }
+
+
+    /**
+     * Returns dynamic rows configuration
+     *
+     * @return array
+     */
+    protected function getProductListing()
+    {
+        return [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'label' => __('Show Button'),
+                        'componentType' => Container::NAME,
+                        'component' => 'Magento_ConfigurableProduct/js/components/associted_product_list',
+                    ],
+                ],
+            ],
+            'children' => $this->getRows(),
         ];
     }
 
@@ -313,7 +337,7 @@ class ConfigurablePanel extends AbstractModifier
                                 'sortOrder' => 10,
                                 'imports' => [
                                     'visible' => 'ns = ${ $.ns }, index = '
-                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isShowAddProductButton',
+                                        . ConfigurablePanel::SHOW_PRODUCT_LISTING . ':isShowAddProductButton',
                                 ],
                             ],
                         ],

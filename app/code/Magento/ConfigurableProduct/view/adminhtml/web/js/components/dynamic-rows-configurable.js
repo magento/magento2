@@ -7,8 +7,9 @@ define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/dynamic-rows/dynamic-rows',
+    'Magento_ConfigurableProduct/js/components/associted_product_list',
     'jquery'
-], function (_, registry, dynamicRows, $) {
+], function (_, registry, dynamicRows, productList , $) {
     'use strict';
 
     return dynamicRows.extend({
@@ -207,7 +208,7 @@ define([
                 attributeCodes = this.source.get('data.attribute_codes');
 
             this.isEmpty(data.length === 0);
-            this.isShowAddProductButton(
+            productList().isShowAddProductButton(
                 (!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) > 0
             );
 
