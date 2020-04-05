@@ -170,9 +170,10 @@ class EmailTemplateTest extends AbstractController
         $emailDom->loadHTML($messageContent);
 
         $emailXpath = new \DOMXPath($emailDom);
-        $greeting = $emailXpath->query('//p[@class="greeting"]')->item(0);
+        $greeting = $emailXpath->query('//p[@class="greeting"]');
 
-        $this->assertSame($expectedGreeting, $greeting->textContent);
+        $this->assertSame(1, $greeting->length);
+        $this->assertSame($expectedGreeting, $greeting->item(0)->textContent);
     }
 
     /**
