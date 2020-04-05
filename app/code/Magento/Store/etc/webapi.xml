@@ -32,7 +32,7 @@
     </route>
 
     <!-- Store Config -->
-    <route url="/V1/store/storeConfigs" method="GET">
+    <route url="/V1/store/storeConfigs" method="POST">
         <service class="Magento\Store\Api\StoreConfigManagerInterface" method="getStoreConfigs"/>
         <resources>
             <resource ref="Magento_Backend::store"/>

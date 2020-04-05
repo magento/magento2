@@ -460,9 +460,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if ($isArrayType && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
         }
-        if ($isArrayType && is_string($data)) {
-            $data = explode(',', $data);
-        }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
             $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
         } else {
