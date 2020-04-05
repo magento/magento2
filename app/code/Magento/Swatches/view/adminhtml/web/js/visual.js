@@ -12,11 +12,12 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
-    'jquery/colorpicker/js/colorpicker',
+    'underscore',
+    'spectrum',
     'prototype',
     'jquery/ui',
     'validation'
-], function (jQuery, mageTemplate, rg) {
+], function (jQuery, mageTemplate, rg, _) {
     'use strict';
 
     return function (config) {
@@ -71,46 +72,57 @@ define([
                 },
 
                 /**
-                 * ColorPicker initialization process
+                 * Spectrum ColorPicker initialization process
                  */
                 initColorPicker: function () {
-                    var element = this,
-                        hiddenColorPicker = !jQuery(element).data('colorpickerId');
+                    var element = this;
 
-                    jQuery(this).ColorPicker({
-
-                        /**
-                         * ColorPicker onShow action
-                         */
-                        onShow: function () {
-                            var color = jQuery(element).parent().parent().prev().prev('input').val(),
-                                menu = jQuery(this).parents('.swatch_sub-menu_container');
-
-                            menu.hide();
-                            jQuery(element).ColorPickerSetColor(color);
-                        },
+                    jQuery(element).spectrum({
+                        showInput: true,
+                        allowEmpty: false,
+                        cancelText: "",
+                        chooseText: "Select",
+                        preferredFormat: "hex",
 
                         /**
                          * ColorPicker onSubmit action
                          *
-                         * @param {String} hsb
-                         * @param {String} hex
-                         * @param {String} rgb
-                         * @param {String} el
+                         * @param {Object} color
                          */
-                        onSubmit: function (hsb, hex, rgb, el) {
-                            var container = jQuery(el).parent().parent().prev();
+                        hide: function(color) {
+                            var container = jQuery(element).parent().parent().prev(),
+                                hex = color.toHexString();
 
-                            jQuery(el).ColorPickerHide();
                             container.parent().removeClass('unavailable');
-                            container.prev('input').val('#' + hex);
-                            container.css('background', '#' + hex);
+                            container.prev('input').val(hex);
+                            container.css('background', hex);
+
+                            /**
+                             * Show option after colorpicker hide
+                             */
+                            _.defer(function() {
+                                jQuery(element).show();
+                            });
+                        },
+
+                        /**
+                         * ColorPicker onShow action
+                         */
+                        show:function(){
+                            var color = jQuery(element).parent().parent().prev().prev('input').val(),
+                                menu = jQuery(element).parents('.swatch_sub-menu_container');
+
+                            menu.hide();
+                            jQuery(element).spectrum("set", color);
                         }
                     });
 
-                    if (hiddenColorPicker) {
-                        jQuery(this).ColorPickerShow();
-                    }
+                    /**
+                     * ColorPicker Show immediate after initialize
+                     */
+                    _.defer(function () {
+                        jQuery(element).spectrum("show");
+                    });
                 },
 
                 /**
