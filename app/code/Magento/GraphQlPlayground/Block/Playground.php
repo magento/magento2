@@ -33,13 +33,13 @@ class Playground extends Template
     /**
      * Playground constructor.
      *
-     * @param AreaList $areaList
      * @param Context $context
+     * @param AreaList $areaList
      * @param array $data
      */
     public function __construct(
-        AreaList $areaList,
         Context $context,
+        AreaList $areaList,
         array $data = []
     ) {
         $this->areaList = $areaList;
