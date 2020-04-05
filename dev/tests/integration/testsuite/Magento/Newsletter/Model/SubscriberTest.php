@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class SubscriberTest extends TestCase
 {
     private const CONFIRMATION_SUBSCRIBE = 'You have been successfully subscribed to our newsletter.';
-    const CONFIRMATION_UNSUBSCRIBE = 'You have been unsubscribed from the newsletter.';
+    private const CONFIRMATION_UNSUBSCRIBE = 'You have been unsubscribed from the newsletter.';
 
     /** @var ObjectManagerInterface */
     private $objectManager;
