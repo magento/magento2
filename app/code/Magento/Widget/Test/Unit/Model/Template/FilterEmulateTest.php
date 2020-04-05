@@ -20,7 +20,7 @@ class FilterEmulateTest extends \PHPUnit\Framework\TestCase
     protected $filterEmulate;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appStateMock;
 

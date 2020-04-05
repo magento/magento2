@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewUserWithValidExpirationTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Create new user with valid expiration date."/>
+            <title value="Create new user with valid expiration date"/>
+            <description value="Create new user with valid expiration date."/>
+            <testCaseId value="" />
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="+5 day" format="M j, Y g:i:s A" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess" />
+
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPage">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <seeInField userInput="{$expiresDateTime}" selector="input#user_expires_at" stepKey="verifyUserExpirationInField"/>
+
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+    </test>
+</tests>

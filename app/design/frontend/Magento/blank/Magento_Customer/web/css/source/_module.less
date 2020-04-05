@@ -85,6 +85,7 @@
     .box-information,
     .box-newsletter {
         .box-content {
+            .lib-wrap-words();
             line-height: 26px;
         }
     }
@@ -411,8 +412,10 @@
 
         .block {
             &:extend(.abs-blocks-2columns all);
-            &.login {
+            .login {
                 .actions-toolbar {
+                    margin-left: 0;
+
                     > .primary {
                         margin-bottom: 0;
                         margin-right: @indent__l;
@@ -427,12 +430,17 @@
 
         .fieldset {
             &:after {
+                margin-left: 0;
                 &:extend(.abs-margin-for-forms-desktop all);
             }
 
             > .field {
                 > .control {
                     width: 80%;
+                }
+
+                .label {
+                    text-align: left;
                 }
             }
         }

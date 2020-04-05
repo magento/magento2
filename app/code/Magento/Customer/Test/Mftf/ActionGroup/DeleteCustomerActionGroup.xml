@@ -15,7 +15,7 @@
         <arguments>
             <argument name="lastName" defaultValue=""/>
         </arguments>
-        
+
         <!--Clear filter if exist-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingCustomerFilters"/>
@@ -28,29 +28,6 @@
         <waitForPageLoad stepKey="waitForDeleteItemPopup" time="10"/>
         <click stepKey="clickOnOk" selector="{{CustomersPageSection.ok}}"/>
         <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="10"/>
-    </actionGroup>
-    
-    <actionGroup name="DeleteCustomerByEmailActionGroup">
-        <annotations>
-            <description>Goes to the Admin Customers grid page. Deletes a Customer based on the provided Email Address.</description>
-        </annotations>
-        <arguments>
-            <argument name="email" type="string"/>
-        </arguments>
-        
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForAdminCustomerPageLoad"/>
-        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-        <waitForPageLoad stepKey="waitForClearFilters"/>
-        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{email}}" stepKey="filterEmail"/>
-        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCustomerGridSection.selectFirstRow}}" stepKey="clickOnEditButton1"/>
-        <click selector="{{CustomersPageSection.actions}}" stepKey="clickActionsDropdown"/>
-        <click selector="{{CustomersPageSection.delete}}" stepKey="clickDelete"/>
-        <waitForElementVisible selector="{{CustomersPageSection.ok}}" stepKey="waitForOkToVisible"/>
-        <click selector="{{CustomersPageSection.ok}}" stepKey="clickOkConfirmationButton"/>
-        <waitForElementVisible stepKey="waitForSuccessfullyDeletedMessage" selector="{{CustomersPageSection.deletedSuccessMessage}}" time="30"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>

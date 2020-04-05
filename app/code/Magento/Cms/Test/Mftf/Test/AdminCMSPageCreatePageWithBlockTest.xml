@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageCreatePageWithBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create CMS Page that contains block content via the Admin"/>
+            <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14678"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to New CMS Page page-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
+        <actionGroup ref="AdminFillCMSPageContentFieldActionGroup" stepKey="fillContentField">
+            <argument name="content" value="{{block class=&apos;Magento\Framework\View\Element\Text&apos; text=&apos;bla bla bla&apos; cache_key=&apos;BACKEND_ACL_RESOURCES&apos; cache_lifetime=999}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCMSPageStoreViewActionGroup" stepKey="selectCMSPageStoreViewForPageWithBlock">
+            <argument name="storeViewName" value="Default Store View"/>
+        </actionGroup>
+        <!--Verify successfully saved-->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="savePageWithBlock"/>
+        <!--verify page on frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStoreFront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="verifyPageWithBlockDataOnFrontend">
+            <argument name="cmsTitle" value="{{_duplicatedCMSPage.title}}"/>
+            <argument name="cmsContent" value="bla bla bla"/>
+            <argument name="cmsContentHeading" value="{{_duplicatedCMSPage.content_heading}}"/>
+        </actionGroup>
+        <!--Delete page with block-->
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePageWithBlock">
+            <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>
