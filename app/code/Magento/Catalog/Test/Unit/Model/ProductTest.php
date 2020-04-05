@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Product Test
+ * Unit test for Product class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -1003,7 +1003,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
      *
-     * @return array
+     * @return void
      */
     protected function configureSaveTest()
     {
