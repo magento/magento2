@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\OfflinePayments\Test\Unit\Block\Info;
 
@@ -46,7 +47,7 @@ class CheckmoTest extends TestCase
     }
 
     /**
-     * @covers       \Magento\OfflinePayments\Block\Info\Checkmo::getPayableTo
+     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getPayableTo
      * @param array $details
      * @param string|null $expected
      * @dataProvider getPayableToDataProvider
@@ -75,7 +76,7 @@ class CheckmoTest extends TestCase
     }
 
     /**
-     * @covers       \Magento\OfflinePayments\Block\Info\Checkmo::getMailingAddress
+     * @covers \Magento\OfflinePayments\Block\Info\Checkmo::getMailingAddress
      * @param array $details
      * @param string|null $expected
      * @dataProvider getMailingAddressDataProvider
