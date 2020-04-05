@@ -29,7 +29,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Deploy static content command
+ * Deploy static files content command
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
