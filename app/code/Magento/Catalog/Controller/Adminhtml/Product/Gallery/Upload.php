@@ -20,7 +20,7 @@ use Magento\Framework\Image\AdapterFactory;
 use Magento\MediaStorage\Model\File\Uploader;
 
 /**
- * Class Upload
+ * Upload media gallery for Products
  */
 class Upload extends Action implements HttpPostActionInterface
 {
@@ -176,5 +176,4 @@ class Upload extends Action implements HttpPostActionInterface
     {
         return $this->imageUploadConfig->getMaxHeight();
     }
-
 }
