@@ -14,7 +14,7 @@ use Magento\Review\Helper\Review as HelperReview;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Review controller
+ * Abstract review controller for product
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -219,6 +219,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
 
     /**
      * Load product model with data by passed id.
+     *
      * Return false if product was not loaded or has incorrect status.
      *
      * @param int $productId
@@ -240,7 +241,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             if (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
                 throw new NoSuchEntityException();
             }
-        } catch (NoSuchEntityException $noEntityException) {
+        } catch (\Exception $exception) {
             return false;
         }
 
