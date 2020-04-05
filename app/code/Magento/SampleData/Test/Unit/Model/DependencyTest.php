@@ -23,8 +23,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for Magento\SampleData\Model\Dependency
+ * Provides tests for Dependency model of SampleData module
  *
+ * @covers \Magento\SampleData\Model\Dependency
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DependencyTest extends TestCase
@@ -190,11 +191,10 @@ class DependencyTest extends TestCase
 
     /**
      * @param array $composerJsonContent
-     * @return MockObject
+     * @return ReadInterface|MockObject
      */
-    public function stubComposerJsonReader(
-        array $composerJsonContent
-    ): MockObject {
+    public function stubComposerJsonReader(array $composerJsonContent): MockObject
+    {
         $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $stub->method('isExist')
@@ -210,7 +210,7 @@ class DependencyTest extends TestCase
     }
 
     /**
-     * @return MockObject
+     * @return ReadInterface|MockObject
      */
     public function stubFileNotFoundReader(): MockObject
     {
