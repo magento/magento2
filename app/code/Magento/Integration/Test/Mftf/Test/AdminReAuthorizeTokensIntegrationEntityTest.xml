@@ -65,9 +65,21 @@
             <argument name="name" value="{{defaultIntegrationData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminIntegrationOpenExistingEntityActionGroup" stepKey="openIntegrationEntity"/>
-        <assertEquals stepKey="assertConsumerKey" expected="($grabConsumerKey)" actual="$grabAfterReauthorizeConsumerKey" actualType="string"/>
-        <assertEquals stepKey="assertConsumerSecret" expected="($grabConsumerSecret)" actual="$grabAfterReauthorizeConsumerSecret" actualType="string"/>
-        <assertNotEquals stepKey="assertNotEqualsToken" expected="($grabAccessToken)" actual="$grabReauthorizedAccessToken" actualType="string"/>
-        <assertNotEquals stepKey="assertNotEqualsTokenSecret" expected="($grabAccessTokenSecret)" actual="$grabReauthorizedAccessTokenSecret" actualType="string"/>
+        <assertEquals stepKey="assertConsumerKey">
+			<actualResult type="string">$grabAfterReauthorizeConsumerKey</actualResult>
+			<expectedResult type="const">($grabConsumerKey)</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertConsumerSecret">
+			<actualResult type="string">$grabAfterReauthorizeConsumerSecret</actualResult>
+			<expectedResult type="const">($grabConsumerSecret)</expectedResult>
+        </assertEquals>
+        <assertNotEquals stepKey="assertNotEqualsToken">
+			<actualResult type="string">$grabReauthorizedAccessToken</actualResult>
+			<expectedResult type="const">($grabAccessToken)</expectedResult>
+        </assertNotEquals>
+        <assertNotEquals stepKey="assertNotEqualsTokenSecret">
+			<actualResult type="string">$grabReauthorizedAccessTokenSecret</actualResult>
+			<expectedResult type="const">($grabAccessTokenSecret)</expectedResult>
+        </assertNotEquals>
     </test>
 </tests>
