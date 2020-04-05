@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
@@ -102,8 +102,7 @@
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with tier price(from above step) on storefront page and is searchable by sku -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{virtualProductBigQty.sku}}" stepKey="fillVirtualProductName"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
         <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>

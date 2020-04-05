@@ -21,27 +21,36 @@
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createdCustomer"/>
             <createData entity="SimpleTwo" stepKey="createdProduct1"/>
             <createData entity="SimpleTwo" stepKey="createdProduct2"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+
             <deleteData createDataKey="createdCustomer" stepKey="deletedCustomer"/>
             <deleteData createDataKey="createdProduct1" stepKey="deletedProduct1"/>
             <deleteData createDataKey="createdProduct2" stepKey="deletedProduct2"/>
-            <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
-                <argument name="term" value="activeTextTerm"/>
+
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{activeTextTerm.name}}"/>
             </actionGroup>
+            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
+        <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="activeTextTerm"/>
         </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createdCustomer$$" />
         </actionGroup>
@@ -51,7 +60,7 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct2ToTheCart">
             <argument name="product" value="$$createdProduct2$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertTermRequireMessageInMultishippingCheckoutActionGroup" stepKey="assertTermInCheckout">
+        <actionGroup ref="AssertStorefrontTermRequireMessageInMultishippingCheckoutActionGroup" stepKey="assertTermInCheckout">
             <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
         </actionGroup>
     </test>

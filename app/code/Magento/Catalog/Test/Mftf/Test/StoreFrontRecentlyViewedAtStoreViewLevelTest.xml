@@ -18,7 +18,7 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
            <!--Create Simple Product and Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
@@ -63,7 +63,7 @@
             </actionGroup>
 
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
 
@@ -94,9 +94,7 @@
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore1ProductPage2"/>
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.name$)}}" stepKey="goToStore1ProductPage3"/>
         <!-- Go to Home Page -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
-        <waitForPageLoad time="30" stepKey="homeWaitForPageLoad"/>
-
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
             <argument name="productPosition" value="2"/>
@@ -116,9 +114,7 @@
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore2ProductPage2"/>
 
         <!-- Go to Home Page -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStoreViewHomePage"/>
-        <waitForPageLoad time="30" stepKey="homePageWaitForStoreView"/>
-
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertNextStore1RecentlyViewedProduct1">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
             <argument name="productPosition" value="2"/>
