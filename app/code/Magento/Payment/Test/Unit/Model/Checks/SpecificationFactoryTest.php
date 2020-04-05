@@ -15,9 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class SpecificationFactoryTest extends TestCase
 {
-    /**
-     * Specification key
-     */
     const SPECIFICATION_KEY = 'specification';
 
     /**

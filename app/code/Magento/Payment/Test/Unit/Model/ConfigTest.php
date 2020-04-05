@@ -181,7 +181,11 @@ class ConfigTest extends TestCase
 
     public function testGetYears()
     {
-        $this->dateMock->expects($this->once())->method('date')->with('Y')->will($this->returnValue(self::CURRENT_YEAR));
+        $this->dateMock
+            ->expects($this->once())
+            ->method('date')
+            ->with('Y')
+            ->will($this->returnValue(self::CURRENT_YEAR));
         $this->assertEquals($this->_getPreparedYearsList(), $this->config->getYears());
     }
 

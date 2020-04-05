@@ -15,9 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class CanUseForCountryTest extends TestCase
 {
-    /**
-     * Expected country id
-     */
     const EXPECTED_COUNTRY_ID = 1;
 
     /**
@@ -53,7 +50,10 @@ class CanUseForCountryTest extends TestCase
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
         )->will($this->returnValue($expectation));
-        $this->countryProviderMock->expects($this->once())->method('getCountry')->willReturn(self::EXPECTED_COUNTRY_ID);
+        $this->countryProviderMock
+            ->expects($this->once())
+            ->method('getCountry')
+            ->willReturn(self::EXPECTED_COUNTRY_ID);
 
         $this->assertEquals($expectation, $this->model->isApplicable($paymentMethod, $quoteMock));
     }

@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Test\Unit\Block\Transparent;
 
 use Magento\Payment\Block\Transparent\Form;
 
 /**
  * Class FormTesting extended test class, used to substitute calls to parent methods
- * @package Magento\Payment\Test\Unit\Block\Transparent
  */
 class FormTesting extends Form
 {
