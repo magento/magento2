@@ -22,7 +22,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer_CA" stepKey="customer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Clean up created test data.-->
@@ -33,7 +33,9 @@
         </after>
 
         <!--Add option to product.-->
-        <amOnPage url="{{AdminProductEditPage.url($simpleProduct.id$)}}" stepKey="navigateToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductEditPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
+        </actionGroup>
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addOption">
             <argument name="option" value="ProductOptionFile"/>
         </actionGroup>

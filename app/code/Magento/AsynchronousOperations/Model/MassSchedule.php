@@ -16,6 +16,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -53,7 +54,7 @@ class MassSchedule
     private $logger;
 
     /**
-     * @var OperationRepository
+     * @var OperationRepositoryInterface
      */
     private $operationRepository;
 
@@ -68,6 +69,11 @@ class MassSchedule
     private $encryptor;
 
     /**
+     * @var SaveMultipleOperationsInterface
+     */
+    private $saveMultipleOperations;
+
+    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -75,9 +81,10 @@ class MassSchedule
      * @param AsyncResponseInterfaceFactory $asyncResponseFactory
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
-     * @param OperationRepository $operationRepository
+     * @param OperationRepositoryInterface $operationRepository
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
+     * @param SaveMultipleOperationsInterface $saveMultipleOperations
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -85,9 +92,10 @@ class MassSchedule
         AsyncResponseInterfaceFactory $asyncResponseFactory,
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
-        OperationRepository $operationRepository,
+        OperationRepositoryInterface $operationRepository,
         UserContextInterface $userContext,
-        Encryptor $encryptor
+        Encryptor $encryptor,
+        SaveMultipleOperationsInterface $saveMultipleOperations
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -97,6 +105,7 @@ class MassSchedule
         $this->operationRepository = $operationRepository;
         $this->userContext = $userContext;
         $this->encryptor = $encryptor;
+        $this->saveMultipleOperations = $saveMultipleOperations;
     }
 
     /**
@@ -137,7 +146,7 @@ class MassSchedule
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
-                $operation = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
+                $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
@@ -159,6 +168,7 @@ class MassSchedule
             }
         }
 
+        $this->saveMultipleOperations->execute($operations);
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
             throw new LocalizedException(
                 __('Something went wrong while processing the request.')

@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Clear product grid-->
             <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>

@@ -15,7 +15,7 @@
             <testCaseId value="MAGETWO-95254"/>
             <title value="Youtube video window on the product page"/>
             <description value="Check Youtube video window on the product page"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <group value="ProductVideo"/>
             <skip>
                 <issueId value="MC-32197"/>
@@ -24,7 +24,7 @@
 
         <before>
             <!--Log In-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
