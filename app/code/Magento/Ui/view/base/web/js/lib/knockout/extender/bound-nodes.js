@@ -8,8 +8,7 @@ define([
     'ko',
     'underscore',
     'mage/utils/wrapper',
-    'uiEvents',
-    'es6-collections'
+    'uiEvents'
 ], function (ko, _, wrapper, Events) {
     'use strict';
 
