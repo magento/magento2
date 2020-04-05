@@ -9,7 +9,7 @@ define([
     'underscore',
     'Magento_ConfigurableProduct/js/components/associted_product_list',
     'mage/translate'
-], function (Component, $, _, productList ) {
+], function (Component, $, _, productList) {
     'use strict';
 
     /**
@@ -42,7 +42,7 @@ define([
             },
             selectedAttributes: [],
             attributes: [],
-            disabledButton : true
+            disabledButton: true
         },
 
         /** @inheritdoc */
@@ -144,7 +144,7 @@ define([
                         }
                         var chose = [];
                         chose.push(chosen);
-                        var newatrr =  {
+                        var newatrr = {
                             'id': attribute.attribute_id,
                             'code': attribute.attribute_code,
                             'label': attribute.frontend_label,
@@ -161,9 +161,9 @@ define([
         },
 
         doShowAddProductButton: function (selected) {
-            if(selected.length > 0){
+            if (selected.length > 0) {
                 this.disabledButton(false);
-            }else{
+            } else {
                 this.disabledButton(true);
             }
         },

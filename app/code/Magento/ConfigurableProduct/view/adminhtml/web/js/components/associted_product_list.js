@@ -1,10 +1,10 @@
 define([
     'uiComponent',
     'ko'
-], function(Component,ko) {
+], function (Component, ko) {
     "use strict";
     return Component.extend({
-        defaults:{
+        defaults: {
             isShowAddProductButton: ko.observable(false)
         }
     });

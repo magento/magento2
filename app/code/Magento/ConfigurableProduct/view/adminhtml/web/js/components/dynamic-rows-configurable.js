@@ -9,7 +9,7 @@ define([
     'Magento_Ui/js/dynamic-rows/dynamic-rows',
     'Magento_ConfigurableProduct/js/components/associted_product_list',
     'jquery'
-], function (_, registry, dynamicRows, productList , $) {
+], function (_, registry, dynamicRows, productList, $) {
     'use strict';
 
     return dynamicRows.extend({
@@ -213,7 +213,7 @@ define([
             );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
-                                 this.pageSize * (this.currentPage() - 1) + this.pageSize);
+                this.pageSize * (this.currentPage() - 1) + this.pageSize);
 
             this.source.set(this.dataScope + '.' + this.index, []);
 
