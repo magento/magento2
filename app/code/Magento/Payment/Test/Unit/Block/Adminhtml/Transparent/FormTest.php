@@ -31,6 +31,16 @@ class FormTest extends TestCase
     private $methodMock;
 
     /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
+
+    /**
+     * @var UrlInterface|MockObject
+     */
+    private $urlBuilderMock;
+
+    /**
      * @var Session|MockObject
      */
     private $checkoutSessionMock;
