@@ -46,9 +46,11 @@ class AreaList
     }
 
     /**
+     * after plugin redirects browser graphql request to frontend
+     *
      * @param \Magento\Framework\App\AreaList $subject
-     * @param $result
-     * @param $frontName
+     * @param string $result
+     * @param string $frontName
      * @return string
      */
     public function afterGetCodeByFrontName(

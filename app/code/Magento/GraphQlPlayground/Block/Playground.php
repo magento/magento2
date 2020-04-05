@@ -15,6 +15,8 @@ use Magento\Store\Model\Store;
 /**
  * Class Playground
  * Block providing GraphQL Playground Config
+ *
+ * @api
  */
 class Playground extends Template
 {

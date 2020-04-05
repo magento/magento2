@@ -10,7 +10,6 @@
     <module name="Magento_GraphQlPlayground">
         <sequence>
             <module name="Magento_Framework"/>
-            <module name="Magento_GraphQl"/>
         </sequence>
     </module>
 </config>
