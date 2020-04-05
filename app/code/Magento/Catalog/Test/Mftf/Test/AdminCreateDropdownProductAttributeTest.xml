@@ -27,7 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
+        <amOnPage url="{{AdminProductAttributeFormPage.url}}" stepKey="navigateToNewProductAttributePage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Set attribute properties -->

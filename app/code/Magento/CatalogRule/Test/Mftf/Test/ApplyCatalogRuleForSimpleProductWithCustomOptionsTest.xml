@@ -56,7 +56,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{AdminCatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -143,7 +143,7 @@
         </actionGroup>
 
         <!-- Navigate to checkout shipping page -->
-        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <amOnPage stepKey="navigateToShippingPage" url="{{StorefrontCheckoutShippingPage.url}}"/>
         <waitForPageLoad stepKey="waitFoCheckoutShippingPageLoad"/>
 
         <!-- Fill Shipping information -->

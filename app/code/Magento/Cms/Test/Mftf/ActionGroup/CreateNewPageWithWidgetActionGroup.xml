@@ -18,8 +18,8 @@
             <argument name="condition" type="string"/>
             <argument name="widgetType" type="string"/>
         </arguments>
-        
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+
+        <amOnPage url="{{AdminCmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>

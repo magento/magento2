@@ -77,7 +77,7 @@
         </actionGroup>
 
         <!-- Check that cart page contains cross-sell to simpleProduct2 and simpleProduct3-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart1"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="goToCart1"/>
         <waitForPageLoad stepKey="waitForCartToLoad"/>
         <waitForElementVisible selector="{{CheckoutCartCrossSellSection.products}}" stepKey="waitForCrossSellLoading"/>
         <see stepKey="seeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>

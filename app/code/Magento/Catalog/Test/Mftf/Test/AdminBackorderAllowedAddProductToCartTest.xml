@@ -41,7 +41,7 @@
         </actionGroup>
 
         <!-- Go to the cart page and verify we see the product -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="gotoCart"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="gotoCart"/>
         <waitForPageLoad stepKey="waitForCartLoad"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createProduct.name$$"/>

@@ -61,7 +61,7 @@
         <waitForElement stepKey="waitNextButton" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
         <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}"/>
         <waitForPageLoad stepKey="waitBillingForm"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeInCurrentUrl url="{{StorefrontCheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
         <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->

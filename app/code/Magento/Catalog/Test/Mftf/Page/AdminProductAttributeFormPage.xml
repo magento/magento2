@@ -7,7 +7,7 @@
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="ProductAttributePage" url="catalog/product_attribute/new/" area="admin" module="Catalog">
+    <page name="AdminProductAttributeFormPage" url="catalog/product_attribute/new/" area="admin" module="Catalog">
         <section name="AdminCreateProductAttributeSection"/>
         <section name="AdminProductAttributeManageLabelsSection"/>
     </page>

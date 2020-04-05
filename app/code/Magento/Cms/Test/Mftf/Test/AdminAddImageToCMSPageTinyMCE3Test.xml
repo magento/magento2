@@ -30,7 +30,7 @@
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
+        <amOnPage url="{{AdminCmsNewPagePage.url}}" stepKey="navigateToPage2"/>
         <waitForPageLoad stepKey="wait5"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />

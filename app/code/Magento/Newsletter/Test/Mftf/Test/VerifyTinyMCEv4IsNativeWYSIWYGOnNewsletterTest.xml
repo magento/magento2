@@ -22,7 +22,7 @@
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <amOnPage url="{{AdminNewsletterTemplateFormPage.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />

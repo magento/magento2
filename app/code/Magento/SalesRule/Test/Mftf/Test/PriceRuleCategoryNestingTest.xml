@@ -36,7 +36,7 @@
         </after>
         <!-- Login as admin and open page for creation new Price Rule -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openCatalogPriceRulePage"/>
+        <amOnPage url="{{AdminPriceRuleNewPage.url}}" stepKey="openCatalogPriceRulePage"/>
         <waitForPageLoad stepKey="waitCatalogPriceRulePageLoad"/>
         <!-- Open Conditions section and select Categories condition -->
         <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="openConditionsSection"/>

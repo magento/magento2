@@ -16,7 +16,7 @@
             <argument name="value" defaultValue="Yes" type="string"/>
         </arguments>
 
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+        <amOnPage url="{{AdminConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1"/>

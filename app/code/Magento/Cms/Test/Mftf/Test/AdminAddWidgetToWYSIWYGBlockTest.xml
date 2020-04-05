@@ -74,7 +74,7 @@
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <after>
-            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
             <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
             <waitForPageLoad stepKey="waitForGridReload"/>

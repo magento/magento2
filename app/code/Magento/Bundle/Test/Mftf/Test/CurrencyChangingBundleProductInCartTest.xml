@@ -32,7 +32,7 @@
                 <!--Clear Configs-->
                 <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
                 <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
-                <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
+                <amOnPage url="{{AdminConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
                 <waitForPageLoad stepKey="waitForConfigCurrencySetupPageForUnselectEuroCurrency"/>
                 <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" userInput="Euro" stepKey="unselectEuro"/>
                 <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
@@ -59,7 +59,7 @@
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOptionProduct0"/>
             <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOptionProduct1"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
+            <amOnPage url="{{AdminConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
             <waitForPageLoad stepKey="waitForConfigCurrencySetupPage"/>
             <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>
             <waitForPageLoad stepKey="waitForOptions"/>

@@ -43,7 +43,7 @@
         </after>
 
         <!-- Go to the shopping cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
 
         <!-- Change the product QTY -->

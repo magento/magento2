@@ -13,7 +13,7 @@
             <description>Goes to the Admin Cart Price Rule creation page.</description>
         </annotations>
 
-        <amOnPage url="{{PriceRuleNewPage.url}}" stepKey="openNewCartPriceRulePage"/>
+        <amOnPage url="{{AdminPriceRuleNewPage.url}}" stepKey="openNewCartPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

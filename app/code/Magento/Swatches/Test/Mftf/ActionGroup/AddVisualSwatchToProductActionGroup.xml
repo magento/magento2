@@ -18,7 +18,7 @@
             <argument name="option2" defaultValue="visualSwatchOption2"/>
         </arguments>
 
-        <seeInCurrentUrl url="{{ProductCatalogPage.url}}" stepKey="seeOnProductEditPage"/>
+        <seeInCurrentUrl url="{{AdminProductCatalogPage.url}}" stepKey="seeOnProductEditPage"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitForSlideOut"/>

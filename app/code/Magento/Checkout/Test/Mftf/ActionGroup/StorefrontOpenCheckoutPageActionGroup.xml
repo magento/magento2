@@ -13,7 +13,7 @@
             <description>Goes to the Storefront Checkout page.</description>
         </annotations>
 
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="openCheckoutPage"/>
+        <amOnPage url="{{StorefrontCheckoutPage.url}}" stepKey="openCheckoutPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoaded"/>
     </actionGroup>
 </actionGroups>

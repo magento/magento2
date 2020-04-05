@@ -59,7 +59,7 @@
             <argument name="product" value="$$createSecondProduct$$"/>
             <argument name="productCount" value="2"/>
         </actionGroup>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <!-- Click 'Check Out with Multiple Addresses' -->
         <waitForPageLoad stepKey="waitForSecondPageLoad"/>
         <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
@@ -71,7 +71,7 @@
         <waitForPageLoad stepKey="waitPageLoad"/>
         <!-- Open the Cart page in another browser window and go back -->
         <openNewTab stepKey="openNewTab"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPageNewTab"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnShoppingCartPageNewTab"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertFirstProductItemInCheckOutCart">
             <argument name="productName" value="$$createFirstProduct.name$$"/>
             <argument name="productSku" value="$$createFirstProduct.sku$$"/>

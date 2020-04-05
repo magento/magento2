@@ -16,7 +16,7 @@
             <argument name="catalogRuleName" type="string"/>
         </arguments>
 
-        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <amOnPage stepKey="goToPriceRulePage" url="{{AdminCatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click selector="{{AdminCatalogPriceRuleGrid.resetFilter}}" stepKey="clickOnResetFilter"/>
         <waitForPageLoad stepKey="waitForTheGridPageToLoad"/>

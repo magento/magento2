@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
 
-        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
+        <amOnPage url="{{AdminCmsNewBlockPage.url}}" stepKey="amOnBlocksCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Verify Save&Duplicate button and Save&Close button-->
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />

@@ -19,7 +19,7 @@
             <argument name="total" type="string"/>
         </arguments>
 
-        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <seeInCurrentUrl url="{{StorefrontCheckoutCartPage.url}}" stepKey="assertUrl"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.shippingMethodForm}}" visible="false" stepKey="openEstimateShippingSection"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="waitForShippingSection"/>

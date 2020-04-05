@@ -12,8 +12,8 @@
         <annotations>
             <description>Goes to the 'Configuration' page for 'Content Management'. Sets the 'WYSIWYG Editor' to 'TinyMCE 4'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
-        
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+
+        <amOnPage url="{{AdminConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox"/>

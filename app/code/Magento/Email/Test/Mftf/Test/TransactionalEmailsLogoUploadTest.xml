@@ -26,14 +26,14 @@
         </before>
         <after>
             <!-- Clear filter on Design Config Page -->
-            <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+            <amOnPage url="{{AdminDesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
             <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!--Logout from Admin Area-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to content->Design->Config page-->
-        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <amOnPage url="{{AdminDesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
         <waitForPageLoad stepKey="waitForPageLoadToViewDesignConfigPage"/>
         <actionGroup ref="AdminGridFilterSearchResultsBySelectActionGroup" stepKey="filterThemeDesignConfiguration">
             <argument name="attributeSelector" value="store_id"/>

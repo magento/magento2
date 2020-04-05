@@ -13,7 +13,7 @@
             <description>Goes to the 'Configuration' page for 'Admin'. Enables 'Admin Account Sharing'. Clicks on the Save button.</description>
         </annotations>
 
-        <amOnPage url="{{AdminConfigAdvancedAdmin.url}}" stepKey="navigateToConfigurationPage"/>
+        <amOnPage url="{{AdminConfigAdvancedAdminPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick stepKey="expandSecurityTab" selector="{{AdminSection.SecurityTab}}" dependentSelector="{{AdminSection.CheckIfTabExpand}}" visible="true"/>
         <waitForElementVisible selector="{{AdminSection.AdminAccountSharing}}" stepKey="waitForAdminAccountSharingDrpDown"/>

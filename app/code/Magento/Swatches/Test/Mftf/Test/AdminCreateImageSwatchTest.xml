@@ -35,7 +35,7 @@
         </after>
 
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <amOnPage url="{{AdminProductAttributeFormPage.url}}" stepKey="goToNewProductAttributePage"/>
         <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
 

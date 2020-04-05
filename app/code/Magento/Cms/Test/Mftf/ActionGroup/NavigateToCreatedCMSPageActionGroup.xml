@@ -16,7 +16,7 @@
             <argument name="CMSPage" defaultValue=""/>
         </arguments>
 
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

@@ -16,7 +16,7 @@
         <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
+        <seeInCurrentUrl url="{{StorefrontCheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
     </actionGroup>
 </actionGroups>

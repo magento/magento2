@@ -168,7 +168,7 @@
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
 
             <!-- Delete created price rules -->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+            <amOnPage url="{{AdminCatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRuleForFirstOption">
                 <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -261,7 +261,7 @@
         </actionGroup>
 
         <!--Assert products prices in the cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <see userInput="$210.69" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeFirstOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForFirstProductOption"/>
         <see userInput="$120.70" selector="{{CheckoutCartProductSection.ProductPriceByOption($$createFirstConfigProductAttributeSecondOption.option[store_labels][1][label]$$)}}" stepKey="assertFirstProductPriceForSecondProductOption"/>

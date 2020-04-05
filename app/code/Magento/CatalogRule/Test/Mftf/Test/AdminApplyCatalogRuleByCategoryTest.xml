@@ -36,7 +36,7 @@
             <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteSimpleProductTwo"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{AdminCatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -46,7 +46,7 @@
         </after>
 
         <!-- 1. Begin creating a new catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <amOnPage url="{{AdminCatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
         <waitForPageLoad stepKey="waitForIndividualRulePage"/>

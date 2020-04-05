@@ -48,7 +48,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <click selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <!-- Check that have the same values after page reload -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="amOnCheckoutShippingInfoPage"/>
+        <amOnPage url="{{StorefrontCheckoutPage.url}}" stepKey="amOnCheckoutShippingInfoPage"/>
         <waitForPageLoad stepKey="waitForShippingPageReload"/>
         <seeInField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeEmailOnCheckout" />
         <seeInField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstName}}" stepKey="seeFirstnameOnCheckout" />
@@ -62,7 +62,7 @@
         <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
         <!-- Reload payment section -->
-        <amOnPage url="{{GuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>
+        <amOnPage url="{{StorefrontGuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
         <!-- Check that address block contains correct information -->
         <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeBilllingFirstName" />

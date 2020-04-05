@@ -13,7 +13,7 @@
             <description>Goes to the 'Configuration' page for 'Web'. Clicks on the Save button.</description>
         </annotations>
 
-        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <amOnPage url="{{AdminWebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>

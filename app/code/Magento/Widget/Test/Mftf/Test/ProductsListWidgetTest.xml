@@ -32,7 +32,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
         <!-- Create a CMS page containing the Products List widget -->
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
+        <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="amOnCmsList"/>
         <waitForPageLoad stepKey="waitForCmsList"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>

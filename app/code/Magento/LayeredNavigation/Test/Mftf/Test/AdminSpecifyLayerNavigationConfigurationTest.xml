@@ -28,7 +28,7 @@
         </after>
 
         <!-- Configure Layered Navigation in Stores -> Configuration -> Catalog -> Layered Navigation -->
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <amOnPage url="{{AdminCatalogConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{LayeredNavigationSection.layeredNavigation}}" dependentSelector="{{LayeredNavigationSection.CheckIfTabExpand}}" visible="true" stepKey="expandLayeredNavigationTab"/>
         <waitForElementVisible selector="{{LayeredNavigationSection.NavigationStepCalculationSystemValue}}" stepKey="waitForUseSystemValueVisible"/>

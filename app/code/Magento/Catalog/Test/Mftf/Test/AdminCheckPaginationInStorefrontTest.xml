@@ -91,7 +91,7 @@
         </after>
        <!--Verify default number of products displayed in the grid view-->
         <comment userInput="Verify default number of products displayed in the grid view" stepKey="commentVerifyDefaultValues"/>
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
+        <amOnPage url="{{AdminCatalogConfigPage.url}}" stepKey="goToCatalogConfigPagePage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad" />
         <conditionalClick selector="{{AdminCatalogStorefrontConfigSection.sectionHeader}}" dependentSelector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" visible="false" stepKey="openCatalogConfigStorefrontSection"/>
         <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>

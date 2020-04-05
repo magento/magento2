@@ -51,7 +51,7 @@
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{AdminCatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>

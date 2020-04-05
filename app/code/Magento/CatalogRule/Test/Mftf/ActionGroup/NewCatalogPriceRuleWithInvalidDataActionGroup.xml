@@ -17,7 +17,7 @@
         </arguments>
 
         <!-- Go to the admin Catalog rule grid and add a new one -->
-        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <amOnPage stepKey="goToPriceRulePage" url="{{AdminCatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
 
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>

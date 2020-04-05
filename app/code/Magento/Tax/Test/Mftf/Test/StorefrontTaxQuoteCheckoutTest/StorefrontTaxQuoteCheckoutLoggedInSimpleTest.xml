@@ -91,7 +91,7 @@
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
+        <amOnPage url="{{StorefrontCheckoutPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForShippingSection"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{SimpleTaxNY.state}}"/>
         <click stepKey="clickNext" selector="{{CheckoutShippingSection.next}}"/>

@@ -173,7 +173,7 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToShippingPage"/>
+        <amOnPage url="{{StorefrontCheckoutShippingPage.url}}" stepKey="navigateToShippingPage"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
 
         <!-- Fill customer address data -->

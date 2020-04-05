@@ -13,7 +13,7 @@
             <description>Verify Save and Duplicate and Save and Close button.</description>
         </annotations>
 
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
+        <amOnPage url="{{AdminCmsNewPagePage.url}}" stepKey="amOnPageCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
         <see selector="{{CmsNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>

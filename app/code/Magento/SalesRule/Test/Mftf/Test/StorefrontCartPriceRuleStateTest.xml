@@ -71,7 +71,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Should not see the discount yet because we have not filled in postcode -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="goToCartPage"/>
         <waitForPageLoad stepKey="waitForCartPage"/>
         <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="expandShipping"/>
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShipping"/>

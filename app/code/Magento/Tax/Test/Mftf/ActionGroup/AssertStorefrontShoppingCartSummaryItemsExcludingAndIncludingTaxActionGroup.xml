@@ -19,7 +19,7 @@
             <argument name="total" defaultValue="113.25" type="string"/>
         </arguments>
 
-        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <seeInCurrentUrl url="{{StorefrontCheckoutCartPage.url}}" stepKey="assertUrl"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotalExcludingTax}}" stepKey="waitForSubtotalVisible"/>
         <see selector="{{CheckoutCartSummarySection.subtotalExcludingTax}}" userInput="{{subtotalExcludingTax}}" stepKey="assertSubtotalExcludingTax"/>
         <see selector="{{CheckoutCartSummarySection.subtotalIncludingTax}}" userInput="{{subtotalIncludingTax}}" stepKey="assertSubtotalIncludingTax"/>

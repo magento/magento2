@@ -13,7 +13,7 @@
             <description>Goes to the Admin CMS Blocks page. Deletes the '_defaultBlock' Block. Validates that the Success Message is present and correct. PLEASE NOTE: The Block that is deleted it Hardcoded.</description>
         </annotations>
 
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <amOnPage url="{{AdminCmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{CmsPagesPageActionsSection.select(_defaultBlock.title)}}" stepKey="ClickOnSelect"/>
         <click selector="{{CmsPagesPageActionsSection.delete(_defaultBlock.title)}}" stepKey="ClickOnEdit"/>

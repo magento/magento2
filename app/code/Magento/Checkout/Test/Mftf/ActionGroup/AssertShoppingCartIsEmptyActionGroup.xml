@@ -13,7 +13,7 @@
             <description>Goes to the Storefront Shopping Cart page. Validates that the Empty Shopping Cart message is present and correct. PLEASE NOTE: The message is Hardcoded.</description>
         </annotations>
 
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
         <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
     </actionGroup>

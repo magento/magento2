@@ -16,7 +16,7 @@
             <argument name="orderToDate" type="string"/>
         </arguments>
 
-        <amOnPage url="{{SoldReportPage.url}}" stepKey="navigateToOrderedProductPage"/>
+        <amOnPage url="{{AdminSoldReportPage.url}}" stepKey="navigateToOrderedProductPage"/>
         <fillField selector="{{SoldReportFilterSection.dateFrom}}" userInput="{{orderFromDate}}" stepKey="fillFromDate"/>
         <fillField selector="{{SoldReportFilterSection.dateTo}}" userInput="{{orderToDate}}" stepKey="fillToDate"/>
         <click selector="{{SoldReportFilterSection.buttonRefresh}}" stepKey="clickRefresh"/>

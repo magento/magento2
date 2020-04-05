@@ -14,8 +14,8 @@
         <arguments>
             <argument name="Block" defaultValue=""/>
         </arguments>
-        
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+
+        <amOnPage url="{{AdminCmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{BlockPageActionsSection.clearAll}}" dependentSelector="{{BlockPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

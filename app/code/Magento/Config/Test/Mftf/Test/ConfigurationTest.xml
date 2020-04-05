@@ -25,7 +25,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
+        <amOnPage url="{{AdminCatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick stepKey="expandStorefrontTab" selector="{{CatalogSection.storefront}}" dependentSelector="{{CatalogSection.CheckIfTabExpand}}" visible="true" />
         <dontSee stepKey="dontSeeDynamicMediaURLsSetting" userInput="Allow Dynamic Media URLs"/>

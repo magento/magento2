@@ -31,7 +31,7 @@
         </after>
         <!-- Go to Admin > Content > Configuration	page -->
         <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>
-        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
+        <amOnPage url="{{AdminDesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterDefaultStoreView">
             <argument name="customStore" value="'Default'" />
         </actionGroup>

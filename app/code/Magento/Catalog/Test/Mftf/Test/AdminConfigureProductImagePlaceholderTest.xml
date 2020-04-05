@@ -37,7 +37,7 @@
 
         <after>
             <!--Unset product image placeholders-->
-            <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPageAfter"/>
+            <amOnPage url="{{AdminCatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPageAfter"/>
             <waitForPageLoad stepKey="waitForConfigurationPageLoadAfter"/>
             <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSectionAfter"/>
             <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpenAfter"/>
@@ -67,7 +67,7 @@
 
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
-        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>
+        <amOnPage url="{{AdminCatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigurationPageLoad1"/>
         <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection1"/>
         <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen1"/>

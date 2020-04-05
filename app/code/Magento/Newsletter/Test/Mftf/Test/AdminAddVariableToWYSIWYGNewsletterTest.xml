@@ -32,7 +32,7 @@
         <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
         <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
         <!--Main test-->
-        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <amOnPage url="{{AdminNewsletterTemplateFormPage.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
@@ -91,7 +91,7 @@
         <!--Delete Custom Variable-->
         <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
         <!--Refresh Storefront-->
-        <amOnPage url="{{NewsletterTemplateGrid.url}}" stepKey="amOnTemplateGrid" />
+        <amOnPage url="{{AdminNewsletterTemplateGridPage.url}}" stepKey="amOnTemplateGrid" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow2"/>
         <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframeAfterVariableDelete"/>

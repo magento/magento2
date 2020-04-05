@@ -13,7 +13,7 @@
             <description>Goes to the 'Configuration' page for 'Url Options'. Enables 'Add Store Code to Urls'. Clicks on the Save button.</description>
         </annotations>
 
-        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <amOnPage url="{{AdminWebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{WebSection.UrlOptionsTab}}" dependentSelector="{{WebSection.CheckIfUrlOptionsTabExpand}}" visible="true" stepKey="expandUrlSectionTab"/>
         <waitForElementVisible selector="{{UrlOptionsSection.addStoreCodeToUrl}}" stepKey="seeAddStoreCodeToUrl"/>

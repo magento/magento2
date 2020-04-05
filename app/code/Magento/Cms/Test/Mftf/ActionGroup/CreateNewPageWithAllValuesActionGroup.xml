@@ -20,7 +20,7 @@
             <argument name="selectHierarchyOpt" type="string"/>
         </arguments>
 
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+        <amOnPage url="{{AdminCmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{PageTitle}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>

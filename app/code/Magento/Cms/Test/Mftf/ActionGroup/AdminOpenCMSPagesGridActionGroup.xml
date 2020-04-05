@@ -13,7 +13,7 @@
             <description>Goes to the Admin Pages grid page.</description>
         </annotations>
 
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

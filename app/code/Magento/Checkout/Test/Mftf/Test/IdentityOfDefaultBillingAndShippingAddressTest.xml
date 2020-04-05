@@ -41,7 +41,7 @@
         </actionGroup>
 
         <!--Proceed to shipment-->
-        <amOnPage url="{{CheckoutPage.url}}/" stepKey="goToCheckout"/>
+        <amOnPage url="{{StorefrontCheckoutPage.url}}/" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForShippingSection"/>
 
         <!--Fill shipment form-->

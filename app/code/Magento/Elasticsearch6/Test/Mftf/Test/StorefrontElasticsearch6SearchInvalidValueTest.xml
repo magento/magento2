@@ -44,7 +44,7 @@
             <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
             <waitForPageLoad stepKey="waitForAttributePageLoad"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
-            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
+            <amOnPage url="{{AdminProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>

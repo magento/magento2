@@ -26,7 +26,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!--Go to backup index page-->
-        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupPage"/>
+        <amOnPage url="{{AdminBackupIndexPage.url}}" stepKey="goToBackupPage"/>
         <waitForPageLoad stepKey="waitForBackupPage"/>
 
         <!--Create system backup-->

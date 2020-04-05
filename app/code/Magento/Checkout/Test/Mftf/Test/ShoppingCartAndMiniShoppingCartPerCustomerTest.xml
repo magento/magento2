@@ -115,7 +115,7 @@
             <argument name="Customer" value="$$createFirstCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
 
         <!-- Assert first products present in shopping cart -->
@@ -155,7 +155,7 @@
         </actionGroup>
 
         <!-- Assert first products present in shopping cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="checkProductInCart">
             <argument name="product" value="$$createSimpleProduct$$"/>

@@ -21,7 +21,7 @@
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <waitForText userInput="You added {{product.name}} to your shopping cart." stepKey="waitForText"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="goToCheckoutPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab"/>
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{couponCode}}" stepKey="fillCouponCode"/>

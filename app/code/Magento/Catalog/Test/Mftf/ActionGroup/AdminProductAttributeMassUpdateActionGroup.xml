@@ -17,7 +17,7 @@
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
         <waitForPageLoad stepKey="waitForUploadPage"/>
-        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
+        <seeInCurrentUrl url="{{AdminProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
         <click selector="{{AdminUpdateAttributesSection.toggleName}}" stepKey="clickToChangeName"/>
         <fillField selector="{{AdminUpdateAttributesSection.name}}" userInput="{{product.name}}" stepKey="fillFieldName"/>
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>

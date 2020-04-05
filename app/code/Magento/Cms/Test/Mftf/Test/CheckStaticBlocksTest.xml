@@ -37,7 +37,7 @@
         </before>
 
         <!--Go to Cms blocks page-->
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <amOnPage url="{{AdminCmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <seeInCurrentUrl url="cms/block/" stepKey="VerifyPageIsOpened"/>
         <!--Click to create new block-->

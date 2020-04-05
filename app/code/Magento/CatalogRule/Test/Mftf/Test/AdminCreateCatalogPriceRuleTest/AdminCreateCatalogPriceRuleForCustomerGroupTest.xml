@@ -31,7 +31,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete the catalog rule -->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToRulePage"/>
+            <amOnPage url="{{AdminCatalogRulePage.url}}" stepKey="goToRulePage"/>
             <waitForPageLoad stepKey="waitForRulePage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>

@@ -56,7 +56,7 @@
         </assertEquals>
 
         <!-- Verify that the CMS page have the required field name indicator next to Page Title -->
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
+        <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
         <executeJS function="{{CmsNewPagePageBasicFieldsSection.RequiredFieldIndicator}}" stepKey="pageTitleRequiredFieldIndicator"/>

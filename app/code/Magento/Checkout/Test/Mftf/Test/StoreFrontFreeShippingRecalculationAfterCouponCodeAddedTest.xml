@@ -64,7 +64,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
         <waitForPageLoad stepKey="waitForpageLoad1"/>
         <dontSee selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <amOnPage url="{{StorefrontCheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
         <waitForPageLoad stepKey="waitForShoppingCartPage"/>
         <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickIfDiscountTabClosed1"/>
         <waitForPageLoad stepKey="waitForCouponTabOpen1"/>
@@ -85,7 +85,7 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
         <waitForPageLoad stepKey="waitForError"/>
         <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
-        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <amOnPage stepKey="navigateToShippingPage" url="{{StorefrontCheckoutShippingPage.url}}"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
         <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>

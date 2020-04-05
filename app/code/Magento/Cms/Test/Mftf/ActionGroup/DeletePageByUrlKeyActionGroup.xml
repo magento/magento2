@@ -15,8 +15,8 @@
         <arguments>
             <argument name="UrlKey" type="string"/>
         </arguments>
-        
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCMSNewPage"/>
+
+        <amOnPage url="{{AdminCmsPagesPage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.select(UrlKey)}}" stepKey="clickSelect"/>
         <click selector="{{CmsPagesPageActionsSection.delete(UrlKey)}}" stepKey="clickDelete"/>
