@@ -3,27 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
-use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
-use Magento\Framework\Serialize\Serializer\FormData;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
-use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product\AttributeSet\Build;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
-use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
-use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,72 +34,72 @@ use Magento\Framework\View\LayoutInterface;
 class SaveTest extends AttributeTest
 {
     /**
-     * @var BuildFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuildFactory|MockObject
      */
-    protected $buildFactoryMock;
+    private $buildFactoryMock;
 
     /**
-     * @var FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterManager|MockObject
      */
-    protected $filterManagerMock;
+    private $filterManagerMock;
 
     /**
-     * @var ProductHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductHelper|MockObject
      */
-    protected $productHelperMock;
+    private $productHelperMock;
 
     /**
-     * @var AttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeFactory|MockObject
      */
-    protected $attributeFactoryMock;
+    private $attributeFactoryMock;
 
     /**
-     * @var ValidatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|MockObject
      */
-    protected $validatorFactoryMock;
+    private $validatorFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
-    protected $groupCollectionFactoryMock;
+    private $groupCollectionFactoryMock;
 
     /**
-     * @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
-    protected $layoutFactoryMock;
+    private $layoutFactoryMock;
 
     /**
-     * @var ResultRedirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect|MockObject
      */
-    protected $redirectMock;
+    private $redirectMock;
 
     /**
-     * @var AttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSet|MockObject
      */
-    protected $attributeSetMock;
+    private $attributeSetMock;
 
     /**
-     * @var Build|\PHPUnit_Framework_MockObject_MockObject
+     * @var Build|MockObject
      */
-    protected $builderMock;
+    private $builderMock;
 
     /**
-     * @var InputTypeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputTypeValidator|MockObject
      */
-    protected $inputTypeValidatorMock;
+    private $inputTypeValidatorMock;
 
     /**
-     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|MockObject
      */
     private $productAttributeMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCodeValidator|MockObject
      */
     private $attributeCodeValidatorMock;
 
@@ -108,6 +111,7 @@ class SaveTest extends AttributeTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->setMethods(['stripTags'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productHelperMock = $this->getMockBuilder(ProductHelper::class)
@@ -151,19 +155,16 @@ class SaveTest extends AttributeTest
             ->setMethods(['getId', 'get'])
             ->getMockForAbstractClass();
 
-        $this->buildFactoryMock->expects($this->any())
-            ->method('create')
+        $this->buildFactoryMock->method('create')
             ->willReturn($this->builderMock);
-        $this->validatorFactoryMock->expects($this->any())
-            ->method('create')
+        $this->validatorFactoryMock->method('create')
             ->willReturn($this->inputTypeValidatorMock);
-        $this->attributeFactoryMock
-            ->method('create')
+        $this->attributeFactoryMock->method('create')
             ->willReturn($this->productAttributeMock);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getModel()
     {
@@ -186,8 +187,7 @@ class SaveTest extends AttributeTest
 
     public function testExecuteWithEmptyData()
     {
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
@@ -217,8 +217,7 @@ class SaveTest extends AttributeTest
             'frontend_input' => 'test_frontend_input',
         ];
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],
@@ -244,8 +243,7 @@ class SaveTest extends AttributeTest
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->redirectMock);
-        $this->redirectMock->expects($this->any())
-            ->method('setPath')
+        $this->redirectMock->method('setPath')
             ->willReturnSelf();
         $this->builderMock->expects($this->once())
             ->method('setEntityTypeId')
@@ -259,12 +257,14 @@ class SaveTest extends AttributeTest
         $this->builderMock->expects($this->once())
             ->method('getAttributeSet')
             ->willReturn($this->attributeSetMock);
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['set', null, 1],
                 ['attribute_code', null, 'test_attribute_code']
             ]);
+        $this->filterManagerMock->method('stripTags')
+            ->with($data['new_attribute_set_name'])
+            ->willReturn($data['new_attribute_set_name']);
         $this->inputTypeValidatorMock->expects($this->once())
             ->method('getMessages')
             ->willReturn([]);
@@ -279,10 +279,9 @@ class SaveTest extends AttributeTest
     {
         $serializedOptions = '{"key":"value"}';
         $message = "The attribute couldn't be saved due to an error. Verify your information and try again. "
-            . "If the error persists, please try again later.";
+            . 'If the error persists, please try again later.';
 
-        $this->requestMock->expects($this->any())
-            ->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, true],
                 ['serialized_options', '[]', $serializedOptions],
