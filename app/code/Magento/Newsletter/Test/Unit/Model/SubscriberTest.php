@@ -12,6 +12,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -26,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Test Subscriber model functionality
+ * @covers \Magento\Newsletter\Model\Subscriber
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -233,12 +234,11 @@ class SubscriberTest extends TestCase
 
     /**
      * Test to try unsubscribe customer from newsletters with wrong confirmation code
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
     public function testUnsubscribeException()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('This is an invalid subscription confirmation code.');
         $this->subscriber->setCode(111);
         $this->subscriber->setCheckCode(222);
 
