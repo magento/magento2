@@ -86,25 +86,12 @@
 
             .product-item-info {
                 text-align: center;
-                width: auto;
-            }
-
-            .product-item-actions {
-                display: inline-block;
-            }
-
-            .product-item-description {
-                margin: 10px 0;
             }
         }
     }
 }
 
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
     .block.widget .products-grid .product-item,
     .page-layout-1column .block.widget .products-grid .product-item,
     .page-layout-3columns .block.widget .products-grid .product-item {
@@ -119,7 +106,13 @@
             margin-left: 0;
         }
     }
+}
 
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.widget .products-grid .product-item {
         width: 100%/3;
 
