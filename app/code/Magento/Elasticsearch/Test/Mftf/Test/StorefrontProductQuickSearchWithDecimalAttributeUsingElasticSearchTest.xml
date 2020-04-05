@@ -79,8 +79,7 @@
         <!--Reindex and clear cache-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageToLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <!-- Navigate to Storefront and search -->
         <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult0">
