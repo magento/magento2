@@ -181,9 +181,6 @@ class RulesTest extends TestCase
 
     /**
      * Test LocalizedException throw case.
-     *
-     * @expectedException LocalizedException
-     * @expectedExceptionMessage TestException
      */
     public function testLocalizedExceptionOccurance()
     {
