@@ -11,6 +11,10 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Customer\Block\Form\Register $block */
 /** @var \Magento\Framework\Escaper $escaper */
 $formData = $block->getFormData();
+$showAddressFileds = false;
+if($block->getShowAddressFields() || $block->getConfig('customer/address/show_address_fields')){
+    $showAddressFileds = true;
+}
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
@@ -64,7 +68,7 @@ $formData = $block->getFormData();
             <?= $_gender->setGender($formData->getGender())->toHtml() ?>
         <?php endif ?>
     </fieldset>
-    <?php if ($block->getShowAddressFields()): ?>
+    <?php if ($showAddressFileds): ?>
         <?php $cityValidationClass = $this->helper(Address::class)->getAttributeValidationClass('city'); ?>
         <?php $postcodeValidationClass = $this->helper(Address::class)->getAttributeValidationClass('postcode'); ?>
         <?php $regionValidationClass = $this->helper(Address::class)->getAttributeValidationClass('region'); ?>
@@ -310,7 +314,7 @@ require([
 
 });
 </script>
-<?php if ($block->getShowAddressFields()): ?>
+<?php if ($showAddressFileds): ?>
 <script type="text/x-magento-init">
     {
         "#country": {
