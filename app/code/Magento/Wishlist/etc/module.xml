@@ -11,6 +11,7 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Captcha"/>
+            <module name="Magento_CatalogInventory"/>
         </sequence>
     </module>
 </config>

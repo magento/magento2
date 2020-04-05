@@ -12,6 +12,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 
 /**
  * Wishlist Data Helper
@@ -111,6 +112,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $escaper;
 
     /**
+     * @var StockItemRepository
+     */
+    protected $stockItemRepository;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -121,6 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param WishlistProviderInterface $wishlistProvider
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Escaper $escaper
+     * @param StockItemRepository $stockItemRepository
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -134,7 +141,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        Escaper $escaper = null
+        Escaper $escaper,
+        StockItemRepository $stockItemRepository = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -144,7 +152,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
-        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->escaper = $escaper;
+        $this->stockItemRepository = $stockItemRepository ?? ObjectManager::getInstance()->get(StockItemRepository::class);
         parent::__construct($context);
     }
 
@@ -347,6 +356,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $url = $this->_getUrlStore($item)->getUrl('wishlist/index/add');
         if ($productId) {
             $params['product'] = $productId;
+            $stockItem = $this->stockItemRepository->get($productId);
+            if ($stockItem) {
+                $params['qty'] = $stockItem->getMinSaleQty() ?? 1;
+            }
         }
 
         return $this->_postDataHelper->getPostData(
