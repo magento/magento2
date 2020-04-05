@@ -171,7 +171,10 @@ class QueueTest extends TestCase
             ->getMock();
         $transport = $this->createMock(TransportInterface::class);
         $this->subscribersCollectionMock->expects($this->once())->method('getQueueJoinedFlag')->willReturn(false);
-        $this->subscribersCollectionMock->expects($this->once())->method('useQueue')->with($this->queue)->willReturnSelf();
+        $this->subscribersCollectionMock->expects($this->once())
+            ->method('useQueue')
+            ->with($this->queue)
+            ->willReturnSelf();
         $this->subscribersCollectionMock->expects($this->once())->method('getSize')->willReturn(5);
         $this->subscribersCollectionMock->expects($this->once())->method('useOnlyUnsent')->willReturnSelf();
         $this->subscribersCollectionMock->expects($this->once())->method('showCustomerInfo')->willReturnSelf();
