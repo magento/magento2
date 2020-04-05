@@ -137,7 +137,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $expected = <<<expected
-(function(require){
+(function(){
 (function() {
 file_one.js content
 require.config(config);
@@ -149,7 +149,7 @@ require.config(config);
 
 
 
-})(require);
+})();
 expected;
 
         $this->minifyAdapterMock
@@ -180,18 +180,19 @@ expected;
             ->willReturnArgument(0);
 
         $expected = <<<code
-    var ctx = require.s.contexts._,
-        origNameToUrl = ctx.nameToUrl,
-        baseUrl = ctx.config.baseUrl;
+    (function () {
+        var ctx = require.s.contexts._,
+            origNameToUrl = ctx.nameToUrl,
+            baseUrl = ctx.config.baseUrl;
 
-    ctx.nameToUrl = function() {
-        var url = origNameToUrl.apply(ctx, arguments);
-        if (url.indexOf(baseUrl) === 0&&!url.match(/\.min\./)) {
-            url = url.replace(/(\.min)?\.js$/, '.min.js');
-        }
-        return url;
-    };
-
+        ctx.nameToUrl = function() {
+            var url = origNameToUrl.apply(ctx, arguments);
+            if (url.indexOf(baseUrl)===0&&!url.match(/\.min\./)) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
+            return url;
+        };
+    })();
 code;
         $this->assertEquals($expected, $this->object->getMinResolverCode());
     }
