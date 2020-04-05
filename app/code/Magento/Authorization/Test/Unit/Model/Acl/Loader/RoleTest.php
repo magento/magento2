@@ -68,7 +68,7 @@ class RoleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->setMethods(['create', 'getModelInstance'])
