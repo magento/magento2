@@ -13,12 +13,12 @@
             <title value="Update category, sort products by default sorting"/>
             <description value="Login as admin, update category and sort products"/>
             <testCaseId value="MC-6059"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>

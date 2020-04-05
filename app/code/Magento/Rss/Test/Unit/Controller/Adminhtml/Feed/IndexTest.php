@@ -6,11 +6,8 @@
 namespace Magento\Rss\Test\Unit\Controller\Adminhtml\Feed;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Zend\Feed\Writer\Exception\InvalidArgumentException;
 
 /**
- * Class IndexTest
- * @package Magento\Rss\Controller\Feed
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexTest extends \PHPUnit\Framework\TestCase

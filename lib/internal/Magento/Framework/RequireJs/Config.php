@@ -155,22 +155,15 @@ config;
     {
         $distributedConfig = '';
         $customConfigFiles = $this->fileSource->getFiles($this->design->getDesignTheme(), self::CONFIG_FILE_NAME);
+        
         foreach ($customConfigFiles as $file) {
             /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
             $fileReader = $this->readFactory->create($file->getFilename(), DriverPool::FILE);
             $config = $fileReader->readAll($file->getName());
-            $distributedConfig .= str_replace(
-                ['%config%', '%context%'],
-                [$config, $file->getModule()],
-                self::PARTIAL_CONFIG_TEMPLATE
-            );
+            $distributedConfig .= str_replace('%config%', $config, self::PARTIAL_CONFIG_TEMPLATE);
         }
 
-        $fullConfig = str_replace(
-            ['%function%', '%usages%'],
-            [$distributedConfig],
-            self::FULL_CONFIG_TEMPLATE
-        );
+        $fullConfig = str_replace(['%function%', '%usages%'], [$distributedConfig], self::FULL_CONFIG_TEMPLATE);
 
         if ($this->minification->isEnabled('js')) {
             $fullConfig = $this->minifyAdapter->minify($fullConfig);

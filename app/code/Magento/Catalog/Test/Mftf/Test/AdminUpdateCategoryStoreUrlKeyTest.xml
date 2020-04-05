@@ -14,7 +14,7 @@
             <stories value="Update SEO-friendly URL via the Admin"/>
             <title value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <description value="SEO-friendly URL should update regardless of scope or redirect change."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92338"/>
             <group value="category"/>
         </annotations>
@@ -26,7 +26,7 @@
         </after>
 
         <!-- Create category, change store view to default -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">

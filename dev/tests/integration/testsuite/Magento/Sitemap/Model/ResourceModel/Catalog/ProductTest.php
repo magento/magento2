@@ -52,7 +52,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include all
-     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionAll()
     {
@@ -121,7 +120,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include base
-     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionBase()
     {

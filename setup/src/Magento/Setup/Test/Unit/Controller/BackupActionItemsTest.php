@@ -67,11 +67,11 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
             $this->filesystem
         );
 
-        $request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
+        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
+        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
         $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
@@ -91,7 +91,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
         $this->filesystem->expects($this->once())->method('validateAvailableDiscSpace');
         $jsonModel = $this->controller->checkAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -106,7 +106,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
             $this->throwException(new \Exception("Test error message"))
         );
         $jsonModel = $this->controller->checkAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -118,7 +118,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
     {
         $this->backupRollback->expects($this->once())->method('dbBackup')->willReturn('backup/path/');
         $jsonModel = $this->controller->createAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -129,6 +129,6 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $model = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $model);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $model);
     }
 }

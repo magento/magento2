@@ -1827,6 +1827,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _getColumnTypeByDdl($column)
     {
+        // phpstan:ignore
         switch ($column['DATA_TYPE']) {
             case 'bool':
                 return Table::TYPE_BOOLEAN;
@@ -1957,7 +1958,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
-                } elseif ($v instanceof \Zend\Db\Sql\Expression) {
+                } elseif ($v instanceof \Laminas\Db\Sql\Expression) {
                     $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
@@ -2732,6 +2733,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             } catch (\Exception $e) {
                 if (in_array(strtolower($indexType), ['primary', 'unique'])) {
                     $match = [];
+                    // phpstan:ignore
                     if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d-\.]+)\'#', $e->getMessage(), $match)) {
                         $ids = explode('-', $match[1]);
                         $this->_removeDuplicateEntry($tableName, $fields, $ids);
