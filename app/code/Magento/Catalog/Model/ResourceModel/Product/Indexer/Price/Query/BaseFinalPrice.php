@@ -223,11 +223,7 @@ class BaseFinalPrice
         $select->where("e.type_id = ?", $productType);
 
         if ($entityIds !== null) {
-            if (count($entityIds) > 1) {
-                $select->where('e.entity_id IN (?)', $entityIds);
-            } else {
-                $select->where('e.entity_id = ?', $entityIds);
-            }
+            $select->where('e.entity_id IN (?)', $entityIds);
         }
 
         /**
