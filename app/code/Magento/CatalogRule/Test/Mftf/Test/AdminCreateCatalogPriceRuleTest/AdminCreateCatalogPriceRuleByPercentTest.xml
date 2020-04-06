@@ -29,7 +29,7 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- log in and create the price rule -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
             <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
