@@ -21,6 +21,7 @@
                 <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+                <magentoCron stepKey="runCronIndex" groups="index"/>
             </before>
             <after>
                 <!-- Delete the bundled product -->
