@@ -286,15 +286,19 @@ class Editor extends Textarea
 
         // Button to media images insertion window
         if ($this->getConfig('add_images')) {
+            $htmlId = $this->getHtmlId();
+            $url = $this->getConfig('files_browser_window_url')
+                . 'target_element_id/'
+                . $htmlId
+                . '/'
+                . (null !== $this->getConfig('store_id')
+                    ? 'store/' . $this->getConfig('store_id') . '/"'
+                    : '');
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Image...'),
-                    'onclick' => "MediabrowserUtility.openDialog('"
-                        . $this->getConfig('files_browser_window_url')
-                        . "target_element_id/" . $this->getHtmlId() . "/"
-                        . (null !== $this->getConfig('store_id') ? 'store/'
-                            . $this->getConfig('store_id') . '/' : '')
-                        . "')",
+                    'onclick' => 'MediabrowserUtility.openDialog(\'' . $url
+                        . '\', null, null, null, { \'targetElementId\': \'' . $htmlId . '\' })',
                     'class' => 'action-add-image plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -496,13 +500,13 @@ class Editor extends Textarea
         $jsString = '
                 <script type="text/javascript">
                 //<![CDATA[
-                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {};
                 window.tinyMCE_GZ.loaded = true;
                 require([
-                "jquery", 
-                "mage/translate", 
-                "mage/adminhtml/events", 
-                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
+                "jquery",
+                "mage/translate",
+                "mage/adminhtml/events",
+                "mage/adminhtml/wysiwyg/tiny_mce/setup",
                 "mage/adminhtml/wysiwyg/widget"
                 ], function(jQuery){' .
             "\n" .
