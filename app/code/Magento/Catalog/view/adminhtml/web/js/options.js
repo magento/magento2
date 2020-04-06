@@ -10,12 +10,13 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'Magento_Catalog/js/options-clearable-default',
     'jquery/ui',
     'prototype',
     'form',
     'validation',
     'mage/translate'
-], function (jQuery, mageTemplate, rg) {
+], function (jQuery, mageTemplate, rg, optionsClearableDefault) {
     'use strict';
 
     return function (config) {
@@ -164,6 +165,7 @@ define([
             jQuery('body').trigger('processStart');
             attributeOption.renderWithDelay(config.attributesData, 0, 100, 300);
             attributeOption.bindRemoveButtons();
+            optionsClearableDefault();
         });
 
         if (config.isSortable) {

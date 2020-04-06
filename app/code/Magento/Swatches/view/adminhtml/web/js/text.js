@@ -12,10 +12,11 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'Magento_Catalog/js/options-clearable-default',
     'jquery/ui',
     'prototype',
     'validation'
-], function (jQuery, mageTemplate, rg) {
+], function (jQuery, mageTemplate, rg, optionsClearableDefault) {
     'use strict';
 
     return function (config) {
@@ -190,6 +191,11 @@ define([
             jQuery('body').trigger('processStart');
             swatchTextOption.renderWithDelay(config.attributesData, 0, 100, 300);
             swatchTextOption.bindRemoveButtons();
+            optionsClearableDefault({
+                'hiddenInputSelector': '#swatch-text-option-clear-default',
+                'isDefaultRadioSelector': 'input[name="defaulttext[]"]',
+                'wrapperSelector': '#swatch-text-options-panel'
+            });
         });
 
         if (config.isSortable) {

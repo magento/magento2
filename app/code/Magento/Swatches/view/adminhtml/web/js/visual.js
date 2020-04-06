@@ -12,11 +12,12 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'Magento_Catalog/js/options-clearable-default',
     'jquery/colorpicker/js/colorpicker',
     'prototype',
     'jquery/ui',
     'validation'
-], function (jQuery, mageTemplate, rg) {
+], function (jQuery, mageTemplate, rg, optionsClearableDefault) {
     'use strict';
 
     return function (config) {
@@ -243,6 +244,11 @@ define([
                 '.colorpicker_handler',
                 swatchVisualOption.initColorPicker
             );
+            optionsClearableDefault({
+                'hiddenInputSelector': '#swatch-visual-option-clear-default',
+                'isDefaultRadioSelector': 'input[name="defaultvisual[]"]',
+                'wrapperSelector': '#swatch-visual-options-panel'
+            });
         });
         jQuery('body').on('click', function (event) {
             var element = jQuery(event.target);

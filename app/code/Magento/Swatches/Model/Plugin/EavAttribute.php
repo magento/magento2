@@ -134,14 +134,17 @@ class EavAttribute
     protected function setProperOptionsArray(Attribute $attribute)
     {
         $canReplace = false;
+        $clearDefaultValue = false;
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $canReplace = true;
             $defaultValue = $attribute->getData('defaultvisual');
+            $clearDefaultValue = $attribute->getData('swatch_visual_clear_default');
             $optionsArray = $attribute->getData('optionvisual');
             $swatchesArray = $attribute->getData('swatchvisual');
         } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
             $canReplace = true;
             $defaultValue = $attribute->getData('defaulttext');
+            $clearDefaultValue = $attribute->getData('swatch_text_clear_default');
             $optionsArray = $attribute->getData('optiontext');
             $swatchesArray = $attribute->getData('swatchtext');
         }
@@ -149,7 +152,9 @@ class EavAttribute
             if (!empty($optionsArray)) {
                 $attribute->setData('option', $optionsArray);
             }
-            if (!empty($defaultValue)) {
+            if ($clearDefaultValue) {
+                $attribute->setData('default', null);
+            } elseif (!empty($defaultValue)) {
                 $attribute->setData('default', $defaultValue);
             } else {
                 $attribute->setData('default', [0 => $attribute->getDefaultValue()]);
