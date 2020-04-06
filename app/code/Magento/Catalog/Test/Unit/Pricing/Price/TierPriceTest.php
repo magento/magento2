@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Test for \Magento\Catalog\Pricing\Price\TierPrice
@@ -323,6 +323,13 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
                         'price'         => '8.3',
                         'website_price' => '8.3',
                         'price_qty'     => '2.',
+                        'cust_group'    => Group::CUST_GROUP_ALL
+                    ],
+                    // cases price is greater than current minimum price
+                    [
+                        'price'         => '9.3',
+                        'website_price' => '9.3',
+                        'price_qty'     => '4.',
                         'cust_group'    => Group::CUST_GROUP_ALL
                     ],
                 ],
