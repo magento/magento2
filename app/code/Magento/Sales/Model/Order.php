@@ -1832,7 +1832,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
         if ($this->isCanceled() || $itemCancel == false) {
 
-            $label = __('Total Cancel');
+            $label = __('Total Canceled');
         } else {
 
             $label = __('Total Due');
