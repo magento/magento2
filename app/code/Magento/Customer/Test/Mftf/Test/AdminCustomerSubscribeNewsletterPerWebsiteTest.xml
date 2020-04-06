@@ -41,8 +41,7 @@
             <argument name="customStore" value="NewStoreViewData"/>
         </actionGroup>
         <!-- Switch to the new Store View on storefront -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
-        <waitForPageLoad stepKey="waitForNavigateHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
             <argument name="storeView" value="NewStoreViewData"/>
         </actionGroup>

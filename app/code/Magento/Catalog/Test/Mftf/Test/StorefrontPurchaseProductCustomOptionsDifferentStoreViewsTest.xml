@@ -209,7 +209,7 @@
 
         <!-- Switch to FR Store View Storefront -->
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnProduct4Page"/>
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
             <argument name="storeView" value="customStoreFR"/>
