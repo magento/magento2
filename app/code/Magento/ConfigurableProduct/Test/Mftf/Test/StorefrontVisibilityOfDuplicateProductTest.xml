@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create configurable product-->
             <comment userInput="Create configurable product" stepKey="commentCreateConfigProduct"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>

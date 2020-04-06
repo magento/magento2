@@ -33,7 +33,7 @@
             <!--Create customer-->
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create tax rule-->
             <actionGroup ref="AdminCreateTaxRuleCustomProductTaxClassActionGroup" stepKey="createTaxRuleCustomProductTaxClass">
                 <argument name="productTaxClassName" value="$createProductTaxClass.taxClass[class_name]$"/>

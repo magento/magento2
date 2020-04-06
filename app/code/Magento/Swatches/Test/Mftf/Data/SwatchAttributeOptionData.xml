@@ -24,4 +24,12 @@
         <requiredEntity type="StoreLabel">Option2Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option2Store1</requiredEntity>
     </entity>
+    <entity name="SwatchProductAttributeOption3" type="ProductSwatchAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">swatch-option3-</data>
+        <data key="is_default">true</data>
+        <data key="sort_order">2</data>
+        <requiredEntity type="StoreLabel">Option3Store0</requiredEntity>
+        <requiredEntity type="StoreLabel">Option3Store1</requiredEntity>
+    </entity>
 </entities>
