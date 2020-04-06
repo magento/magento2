@@ -19,7 +19,7 @@ use Magento\Authorization\Model\Role;
 use Magento\User\Model\User;
 
 /**
- * Class CategoriesTest
+ * Tests for \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
