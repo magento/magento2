@@ -21,7 +21,7 @@
             <!--Set Display out of stock product-->
             <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 1" />
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Create Simple Product-->

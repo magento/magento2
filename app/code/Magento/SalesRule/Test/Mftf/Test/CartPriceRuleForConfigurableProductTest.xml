@@ -77,7 +77,7 @@
 
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

@@ -35,4 +35,13 @@
         <data key="checkboxText" unique="suffix">test_checkbox</data>
         <data key="content" unique="suffix">TestMessage</data>
     </entity>
+    <entity name="disabledHtmlTerm" type="term">
+        <data key="name" unique="suffix">name</data>
+        <data key="isActive">Disabled</data>
+        <data key="isHtml">HTML</data>
+        <data key="mode">Manually</data>
+        <data key="storeView">Default Store View</data>
+        <data key="checkboxText" unique="suffix">test_checkbox</data>
+        <data key="content">&lt;html&gt;</data>
+    </entity>
 </entities>
