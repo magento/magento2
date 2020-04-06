@@ -94,13 +94,9 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
-            ->with(
-                $expectedClass,
-                [
-                    'data' => ['attribute_model' => $this->attributeMock],
-                    'layer' => $this->layerMock
-                ]
-            )
+            ->with($expectedClass, [
+                'data' => ['attribute_model' => $this->attributeMock],
+                'layer' => $this->layerMock])
             ->will($this->returnValue('filter'));
 
         $this->attributeMock->expects($this->once())
@@ -169,8 +165,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'method' => 'getFrontendInput',
-                'value' => 'price',
+                'method' => 'getAttributeCode',
+                'value' => FilterList::PRICE_FILTER,
                 'expectedClass' => 'PriceFilterClass',
             ],
             [
@@ -179,8 +175,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                 'expectedClass' => 'DecimalFilterClass',
             ],
             [
-                'method' => 'getFrontendInput',
-                'value' => 'text',
+                'method' => 'getAttributeCode',
+                'value' => null,
                 'expectedClass' => 'AttributeFilterClass',
             ]
         ];
@@ -195,8 +191,8 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Filters contains only price attribute' => [
-                'method' => 'getFrontendInput',
-                'value' => 'price',
+                'method' => 'getAttributeCode',
+                'value' => FilterList::PRICE_FILTER,
                 'expectedClass' => 'PriceFilterClass',
                 'expectedResult' => [
                     'filter'
