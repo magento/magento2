@@ -7,14 +7,14 @@
 
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel;
 
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Indexer\ActionInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\ActionInterface;
 
 /**
  * Plugin product resource model

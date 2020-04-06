@@ -14,8 +14,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Indexer\ActionInterface;
 
 /**
