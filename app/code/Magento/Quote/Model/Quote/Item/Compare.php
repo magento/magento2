@@ -26,6 +26,13 @@ class Compare
     private $jsonValidator;
 
     /**
+     * Not Represent options
+     *
+     * @var array
+     */
+    private $notRepresentOptions = ['info_buyRequest'];
+
+    /**
      * Constructor
      *
      * @param Json|null $serializer
@@ -96,7 +103,11 @@ class Compare
     {
         $options = [];
         foreach ($item->getOptions() as $option) {
-            $options[$option->getCode()] = $this->getOptionValues($option->getValue());
+            $optionCode = $option->getCode();
+            if (in_array($optionCode, $this->notRepresentOptions)) {
+                continue;
+            }
+            $options[$optionCode] = $this->getOptionValues($option->getValue());
         }
         return $options;
     }
