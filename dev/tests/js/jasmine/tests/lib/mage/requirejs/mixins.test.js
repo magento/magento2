@@ -6,6 +6,8 @@
 /* eslint max-nested-callbacks: 0 */
 // jscs:disable jsDoc
 
+var config = requirejs.s.contexts._.config;
+
 require.config({
     paths: {
         'mixins': 'mage/requirejs/mixins'
@@ -25,6 +27,10 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
             resolver(function () {
                 done();
             });
+        });
+
+        afterEach(function () {
+            requirejs.s.contexts._.config = config;
         });
 
         it('does not affect modules without mixins', function (done) {
@@ -184,4 +190,6 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
             require([name], function () {});
         });
     });
+    requirejs.s.contexts._.config = config;
 });
+requirejs.s.contexts._.config = config;
