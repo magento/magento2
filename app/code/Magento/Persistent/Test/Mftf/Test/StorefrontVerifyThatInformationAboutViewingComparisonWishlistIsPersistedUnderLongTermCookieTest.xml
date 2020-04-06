@@ -36,7 +36,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>

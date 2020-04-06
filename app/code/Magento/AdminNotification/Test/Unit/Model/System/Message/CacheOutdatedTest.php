@@ -5,42 +5,50 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
-class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
+use Magento\AdminNotification\Model\System\Message\CacheOutdated;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CacheOutdatedTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheTypeListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_urlInterfaceMock;
 
     /**
-     * @var \Magento\AdminNotification\Model\System\Message\CacheOutdated
+     * @var CacheOutdated
      */
     protected $_messageModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
-        $this->_urlInterfaceMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->_cacheTypeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->_urlInterfaceMock = $this->createMock(UrlInterface::class);
+        $this->_cacheTypeListMock = $this->createMock(TypeListInterface::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $arguments = [
             'authorization' => $this->_authorizationMock,
             'urlBuilder' => $this->_urlInterfaceMock,
             'cacheTypeList' => $this->_cacheTypeListMock,
         ];
         $this->_messageModel = $objectManagerHelper->getObject(
-            \Magento\AdminNotification\Model\System\Message\CacheOutdated::class,
+            CacheOutdated::class,
             $arguments
         );
     }

@@ -24,7 +24,7 @@
             </createData>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="multiple_address_customer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Go to tax rule page -->
             <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
