@@ -39,7 +39,7 @@ class AuthenticateTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
-        $this->customerRegistry = $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
     }
 
     /**

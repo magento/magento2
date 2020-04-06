@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Model;
 
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
-use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for customer authentication model.
  *
+ * @see \Magento\Customer\Model\Authentication
  * @magentoDbIsolation enabled
  */
 class AuthenticationTest extends TestCase
@@ -23,7 +23,7 @@ class AuthenticationTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var Authentication */
+    /** @var AuthenticationInterface */
     private $authentication;
 
     /**
@@ -34,18 +34,7 @@ class AuthenticationTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->authentication = $this->objectManager->get(Authentication::class);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/locked_customer.php
-     *
-     * @return void
-     */
-    public function testAuthenticateWithWrongPasswordByLockedCustomer(): void
-    {
-        $this->expectExceptionObject(new UserLockedException(__('The account is locked.')));
-        $this->authentication->authenticate(1, 'password1');
+        $this->authentication = $this->objectManager->get(AuthenticationInterface::class);
     }
 
     /**

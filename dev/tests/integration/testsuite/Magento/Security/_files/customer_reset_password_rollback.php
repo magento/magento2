@@ -9,10 +9,12 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer_rollback.php';
+if ($this->moduleManager->isEnabled('Magento_Customer')) {
+    require __DIR__ . '/../../../Magento/Customer/_files/customer_rollback.php';
 
-$objectManager = Bootstrap::getObjectManager();
-/** @var PasswordResetRequestEvent $passwordResetRequestEventResource */
-$passwordResetRequestEventResource = $objectManager->get(PasswordResetRequestEvent::class);
-$dateTime = new DateTimeImmutable();
-$passwordResetRequestEventResource->deleteRecordsOlderThen($dateTime->format(DateTime::DATETIME_PHP_FORMAT));
+    $objectManager = Bootstrap::getObjectManager();
+    /** @var PasswordResetRequestEvent $passwordResetRequestEventResource */
+    $passwordResetRequestEventResource = $objectManager->get(PasswordResetRequestEvent::class);
+    $dateTime = new DateTimeImmutable();
+    $passwordResetRequestEventResource->deleteRecordsOlderThen($dateTime->format(DateTime::DATETIME_PHP_FORMAT));
+}

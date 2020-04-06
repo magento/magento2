@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for customer checkout config provider.
+ *
+ * @see \Magento\Customer\Model\Checkout\ConfigProvider
  */
 class ConfigProviderTest extends TestCase
 {
@@ -20,7 +22,7 @@ class ConfigProviderTest extends TestCase
     private $objectManager;
 
     /** @var ConfigProvider */
-    private $configProviderInterface;
+    private $configProvider;
 
     /**
      * @inheritdoc
@@ -30,7 +32,7 @@ class ConfigProviderTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->configProviderInterface = $this->objectManager->get(ConfigProvider::class);
+        $this->configProvider = $this->objectManager->get(ConfigProvider::class);
     }
 
     /**
@@ -40,7 +42,7 @@ class ConfigProviderTest extends TestCase
      */
     public function testAutocompletePasswordEnabled(): void
     {
-        $this->assertEquals('on', $this->configProviderInterface->getConfig()['autocomplete']);
+        $this->assertEquals('on', $this->configProvider->getConfig()['autocomplete']);
     }
 
     /**
@@ -50,6 +52,6 @@ class ConfigProviderTest extends TestCase
      */
     public function testAutocompletePasswordDisabled(): void
     {
-        $this->assertEquals('off', $this->configProviderInterface->getConfig()['autocomplete']);
+        $this->assertEquals('off', $this->configProvider->getConfig()['autocomplete']);
     }
 }

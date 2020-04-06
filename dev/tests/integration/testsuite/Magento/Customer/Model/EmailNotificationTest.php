@@ -8,15 +8,24 @@ declare(strict_types=1);
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Email\Model\ResourceModel\Template as TemplateResource;
+use Magento\Email\Model\ResourceModel\Template\CollectionFactory;
+use Magento\Email\Model\Template;
+use Magento\Email\Model\TemplateFactory;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Mail\MessageInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
 
+
 /**
  * Test for customer email notification model.
  *
+ * @see \Magento\Customer\Model\EmailNotification
  * @magentoDbIsolation enabled
  */
 class EmailNotificationTest extends TestCase
@@ -24,14 +33,29 @@ class EmailNotificationTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
+    /** @var Manager */
+    private $moduleManager;
+
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
-    /** @var EmailNotification */
+    /** @var EmailNotificationInterface */
     private $emailNotification;
 
     /** @var TransportBuilderMock */
     private $transportBuilder;
+
+    /** @var TemplateResource */
+    private $templateResource;
+
+    /** @var TemplateFactory */
+    private $templateFactory;
+
+    /** @var MutableScopeConfigInterface */
+    private $mutableScopeConfig;
+
+    /** @var CollectionFactory */
+    private $templateCollectionFactory;
 
     /**
      * @inheritdoc
@@ -41,19 +65,46 @@ class EmailNotificationTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->moduleManager = $this->objectManager->get(Manager::class);
+        //This check is needed because Magento_Customer independent of Magento_Email
+        if (!$this->moduleManager->isEnabled('Magento_Email')) {
+            $this->markTestSkipped('Magento_Email module disabled.');
+        }
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
-        $this->emailNotification = $this->objectManager->get(EmailNotification::class);
+        $this->emailNotification = $this->objectManager->get(EmailNotificationInterface::class);
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
+        $this->templateResource = $this->objectManager->get(TemplateResource::class);
+        $this->templateFactory = $this->objectManager->create(TemplateFactory::class);
+        $this->mutableScopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
+        $this->templateCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        if ($this->moduleManager->isEnabled('Magento_Email')) {
+            $this->mutableScopeConfig->clean();
+            $collection = $this->templateCollectionFactory->create();
+            $template = $collection->addFieldToFilter('template_code', 'customer_password_email_template')
+                ->getFirstItem();
+            if ($template->getId()) {
+                $this->templateResource->delete($template);
+            }
+        }
+
+        parent::tearDown();
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/set_custom_customer_reset_password_template.php
      *
      * @return void
      */
     public function testResetPasswordCustomTemplate(): void
     {
+        $this->setEmailTemplateConfig(EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE);
         $customer = $this->customerRepository->get('customer@example.com');
         $this->emailNotification->credentialsChanged($customer, $customer->getEmail(), true);
         $expectedSender = ['name' => 'CustomerSupport', 'email' => 'support@example.com'];
@@ -62,13 +113,13 @@ class EmailNotificationTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/set_custom_customer_forgot_email_template.php
      * @magentoConfigFixture current_store customer/password/forgot_email_identity custom1
      *
      * @return void
      */
     public function testForgotPasswordCustomTemplate(): void
     {
+        $this->setEmailTemplateConfig(EmailNotification::XML_PATH_FORGOT_EMAIL_TEMPLATE);
         $customer = $this->customerRepository->get('customer@example.com');
         $this->emailNotification->passwordResetConfirmation($customer);
         $expectedSender = ['name' => 'Custom 1', 'email' => 'custom1@example.com'];
@@ -77,13 +128,13 @@ class EmailNotificationTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/set_custom_customer_remind_email_template.php
      * @magentoConfigFixture current_store customer/password/forgot_email_identity custom2
      *
      * @return void
      */
     public function testRemindPasswordCustomTemplate(): void
     {
+        $this->setEmailTemplateConfig(EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE);
         $customer = $this->customerRepository->get('customer@example.com');
         $this->emailNotification->passwordReminder($customer);
         $expectedSender = ['name' => 'Custom 2', 'email' => 'custom2@example.com'];
@@ -122,5 +173,21 @@ class EmailNotificationTest extends TestCase
         $messageFrom = current($messageFrom);
         $this->assertEquals($expectedSender['name'], $messageFrom->getName());
         $this->assertEquals($expectedSender['email'], $messageFrom->getEmail());
+    }
+
+    /**
+     * Set email template config.
+     *
+     * @param string $configPath
+     * @return void
+     */
+    private function setEmailTemplateConfig(string $configPath): void
+    {
+        $template = $this->templateFactory->create();
+        $template->setTemplateCode('customer_password_email_template')
+            ->setTemplateText(file_get_contents(__DIR__ . '/../_files/customer_password_email_template.html'))
+            ->setTemplateType(Template::TYPE_HTML);
+        $this->templateResource->save($template);
+        $this->mutableScopeConfig->setValue($configPath, $template->getId(), ScopeInterface::SCOPE_STORE, 'default');
     }
 }

@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for authentication popup block.
  *
+ * @see \Magento\Customer\Block\Account\AuthenticationPopup
  * @magentoAppArea frontend
  */
 class AuthenticationPopupTest extends TestCase
