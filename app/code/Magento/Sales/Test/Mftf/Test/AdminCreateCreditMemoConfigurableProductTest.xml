@@ -83,7 +83,7 @@
             <!-- Enable payment method one of "Check/Money Order" and  shipping method one of "Flat Rate" -->
             <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete data -->

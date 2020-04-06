@@ -17,7 +17,7 @@
             <group value="Swatches"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="addNewProductAttribute"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}"

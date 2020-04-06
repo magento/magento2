@@ -23,7 +23,7 @@
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="ApiSimplePrice100Qty100v2" stepKey="simpleProduct"/>
             <createData entity="Simple_US_Utah_Customer" stepKey="customer" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct" />

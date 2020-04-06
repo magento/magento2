@@ -23,7 +23,7 @@
         </annotations>
         <before>
             <!--Login As Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--CreateNewProduct-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -93,7 +93,7 @@
 
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>

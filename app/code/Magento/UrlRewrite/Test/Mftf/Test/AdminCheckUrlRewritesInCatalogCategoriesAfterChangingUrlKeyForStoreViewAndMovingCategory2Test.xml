@@ -16,7 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25622"/>
             <group value="catalog"/>
-            <group value="urlRewrite"/>
+            <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -31,7 +31,7 @@
             </createData>
 
             <!-- Log in to backend -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
