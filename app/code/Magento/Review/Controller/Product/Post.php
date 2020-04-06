@@ -11,7 +11,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
 /**
- * Class Post
+ * Save new submitted review
  */
 class Post extends ProductController implements HttpPostActionInterface
 {
