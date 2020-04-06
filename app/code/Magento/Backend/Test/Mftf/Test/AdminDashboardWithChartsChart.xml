@@ -41,7 +41,7 @@
         </after>
         <!-- Login as admin -->
         <comment userInput="Login as admin" stepKey="adminLogin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Grab quantity value -->
         <comment userInput="Grab quantity value from dashboard" stepKey="grabQuantityFromDashboard"/>
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabStartQuantity"/>

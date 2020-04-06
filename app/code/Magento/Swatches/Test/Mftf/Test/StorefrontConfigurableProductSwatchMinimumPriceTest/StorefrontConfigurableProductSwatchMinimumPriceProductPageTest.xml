@@ -21,7 +21,7 @@
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <!-- Delete configurable product and all child products -->

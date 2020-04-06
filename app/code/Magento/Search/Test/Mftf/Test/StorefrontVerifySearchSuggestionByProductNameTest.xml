@@ -20,7 +20,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>

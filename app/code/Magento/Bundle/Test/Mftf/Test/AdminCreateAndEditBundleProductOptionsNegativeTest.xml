@@ -32,7 +32,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete the simple product -->

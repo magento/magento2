@@ -38,7 +38,7 @@
             <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
             <deleteData createDataKey="createSimple2" stepKey="deleteSimple2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
                 <argument name="customerEmail" value="John_Smith_Customer.email"/>
             </actionGroup>

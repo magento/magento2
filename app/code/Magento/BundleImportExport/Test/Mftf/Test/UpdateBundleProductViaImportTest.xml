@@ -18,7 +18,7 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete products created via import -->
@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="sku" value="Simple"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Create Bundle product via import -->
