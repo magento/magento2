@@ -17,6 +17,7 @@ use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SeverityTest extends TestCase
@@ -32,10 +33,10 @@ class SeverityTest extends TestCase
     {
         parent::setUp();
 
-        /** @var Inbox |\PHPUnit_Framework_MockObject_MockObject $inboxMock */
+        /** @var Inbox|MockObject $inboxMock */
         $inboxMock = $this->getMockBuilder(Inbox::class)->disableOriginalConstructor()->getMock();
 
-        /** @var Context | \PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var Context|MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
 
         $this->sut = new Severity($contextMock, $inboxMock);
@@ -43,7 +44,7 @@ class SeverityTest extends TestCase
 
     public function testShouldRenderSeverity() : void
     {
-        /** @var Column | \PHPUnit_Framework_MockObject_MockObject $columnMock */
+        /** @var Column|MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndex'])

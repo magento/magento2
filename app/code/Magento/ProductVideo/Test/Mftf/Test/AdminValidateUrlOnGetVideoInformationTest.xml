@@ -15,9 +15,12 @@
             <description value="Testing for a required video url when getting video information"/>
             <severity value="CRITICAL"/>
             <group value="ProductVideo"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig"/>
         </before>
         <after>

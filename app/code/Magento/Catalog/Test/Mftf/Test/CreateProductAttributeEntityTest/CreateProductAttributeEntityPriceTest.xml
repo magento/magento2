@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateProductAttributeEntityPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Admin should be able to create a Price product attribute"/>
+            <description value="Admin should be able to create a Price product attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-10897"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{priceProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
+            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
+            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+
+        <!--Create new Product Attribute with Price-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="priceProductAttribute"/>
+        </actionGroup>
+
+        <!--Navigate to Product Attribute.-->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+            <argument name="ProductAttribute" value="{{priceProductAttribute.attribute_code}}"/>
+        </actionGroup>
+
+        <!--Perform appropriate assertions against priceProductAttribute entity-->
+        <seeInField stepKey="assertLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{priceProductAttribute.attribute_code}}"/>
+        <seeOptionIsSelected stepKey="assertInputType" selector="{{AttributePropertiesSection.InputType}}" userInput="{{priceProductAttribute.frontend_input}}"/>
+        <seeOptionIsSelected stepKey="assertRequired" selector="{{AttributePropertiesSection.ValueRequired}}" userInput="{{priceProductAttribute.is_required_admin}}"/>
+        <seeInField stepKey="assertAttrCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{priceProductAttribute.attribute_code}}"/>
+
+        <!--Go to New Product page, add Attribute and check values-->
+        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
+            <argument name="attributeCode" value="{{priceProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeTextInputByCode(priceProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
+        <see stepKey="checkLabel" selector="{{AdminProductAttributesSection.attributeLabelByCode(priceProductAttribute.attribute_code)}}" userInput="{{priceProductAttribute.attribute_code}}"/>
+    </test>
+</tests>

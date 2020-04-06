@@ -14,14 +14,14 @@
             <stories value="Multishipping"/>
             <title value="Process multishipping checkout when Cart page is opened in another tab"/>
             <description value="Process multishipping checkout when Cart page is opened in another tab"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-17871"/>
             <useCaseId value="MC-17469"/>
             <group value="multishipping"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create two simple products -->

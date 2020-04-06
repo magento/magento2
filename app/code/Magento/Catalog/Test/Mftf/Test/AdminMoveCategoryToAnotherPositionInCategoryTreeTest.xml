@@ -14,13 +14,13 @@
             <title value="Move Category to Another Position in Category Tree"/>
             <description value="Test log in to Move Category and Move Category to Another Position in Category Tree"/>
             <testCaseId value="MC-13612"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
         <after>

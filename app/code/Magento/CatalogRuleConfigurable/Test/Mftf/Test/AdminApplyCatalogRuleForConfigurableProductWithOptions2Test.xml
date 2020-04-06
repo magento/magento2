@@ -92,8 +92,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <!-- Delete created data -->
@@ -104,16 +103,27 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
 
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <!-- Delete created price rules -->
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteFirstCatalogPriceRule">
+                <argument name="ruleName" value="{{CatalogRuleToFixed.name}}"/>
+            </actionGroup>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteSecondCatalogPriceRule">
+                <argument name="ruleName" value="{{CatalogRuleWithoutDiscount.name}}"/>
+            </actionGroup>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteThirdCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Create price rule for first configurable product option -->
         <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
         <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="name" value="{{CatalogRuleToFixed.name}}"/>
+            <argument name="description" value="{{CatalogRuleToFixed.description}}"/>
             <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForFirstPriceRule">
@@ -131,6 +141,8 @@
         <!-- Create price rule for second configurable product option -->
         <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingThirdPriceRule"/>
         <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForThirdPriceRule">
+            <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+            <argument name="description" value="{{_defaultCatalogRule.description}}"/>
             <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForThirdPriceRule">
@@ -145,6 +157,8 @@
         <!-- Create price rule for third configurable product option -->
         <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingSecondPriceRule"/>
         <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForSecondPriceRule">
+            <argument name="name" value="{{CatalogRuleWithoutDiscount.name}}"/>
+            <argument name="description" value="{{CatalogRuleWithoutDiscount.description}}"/>
             <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="fillConditionsForSecondPriceRule">
