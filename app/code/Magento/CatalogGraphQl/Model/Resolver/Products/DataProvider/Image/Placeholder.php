@@ -10,7 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
-use Magento\Theme\Model\View\Design;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Image Placeholder provider
@@ -28,19 +28,19 @@ class Placeholder
     private $assetRepository;
 
     /**
-     * @var Design
+     * @var DesignInterface
      */
     private $themeDesign;
 
     /**
      * @param PlaceholderFactory $placeholderFactory
      * @param AssetRepository $assetRepository
-     * @param Design $themeDesign
+     * @param DesignInterface $themeDesign
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         AssetRepository $assetRepository,
-        Design $themeDesign
+        DesignInterface $themeDesign
     ) {
         $this->placeholderFactory = $placeholderFactory;
         $this->assetRepository = $assetRepository;
