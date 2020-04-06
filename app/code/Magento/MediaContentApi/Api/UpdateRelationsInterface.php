@@ -10,12 +10,12 @@ namespace Magento\MediaContentApi\Api;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 
 /**
- * Process relation managing between media asset and content: assign or unassign relation if exists.
+ * Update the media assets to content relations. Assign new media assets and unassign media assets no longer used
  */
 interface UpdateRelationsInterface
 {
     /**
-     * Create new relation between media asset and content or updated existing
+     * Update the media assets to content relations. Assign new media assets and unassign media assets no longer used
      *
      * @param ContentIdentityInterface $contentIdentity
      * @param string $content

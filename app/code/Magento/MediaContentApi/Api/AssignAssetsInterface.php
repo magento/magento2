@@ -11,13 +11,13 @@ namespace Magento\MediaContentApi\Api;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 
 /**
- * Saving data represents relation between the media asset and media content
+ * Assign a media asset to the piece of content. Should be executed when media assets is added to the content
  * @api
  */
 interface AssignAssetsInterface
 {
     /**
-     * Save relation between media asset and media content.
+     * Assign a media asset to the piece of content. Should be executed when media assets is added to the content
      *
      * @param ContentIdentityInterface $contentIdentity
      * @param int[] $assetIds

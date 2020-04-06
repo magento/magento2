@@ -10,13 +10,13 @@ namespace Magento\MediaContentApi\Api;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Used for extracting media asset list from a media content by the search pattern.
+ * Parse the content string for references to media assets and return the list of identified media assets
  * @api
  */
 interface ExtractAssetsFromContentInterface
 {
     /**
-     * Search for the media asset in content and extract it providing a list of media assets.
+     * Parse the content string for references to media assets and return the list of identified media assets
      *
      * @param string $content
      * @return AssetInterface[]

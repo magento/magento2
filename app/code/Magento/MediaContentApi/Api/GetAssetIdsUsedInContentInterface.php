@@ -11,13 +11,13 @@ namespace Magento\MediaContentApi\Api;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 
 /**
- * Get media asset ids used in the content
+ * Get media asset ids that are used in the piece of content identified by the specified content identity
  * @api
  */
 interface GetAssetIdsUsedInContentInterface
 {
     /**
-     * Get media asset ids used in the content
+     * Get media asset ids that are used in the piece of content identified by the specified content identity
      *
      * @param ContentIdentityInterface $contentIdentity
      * @return int[]
