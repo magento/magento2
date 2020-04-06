@@ -21,12 +21,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
 
-
 /**
  * Test for customer email notification model.
  *
  * @see \Magento\Customer\Model\EmailNotification
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailNotificationTest extends TestCase
 {

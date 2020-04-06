@@ -5,16 +5,20 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\PasswordResetRequestEventFactory;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent as PasswordResetRequestEventResource;
 use Magento\TestFramework\Helper\Bootstrap;
 
-if ($this->moduleManager->isEnabled('Magento_Customer')) {
+$objectManager = Bootstrap::getObjectManager();
+/** @var Manager $moduleManager */
+$moduleManager = $objectManager->get(Manager::class);
+//This check is needed because Magento_Security independent of Magento_Customer
+if ($moduleManager->isEnabled('Magento_Customer')) {
     require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
-    $objectManager = Bootstrap::getObjectManager();
     /** @var PasswordResetRequestEventFactory $passwordResetRequestEventFactory */
     $passwordResetRequestEventFactory = $objectManager->get(PasswordResetRequestEventFactory::class);
     /** @var PasswordResetRequestEventResource $passwordResetRequestEventResource */
