@@ -20,7 +20,7 @@
             <group value="elasticsearch"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Set Minimal Query Length-->
@@ -83,8 +83,7 @@
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
         <!--Assert search results on storefront-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
             <argument name="phrase" value="?searchable;"/>
         </actionGroup>

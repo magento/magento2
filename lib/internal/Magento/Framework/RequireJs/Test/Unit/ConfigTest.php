@@ -115,9 +115,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $fileOne->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('file_one.js'));
-        $fileOne->expects($this->once())
-            ->method('getModule')
-            ->will($this->returnValue('Module_One'));
         $fileTwo = $this->createMock(\Magento\Framework\View\File::class);
         $fileTwo->expects($this->once())
             ->method('getFilename')

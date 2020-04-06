@@ -22,7 +22,7 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Clean up our modifications to the existing color attribute -->

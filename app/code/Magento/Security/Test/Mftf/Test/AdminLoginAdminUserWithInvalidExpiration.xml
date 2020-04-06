@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
@@ -34,7 +34,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserInfoTab"/>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         <wait time="120" stepKey="waitForUserToExpire"/>
         <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
             <argument name="adminUser" value="{$grabUsername}"/>
@@ -43,7 +43,7 @@
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage" />
 
         <!-- delete user -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
             <argument name="user" value="NewAdminUser" />
         </actionGroup>

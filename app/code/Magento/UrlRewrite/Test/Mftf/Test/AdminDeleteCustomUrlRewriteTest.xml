@@ -20,7 +20,7 @@
 
         <before>
             <createData entity="defaultUrlRewrite" stepKey="urlRewrite" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
