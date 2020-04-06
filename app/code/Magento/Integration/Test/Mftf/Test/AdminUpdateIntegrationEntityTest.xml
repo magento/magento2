@@ -30,24 +30,32 @@
             <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
             <!-- Create New Integration -->
             <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createIntegration">
-                <argument name="name" value="Integration1"/>
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
                 <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
+            <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
         </before>
         <after>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="returnToIntegrationsPage">
+                <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="searchForIntegration">
+                <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- TEST BODY -->
         <!-- Find Created Integration In Grid -->
         <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
-            <argument name="name" value="Integration1"/>
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
         </actionGroup>
         <!-- Open Integration Edit Page -->
         <actionGroup ref="AdminClickEditIntegrationEntityActionGroup" stepKey="clickEditButton"/>
         <!-- Update Integration Entity -->
         <actionGroup ref="AdminUpdateCreatedIntegrationEntityActionGroup" stepKey="updateIntegrationEntity">
-            <argument name="name" value="Integration Updated"/>
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
             <argument name="endpoint" value="https://endpoint-updated.com"/>
             <argument name="linkUrl" value="https://testlink-updated.com"/>
             <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
@@ -56,15 +64,15 @@
         <actionGroup ref="AdminSubmitIntegrationFormActionGroup" stepKey="submitTheForm"/>
         <!-- Assert Success Message -->
         <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeSuccessMessage">
-            <argument name="message" value="The integration 'Integration Updated' has been saved."/>
+            <argument name="message" value="The integration '{{defaultIntegrationData.name}} Updated' has been saved."/>
             <argument value="success" name="messageType"/>
         </actionGroup>
         <!-- Assert Updated Entity In Grid -->
         <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findDeletedIntegration">
-            <argument name="name" value="Integration Updated"/>
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
         </actionGroup>
         <actionGroup ref="AssertUpdatedIntegrationEntityInGridActionGroup" stepKey="seeIntegrationEntity">
-            <argument name="name" value="Integration Updated"/>
+            <argument name="name" value="{{defaultIntegrationData.name}} Updated"/>
         </actionGroup>
     </test>
 </tests>
