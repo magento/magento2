@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontOpenInlineTranslationPopupActionGroup">
         <annotations>
-            <description>Open the Inline Translation popup for provided element.</description>
+            <description>Open the Inline Translation popup for provided element on Storefront.</description>
         </annotations>
         <arguments>
             <argument name="elementSelector" type="string" defaultValue="{{StorefrontHeaderSection.welcomeMessage}}"/>
@@ -18,5 +18,7 @@
 
         <executeJS function="jQuery('{{elementSelector}}').mousemove()" stepKey="moveMouseOverSelector"/>
         <executeJS function="jQuery('{{InlineTranslationModeSection.bookIcon}}').click()" stepKey="clickBookIcon"/>
+        <waitForElementVisible selector="{{InlineTranslationModeSection.popUpTranslate}}" stepKey="waitForTranslationPopupAppear"/>
+        <seeElement selector="{{InlineTranslationModeSection.popUpTranslate}}" stepKey="seeTranslateForm"/>
     </actionGroup>
 </actionGroups>

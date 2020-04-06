@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminTranslateElementActionGroup" deprecated="Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, AssertStorefrontInlineTranslationPopupAppearsActionGroup, StorefrontFillTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup">
+    <actionGroup name="AdminTranslateElementActionGroup" deprecated="Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, StorefrontFillCustomTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup">
         <annotations>
-            <description>DEPRECATED. Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, AssertStorefrontInlineTranslationPopupAppearsActionGroup, StorefrontFillTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup.</description>
+            <description>DEPRECATED. Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, StorefrontFillCustomTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup.</description>
         </annotations>
         <arguments>
             <argument name="elementSelector" type="string"/>

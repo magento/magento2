@@ -12,7 +12,7 @@
         <annotations>
             <features value="Translation"/>
             <stories value="Inline Translation"/>
-            <title value="[Inline Translation] Buttons inline translation"/>
+            <title value="Buttons inline translation"/>
             <description value="A merchant should be able to translate buttons by an inline translation tool"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-12735"/>
@@ -59,8 +59,5 @@
         <actionGroup ref="StorefrontOpenInlineTranslationPopupActionGroup" stepKey="openInlineTranslationPopup">
             <argument name="elementSelector" value="{{StorefrontMinicartSection.goToCheckout}}"/>
         </actionGroup>
-
-        <!-- Assert that Inline Translation popup appears -->
-        <actionGroup ref="AssertStorefrontInlineTranslationPopupAppearsActionGroup" stepKey="assertInlineTranslationPopupAppears"/>
     </test>
 </tests>
