@@ -19,7 +19,7 @@ class ResourceFactoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $serviceLocatorMock = $this->getMockForAbstractClass(
-            \Zend\ServiceManager\ServiceLocatorInterface::class,
+            \Laminas\ServiceManager\ServiceLocatorInterface::class,
             ['get']
         );
         $connectionFactory = new ConnectionFactory($serviceLocatorMock);

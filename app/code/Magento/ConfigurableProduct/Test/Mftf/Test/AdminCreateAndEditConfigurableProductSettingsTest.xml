@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
@@ -91,7 +91,7 @@
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="{{ApiConfigurableProduct.name}}"/>
+            <argument name="productUrl" value="{{ApiConfigurableProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Assert product design settings "Layout empty" -->
