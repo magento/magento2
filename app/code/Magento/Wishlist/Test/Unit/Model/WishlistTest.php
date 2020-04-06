@@ -357,7 +357,13 @@ class WishlistTest extends TestCase
         ];
     }
 
-    public function testAddNewItem()
+    /**
+     * @param boolean $isSalable
+     * @throws LocalizedException
+     *
+     * @dataProvider addNewItemProvider
+     */
+    public function testAddNewItem($isSalable)
     {
         $productId = 1;
         $storeId = 1;
@@ -382,7 +388,7 @@ class WishlistTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'hasWishlistStoreId', 'getStoreId', 'getTypeInstance'])
+            ->setMethods(['getId', 'hasWishlistStoreId', 'getStoreId', 'getTypeInstance', 'isSalable'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('getId')
@@ -396,6 +402,9 @@ class WishlistTest extends TestCase
         $productMock->expects($this->once())
             ->method('getTypeInstance')
             ->willReturn($instanceType);
+        $productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn($isSalable);
 
         $this->productRepository->expects($this->once())
             ->method('getById')
@@ -420,5 +429,13 @@ class WishlistTest extends TestCase
             ->will($this->returnValue($stockItem));
 
         $this->assertEquals($result, $this->wishlist->addNewItem($productMock, $buyRequest));
+    }
+
+    public function addNewItemProvider(): \Generator
+    {
+        $isSaleableValues = [true, false];
+        foreach ($isSaleableValues as $isSaleable) {
+            yield [$isSaleable];
+        }
     }
 }
