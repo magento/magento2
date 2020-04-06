@@ -17,9 +17,12 @@
             <testCaseId value="MC-11505"/>
             <group value="translation"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-31663"/>
+            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!--Product and a customer is created -->
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
@@ -43,7 +46,7 @@
             <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Set production mode -->
 <!--            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->
@@ -56,7 +59,7 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProduct">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -333,7 +336,7 @@
             <argument name="Customer" value="$$createCustomer2$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showCart"/>
@@ -427,7 +430,7 @@
             <argument name="Customer" value="$$createCustomer3$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addOneProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addOneProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

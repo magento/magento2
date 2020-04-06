@@ -160,7 +160,23 @@ class RowTest extends \PHPUnit\Framework\TestCase
             ->willReturn('store_flat_table');
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(true);
+        $this->connection->expects($this->any())->method('fetchCol')
+            ->willReturn(['store_id_1']);
         $this->flatItemEraser->expects($this->once())->method('removeDeletedProducts');
+        $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);
+        $this->model->execute('product_id_1');
+    }
+
+    public function testExecuteWithExistingFlatTablesRemoveProductFromStore()
+    {
+        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
+            ->willReturn('store_flat_table');
+        $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
+            ->willReturn(true);
+        $this->connection->expects($this->any())->method('fetchCol')
+            ->willReturn([1]);
+        $this->flatItemEraser->expects($this->once())->method('deleteProductsFromStore');
+        $this->flatItemEraser->expects($this->never())->method('removeDeletedProducts');
         $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);
         $this->model->execute('product_id_1');
     }

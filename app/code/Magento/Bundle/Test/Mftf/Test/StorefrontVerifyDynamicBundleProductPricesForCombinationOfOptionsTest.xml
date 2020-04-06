@@ -39,10 +39,12 @@
             </createData>
 
             <!--Add special price to simple product-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct5.id$$)}}" stepKey="openAdminEditPage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
+                <argument name="productId" value="$$simpleProduct5.id$$"/>
+            </actionGroup>
             <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
             <!--Create Bundle product-->
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
@@ -192,7 +194,7 @@
             <waitForPageLoad stepKey="waitForTaxSaved"/>
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory1"/>
 
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>

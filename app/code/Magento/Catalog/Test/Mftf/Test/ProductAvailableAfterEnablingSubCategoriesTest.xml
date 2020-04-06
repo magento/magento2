@@ -14,7 +14,7 @@
             <stories value="Categories"/>
             <title value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
             <description value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-97370"/>
             <useCaseId value="MAGETWO-96846"/>
             <group value="Catalog"/>
@@ -29,12 +29,12 @@
                 <requiredEntity createDataKey="simpleSubCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront2"/>

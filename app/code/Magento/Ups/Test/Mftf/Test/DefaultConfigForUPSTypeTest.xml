@@ -20,13 +20,13 @@
             <group value="ups"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Collapse UPS tab and logout-->
             <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
             <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Set shipping methods UPS type to default -->
         <comment userInput="Set shipping methods UPS type to default" stepKey="setToDefaultShippingMethodsUpsType"/>
@@ -42,6 +42,9 @@
         <!-- Assert that selected UPS type by default is 'United Parcel Service XML' -->
         <comment userInput="Check that selected UPS type by default is 'United Parcel Service XML'" stepKey="assertDefUpsType"/>
         <grabTextFrom selector="{{AdminShippingMethodsUpsSection.selectedUpsType}}" stepKey="grabSelectedOptionText"/>
-        <assertEquals expected='United Parcel Service XML' expectedType="string" actual="($grabSelectedOptionText)" stepKey="assertDefaultUpsType"/>
+        <assertEquals stepKey="assertDefaultUpsType">
+			<actualResult type="const">($grabSelectedOptionText)</actualResult>
+			<expectedResult type="string">United Parcel Service XML</expectedResult>
+        </assertEquals>
     </test>
 </tests>

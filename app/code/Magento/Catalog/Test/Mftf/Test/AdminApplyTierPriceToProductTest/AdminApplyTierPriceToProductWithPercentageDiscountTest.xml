@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyTierPriceToProductWithPercentageDiscountTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MC-5517 - System tries to save 0 in Advanced Pricing which is invalid for Discount field"/>
+            <title value="You should be able to apply tier price to a product with float percent discount."/>
+            <description value="You should be able to apply tier price to a product with float percent discount."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-96881"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAndpercent"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="1" stepKey="fillProductTierPriceQtyInput"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="Discount" stepKey="selectProductTierPriceValueType"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="0.1" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="goProductPageOnStorefront"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceProductPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmountProductPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabelCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmountCategoryPage"/>
+    </test>
+</tests>

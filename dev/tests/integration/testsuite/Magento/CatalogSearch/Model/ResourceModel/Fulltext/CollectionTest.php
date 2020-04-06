@@ -40,6 +40,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider filtersDataProviderQuickSearch
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
+     * @magentoAppIsolation enabled
      */
     public function testLoadWithFilterQuickSearch($filters, $expectedCount)
     {
@@ -61,6 +62,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider filtersDataProviderCatalogView
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
+     * @magentoAppIsolation enabled
      */
     public function testLoadWithFilterCatalogView($filters, $expectedCount)
     {
@@ -78,6 +80,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/products_with_the_same_search_score.php
+     * @magentoAppIsolation enabled
      */
     public function testSearchResultsAreTheSameForSameRequests()
     {
@@ -141,5 +144,158 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             [['category_ids' => []], 5],
             [[], 5],
         ];
+    }
+
+    /**
+     * Test configurable product with multiple options
+     *
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_two_options.php
+     * @magentoConfigFixture default/catalog/search/engine mysql
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @magentoAppIsolation enabled
+     * @dataProvider configurableProductWithMultipleOptionsDataProvider
+     * @param array $filters
+     * @param bool $found
+     * @param array $outOfStock
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testConfigurableProductWithMultipleOptions(array $filters, bool $found, array $outOfStock = [])
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /**@var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
+        $stockRegistry = $objectManager->get(\Magento\CatalogInventory\Model\StockRegistry::class);
+        /**@var $stockItemRepository \Magento\CatalogInventory\Api\StockItemRepositoryInterface */
+        $stockItemRepository = $objectManager->get(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);
+        $collection = $objectManager->create(
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
+            ['searchRequestName' => 'filter_by_configurable_product_options']
+        );
+        foreach ($outOfStock as $sku) {
+            $stockItem = $stockRegistry->getStockItemBySku($sku);
+            $stockItem->setQty(0);
+            $stockItem->setIsInStock(0);
+            $stockItemRepository->save($stockItem);
+        }
+
+        $options = ['test_configurable', 'test_configurable_2'];
+        foreach ($options as $option) {
+            if (isset($filters[$option])) {
+                $filters[$option] = $this->getOptionValue($option, $filters[$option]);
+            }
+        }
+        $filters['category_ids'] = 2;
+        foreach ($filters as $field => $value) {
+            $collection->addFieldToFilter($field, $value);
+        }
+        $collection->load();
+        $items = $collection->getItems();
+        if ($found) {
+            $this->assertCount(1, $items);
+            $item = array_shift($items);
+            $this->assertEquals('configurable_with_2_opts', $item['sku']);
+        }
+        $this->assertCount(0, $items);
+    }
+
+    /**
+     * Provide filters to test configurable product with multiple options
+     *
+     * @return array
+     */
+    public function configurableProductWithMultipleOptionsDataProvider(): array
+    {
+        return [
+            [
+                [],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 1'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 2'],
+                true
+            ],
+            [
+                ['test_configurable_2' => 'Option 1'],
+                true
+            ],
+            [
+                ['test_configurable_2' => 'Option 2'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 1', 'test_configurable_2' => 'Option 1'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 1', 'test_configurable_2' => 'Option 2'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 2', 'test_configurable_2' => 'Option 1'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 2', 'test_configurable_2' => 'Option 2'],
+                true
+            ],
+            [
+                ['test_configurable' => 'Option 2', 'test_configurable_2' => 'Option 2'],
+                false,
+                [
+                    'configurable2_option_12',
+                    'configurable2_option_22',
+                ]
+            ],
+            [
+                ['test_configurable' => 'Option 2', 'test_configurable_2' => 'Option 2'],
+                false,
+                [
+                    'configurable2_option_21',
+                    'configurable2_option_22',
+                ]
+            ],
+            [
+                ['test_configurable' => 'Option 2'],
+                false,
+                [
+                    'configurable2_option_21',
+                    'configurable2_option_22',
+                ]
+            ],
+            [
+                [],
+                false,
+                [
+                    'configurable2_option_11',
+                    'configurable2_option_12',
+                    'configurable2_option_21',
+                    'configurable2_option_22',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Get attribute option value by label
+     *
+     * @param string $attributeName
+     * @param string $optionLabel
+     * @return string|null
+     */
+    private function getOptionValue(string $attributeName, string $optionLabel): ?string
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        $attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeName);
+        $option = null;
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getLabel() === $optionLabel) {
+                return $option->getValue();
+            }
+        }
+        return null;
     }
 }
