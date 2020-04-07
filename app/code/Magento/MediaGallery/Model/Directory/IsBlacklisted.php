@@ -19,17 +19,15 @@ use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
 class IsBlacklisted implements IsBlacklistedInterface
 {
     /**
-     * @var array
+     * @var Config
      */
-    private $patterns;
+    private $config;
 
     /**
-     * @param array $patterns
+     * @param Config $config
      */
-    public function __construct(
-        array $patterns
-    ) {
-        $this->patterns = $patterns;
+    public function __construct(Config $config) {
+        $this->config = $config;
     }
 
     /**
@@ -40,7 +38,7 @@ class IsBlacklisted implements IsBlacklistedInterface
      */
     public function execute(string $path): bool
     {
-        foreach ($this->patterns as $pattern) {
+        foreach ($this->config->get('blacklist/patterns') as $pattern) {
             if (empty($pattern)) {
                 continue;
             }

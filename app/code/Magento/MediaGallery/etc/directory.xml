@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_MediaGallery:etc/directory.xsd">
+    <blacklist>
+        <patterns>
+            <pattern name="captcha">/pub\/media\/captcha/</pattern>
+            <pattern name="catalog">/pub\/media\/catalog\/product/</pattern>
+            <pattern name="customer">/pub\/media\/customer/</pattern>
+            <pattern name="downloadable">/pub\/media\/downloadable/</pattern>
+            <pattern name="import">/pub\/media\/import/</pattern>
+            <pattern name="theme">/pub\/media\/theme/</pattern>
+            <pattern name="theme_customization">/pub\/media\/theme_customization/</pattern>
+            <pattern name="tmp">/pub\/media\/tmp/</pattern>
+            <pattern name="directories-with-dots">/^\./</pattern>
+        </patterns>
+    </blacklist>
+</config>
