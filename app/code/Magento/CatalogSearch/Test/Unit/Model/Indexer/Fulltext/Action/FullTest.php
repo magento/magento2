@@ -22,6 +22,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped("MC-18948: Mysql Search Engine is deprecated");
         $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();

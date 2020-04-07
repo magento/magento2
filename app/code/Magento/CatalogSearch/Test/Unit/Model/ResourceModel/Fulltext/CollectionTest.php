@@ -83,6 +83,7 @@ class CollectionTest extends BaseCollection
      */
     protected function setUp()
     {
+        $this->markTestSkipped("MC-18948: Mysql Search Engine is deprecated");
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();
