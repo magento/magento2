@@ -8,9 +8,8 @@ define([
     'jquery',
     'underscore',
     'Magento_ConfigurableProduct/js/components/associated-product-list',
-    'Magento_ConfigurableProduct/js/variations/product-grid',
     'mage/translate'
-], function (Component, $, _, productList , prdoductGrid ) {
+], function (Component, $, _, productList ) {
     'use strict';
 
     /**
