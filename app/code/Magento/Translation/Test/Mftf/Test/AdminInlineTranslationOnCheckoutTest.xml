@@ -11,14 +11,14 @@
     <test name="AdminInlineTranslationOnCheckoutTest">
         <annotations>
             <stories value="Inline Translation"/>
-            <title value="[Inline Translation] Inline translate on Checkout"/>
-            <description value="As merchant I want to be able to rename text labels on Checkout steps"/>
+            <title value="DEPRECATED [Inline Translation] Inline translate on Checkout"/>
+            <description value="DEPRECATED As merchant I want to be able to rename text labels on Checkout steps"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11505"/>
             <group value="translation"/>
             <group value="checkout"/>
             <skip>
-                <issueId value="MC-31016"/>
+                <issueId value="DEPRECATED">Use StorefrontInlineTranslationOnCheckoutTest instead</issueId>
             </skip>
         </annotations>
         <before>

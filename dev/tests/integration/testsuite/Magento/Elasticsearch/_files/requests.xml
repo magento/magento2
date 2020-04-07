@@ -451,4 +451,44 @@
         <from>0</from>
         <size>10</size>
     </request>
+    <request query="catalog_view_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="catalog_view_container" boost="1">
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="visibility"/>
+            </query>
+            <query xsi:type="filteredQuery" name="category">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="price">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="visibility">
+                <filterReference clause="must" ref="visibility_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
+        </filters>
+        <aggregations>
+            <bucket name="price_bucket" field="price" xsi:type="dynamicBucket" method="$price_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="category_bucket" field="category_ids" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10</size>
+    </request>
 </requests>
