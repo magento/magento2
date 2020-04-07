@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Advanced;
 
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Strategy provider for preparing product collection.
@@ -38,7 +39,7 @@ class ProductCollectionPrepareStrategyProvider
      * Get strategy provider for product collection prepare process.
      *
      * @return ProductCollectionPrepareStrategyInterface
-     * @throws \Exception
+     * @throws RuntimeException
      */
     public function getStrategy(): ProductCollectionPrepareStrategyInterface
     {
@@ -46,7 +47,7 @@ class ProductCollectionPrepareStrategyProvider
             if ($this->strategies['default']) {
                 return $this->strategies['default'];
             } else {
-                throw new \Exception('Default product collection strategy not found');
+                throw new RuntimeException(__('Default product collection strategy not found'));
             }
         }
         return $this->strategies[$this->engineResolver->getCurrentSearchEngine()];

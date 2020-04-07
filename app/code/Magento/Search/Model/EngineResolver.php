@@ -8,6 +8,7 @@ namespace Magento\Search\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Search engine resolver model.
@@ -91,7 +92,7 @@ class EngineResolver implements EngineResolverInterface
      * It returns string identifier of Search Engine that is currently chosen in configuration
      *
      * @return string
-     * @throws \Exception
+     * @throws RuntimeException
      * @since 100.1.0
      */
     public function getCurrentSearchEngine()
@@ -109,13 +110,13 @@ class EngineResolver implements EngineResolverInterface
             $defaultEngine = $this->scopeConfig->getValue(
                 $this->path
             );
-            if ($defaultEngine) {
+            if (in_array($defaultEngine, $this->engines)) {
                 $this->logger->error(
                     $engine . ' search engine doesn\'t exist. Falling back to ' . $defaultEngine
                 );
                 return $defaultEngine;
             } else {
-                throw new \Exception($engine . ' search engine doesn\'t exist');
+                throw new RuntimeException(__('"%1" search engine doesn\'t exist', $engine));
             }
         }
     }

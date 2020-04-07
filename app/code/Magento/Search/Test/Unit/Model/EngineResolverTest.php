@@ -62,7 +62,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
         $this->path = 'catalog/search/engine';
         $this->scopeType = 'default';
         $this->scopeCode = null;
-        $this->engines = [EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, 'anotherengine'];
+        $this->engines = ['defaultentengine', 'anotherengine'];
 
         $this->model = new EngineResolver(
             $this->scopeConfig,
@@ -91,21 +91,40 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getCurrentSearchEngine
      */
-    public function testGetCurrentSearchEngineWithoutEngine()
+    public function testGetCurrentSearchEngineDefaultEngine()
     {
         $engine = 'nonexistentengine';
+        $defaultEngine = 'defaultentengine';
+
+        $this->scopeConfig->expects($this->at(0))
+            ->method('getValue')
+            ->willReturn($engine);
+
+        $this->scopeConfig->expects($this->at(1))
+            ->method('getValue')
+            ->willReturn($defaultEngine);
+
+        $this->loggerMock->expects($this->any())
+            ->method('error')
+            ->with(
+                "{$engine} search engine doesn't exist. Falling back to {$defaultEngine}"
+            );
+
+        $this->assertEquals($defaultEngine, $this->model->getCurrentSearchEngine());
+    }
+
+    /**
+     * Test getCurrentSearchEngine
+     * @expectedException \Exception
+     */
+    public function testGetCurrentSearchEngineWithoutEngine()
+    {
+        $engine = null;
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn($engine);
 
-        $this->loggerMock->expects($this->any())
-            ->method('error')
-            ->with(
-                $engine . ' search engine doesn\'t exists. Falling back to '
-                . EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE
-            );
-
-        $this->assertEquals(EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, $this->model->getCurrentSearchEngine());
+        $this->model->getCurrentSearchEngine();
     }
 }
