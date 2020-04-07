@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
 /**
  * Sets up session for setup/index.php/session/prolong or redirects to error page
  */
-class Session extends \Zend\Mvc\Controller\AbstractActionController
+class Session extends \Laminas\Mvc\Controller\AbstractActionController
 {
     /**
-     * @var \Zend\ServiceManager\ServiceManager
+     * @var \Laminas\ServiceManager\ServiceManager
      */
     private $serviceManager;
 
@@ -21,11 +22,11 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
     private $objectManagerProvider;
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param \Laminas\ServiceManager\ServiceManager $serviceManager
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
-        \Zend\ServiceManager\ServiceManager $serviceManager,
+        \Laminas\ServiceManager\ServiceManager $serviceManager,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
     ) {
         $this->serviceManager = $serviceManager;
@@ -35,13 +36,13 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * No index action, return 404 error page
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new \Laminas\View\Model\ViewModel();
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_404);
         return $view;
     }
 
@@ -65,6 +66,7 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
                     $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
                     /** @var \Magento\Backend\Model\Url $backendUrl */
                     $backendUrl = $objectManager->get(\Magento\Backend\Model\Url::class);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $urlPath = parse_url($backendUrl->getBaseUrl(), PHP_URL_PATH);
                     $cookiePath = $urlPath . 'setup';
                     $sessionConfig->setCookiePath($cookiePath);
@@ -78,23 +80,24 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
                     );
                 }
                 $session->prolong();
-                return new \Zend\View\Model\JsonModel(['success' => true]);
+                return new \Laminas\View\Model\JsonModel(['success' => true]);
             }
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception $e) {
         }
-        return new \Zend\View\Model\JsonModel(['success' => false]);
+        return new \Laminas\View\Model\JsonModel(['success' => false]);
     }
 
     /**
      * Unlogin action, return 401 error page
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function unloginAction()
     {
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new \Laminas\View\Model\ViewModel();
         $view->setTemplate('/error/401.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_401);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_401);
         return $view;
     }
 }

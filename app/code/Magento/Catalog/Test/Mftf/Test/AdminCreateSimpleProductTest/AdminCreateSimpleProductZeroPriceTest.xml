@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductZeroPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Admin should be able to create a product with zero price"/>
+            <description value="Admin should be able to create a product with zero price"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89910"/>
+            <group value="product"/>
+        </annotations>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="0" stepKey="fillPrice"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.name)}}" stepKey="viewProduct"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$0.00" stepKey="seeZeroPrice"/>
+    </test>
+</tests>

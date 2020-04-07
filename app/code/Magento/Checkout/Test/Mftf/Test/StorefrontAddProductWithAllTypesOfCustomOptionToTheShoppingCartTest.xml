@@ -13,7 +13,7 @@
             <title value="Create a simple products with all types of oprtions and add it to the cart"/>
             <description value="Create a simple products with all types of oprtions and add it to the cart"/>
             <testCaseId value="MC-14726"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
