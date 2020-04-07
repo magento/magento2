@@ -8,26 +8,26 @@ namespace Magento\RedisMq\Model;
 use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 
 /**
- * DB connection type resolver.
+ * Redis connection type resolver.
  */
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
     /**
-     * DB connection names.
+     * Redis connection names.
      *
      * @var string[]
      */
-    private $dbConnectionNames;
+    private $redisConnectionNames;
 
     /**
      * Initialize dependencies.
      *
-     * @param string[] $dbConnectionNames
+     * @param string[] $redisConnectionNames
      */
-    public function __construct(array $dbConnectionNames = [])
+    public function __construct(array $redisConnectionNames = [])
     {
-        $this->dbConnectionNames = $dbConnectionNames;
-        $this->dbConnectionNames[] = 'db';
+        $this->redisConnectionNames = $redisConnectionNames;
+        $this->redisConnectionNames[] = 'redis';
     }
 
     /**
@@ -35,6 +35,6 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      */
     public function getConnectionType($connectionName)
     {
-        return in_array($connectionName, $this->dbConnectionNames) ? 'db' : null;
+        return in_array($connectionName, $this->redisConnectionNames) ? 'redis' : null;
     }
 }

@@ -88,7 +88,7 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
         );
         $exchange1->expects($this->once())
             ->method('getConnection')
-            ->willReturn('db');
+            ->willReturn('redis');
         $exchange1->expects($this->once())
             ->method('getBindings')
             ->willReturn([$binding1, $binding2]);
@@ -101,7 +101,7 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
         $exchange2->expects($this->never())
             ->method('getBindings');
 
-        $this->connnectionTypeResolver->method('getConnectionType')->willReturnOnConsecutiveCalls(['db', null]);
+        $this->connnectionTypeResolver->method('getConnectionType')->willReturnOnConsecutiveCalls(['redis', null]);
         $envelopeBody = 'serializedMessage';
         $this->messageQueueConfig->expects($this->once())
             ->method('getExchanges')->willReturn([$exchange1, $exchange2]);

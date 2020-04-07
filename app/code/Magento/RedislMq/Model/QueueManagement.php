@@ -279,7 +279,7 @@ class QueueManagement
         /* The logic below allows to prevent the same message being processed by several consumers in parallel */
         $selectedMessagesRelatedIds = [];
         foreach ($selectedMessages as &$message) {
-            /* Set message status here to avoid extra reading from DB after it is updated */
+            /* Set message status here to avoid extra reading from Redis after it is updated */
             $message[self::MESSAGE_STATUS] = self::MESSAGE_STATUS_IN_PROGRESS;
             $selectedMessagesRelatedIds[] = $message[self::MESSAGE_QUEUE_RELATION_ID];
         }

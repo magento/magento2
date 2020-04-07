@@ -30,7 +30,7 @@ class DefaultValueProvider
      * @param string $connection
      * @param string $exchange
      */
-    public function __construct($connection = 'amqp', $exchange = 'magento')
+    public function __construct($connection = 'db', $exchange = 'magento')
     {
         $this->connection = $connection;
         $this->exchange = $exchange;

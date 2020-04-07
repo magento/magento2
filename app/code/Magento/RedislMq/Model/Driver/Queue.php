@@ -5,10 +5,10 @@
  */
 namespace Magento\RedisMq\Model\Driver;
 
+use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\RedisMq\Model\QueueManagement;
-use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -78,9 +78,9 @@ class Queue implements QueueInterface
     public function dequeue()
     {
         $envelope = null;
-        $messages = $this->queueManagement->readMessages($this->queueName, 1);
-        if (isset($messages[0])) {
-            $properties = $messages[0];
+        $envelopes = $this->queueManagement->readMessages($this->queueName, 1);
+        if (isset($envelopes[0])) {
+            $properties = $envelopes[0];
 
             $body = $properties[QueueManagement::MESSAGE_BODY];
             unset($properties[QueueManagement::MESSAGE_BODY]);
@@ -96,10 +96,40 @@ class Queue implements QueueInterface
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
-        $properties = $envelope->getProperties();
-        $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
+        $this->getRedis()->zrem($this->queueName . ':reserved', $envelope->getReservedKey());
+    }
 
-        $this->queueManagement->changeStatus($relationId, QueueManagement::MESSAGE_STATUS_COMPLETE);
+    /**
+     * @inheritdoc
+     */
+    public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
+    {
+//        $properties = $envelope->getProperties();
+//        $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
+//
+//        if ($properties[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < $this->maxNumberOfTrials && $requeue) {
+//            $this->queueManagement->pushToQueueForRetry($relationId);
+//        } else {
+//            $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
+//            if ($rejectionMessage !== null) {
+//                $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
+//            }
+//        }
+
+        $this->acknowledge($envelope);
+
+        if ($requeue) {
+            $envelope = $this->getContext()->getSerializer()->toMessage($envelope->getReservedKey());
+            $envelope->setHeader('attempts', 0);
+
+            if ($envelope->getTimeToLive()) {
+                $envelope->setHeader('expires_at', time() + $envelope->getTimeToLive());
+            }
+
+            $payload = $this->getContext()->getSerializer()->toString($envelope);
+
+            $this->getRedis()->lpush($this->queueName, $payload);
+        }
     }
 
     /**
@@ -122,33 +152,39 @@ class Queue implements QueueInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
-    {
-        $properties = $envelope->getProperties();
-        $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
-
-        if ($properties[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < $this->maxNumberOfTrials && $requeue) {
-            $this->queueManagement->pushToQueueForRetry($relationId);
-        } else {
-            $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
-            if ($rejectionMessage !== null) {
-                $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
-            }
-        }
-    }
-
-    /**
      * @inheritDoc
      */
     public function push(EnvelopeInterface $envelope)
     {
-        $properties = $envelope->getProperties();
-        $this->queueManagement->addMessageToQueues(
-            $properties[QueueManagement::MESSAGE_TOPIC],
-            $envelope->getBody(),
-            [$this->queueName]
-        );
+//        $properties = $envelope->getProperties();
+//        $this->queueManagement->addMessageToQueues(
+//            $properties[QueueManagement::MESSAGE_TOPIC],
+//            $envelope->getBody(),
+//            [$this->queueName]
+//        );
+
+        $envelope->setMessageId(Uuid::uuid4()->toString());
+        $envelope->setHeader('attempts', 0);
+
+        if (null !== $this->timeToLive && null === $envelope->getTimeToLive()) {
+            $envelope->setTimeToLive($this->timeToLive);
+        }
+
+        if (null !== $this->deliveryDelay && null === $envelope->getDeliveryDelay()) {
+            $envelope->setDeliveryDelay($this->deliveryDelay);
+        }
+
+        if ($envelope->getTimeToLive()) {
+            $envelope->setHeader('expires_at', time() + $envelope->getTimeToLive());
+        }
+
+        $payload = $this->context->getSerializer()->toString($envelope);
+
+        if ($envelope->getDeliveryDelay()) {
+            $deliveryAt = time() + $envelope->getDeliveryDelay() / 1000;
+            $this->context->getRedis()->zadd($destination->getName() . ':delayed', $payload, $deliveryAt);
+        } else {
+            $this->context->getRedis()->lpush($destination->getName(), $payload);
+        }
     }
 }
