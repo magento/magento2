@@ -26,7 +26,6 @@ parameters:
         triggered_by: ["php"]
         whitelist_patterns:
           - /^app\/code\/Atwix\/(.*)/
-          - /^app\/code\/Magento\/(.*)/
         exclude: []
       phpcs:
         standard: "%magento_dir%/dev/tests/static/framework/Magento/ruleset.xml"
@@ -38,7 +37,6 @@ parameters:
         report_width: ~
         whitelist_patterns:
           - /^app\/code\/Atwix\/(.*)/
-          - /^app\/code\/Magento\/(.*)/
         encoding: ~
         ignore_patterns: []
         sniffs: []
