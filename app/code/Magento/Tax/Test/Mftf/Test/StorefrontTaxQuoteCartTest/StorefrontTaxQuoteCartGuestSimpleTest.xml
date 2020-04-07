@@ -18,7 +18,7 @@
             <group value="Tax"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
