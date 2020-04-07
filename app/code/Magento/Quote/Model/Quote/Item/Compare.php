@@ -71,13 +71,6 @@ class Compare
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }
-        $targetOptions = $this->getOptions($target);
-        $comparedOptions = $this->getOptions($compared);
-
-        if (array_diff_key($targetOptions, $comparedOptions) != array_diff_key($comparedOptions, $targetOptions)
-        ) {
-            return false;
-        }
 
         $targetOptionByCode = $target->getOptionsByCode();
         $comparedOptionsByCode = $compared->getOptionsByCode();
