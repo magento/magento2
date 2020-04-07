@@ -17,6 +17,5 @@
         </arguments>
         <fillField stepKey="fillNameField" selector="{{AdminNewIntegrationSection.name}}" userInput="{{name}}"/>
         <fillField stepKey="fillAdminPasswordField" selector="{{AdminNewIntegrationSection.password}}" userInput="{{password}}"/>
-
     </actionGroup>
 </actionGroups>
