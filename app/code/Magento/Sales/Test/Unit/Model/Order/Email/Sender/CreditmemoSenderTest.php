@@ -12,6 +12,10 @@ use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
  */
 class CreditmemoSenderTest extends AbstractSenderTest
 {
+    private const CREDITMEMO_ID = 1;
+
+    private const ORDER_ID = 1;
+
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender
      */
@@ -40,6 +44,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
             \Magento\Sales\Model\Order\Creditmemo::class,
             [
                 'getStore',
+                'getId',
                 '__wakeup',
                 'getOrder',
                 'setSendEmail',
@@ -54,6 +59,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+        $this->creditmemoMock->method('getId')
+            ->willReturn(self::CREDITMEMO_ID);
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::class,
@@ -142,7 +151,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ->with(
                     [
                         'order' => $this->orderMock,
+                        'order_id' => self::ORDER_ID,
                         'creditmemo' => $this->creditmemoMock,
+                        'creditmemo_id' => self::CREDITMEMO_ID,
                         'comment' => $customerNoteNotify ? $comment : '',
                         'billing' => $addressMock,
                         'payment_html' => 'payment',
@@ -285,7 +296,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
             ->with(
                 [
                     'order' => $this->orderMock,
+                    'order_id' => self::ORDER_ID,
                     'creditmemo' => $this->creditmemoMock,
+                    'creditmemo_id' => self::CREDITMEMO_ID,
                     'comment' => '',
                     'billing' => $addressMock,
                     'payment_html' => 'payment',
