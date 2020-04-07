@@ -8,6 +8,8 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 /**
  * Class CompareTest
+ *
+ * Tests the class that is used to compare Quote Item Options
  */
 class CompareTest extends \PHPUnit\Framework\TestCase
 {
@@ -298,6 +300,27 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                 [
                     $this->getOptionMock('option-1', $comparedOptionValue)
                 ]
+            );
+
+        // Different Option Values
+        $this->itemMock->expects($this->once())
+            ->method('getOptionsByCode')
+            ->will(
+                $this->returnValue(
+                    [
+                        'empty_option' => $this->getOptionMock('empty_option', '')
+                    ]
+                )
+            );
+
+        $this->comparedMock->expects($this->once())
+            ->method('getOptionsByCode')
+            ->will(
+                $this->returnValue(
+                    [
+                        'empty_option' => $this->getOptionMock('empty_option', '')
+                    ]
+                )
             );
 
         $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
