@@ -10,7 +10,7 @@
     <preference for="Magento\MediaContentApi\Api\UnassignAssetsInterface" type="Magento\MediaContent\Model\UnassignAssets"/>
     <preference for="Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetIdsUsedInContent"/>
     <preference for="Magento\MediaContentApi\Api\GetContentWithAssetsInterface" type="Magento\MediaContent\Model\GetContentWithAssets"/>
-    <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContentApi\Model\ExtractAssetsFromContent"/>
+    <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetsFromContent"/>
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\Content"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
@@ -18,5 +18,23 @@
     </type>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
+    </type>
+    <type name="Magento\MediaContent\Model\Content\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">media_content.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\MediaContent\Model\Content\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\MediaContent\Model\Content\Config\SchemaLocator</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\MediaContent\Model\Directory\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\MediaContent\Model\Content\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Media_Content_Patterns_CacheId</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaContent\Model\Content\Config">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\MediaContent\Model\Content\Config\Data</argument>
+        </arguments>
     </type>
 </config>

@@ -22,11 +22,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentApi\Model\ExtractAssetsFromContent">
-        <arguments>
-            <argument name="searchPatterns" xsi:type="array">
-                <item name="catalog_image" xsi:type="string">/^\/?media\/(.*)/</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

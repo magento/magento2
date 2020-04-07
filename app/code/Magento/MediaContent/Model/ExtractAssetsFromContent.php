@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentApi\Model;
+namespace Magento\MediaContent\Model;
 
+use Magento\MediaContent\Model\Content\Config;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
@@ -14,17 +15,13 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Used for extracting media asset list from a media content by the search pattern.
- *
- * This class should be used for DI configuration only, please use the interface in the code
- *
- * @api
  */
 class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
 {
     /**
-     * @var string
+     * @var Config
      */
-    private $searchPatterns;
+    private $config;
 
     /**
      * @var GetByPathInterface
@@ -37,18 +34,18 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     private $logger;
 
     /**
+     * @param Config $config
      * @param GetByPathInterface $getMediaAssetByPath
      * @param LoggerInterface $logger
-     * @param array $searchPatterns
      */
     public function __construct(
+        Config $config,
         GetByPathInterface $getMediaAssetByPath,
-        LoggerInterface $logger,
-        array $searchPatterns
+        LoggerInterface $logger
     ) {
+        $this->config = $config;
         $this->getMediaAssetByPath = $getMediaAssetByPath;
         $this->logger = $logger;
-        $this->searchPatterns = $searchPatterns;
     }
 
     /**
@@ -61,7 +58,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     {
         $paths = [];
 
-        foreach ($this->searchPatterns as $pattern) {
+        foreach ($this->config->get('search/patterns') as $pattern) {
             if (empty($pattern)) {
                 continue;
             }
