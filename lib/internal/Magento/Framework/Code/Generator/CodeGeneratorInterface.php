@@ -9,7 +9,7 @@ namespace Magento\Framework\Code\Generator;
  * Interface \Magento\Framework\Code\Generator\CodeGeneratorInterface
  *
  */
-interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
+interface CodeGeneratorInterface extends \Laminas\Code\Generator\GeneratorInterface
 {
     /**
      * Set class name.

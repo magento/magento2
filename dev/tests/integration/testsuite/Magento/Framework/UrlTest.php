@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework;
 
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
