@@ -89,10 +89,12 @@ class AccountManagementTest extends TestCase
      */
     public function testMaxNumberPasswordResetRequests(): void
     {
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
         $this->expectExceptionObject(new SecurityViolationException($this->errorMessage));
-        $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER);
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
+        );
     }
 
     /**
@@ -103,10 +105,12 @@ class AccountManagementTest extends TestCase
      */
     public function testTimeBetweenPasswordResetRequests(): void
     {
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
         $this->expectExceptionObject(new SecurityViolationException($this->errorMessage));
-        $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER);
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
+        );
     }
 
     /**
@@ -118,11 +122,12 @@ class AccountManagementTest extends TestCase
      */
     public function testPasswordResetProtectionTypeDisabled(): void
     {
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
-        $this->assertTrue(
-            $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER)
+        $result = $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
         );
+        $this->assertTrue($result);
     }
 
     /**
@@ -134,10 +139,12 @@ class AccountManagementTest extends TestCase
      */
     public function testPasswordResetProtectionTypeByIpAndEmail(): void
     {
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
         $this->expectExceptionObject(new SecurityViolationException($this->errorMessage));
-        $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER);
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
+        );
     }
 
     /**
@@ -150,10 +157,12 @@ class AccountManagementTest extends TestCase
     public function testPasswordResetProtectionTypeByIp(): void
     {
         $this->markTestSkipped('Test blocked by issue MC-32988.');
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
         $this->expectExceptionObject(new SecurityViolationException($this->errorMessage));
-        $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER);
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
+        );
     }
 
     /**
@@ -165,10 +174,12 @@ class AccountManagementTest extends TestCase
      */
     public function testPasswordResetProtectionTypeByEmail(): void
     {
-        $email = 'customer@example.com';
         $this->prepareServerParameters();
         $this->expectExceptionObject(new SecurityViolationException($this->errorMessage));
-        $this->accountManagement->initiatePasswordReset($email, CustomerAccountManagement::EMAIL_REMINDER);
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            CustomerAccountManagement::EMAIL_REMINDER
+        );
     }
 
     /**

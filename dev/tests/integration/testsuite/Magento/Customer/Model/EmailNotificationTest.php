@@ -74,7 +74,7 @@ class EmailNotificationTest extends TestCase
         $this->emailNotification = $this->objectManager->get(EmailNotificationInterface::class);
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
         $this->templateResource = $this->objectManager->get(TemplateResource::class);
-        $this->templateFactory = $this->objectManager->create(TemplateFactory::class);
+        $this->templateFactory = $this->objectManager->get(TemplateFactory::class);
         $this->mutableScopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
         $this->templateCollectionFactory = $this->objectManager->get(CollectionFactory::class);
     }
