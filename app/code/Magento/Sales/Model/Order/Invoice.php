@@ -502,7 +502,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
                 }
             }
         }
-        return $this->getItems();
+        return $this->getData(InvoiceInterface::ITEMS);
     }
 
     /**
@@ -782,10 +782,9 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns invoice items
      *
-     * @param bool $invoiceItemCheck
      * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
      */
-    public function getItems($invoiceItemCheck = false)
+    public function getItems()
     {
         if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
             $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
@@ -793,13 +792,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
                 $item->setInvoice($this);
             }
             $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
-        }
-        if ($invoiceItemCheck) {
-            $items = $this->getData(InvoiceInterface::ITEMS);
-            if ($items instanceof \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection) {
-                $resourceCollection = $this->getData(InvoiceInterface::ITEMS);
-                return $resourceCollection->getItems();
-            }
         }
         return $this->getData(InvoiceInterface::ITEMS);
     }
