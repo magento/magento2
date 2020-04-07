@@ -33,6 +33,11 @@ class IndexTest extends TestCase
     private $configMock;
 
     /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
