@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminInlineTranslationOnCheckoutTest">
+    <test name="AdminInlineTranslationOnCheckoutTest" deprecated="Replaced with StorefrontInlineTranslationOnCheckoutTest">
         <annotations>
             <stories value="Inline Translation"/>
-            <title value="[Inline Translation] Inline translate on Checkout"/>
-            <description value="As merchant I want to be able to rename text labels on Checkout steps"/>
+            <title value="DEPRECATED [Inline Translation] Inline translate on Checkout"/>
+            <description value="DEPRECATED As merchant I want to be able to rename text labels on Checkout steps"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11505"/>
             <group value="translation"/>
