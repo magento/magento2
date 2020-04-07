@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create Dropdown Product Attribute -->
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
             <!-- Create Attribute set -->
