@@ -11,8 +11,6 @@ use Magento\Framework\Api\AttributeInterface;
 
 /**
  * Interface for customer custom attribute validator.
- *
- * @api
  */
 interface ValidatorInterface
 {
