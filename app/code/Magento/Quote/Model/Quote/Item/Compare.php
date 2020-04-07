@@ -85,10 +85,14 @@ class Compare
         ) {
             return false;
         }
-        foreach ($targetOptions as $name => $value) {
-            if ($comparedOptions[$name] != $value) {
-                return false;
-            }
+
+        $targetOptionByCode = $target->getOptionsByCode();
+        $comparedOptionsByCode = $compared->getOptionsByCode();
+        if (!$target->compareOptions($targetOptionByCode, $comparedOptionsByCode)) {
+            return false;
+        }
+        if (!$target->compareOptions($comparedOptionsByCode, $targetOptionByCode)) {
+            return false;
         }
         return true;
     }
@@ -103,11 +107,7 @@ class Compare
     {
         $options = [];
         foreach ($item->getOptions() as $option) {
-            $optionCode = $option->getCode();
-            if (in_array($optionCode, $this->notRepresentOptions)) {
-                continue;
-            }
-            $options[$optionCode] = $this->getOptionValues($option->getValue());
+            $options[$option->getCode()] = $this->getOptionValues($option->getValue());
         }
         return $options;
     }
