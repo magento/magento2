@@ -27,4 +27,14 @@ class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\Dat
     {
         return $this->getProduct()->getIdentities();
     }
+
+    /**
+     * Retrieve manage stock value
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     */
+    public function getStock()
+    {
+        return $this->stockRegistry->getStockItem($this->getProduct()->getId());
+    }
 }
