@@ -166,6 +166,7 @@ class CreditmemoFactory
                     return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
                 }
             }
+            return false;
         } else {
             return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
         }
