@@ -10,25 +10,13 @@
     <actionGroup name="AdminOrderChangeByCustomerEmailActionGroup">
         <annotations>
             <description>
-                Changes all orders found by Customer Email field.
+                Changes all orders found by Customer Email field on Admin Order Grid page.
             </description>
         </annotations>
         <arguments>
             <argument name="customerEmail" type="string"/>
             <argument name="actionLabel" type="string" defaultValue="Cancel"/>
         </arguments>
-
-        <!-- Show Customer Email column in the grid -->
-        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderColumns"/>
-        <checkOption
-            selector="{{AdminDataGridHeaderSection.columnCheckbox('Customer Email')}}"
-            stepKey="showCustomerEmailColumn"
-        />
-        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderColumns"/>
-        <seeElement
-            selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}"
-            stepKey="seeCustomerEmailColumnInGrid"
-        />
 
         <!-- Filter orders by Customer Email -->
         <click selector="{{AdminDataGridFilterSection.filterExpand}}" stepKey="openOrderFilters"/>

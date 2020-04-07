@@ -31,6 +31,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
             <waitForLoadingMaskToDisappear stepKey="waitAfterClearFilters"/>
+            <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+                <argument name="columnLabel" value="Customer Email"/>
+            </actionGroup>
             <actionGroup ref="AdminOrderChangeByCustomerEmailActionGroup" stepKey="cancelOrders">
                 <argument name="customerEmail" value="$$createSimpleUsCustomer.email$$"/>
             </actionGroup>
