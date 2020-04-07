@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProductsTest">
+    <test name="AdminApplyCatalogRuleForConfigurableProductWithAssignedSimpleProductsTest" deprecated="some">
         <annotations>
             <features value="CatalogRuleConfigurable"/>
             <stories value="Apply catalog price rule"/>

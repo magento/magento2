@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontMyAccountWithMultishipmentTest">
+    <test name="StorefrontMyAccountWithMultishipmentTest" deprecated="some">
         <annotations>
             <features value="Multishipping"/>
             <stories value="Shipping price shows 0 on Order view page after multiple address checkout"/>
