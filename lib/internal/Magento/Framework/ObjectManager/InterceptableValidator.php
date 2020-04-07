@@ -13,11 +13,10 @@ class InterceptableValidator
      */
     public function validate($className)
     {
-        return !$this->isInterceptor($className) && $this->isInterceptable($className);
+        return !$this->isInterceptor($className) && !$this->isProxy($className) && $this->isInterceptable($className);
     }
 
     /**
-     *
      * Check if instance type is interceptor
      *
      * @param string $instanceName
@@ -26,6 +25,20 @@ class InterceptableValidator
     private function isInterceptor($instanceName)
     {
         return $this->endsWith($instanceName, '\Interceptor');
+    }
+
+    /**
+     * Check if instance type is proxy
+     *
+     * @param string $instanceName
+     * @return bool
+     */
+    private function isProxy($instanceName)
+    {
+        return $this->endsWith(
+            $instanceName,
+            '\\' . ucfirst(\Magento\Framework\ObjectManager\Code\Generator\Proxy::ENTITY_TYPE)
+        );
     }
 
     /**
@@ -39,7 +52,7 @@ class InterceptableValidator
     {
         return !is_subclass_of(
             $instanceName,
-            '\\' . \Magento\Framework\ObjectManager\Code\Generator\Proxy::NON_INTERCEPTABLE_INTERFACE
+            '\\' . \Magento\Framework\ObjectManager\NoninterceptableInterface::class
         );
     }
 
