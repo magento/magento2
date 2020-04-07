@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaGallery\Model\Directory\Config;
 
 use Magento\Framework\App\Area;
@@ -12,6 +14,9 @@ use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Config\Dom;
 
+/**
+ * Media gallery directory config reader
+ */
 class Reader extends Filesystem implements ReaderInterface
 {
     /**

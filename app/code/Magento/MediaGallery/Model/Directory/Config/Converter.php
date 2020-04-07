@@ -3,29 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaGallery\Model\Directory\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
 /**
- * Class Converter
+ * Media gallery directory config converter
  */
 class Converter implements ConverterInterface
 {
     /**
      * Blacklist tag name
      */
-    private CONST BLACKLIST_TAG_NAME = 'blacklist';
+    private const BLACKLIST_TAG_NAME = 'blacklist';
 
     /**
      * Patterns tag name
      */
-    private CONST PATTERNS_TAG_NAME = 'patterns';
+    private const PATTERNS_TAG_NAME = 'patterns';
 
     /**
      * Pattern tag name
      */
-    private CONST PATTERN_TAG_NAME = 'pattern';
+    private const PATTERN_TAG_NAME = 'pattern';
 
     /**
      * Convert dom node to array
@@ -33,7 +35,7 @@ class Converter implements ConverterInterface
      * @param \DOMDocument $source
      * @return array
      */
-    public function convert($source) : array
+    public function convert($source): array
     {
         $result = [];
 
