@@ -15,7 +15,7 @@
             <description value="DEPRECATED. Check url rewrites in catalog categories after changing url key for store view and moving category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5352"/>
-            <group value="urlRewrite"/>
+            <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckUrlRewritesInCatalogCategoriesAfterChangingUrlKeyForStoreViewAndMovingCategory2Test instead</issueId>
