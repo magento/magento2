@@ -41,7 +41,7 @@ class AssignAssetsTest extends TestCase
     /**
      * Media content type
      */
-    private const TYPE = 'type';
+    private const ENTITY_TYPE = 'entity_type';
 
     /**
      * Media entity id
@@ -120,7 +120,7 @@ class AssignAssetsTest extends TestCase
     ): void {
         $saveData = [
             self::ASSET_ID => $assetId,
-            self::TYPE => $contentType,
+            self::ENTITY_TYPE => $contentType,
             self::ENTITY_ID => $contentEntityId,
             self::FIELD => $contentField
         ];

@@ -2,7 +2,7 @@
     "media_content_asset": {
         "column": {
             "asset_id": true,
-            "type": true,
+            "entity_type": true,
             "entity_id": true,
             "field": true
         },

@@ -143,7 +143,7 @@ class GetAssetsusedInContentTest extends TestCase
         return [
             [
                 [
-                    'type' => 'cms_page',
+                    'entity_type' => 'cms_page',
                     'entity_id' => '1',
                     'field' => 'content'
                 ],

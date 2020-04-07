@@ -20,6 +20,9 @@ class GetContentWithAssets implements GetContentWithAssetsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
+    private const ENTITY_TYPE = 'entity_type';
+    private const ENTITY_ID = 'entity_id';
+    private const FIELD = 'field';
 
     /**
      * @var ResourceConnection
@@ -59,8 +62,12 @@ class GetContentWithAssets implements GetContentWithAssetsInterface
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from($this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME))
-                ->where(self::ASSET_ID . 'IN (?)', $assetIds);
+                ->distinct()
+                ->from(
+                    $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
+                    [self::ENTITY_TYPE, self::ENTITY_ID, self::FIELD]
+                )
+                ->where(self::ASSET_ID . ' IN (?)', $assetIds);
 
             $contentIdentities = [];
             foreach ($connection->fetchAssoc($select) as $contentIdentityData) {

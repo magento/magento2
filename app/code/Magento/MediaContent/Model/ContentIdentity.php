@@ -15,7 +15,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
  */
 class ContentIdentity extends AbstractExtensibleModel implements ContentIdentityInterface
 {
-    private const TYPE = 'entity_type';
+    private const ENTITY_TYPE = 'entity_type';
     private const ENTITY_ID = 'entity_id';
     private const FIELD = 'field';
 
@@ -24,7 +24,7 @@ class ContentIdentity extends AbstractExtensibleModel implements ContentIdentity
      */
     public function getEntityType(): string
     {
-        return (string) $this->getData(self::TYPE);
+        return (string) $this->getData(self::ENTITY_TYPE);
     }
 
     /**

@@ -20,7 +20,7 @@ class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
-    private const TYPE = 'type';
+    private const ENTITY_TYPE = 'entity_type';
     private const ENTITY_ID = 'entity_id';
     private const FIELD = 'field';
 
@@ -58,7 +58,7 @@ class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
                     $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
                     self::ASSET_ID
                 )->where(
-                    self::TYPE . ' = ?',
+                    self::ENTITY_TYPE . ' = ?',
                     $contentIdentity->getEntityType()
                 )->where(
                     self::ENTITY_ID . '= ?',
@@ -68,7 +68,7 @@ class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
                     $contentIdentity->getField()
                 );
 
-            return $connection->fetchAssoc($select);
+            return array_keys($connection->fetchAssoc($select));
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred at getting asset used in content information.');

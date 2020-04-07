@@ -20,7 +20,7 @@ class AssignAssets implements AssignAssetsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
-    private const TYPE = 'type';
+    private const ENTITY_TYPE = 'entity_type';
     private const ENTITY_ID = 'entity_id';
     private const FIELD = 'field';
 
@@ -56,7 +56,7 @@ class AssignAssets implements AssignAssetsInterface
             foreach ($assetIds as $assetId) {
                 $data[] = [
                     self::ASSET_ID => $assetId,
-                    self::TYPE => $contentIdentity->getEntityType(),
+                    self::ENTITY_TYPE => $contentIdentity->getEntityType(),
                     self::ENTITY_ID => $contentIdentity->getEntityId(),
                     self::FIELD => $contentIdentity->getField()
                 ];
@@ -64,8 +64,9 @@ class AssignAssets implements AssignAssetsInterface
             $connection->insertMultiple($tableName, $data);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred while saving relation between media asset and media content.');
-            throw new CouldNotSaveException($message);
+            throw new CouldNotSaveException(
+                __('An error occurred while saving relation between media asset and media content.')
+            );
         }
     }
 }

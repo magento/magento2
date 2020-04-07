@@ -12,7 +12,7 @@
     <preference for="Magento\MediaContentApi\Api\GetContentWithAssetsInterface" type="Magento\MediaContent\Model\GetContentWithAssets"/>
     <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetsFromContent"/>
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
-    <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\Content"/>
+    <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByPath" />
     </type>
@@ -26,7 +26,7 @@
             <argument name="schemaLocator" xsi:type="object">Magento\MediaContent\Model\Content\Config\SchemaLocator</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaContent\Model\Directory\Config\Data" type="Magento\Framework\Config\Data">
+    <virtualType name="Magento\MediaContent\Model\Content\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\MediaContent\Model\Content\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">Media_Content_Patterns_CacheId</argument>

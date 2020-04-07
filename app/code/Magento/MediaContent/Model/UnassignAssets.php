@@ -20,7 +20,7 @@ class UnassignAssets implements UnassignAssetsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
-    private const TYPE = 'type';
+    private const ENTITY_TYPE = 'entity_type';
     private const ENTITY_ID = 'entity_id';
     private const FIELD = 'field';
 
@@ -58,7 +58,7 @@ class UnassignAssets implements UnassignAssetsInterface
                 $tableName,
                 [
                     self::ASSET_ID . ' IN (?)' => $assetIds,
-                    self::TYPE . ' = ?' => $contentIdentity->getEntityType(),
+                    self::ENTITY_TYPE . ' = ?' => $contentIdentity->getEntityType(),
                     self::ENTITY_ID . ' = ?' => $contentIdentity->getEntityId(),
                     self::FIELD . ' = ?' => $contentIdentity->getField()
                 ]
