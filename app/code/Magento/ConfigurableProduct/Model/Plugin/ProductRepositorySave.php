@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
