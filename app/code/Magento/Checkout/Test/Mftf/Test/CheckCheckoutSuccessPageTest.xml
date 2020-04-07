@@ -27,10 +27,16 @@
         </before>
 
         <after>
+            <!--Cancel orders-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOrderChangeByCustomerEmailActionGroup" stepKey="cancelOrders">
+                <argument name="customerEmail" value="$$createSimpleUsCustomer.email$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
             <!--Logout from customer account-->
             <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>

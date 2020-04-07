@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderChangeByCustomerEmailActionGroup">
+        <annotations>
+            <description>
+                Goes to the Admin Orders grid page and changes all orders found by Customer Email field.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail" type="string"/>
+            <argument name="actionLabel" type="string" defaultValue="Cancel"/>
+        </arguments>
+
+        <!-- Go to orders page, clear filters -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick
+            selector="{{AdminDataGridFilterSection.clear}}"
+            dependentSelector="{{AdminDataGridFilterSection.clear}}"
+            visible="true"
+            stepKey="clearFiltersIfPresent"
+        />
+        <waitForLoadingMaskToDisappear stepKey="waitAfterClearFilters"/>
+
+        <!-- Show Customer Email column in the grid -->
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openOrderColumns"/>
+        <checkOption
+            selector="{{AdminDataGridHeaderSection.columnCheckbox('Customer Email')}}"
+            stepKey="showCustomerEmailColumn"
+        />
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeOrderColumns"/>
+        <seeElement
+            selector="{{AdminDataGridTableSection.columnHeader('Customer Email')}}"
+            stepKey="seeCustomerEmailColumnInGrid"
+        />
+
+        <!-- Filter orders by Customer Email -->
+        <click selector="{{AdminDataGridFilterSection.filterExpand}}" stepKey="openOrderFilters"/>
+        <fillField
+            selector="{{AdminDataGridFilterSection.inputFieldByNameAttr('customer_email')}}"
+            userInput="{{customerEmail}}"
+            stepKey="fillCustomerEmailFilter"
+        />
+        <click selector="{{AdminDataGridFilterSection.apply}}" stepKey="applyOrderFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitAfterApplyFilters"/>
+
+        <!-- Change found orders -->
+        <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllOrders"/>
+        <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
+        <click selector="{{AdminGridSelectRows.bulkActionOption(actionLabel)}}" stepKey="clickActionLabel"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
