@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\PageCache;
 
+use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -242,6 +243,8 @@ QUERY;
             'Currency code EUR in fixture ' . $storeCodeFromFixture . ' is unexpected'
         );
 
+        $this->flushPageCache();
+
         // test cached store + currency header in Euros
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'EUR'];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
@@ -255,6 +258,8 @@ QUERY;
             $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
             'Currency code EUR in fixture ' . $storeCodeFromFixture . ' is unexpected'
         );
+
+        $this->flushPageCache();
 
         // test non cached store + currency header in USD
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'USD'];
@@ -270,26 +275,7 @@ QUERY;
             'Currency code USD in fixture ' . $storeCodeFromFixture . ' is unexpected'
         );
 
-        // test non cached store + currency header in USD not cached
-        $headerMap = ['Store' => 'default', 'Content-Currency' => 'EUR'];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertEquals(
-            'Simple Product',
-            $response['products']['items'][0]['name'],
-            'Product name in fixture store is invalid.'
-        );
-        $this->assertEquals(
-            'EUR',
-            $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
-            'Currency code EUR in fixture store default is unexpected'
-        );
-
-        // test cached response store + currency header with non existing currency, and no valid response, no cache
-        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
-        $this->expectExceptionMessage(
-            'GraphQL response contains errors: Please correct the target currency'
-        );
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $this->flushPageCache();
 
         // test non cached store + currency header in USD not cached
         $headerMap = ['Store' => 'default', 'Content-Currency' => 'USD'];
@@ -305,7 +291,25 @@ QUERY;
             'Currency code USD in fixture store default is unexpected'
         );
 
-        // test non cached store + currency header in USD cached
+        $this->flushPageCache();
+
+        // test non cached store + currency header in USD not cached
+        $headerMap = ['Store' => 'default', 'Content-Currency' => 'EUR'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertEquals(
+            'Simple Product',
+            $response['products']['items'][0]['name'],
+            'Product name in fixture store is invalid.'
+        );
+        $this->assertEquals(
+            'EUR',
+            $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
+            'Currency code EUR in fixture store default is unexpected'
+        );
+
+        $this->flushPageCache();
+
+        // test non cached store + currency header in USD  cached
         $headerMap = ['Store' => 'default'];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertEquals(
@@ -318,5 +322,22 @@ QUERY;
             $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
             'Currency code USD in fixture store default is unexpected'
         );
+
+        $this->flushPageCache();
+
+        // test cached response store + currency header with non existing currency, and no valid response, no cache
+        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Please correct the target currency'
+        );
+
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    protected function flushPageCache(): void
+    {
+        /** @var PageCache $fullPageCache */
+        $fullPageCache = ObjectManager::getInstance()->get(PageCache::class);
+        $fullPageCache->clean();
     }
 }
