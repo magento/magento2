@@ -35,7 +35,7 @@ class CompositeInstallConfig implements InstallConfigInterface
         $searchEngine = $inputOptions['search-engine'];
 
         if (!isset($this->installConfigList[$searchEngine])) {
-            throw new InputException(__('Unable to configure search engine: ' . $searchEngine));
+            throw new InputException(__('Unable to configure search engine: %1', $searchEngine));
         }
         $installConfig = $this->installConfigList[$searchEngine];
 

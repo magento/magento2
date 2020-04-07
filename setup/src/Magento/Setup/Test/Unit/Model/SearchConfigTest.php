@@ -112,7 +112,6 @@ class SearchConfigTest extends TestCase
                     'elasticsearch-enable-auth' => false,
                     'elasticsearch-index-prefix' => 'magento2',
                     'elasticsearch-timeout' => 15,
-                    'skip-elasticsearch-validation' => false,
                     'no-interaction' => false,
                 ],
                 'search' => [
@@ -122,7 +121,6 @@ class SearchConfigTest extends TestCase
                     'elasticsearch-enable-auth' => false,
                     'elasticsearch-index-prefix' => 'magento2',
                     'elasticsearch-timeout' => 15,
-                    'skip-elasticsearch-validation' => false,
                 ]
             ]
         ];

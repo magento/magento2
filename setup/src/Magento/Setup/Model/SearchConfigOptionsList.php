@@ -30,7 +30,6 @@ class SearchConfigOptionsList
     const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
     const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
     const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
-    const INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION = 'skip-elasticsearch-validation';
 
     /**
      * Default values
@@ -102,12 +101,6 @@ class SearchConfigOptionsList
                 '',
                 'Elasticsearch server timeout.',
                 self::DEFAULT_ELASTICSEARCH_TIMEOUT
-            ),
-            new FlagConfigOption(
-                self::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION,
-                '',
-                'Skip Elasticsearch connection validation.',
-                null
             )
         ];
     }

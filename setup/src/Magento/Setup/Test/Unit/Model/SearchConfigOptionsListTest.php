@@ -30,7 +30,7 @@ class SearchConfigOptionsListTest extends TestCase
     public function testGetOptionsList()
     {
         $optionsList = $this->searchConfigOptionsList->getOptionsList();
-        $this->assertCount(9, $optionsList);
+        $this->assertCount(8, $optionsList);
 
         $this->assertArrayHasKey(0, $optionsList);
         $this->assertInstanceOf(SelectConfigOption::class, $optionsList[0]);
@@ -67,9 +67,5 @@ class SearchConfigOptionsListTest extends TestCase
         $this->assertArrayHasKey(7, $optionsList);
         $this->assertInstanceOf(TextConfigOption::class, $optionsList[7]);
         $this->assertEquals('elasticsearch-timeout', $optionsList[7]->getName());
-
-        $this->assertArrayHasKey(8, $optionsList);
-        $this->assertInstanceOf(FlagConfigOption::class, $optionsList[8]);
-        $this->assertEquals('skip-elasticsearch-validation', $optionsList[8]->getName());
     }
 }
