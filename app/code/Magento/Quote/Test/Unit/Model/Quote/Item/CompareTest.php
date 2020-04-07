@@ -302,7 +302,6 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        // Different Option Values
         $this->itemMock->expects($this->once())
             ->method('getOptionsByCode')
             ->will(
