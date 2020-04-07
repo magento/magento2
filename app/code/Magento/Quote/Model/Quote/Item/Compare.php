@@ -26,13 +26,6 @@ class Compare
     private $jsonValidator;
 
     /**
-     * Not Represent options
-     *
-     * @var array
-     */
-    private $notRepresentOptions = ['info_buyRequest'];
-
-    /**
      * Constructor
      *
      * @param Json|null $serializer
