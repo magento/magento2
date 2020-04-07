@@ -1,48 +1,53 @@
 name: Magento CI
 env:
-  GITHUB_TOKEN: ${{ secrets.GIT_ACCESS_TOKEN }}
-  DEBIAN_FRONTEND: noninteractive
-  TESTS_DIR: static-tests
+    GITHUB_TOKEN: ${{ secrets.GIT_ACCESS_TOKEN }}
+    DEBIAN_FRONTEND: noninteractive
+    TESTS_DIR: static-tests
 
 on: [pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+    build:
+        runs-on: ubuntu-18.04
 
-    steps:
-    - uses: actions/checkout@v1
+        steps:
+            - uses: actions/checkout@v1
 
-    - name: Setup PHP, with composer and extensions
-      uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
-      with:
-        php-version: 7.2
-        extensions: mbstring, dom, xml
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+              with:
+                  php-version: 7.2
+                  extensions: mbstring, dom, xml
 
-    - name: Get composer cache directory
-      id: composer-cache
-      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Get composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
 
-    - name: Configure Composer
-      run: composer config -g github-oauth.github.com ${GITHUB_TOKEN}
+            - name: Configure Composer
+              run: composer config -g github-oauth.github.com ${GITHUB_TOKEN}
 
-    - name: Create working directory
-      run: mkdir ${TESTS_DIR}
+            - name: Create working directory
+              run: mkdir ${TESTS_DIR}
 
-    - name: Installing toolkit for static tests
-      run: |
-        cp .github/static-tests/composer.json ${TESTS_DIR}
-        cd ${TESTS_DIR}
-        composer install -n
+            - name: Installing toolkit for static tests
+              run: |
+                  cp .github/static-tests/composer.json ${TESTS_DIR}
+                  cd ${TESTS_DIR}
+                  composer install -n
 
-    - name: Execute tests
-      run: |
-        chmod +x ${TESTS_DIR}/vendor/atwix/ci-scripts/runCodeSniffer.sh
-        ${TESTS_DIR}/vendor/atwix/ci-scripts/runCodeSniffer.sh origin/${GITHUB_BASE_REF} ./grumphp.yml
+            - name: Link vendor folder to dockroot
+              run: |
+                  rm -rf ./vendor
+                  ln -s ${TESTS_DIR}/vendor ./
+
+            - name: Execute tests
+              run: |
+                  chmod +x ${TESTS_DIR}/vendor/atwix/ci-scripts/runCodeSniffer.sh
+                  ${TESTS_DIR}/vendor/atwix/ci-scripts/runCodeSniffer.sh origin/${GITHUB_BASE_REF} ./grumphp.yml
