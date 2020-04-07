@@ -20,7 +20,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @dataProvider filtersDataProviderSearch
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoAppIsolation enabled
      */
     public function testLoadWithFilterSearch($request, $filters, $expectedCount)
@@ -155,7 +154,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * Test configurable product with multiple options
      *
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_two_options.php
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoAppIsolation enabled
      * @dataProvider configurableProductWithMultipleOptionsDataProvider
