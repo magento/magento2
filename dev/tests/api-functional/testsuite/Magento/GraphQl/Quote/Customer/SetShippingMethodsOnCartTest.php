@@ -39,6 +39,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -64,7 +65,17 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
 
         $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        $availableShippingMethods = $shippingAddress['available_shipping_methods'];
+
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+        self::assertArrayHasKey('available_shipping_methods', $shippingAddress);
+
+        self::assertCount(2, $availableShippingMethods);
+        self::assertEquals('freeshipping', $availableShippingMethods[0]['carrier_code']);
+        self::assertEquals($carrierCode, $availableShippingMethods[1]['carrier_code']);
+
+        self::assertEquals($availableShippingMethods[0]['amount']['value'], 0);
+        self::assertEquals($availableShippingMethods[1]['amount']['value'], 10);
 
         self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['carrier_code']);
@@ -146,7 +157,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   {$input}     
+   {$input}
   }) {
     cart {
       shipping_addresses {
@@ -237,7 +248,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   cart_id: "{$maskedQuoteId}", 
+   cart_id: "{$maskedQuoteId}",
    shipping_methods: [
         {
             carrier_code: "flatrate"
@@ -329,9 +340,9 @@ QUERY;
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
@@ -348,6 +359,12 @@ mutation {
             value
             currency
           }
+        }
+        available_shipping_methods {
+          amount{
+            value
+          }
+          carrier_code
         }
       }
     }

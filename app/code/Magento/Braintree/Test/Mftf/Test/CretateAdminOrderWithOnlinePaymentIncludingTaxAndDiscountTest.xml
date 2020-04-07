@@ -44,7 +44,7 @@
             </createData>
 
             <!--Login as Admin User-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -74,7 +74,7 @@
         </after>
 
         <!-- Create a cart price rule with 10% discount for whole cart -->
-        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing" />
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="clickOnMarketing"/>
         <waitForPageLoad stepKey="waitForMarketing"/>
         <click selector="{{CartPriceRulesSubmenuSection.cartPriceRules}}" stepKey="clickOnCartPriceRules"/>
         <waitForPageLoad stepKey="waitForCartPriceRules"/>
@@ -93,7 +93,9 @@
         <actionGroup ref="ChangeShippingTaxClassActionGroup" stepKey="changeShippingTaxClass"/>
 
         <!--Adding Special price to product-->
-        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 

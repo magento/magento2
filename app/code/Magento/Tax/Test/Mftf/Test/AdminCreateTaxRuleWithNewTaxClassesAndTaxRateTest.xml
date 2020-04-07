@@ -29,7 +29,7 @@
             <getData entity="productTaxClass" stepKey="productTaxClass">
                 <requiredEntity createDataKey="createProductTaxClass"/>
             </getData>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
