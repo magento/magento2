@@ -8,8 +8,8 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response\PayPal;
 use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -99,7 +99,12 @@ class VaultDetailsHandlerTest extends TestCase
             ->getMock();
 
         $this->paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->setMethods([
+                'setVaultPaymentToken',
+                'getVaultPaymentToken',
+                'setNotificationMessage',
+                'getNotificationMessage'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactoryMock = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
@@ -119,7 +124,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        
+
         $this->handler = new VaultDetailsHandler(
             $this->paymentTokenFactoryMock,
             $this->paymentExtensionFactoryMock,
@@ -139,7 +144,7 @@ class VaultDetailsHandlerTest extends TestCase
             ->with($this->paymentTokenMock);
         $this->paymentExtensionMock->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
-        
+
         $this->paymentDataObjectMock->method('getPayment')
             ->willReturn($this->paymentInfoMock);
 
@@ -154,7 +159,7 @@ class VaultDetailsHandlerTest extends TestCase
         $expirationDate = '2017-07-05 00:00:00';
         $this->dateTimeFactoryMock->method('create')
             ->willReturn($dateTime);
-        
+
         $this->handler->handle($this->subject, $response);
 
         $extensionAttributes = $this->paymentInfoMock->getExtensionAttributes();
