@@ -46,7 +46,7 @@
             </getData>
 
             <!-- Login to Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Go to Tax Rule page, add Tax Rate, unassign Default Tax Rate -->
             <amOnPage url="{{AdminEditTaxRulePage.url($createTaxRule.id$)}}" stepKey="goToTaxRulePage"/>
@@ -119,7 +119,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterCustomer"/>
 
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open Created product. In Tax Class select new created Product Tax class.-->
