@@ -9,12 +9,16 @@ declare(strict_types=1);
 namespace Magento\Variable\Test\Unit\Model\Variable;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Variable\Model\Variable\Data as VariableDataModel;
 use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory as VariableCollectionFactory;
 use Magento\Variable\Model\ResourceModel\Variable\Collection as VariableCollection;
 use Magento\Variable\Model\Source\Variables as StoreVariables;
 
+/**
+ * Class DataTest
+ */
 class DataTest extends TestCase
 {
     /**
@@ -28,19 +32,19 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var StoreVariables|PHPUnit_Framework_MockObject_MockObject
+     * @var StoreVariables|MockObject
      */
     private $storesVariablesMock;
 
     /**
-     * @var VariableCollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var VariableCollectionFactory|MockObject
      */
     private $variableCollectionFactoryMock;
 
     /**
      * Set up before tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storesVariablesMock = $this->createMock(StoreVariables::class);
         $this->variableCollectionFactoryMock = $this->getMockBuilder(
@@ -60,7 +64,7 @@ class DataTest extends TestCase
     /**
      * Test getDefaultVariables() function
      */
-    public function testGetDefaultVariables()
+    public function testGetDefaultVariables(): void
     {
         $storesVariablesData = [
             [
@@ -94,7 +98,7 @@ class DataTest extends TestCase
     /**
      * Test getCustomVariables() function
      */
-    public function testGetCustomVariables()
+    public function testGetCustomVariables(): void
     {
         $customVariables = [
             [
