@@ -117,7 +117,7 @@
                 <requiredEntity createDataKey="createConfigProductAttributeSelect"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!-- Go to the product page for the first product -->
             <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>

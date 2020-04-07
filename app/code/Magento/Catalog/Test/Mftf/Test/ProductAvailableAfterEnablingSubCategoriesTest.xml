@@ -29,7 +29,7 @@
                 <requiredEntity createDataKey="simpleSubCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>

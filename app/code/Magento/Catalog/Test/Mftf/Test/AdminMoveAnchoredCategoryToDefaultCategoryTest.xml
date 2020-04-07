@@ -18,7 +18,7 @@
             <features value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
         </before>

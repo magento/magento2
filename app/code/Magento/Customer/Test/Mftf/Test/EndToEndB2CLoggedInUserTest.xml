@@ -27,10 +27,10 @@
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteCustomerFromAdminActionGroup" stepKey="deleteCustomerFromAdmin"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!-- Step 0: User signs up an account -->
         <comment userInput="Start of signing up user account" stepKey="startOfSigningUpUserAccount" />
