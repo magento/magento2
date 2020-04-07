@@ -7,7 +7,7 @@ define([
     'underscore',
     'uiRegistry',
     'Magento_Ui/js/dynamic-rows/dynamic-rows',
-    'Magento_ConfigurableProduct/js/components/associted_product_list',
+    'Magento_ConfigurableProduct/js/components/associated-product-list',
     'jquery'
 ], function (_, registry, dynamicRows, productList, $) {
     'use strict';

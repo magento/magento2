@@ -24,7 +24,7 @@ class ConfigurablePanel extends AbstractModifier
     const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
     const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
     const CONFIGURABLE_MATRIX = 'configurable-matrix';
-    const SHOW_PRODUCT_LISTING = 'show_product_listing';
+    private const SHOW_PRODUCT_LISTING = 'show_product_listing';
 
     /**
      * @var string
@@ -266,7 +266,7 @@ class ConfigurablePanel extends AbstractModifier
      *
      * @return array
      */
-    protected function getProductListing()
+    private function getProductListing()
     {
         return [
             'arguments' => [
@@ -274,7 +274,7 @@ class ConfigurablePanel extends AbstractModifier
                     'config' => [
                         'label' => __('Show Button'),
                         'componentType' => Container::NAME,
-                        'component' => 'Magento_ConfigurableProduct/js/components/associted_product_list',
+                        'component' => 'Magento_ConfigurableProduct/js/components/associated-product-list',
                     ],
                 ],
             ],

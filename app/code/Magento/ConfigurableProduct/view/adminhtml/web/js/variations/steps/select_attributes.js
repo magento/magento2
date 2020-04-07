@@ -7,9 +7,10 @@ define([
     'uiComponent',
     'jquery',
     'underscore',
-    'Magento_ConfigurableProduct/js/components/associted_product_list',
+    'Magento_ConfigurableProduct/js/components/associated-product-list',
+    'Magento_ConfigurableProduct/js/variations/product-grid',
     'mage/translate'
-], function (Component, $, _, productList) {
+], function (Component, $, _, productList , prdoductGrid ) {
     'use strict';
 
     /**
@@ -47,7 +48,6 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            console.log("ggg");
             this._super();
             this.selected = [];
 
@@ -161,11 +161,7 @@ define([
         },
 
         doShowAddProductButton: function (selected) {
-            if (selected.length > 0) {
-                this.disabledButton(false);
-            } else {
-                this.disabledButton(true);
-            }
+            this.disabledButton(!selected.length);
         },
 
 
@@ -186,7 +182,7 @@ define([
          */
         back: function () {
         },
-
+    
         addProductManualy: function (data, event) {
             productList().isShowAddProductButton(true);
             this.variationsComponent().render(null, this.attributes());
