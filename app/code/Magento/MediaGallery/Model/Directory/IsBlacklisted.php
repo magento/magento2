@@ -10,14 +10,12 @@ namespace Magento\MediaGallery\Model\Directory;
 use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
 
 /**
- * Directories blacklisted for media gallery. This class should be used for DI configuration.
- *
- * Please use the interface in the code (for constructor injection) instead of this implementation.
- *
- * @api
+ * Check if the path is blacklisted for media gallery. Directory path may be blacklisted if it's reserved by the system
  */
 class IsBlacklisted implements IsBlacklistedInterface
 {
+    const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
+
     /**
      * @var Config
      */
@@ -26,7 +24,8 @@ class IsBlacklisted implements IsBlacklistedInterface
     /**
      * @param Config $config
      */
-    public function __construct(Config $config) {
+    public function __construct(Config $config)
+    {
         $this->config = $config;
     }
 
@@ -38,7 +37,7 @@ class IsBlacklisted implements IsBlacklistedInterface
      */
     public function execute(string $path): bool
     {
-        foreach ($this->config->get('blacklist/patterns') as $pattern) {
+        foreach ($this->config->get(self::XML_PATH_BLACKLIST_PATTERNS) as $pattern) {
             if (empty($pattern)) {
                 continue;
             }
