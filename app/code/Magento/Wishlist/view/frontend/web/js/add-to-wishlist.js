@@ -19,9 +19,19 @@ define([
             qtyInfo: '#qty',
             actionElement: '[data-action="add-to-wishlist"]'
         },
+        defaultParamsData: {},
 
         /** @inheritdoc */
         _create: function () {
+            var self = this;
+            // Init default params data
+            $('[data-action="add-to-wishlist"]').each(function (index, element) {
+                var params = $(element).data('post');
+
+                if (params && params.data) {
+                    self.defaultParamsData[index] = params.data;
+                }
+            });
             this._bind();
         },
 
@@ -116,6 +126,10 @@ define([
                     params = {
                         'data': {}
                     };
+                } else {
+                    if (typeof self.defaultParamsData[index] !== 'undefined') {
+                        params.data = self.defaultParamsData[index];
+                    }
                 }
 
                 params.data = $.extend({}, params.data, dataToAdd, {
