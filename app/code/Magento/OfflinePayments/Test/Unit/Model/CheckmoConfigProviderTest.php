@@ -31,7 +31,7 @@ class CheckmoConfigProviderTest extends TestCase
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->methodMock = $this->createMock(Checkmo::class);
 

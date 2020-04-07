@@ -28,7 +28,7 @@ class CashondeliveryTest extends TestCase
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

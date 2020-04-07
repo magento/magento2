@@ -38,7 +38,7 @@ class InstructionsConfigProviderTest extends TestCase
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->methodOneMock = $this->createPartialMock(
             AbstractMethod::class,

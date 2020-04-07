@@ -19,7 +19,7 @@ class AbstractInstructionTest extends TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(Context::class);
         $this->model = $this->getMockForAbstractClass(

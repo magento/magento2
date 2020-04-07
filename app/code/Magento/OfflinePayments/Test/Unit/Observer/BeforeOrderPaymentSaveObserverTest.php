@@ -54,7 +54,7 @@ class BeforeOrderPaymentSaveObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->paymentMock = $this->getMockBuilder(Payment::class)

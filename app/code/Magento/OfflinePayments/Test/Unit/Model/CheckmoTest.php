@@ -27,7 +27,7 @@ class CheckmoTest extends TestCase
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $eventManager = $this->createMock(ManagerInterface::class);
