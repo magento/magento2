@@ -24,14 +24,14 @@
             <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerModeSchedule"/>
             <magentoCLI command="indexer:reindex" stepKey="indexerReindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/></before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/></before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setIndexerModeRealTime"/>
             <magentoCLI command="indexer:reindex" stepKey="indexerReindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPageFirst">

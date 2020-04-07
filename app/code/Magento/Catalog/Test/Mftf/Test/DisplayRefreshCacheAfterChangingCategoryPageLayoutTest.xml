@@ -23,7 +23,7 @@
             <!-- Create category, flush cache and log in -->
             <comment userInput="Create category, flush cache and log in" stepKey="createCategoryAndLogIn"/>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
