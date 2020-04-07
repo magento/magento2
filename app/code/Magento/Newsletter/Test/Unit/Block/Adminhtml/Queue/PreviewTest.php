@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Queue;
 
 use Magento\Backend\Block\Template\Context;
@@ -67,7 +69,7 @@ class PreviewTest extends TestCase
      */
     private $preview;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(Context::class);
         $eventManager = $this->createMock(ManagerInterface::class);

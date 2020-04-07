@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -101,7 +103,7 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->newsletterData = $this->createMock(Data::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);

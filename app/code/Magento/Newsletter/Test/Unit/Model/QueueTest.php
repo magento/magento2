@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Model;
 
 use Magento\Framework\Data\Collection as DataCollection;
@@ -79,7 +81,7 @@ class QueueTest extends TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()

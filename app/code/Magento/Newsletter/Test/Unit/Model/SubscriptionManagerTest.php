@@ -67,7 +67,7 @@ class SubscriptionManagerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
         $this->logger = $this->createMock(LoggerInterface::class);

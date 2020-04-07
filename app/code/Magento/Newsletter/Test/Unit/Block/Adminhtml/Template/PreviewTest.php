@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Framework\App\RequestInterface;
@@ -46,7 +48,7 @@ class PreviewTest extends TestCase
     /** @var RequestInterface|MockObject */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->appStateMock = $this->createMock(State::class);

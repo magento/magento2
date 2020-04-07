@@ -32,7 +32,7 @@ class ObserverTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 
