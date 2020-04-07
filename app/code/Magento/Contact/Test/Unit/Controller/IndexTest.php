@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test covers Magento\Contact\Controller\Index
+ * @covers \Magento\Contact\Controller\Index
  */
 class IndexTest extends TestCase
 {

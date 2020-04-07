@@ -24,8 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test covers Magento\Contact\Controller\Index\Post
- *
+ * @covers \Magento\Contact\Controller\Index\Post
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PostTest extends TestCase

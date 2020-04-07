@@ -11,6 +11,9 @@ use Magento\Contact\Controller\Index;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * Index Stub for Magento\Contact\Controller\Index
+ */
 class IndexStub extends Index
 {
     /**

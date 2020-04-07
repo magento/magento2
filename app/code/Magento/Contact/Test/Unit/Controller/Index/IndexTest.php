@@ -20,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test covers Magento\Contact\Controller\Index\Index
+ * @covers \Magento\Contact\Controller\Index\Index
  */
 class IndexTest extends TestCase
 {
@@ -42,7 +42,7 @@ class IndexTest extends TestCase
     /**
      * @var UrlInterface|MockObject
      */
-    private $url;
+    private $urlMock;
 
     /**
      * @inheritDoc
@@ -57,11 +57,11 @@ class IndexTest extends TestCase
             )->disableOriginalConstructor(
             )->getMock();
 
-        $this->url = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
+        $this->urlMock = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
 
         $contextMock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->url));
+            ->will($this->returnValue($this->urlMock));
 
         $contextMock->expects($this->any())
             ->method('getRequest')

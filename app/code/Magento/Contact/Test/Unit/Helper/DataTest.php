@@ -19,6 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\Contact\Helper\Data
+ */
 class DataTest extends TestCase
 {
     /**

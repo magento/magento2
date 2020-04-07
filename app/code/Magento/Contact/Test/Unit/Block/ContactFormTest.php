@@ -15,24 +15,24 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test Covers Magento\Contact\Block\ContactForm
+ * @covers \Magento\Contact\Block\ContactForm
  */
 class ContactFormTest extends TestCase
 {
     /**
      * @var ContactForm
      */
-    protected $contactForm;
+    private $contactForm;
 
     /**
      * @var Context|MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var UrlInterface|MockObject
      */
-    protected $urlBuilderMock;
+    private $urlBuilderMock;
 
     /**
      * {@inheritDoc}

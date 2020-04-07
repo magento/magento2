@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test covers Magento\Contact\Model\Mail
+ * @covers \Magento\Contact\Model\Mail
  */
 class MailTest extends TestCase
 {

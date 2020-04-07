@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test covers Magento\Contact\Model\System\Config\Backend\Links
+ * @covers \Magento\Contact\Model\System\Config\Backend\Links
  */
 class LinksTest extends TestCase
 {
