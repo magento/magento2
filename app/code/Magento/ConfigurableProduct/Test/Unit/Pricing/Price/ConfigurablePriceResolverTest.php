@@ -9,9 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\TierPriceInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
-use Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
@@ -142,7 +140,6 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @param $variantPrices
      * @param $expectedPrice
-     * @throws LocalizedException
      */
     public function testResolvePriceWithTier($variantPrices, $expectedPrice)
     {
@@ -198,7 +195,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
      * @param float $amount
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    private function getAmountMock($amount): PHPUnit_Framework_MockObject_MockObject
+    private function getAmountMock($amount)
     {
         $amountMock = $this->getMockBuilder(AmountInterface::class)
             ->setMethods(['getValue', 'getBaseAmount'])
