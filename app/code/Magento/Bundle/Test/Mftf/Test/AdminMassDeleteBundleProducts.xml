@@ -121,7 +121,7 @@
         <waitForPageLoad stepKey="loading"/>
         <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
         <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
-        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
+        <click selector="//button[@class='action primary action-primary action-accept']" stepKey="ConfirmDelete"/>
         <waitForPageLoad stepKey="loading3"/>
 
         <!--Locating delete message-->

@@ -12,6 +12,6 @@
         <element name="role" parameterized="true" selector="//td[contains(text(), '{{roleName}}')]" type="button"/>
         <element name="password" selector="#user_current_password" type="input"/>
         <element name="delete" selector="//button/span[contains(text(), 'Delete User')]" type="button"/>
-        <element name="confirm" selector=".action-primary.action-accept" type="button"/>
+        <element name="confirm" selector=".action primary.action-primary.action-accept" type="button"/>
     </section>
 </sections>

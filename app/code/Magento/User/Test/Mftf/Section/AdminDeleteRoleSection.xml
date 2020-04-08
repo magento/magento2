@@ -13,7 +13,7 @@
         <element name="salesRole" selector="//td[contains(text(), 'Sales')]" type="button"/>
         <element name="current_pass" type="button" selector="#current_password"/>
         <element name="delete" selector="//button/span[contains(text(), 'Delete Role')]" type="button"/>
-        <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>
+        <element name="confirm" selector="//*[@class='action primary action-primary action-accept']" type="button"/>
     </section>
 </sections>
 
