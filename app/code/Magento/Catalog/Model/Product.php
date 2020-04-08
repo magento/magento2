@@ -1540,11 +1540,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
                 $image['id'] = $image['value_id'];
-
-                // @deprecated 'path' should not be used
-                // The file can be absent in local filesystem if remote storage is used
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
-
                 $images->addItem(new \Magento\Framework\DataObject($image));
             }
             $this->setData('media_gallery_images', $images);

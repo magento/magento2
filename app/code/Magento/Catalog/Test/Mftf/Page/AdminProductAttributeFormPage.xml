@@ -9,5 +9,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="ProductAttributePage" url="catalog/product_attribute/new/" area="admin" module="Catalog">
         <section name="AdminCreateProductAttributeSection"/>
+        <section name="AdminProductAttributeManageLabelsSection"/>
     </page>
 </pages>

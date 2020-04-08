@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddSimpleProductToCartActionGroup">
+    <actionGroup name="AddSimpleProductToCartActionGroup" deprecated="Avoid using super-ActionGroups. Use StorefrontOpenProductEntityPageActionGroup, StorefrontAddSimpleProductToCartActionGroup and StorefrontAssertProductAddedToCartResultMessageActionGroup">
         <annotations>
             <description>Navigates to the Storefront Product page. Then adds the Product to the Cart. Validates that the Success Message is present and correct.</description>
         </annotations>

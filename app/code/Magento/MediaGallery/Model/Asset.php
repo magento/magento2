@@ -24,6 +24,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     private const CONTENT_TYPE = 'content_type';
     private const WIDTH = 'width';
     private const HEIGHT = 'height';
+    private const SIZE = 'size';
     private const CREATED_AT = 'created_at';
     private const UPDATED_AT = 'updated_at';
 
@@ -87,6 +88,14 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
     public function getHeight(): int
     {
         return (int) $this->getData(self::HEIGHT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSize(): int
+    {
+        return (int) $this->getData(self::SIZE);
     }
 
     /**

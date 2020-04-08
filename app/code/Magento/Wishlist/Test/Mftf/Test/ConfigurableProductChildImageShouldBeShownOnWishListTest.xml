@@ -21,7 +21,7 @@
         <before>
             <magentoCLI command="config:set checkout/cart/configurable_product_image 0" stepKey="setProductImageSettingUnderCofigurationSalesCheckout"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>

@@ -8,9 +8,9 @@ namespace Magento\Setup\Controller;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\RequestDataConverter;
 use Magento\Setup\Validator\AdminCredentialsValidator;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Controller for admin credentials validation

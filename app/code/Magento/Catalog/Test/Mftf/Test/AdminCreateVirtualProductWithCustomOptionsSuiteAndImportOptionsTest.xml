@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
