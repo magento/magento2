@@ -83,4 +83,28 @@ class PatchHistoryTest extends \PHPUnit\Framework\TestCase
         $adapterMock->expects($this->never())->method('insert');
         $this->patchHistory->fixPatch(get_class($patch1));
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ cannot be applied twice"
+     */
+    public function testFixPatchTwice()
+    {
+        /** @var PatchInterface|\PHPUnit_Framework_MockObject_MockObject $patch1 */
+        $patch = $this->createMock(PatchInterface::class);
+        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $adapterMock */
+        $adapterMock = $this->createMock(AdapterInterface::class);
+        $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
+        $this->resourceConnectionMock->expects($this->any())
+            ->method('getTableName')
+            ->willReturn(PatchHistory::TABLE_NAME);
+        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock->expects($this->once())->method('from');
+        $adapterMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $adapterMock->expects($this->once())->method('fetchCol')->willReturn([]);
+        $adapterMock->expects($this->once())->method('insert');
+
+        $this->patchHistory->fixPatch(get_class($patch));
+        $this->patchHistory->fixPatch(get_class($patch));
+    }
 }

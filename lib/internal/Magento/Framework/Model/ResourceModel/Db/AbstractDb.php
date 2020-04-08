@@ -157,9 +157,6 @@ abstract class AbstractDb extends AbstractResource
      * Provide variables to serialize
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -172,9 +169,6 @@ abstract class AbstractDb extends AbstractResource
      * Restore global dependencies
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -368,7 +362,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 

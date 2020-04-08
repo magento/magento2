@@ -96,25 +96,6 @@ class PlaceOrderTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
-    public function testPlaceOrderIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  placeOrder(input: {}) {
-    order {
-      order_number
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoConfigFixture default_store carriers/flatrate/active 1
      * @magentoConfigFixture default_store carriers/tablerate/active 1

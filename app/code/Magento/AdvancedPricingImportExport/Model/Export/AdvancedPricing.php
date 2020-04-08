@@ -216,6 +216,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             if ($entityCollection->count() == 0) {
                 break;
             }
+            $entityCollection->clear();
             $exportData = $this->getExportData();
             foreach ($exportData as $dataRow) {
                 $writer->writeRow($dataRow);

@@ -7,6 +7,8 @@ namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Psr\Log\LoggerInterface;
@@ -21,9 +23,6 @@ use Psr\Log\LoggerInterface;
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
-    /**
-     * Checkout state begin
-     */
     const CHECKOUT_STATE_BEGIN = 'begin';
 
     /**
@@ -228,7 +227,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @return Quote
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -273,21 +272,21 @@ class Session extends \Magento\Framework\Session\SessionManager
                          */
                         $quote = $this->quoteRepository->get($this->getQuoteId());
                     }
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+
+                    if ($quote->getTotalsCollectedFlag() === false) {
+                        $quote->collectTotals();
+                    }
+                } catch (NoSuchEntityException $e) {
                     $this->setQuoteId(null);
                 }
             }
 
             if (!$this->getQuoteId()) {
                 if ($this->_customerSession->isLoggedIn() || $this->_customer) {
-                    $customerId = $this->_customer
-                        ? $this->_customer->getId()
-                        : $this->_customerSession->getCustomerId();
-                    try {
-                        $quote = $this->quoteRepository->getActiveForCustomer($customerId);
-                        $this->setQuoteId($quote->getId());
-                    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                        $this->logger->critical($e);
+                    $quoteByCustomer = $this->getQuoteByCustomer();
+                    if ($quoteByCustomer !== null) {
+                        $this->setQuoteId($quoteByCustomer->getId());
+                        $quote = $quoteByCustomer;
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
@@ -375,7 +374,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
         try {
             $customerQuote = $this->quoteRepository->getForCustomer($this->_customerSession->getCustomerId());
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             $customerQuote = $this->quoteFactory->create();
         }
         $customerQuote->setStoreId($this->_storeManager->getStore()->getId());
@@ -558,7 +557,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $this->replaceQuote($quote)->unsLastRealOrderId();
                 $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
                 return true;
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $this->logger->critical($e);
             }
         }
@@ -587,5 +586,23 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected function isQuoteMasked()
     {
         return $this->isQuoteMasked;
+    }
+
+    /**
+     * Returns quote for customer if there is any
+     */
+    private function getQuoteByCustomer(): ?CartInterface
+    {
+        $customerId = $this->_customer
+            ? $this->_customer->getId()
+            : $this->_customerSession->getCustomerId();
+
+        try {
+            $quote = $this->quoteRepository->getActiveForCustomer($customerId);
+        } catch (NoSuchEntityException $e) {
+            $quote = null;
+        }
+
+        return $quote;
     }
 }

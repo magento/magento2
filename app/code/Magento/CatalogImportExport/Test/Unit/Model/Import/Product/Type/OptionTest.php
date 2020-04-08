@@ -777,6 +777,77 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     }
 
     /**
+     * Test for row without store view code field
+     * @param array $rowData
+     * @param array $responseData
+     *
+     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_parseCustomOptions
+     * @dataProvider validateRowStoreViewCodeFieldDataProvider
+     */
+    public function testValidateRowDataForStoreViewCodeField($rowData, $responseData)
+    {
+        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product\Option::class);
+        $reflectionMethod = $reflection->getMethod('_parseCustomOptions');
+        $reflectionMethod->setAccessible(true);
+        $result = $reflectionMethod->invoke($this->model, $rowData);
+        $this->assertEquals($responseData, $result);
+    }
+
+    /**
+     * Data provider for test of method _parseCustomOptions
+     *
+     * @return array
+     */
+    public function validateRowStoreViewCodeFieldDataProvider()
+    {
+        return [
+            'with_store_view_code' => [
+                '$rowData' => [
+                    'store_view_code' => '',
+                    'custom_options' =>
+                        'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'store_view_code' => '',
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'field',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '0',
+                                'price_type' => 'fixed',
+                                '_custom_option_store' => ''
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            'without_store_view_code' => [
+                '$rowData' => [
+                    'custom_options' =>
+                        'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'field',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '0',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ],
+            ]
+        ];
+    }
+
+    /**
      * Data provider of row data and errors
      *
      * @return array

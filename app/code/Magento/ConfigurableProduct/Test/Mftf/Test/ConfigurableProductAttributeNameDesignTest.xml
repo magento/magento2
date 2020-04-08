@@ -21,21 +21,21 @@
 
         <before>
             <!-- Log in to Dashboard page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
 
 
         <!-- Navigate to Catalog-> Products -->
-        <actionGroup ref="GotoCatalogProductsPage" stepKey="goToCatalogProductsPage"/>
+        <actionGroup ref="GotoCatalogProductsPageActionGroup" stepKey="goToCatalogProductsPage"/>
         <!-- Fill the fields on Configurable Product-->
-        <actionGroup ref="GotoConfigurableProductPage" stepKey="goToConfigurableProductPage"/>
-        <actionGroup ref="FillAllRequiredFields" stepKey="fillInAllRequiredFields"/>
+        <actionGroup ref="GotoConfigurableProductPageActionGroup" stepKey="goToConfigurableProductPage"/>
+        <actionGroup ref="FillAllRequiredFieldsActionGroup" stepKey="fillInAllRequiredFields"/>
         <!-- Create New Attribute (Default Label= design) -->
-        <actionGroup ref="CreateNewAttribute" stepKey="createNewAttribute"/>
+        <actionGroup ref="CreateNewAttributeActionGroup" stepKey="createNewAttribute"/>
 
         <after>
             <!-- Delete Created Attribute -->
-            <actionGroup ref="DeleteCreatedAttribute" stepKey="deleteCreatedAttribute"/>
+            <actionGroup ref="DeleteCreatedAttributeActionGroup" stepKey="deleteCreatedAttribute"/>
         </after>
 
     </test>

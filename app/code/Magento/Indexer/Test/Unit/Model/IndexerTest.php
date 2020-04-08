@@ -154,15 +154,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
 
         if ($getViewIsEnabled && $getViewGetUpdated) {
-            if (!$getStateGetUpdated) {
-                $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-            } else {
-                if ($getViewGetUpdated == $getStateGetUpdated) {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                } else {
-                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
-                }
-            }
+            $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
         } else {
             $getLatestUpdated = $this->model->getLatestUpdated();
             $this->assertEquals($getStateGetUpdated, $getLatestUpdated);

@@ -78,3 +78,27 @@
         }
     }
 }
+
+.customer-newsletter-fieldset.admin__fieldset {
+    &.multi-website {
+        > .admin__field > .admin__field-control {
+            width: ~'calc(100% * 0.75 - 30px)';
+
+            table {
+                th.subscriber-status {
+                    text-align: center;
+                }
+
+                td {
+                    &.subscriber-status {
+                        text-align: center;
+                    }
+
+                    select.admin__control-select {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

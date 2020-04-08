@@ -123,6 +123,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/errorUrl"
           }
       }
   }) {    

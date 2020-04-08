@@ -38,13 +38,13 @@
         <label class="label"><span><?= $block->escapeHtml(__('Resources')) ?></span></label>
 
         <div class="control">
-            <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?= /* @noEscape */
-                $block->getJsonSerializer()->serialize([
+            <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?=
+                $block->escapeHtmlAttr($block->getJsonSerializer()->serialize([
                     'rolesTree' => [
                         "treeInitData" => $block->getTree(),
                         "treeInitSelectedData" => $block->getSelectedResources(),
                     ],
-                ]); ?>'>
+                ])); ?>'>
             </div>
         </div>
     </div>

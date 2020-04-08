@@ -329,7 +329,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * Set attribute model
+     * Set attribute model class.
      *
      * @param array $data
      * @return $this
@@ -1405,9 +1405,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -1433,9 +1430,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

@@ -55,7 +55,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->getRequest()->setParam('block', ',');
         $this->getRequest()->setParam('json', 1);
         $this->dispatch('backend/sales/order_create/loadBlock');
-        $this->assertEquals('{"message":""}', $this->getResponse()->getBody());
+        $this->assertContains('"message":""}', $this->getResponse()->getBody());
     }
 
     /**

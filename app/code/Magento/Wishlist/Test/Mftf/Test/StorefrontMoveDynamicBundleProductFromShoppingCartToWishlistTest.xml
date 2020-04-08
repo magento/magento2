@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMoveDynamicBundleProductFromShoppingCartToWishlistTest">
+        <annotations>
+            <stories value="Wishlist"/>
+            <title value="Move Dynamic Bundle Product from Shopping Cart to Wishlist"/>
+            <description value="Move Dynamic Bundle Product from Shopping Cart to Wishlist"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14212"/>
+            <group value="wishlist"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">20.00</field>
+            </createData>
+            <!--Create Bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
+            <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
+            <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- 1. Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Open Product page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeButton"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption1_1.title$$)}}" userInput="$$simpleProduct1.sku$$ +$100.00" stepKey="selectOption0Product0"/>
+        <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity($$createBundleOption1_1.title$$)}}" userInput="1" stepKey="fillQuantity00"/>
+
+        <!-- Add product to the cart and Assert add product to cart success message-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Select Mini Cart and select 'View And Edit Cart' -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
+
+        <!-- Assert move product to wishlist success message -->
+        <actionGroup ref="AssertMoveProductToWishListSuccessMessageActionGroup" stepKey="moveToWishlist">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Assert product is present in wishlist -->
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="productPrice" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Assert product details in Wishlist -->
+        <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="label" value="$$createBundleOption1_1.title$$"/>
+            <argument name="labelValue" value="$$simpleProduct1.sku$$ $100.00"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="assertCartIsEmpty"/>
+    </test>
+</tests>

@@ -7,7 +7,7 @@
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_optionId = (int)$_option->getId(); ?>
-<div class="admin__field field<?= $_option->getIsRequire() ? ' required _required' : '' ?>">
+<div class="admin__field field<?= $_option->getIsRequire() ? ' required' : '' ?>">
     <label class="label admin__field-label">
         <?= $block->escapeHtml($_option->getTitle()) ?>
         <?= /* @noEscape */ $block->getFormattedPrice() ?>

@@ -13,14 +13,33 @@ define([
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/action/get-totals',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'underscore'
+], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _) {
     'use strict';
+
+    /**
+     * Filter template data.
+     *
+     * @param {Object|Array} data
+     */
+    var filterTemplateData = function (data) {
+        return _.each(data, function (value, key, list) {
+            if (_.isArray(value) || _.isObject(value)) {
+                list[key] = filterTemplateData(value);
+            }
+
+            if (key === '__disableTmpl') {
+                delete list[key];
+            }
+        });
+    };
 
     return function (messageContainer, paymentData, skipBilling) {
         var serviceUrl,
             payload;
 
+        paymentData = filterTemplateData(paymentData);
         skipBilling = skipBilling || false;
         payload = {
             cartId: quote.getQuoteId(),

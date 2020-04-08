@@ -3,19 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateDefaultAttributeValue
- * @package Magento\Catalog\Setup\Patch
+ * Updates 'is_anchor' attribute default value.
  */
 class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInterface
 {
@@ -30,7 +29,6 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     private $categorySetupFactory;
 
     /**
-     * PatchInitial constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CategorySetupFactory $categorySetupFactory
      */
@@ -43,17 +41,24 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $categorySetup->updateAttribute(3, 54, 'default_value', 1);
+        $categorySetup->updateAttribute(
+            CategorySetup::CATEGORY_ENTITY_TYPE_ID,
+            'is_anchor',
+            'default_value',
+            1
+        );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -63,7 +68,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -71,7 +76,7 @@ class UpdateDefaultAttributeValue implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -27,8 +27,11 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
+                <argument name="sku" value="{{updateVirtualProductRegularPrice99OutOfStock.sku}}"/>
+            </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default virtual product in the grid page -->

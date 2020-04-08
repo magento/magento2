@@ -142,7 +142,7 @@
             <column name="website_id"/>
         </index>
     </table>
-    <table name="cataloginventory_stock_status_tmp" resource="default" engine="memory"
+    <table name="cataloginventory_stock_status_tmp" resource="default" engine="innodb"
            comment="Cataloginventory Stock Status Indexer Tmp">
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Product ID"/>
@@ -159,10 +159,10 @@
             <column name="website_id"/>
             <column name="stock_id"/>
         </constraint>
-        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>
-        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="hash">
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
     </table>

@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 /**
@@ -21,29 +22,38 @@ class CouponUsagesDecrement
     private $updateCouponUsages;
 
     /**
+     * @var OrderRepository
+     */
+    private $orderRepository;
+
+    /**
      * @param UpdateCouponUsages $updateCouponUsages
+     * @param OrderRepository $orderRepository
      */
     public function __construct(
-        UpdateCouponUsages $updateCouponUsages
+        UpdateCouponUsages $updateCouponUsages,
+        OrderRepository $orderRepository
     ) {
         $this->updateCouponUsages = $updateCouponUsages;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
      * Decrements number of coupon usages after cancelling order.
      *
-     * @param Order $subject
-     * @param callable $proceed
-     * @return Order
+     * @param OrderService $subject
+     * @param bool $result
+     * @param int $orderId
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCancel(Order $subject, callable $proceed): Order
+    public function afterCancel(OrderService $subject, bool $result, $orderId): bool
     {
-        $canCancel = $subject->canCancel();
-        $returnValue = $proceed();
-        if ($canCancel) {
-            $returnValue = $this->updateCouponUsages->execute($returnValue, false);
+        $order = $this->orderRepository->get($orderId);
+        if ($result) {
+            $this->updateCouponUsages->execute($order, false);
         }
 
-        return $returnValue;
+        return $result;
     }
 }

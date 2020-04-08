@@ -21,6 +21,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * A client that can communicate with the Authorize.net API
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class Client implements ClientInterface
 {
@@ -109,10 +112,12 @@ class Client implements ClientInterface
             try {
                 $data = $this->json->unserialize($responseBody);
             } catch (InvalidArgumentException $e) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Invalid JSON was returned by the gateway');
             }
 
             return $data;
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $this->logger->critical($e);
 

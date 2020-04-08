@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontOpenCustomerAddressesOnPaymentStepInCheckoutActionGroup">
+        <annotations>
+            <description>Click 'Change Address' link on the Storefront Checkout page on the 'Payment' step.</description>
+        </annotations>
+
+        <click selector="{{CheckoutBillingAddressSection.changeAddressButton}}" stepKey="clickChangeAddresslink"/>
+        <waitForElementVisible selector="{{CheckoutShippingAddressSearchSection.popupSelectShippingAddress}}" stepKey="seePopup"/>
+        <seeElement selector="{{CheckoutShippingAddressSearchSection.selectShippingAddressGrid}}" stepKey="seeAddressGrid"/>
+    </actionGroup>
+</actionGroups>

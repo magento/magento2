@@ -182,11 +182,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->hasAllowProducts()) {
             $products = [];
-            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
             /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
-                if ($skipSaleableCheck || ((int) $product->getStatus()) === Status::STATUS_ENABLED) {
+                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
                     $products[] = $product;
                 }
             }

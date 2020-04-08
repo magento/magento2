@@ -12,18 +12,28 @@
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
 use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\Config\Share as CustomerShareConfig;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Directory\Model\ResourceModel\Country\Collection as CountryCollection;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory as AttrubuteOptionFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
-class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Table
+/**
+ * Return allowed countries for specified website
+ */
+class CountryWithWebsites extends Table
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     * @var CountryCollectionFactory
      */
     private $countriesFactory;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries
+     * @var AllowedCountries
      */
     private $allowedCountriesReader;
 
@@ -33,7 +43,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     private $options;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -43,21 +53,20 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     private $shareConfig;
 
     /**
-     * CountryWithWebsites constructor.
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory
+     * @param OptionCollectionFactory $attrOptionCollectionFactory
+     * @param AttrubuteOptionFactory $attrOptionFactory
+     * @param CountryCollectionFactory $countriesFactory
      * @param AllowedCountries $allowedCountriesReader
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param Share $shareConfig
      */
     public function __construct(
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countriesFactory,
-        \Magento\Directory\Model\AllowedCountries $allowedCountriesReader,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Config\Share $shareConfig
+        OptionCollectionFactory $attrOptionCollectionFactory,
+        AttrubuteOptionFactory $attrOptionFactory,
+        CountryCollectionFactory $countriesFactory,
+        AllowedCountries $allowedCountriesReader,
+        StoreManagerInterface $storeManager,
+        CustomerShareConfig $shareConfig
     ) {
         $this->countriesFactory = $countriesFactory;
         $this->allowedCountriesReader = $allowedCountriesReader;
@@ -72,19 +81,22 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         if (!$this->options) {
-            $allowedCountries = [];
             $websiteIds = [];
 
             if (!$this->shareConfig->isGlobalScope()) {
+                $allowedCountries = [[]];
+
                 foreach ($this->storeManager->getWebsites() as $website) {
                     $countries = $this->allowedCountriesReader
                         ->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId());
-                    $allowedCountries = array_merge($allowedCountries, $countries);
+                    $allowedCountries[] = $countries;
 
                     foreach ($countries as $countryCode) {
                         $websiteIds[$countryCode][] = $website->getId();
                     }
                 }
+
+                $allowedCountries = array_unique(array_merge(...$allowedCountries));
             } else {
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
             }
@@ -106,7 +118,7 @@ class CountryWithWebsites extends \Magento\Eav\Model\Entity\Attribute\Source\Tab
     /**
      * Create Countries Collection with all countries
      *
-     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @return CountryCollection
      */
     private function createCountriesCollection()
     {

@@ -10,7 +10,7 @@
  */
 ?>
 <dl class="payment-method">
-    <dt class="title"><?= $block->escapeHtml($block->getTitle()) ?></dt>
+    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
 <?php if ($block->getInstructions()) : ?>
     <dd class="content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></dd>
 <?php endif; ?>

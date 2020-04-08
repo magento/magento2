@@ -38,6 +38,21 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
     private $baseSelectProcessorMock;
 
     /**
+     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $indexScopeResolverMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\Dimension|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionMock;
+
+    /**
+     * @var \Magento\Framework\Indexer\DimensionFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $dimensionFactoryMock;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice
      */
     private $model;
@@ -85,6 +100,7 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
     public function testBuild()
     {
         $productId = 10;
+        $storeId = 1;
         $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -108,6 +124,6 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $metadata->expects($this->once())->method('getLinkField')->willReturn('row_id');
         $this->resourceMock->expects($this->any())->method('getTableName');
         $this->baseSelectProcessorMock->expects($this->once())->method('process')->willReturnSelf();
-        $this->model->build($productId);
+        $this->model->build($productId, $storeId);
     }
 }

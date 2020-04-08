@@ -14,6 +14,9 @@ use Magento\Payment\Gateway\CommandInterface;
 
 /**
  * Chooses the best method of accepting the payment based on the status of the transaction
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class AcceptPaymentStrategyCommand implements CommandInterface
 {

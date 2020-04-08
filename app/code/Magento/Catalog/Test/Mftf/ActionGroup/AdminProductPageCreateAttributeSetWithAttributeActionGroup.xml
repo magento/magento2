@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductPageCreateAttributeSetWithAttributeActionGroup">
+        <annotations>
+            <description>Adds the provided Product Attribute Set to a Product on the Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeName" type="string"/>
+            <argument name="attributeSetName" type="string"/>
+            <argument name="attributeType" type="string" defaultValue="TextField"/>
+        </arguments>
+
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
+        <waitForPageLoad stepKey="waitForSidePanel"/>
+        <see userInput="Select Attribute" stepKey="checkNewAttributePopUpAppeared"/>
+        <click selector="{{AdminProductFormAttributeSection.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
+        <fillField selector="{{AdminProductFormNewAttributeSection.attributeLabel}}" userInput="{{attributeName}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminProductFormNewAttributeSection.attributeType}}" userInput="{{attributeType}}" stepKey="selectAttributeType"/>
+        <click selector="{{AdminProductFormNewAttributeSection.saveInNewSet}}" stepKey="saveAttribute"/>
+        <fillField selector="{{AdminProductFormNewAttributeNewSetSection.setName}}" userInput="{{attributeSetName}}" stepKey="fillSetName"/>
+        <click selector="{{AdminProductFormNewAttributeNewSetSection.accept}}" stepKey="acceptPopup"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingToFinish"/>
+        <!-- Product page will hang if there is no reload-->
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
+    </actionGroup>
+</actionGroups>

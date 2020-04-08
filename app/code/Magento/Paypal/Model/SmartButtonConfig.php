@@ -83,7 +83,7 @@ class SmartButtonConfig
             'allowedFunding' => $this->getAllowedFunding($page),
             'disallowedFunding' => $this->getDisallowedFunding(),
             'styles' => $this->getButtonStyles($page),
-            'isVisibleOnProductPage'  => $this->config->getValue('visible_on_product'),
+            'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed
         ];
     }

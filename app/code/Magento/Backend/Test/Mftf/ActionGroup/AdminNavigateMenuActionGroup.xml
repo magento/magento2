@@ -17,6 +17,7 @@
             <argument name="submenuUiId" type="string"/>
         </arguments>
 
+        <waitForPageLoad stepKey="waitPageLoad"/>
         <click selector="{{AdminMenuSection.menuItem(menuUiId)}}" stepKey="clickOnMenuItem"/>
         <click selector="{{AdminMenuSection.menuItem(submenuUiId)}}" stepKey="clickOnSubmenuItem"/>
     </actionGroup>

@@ -26,7 +26,7 @@ foreach ($addressList as $key => $address) {
 
 // assign virtual product to the billing address
 $billingAddress = $quote->getBillingAddress();
-$virtualItem = $items[sizeof($items) - 1];
+$virtualItem = $items[count($items) - 1];
 $billingAddress->setTotalQty(1);
 $billingAddress->addItem($virtualItem);
 

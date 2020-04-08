@@ -3,10 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\SalesRule\Model\Rule;
 
+/**
+ * Block for rendering Conditions tab on Sales Rules creation page.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -33,8 +42,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     private $ruleFactory;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -60,7 +67,8 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getTabClass()
@@ -69,7 +77,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabUrl()
     {
@@ -77,7 +85,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAjaxLoaded()
     {
@@ -85,7 +93,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -93,7 +101,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -101,7 +109,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -109,7 +117,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -133,7 +141,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Handles addition of conditions tab to supplied form.
      *
-     * @param \Magento\SalesRule\Model\Rule $model
+     * @param Rule $model
      * @param string $fieldsetId
      * @param string $formName
      * @return \Magento\Framework\Data\Form

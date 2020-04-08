@@ -15,6 +15,9 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Validates the status of an attempted transaction
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class TransactionResponseValidator extends AbstractValidator
 {
@@ -85,9 +88,7 @@ class TransactionResponseValidator extends AbstractValidator
             ?? $transactionResponse['errors'][0]['errorCode']
             ?? null;
 
-        return !in_array($transactionResponse['responseCode'], [
-                self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD
-            ])
+        return !in_array($transactionResponse['responseCode'], [self::RESPONSE_CODE_APPROVED, self::RESPONSE_CODE_HELD])
             || $code
             && !in_array(
                 $code,

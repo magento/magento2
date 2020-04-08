@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateTaxRuleCustomProductTaxClassActionGroup">
+        <annotations>
+            <description>Admin create tax rule with custom tax rate and product tax class</description>
+        </annotations>
+        <arguments>
+            <argument name="taxRuleCode" type="string" defaultValue="{{defaultTaxRule.code}}"/>
+            <argument name="taxRateCode" type="string" defaultValue="{{US_NY_Rate_1.code}}"/>
+            <argument name="productTaxClassName" type="string" defaultValue="NewTaxClass"/>
+        </arguments>
+        <amOnPage url="{{AdminNewTaxRulePage.url}}" stepKey="goNewTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForNewTaxRulePageLoaded"/>
+        <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{taxRuleCode}}" stepKey="fillRuleName"/>
+        <click selector="{{AdminTaxRulesSection.selectTaxRate(taxRateCode)}}" stepKey="selectTaxRate"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
+        <click selector="{{AdminTaxRulesSection.selectProductTaxClass(taxableGoodsTaxClass.class_name)}}" stepKey="unSelectTaxClass"/>
+        <click selector="{{AdminTaxRulesSection.selectProductTaxClass(productTaxClassName)}}" stepKey="selectProductTaxClass"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>
+    </actionGroup>
+</actionGroups>

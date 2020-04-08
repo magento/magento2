@@ -47,7 +47,7 @@
 
         <!-- Add product to the cart -->
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
         </actionGroup>
 

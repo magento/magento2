@@ -47,6 +47,7 @@ class LoginUser extends Ui
             $loginForm->fill($fixture);
             $loginForm->submit();
             $loginPage->waitForHeaderBlock();
+            $loginPage->dismissAdminUsageNotification();
         }
     }
 }

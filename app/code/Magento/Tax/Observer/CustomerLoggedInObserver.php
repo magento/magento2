@@ -9,7 +9,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
@@ -33,7 +33,7 @@ class CustomerLoggedInObserver implements ObserverInterface
     /**
      * Module manager
      *
-     * @var ModuleManagerInterface
+     * @var Manager
      */
     private $moduleManager;
 
@@ -60,7 +60,7 @@ class CustomerLoggedInObserver implements ObserverInterface
      * @param GroupRepositoryInterface $groupRepository
      * @param Session $customerSession
      * @param Data $taxHelper
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
@@ -68,7 +68,7 @@ class CustomerLoggedInObserver implements ObserverInterface
         GroupRepositoryInterface $groupRepository,
         Session $customerSession,
         Data $taxHelper,
-        ModuleManagerInterface $moduleManager,
+        Manager $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {

@@ -118,3 +118,5 @@ Downloads,Downloads
 "Use Content-Disposition","Use Content-Disposition"
 "Disable Guest Checkout if Cart Contains Downloadable Items","Disable Guest Checkout if Cart Contains Downloadable Items"
 "Guest checkout will only work with shareable.","Guest checkout will only work with shareable."
+"Link URL's domain is not in list of downloadable_domains in env.php.","Link URL's domain is not in list of downloadable_domains in env.php."
+"Sample URL's domain is not in list of downloadable_domains in env.php.","Sample URL's domain is not in list of downloadable_domains in env.php."

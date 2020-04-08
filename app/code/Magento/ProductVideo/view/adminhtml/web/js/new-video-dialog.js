@@ -282,9 +282,15 @@ define([
          * @private
          */
         _onGetVideoInformationClick: function () {
-            this._onlyVideoPlayer = false;
-            this._isEditPage = false;
-            this._videoUrlWidget.trigger('update_video_information');
+            var videoForm = this.element.find(this._videoFormSelector);
+
+            videoForm.validation();
+
+            if (this.element.find(this._videoUrlSelector).valid()) {
+                this._onlyVideoPlayer = false;
+                this._isEditPage = false;
+                this._videoUrlWidget.trigger('update_video_information');
+            }
         },
 
         /**
@@ -299,6 +305,14 @@ define([
          * @private
          */
         _onGetVideoInformationStartRequest: function () {
+            var videoForm = this.element.find(this._videoFormSelector);
+
+            try {
+                videoForm.validation('clearError');
+            } catch (e) {
+                // Do nothing
+            }
+
             this._videoRequestComplete = false;
         },
 

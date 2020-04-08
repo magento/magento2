@@ -15,7 +15,7 @@
         <arguments>
             <argument name="storeView" defaultValue="customStore.name"/>
         </arguments>
-        
+
         <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickStoreViewSwitchDropdown"/>
         <waitForElementVisible selector="{{AdminMainActionsSection.storeViewByName('Default Store View')}}" stepKey="waitForStoreViewsAreVisible"/>
         <click selector="{{AdminMainActionsSection.storeViewByName(storeView)}}" stepKey="clickStoreViewByName"/>
@@ -24,14 +24,5 @@
         <waitForPageLoad stepKey="waitForStoreViewSwitched"/>
         <scrollToTopOfPage stepKey="scrollToStoreSwitcher"/>
         <see userInput="{{storeView}}" selector="{{AdminMainActionsSection.storeSwitcher}}" stepKey="seeNewStoreViewName"/>
-    </actionGroup>
-    
-    <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchStoreViewActionGroup">
-        <annotations>
-            <description>EXTENDS: AdminSwitchStoreViewActionGroup. Clicks on the 'All Store Views' drop down menu. Validates that the 'All Store Views' options is present and correct.</description>
-        </annotations>
-        
-        <click selector="{{AdminMainActionsSection.allStoreViews}}" stepKey="clickStoreViewByName" after="waitForStoreViewsAreVisible"/>
-        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="All Store Views" stepKey="seeNewStoreViewName" after="waitForStoreViewSwitched"/>
     </actionGroup>
 </actionGroups>

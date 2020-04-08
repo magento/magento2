@@ -6,7 +6,7 @@
 namespace Magento\Customer\Test\Unit\Model\Customer\Source;
 
 use Magento\Customer\Model\Customer\Source\Group;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
@@ -23,7 +23,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
@@ -49,7 +49,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->moduleManagerMock = $this->getMockBuilder(ModuleManagerInterface::class)
+        $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)

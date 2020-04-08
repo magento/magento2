@@ -14,5 +14,13 @@
         <element name="error" type="text" selector="#messages div.message-error"/>
         <element name="notice" type="text" selector=".message.message-notice.notice"/>
         <element name="messageByType" type="text" selector="#messages div.message-{{messageType}}" parameterized="true" />
+        <element name="warning" type="text" selector="#messages div.message-warning"/>
+        <element name="accessDenied" type="text" selector=".access-denied-page"/>
+        <!-- Deprecated elements, please do not use them. Use elements above-->
+        <!-- Elements below are too common and catch non messages blocks. Ex: system messages blocks-->
+        <element name="successMessage" type="text" selector=".message-success"/>
+        <element name="errorMessage" type="text" selector=".message.message-error.error"/>
+        <element name="warningMessage" type="text" selector=".message-warning"/>
+        <element name="noticeMessage" type="text" selector=".message-notice"/>
     </section>
 </sections>

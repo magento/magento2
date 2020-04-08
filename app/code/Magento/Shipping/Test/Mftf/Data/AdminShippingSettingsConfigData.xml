@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminShippingSettingsOriginCountryConfigData">
+        <data key="path">shipping/origin/country_id</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginZipCodeConfigData">
+        <data key="path">shipping/origin/postcode</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginCityConfigData">
+        <data key="path">shipping/origin/city</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginStreetAddressConfigData">
+        <data key="path">shipping/origin/street_line1</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginStreetAddress2ConfigData">
+        <data key="path">shipping/origin/street_line2</data>
+    </entity>
+    <entity name="AdminFreeshippingActiveConfigData">
+        <data key="path">carriers/freeshipping/active</data>
+        <data key="enabled">1</data>
+        <data key="disabled">0</data>
+    </entity>
+    <entity name="AdminFreeshippingMinimumOrderAmountConfigData">
+        <data key="path">carriers/freeshipping/free_shipping_subtotal</data>
+        <data key="hundred">100</data>
+        <data key="default">0</data>
+    </entity>
+    <entity name="AdminResetShippingOrigin" type="shipping_origin">
+        <requiredEntity type="inheritCountryFlag">ShippingOriginCountryInheritValue</requiredEntity>
+        <requiredEntity type="inheritRegionFlag">ShippingOriginRegionInheritValue</requiredEntity>
+        <requiredEntity type="inheritPostcodeFlag">ShippingOriginPostcodeInheritValue</requiredEntity>
+    </entity>
+    <entity name="ShippingOriginCountryInheritValue" type="inheritCountryFlag">
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingOriginRegionInheritValue" type="inheritRegionFlag">
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingOriginPostcodeInheritValue" type="inheritPostcodeFlag">
+        <data key="value">1</data>
+    </entity>
+</entities>

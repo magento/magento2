@@ -1238,7 +1238,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_cfg_opt_agr_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_cfg_opt_agr_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Config Option Aggregate Temp Table">
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
@@ -1279,7 +1279,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_cfg_opt_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_cfg_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Config Option Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1327,7 +1327,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_final_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_final_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Final Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1375,7 +1375,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_opt_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Option Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1418,7 +1418,7 @@
             <column name="option_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_opt_agr_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_opt_agr_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Option Aggregate Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1470,7 +1470,7 @@
             <column name="value"/>
         </index>
     </table>
-    <table name="catalog_product_index_eav_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_eav_tmp" resource="default" engine="innodb"
            comment="Catalog Product EAV Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1489,13 +1489,13 @@
             <column name="value"/>
             <column name="source_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE" indexType="btree">
             <column name="value"/>
         </index>
     </table>
@@ -1528,7 +1528,7 @@
             <column name="value"/>
         </index>
     </table>
-    <table name="catalog_product_index_eav_decimal_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_eav_decimal_tmp" resource="default" engine="innodb"
            comment="Catalog Product EAV Decimal Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1547,13 +1547,13 @@
             <column name="value"/>
             <column name="source_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE" indexType="btree">
             <column name="value"/>
         </index>
     </table>
@@ -1592,7 +1592,7 @@
             <column name="min_price"/>
         </index>
     </table>
-    <table name="catalog_product_index_price_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1617,17 +1617,17 @@
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="btree">
             <column name="min_price"/>
         </index>
     </table>
-    <table name="catalog_category_product_index_tmp" resource="default" engine="memory"
+    <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Category ID"/>
@@ -1646,7 +1646,7 @@
             <column name="product_id"/>
             <column name="store_id"/>
         </constraint>
-        <index referenceId="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="hash">
+        <index referenceId="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="btree">
             <column name="product_id"/>
             <column name="category_id"/>
             <column name="store_id"/>

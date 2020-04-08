@@ -50,6 +50,7 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild()
     {
         $productId = 42;
+        $storeId = 1;
 
         /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
@@ -67,6 +68,6 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('process')
             ->with($selectMock);
 
-        $this->assertEquals($expectedResult, $this->subject->build($productId));
+        $this->assertEquals($expectedResult, $this->subject->build($productId, $storeId));
     }
 }

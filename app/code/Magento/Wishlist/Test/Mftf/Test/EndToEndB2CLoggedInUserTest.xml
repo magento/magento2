@@ -17,10 +17,10 @@
         <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" after="wishlistGotoCategory1" stepKey="wishlistAddSimpleProduct1ToWishlist">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" after="wishlistAddSimpleProduct1ToWishlist" stepKey="wishlistCheckSimpleProduct1InWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="wishlistAddSimpleProduct1ToWishlist" stepKey="wishlistCheckSimpleProduct1InWishlist">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" after="wishlistCheckSimpleProduct1InWishlist" stepKey="wishlistCheckSimpleProduct1InWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct1InWishlist" stepKey="wishlistCheckSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
 
@@ -31,10 +31,10 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickSimpleProduct2" stepKey="wishlistAddSimpleProduct2ToWishlist">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" after="wishlistAddSimpleProduct2ToWishlist" stepKey="wishlistCheckSimpleProduct2InWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="wishlistAddSimpleProduct2ToWishlist" stepKey="wishlistCheckSimpleProduct2InWishlist">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct2$$"/>
         </actionGroup>
         <comment userInput="End of adding products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="endOfAddingProductsToWishlist" />

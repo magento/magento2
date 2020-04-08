@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
@@ -51,6 +51,7 @@ class Wysiwyg extends AbstractElement
         array $config = []
     ) {
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
+
         $this->form = $formFactory->create();
         $wysiwygId = $context->getNamespace() . '_' . $data['name'];
         $this->editor = $this->form->addField(

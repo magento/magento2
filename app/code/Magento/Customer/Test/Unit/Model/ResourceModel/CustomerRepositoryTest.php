@@ -211,6 +211,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'setFirstFailure',
                 'setLockExpires',
                 'save',
+                'setGroupId'
             ]
         );
 
@@ -245,9 +246,15 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customer->expects($this->atLeastOnce())
+        $this->customer->expects($this->at(4))
             ->method('__toArray')
             ->willReturn([]);
+        $this->customer->expects($this->at(3))
+            ->method('__toArray')
+            ->willReturn(['group_id' => 1]);
+        $customerModel->expects($this->once())
+            ->method('setGroupId')
+            ->with(1);
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)

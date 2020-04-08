@@ -220,9 +220,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Remove unneeded properties from serialization
      *
      * @return string[]
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -247,9 +244,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Init not serializable fields
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

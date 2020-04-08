@@ -325,4 +325,30 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    /**
+     * @return void
+     */
+    public function testExtractModuleName()
+    {
+        $blockClassNames = $this->getPossibleBlockClassNames();
+
+        foreach ($blockClassNames as $expectedModuleName => $className) {
+            $extractedModuleName = $this->block->extractModuleName($className);
+            $this->assertSame($expectedModuleName, $extractedModuleName);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossibleBlockClassNames()
+    {
+        return [
+            'Vendor_Module' => 'Vendor\Module\Block\Class',
+            'Vendor_ModuleBlock' => 'Vendor\ModuleBlock\Block\Class',
+            'Vendor_BlockModule' => 'Vendor\BlockModule\Block\Class',
+            'Vendor_CustomBlockModule' => 'Vendor\CustomBlockModule\Block\Class',
+        ];
+    }
 }

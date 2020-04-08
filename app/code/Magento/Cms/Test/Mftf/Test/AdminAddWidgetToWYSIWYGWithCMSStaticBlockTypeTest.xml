@@ -15,13 +15,13 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: CMS Static Block"/>
             <description value="Admin should be able to create a CMS page with widget type: CMS Static Block"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83787"/>
         </annotations>
         <before>
             <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <!--Main test-->
@@ -68,8 +68,8 @@
         <see userInput="$$createPreReqBlock.content$$" stepKey="seeBlockLink"/>
         <after>
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

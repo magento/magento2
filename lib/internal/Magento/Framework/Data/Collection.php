@@ -538,7 +538,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
             }
         }
     }
-    
+
     /**
      * Setting data for all collection items
      *
@@ -889,9 +889,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return string[]
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -910,9 +907,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return void
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

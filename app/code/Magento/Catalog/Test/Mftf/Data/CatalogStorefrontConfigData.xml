@@ -60,4 +60,13 @@
     <entity name="DefaultFlatCatalogCategory" type="flat_catalog_category">
         <data key="value">0</data>
     </entity>
+
+    <entity name="DefaultGridPerPageValuesConfigData">
+        <data key="path">catalog/frontend/grid_per_page_values</data>
+        <data key="value">12,24,36</data>
+    </entity>
+    <entity name="CustomGridPerPageValuesConfigData">
+        <data key="path">catalog/frontend/grid_per_page_values</data>
+        <data key="value">1,2</data>
+    </entity>
 </entities>

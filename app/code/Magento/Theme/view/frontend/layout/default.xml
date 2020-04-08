@@ -50,12 +50,7 @@
                 </container>
             </container>
             <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content">
-                <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
-                    <arguments>
-                        <argument name="logo_img_width" xsi:type="number">189</argument>
-                        <argument name="logo_img_height" xsi:type="number">64</argument>
-                    </arguments>
-                </block>
+                <block class="Magento\Theme\Block\Html\Header\Logo" name="logo"/>
             </container>
         </referenceContainer>
         <referenceContainer name="page.top">

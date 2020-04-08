@@ -12,8 +12,8 @@
         <annotations>
             <description>EXTENDS: AdminCreateWidgetActionGroup. Clicks on Save. Validates that the Success Message is present and correct.</description>
         </annotations>
-        
+
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

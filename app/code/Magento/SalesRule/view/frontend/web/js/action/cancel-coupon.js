@@ -16,9 +16,10 @@ define([
     'Magento_Checkout/js/action/get-payment-information',
     'Magento_Checkout/js/model/totals',
     'mage/translate',
-    'Magento_Checkout/js/model/full-screen-loader'
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/action/recollect-shipping-rates'
 ], function ($, quote, urlManager, errorProcessor, messageContainer, storage, getPaymentInformationAction, totals, $t,
-  fullScreenLoader
+  fullScreenLoader, recollectShippingRates
 ) {
     'use strict';
 
@@ -56,6 +57,7 @@ define([
             var deferred = $.Deferred();
 
             totals.isLoading(true);
+            recollectShippingRates();
             getPaymentInformationAction(deferred);
             $.when(deferred).done(function () {
                 isApplied(false);
