@@ -40,6 +40,9 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="page_cache_from_key_from_cookie" type="Magento\PageCache\Plugin\RegisterFormKeyFromCookie" />
     </type>
+    <type name="Magento\Framework\View\Element\FormKey">
+        <plugin name="page_cache_inline_form_key_updater" type="Magento\PageCache\Plugin\Framework\View\Element\InlineFormKeyUpdater" sortOrder="1" disabled="false" />
+    </type>
     <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
 </config>
