@@ -44,7 +44,7 @@ class AssignGetUnassignTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->assign = Bootstrap::getObjectManager()->create(AssignAssetsInterface::class);
         $this->getAssetIds = Bootstrap::getObjectManager()->create(GetAssetIdsUsedInContentInterface::class);
@@ -55,34 +55,38 @@ class AssignGetUnassignTest extends TestCase
     /**
      * Assing assets to content, retrieve the data, then unassign assets from content
      */
-    public function testAssignRetrieveAndUnassign()
+    public function testAssignRetrieveAndUnassign(): void
     {
+        $entityType = 'catalog_product';
+        $entityId = '42';
+        $field = 'description';
+        $assetIds = [56, 78];
+
         $contentIdentity = Bootstrap::getObjectManager()->create(
             ContentIdentityInterface::class,
             [
                 'data' => [
-                    'entity_type' => 'catalog_product',
-                    'entity_id' => '42',
-                    'field' => 'description'
+                    'entity_type' => $entityType,
+                    'entity_id' => $entityId,
+                    'field' => $field
                 ]
             ]
         );
-        $assetIds = [56, 78];
 
         $this->assign->execute($contentIdentity, $assetIds);
 
         $retrievedAssetIds = $this->getAssetIds->execute($contentIdentity);
         $this->assertEquals($assetIds, $retrievedAssetIds);
 
-
         $retrievedContentIdentities = $this->getContent->execute($assetIds);
 
         $this->assertEquals(count($retrievedContentIdentities), 1);
 
-        $identity = $retrievedContentIdentities[0];
-        $this->assertEquals('catalog_product', $identity->getEntityType());
-        $this->assertEquals('42', $identity->getEntityId());
-        $this->assertEquals('description', $identity->getField());
+        foreach ($retrievedContentIdentities as $identity) {
+            $this->assertEquals($entityType, $identity->getEntityType());
+            $this->assertEquals($entityId, $identity->getEntityId());
+            $this->assertEquals($field, $identity->getField());
+        }
 
         $this->unassign->execute($contentIdentity, $assetIds);
 

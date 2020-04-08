@@ -19,13 +19,16 @@
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
     </type>
-    <type name="Magento\MediaContent\Model\Content\Config\Reader">
+    <virtualType name="Magento\MediaContent\Model\Content\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="fileName" xsi:type="string">media_content.xml</argument>
             <argument name="converter" xsi:type="object">Magento\MediaContent\Model\Content\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\MediaContent\Model\Content\Config\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/search/patterns/pattern" xsi:type="string">name</item>
+            </argument>
         </arguments>
-    </type>
+    </virtualType>
     <virtualType name="Magento\MediaContent\Model\Content\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\MediaContent\Model\Content\Config\Reader</argument>

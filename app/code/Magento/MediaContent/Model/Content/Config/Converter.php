@@ -15,9 +15,9 @@ use Magento\Framework\Config\ConverterInterface;
 class Converter implements ConverterInterface
 {
     /**
-     * Blacklist tag name
+     * Search tag name
      */
-    private const BLACKLIST_TAG_NAME = 'search';
+    private const SEARCH_TAG_NAME = 'search';
 
     /**
      * Patterns tag name
@@ -43,12 +43,12 @@ class Converter implements ConverterInterface
             return $result;
         }
 
-        foreach ($source->getElementsByTagName(self::BLACKLIST_TAG_NAME) as $blacklist) {
-            $result[self::BLACKLIST_TAG_NAME] = [];
+        foreach ($source->getElementsByTagName(self::SEARCH_TAG_NAME) as $blacklist) {
+            $result[self::SEARCH_TAG_NAME] = [];
             foreach ($blacklist->getElementsByTagName(self::PATTERNS_TAG_NAME) as $patterns) {
-                $result[self::BLACKLIST_TAG_NAME][self::PATTERNS_TAG_NAME] = [];
+                $result[self::SEARCH_TAG_NAME][self::PATTERNS_TAG_NAME] = [];
                 foreach ($patterns->getElementsByTagName(self::PATTERN_TAG_NAME) as $pattern) {
-                    $result[self::BLACKLIST_TAG_NAME][self::PATTERNS_TAG_NAME]
+                    $result[self::SEARCH_TAG_NAME][self::PATTERNS_TAG_NAME]
                     [$pattern->attributes->getNamedItem('name')->nodeValue] = $pattern->nodeValue;
                 }
             }
