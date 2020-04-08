@@ -52,7 +52,7 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search and open customer -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">

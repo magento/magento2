@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -149,6 +150,28 @@ class LoginPostTest extends AbstractController
         $this->dispatch('customer/account/loginPost');
         $this->assertTrue($this->session->isLoggedIn());
         $this->assertRedirect($this->stringContains('customer/account/'));
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/startup/redirect_dashboard 1
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testNoFormKeyLoginPostAction(): void
+    {
+        $this->prepareRequest('customer@example.com', 'password');
+        $this->getRequest()->setPostValue('form_key', null);
+        $this->getRequest()->setParam(Url::REFERER_QUERY_PARAM_NAME, $this->urlEncoder->encode('test_redirect'));
+        $this->dispatch('customer/account/loginPost');
+        $this->assertFalse($this->session->isLoggedIn());
+        $this->assertRedirect($this->stringContains('customer/account/'));
+        $this->assertSessionMessages(
+            $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**

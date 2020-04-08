@@ -19,7 +19,7 @@
             <group value="GroupedProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="_defaultCategory" stepKey="category"/>
             <!-- Create 23 products so that grid can have more than one page -->
             <createData entity="ApiSimpleProduct" stepKey="product1">
