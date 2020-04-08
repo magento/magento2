@@ -10,11 +10,8 @@ define([
     'Magento_Customer/js/action/login',
     'Magento_Customer/js/customer-data',
     'Magento_Customer/js/model/authentication-popup',
-    'mage/translate',
-    'mage/url',
-    'Magento_Ui/js/modal/alert',
-    'mage/validation'
-], function ($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
+    'mage/translate'
+], function ($, ko, Component, loginAction, customerData, authenticationPopup) {
     'use strict';
 
     return Component.extend({
@@ -32,13 +29,11 @@ define([
          * Init
          */
         initialize: function () {
-            var self = this;
-
             this._super();
-            url.setBaseUrl(window.authenticationPopup.baseUrl);
+
             loginAction.registerLoginCallback(function () {
-                self.isLoading(false);
-            });
+                this.isLoading(false);
+            }.bind(this));
         },
 
         /** Init popup login window */
@@ -60,8 +55,10 @@ define([
             if (this.modalWindow) {
                 $(this.modalWindow).modal('openModal');
             } else {
-                alert({
-                    content: $t('Guest checkout is disabled.')
+                require(['Magento_Ui/js/modal/alert'], function (alert) {
+                    alert({
+                        content: $t('Guest checkout is disabled.')
+                    });
                 });
             }
         },
@@ -81,14 +78,14 @@ define([
                 loginData[entry.name] = entry.value;
             });
 
-            if (formElement.validation() &&
-                formElement.validation('isValid')
-            ) {
-                this.isLoading(true);
-                loginAction(loginData);
-            }
-
-            return false;
+            require(['mage/validation'], function () {
+                if (formElement.validation() &&
+                    formElement.validation('isValid')
+                ) {
+                    this.isLoading(true);
+                    loginAction(loginData);
+                }
+            });
         }
     });
 });

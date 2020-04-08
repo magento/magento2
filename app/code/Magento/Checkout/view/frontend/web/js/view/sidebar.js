@@ -5,10 +5,9 @@
 
 define([
     'uiComponent',
-    'ko',
     'jquery',
     'Magento_Checkout/js/model/sidebar'
-], function (Component, ko, $, sidebarModel) {
+], function (Component, $, sidebarModel) {
     'use strict';
 
     return Component.extend({
