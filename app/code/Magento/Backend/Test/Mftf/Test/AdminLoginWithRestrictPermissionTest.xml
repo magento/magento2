@@ -20,16 +20,16 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
             <!--Create user role-->
             <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
                 <argument name="User" value="adminRole"/>
-                <argument name="restrictedRole" value="Media Gallery"/>
+                <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>
             <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
             <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
                 <argument name="User" value="adminRole"/>
-                <argument name="restrictedRole" value="Media Gallery"/>
+                <argument name="restrictedRole" value="Global Search"/>
             </actionGroup>
             <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
             <!--Create user and assign role to it-->
@@ -40,7 +40,7 @@
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
@@ -53,8 +53,9 @@
         </after>
         <!--Log out of admin and login with newly created user-->
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUser">
-            <argument name="adminUser" value="admin2"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertUserRoleRestrictedAccessActionGroup" stepKey="assertRestrictPage"/>
     </test>

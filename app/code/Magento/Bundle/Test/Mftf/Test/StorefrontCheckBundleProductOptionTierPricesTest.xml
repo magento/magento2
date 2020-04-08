@@ -26,8 +26,10 @@
 
             <!-- Add tier prices to simple products -->
             <!-- Simple product 1 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPageProduct1">
+                <argument name="productId" value="$$simpleProduct1CreateBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceProduct1">
                 <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="5"/>
@@ -35,7 +37,9 @@
                 <argument name="amount" value="50"/>
             </actionGroup>
             <!-- Simple product 2 -->
-            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct2CreateBundleProduct.id$$)}}" stepKey="openAdminEditPageProduct2"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPageProduct2">
+                <argument name="productId" value="$$simpleProduct2CreateBundleProduct.id$$"/>
+            </actionGroup>
             <actionGroup ref="ProductSetAdvancedPricingActionGroup" stepKey="addTierPriceProduct2">
                 <argument name="group" value="ALL GROUPS"/>
                 <argument name="quantity" value="7"/>
