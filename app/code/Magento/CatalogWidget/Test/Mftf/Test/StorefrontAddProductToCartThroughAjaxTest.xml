@@ -38,8 +38,10 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <actionGroup ref="StorefrontAddToCartFromCmsPageUsingAjaxActionGroup" stepKey="addProductToCartAndCheck">
+        <actionGroup ref="StorefrontAddToCartFromCmsPageUsingAjaxActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="AssertStorefrontProductMessagesActionGroup" stepKey="checkSuccessMsg">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
+        <actionGroup ref="AssertStorefrontCartQuantityActionGroup" stepKey="checkCartQuantity"/>
     </test>
 </tests>
