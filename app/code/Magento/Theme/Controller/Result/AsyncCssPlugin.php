@@ -39,19 +39,17 @@ class AsyncCssPlugin
      */
     public function beforeSendResponse(Http $subject): void
     {
-        $content = $subject->getContent() ?? '';
+        $content = (string)$subject->getContent();
 
         $headClose = '</head>';
 
-        if (is_string($content) && strpos($content, $headClose) !== false && $this->scopeConfig->isSetFlag(
+        if (strpos($content, $headClose) !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_USE_CSS_CRITICAL_PATH,
             ScopeInterface::SCOPE_STORE
         )) {
             $styles = '';
-
             $styleOpen = '<link';
             $styleClose = '>';
-
             $styleOpenPos = strpos($content, $styleOpen);
 
             while ($styleOpenPos !== false) {
