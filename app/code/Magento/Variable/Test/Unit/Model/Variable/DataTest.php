@@ -17,7 +17,7 @@ use Magento\Variable\Model\ResourceModel\Variable\Collection as VariableCollecti
 use Magento\Variable\Model\Source\Variables as StoreVariables;
 
 /**
- * Class DataTest
+ * Test variable data model
  */
 class DataTest extends TestCase
 {

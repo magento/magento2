@@ -25,7 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ValidateTest
+ * Variable validate test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
