@@ -14,6 +14,8 @@ use Magento\Framework\Config\DataInterface;
  */
 class Config
 {
+    private const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
+
     /**
      * @var DataInterface
      */
@@ -37,5 +39,15 @@ class Config
     public function get($key = null, $default = null)
     {
         return $this->data->get($key, $default);
+    }
+
+    /**
+     * Returns list of blacklist regexp patterns
+     *
+     * @return array
+     */
+    public function getBlacklistPatterns() : array
+    {
+        return $this->data->get(self::XML_PATH_BLACKLIST_PATTERNS);
     }
 }

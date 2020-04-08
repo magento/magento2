@@ -14,8 +14,6 @@ use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
  */
 class IsBlacklisted implements IsBlacklistedInterface
 {
-    const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
-
     /**
      * @var Config
      */
@@ -37,7 +35,7 @@ class IsBlacklisted implements IsBlacklistedInterface
      */
     public function execute(string $path): bool
     {
-        foreach ($this->config->get(self::XML_PATH_BLACKLIST_PATTERNS) as $pattern) {
+        foreach ($this->config->getBlacklistPatterns() as $pattern) {
             if (empty($pattern)) {
                 continue;
             }

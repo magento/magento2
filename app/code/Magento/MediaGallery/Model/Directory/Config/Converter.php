@@ -40,7 +40,7 @@ class Converter implements ConverterInterface
         $result = [];
 
         if (!$source instanceof \DOMDocument) {
-            return $result;
+            throw new \InvalidArgumentException('The source should be instance of DOMDocument');
         }
 
         foreach ($source->getElementsByTagName(self::BLACKLIST_TAG_NAME) as $blacklist) {

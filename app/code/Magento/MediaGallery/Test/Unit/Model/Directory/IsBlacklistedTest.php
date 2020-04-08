@@ -10,6 +10,7 @@ namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Magento\MediaGallery\Model\Directory\IsBlacklisted;
+use Magento\MediaGallery\Model\Directory\Config;
 
 /**
  * Test the Excluded model
@@ -22,19 +23,23 @@ class IsBlacklistedTest extends TestCase
     private $object;
 
     /**
+     * @var
+     */
+    private $config;
+
+    /**
      * Initialize basic test class mocks
      */
     protected function setUp(): void
     {
-        $this->object = (new ObjectManager($this))->getObject(
-            IsBlacklisted::class,
-            [
-                'patterns' => [
-                    'tmp' => '/pub\/media\/tmp/',
-                    'captcha' => '/pub\/media\/captcha/'
-                ]
-            ]
-        );
+        $this->config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->config->expects($this->at(0))->method('getBlacklistPatterns')->willReturn([
+            'tmp' => '/pub\/media\/tmp/',
+            'captcha' => '/pub\/media\/captcha/'
+        ]);
+        $this->object = (new ObjectManager($this))->getObject(IsBlacklisted::class, [
+            'config' => $this->config
+        ]);
     }
 
     /**

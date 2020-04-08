@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Magento\Eav\Helper\Data;
 use Magento\MediaGallery\Model\Asset\Command\Save;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\Framework\App\ResourceConnection;
