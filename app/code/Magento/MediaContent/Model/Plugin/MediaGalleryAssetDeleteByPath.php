@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MediaContent\Model\Plugin;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\MediaContent\Model\RemoveRelationsForAssetIds;
 use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,9 +19,9 @@ use Psr\Log\LoggerInterface;
 class MediaGalleryAssetDeleteByPath
 {
     /**
-     * @var ResourceConnection
+     * @var GetByPathInterface
      */
-    private $resourceConnection;
+    private $getByPath;
 
     /**
      * @var LoggerInterface
@@ -28,16 +29,22 @@ class MediaGalleryAssetDeleteByPath
     private $logger;
 
     /**
-     * DeleteById constructor.
-     *
-     * @param ResourceConnection $resourceConnection
+     * @var RemoveRelationsForAssetIds
+     */
+    private $removeRelationsForAssetIds;
+
+    /**
+     * @param RemoveRelationsForAssetIds $removeRelationsForAssetIds
+     * @param GetByPathInterface $getByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        RemoveRelationsForAssetIds $removeRelationsForAssetIds,
+        GetByPathInterface $getByPath,
         LoggerInterface $logger
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->removeRelationsForAssetIds = $removeRelationsForAssetIds;
+        $this->getByPath = $getByPath;
         $this->logger = $logger;
     }
 
@@ -55,30 +62,10 @@ class MediaGalleryAssetDeleteByPath
         \Closure $proceed,
         string $mediaAssetPath
     ) : void {
-        /** @var AdapterInterface $connection */
-        $connection = $this->resourceConnection->getConnection();
-        $galleryAssetTableName = $this->resourceConnection->getTableName('media_gallery_asset');
-        $mediaContentAssetTableName = $this->resourceConnection->getTableName('media_content_asset');
-
-        $select = $connection->select();
-        $select->from($galleryAssetTableName, ['id']);
-        $select->where('path = ?', $mediaAssetPath);
-        $galleryAssetIds = $connection->fetchCol($select);
+        $asset = $this->getByPath->execute($mediaAssetPath);
 
         $proceed();
 
-        try {
-            $connection->delete(
-                $mediaContentAssetTableName,
-                ['asset_id IN(?)' => implode(', ', $galleryAssetIds)]
-            );
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            $message = __(
-                'Could not delete media content assets for media gallery asset with path %path: %error',
-                ['path' => $mediaAssetPath, 'error' => $exception->getMessage()]
-            );
-            throw new CouldNotDeleteException($message, $exception);
-        }
+        $this->removeRelationsForAssetIds->execute([$asset->getId()]);
     }
 }
