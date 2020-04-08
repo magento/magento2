@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
-use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -24,6 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -1717,7 +1717,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // optimize if using cat index
             $filters = $this->_productLimitationFilters;
             if (isset($filters['category_id']) || isset($filters['visibility'])) {
-                $this->getSelect()->order('cat_index.position ' . $dir);
+                $this->getSelect()->order([
+                    'cat_index.position ' . $dir,
+                    'e.entity_id ' . \Magento\Framework\DB\Select::SQL_DESC
+                ]);
             } else {
                 $this->getSelect()->order('e.entity_id ' . $dir);
             }
@@ -2337,35 +2340,49 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Statement_Exception
      */
     public function addMediaGalleryData()
     {
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
+
         if (!$this->getSize()) {
             return $this;
         }
-        if (!$this->isLoaded()) {
-            $this->load();
-        }
-        $records = $this->getMediaGalleryResource()->getMediaRecords(
-            $this->getStoreId(),
-            $this->getLoadedIds()
-        );
+
+        $items = $this->getItems();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
+
+        $select = $this->getMediaGalleryResource()
+            ->createBatchBaseSelect(
+                $this->getStoreId(),
+                $this->getAttribute('media_gallery')->getAttributeId()
+            )->reset(
+                Select::ORDER // we don't care what order is in current scenario
+            )->where(
+                'entity.' . $linkField . ' IN (?)',
+                array_map(
+                    function ($item) use ($linkField) {
+                        return (int) $item->getOrigData($linkField);
+                    },
+                    $items
+                )
+            );
+
         $mediaGalleries = [];
-        foreach ($records as $record) {
-            $mediaGalleries[$record['entity_id']][] = $record;
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $mediaGalleries[$row[$linkField]][] = $row;
         }
 
-        foreach ($this->getItems() as $item) {
+        foreach ($items as $item) {
             $this->getGalleryReadHandler()
                 ->addMediaDataToProduct(
                     $item,
-                    $mediaGalleries[$item->getId()] ?? []
+                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
                 );
         }
+
         $this->setFlag('media_gallery_added', true);
         return $this;
     }
