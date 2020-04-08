@@ -23,7 +23,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Create category A without products -->
             <createData entity="_defaultCategory" stepKey="createCategoryA"/>
 
