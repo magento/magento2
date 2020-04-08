@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 
 /**
- * Test methods of class DeleteByPath
+ * Test methods of class DeleteByAssertIdTest
  */
 class DeleteByAssertIdTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +24,7 @@ class DeleteByAssertIdTest extends \PHPUnit\Framework\TestCase
     private CONST TEST_DIRECTORY_NAME = 'testDirectory';
 
     /**
-     * Absolute path to the media direcrory
+     * Absolute path to the media directory
      */
     private static $_mediaPath;
 
