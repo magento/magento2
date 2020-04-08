@@ -112,7 +112,7 @@ class SaveTest extends TestCase
             Save::class,
             [
                 'resourceConnection' => $this->resourceConnectionMock,
-                'objectProcessor'          => $this->objectProcessor,
+                'objectProcessor'    => $this->objectProcessor,
                 'logger'             => $this->loggerMock
             ]
         );
