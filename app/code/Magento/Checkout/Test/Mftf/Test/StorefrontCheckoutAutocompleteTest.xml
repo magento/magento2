@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutAutocompleteTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Autocomplete to Checkout and user area input fields"/>
+            <title value="Checkout - autocomplete to checkout inputs"/>
+            <description value="The Autocomplete attribute must be specified for fields on checkout."/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.email}}" attribute="autocomplete" expectedValue="email" stepKey="checkAutocompleteForEmailField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.firstName}}" attribute="autocomplete" expectedValue="given-name" stepKey="checkAutocompleteForFirstNameField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.lastName}}" attribute="autocomplete" expectedValue="family-name" stepKey="checkAutocompleteForLastNameField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.company}}" attribute="autocomplete" expectedValue="organization" stepKey="checkAutocompleteForCompanyField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.street}}" attribute="autocomplete" expectedValue="address-line1" stepKey="checkAutocompleteForStreetField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.street2}}" attribute="autocomplete" expectedValue="address-line2" stepKey="checkAutocompleteForStreet2Field" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.city}}" attribute="autocomplete" expectedValue="address-level2" stepKey="checkAutocompleteForCityField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.postcode}}" attribute="autocomplete" expectedValue="postal-code" stepKey="checkAutocompleteForPostcodeField" />
+        <assertElementContainsAttribute selector="{{CheckoutShippingGuestInfoSection.telephone}}" attribute="autocomplete" expectedValue="tel" stepKey="checkAutocompleteForTelephoneField" />
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeAddress">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+   </test>
+</tests>
