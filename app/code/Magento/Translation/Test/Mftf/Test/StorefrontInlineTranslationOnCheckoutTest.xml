@@ -364,7 +364,7 @@
         <!-- 8. Clear magento cache -->
         <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateDisabled"/>
 
-        <actionGroup ref="AdminCleanStaticAndVarDirsActionGroup" stepKey="cleanStaticAndVarDirs"/>
+        <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
 
         <!-- 9. Clear browser locale storage for magento site -->
         <executeJS function="localStorage.clear();" stepKey="clearStorage"/>
