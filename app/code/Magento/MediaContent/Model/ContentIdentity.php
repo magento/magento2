@@ -9,6 +9,7 @@ namespace Magento\MediaContent\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface;
 
 /**
  * @inheritdoc
@@ -41,5 +42,21 @@ class ContentIdentity extends AbstractExtensibleModel implements ContentIdentity
     public function getField(): string
     {
         return (string) $this->getData(self::FIELD);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): ContentIdentityExtensionInterface
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(ContentIdentityExtensionInterface $extensionAttributes): void
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

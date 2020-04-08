@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Api\Data;
 
+use Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface;
+
 /**
  * Data interface representing the identificator of content. I.e. short description field of product entity with id 42
  * @api
@@ -34,4 +36,19 @@ interface ContentIdentityInterface
      * @return string
      */
     public function getField(): string;
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ContentIdentityExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(ContentIdentityExtensionInterface $extensionAttributes): void;
 }
