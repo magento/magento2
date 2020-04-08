@@ -303,7 +303,7 @@ require([
     <?php else: ?>
         ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
     <?php endif ?>
-    }).find('input:text').attr('autocomplete', 'off');
+    });
     dataForm.submit(function () {
         $(this).find(':submit').attr('disabled', 'disabled');
     });
