@@ -42,6 +42,12 @@
         <actionGroup ref="AssertStorefrontProductMessagesActionGroup" stepKey="checkSuccessMsg">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontCartQuantityActionGroup" stepKey="checkCartQuantity"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="cartSubtotal" value="123.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
     </test>
 </tests>
