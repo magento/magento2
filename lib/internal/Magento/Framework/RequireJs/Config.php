@@ -313,7 +313,6 @@ config;
             return url;
         };
     })();
-
 code;
 
         if ($this->minification->isEnabled('js')) {
