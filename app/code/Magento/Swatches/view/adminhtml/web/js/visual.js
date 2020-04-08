@@ -80,16 +80,16 @@ define([
                     jQuery(element).spectrum({
                         showInput: true,
                         allowEmpty: false,
-                        cancelText: "",
-                        chooseText: "Select",
-                        preferredFormat: "hex",
+                        cancelText: '',
+                        chooseText: 'Select',
+                        preferredFormat: 'hex',
 
                         /**
                          * ColorPicker onSubmit action
                          *
                          * @param {Object} color
                          */
-                        hide: function(color) {
+                        hide: function (color) {
                             var container = jQuery(element).parent().parent().prev(),
                                 hex = color.toHexString();
 
@@ -100,7 +100,7 @@ define([
                             /**
                              * Show option after colorpicker hide
                              */
-                            _.defer(function() {
+                            _.defer(function () {
                                 jQuery(element).show();
                             });
                         },
@@ -108,12 +108,12 @@ define([
                         /**
                          * ColorPicker onShow action
                          */
-                        show:function(){
+                        show: function () {
                             var color = jQuery(element).parent().parent().prev().prev('input').val(),
                                 menu = jQuery(element).parents('.swatch_sub-menu_container');
 
                             menu.hide();
-                            jQuery(element).spectrum("set", color);
+                            jQuery(element).spectrum('set', color);
                         }
                     });
 
@@ -121,7 +121,7 @@ define([
                      * ColorPicker Show immediate after initialize
                      */
                     _.defer(function () {
-                        jQuery(element).spectrum("show");
+                        jQuery(element).spectrum('show');
                     });
                 },
 
