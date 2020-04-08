@@ -9,7 +9,7 @@ namespace Magento\MediaGalleryApi\Model\Keyword\Command;
 
 /**
  * A command represents the media gallery asset keywords save operation.
- * @api
+ * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
  */
 interface SaveAssetKeywordsInterface
 {

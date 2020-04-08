@@ -5,22 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\Keyword\Command;
+namespace Magento\MediaGallery\Model\ResourceModel\Keyword;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveAssetKeywords
- * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
+ * Save keywords of assets
  */
-class SaveAssetKeywords implements SaveAssetKeywordsInterface
+class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
 {
     private const TABLE_KEYWORD = 'media_gallery_keyword';
     private const ID = 'id';
@@ -59,45 +57,62 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function execute(array $assetKeywords): void
+    {
+        $failedAssetIds = [];
+        foreach ($assetKeywords as $assetKeyword) {
+            try {
+                $this->saveAssetKeywords($assetKeyword->getKeywords(), $assetKeyword->getAssetId());
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+                $failedAssetIds[] = $assetKeyword->getAssetId();
+            }
+        }
+
+        if (!empty($failedAssetIds)) {
+            throw new CouldNotSaveException(
+                __('Could not save keywords for asset ids: %ids', ['ids' => implode(' ,', $failedAssetIds)])
+            );
+        }
+    }
+
+    /**
      * Save asset keywords.
      *
      * @param KeywordInterface[] $keywords
      * @param int $assetId
      * @throws CouldNotSaveException
+     * @throws \Zend_Db_Exception
      */
-    public function execute(array $keywords, int $assetId): void
+    private function saveAssetKeywords(array $keywords, int $assetId): void
     {
-        try {
-            $data = [];
-            /** @var KeywordInterface $keyword */
-            foreach ($keywords as $keyword) {
-                $data[] = $keyword->getKeyword();
-            }
-
-            if (!empty($data)) {
-                /** @var Mysql $connection */
-                $connection = $this->resourceConnection->getConnection();
-                $connection->insertArray(
-                    $this->resourceConnection->getTableName(self::TABLE_KEYWORD),
-                    [self::KEYWORD],
-                    $data,
-                    AdapterInterface::INSERT_IGNORE
-                );
-
-                $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
-            }
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
-            throw new CouldNotSaveException($message, $exception);
+        $data = [];
+        foreach ($keywords as $keyword) {
+            $data[] = $keyword->getKeyword();
         }
+
+        if (empty($data)) {
+            return;
+        }
+
+        /** @var Mysql $connection */
+        $connection = $this->resourceConnection->getConnection();
+        $connection->insertArray(
+            $this->resourceConnection->getTableName(self::TABLE_KEYWORD),
+            [self::KEYWORD],
+            $data,
+            AdapterInterface::INSERT_IGNORE
+        );
+
+        $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
     }
 
     /**
      * Select keywords by names
      *
      * @param string[] $keywords
-     *
      * @return int[]
      */
     private function getKeywordIds(array $keywords): array

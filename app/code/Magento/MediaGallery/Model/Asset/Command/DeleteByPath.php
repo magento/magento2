@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class DeleteByPath
+ * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  */
 class DeleteByPath implements DeleteByPathInterface
 {

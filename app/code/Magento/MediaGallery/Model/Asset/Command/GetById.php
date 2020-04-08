@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Get media asset by id
+ * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
  */
 class GetById implements GetByIdInterface
 {

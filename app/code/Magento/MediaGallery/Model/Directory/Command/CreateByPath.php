@@ -9,13 +9,13 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaGalleryApi\Model\Directory\Command\CreateByPathInterface;
+use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Create folder by provided path
  */
-class CreateByPath implements CreateByPathInterface
+class CreateByPath implements CreateDirectoriesByPathsInterface
 {
     /**
      * @var LoggerInterface
@@ -40,19 +40,31 @@ class CreateByPath implements CreateByPathInterface
     }
 
     /**
-     * Create new directory by the provided path in the media storage
-     *
-     * @param string $path
-     * @param string $name
-     * @throws CouldNotSaveException
+     * @inheritdoc
      */
-    public function execute(string $path, string $name): void
+    public function execute(array $paths): void
     {
-        try {
-            $this->storage->createDirectory($name, $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            throw new CouldNotSaveException(__('Failed to create the folder'), $exception);
+        $failedPaths = [];
+        foreach ($paths as $path) {
+            try {
+                $name = end(explode('/', $path));
+                $this->storage->createDirectory(
+                    $name,
+                    $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path
+                );
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+                $failedPaths[] = $path;
+            }
+        }
+
+        if (!empty($failedPaths)) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save directories: %paths',
+                    implode(' ,', $failedPaths)
+                )
+            );
         }
     }
 }

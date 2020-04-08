@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Directory;
 
-use Magento\MediaGalleryApi\Model\Directory\IsBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 
 /**
  * Check if the path is blacklisted for media gallery. Directory path may be blacklisted if it's reserved by the system
  */
-class IsBlacklisted implements IsBlacklistedInterface
+class IsBlacklisted implements IsPathBlacklistedInterface
 {
     /**
      * @var Config

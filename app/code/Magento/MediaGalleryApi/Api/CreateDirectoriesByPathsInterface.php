@@ -5,20 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Model\Directory\Command;
+namespace Magento\MediaGalleryApi\Api;
 
 /**
  * Create folder by provided path
  * @api
  */
-interface CreateByPathInterface
+interface CreateDirectoriesByPathsInterface
 {
     /**
      * Create new directory by provided path
      *
-     * @param string $path
-     * @param string $name
+     * @param string[] $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(string $path, string $name): void;
+    public function execute(array $paths): void;
 }

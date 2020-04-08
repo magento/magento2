@@ -9,13 +9,13 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Delete directory from media storage by path
  */
-class DeleteByPath implements DeleteByPathInterface
+class DeleteByPath implements DeleteDirectoriesByPathsInterface
 {
     /**
      * @var LoggerInterface
@@ -40,18 +40,27 @@ class DeleteByPath implements DeleteByPathInterface
     }
 
     /**
-     * Removes directory and corresponding thumbnails directory from media storage if not in blacklist
-     *
-     * @param string $path
-     * @throws CouldNotDeleteException
+     * @inheritdoc
      */
-    public function execute(string $path): void
+    public function execute(array $paths): void
     {
-        try {
-            $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            throw new CouldNotDeleteException(__('Failed to delete the folder'), $exception);
+        $failedPaths = [];
+        foreach ($paths as $path) {
+            try {
+                $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+                $failedPaths[] = $path;
+            }
+        }
+
+        if (!empty($failedPaths)) {
+            throw new CouldNotDeleteException(
+                __(
+                    'Could not delete directories: %paths',
+                    implode(' ,', $failedPaths)
+                )
+            );
         }
     }
 }

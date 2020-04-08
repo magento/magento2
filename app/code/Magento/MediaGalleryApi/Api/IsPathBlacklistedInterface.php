@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Model\Directory;
+namespace Magento\MediaGalleryApi\Api;
 
 /**
  * Directory paths that are reserved by system and not be included in the media gallery
  * @api
  */
-interface IsBlacklistedInterface
+interface IsPathBlacklistedInterface
 {
     /**
      * Check if the path is excluded from displaying and processing in the media gallery

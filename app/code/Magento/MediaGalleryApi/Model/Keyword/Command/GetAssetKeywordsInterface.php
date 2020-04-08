@@ -9,7 +9,7 @@ namespace Magento\MediaGalleryApi\Model\Keyword\Command;
 
 /**
  * A command represents functionality to get a media gallery asset keywords filtered by media gallery asset id.
- * @api
+ * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
  */
 interface GetAssetKeywordsInterface
 {

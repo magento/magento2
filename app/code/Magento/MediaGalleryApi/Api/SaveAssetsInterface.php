@@ -6,22 +6,21 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Model\Asset\Command;
+namespace Magento\MediaGalleryApi\Api;
 
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * A command which executes the media gallery asset save operation.
- * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetInterface instead
+ * @api
  */
-interface SaveInterface
+interface SaveAssetsInterface
 {
     /**
      * Save media asset and return the media asset id
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface $mediaAsset
-     * @return int
+     * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface[] $assets
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(AssetInterface $mediaAsset): int;
+    public function execute(array $assets): void;
 }

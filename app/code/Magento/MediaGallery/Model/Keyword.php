@@ -18,7 +18,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class Keyword extends AbstractExtensibleModel implements KeywordInterface
 {
     private const ID = 'id';
-
     private const KEYWORD = 'keyword';
 
     /**
@@ -40,7 +39,7 @@ class Keyword extends AbstractExtensibleModel implements KeywordInterface
      */
     public function getKeyword(): string
     {
-        return (string)$this->getData(self::KEYWORD);
+        return (string) $this->getData(self::KEYWORD);
     }
 
     /**

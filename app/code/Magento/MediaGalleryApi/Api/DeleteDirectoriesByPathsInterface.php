@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryApi\Model\Directory\Command;
+namespace Magento\MediaGalleryApi\Api;
 
 /**
  * Delete folder by provided path
  * @api
  */
-interface DeleteByPathInterface
+interface DeleteDirectoriesByPathsInterface
 {
     /**
      * Deletes the existing folder
      *
-     * @param string $path
+     * @param string[] $paths
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function execute(string $path): void;
+    public function execute(array $paths): void;
 }

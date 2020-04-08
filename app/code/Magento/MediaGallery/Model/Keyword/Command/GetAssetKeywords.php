@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Retrieve keywords for the media asset
+ * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
  */
 class GetAssetKeywords implements GetAssetKeywordsInterface
 {

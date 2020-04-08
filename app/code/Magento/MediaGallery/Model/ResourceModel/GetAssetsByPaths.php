@@ -5,24 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\Asset\Command;
+namespace Magento\MediaGallery\Model\ResourceModel;
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class GetByPath
- * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByPathInterface instead
  */
-class GetByPath implements GetByPathInterface
+class GetAssetsByPaths implements GetAssetsByPathsInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
-
     private const MEDIA_GALLERY_ASSET_PATH = 'path';
 
     /**
@@ -58,32 +54,34 @@ class GetByPath implements GetByPathInterface
     }
 
     /**
-     * Return media asset asset list
-     *
-     * @param string $path
-     *
-     * @return AssetInterface
-     * @throws IntegrationException
+     * @inheritdoc
      */
-    public function execute(string $path): AssetInterface
+    public function execute(array $paths): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
-                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $path);
-            $data = $connection->query($select)->fetch();
-
-            if (empty($data)) {
-                $message = __('There is no such media asset with path "%1"', $path);
-                throw new NoSuchEntityException($message);
-            }
-
-            return $this->mediaAssetFactory->create(['data' => $data]);
+                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' IN (?)', $paths);
+            $assetsData = $connection->query($select)->fetchAll();
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
-            throw new IntegrationException($message, $exception);
+            throw new LocalizedException(
+                __(
+                    'Could not get media assets for paths: %paths',
+                    [
+                        'paths' => implode(' ,', $paths)
+                    ]
+                )
+            );
         }
+
+        $assets = [];
+
+        foreach ($assetsData as $assetData) {
+            $assets[] = $this->mediaAssetFactory->create(['data' => $assetData]);
+        }
+
+        return $assets;
     }
 }

@@ -14,9 +14,8 @@ use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeleteByDirectoryPath
- *
  * Remove asset(s) that correspond the provided directory path
+ * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  */
 class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
 {

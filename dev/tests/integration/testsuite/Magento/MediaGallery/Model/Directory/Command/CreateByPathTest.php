@@ -38,7 +38,7 @@ class CreateByPathTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->createByPath = Bootstrap::getObjectManager()->create(CreateByPathInterface::class);
+        $this->createByPath = Bootstrap::getObjectManager()->get(CreateByPathInterface::class);
         $this->mediaDirectoryPath = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
     }

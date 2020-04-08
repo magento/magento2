@@ -11,7 +11,7 @@ namespace Magento\MediaGalleryApi\Model\Asset\Command;
 /**
  * A command represents the media gallery assets delete action. A media gallery asset is filtered by directory
  * path value.
- * @api
+ * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
  */
 interface DeleteByDirectoryPathInterface
 {
