@@ -111,4 +111,18 @@ class SearchConfigOptionsList
             )
         ];
     }
+
+    /**
+     * Get UI friendly list of available search engines
+     *
+     * @return array
+     */
+    public function getAvailableSearchEngineList(): array
+    {
+        return [
+            'elasticsearch5' => 'Elasticsearch 5.x (deprecated)',
+            'elasticsearch6' => 'Elasticsearch 6.x',
+            'elasticsearch7' => 'Elasticsearch 7.x'
+        ];
+    }
 }

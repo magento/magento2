@@ -94,15 +94,26 @@ return [
             'type'        => 'install'
         ],
         [
+            'id'          => 'root.configure-catalog-search',
+            'url'         => 'configure-catalog-search',
+            'templateUrl' => "{$base}/configure-catalog-search",
+            'title'       => "Configure \n Search",
+            'header'      => 'Step 5: Configure Catalog Search',
+            'controller'  => 'configureCatalogSearchController',
+            'nav'         => true,
+            'order'       => 6,
+            'type'        => 'install'
+        ],
+        [
             'id'          => 'root.create-admin-account',
             'url'         => 'create-admin-account',
             'templateUrl' => "{$base}/create-admin-account",
             'title'       => "Create \n Admin Account",
-            'header'      => 'Step 5: Create Admin Account',
+            'header'      => 'Step 6: Create Admin Account',
             'controller'  => 'createAdminAccountController',
             'nav'         => true,
             'validate'    => true,
-            'order'       => 6,
+            'order'       => 7,
             'type'        => 'install'
         ],
         [
@@ -110,10 +121,10 @@ return [
             'url'         => 'install',
             'templateUrl' => "{$base}/install",
             'title'       => 'Install',
-            'header'      => 'Step 6: Install',
+            'header'      => 'Step 7: Install',
             'controller'  => 'installController',
             'nav'         => true,
-            'order'       => 7,
+            'order'       => 8,
             'type'        => 'install'
         ],
         [
@@ -123,7 +134,7 @@ return [
             'title'       => 'Success',
             'controller'  => 'successController',
             'main'        => true,
-            'order'       => 8,
+            'order'       => 9,
             'type'        => 'install'
         ],
     ],

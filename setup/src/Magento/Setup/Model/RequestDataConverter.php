@@ -26,7 +26,8 @@ class RequestDataConverter
         $result = array_merge(
             $this->convertDeploymentConfigForm($source),
             $this->convertUserConfigForm($source),
-            $this->convertAdminUserForm($source)
+            $this->convertAdminUserForm($source),
+            $this->convertSearchConfigForm($source)
         );
         return $result;
     }
@@ -120,6 +121,41 @@ class RequestDataConverter
         $result[AdminAccount::KEY_EMAIL] = isset($source['admin']['email']) ? $source['admin']['email'] : '';
         $result[AdminAccount::KEY_FIRST_NAME] = $result[AdminAccount::KEY_USER];
         $result[AdminAccount::KEY_LAST_NAME] = $result[AdminAccount::KEY_USER];
+        return $result;
+    }
+
+    /**
+     * Convert data from request to format of search config model
+     *
+     * @param array $source
+     * @return array
+     */
+    private function convertSearchConfigForm(array $source): array
+    {
+        $result = [];
+        $result[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE] =
+            isset($source['search']['engine']) ? $source['search']['engine'] : '';
+
+        $esConfig = $source['search']['elasticsearch'];
+        $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_HOST] =
+            isset($esConfig['hostname']) ? $esConfig['hostname'] : '';
+        $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PORT] =
+            isset($esConfig['port']) ? $esConfig['port'] : '';
+        $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX] =
+            isset($esConfig['indexPrefix']) ? $esConfig['indexPrefix'] : '';
+        $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_TIMEOUT] =
+            isset($esConfig['timeout']) ? $esConfig['timeout'] : '';
+        if (isset($esConfig['enableAuth']) && true === $esConfig['enableAuth']) {
+            $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] = $esConfig['enableAuth'];
+            $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_USERNAME] =
+                isset($esConfig['username']) ? $esConfig['username'] : '';
+            $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PASSWORD] =
+                isset($esConfig['password']) ? $esConfig['password'] : '';
+        } else {
+            $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] =
+                isset($esConfig['enableAuth']) ? $esConfig['enableAuth'] : false;
+        }
+
         return $result;
     }
 }
