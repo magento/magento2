@@ -18,8 +18,6 @@ use Psr\Log\LoggerInterface;
  */
 class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
 {
-    private const XML_PATH_SEARCH_PATTERNS = 'search/patterns';
-
     /**
      * @var Config
      */
@@ -57,7 +55,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     {
         $paths = [];
 
-        foreach ($this->config->get(self::XML_PATH_SEARCH_PATTERNS) as $pattern) {
+        foreach ($this->config->getSearchPatterns() as $pattern) {
             if (empty($pattern)) {
                 continue;
             }

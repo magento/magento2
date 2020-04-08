@@ -14,6 +14,8 @@ use Magento\Framework\Config\DataInterface;
  */
 class Config
 {
+    private const XML_PATH_SEARCH_PATTERNS = 'search/patterns';
+
     /**
      * @var DataInterface
      */
@@ -37,5 +39,15 @@ class Config
     public function get($key = null, $default = null)
     {
         return $this->data->get($key, $default);
+    }
+
+    /**
+     * Retrieve search regexp patterns for finding media asset paths within content
+     *
+     * @return array
+     */
+    public function getSearchPatterns(): array
+    {
+        return $this->get(self::XML_PATH_SEARCH_PATTERNS);
     }
 }
