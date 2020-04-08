@@ -24,8 +24,9 @@ define([
         /** @inheritdoc */
         _create: function () {
             var self = this;
+
             // Init default params data
-            $('[data-action="add-to-wishlist"]').each(function (index, element) {
+            $(this.options.actionElement).each(function (index, element) {
                 var params = $(element).data('post');
 
                 if (params && params.data) {
@@ -126,10 +127,8 @@ define([
                     params = {
                         'data': {}
                     };
-                } else {
-                    if (typeof self.defaultParamsData[index] !== 'undefined') {
-                        params.data = self.defaultParamsData[index];
-                    }
+                } else if (typeof self.defaultParamsData[index] !== 'undefined') {
+                    params.data = self.defaultParamsData[index];
                 }
 
                 params.data = $.extend({}, params.data, dataToAdd, {
