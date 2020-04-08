@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  *
  */
+declare(strict_types=1);
+
 namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -17,30 +19,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 class DeleteByPathTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Test directory name
-     */
-    private CONST TEST_DIRECTORY_NAME = 'testDeleteDirectory';
-
-    /**
-     * Absolute path to the media direcrory
-     */
-    private static $_mediaPath;
-
-    /**
      * @var DeleteByPathInterface
      */
     private $deleteByPath;
 
     /**
-     * @inheritdoc
+     * @var string
      */
-    public static function setUpBeforeClass()
-    {
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
-        $directory = Bootstrap::getObjectManager()->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
-        self::$_mediaPath = $directory->getAbsolutePath();
-        $directory->create(self::TEST_DIRECTORY_NAME);
-    }
+    private $testDirectoryName = 'testDeleteDirectory';
 
     /**
      * @inheritdoc
@@ -51,19 +37,22 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function testDeleteDirectoryWithExistingDirectoryAndCorrectAbsolutePath(): void
     {
-        $fullPath = self::$_mediaPath . self::TEST_DIRECTORY_NAME;
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaDirectory->create($this->testDirectoryName);
+        $fullPath = $mediaDirectory->getAbsolutePath($this->testDirectoryName);
         $this->assertFileExists($fullPath);
-        $this->deleteByPath->execute(self::TEST_DIRECTORY_NAME);
+        $this->deleteByPath->execute($this->testDirectoryName);
         $this->assertFileNotExists($fullPath);
     }
 
     /**
-     * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
@@ -73,7 +62,6 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      */
@@ -85,14 +73,14 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public static function tearDownAfterClass()
+    public function tearDown()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
         $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        if ($directory->isExist(self::TEST_DIRECTORY_NAME)) {
-            $directory->delete(self::TEST_DIRECTORY_NAME);
+        if ($directory->isExist($this->testDirectoryName)) {
+            $directory->delete($this->testDirectoryName);
         }
     }
 }

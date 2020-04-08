@@ -28,7 +28,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function __construct(Reader $moduleReader)
     {
-        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaGallery') . '/directory.xsd';
+        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaGalleryApi') . '/directory.xsd';
     }
 
     /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  *
  */
+declare(strict_types=1);
+
 namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,12 +21,12 @@ class CreateByPathTest extends \PHPUnit\Framework\TestCase
     /**
      * Test directory name
      */
-    private CONST TEST_DIRECTORY_NAME = 'testCreateDirectory';
+    private const TEST_DIRECTORY_NAME = 'testCreateDirectory';
 
     /**
      * Absolute path to the media direcrory
      */
-    private static $_mediaPath;
+    private $mediaDirectoryPath;
 
     /**
      * @var CreateByPathInterface
@@ -34,18 +36,11 @@ class CreateByPathTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
-    {
-        self::$_mediaPath = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function setUp()
     {
         $this->createByPath = Bootstrap::getObjectManager()->create(CreateByPathInterface::class);
+        $this->mediaDirectoryPath = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
     }
 
     /**
@@ -54,7 +49,7 @@ class CreateByPathTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateDirectory(): void
     {
-        $fullPath = self::$_mediaPath . self::TEST_DIRECTORY_NAME;
+        $fullPath = $this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME;
         $this->createByPath->execute('', self::TEST_DIRECTORY_NAME);
         $this->assertFileExists($fullPath);
     }

@@ -48,6 +48,6 @@ class Config
      */
     public function getBlacklistPatterns() : array
     {
-        return $this->data->get(self::XML_PATH_BLACKLIST_PATTERNS);
+        return $this->get(self::XML_PATH_BLACKLIST_PATTERNS);
     }
 }

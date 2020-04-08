@@ -24,7 +24,6 @@ use Psr\Log\LoggerInterface;
  */
 class SaveTest extends TestCase
 {
-
     /**
      * Constant for tablename of media gallery assets
      */
