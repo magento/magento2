@@ -39,20 +39,19 @@ class JsFooterPlugin
      */
     public function beforeSendResponse(Http $subject)
     {
-        $content = $subject->getContent() ?? '';
+        $content = (string)$subject->getContent();
 
         $bodyClose = '</body';
 
-        if (is_string($content) && strpos($content, $bodyClose) !== false && $this->scopeConfig->isSetFlag(
+        if (strpos($content, $bodyClose) !== false && $this->scopeConfig->isSetFlag(
             self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
             ScopeInterface::SCOPE_STORE
         )) {
             $scripts = '';
-
             $scriptOpen = '<script';
             $scriptClose = '</script>';
-
             $scriptOpenPos = strpos($content, $scriptOpen);
+
             while ($scriptOpenPos !== false) {
                 $scriptClosePos = strpos($content, $scriptClose, $scriptOpenPos);
                 $script = substr($content, $scriptOpenPos, $scriptClosePos - $scriptOpenPos + strlen($scriptClose));
