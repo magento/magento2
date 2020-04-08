@@ -59,6 +59,7 @@ class BulkNotificationManagement
 
     /**
      * Mark given bulks as acknowledged.
+     *
      * Notifications related to these bulks will not appear in notification area.
      *
      * @param array $bulkUuids
@@ -85,6 +86,7 @@ class BulkNotificationManagement
 
     /**
      * Remove given bulks from acknowledged list.
+     *
      * Notifications related to these bulks will appear again in notification area.
      *
      * @param array $bulkUuids

@@ -10,8 +10,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Result\Page;
 use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class Index extends \Magento\Backend\App\Action
+class Index extends Action implements HttpGetActionInterface
 {
     public const BULK_OPERATIONS_MENU_ID = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
 
@@ -24,11 +26,6 @@ class Index extends \Magento\Backend\App\Action
      * @var AccessManager
      */
     private $accessManager;
-
-    /**
-     * @var string
-     */
-    private $menuId;
 
     /**
      * Details constructor.

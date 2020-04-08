@@ -70,8 +70,7 @@ class AccessManager
     }
 
     /**
-     * Check if content allowed for current user
-     * depends from assigned user roles and bulkUuid
+     * Check if content allowed for current use depends from assigned user roles and bulkUuid
      *
      * @param int $bulkUuid
      * @return bool

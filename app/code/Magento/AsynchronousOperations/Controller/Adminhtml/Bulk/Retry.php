@@ -12,11 +12,12 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\App\Action;
 use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Bulk Retry Controller
  */
-class Retry extends Action
+class Retry extends Action implements HttpPostActionInterface
 {
     /**
      * @var BulkManagement
@@ -62,7 +63,7 @@ class Retry extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

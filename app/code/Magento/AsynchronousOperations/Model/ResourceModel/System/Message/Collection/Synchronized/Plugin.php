@@ -13,6 +13,7 @@ use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
@@ -55,6 +56,11 @@ class Plugin
     private $statusMapper;
 
     /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
+    /**
      * Plugin constructor.
      *
      * @param MessageFactory $messageFactory
@@ -63,7 +69,8 @@ class Plugin
      * @param UserContextInterface $userContext
      * @param Details $operationDetails
      * @param StatusMapper $statusMapper
-     * @param AccessManager $accessManager;
+     * @param AccessManager $accessManager
+     * @param Encryptor $encryptor
      */
     public function __construct(
         MessageFactory $messageFactory,
@@ -72,7 +79,8 @@ class Plugin
         UserContextInterface $userContext,
         Details $operationDetails,
         StatusMapper $statusMapper,
-        AccessManager $accessManager
+        AccessManager $accessManager,
+        Encryptor $encryptor
     ) {
         $this->messageFactory = $messageFactory;
         $this->bulkStatus = $bulkStatus;
@@ -81,6 +89,7 @@ class Plugin
         $this->bulkNotificationManagement = $bulkNotificationManagement;
         $this->statusMapper = $statusMapper;
         $this->accessManager = $accessManager;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -118,7 +127,7 @@ class Plugin
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
                         'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
-                        'identity' => md5('bulk' . $bulkUuid),
+                        'identity' => $this->encryptor->hash('bulk' . $bulkUuid, Encryptor::HASH_VERSION_SHA256),
                         'uuid' => $bulkUuid,
                         'status' => $bulkStatus,
                         'created_at' => $bulk->getStartTime()

@@ -81,8 +81,6 @@ class AccessManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->model->isAllowedForBulkUuid($uuid), $expectedResult);
     }
 
-
-
     /**
      * @return array
      */

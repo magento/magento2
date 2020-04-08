@@ -13,7 +13,7 @@ use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 
 /**
- * Class PluginTest
+ * Test cases for Plugin implementation
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -68,11 +68,6 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $accessManager;
-
-    /**
-     * @var string
-     */
-    private $resourceName = 'Magento_Logging::system_magento_logging_bulk_operations';
 
     protected function setUp()
     {

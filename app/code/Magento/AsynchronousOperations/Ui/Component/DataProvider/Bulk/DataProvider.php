@@ -39,22 +39,22 @@ class DataProvider extends AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param array $meta
-     * @param array $data
      * @param AccessManager $accessManager
      * @param FilterBuilder $filterBuilder
      * @param UserContextInterface $userContext
+     * @param array $meta
+     * @param array $data
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        array $meta = [],
-        array $data = [],
         AccessManager $accessManager,
         FilterBuilder $filterBuilder,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        array $meta = [],
+        array $data = []
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->accessManager = $accessManager;
@@ -63,6 +63,11 @@ class DataProvider extends AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
+    /**
+     * Get data for Bulk Operations Grid
+     *
+     * @return array
+     */
     public function getData()
     {
         $allowedUserTypes = $this->accessManager->getGlobalAllowedUserTypes();

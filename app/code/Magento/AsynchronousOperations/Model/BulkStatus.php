@@ -13,7 +13,7 @@ use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class BulkStatus
+ * Class Provides method for manipulate with Status data
  */
 class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
 {

@@ -10,11 +10,12 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
-class Dismiss extends Action
+class Dismiss extends Action implements HttpGetActionInterface
 {
     /**
      * @var BulkNotificationManagement
@@ -52,7 +53,7 @@ class Dismiss extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
