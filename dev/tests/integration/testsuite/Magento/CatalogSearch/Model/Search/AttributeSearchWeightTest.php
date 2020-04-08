@@ -77,6 +77,7 @@ class AttributeSearchWeightTest extends TestCase
         array $attributeWeights,
         array $expectedProductNames
     ): void {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $this->updateAttributesWeight($attributeWeights);
         $actualProductNames = $this->quickSearchByQuery->execute($searchQuery)->getColumnValues('name');
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');

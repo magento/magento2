@@ -93,6 +93,7 @@ class SortingTest extends TestCase
      */
     public function testProductListSortOrder(string $sortBy, string $direction, array $expectation): void
     {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
         $this->renderBlock($category, $direction);
         $this->assertBlockSorting($sortBy, $expectation);
@@ -108,6 +109,7 @@ class SortingTest extends TestCase
      */
     public function testProductListSortOrderWithConfig(string $sortBy, string $direction, array $expectation): void
     {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $this->objectManager->removeSharedInstance(Config::class);
         $this->scopeConfig->setValue(
             Config::XML_PATH_LIST_DEFAULT_SORT_BY,
@@ -185,6 +187,7 @@ class SortingTest extends TestCase
         array $expectation,
         string $defaultSortBy
     ): void {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
         $category = $this->updateCategorySortBy('Category 1', $secondStoreId, $sortBy);
@@ -208,6 +211,7 @@ class SortingTest extends TestCase
         array $expectation,
         string $defaultSortBy
     ): void {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->scopeConfig->setValue(
