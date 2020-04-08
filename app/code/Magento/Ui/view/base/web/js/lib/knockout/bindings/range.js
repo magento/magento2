@@ -46,7 +46,7 @@ define([
                 }
             });
 
-            require([sliderModule], function() {
+            require([sliderModule], function () {
                 $(element)[sliderFn](config);
             });
         },
@@ -62,7 +62,7 @@ define([
 
             config.value = ko.unwrap(config.value);
 
-            require([sliderModule], function() {
+            require([sliderModule], function () {
                 $(element)[sliderFn]('option', config);
             });
         }
