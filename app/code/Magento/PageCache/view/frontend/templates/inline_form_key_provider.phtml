@@ -1,0 +1,21 @@
+  
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<script>
+var formKey = (function () {
+    
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + 'form_key' + "=");
+    
+    if (parts.length == 2) {
+        return parts.pop().split(";").shift();
+    }
+    
+})();
+</script>
