@@ -25,4 +25,4 @@ $mediaAsset = $mediaAssetFactory->create(
 );
 /** @var SaveInterface $saveAsset */
 $saveAsset = $objectManager->get(SaveInterface::class);
-$mediaId = $saveAsset->execute($mediaAsset);
+$saveAsset->execute($mediaAsset);

@@ -33,7 +33,7 @@ class ExtractAssetsFromContentTest extends TestCase
     /**
      * Assing assets to content, retrieve the data, then unassign assets from content
      *
-     * @magentoDataFixture Magento/MediaContent/_files/media_asset.php
+     * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      *
      * @dataProvider contentProvider
      * @param string $content
@@ -72,6 +72,12 @@ class ExtractAssetsFromContentTest extends TestCase
             ],
             'Relevant paths in content' => [
                 'content {{media url="testDirectory/path.jpg"}} content',
+                [
+                    55
+                ]
+            ],
+            'Relevant path content' => [
+                '/media/testDirectory/path.jpg',
                 [
                     55
                 ]

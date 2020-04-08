@@ -58,7 +58,7 @@ class UpdateRelations implements UpdateRelationsInterface
      */
     public function __construct(
         ExtractAssetsFromContentInterface $extractAssetFromContent,
-        UnassignAssetsInterface $assignAsset,
+        AssignAssetsInterface $assignAsset,
         GetAssetIdsUsedInContentInterface $getAssetsUsedInContent,
         UnassignAssetsInterface $unassignAsset,
         LoggerInterface $logger
