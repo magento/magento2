@@ -113,6 +113,8 @@ abstract class Create extends \Magento\Backend\App\Action
          */
         if ($customerId = $this->getRequest()->getParam('customer_id')) {
             $this->_getSession()->setCustomerId((int)$customerId);
+        } else {
+            $this->_getSession()->setCustomerId(null);
         }
 
         /**
