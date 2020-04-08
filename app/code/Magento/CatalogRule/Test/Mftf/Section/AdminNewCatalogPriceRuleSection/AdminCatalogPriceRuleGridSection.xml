@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogPriceRuleGrid">
+        <element name="applyRules" type="button" selector="#apply_rules" timeout="30"/>
+        <element name="updateMessage" type="text" selector="//div[@class='message message-notice notice']//div[contains(.,'We found updated rules that are not applied. Please click')]"/>
+        <element name="ruleFilter" type="input" selector="//td[@data-column='name']/input[@name='name']"/>
+        <element name="resetFilter" type="button" selector="//button[@title='Reset Filter']" timeout="30"/>
+        <element name="search" type="button" selector="//div[@id='promo_catalog_grid']//button[@title='Search']" timeout="30"/>
+        <element name="selectRowByRuleName" type="text" selector="//tr[@data-role='row']//td[contains(.,'{{ruleName}}')]" parameterized="true"/>
+        <element name="firstRow" type="text" selector="//tr[@data-role='row']"/>
+    </section>
+</sections>

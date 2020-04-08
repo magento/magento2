@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
