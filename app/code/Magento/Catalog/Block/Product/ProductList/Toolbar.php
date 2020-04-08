@@ -9,6 +9,7 @@ use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 
 /**
  * Product list toolbar
@@ -139,6 +140,11 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     private $formKey;
 
     /**
+     * @var ToolbarConfig
+     */
+    private $toolbarConfig;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Config $catalogConfig
@@ -150,6 +156,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param ToolbarMemorizer|null $toolbarMemorizer
      * @param \Magento\Framework\App\Http\Context|null $httpContext
      * @param \Magento\Framework\Data\Form\FormKey|null $formKey
+     * @param ToolbarConfig|null $toolbarConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -164,7 +171,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         array $data = [],
         ToolbarMemorizer $toolbarMemorizer = null,
         \Magento\Framework\App\Http\Context $httpContext = null,
-        \Magento\Framework\Data\Form\FormKey $formKey = null
+        \Magento\Framework\Data\Form\FormKey $formKey = null,
+        ToolbarConfig $toolbarConfig = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogConfig = $catalogConfig;
@@ -181,6 +189,10 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         $this->formKey = $formKey ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Data\Form\FormKey::class
         );
+        $this->toolbarConfig = $toolbarConfig ?: ObjectManager::getInstance()->get(
+            ToolbarConfig::class
+        );
+
         parent::__construct($context, $data);
     }
 
@@ -756,15 +768,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get order field
-     *
-     * @return null|string
+     * @return string
      */
     protected function getOrderField()
     {
         if ($this->_orderField === null) {
-            $this->_orderField = $this->_productListHelper->getDefaultSortField();
+            $this->_orderField = $this->toolbarConfig->getOrderField();
         }
+
         return $this->_orderField;
     }
 

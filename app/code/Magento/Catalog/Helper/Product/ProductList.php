@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Class ProductList
  *
@@ -29,11 +31,6 @@ class ProductList
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Registry
-     */
-    private $coreRegistry;
-
-    /**
      * Default limits per page
      *
      * @var array
@@ -41,17 +38,12 @@ class ProductList
     protected $_defaultAvailableLimit  = [10 => 10,20 => 20,50 => 50];
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Registry $coreRegistry = null
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Registry::class
-        );
     }
 
     /**
@@ -100,24 +92,6 @@ class ProductList
             $options = $this->getAvailableViewMode();
         }
         return current(array_keys($options));
-    }
-
-    /**
-     * Get default sort field
-     *
-     * @return null|string
-     */
-    public function getDefaultSortField()
-    {
-        $currentCategory = $this->coreRegistry->registry('current_category');
-        if ($currentCategory) {
-            return $currentCategory->getDefaultSortBy();
-        }
-
-        return $this->scopeConfig->getValue(
-            \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
     }
 
     /**
