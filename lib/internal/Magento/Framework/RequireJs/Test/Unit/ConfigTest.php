@@ -137,7 +137,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $expected = <<<expected
-(function(){
+(function(require){
 (function() {
 file_one.js content
 require.config(config);
@@ -149,7 +149,7 @@ require.config(config);
 
 
 
-})();
+})(require);
 expected;
 
         $this->minifyAdapterMock
