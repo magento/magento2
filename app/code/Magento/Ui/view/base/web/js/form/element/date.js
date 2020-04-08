@@ -117,8 +117,6 @@ define([
         /**
          * Prepares and sets date/time value that will be displayed
          * in the input field.
-         *
-         * @inheritDoc
          */
         setInitialValue: function () {
             const value = this.getInitialValue();
