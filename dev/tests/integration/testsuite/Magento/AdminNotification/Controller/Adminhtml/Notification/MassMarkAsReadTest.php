@@ -5,12 +5,15 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class MassMarkAsReadTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {
         $this->resource = 'Magento_AdminNotification::mark_as_read';
         $this->uri = 'backend/admin/notification/massmarkasread';
+        $this->httpMethod = HttpRequest::METHOD_POST;
         parent::setUp();
     }
 }

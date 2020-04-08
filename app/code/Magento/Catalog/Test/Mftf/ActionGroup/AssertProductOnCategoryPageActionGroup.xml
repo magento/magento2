@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertProductOnCategoryPageActionGroup" extends="StorefrontCheckCategorySimpleProductActionGroup">
         <annotations>
-            <description>EXTENDS:StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice', 'moveMouseOverProduct', 'AssertAddToCart'</description>
+            <description>DEPRECATED. Use AssertStorefrontProductIsPresentOnCategoryPageActionGroup.
+                EXTENDS:StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice', 'moveMouseOverProduct', 'AssertAddToCart'</description>
         </annotations>
         <remove keyForRemoval="AssertProductPrice"/>
         <remove keyForRemoval="moveMouseOverProduct"/>

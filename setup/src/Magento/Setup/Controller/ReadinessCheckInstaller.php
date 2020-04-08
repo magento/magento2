@@ -5,19 +5,24 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
+/**
+ * ReadinessCheckInstaller controller
+ */
 class ReadinessCheckInstaller extends AbstractActionController
 {
     const INSTALLER = 'installer';
 
     /**
+     * Index action
+     *
      * @return array|ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/readiness-check.phtml');
         $view->setVariable('actionFrom', self::INSTALLER);
@@ -25,11 +30,13 @@ class ReadinessCheckInstaller extends AbstractActionController
     }
 
     /**
+     * Progress action
+     *
      * @return array|ViewModel
      */
     public function progressAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTemplate('/magento/setup/readiness-check/progress.phtml');
         $view->setTerminal(true);
         return $view;

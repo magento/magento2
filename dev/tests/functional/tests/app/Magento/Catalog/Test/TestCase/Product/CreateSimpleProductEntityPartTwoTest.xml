@@ -159,6 +159,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCanSaveProduct" />
         </variation>
         <variation name="CreateSimpleProductNotVisibleIndividually" summary="Check that url rewrite is not generated for product if visibility is 'Not Visible Individually'" ticketId="MAGETWO-53788">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>

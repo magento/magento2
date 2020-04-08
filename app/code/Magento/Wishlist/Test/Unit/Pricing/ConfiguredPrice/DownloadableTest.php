@@ -15,17 +15,17 @@ use Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable;
 class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $saleableItem;
 
     /**
-     * @var CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $calculator;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 
@@ -35,7 +35,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceInfoMock;
 

@@ -10,14 +10,16 @@ use Magento\Checkout\Block\Checkout\LayoutProcessor;
 use Magento\Checkout\Helper\Data;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
-
+use Magento\Shipping\Model\Config;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\AttributeMapper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * LayoutProcessorTest covers a list of variations for checkout layout processor
  */
-class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
+class LayoutProcessorTest extends TestCase
 {
     /**
      * @var AttributeMetadataDataProvider|MockObject
@@ -45,7 +47,7 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     private $layoutProcessor;
 
     /**
-     * @var MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
@@ -75,11 +77,11 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $shippingConfig = $this->getMockBuilder(\Magento\Shipping\Model\Config::class)
+        $shippingConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->layoutProcessor = new LayoutProcessor(
             $this->attributeDataProvider,
@@ -109,10 +111,12 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeMerger->expects(static::exactly(2))
             ->method('merge')
-            ->willReturnMap([
-                ['payment1_1' => $this->getBillingComponent('payment1_1')],
-                ['payment2_1' => $this->getBillingComponent('payment2_1')],
-            ]);
+            ->willReturnMap(
+                [
+                    ['payment1_1' => $this->getBillingComponent('payment1_1')],
+                    ['payment2_1' => $this->getBillingComponent('payment2_1')],
+                ]
+            );
 
         $actual = $this->layoutProcessor->process($jsLayout);
 
@@ -236,9 +240,6 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
     private function getBillingComponent($paymentCode)
     {
         return [
-            'country_id' => [
-                'sortOrder' => 115,
-            ],
             'region' => [
                 'visible' => false,
             ],
