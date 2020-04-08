@@ -86,7 +86,7 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Login to admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to created Order -->
         <amOnPage url="{{AdminOrderPage.url({$grabOrderId})}}" stepKey="goToAdminViewOrder"/>
