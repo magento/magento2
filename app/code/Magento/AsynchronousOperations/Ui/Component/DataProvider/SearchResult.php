@@ -102,7 +102,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * Add additional field for filter request
      *
      * @param array|string $field
-     * @param null $condition
+     * @param string|array $condition
      *
      * @return $this
      */
