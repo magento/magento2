@@ -69,6 +69,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     private $accessManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $encryptor;
+
     protected function setUp()
     {
         $this->messagefactoryMock = $this->createPartialMock(
@@ -84,6 +89,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
         $this->statusMapper = $this->createMock(\Magento\AsynchronousOperations\Model\StatusMapper::class);
         $this->accessManager = $this->createMock(\Magento\AsynchronousOperations\Model\AccessManager::class);
+        $this->encryptor = $this->createMock(\Magento\Framework\Encryption\Encryptor::class);
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
@@ -91,7 +97,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             $this->userContextMock,
             $this->operationsDetailsMock,
             $this->statusMapper,
-            $this->accessManager
+            $this->accessManager,
+            $this->encryptor
         );
     }
 
