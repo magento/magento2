@@ -71,10 +71,7 @@ class UpdateRelations implements UpdateRelationsInterface
     }
 
     /**
-     * Create new relation between media asset and content or updated existing
-     *
-     * @param ContentIdentityInterface $contentIdentity
-     * @param string $data
+     * @inheritdoc
      */
     public function execute(ContentIdentityInterface $contentIdentity, string $data): void
     {
@@ -86,7 +83,7 @@ class UpdateRelations implements UpdateRelationsInterface
     }
 
     /**
-     * Records a relation for the newly added asset
+     * Find out which relations are obsolete and which are new and update them
      *
      * @param ContentIdentityInterface $contentIdentity
      * @param string $data

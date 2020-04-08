@@ -11,6 +11,9 @@ use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 
+/**
+ * Media Content configuration schema locator
+ */
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**
@@ -25,7 +28,8 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function __construct(Reader $moduleReader)
     {
-        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaContent') . '/media_content.xsd';
+        $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_MediaContentApi')
+            . '/media_content.xsd';
     }
 
     /**

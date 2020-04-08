@@ -65,7 +65,8 @@ class AssignAssets implements AssignAssetsInterface
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotSaveException(
-                __('An error occurred while saving relation between media asset and media content.')
+                __('An error occurred while saving relation between media asset and media content.'),
+                $exception
             );
         }
     }

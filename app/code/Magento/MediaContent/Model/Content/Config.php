@@ -10,7 +10,7 @@ namespace Magento\MediaContent\Model\Content;
 use Magento\Framework\Config\DataInterface;
 
 /**
- * Media content config
+ * Media content configuration
  */
 class Config
 {

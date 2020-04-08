@@ -35,8 +35,6 @@ class UnassignAssets implements UnassignAssetsInterface
     private $logger;
 
     /**
-     * GetAssetsUsedInContent constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      */
@@ -66,7 +64,8 @@ class UnassignAssets implements UnassignAssetsInterface
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotDeleteException(
-                __('An error occurred at unassign relation between the media asset and media content.')
+                __('An error occurred at unassign relation between the media asset and media content.'),
+                $exception
             );
         }
     }

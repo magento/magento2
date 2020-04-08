@@ -55,7 +55,7 @@ class GetContentWithAssets implements GetContentWithAssetsInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute(array $assetIds): array
     {

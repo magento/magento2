@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
  */
 class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
 {
+    private const XML_PATH_SEARCH_PATTERNS = 'search/patterns';
+
     /**
      * @var Config
      */
@@ -49,16 +51,13 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     }
 
     /**
-     * Search for the media asset in content and extract it providing a list of media assets.
-     *
-     * @param string $content
-     * @return AssetInterface[]
+     * @inheritdoc
      */
     public function execute(string $content): array
     {
         $paths = [];
 
-        foreach ($this->config->get('search/patterns') as $pattern) {
+        foreach ($this->config->get(self::XML_PATH_SEARCH_PATTERNS) as $pattern) {
             if (empty($pattern)) {
                 continue;
             }
@@ -86,7 +85,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
         foreach ($paths as $path) {
             try {
                 /** @var AssetInterface $asset */
-                $asset = $this->getMediaAssetByPath->execute('/' . $path);
+                $asset = $this->getMediaAssetByPath->execute($this->getPathStartingWithSlash($path));
                 $assets[$asset->getId()] = $asset;
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
@@ -94,5 +93,16 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
         }
 
         return $assets;
+    }
+
+    /**
+     * Ensure the extracted paths matches the standard format
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getPathStartingWithSlash(string $path): string
+    {
+        return '/' . ltrim($path, '/');
     }
 }
