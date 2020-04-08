@@ -15,7 +15,7 @@
             <title value="Admin Reports Review by Products"/>
             <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="MC-32083"/>
+            <testCaseId value="MC-32084"/>
         </annotations>
         <before>
             <!--Login-->
