@@ -57,24 +57,32 @@ class GetAssetsByIds implements GetAssetsByIdsInterface
      */
     public function execute(array $ids): array
     {
+        $assets = [];
         try {
-            $mediaAssetTable = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
-            $connection = $this->resourceConnection->getConnection();
-            $select = $connection->select()
-                ->from(['amg' => $mediaAssetTable])
-                ->where('amg.id IN (?)', $ids);
-            $assetsData = $connection->query($select)->fetchAll();
+            foreach ($this->getAssetsData($ids) as $assetData) {
+                $assets[] = $this->assetFactory->create(['data' => $assetData]);
+            }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new LocalizedException(__('Could not retrieve media assets'), $exception);
         }
-
-        $assets = [];
-
-        foreach ($assetsData as $assetData) {
-            $assets[] = $this->assetFactory->create(['data' => $assetData]);
-        }
-
         return $assets;
+    }
+
+    /**
+     * Retrieve assets data from database
+     *
+     * @param array $ids
+     * @return array
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function getAssetsData(array $ids): array
+    {
+        $mediaAssetTable = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from(['amg' => $mediaAssetTable])
+            ->where('amg.id IN (?)', $ids);
+        return $connection->query($select)->fetchAll();
     }
 }

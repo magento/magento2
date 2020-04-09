@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Create folder by provided path
+ * Delete directory from media storage by path
  */
-class CreateByPath implements CreateDirectoriesByPathsInterface
+class DeleteByPaths implements DeleteDirectoriesByPathsInterface
 {
     /**
      * @var LoggerInterface
@@ -47,11 +47,7 @@ class CreateByPath implements CreateDirectoriesByPathsInterface
         $failedPaths = [];
         foreach ($paths as $path) {
             try {
-                $name = end(explode('/', $path));
-                $this->storage->createDirectory(
-                    $name,
-                    $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path
-                );
+                $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
                 $failedPaths[] = $path;
@@ -59,9 +55,9 @@ class CreateByPath implements CreateDirectoriesByPathsInterface
         }
 
         if (!empty($failedPaths)) {
-            throw new CouldNotSaveException(
+            throw new CouldNotDeleteException(
                 __(
-                    'Could not save directories: %paths',
+                    'Could not delete directories: %paths',
                     implode(' ,', $failedPaths)
                 )
             );

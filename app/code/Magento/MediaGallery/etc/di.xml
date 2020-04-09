@@ -19,8 +19,8 @@
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords"/>
     <preference for="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" type="Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords"/>
 
-    <preference for="Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\CreateByPath"/>
-    <preference for="Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\DeleteByPath"/>
+    <preference for="Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\CreateByPaths"/>
+    <preference for="Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\DeleteByPaths"/>
 
     <preference for="Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface" type="Magento\MediaGallery\Model\Directory\IsBlacklisted"/>
 

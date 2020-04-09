@@ -58,12 +58,11 @@ class GetAssetsByPaths implements GetAssetsByPathsInterface
      */
     public function execute(array $paths): array
     {
+        $assets = [];
         try {
-            $connection = $this->resourceConnection->getConnection();
-            $select = $connection->select()
-                ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
-                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' IN (?)', $paths);
-            $assetsData = $connection->query($select)->fetchAll();
+            foreach ($this->getAssetsData($paths) as $assetData) {
+                $assets[] = $this->mediaAssetFactory->create(['data' => $assetData]);
+            }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new LocalizedException(
@@ -75,13 +74,22 @@ class GetAssetsByPaths implements GetAssetsByPathsInterface
                 )
             );
         }
-
-        $assets = [];
-
-        foreach ($assetsData as $assetData) {
-            $assets[] = $this->mediaAssetFactory->create(['data' => $assetData]);
-        }
-
         return $assets;
+    }
+
+    /**
+     * Retrieve assets data from database
+     *
+     * @param array $paths
+     * @return array
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function getAssetsData(array $paths): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
+            ->where(self::MEDIA_GALLERY_ASSET_PATH . ' IN (?)', $paths);
+        return $connection->query($select)->fetchAll();
     }
 }

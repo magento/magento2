@@ -74,7 +74,12 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
         }
     }
 
-    private function deleteAssetsByDirectoryPath(string $path)
+    /**
+     * Delete assets from database based on the first part (beginning) of the path
+     *
+     * @param string $path
+     */
+    private function deleteAssetsByDirectoryPath(string $path): void
     {
         // Make sure that the path has a trailing slash
         $path = rtrim($path, '/') . '/';

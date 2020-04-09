@@ -79,7 +79,7 @@ class SaveAssets implements SaveAssetsInterface
                 __(
                     'Could not save the media assets: %assets',
                     [
-                        'assets' => $failedAssets
+                        'assets' => implode(' ,', $failedAssets)
                     ]
                 )
             );
