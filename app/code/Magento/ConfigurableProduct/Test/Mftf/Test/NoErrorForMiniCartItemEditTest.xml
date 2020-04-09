@@ -60,7 +60,7 @@
         <waitForPageLoad stepKey="waitForMiniCart"/>
 
         <!-- Edit Item in Cart -->
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
         <click selector="{{StorefrontMinicartSection.editMiniCartItem}}" stepKey="clickEditCartItem"/>
 
         <!-- Check if Product Configuration is still selected -->

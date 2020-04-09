@@ -47,7 +47,7 @@
         </actionGroup>
 
         <!-- Assert Simple and Virtual products in mini cart -->
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>

@@ -135,7 +135,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$createConfigProduct1.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniShoppingCart1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniShoppingCart1"/>
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
     </test>
 </tests>

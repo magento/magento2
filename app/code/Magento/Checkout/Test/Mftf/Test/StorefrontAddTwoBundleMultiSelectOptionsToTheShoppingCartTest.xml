@@ -112,7 +112,7 @@
         </actionGroup>
 
         <!-- Assert Product in Mini Cart -->
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productPrice" value="$60.00"/>

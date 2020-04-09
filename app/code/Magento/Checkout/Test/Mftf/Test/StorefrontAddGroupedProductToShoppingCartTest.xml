@@ -101,7 +101,7 @@
         </actionGroup>
 
         <!-- Assert product1 details in Mini Cart -->
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simple3.name$$"/>
             <argument name="productPrice" value="$300.00"/>

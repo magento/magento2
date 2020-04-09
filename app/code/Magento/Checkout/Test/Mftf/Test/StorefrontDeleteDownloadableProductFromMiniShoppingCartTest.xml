@@ -49,7 +49,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert product details in Mini Cart -->
-        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
             <argument name="productPrice" value="$123.00"/>
