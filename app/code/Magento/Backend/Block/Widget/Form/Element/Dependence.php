@@ -6,6 +6,9 @@
 
 namespace Magento\Backend\Block\Widget\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Form element dependencies mapper
  * Assumes that one element may depend on other element values.
@@ -131,11 +134,12 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
             $params .= ', ' .  $this->_jsonEncoder->encode($this->_configOptions);
         }
 
-        return "<script>
-require(['mage/adminhtml/form'], function(){
-    new FormElementDependenceController({$params});
-});
-</script>";
+        $secureHtmlRenderer = ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $scriptString = 'require([\'mage/adminhtml/form\'], function(){
+    new FormElementDependenceController(' . $params . ');
+});';
+
+        return /* @noEscape */ $secureHtmlRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**

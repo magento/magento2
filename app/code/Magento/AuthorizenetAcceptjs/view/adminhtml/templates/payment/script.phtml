@@ -5,8 +5,9 @@
  */
 
 /** @var Magento\AuthorizenetAcceptjs\Block\Payment $block */
+/** @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $scriptString = <<<script
     //<![CDATA[
     require(
         [
@@ -14,11 +15,15 @@
             'jquery',
             'domReady!'
         ], function(AuthorizenetAcceptjs, $) {
-            var config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
-                form = $('#payment_form_<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($block->getMethodCode())) ?>');
+script;
+$scriptString .= 'var config = ' . /* @noEscape */ $block->getPaymentConfig() . ',
+    form = $(\'#payment_form_' . /* @noEscape */ $block->escapeJs($block->escapeHtml($block->getMethodCode())) . '\');';
+$scriptString .= <<<script
 
             config.active = form.length > 0 && !form.is(':hidden');
             new AuthorizenetAcceptjs(config);
         });
     //]]>
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

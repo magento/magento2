@@ -7,8 +7,10 @@ namespace Magento\Ups\Block\Backend\System;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Website;
 use Magento\Ups\Helper\Config as ConfigHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Backend shipping UPS content block
@@ -44,6 +46,7 @@ class CarrierConfig extends Template
     ) {
         $this->carrierConfig = $carrierConfig;
         $this->_websiteModel = $websiteModel;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 

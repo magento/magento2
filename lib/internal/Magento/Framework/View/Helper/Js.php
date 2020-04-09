@@ -9,6 +9,11 @@
  */
 namespace Magento\Framework\View\Helper;
 
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Class Js help render script.
+ */
 class Js
 {
     /**
@@ -19,6 +24,9 @@ class Js
      */
     public function getScript($script)
     {
-        return '<script type="text/javascript">//<![CDATA[' . "\n{$script}\n" . '//]]></script>';
+        $secureHtmlRenderer = ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $scriptString = '//<![CDATA[' . "\n{$script}\n" . '//]]>';
+
+        return /* @noEscape */ $secureHtmlRenderer->renderTag('script', [], $scriptString, false);
     }
 }
