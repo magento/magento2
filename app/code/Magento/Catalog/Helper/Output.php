@@ -182,7 +182,7 @@ class Output extends AbstractHelper
         if ($attributeHtml !== null
             && $attribute->getIsHtmlAllowedOnFront()
             && $attribute->getIsWysiwygEnabled()
-            && $this->isDirectivesExists($attributeHtml)
+            && $this->isDirectivesExists((string)$attributeHtml)
         ) {
             $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
         }

@@ -218,7 +218,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     );
                 } finally {
                     if (isset($message)) {
-                        $this->messageManager->addErrorMessage($message);
+                        $this->messageManager->addError($message);
                         $this->session->setUsername($login['username']);
                     }
                 }
