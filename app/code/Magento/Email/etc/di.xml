@@ -16,11 +16,6 @@
             <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
         </arguments>
     </type>
-    <type name="Magento\Email\Model\Template">
-        <arguments>
-            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
-        </arguments>
-    </type>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
             <argument name="metadata" xsi:type="array">
