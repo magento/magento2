@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\SearchConfigOptionsList;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Model\SearchConfigOptionsList;
 
 /**
  * ConfigureCatalogSearch controller
@@ -33,7 +35,7 @@ class ConfigureCatalogSearch extends AbstractActionController
      *
      * @return ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ViewModel
     {
         $view = new ViewModel([
             'availableSearchEngines' => $this->searchConfigOptionsList->getAvailableSearchEngineList(),
@@ -47,7 +49,7 @@ class ConfigureCatalogSearch extends AbstractActionController
      *
      * @return JsonModel
      */
-    public function defaultParametersAction()
+    public function defaultParametersAction(): JsonModel
     {
         $defaults = [
             'engine' => SearchConfigOptionsList::DEFAULT_SEARCH_ENGINE,
@@ -56,17 +58,10 @@ class ConfigureCatalogSearch extends AbstractActionController
                 'port' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_PORT,
                 'timeout' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_TIMEOUT,
                 'indexPrefix' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_INDEX_PREFIX,
-                'enableAuth' => false,
-                'username' => null,
-                'password' => null
+                'enableAuth' => false
             ]
         ];
 
         return new JsonModel($defaults);
-    }
-
-    public function saveAction()
-    {
-
     }
 }

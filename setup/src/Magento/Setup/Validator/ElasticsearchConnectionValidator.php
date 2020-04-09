@@ -16,6 +16,8 @@ class ElasticsearchConnectionValidator
     /**
      * Validate elasticsearch connection
      *
+     * Throws exception if unable to connect to Elasticsearch server
+     *
      * @param array $options
      * @return bool
      * @throws \Exception
