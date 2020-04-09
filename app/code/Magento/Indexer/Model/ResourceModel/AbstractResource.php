@@ -141,7 +141,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
 
         if ($from === $to) {
             $query = $select->insertFromSelect($destTable, $columns);
-            $to->query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED;');
+//            $to->query('SET TRANSACTION ISOLATION LEVEL READ COMMITTED;');
             $to->query($query);
         } else {
             $stmt = $from->query($select);

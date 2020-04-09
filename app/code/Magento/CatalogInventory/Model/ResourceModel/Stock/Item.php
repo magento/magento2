@@ -219,6 +219,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $values, $where);
 
         $this->stockIndexerProcessor->markIndexerAsInvalid();
+        $this->priceIndexProcessor->markIndexerAsInvalid();
     }
 
     /**
@@ -251,6 +252,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $values, $where);
 
         $this->stockIndexerProcessor->markIndexerAsInvalid();
+        $this->priceIndexProcessor->markIndexerAsInvalid();
     }
 
     /**
