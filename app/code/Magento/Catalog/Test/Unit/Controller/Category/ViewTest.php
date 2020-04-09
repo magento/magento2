@@ -117,7 +117,7 @@ class ViewTest extends TestCase
     /**
      * Set up instances and mock objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->responseMock = $this->createMock(ResponseInterface::class);
