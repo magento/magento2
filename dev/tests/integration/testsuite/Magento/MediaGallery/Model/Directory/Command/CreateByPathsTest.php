@@ -10,13 +10,13 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Directory\Command\CreateByPathInterface;
+use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test methods of class CreateByPath
  */
-class CreateByPathTest extends \PHPUnit\Framework\TestCase
+class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test directory name
@@ -24,54 +24,74 @@ class CreateByPathTest extends \PHPUnit\Framework\TestCase
     private const TEST_DIRECTORY_NAME = 'testCreateDirectory';
 
     /**
-     * Absolute path to the media direcrory
+     * Absolute path to the media directory
      */
     private $mediaDirectoryPath;
 
     /**
-     * @var CreateByPathInterface
+     * @var CreateDirectoriesByPathsInterface
      */
-    private $createByPath;
+    private $createByPaths;
 
     /**
      * @inheritdoc
      */
     public function setUp()
     {
-        $this->createByPath = Bootstrap::getObjectManager()->get(CreateByPathInterface::class);
+        $this->createByPaths = Bootstrap::getObjectManager()->get(CreateDirectoriesByPathsInterface::class);
         $this->mediaDirectoryPath = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
     }
 
     /**
-     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testCreateDirectory(): void
     {
-        $fullPath = $this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME;
-        $this->createByPath->execute('', self::TEST_DIRECTORY_NAME);
-        $this->assertFileExists($fullPath);
+        $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
+        $this->assertFileExists($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
     }
 
     /**
-     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testCreateDirectoryThatAlreadyExist(): void
     {
-        $this->createByPath->execute('', self::TEST_DIRECTORY_NAME);
+        $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
+        $this->assertFileExists($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
     }
 
     /**
-     * @return void
+     * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @dataProvider notAllowedPathsProvider
      */
-    public function testCreateDirectoryWithRelativePath(): void
+    public function testCreateDirectoryWithRelativePath(array $paths): void
     {
-        $this->createByPath->execute('../../pub/', self::TEST_DIRECTORY_NAME);
+        $this->createByPaths->execute($paths);
+    }
+
+    /**
+     * Provider of paths that are not allowed for deletion
+     *
+     * @return array
+     */
+    public function notAllowedPathsProvider(): array
+    {
+        return [
+            [
+                ['../../pub/' . self::TEST_DIRECTORY_NAME]
+            ],
+            [
+                ['theme/' . self::TEST_DIRECTORY_NAME]
+            ],
+            [
+                ['../../pub/media', 'theme']
+            ]
+        ];
     }
 
     /**

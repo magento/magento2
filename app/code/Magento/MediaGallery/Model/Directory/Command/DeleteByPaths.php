@@ -58,7 +58,9 @@ class DeleteByPaths implements DeleteDirectoriesByPathsInterface
             throw new CouldNotDeleteException(
                 __(
                     'Could not delete directories: %paths',
-                    implode(' ,', $failedPaths)
+                    [
+                        'paths' => implode(' ,', $failedPaths)
+                    ]
                 )
             );
         }

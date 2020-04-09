@@ -47,7 +47,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         $failedPaths = [];
         foreach ($paths as $path) {
             try {
-                $name = end(explode('/', $path));
+                $name = basename($path);
                 $this->storage->createDirectory(
                     $name,
                     $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path
@@ -62,7 +62,9 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
             throw new CouldNotSaveException(
                 __(
                     'Could not save directories: %paths',
-                    implode(' ,', $failedPaths)
+                    [
+                        'paths' => implode(' ,', $failedPaths)
+                    ]
                 )
             );
         }

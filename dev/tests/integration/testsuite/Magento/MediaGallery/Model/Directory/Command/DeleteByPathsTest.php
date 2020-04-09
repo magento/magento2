@@ -10,18 +10,18 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Model\Directory\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test methods of class DeleteByPath
  */
-class DeleteByPathTest extends \PHPUnit\Framework\TestCase
+class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeleteByPathInterface
+     * @var DeleteDirectoriesByPathsInterface
      */
-    private $deleteByPath;
+    private $deleteByPaths;
 
     /**
      * @var string
@@ -29,45 +29,63 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
     private $testDirectoryName = 'testDeleteDirectory';
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @inheritdoc
      */
     public function setUp()
     {
-        $this->deleteByPath = Bootstrap::getObjectManager()->create(DeleteByPathInterface::class);
+        $this->deleteByPaths = Bootstrap::getObjectManager()->get(DeleteDirectoriesByPathsInterface::class);
+        $this->filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
     }
 
     /**
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function testDeleteDirectoryWithExistingDirectoryAndCorrectAbsolutePath(): void
+    public function testDeleteDirectory(): void
     {
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create($this->testDirectoryName);
         $fullPath = $mediaDirectory->getAbsolutePath($this->testDirectoryName);
         $this->assertFileExists($fullPath);
-        $this->deleteByPath->execute($this->testDirectoryName);
+        $this->deleteByPaths->execute([$this->testDirectoryName]);
         $this->assertFileNotExists($fullPath);
     }
 
     /**
+     * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
+     * @dataProvider notAllowedPathsProvider
      */
-    public function testDeleteDirectoryWithRelativePathUnderMediaFolder(): void
+    public function testDeleteDirectoryThatIsNotAllowed(array $paths): void
     {
-        $this->deleteByPath->execute('../../pub/media');
+        $this->deleteByPaths->execute($paths);
     }
 
     /**
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
+     * Provider of paths that are not allowed for deletion
+     *
+     * @return array
      */
-    public function testDeleteDirectoryThatIsNotAllowed(): void
+    public function notAllowedPathsProvider(): array
     {
-        $this->deleteByPath->execute('theme');
+        return [
+            [
+                ['../../pub/media']
+            ],
+            [
+                ['theme']
+            ],
+            [
+                ['../../pub/media', 'theme']
+            ]
+        ];
     }
 
     /**
@@ -75,10 +93,7 @@ class DeleteByPathTest extends \PHPUnit\Framework\TestCase
      */
     public function tearDown()
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Filesystem::class);
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directory */
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directory->isExist($this->testDirectoryName)) {
             $directory->delete($this->testDirectoryName);
         }
