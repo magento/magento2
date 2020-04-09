@@ -37,7 +37,7 @@ define([
                          */
                         done: function () {
                             obj.targetElementId = 1;
-                            obj.modalLoaded = true;
+                            obj.initialized = true;
                         }
                     };
                 });
@@ -55,7 +55,7 @@ define([
                          */
                         done: function () {
                             obj.targetElementId = 'instance/url';
-                            obj.modalLoaded = true;
+                            obj.initialized = true;
                         }
                     };
                 });
