@@ -22,7 +22,7 @@ class SchemaLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReaderMock = $this->getMockBuilder(ModuleDirReader::class)
             ->disableOriginalConstructor()->getMock();

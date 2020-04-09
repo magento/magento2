@@ -26,7 +26,7 @@ class CronCommandTest extends TestCase
      */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(ObjectManagerFactory::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);

@@ -22,7 +22,7 @@ class ConfigTest extends TestCase
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configDataMock = $this->getMockBuilder(
             ConfigDataModel::class

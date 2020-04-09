@@ -15,7 +15,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Xml();
     }

@@ -36,7 +36,7 @@ class ConverterTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupsConfigMock = $this->getMockBuilder(GroupsConfigModel::class)
             ->disableOriginalConstructor()
