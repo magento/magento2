@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
 
-use Hoa\Iterator\Mock;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
@@ -41,7 +40,7 @@ use Psr\Log\LoggerInterface;
 class AdvancedPricingTest extends TestCase
 {
     /**
-     * @var Timezone|Mock
+     * @var Timezone|MockObject
      */
     private $localeDateMock;
 
