@@ -58,7 +58,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -99,7 +99,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      * @param $productType
      * @param $isAllowed
      */
-    public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed)
+    public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed): void
     {
         if ($isAllowed) {
             $this->resultMock->expects($this->at(0))
@@ -168,7 +168,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue()
+    public function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue(): array
     {
         return [
             1 => [Type::TYPE_DOWNLOADABLE, true],
@@ -176,7 +176,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         ];
     }
 
-    public function testIsAllowedGuestCheckoutConfigSetToFalse()
+    public function testIsAllowedGuestCheckoutConfigSetToFalse(): void
     {
         $storeCode = 1;
 
