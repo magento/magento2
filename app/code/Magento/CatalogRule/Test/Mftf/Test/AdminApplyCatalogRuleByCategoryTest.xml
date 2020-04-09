@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
             <magentoCron stepKey="runCronIndex" groups="index"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>

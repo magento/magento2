@@ -128,9 +128,8 @@
 
             <magentoCron stepKey="runCronIndex" groups="index"/>
 
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        </before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+    </before>
         <after>
             <!-- Remove downloadable domains -->
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>

@@ -70,8 +70,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Action">
-        <plugin name="process_product_url_rewrites_on_website_change"
-                type="Magento\CatalogUrlRewrite\Plugin\ProductProcessUrlRewriteRemovingPlugin"/>
-    </type>
 </config>
