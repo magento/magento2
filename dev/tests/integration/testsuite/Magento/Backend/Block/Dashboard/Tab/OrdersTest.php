@@ -49,15 +49,18 @@ class OrdersTest extends TestCase
      * @magentoDataFixture Magento/Sales/_files/order_list_with_invoice.php
      * @dataProvider chartUrlDataProvider
      * @param string $period
-     * @param string $expectedAxisRange
      * @return void
      */
-    public function testGetChartUrl(string $period, string $expectedAxisRange): void
+    public function testGetChartUrl(string $period): void
     {
         $this->graphBlock->getRequest()->setParams(['period' => $period]);
+        /** @var Orders $ordersBlock */
         $ordersBlock = $this->layout->createBlock(Orders::class);
         $decodedChartUrl = urldecode($ordersBlock->getChartUrl());
-        $this->assertEquals($expectedAxisRange, $this->getUrlParamData($decodedChartUrl, 'chxr'));
+        $this->assertEquals(
+            $this->getExpectedAxisRange($ordersBlock),
+            $this->getUrlParamData($decodedChartUrl, 'chxr')
+        );
     }
 
     /**
@@ -66,11 +69,11 @@ class OrdersTest extends TestCase
     public function chartUrlDataProvider(): array
     {
         return [
-            'Last 24 Hours' => ['24h', '1,0,2,1'],
-            'Last 7 Days' => ['7d', '1,0,3,1'],
-            'Current Month' => ['1m', '1,0,3,1'],
-            'YTD' => ['1y', '1,0,4,1'],
-            '2YTD' => ['2y', '1,0,4,1'],
+            'Last 24 Hours' => ['24h'],
+            'Last 7 Days' => ['7d'],
+            'Current Month' => ['1m'],
+            'YTD' => ['1y'],
+            '2YTD' => ['2y'],
         ];
     }
 
@@ -90,5 +93,21 @@ class OrdersTest extends TestCase
         }
 
         return '';
+    }
+
+    /**
+     * @param Orders $ordersBlock
+     * @return string
+     */
+    private function getExpectedAxisRange(Orders $ordersBlock): string
+    {
+        $dashboardOrders = $ordersBlock->getDataHelper()->getItems();
+        $ordersQty = array_map(function ($order) {
+            return $order->getQuantity();
+        }, $dashboardOrders);
+
+        $axisPeak = max(array_values($ordersQty)) + 1;
+
+        return "1,0,{$axisPeak},1";
     }
 }
