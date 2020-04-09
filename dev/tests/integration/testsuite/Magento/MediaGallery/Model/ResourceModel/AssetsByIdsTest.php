@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Testing assets keywords save and get
+ * Test for GetAssetsByIdsInterface
  */
 class AssetsByIdsTest extends TestCase
 {

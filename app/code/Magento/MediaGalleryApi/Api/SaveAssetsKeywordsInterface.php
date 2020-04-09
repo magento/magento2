@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * A command represents the media gallery asset keywords save operation.
+ * Save keywords related to assets to the database
  * @api
  */
 interface SaveAssetsKeywordsInterface
 {
     /**
-     * Save asset keywords.
+     * Save assets keywords
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface[] $assetKeywords
      * @throws \Magento\Framework\Exception\CouldNotSaveException

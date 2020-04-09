@@ -14,7 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetByPath
+ * Get media assets by paths
  */
 class GetAssetsByPaths implements GetAssetsByPathsInterface
 {

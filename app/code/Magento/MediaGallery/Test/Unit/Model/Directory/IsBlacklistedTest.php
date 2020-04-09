@@ -8,22 +8,23 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\TestCase;
 use Magento\MediaGallery\Model\Directory\IsBlacklisted;
 use Magento\MediaGallery\Model\Directory\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test the Excluded model
+ * Test for IsBlacklisted
  */
 class IsBlacklistedTest extends TestCase
 {
     /**
-     * @var
+     * @var IsBlacklisted
      */
     private $object;
 
     /**
-     * @var
+     * @var Config|MockObject
      */
     private $config;
 

@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * Create folder by provided path
+ * Create folders by provided paths
  * @api
  */
 interface CreateDirectoriesByPathsInterface
 {
     /**
-     * Create new directory by provided path
+     * Create new directories by provided paths
      *
      * @param string[] $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException

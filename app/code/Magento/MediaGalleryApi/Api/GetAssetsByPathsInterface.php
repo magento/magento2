@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * A command represents the get media gallery asset by using media gallery asset path as a filter parameter.
+ * Get media gallery assets by paths in media storage
  * @api
  */
 interface GetAssetsByPathsInterface

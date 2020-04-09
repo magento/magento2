@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * A command which executes the media gallery asset save operation.
+ * Save media gallery assets to the database
  * @api
  */
 interface SaveAssetsInterface
 {
     /**
-     * Save media asset and return the media asset id
+     * Save media asset. The saved asset can later be retrieved by path
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface[] $assets
      * @throws \Magento\Framework\Exception\CouldNotSaveException

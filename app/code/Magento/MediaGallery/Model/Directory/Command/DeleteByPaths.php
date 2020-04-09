@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Delete directory from media storage by path
+ * Delete directory by provided paths in the media storage
  */
 class DeleteByPaths implements DeleteDirectoriesByPathsInterface
 {

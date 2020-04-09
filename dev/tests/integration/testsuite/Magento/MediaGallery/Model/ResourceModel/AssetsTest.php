@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Testing assets keywords save and get
+ * Test for assets operations
  */
 class AssetsTest extends TestCase
 {

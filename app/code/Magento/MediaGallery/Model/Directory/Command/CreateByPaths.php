@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Create folder by provided path
+ * Create directories by provided paths in the media storage
  */
 class CreateByPaths implements CreateDirectoriesByPathsInterface
 {

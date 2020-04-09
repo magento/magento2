@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * Delete folder by provided path
+ * Delete folders by provided paths
  * @api
  */
 interface DeleteDirectoriesByPathsInterface
 {
     /**
-     * Deletes the existing folder
+     * Deletes the existing folders
      *
      * @param string[] $paths
      * @throws \Magento\Framework\Exception\CouldNotDeleteException

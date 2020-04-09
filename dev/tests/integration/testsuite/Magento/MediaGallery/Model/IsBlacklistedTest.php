@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test methods of class CreateByPath
+ * Test for IsPathBlacklistedInterface
  */
 class CreateByPathsTest extends TestCase
 {

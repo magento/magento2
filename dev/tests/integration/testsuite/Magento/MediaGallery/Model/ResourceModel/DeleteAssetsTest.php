@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Testing delete assets
+ * Testing delete assets operation
  */
 class DeleteAssetsTest extends TestCase
 {

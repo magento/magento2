@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * SaveAssetKeywordsTest.
+ * Test for SaveAssetKeywords
  */
 class SaveAssetKeywordsTest extends TestCase
 {

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * A command represents the get media gallery asset by using media gallery asset id as a filter parameter.
+ * Get media gallery assets by id attribute
  * @api
  */
 interface GetAssetsByIdsInterface

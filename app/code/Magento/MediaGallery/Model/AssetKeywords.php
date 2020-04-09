@@ -12,7 +12,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface;
 
 /**
- * Asset's Keywords
+ * Asset Id and Keywords combination data object for bulk operations with keyword services
  */
 class AssetKeywords extends AbstractExtensibleModel implements AssetKeywordsInterface
 {

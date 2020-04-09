@@ -21,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Testing assets keywords save and get
+ * End to end test for working with assets and keywords
  */
 class AssetEndToEndTest extends TestCase
 {

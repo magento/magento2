@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * SaveAssetLinksTest.
+ * Test for SaveAssetLinks
  */
 class SaveAssetLinksTest extends TestCase
 {
