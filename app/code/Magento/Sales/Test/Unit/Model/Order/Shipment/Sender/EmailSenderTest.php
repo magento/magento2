@@ -21,6 +21,7 @@ use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Sales\Model\Order\Shipment\Sender\EmailSender;
 use Magento\Sales\Model\ResourceModel\Order\Shipment;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -42,82 +43,82 @@ class EmailSenderTest extends TestCase
     private $subject;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
     /**
-     * @var Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sender|MockObject
      */
     private $senderMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentInterface|MockObject
      */
     private $shipmentMock;
 
     /**
-     * @var ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentCommentCreationInterface|MockObject
      */
     private $commentMock;
 
     /**
-     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
     private $addressMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $globalConfigMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|MockObject
      */
     private $paymentInfoMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $paymentHelperMock;
 
     /**
-     * @var Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shipment|MockObject
      */
     private $shipmentResourceMock;
 
     /**
-     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|MockObject
      */
     private $addressRendererMock;
 
     /**
-     * @var Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var Template|MockObject
      */
     private $templateContainerMock;
 
     /**
-     * @var ShipmentIdentity|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentIdentity|MockObject
      */
     private $identityContainerMock;
 
     /**
-     * @var SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SenderBuilderFactory|MockObject
      */
     private $senderBuilderFactoryMock;
 
