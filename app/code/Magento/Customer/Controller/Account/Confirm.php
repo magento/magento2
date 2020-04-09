@@ -24,6 +24,8 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Confirm
  *
+ * Confirm class is responsible for account confirmation flow
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Confirm extends AbstractAccount implements HttpGetActionInterface

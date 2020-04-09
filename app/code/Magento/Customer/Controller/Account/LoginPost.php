@@ -68,6 +68,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     private $cookieMetadataManager;
 
     /**
+     * @var CustomerUrl
+     */
+    private $customerUrl;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
