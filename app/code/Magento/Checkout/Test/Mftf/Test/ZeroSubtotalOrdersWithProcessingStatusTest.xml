@@ -68,7 +68,7 @@
         </actionGroup>
 
         <!--Proceed to shipment-->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickToOpenCard"/>
+        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickToOpenCard"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickToProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
 

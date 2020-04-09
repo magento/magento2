@@ -69,7 +69,7 @@
         <waitForPageLoad stepKey="waitForStoreView"/>
 
         <!--Check product name in Minicart-->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <actionGroup name="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
         <grabTextFrom selector="{{StorefrontMinicartSection.productName}}" stepKey="grabProductNameMinicart"/>
         <assertContains stepKey="assertProductNameMinicart">
 			<actualResult type="const">$grabProductNameMinicart</actualResult>
