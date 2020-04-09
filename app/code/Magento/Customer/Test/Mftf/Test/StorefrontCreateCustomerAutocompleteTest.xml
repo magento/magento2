@@ -11,7 +11,7 @@
     <test name="StorefrontCreateCustomerAutocompleteTest">
         <annotations>
             <features value="Customer"/>
-            <stories value="Autocomplete to user area input fields"/>
+            <stories value="As a Store Customer I should be able to use browser autocomplete feature for Customer registration"/>
             <title value="Create customer form - autocomplete to input fields"/>
             <description value="Autocomplete for input fields in Create account form"/>
             <severity value="AVERAGE"/>
@@ -19,21 +19,22 @@
             <group value="create"/>
         </annotations>
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
-                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+                <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
         </after>
-        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" attribute="autocomplete" expectedValue="given-name" stepKey="checkAutocompleteForFirstNameField" />
         <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" attribute="autocomplete" expectedValue="family-name" stepKey="checkAutocompleteForLastNameField" />
         <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.emailField}}" attribute="autocomplete" expectedValue="email" stepKey="checkAutocompleteForEmailField" />
-        <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
-        <fillField  stepKey="fillLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
-        <fillField  stepKey="fillEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
-        <fillField  stepKey="fillPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
-        <fillField  stepKey="fillConfirmPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
-        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
     </test>
 </tests>
