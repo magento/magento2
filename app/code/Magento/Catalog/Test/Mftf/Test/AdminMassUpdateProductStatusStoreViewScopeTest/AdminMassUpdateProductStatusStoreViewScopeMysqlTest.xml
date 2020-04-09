@@ -17,10 +17,10 @@
             <testCaseId value="MC-20471"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
-            <group value="SearchEngineMysql"/>
-            <skip>
-                <issueId value="MC-18948"/>
-            </skip>
+<!--            <group value="SearchEngineMysql"/>-->
+<!--            <skip>-->
+<!--                <issueId value="MC-18948"/>-->
+<!--            </skip>-->
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

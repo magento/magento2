@@ -7,10 +7,10 @@
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="SearchEngineMysqlConfigData">
-        <data key="path">catalog/search/engine</data>
-        <data key="scope_id">1</data>
-        <data key="label">MySQL</data>
-        <data key="value">mysql</data>
-    </entity>
+<!--    <entity name="SearchEngineMysqlConfigData">-->
+<!--        <data key="path">catalog/search/engine</data>-->
+<!--        <data key="scope_id">1</data>-->
+<!--        <data key="label">MySQL</data>-->
+<!--        <data key="value">mysql</data>-->
+<!--    </entity>-->
 </entities>
