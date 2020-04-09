@@ -689,17 +689,17 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $setId
      * @param int|string $groupId
-     * @return $this
+     * @return int
      * @throws LocalizedException
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
     {
         if (!is_numeric($groupId)) {
-            $groupId = $this->getAttributeGroup($entityTypeId, $setId, $groupId, 'attribute_group_id');
+            $groupId = (int)$this->getAttributeGroup($entityTypeId, $setId, $groupId, 'attribute_group_id');
         }
 
         if (!is_numeric($groupId)) {
-            $groupId = $this->getDefaultAttributeGroupId($entityTypeId, $setId);
+            $groupId = (int)$this->getDefaultAttributeGroupId($entityTypeId, $setId);
         }
 
         if (!is_numeric($groupId)) {
