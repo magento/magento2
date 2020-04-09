@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContent\Model\Plugin;
+namespace Magento\MediaContent\Plugin;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -67,7 +67,7 @@ class MediaGalleryAssetDeleteByDirectoryPath
     ) : void {
         $assetIds = $this->getAssetIdsByDirectoryPath($directoryPath);
 
-        $proceed();
+        $proceed($directoryPath);
 
         $this->removeRelationsForAssetIds->execute($assetIds);
     }

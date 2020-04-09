@@ -14,10 +14,10 @@
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
-        <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByPath" />
+        <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\MediaGalleryAssetDeleteByPath" />
     </type>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
-        <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Model\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
+        <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
     </type>
     <virtualType name="Magento\MediaContent\Model\Content\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContent\Model\Plugin;
+namespace Magento\MediaContent\Plugin;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaContent\Model\RemoveRelationsForAssetIds;
@@ -64,7 +64,7 @@ class MediaGalleryAssetDeleteByPath
     ) : void {
         $asset = $this->getByPath->execute($mediaAssetPath);
 
-        $proceed();
+        $proceed($mediaAssetPath);
 
         $this->removeRelationsForAssetIds->execute([$asset->getId()]);
     }
