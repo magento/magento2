@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerAutocompleteTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Autocomplete to user area input fields"/>
+            <title value="Create customer form - autocomplete to input fields"/>
+            <description value="Autocomplete for input fields in Create account form"/>
+            <severity value="AVERAGE"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+        </after>
+        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnStorefrontPage"/>
+        <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" attribute="autocomplete" expectedValue="given-name" stepKey="checkAutocompleteForFirstNameField" />
+        <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.lastnameField}}" attribute="autocomplete" expectedValue="family-name" stepKey="checkAutocompleteForLastNameField" />
+        <assertElementContainsAttribute selector="{{StorefrontCustomerCreateFormSection.emailField}}" attribute="autocomplete" expectedValue="email" stepKey="checkAutocompleteForEmailField" />
+        <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
+        <fillField  stepKey="fillLastName" userInput="{{CustomerEntityOne.lastname}}" selector="{{StorefrontCustomerCreateFormSection.lastnameField}}"/>
+        <fillField  stepKey="fillEmail" userInput="{{CustomerEntityOne.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
+        <fillField  stepKey="fillPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
+        <fillField  stepKey="fillConfirmPassword" userInput="{{CustomerEntityOne.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
+    </test>
+</tests>
