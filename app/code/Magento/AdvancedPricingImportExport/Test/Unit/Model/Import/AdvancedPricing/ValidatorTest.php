@@ -3,45 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
-    protected $validator;
+    private $validatorMock;
 
     /**
-     * @var Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
-    protected $validators;
+    private $validatorsMock;
 
     /**
-     * @var RowValidatorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var RowValidatorInterface|MockObject
      */
-    protected $validatorTest;
+    private $validatorTestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorTest = $this->getMockForAbstractClass(
-            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->validatorTestMock = $this->getMockForAbstractClass(RowValidatorInterface::class, [], '', false);
         $messages = ['messages'];
-        $this->validatorTest->expects($this->any())->method('getMessages')->willReturn($messages);
-        $this->validators = [$this->validatorTest];
+        $this->validatorTestMock->expects($this->any())->method('getMessages')->willReturn($messages);
+        $this->validatorsMock = [$this->validatorTestMock];
 
-        $this->validator = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class
-        )
+        $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->setMethods(['_clearMessages', '_addMessages'])
-            ->setConstructorArgs([$this->validators])
+            ->setConstructorArgs([$this->validatorsMock])
             ->getMock();
     }
 
@@ -49,32 +46,36 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider isValidDataProvider
      *
      * @param array $validatorResult
-     * @param bool  $expectedResult
+     * @param bool $expectedResult
+     * @throws \Zend_Validate_Exception
      */
     public function testIsValid($validatorResult, $expectedResult)
     {
-        $this->validator->expects($this->once())->method('_clearMessages');
+        $this->validatorMock->expects($this->once())->method('_clearMessages');
         $value = 'value';
-        $this->validatorTest->expects($this->once())->method('isValid')->with($value)->willReturn($validatorResult);
+        $this->validatorTestMock
+            ->expects($this->once())->method('isValid')
+            ->with($value)
+            ->willReturn($validatorResult);
 
-        $result = $this->validator->isValid($value);
+        $result = $this->validatorMock->isValid($value);
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testIsValidAddMessagesCall()
     {
         $value = 'value';
-        $this->validatorTest->expects($this->once())->method('isValid')->willReturn(false);
-        $this->validator->expects($this->once())->method('_addMessages');
+        $this->validatorTestMock->expects($this->once())->method('isValid')->willReturn(false);
+        $this->validatorMock->expects($this->once())->method('_addMessages');
 
-        $this->validator->isValid($value);
+        $this->validatorMock->isValid($value);
     }
 
     public function testInit()
     {
-        $this->validatorTest->expects($this->once())->method('init');
+        $this->validatorTestMock->expects($this->once())->method('init');
 
-        $this->validator->init(null);
+        $this->validatorMock->init(null);
     }
 
     /**

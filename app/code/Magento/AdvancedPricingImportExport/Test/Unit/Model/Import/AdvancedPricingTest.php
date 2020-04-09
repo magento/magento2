@@ -3,182 +3,174 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
-use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Data as CatalogHelper;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\ImportExport\Helper\Data as ImportExportHelper;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * @SuppressWarnings(PHPMD)
- */
-class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class AdvancedPricingTest extends AbstractImportTestCase
 {
-    /**
-     * DB Table data
-     */
     const TABLE_NAME = 'tableName';
     const LINK_FIELD = 'linkField';
 
     /**
-     * @var ResourceFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceFactory|MockObject
      */
-    protected $resourceFactory;
+    private $resourceFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Data |\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogHelper|MockObject
      */
-    protected $catalogData;
+    private $catalogHelperMock;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver |\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResolver|MockObject
      */
-    protected $storeResolver;
+    private $storeResolverMock;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
-    protected $importProduct;
+    private $importProductMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductModel|MockObject
      */
-    protected $productModel;
+    private $productModelMock;
 
     /**
-     * @var AdvancedPricing\Validator |\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
-    protected $validator;
+    private $validatorMock;
 
     /**
-     * @var AdvancedPricing\Validator\Website |\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
-    protected $websiteValidator;
+    private $websiteValidatorMock;
 
     /**
-     * @var AdvancedPricing\Validator\TierPrice |\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPrice|MockObject
      */
-    protected $tierPriceValidator;
+    private $tierPriceValidatorMock;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Helper |\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|MockObject
      */
-    protected $resourceHelper;
+    private $resourceHelperMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
-    protected $connection;
+    private $connectionMock;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $dataSourceModel;
+    private $dataSourceModelMock;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
-    protected $eavConfig;
+    private $eavConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
-    protected $dateTime;
+    private $dateTimeMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
-    protected $resource;
+    private $resourceMock;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonHelper|MockObject
      */
-    protected $jsonHelper;
+    private $jsonHelperMock;
 
     /**
-     * @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImportExportHelper|MockObject
      */
-    protected $importExportData;
+    private $importExportHelperMock;
 
     /**
-     * @var array
+     * @var AdvancedPricing|MockObject
      */
-    protected $cachedSkuToDelete;
+    private $advancedPricingMock;
 
     /**
-     * @var array
+     * @var StringUtils
      */
-    protected $oldSkus;
+    private $stringUtils;
 
     /**
-     * @var AdvancedPricing |\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorAggregatorInterface
      */
-    protected $advancedPricing;
+    private $errorAggregator;
 
-    /**
-     * @var \Magento\Framework\Stdlib\StringUtils
-     */
-    protected $stringObject;
-
-    /**
-     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     */
-    protected $errorAggregator;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->jsonHelper = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
-        $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
-        $this->resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
-        $this->resource = $this->createPartialMock(\Magento\Framework\App\ResourceConnection::class, ['getConnection']);
-        $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
-        $this->dataSourceModel = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
-        $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $entityType = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
+        $this->jsonHelperMock = $this->createMock(JsonHelper::class);
+        $this->importExportHelperMock = $this->createMock(ImportExportHelper::class);
+        $this->resourceHelperMock = $this->createMock(Helper::class);
+        $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class, [], '', false);
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
+        $this->dataSourceModelMock = $this->createMock(Data::class);
+        $this->eavConfig = $this->createMock(Config::class);
+        $entityType = $this->createMock(Type::class);
         $entityType->method('getEntityTypeId')->willReturn('');
         $this->eavConfig->method('getEntityType')->willReturn($entityType);
-        $this->resourceFactory = $this->getMockBuilder(
-            \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class
-        )
+        $this->resourceFactoryMock = $this->getMockBuilder(ResourceFactory::class)
             ->setMethods(['create', 'getTable'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceFactory->expects($this->any())->method('create')->willReturnSelf();
-        $this->resourceFactory->expects($this->any())->method('getTable')->willReturn(self::TABLE_NAME);
-        $this->catalogData = $this->createMock(\Magento\Catalog\Helper\Data::class);
-        $this->storeResolver = $this->createMock(
-            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class
-        );
-        $this->importProduct = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product::class);
-        $this->productModel = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->validator = $this->createPartialMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class,
-            ['isValid', 'getMessages']
-        );
-        $this->websiteValidator = $this->createMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
-        );
-        $this->tierPriceValidator = $this->createMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice::class
-        );
-        $this->stringObject = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->resourceFactoryMock->expects($this->any())->method('create')->willReturnSelf();
+        $this->resourceFactoryMock->expects($this->any())->method('getTable')->willReturn(self::TABLE_NAME);
+        $this->catalogHelperMock = $this->createMock(CatalogHelper::class);
+        $this->storeResolverMock = $this->createMock(StoreResolver::class);
+        $this->importProductMock = $this->createMock(Product::class);
+        $this->productModelMock = $this->createMock(ProductModel::class);
+        $this->validatorMock = $this->createPartialMock(Validator::class, ['isValid', 'getMessages']);
+        $this->websiteValidatorMock = $this->createMock(Website::class);
+        $this->tierPriceValidatorMock = $this->createMock(TierPrice::class);
+        $this->stringUtils = $this->createMock(StringUtils::class);
         $this->errorAggregator = $this->getErrorAggregatorObject();
-        $this->dateTime = $this->createPartialMock(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class,
-            ['date', 'format']
-        );
-        $this->dateTime->expects($this->any())->method('date')->willReturnSelf();
+        $this->dateTimeMock = $this->createPartialMock(DateTime::class, ['date', 'format']);
+        $this->dateTimeMock->expects($this->any())->method('date')->willReturnSelf();
 
-        $this->advancedPricing = $this->getAdvancedPricingMock(
+        $this->advancedPricingMock = $this->getAdvancedPricingMock(
             [
                 'retrieveOldSkus',
                 'validateRow',
@@ -194,7 +186,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ]
         );
 
-        $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
+        $this->advancedPricingMock->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
     }
 
     /**
@@ -202,7 +194,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     public function testGetEntityTypeCode()
     {
-        $result = $this->advancedPricing->getEntityTypeCode();
+        $result = $this->advancedPricingMock->getEntityTypeCode();
         $expectedResult = 'advanced_pricing';
 
         $this->assertEquals($expectedResult, $result);
@@ -230,7 +222,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 'getBehavior',
             ]
         );
-        $this->validator->expects($this->any())->method('isValid')->willReturn(true);
+        $this->validatorMock->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
 
         $result = $advancedPricingMock->validateRow($rowData, $rowNum);
@@ -259,7 +251,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 'getBehavior',
             ]
         );
-        $this->validator->expects($this->any())->method('isValid')->willReturn(true);
+        $this->validatorMock->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $advancedPricingMock->expects($this->once())->method('addRowError')->with($error, $rowNum);
 
@@ -272,9 +264,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     public function testValidateRowValidatorCall()
     {
         $rowNum = 0;
-        $rowData = [
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_SKU => 'sku value',
-        ];
+        $rowData = [AdvancedPricing::COL_SKU => 'sku value'];
         $advancedPricingMock = $this->getAdvancedPricingMock(
             [
                 'retrieveOldSkus',
@@ -285,9 +275,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ]
         );
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', []);
-        $this->validator->expects($this->once())->method('isValid')->willReturn(false);
+        $this->validatorMock->expects($this->once())->method('isValid')->willReturn(false);
         $messages = ['value'];
-        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
+        $this->validatorMock->expects($this->once())->method('getMessages')->willReturn($messages);
         $advancedPricingMock->expects($this->once())->method('addRowError')->with('value', $rowNum);
 
         $advancedPricingMock->validateRow($rowData, $rowNum);
@@ -304,16 +294,16 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 'bunch',
             ]
         ];
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($testBunch);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
-        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn($testBunch);
+        $this->advancedPricingMock->expects($this->once())->method('validateRow')->willReturn(false);
+        $this->advancedPricingMock->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
 
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->once())
             ->method('addRowError')
             ->with(RowValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
 
-        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+        $this->invokeMethod($this->advancedPricingMock, 'saveAndReplaceAdvancedPrices');
     }
 
     /**
@@ -321,13 +311,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     public function testSaveAdvancedPricing()
     {
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->once())
             ->method('saveAndReplaceAdvancedPrices');
 
-        $result = $this->advancedPricing->saveAdvancedPricing();
+        $result = $this->advancedPricingMock->saveAdvancedPricing();
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertEquals($this->advancedPricingMock, $result);
     }
 
     /**
@@ -370,8 +360,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $advancedPricing
             ->expects($this->any())
             ->method('getBehavior')
-            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+            ->willReturn(Import::BEHAVIOR_APPEND);
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
         $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
@@ -389,7 +379,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $oldSkus = [$sku => $skuProduct];
         $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
         $advancedPricing->expects($this->once())->method('retrieveOldSkus')->willReturn($oldSkus);
-        $this->connection->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
@@ -439,8 +429,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $advancedPricing
             ->expects($this->any())
             ->method('getBehavior')
-            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+            ->willReturn(Import::BEHAVIOR_APPEND);
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn($data);
         $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
         $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
@@ -458,7 +448,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $oldSkus = [$sku => $skuProduct];
         $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
         $advancedPricing->expects($this->never())->method('retrieveOldSkus')->willReturn($oldSkus);
-        $this->connection->expects($this->never())
+        $this->connectionMock->expects($this->never())
             ->method('insertOnDuplicate')
             ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
@@ -485,42 +475,30 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $listSku = [
             $skuVal
         ];
-        $this->advancedPricing->expects($this->any())->method('getBehavior')->willReturn(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
-        );
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
+        $this->advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_REPLACE);
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $this->advancedPricingMock->expects($this->once())->method('validateRow')->willReturn(true);
 
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->never())
             ->method('getCustomerGroupId');
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->never())
             ->method('getWebSiteId');
 
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->any())
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [
-                    $listSku,
-                    AdvancedPricing::TABLE_TIER_PRICE,
-                ]
-            )
+            ->withConsecutive([$listSku, AdvancedPricing::TABLE_TIER_PRICE])
             ->willReturn(true);
 
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->any())
             ->method('saveProductPrices')
-            ->withConsecutive(
-                [
-                    $expectedTierPrices,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
+            ->withConsecutive([$expectedTierPrices, AdvancedPricing::TABLE_TIER_PRICE])
             ->will($this->returnSelf());
 
-        $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+        $this->invokeMethod($this->advancedPricingMock, 'saveAndReplaceAdvancedPrices');
     }
 
     /**
@@ -539,17 +517,17 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ],
         ];
 
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $this->advancedPricingMock->expects($this->any())->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->once())
             ->method('deleteProductTierPrices')
             ->withConsecutive(
                 [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
             )->will($this->returnSelf());
 
-        $this->advancedPricing->deleteAdvancedPricing();
+        $this->advancedPricingMock->deleteAdvancedPricing();
     }
 
     /**
@@ -557,12 +535,12 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     public function testDeleteAdvancedPricingResetCachedSkuToDelete()
     {
-        $this->setPropertyValue($this->advancedPricing, '_cachedSkuToDelete', 'some value');
-        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn([]);
+        $this->setPropertyValue($this->advancedPricingMock, '_cachedSkuToDelete', 'some value');
+        $this->dataSourceModelMock->expects($this->at(0))->method('getNextBunch')->willReturn([]);
 
-        $this->advancedPricing->deleteAdvancedPricing();
+        $this->advancedPricingMock->deleteAdvancedPricing();
 
-        $cachedSkuToDelete = $this->getPropertyValue($this->advancedPricing, '_cachedSkuToDelete');
+        $cachedSkuToDelete = $this->getPropertyValue($this->advancedPricingMock, '_cachedSkuToDelete');
         $this->assertNull($cachedSkuToDelete);
     }
 
@@ -571,13 +549,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     public function testReplaceAdvancedPricing()
     {
-        $this->advancedPricing
+        $this->advancedPricingMock
             ->expects($this->once())
             ->method('saveAndReplaceAdvancedPrices');
 
-        $result = $this->advancedPricing->saveAdvancedPricing();
+        $result = $this->advancedPricingMock->saveAdvancedPricing();
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertEquals($this->advancedPricingMock, $result);
     }
 
     /**
@@ -728,14 +706,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => null,
                 ],
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                '$behavior' => Import::BEHAVIOR_DELETE,
                 '$expectedResult' => false,
             ],
             [
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => 'sku value',
                 ],
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                '$behavior' => Import::BEHAVIOR_DELETE,
                 '$expectedResult' => true,
             ]
         ];
@@ -753,7 +731,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 '$rowData' => [
                     AdvancedPricing::COL_SKU => null,
                 ],
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                '$behavior' => Import::BEHAVIOR_DELETE,
                 '$error' => RowValidatorInterface::ERROR_SKU_IS_EMPTY,
             ],
             [
@@ -767,23 +745,25 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     }
 
     /**
+     * @dataProvider saveProductPricesDataProvider
+     *
      * @param array $priceData
      * @param array $oldSkus
      * @param array $priceIn
      * @param int $callNum
-     * @dataProvider saveProductPricesDataProvider
+     * @throws \ReflectionException
      */
     public function testSaveProductPrices($priceData, $oldSkus, $priceIn, $callNum)
     {
-        $this->advancedPricing = $this->getAdvancedPricingMock(['retrieveOldSkus']);
+        $this->advancedPricingMock = $this->getAdvancedPricingMock(['retrieveOldSkus']);
 
-        $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->advancedPricingMock->expects($this->any())->method('retrieveOldSkus')->willReturn($oldSkus);
 
-        $this->connection->expects($this->exactly($callNum))
+        $this->connectionMock->expects($this->exactly($callNum))
             ->method('insertOnDuplicate')
             ->with(self::TABLE_NAME, $priceIn, ['value', 'percentage_value']);
 
-        $this->invokeMethod($this->advancedPricing, 'saveProductPrices', [$priceData, 'table']);
+        $this->invokeMethod($this->advancedPricingMock, 'saveProductPrices', [$priceData, 'table']);
     }
 
     /**
@@ -809,13 +789,15 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     }
 
     /**
+     * @dataProvider deleteProductTierPricesDataProvider
+     *
      * @param array $listSku
      * @param array $cachedSkuToDelete
      * @param int $numCallAddError
      * @param int $numCallDelete
      * @param boolean $exceptionInDelete
      * @param boolean $result
-     * @dataProvider deleteProductTierPricesDataProvider
+     * @throws \ReflectionException
      */
     public function testDeleteProductTierPrices(
         $listSku,
@@ -825,13 +807,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $exceptionInDelete,
         $result
     ) {
-        $this->advancedPricing = $this->getAdvancedPricingMock(['addRowError', 'retrieveOldSkus']);
-        $dbSelectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->advancedPricingMock = $this->getAdvancedPricingMock(['addRowError', 'retrieveOldSkus']);
+        $dbSelectMock = $this->createMock(Select::class);
         if ($listSku) {
-            $this->connection->expects($this->once())
+            $this->connectionMock->expects($this->once())
                 ->method('fetchCol')
                 ->willReturn($cachedSkuToDelete);
-            $this->connection->expects($this->once())
+            $this->connectionMock->expects($this->once())
                 ->method('select')
                 ->willReturn($dbSelectMock);
             $dbSelectMock->expects($this->once())
@@ -843,20 +825,20 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 ->willReturnSelf();
         }
 
-        $this->advancedPricing->expects($this->exactly($numCallAddError))
+        $this->advancedPricingMock->expects($this->exactly($numCallAddError))
             ->method('addRowError');
         if ($exceptionInDelete) {
-            $this->connection->expects($this->exactly($numCallDelete))
+            $this->connectionMock->expects($this->exactly($numCallDelete))
                 ->method('delete')
                 ->willThrowException(new \Exception());
         } else {
-            $this->connection->expects($this->exactly($numCallDelete))
+            $this->connectionMock->expects($this->exactly($numCallDelete))
                 ->method('delete')
                 ->willReturn(1);
         }
         $this->assertEquals(
             $result,
-            $this->invokeMethod($this->advancedPricing, 'deleteProductTierPrices', [$listSku, 'table'])
+            $this->invokeMethod($this->advancedPricingMock, 'deleteProductTierPrices', [$listSku, 'table'])
         );
     }
 
@@ -902,12 +884,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     }
 
     /**
+     * @dataProvider processCountExistingPricesDataProvider
+     *
      * @param array $prices
      * @param array $existingPrices
      * @param array $oldSkus
      * @param int $numCall
      * @param array $args
-     * @dataProvider processCountExistingPricesDataProvider
+     * @throws \ReflectionException
      */
     public function testProcessCountExistingPrices(
         $prices,
@@ -916,17 +900,12 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $numCall,
         $args
     ) {
-        $this->advancedPricing = $this->getAdvancedPricingMock(
-            [
-                'incrementCounterUpdated',
-                'retrieveOldSkus'
-            ]
-        );
-        $dbSelectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->connection->expects($this->once())
+        $this->advancedPricingMock = $this->getAdvancedPricingMock(['incrementCounterUpdated', 'retrieveOldSkus']);
+        $dbSelectMock = $this->createMock(Select::class);
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->willReturn($existingPrices);
-        $this->connection->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($dbSelectMock);
         $dbSelectMock->expects($this->once())
@@ -935,14 +914,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 self::TABLE_NAME,
                 [self::LINK_FIELD, 'all_groups', 'customer_group_id', 'qty']
             )->willReturnSelf();
-        $this->advancedPricing->expects($this->once())
+        $this->advancedPricingMock->expects($this->once())
             ->method('retrieveOldSkus')
             ->willReturn($oldSkus);
-        $this->advancedPricing->expects($this->exactly($numCall))
+        $this->advancedPricingMock->expects($this->exactly($numCall))
             ->method('incrementCounterUpdated')
             ->withConsecutive($args);
 
-        $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
+        $this->invokeMethod($this->advancedPricingMock, 'processCountExistingPrices', [$prices, 'table']);
     }
 
     /**
@@ -1015,7 +994,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     private function invokeMethod($object, $method, $args = [])
     {
-        $class = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
+        $class = new \ReflectionClass(AdvancedPricing::class);
         $method = $class->getMethod($method);
         $method->setAccessible(true);
 
@@ -1027,47 +1006,45 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      *
      * @param array $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \ReflectionException
      */
     private function getAdvancedPricingMock($methods = [])
     {
-        $metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadataPoolMock = $this->createMock(MetadataPool::class);
+        $metadataMock = $this->createMock(EntityMetadata::class);
         $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn(self::LINK_FIELD);
         $metadataPoolMock->expects($this->any())
             ->method('getMetaData')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($metadataMock);
-        $advancedPricingMock = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
-        )
+        $advancedPricingMock = $this->getMockBuilder(AdvancedPricing::class)
             ->setMethods($methods)
             ->setConstructorArgs(
                 [
-                    $this->jsonHelper,
-                    $this->importExportData,
-                    $this->dataSourceModel,
+                    $this->jsonHelperMock,
+                    $this->importExportHelperMock,
+                    $this->dataSourceModelMock,
                     $this->eavConfig,
-                    $this->resource,
-                    $this->resourceHelper,
-                    $this->stringObject,
+                    $this->resourceMock,
+                    $this->resourceHelperMock,
+                    $this->stringUtils,
                     $this->errorAggregator,
-                    $this->dateTime,
-                    $this->resourceFactory,
-                    $this->productModel,
-                    $this->catalogData,
-                    $this->storeResolver,
-                    $this->importProduct,
-                    $this->validator,
-                    $this->websiteValidator,
-                    $this->tierPriceValidator
+                    $this->dateTimeMock,
+                    $this->resourceFactoryMock,
+                    $this->productModelMock,
+                    $this->catalogHelperMock,
+                    $this->storeResolverMock,
+                    $this->importProductMock,
+                    $this->validatorMock,
+                    $this->websiteValidatorMock,
+                    $this->tierPriceValidatorMock
                 ]
             )
             ->getMock();
-        $reflection = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
+        $reflection = new \ReflectionClass(AdvancedPricing::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($advancedPricingMock, $metadataPoolMock);

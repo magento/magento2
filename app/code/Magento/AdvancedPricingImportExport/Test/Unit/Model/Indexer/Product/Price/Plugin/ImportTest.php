@@ -3,93 +3,89 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ImportTest extends \PHPUnit\Framework\TestCase
+class ImportTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
-    private $indexer;
+    private $indexerMock;
 
     /**
-     * @var Import |\PHPUnit_Framework_MockObject_MockObject
+     * @var Import|MockObject
      */
-    private $import;
+    private $importMock;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing|MockObject
      */
-    private $advancedPricing;
+    private $advancedPricingMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
-    private $indexerRegistry;
+    private $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->indexer = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->indexerRegistry = $this->createMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class
-        );
-        $this->import = new \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import(
-            $this->indexerRegistry
-        );
-        $this->advancedPricing = $this->createMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
-        );
-        $this->indexerRegistry->expects($this->any())
+        $this->indexerMock = $this->getMockForAbstractClass(IndexerInterface::class, [], '', false);
+        $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
+        $this->importMock = new Import($this->indexerRegistryMock);
+        $this->advancedPricingMock = $this->createMock(AdvancedPricing::class);
+        $this->indexerRegistryMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
-            ->willReturn($this->indexer);
+            ->with(Processor::INDEXER_ID)
+            ->willReturn($this->indexerMock);
     }
 
     public function testAfterSaveReindexIsOnSave()
     {
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(false);
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('invalidate');
-        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
+        $this->importMock->afterSaveAdvancedPricing($this->advancedPricingMock);
     }
 
     public function testAfterSaveReindexIsOnSchedule()
     {
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(true);
-        $this->indexer->expects($this->never())
+        $this->indexerMock->expects($this->never())
             ->method('invalidate');
-        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
+        $this->importMock->afterSaveAdvancedPricing($this->advancedPricingMock);
     }
 
     public function testAfterDeleteReindexIsOnSave()
     {
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(false);
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('invalidate');
-        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
+        $this->importMock->afterSaveAdvancedPricing($this->advancedPricingMock);
     }
 
     public function testAfterDeleteReindexIsOnSchedule()
     {
-        $this->indexer->expects($this->once())
+        $this->indexerMock->expects($this->once())
             ->method('isScheduled')
             ->willReturn(true);
-        $this->indexer->expects($this->never())
+        $this->indexerMock->expects($this->never())
             ->method('invalidate');
-        $this->import->afterSaveAdvancedPricing($this->advancedPricing);
+        $this->importMock->afterSaveAdvancedPricing($this->advancedPricingMock);
     }
 }

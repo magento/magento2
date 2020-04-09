@@ -3,61 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\Directory\Model\Currency;
+use Magento\Store\Model\WebSite;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\WebSite|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebSite|MockObject
      */
-    protected $webSiteModel;
+    private $webSiteModelMock;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResolver|MockObject
      */
-    protected $storeResolver;
+    private $storeResolverMock;
 
     /**
-     * @var  AdvancedPricing\Validator\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\Website|MockObject
      */
-    protected $website;
+    private $websiteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->webSiteModel = $this->getMockBuilder(\Magento\Store\Model\Website::class)
+        $this->webSiteModelMock = $this->getMockBuilder(Website::class)
             ->setMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeResolver = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class,
+        $this->storeResolverMock = $this->createPartialMock(
+            StoreResolver::class,
             ['getWebsiteCodeToId']
         );
 
-        $this->website = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
-        )
+        $this->websiteMock = $this->getMockBuilder(AdvancedPricing\Validator\Website::class)
             ->setMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
-            ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])
+            ->setConstructorArgs([$this->storeResolverMock, $this->webSiteModelMock])
             ->getMock();
     }
 
     public function testInit()
     {
-        $result = $this->website->init(null);
+        $result = $this->websiteMock->init(null);
 
-        $this->assertEquals($this->website, $result);
+        $this->assertEquals($this->websiteMock, $result);
     }
 
     /**
      * @dataProvider isValidReturnDataProvider
      *
-     * @param array  $value
+     * @param array $value
      * @param string $allWebsites
      * @param string $colTierPriceWebsite
-     * @param bool   $expectedResult
+     * @param bool $expectedResult
      */
     public function testIsValidReturn(
         $value,
@@ -65,13 +69,13 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $colTierPriceWebsite,
         $expectedResult
     ) {
-        $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
-        $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
+        $this->websiteMock->expects($this->once())->method('_clearMessages');
+        $this->websiteMock->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
+        $this->storeResolverMock->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
         ]);
 
-        $result = $this->website->isValid($value);
+        $result = $this->websiteMock->isValid($value);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -84,30 +88,28 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $colTierPriceWebsite = false;
         $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
-        $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
-        $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
+        $this->websiteMock->expects($this->once())->method('_clearMessages');
+        $this->websiteMock->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
+        $this->storeResolverMock->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
         ]);
 
-        $this->website->expects($this->any())->method('_addMessages')->with($expectedMessages);
-        $this->website->isValid($value);
+        $this->websiteMock->expects($this->any())->method('_addMessages')->with($expectedMessages);
+        $this->websiteMock->isValid($value);
     }
 
     public function testGetAllWebsitesValue()
     {
         $currencyCode = 'currencyCodeValue';
-        $currency = $this->createPartialMock(\Magento\Directory\Model\Currency::class, ['getCurrencyCode']);
+        $currency = $this->createPartialMock(Currency::class, ['getCurrencyCode']);
         $currency->expects($this->once())->method('getCurrencyCode')->willReturn($currencyCode);
 
-        $this->webSiteModel->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
+        $this->webSiteModelMock->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
 
         $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
-        $websiteString = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
-        )
+        $websiteString = $this->getMockBuilder(AdvancedPricing\Validator\Website::class)
             ->setMethods(['_clearMessages', '_addMessages'])
-            ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])
+            ->setConstructorArgs([$this->storeResolverMock, $this->webSiteModelMock])
             ->getMock();
         $result = $websiteString->getAllWebsitesValue();
 
