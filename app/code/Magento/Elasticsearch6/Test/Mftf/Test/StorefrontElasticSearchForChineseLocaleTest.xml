@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontElasticSearch6ForChineseLocaleTest">
+    <test name="StorefrontElasticSearchForChineseLocaleTest">
         <annotations>
             <features value="Elasticsearch6"/>
             <stories value="Elasticsearch6 for Chinese"/>

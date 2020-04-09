@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontProductQuickSearchUsingElasticSearch6WithNotAvailablePageTest" extends="StorefrontProductQuickSearchUsingElasticSearch6Test">
+    <test name="StorefrontProductQuickSearchUsingElasticSearchWithNotAvailablePageTest" extends="StorefrontProductQuickSearchUsingElasticSearchTest">
         <annotations>
             <features value="CatalogSearch"/>
             <stories value="Storefront Search"/>
