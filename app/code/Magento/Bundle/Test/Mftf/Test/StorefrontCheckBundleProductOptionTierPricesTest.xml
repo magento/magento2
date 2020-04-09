@@ -26,7 +26,7 @@
 
             <!-- Add tier prices to simple products -->
             <!-- Simple product 1 -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPageProduct1">
                 <argument name="productId" value="$$simpleProduct1CreateBundleProduct.id$$"/>
             </actionGroup>
