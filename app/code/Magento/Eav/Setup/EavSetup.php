@@ -689,7 +689,7 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $setId
      * @param int|string $groupId
-     * @return $this
+     * @return int|string
      * @throws LocalizedException
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
