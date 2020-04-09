@@ -12,6 +12,13 @@
         <annotations>
             <description>Selects all Attribute options for the provided Attribute Code and navigates to Options quantity on the Configurable Product creation/edit page.</description>
         </annotations>
+        <arguments>
+            <argument name="price" type="string" defaultValue="100"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="clickOnNextButton2" stepKey="waitForNextPageOpened"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="waitForNextPageOpened" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" after="clickOnApplySinglePriceToAllSkus" stepKey="enterAttributePrice"/>
 
         <remove keyForRemoval="clickOnApplySingleQuantityToEachSku"/>
         <remove keyForRemoval="enterAttributeQuantity"/>
