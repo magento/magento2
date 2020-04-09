@@ -14,7 +14,7 @@ use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test methods of class CreateByPath
+ * Test for CreateDirectoriesByPathsInterface
  */
 class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 {

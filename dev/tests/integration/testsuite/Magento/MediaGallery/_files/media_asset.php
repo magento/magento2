@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
@@ -18,7 +17,7 @@ $mediaAssetFactory = $objectManager->get(AssetInterfaceFactory::class);
 $mediaAsset = $mediaAssetFactory->create(
     [
         'data' => [
-            'id' => 1,
+            'id' => 2020,
             'path' => 'testDirectory/path.jpg'
         ]
     ]

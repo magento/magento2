@@ -81,9 +81,6 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
      */
     private function deleteAssetsByDirectoryPath(string $path): void
     {
-        // Make sure that the path has a trailing slash
-        $path = rtrim($path, '/') . '/';
-
         /** @var AdapterInterface $connection */
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);

@@ -112,7 +112,7 @@ class GetAssetsKeywords implements GetAssetsKeywordsInterface
 
         $assetKeywords = [];
         foreach ($keywordsByAsset as $assetId => $keywords) {
-            $assetKeywords[] = $this->assetKeywordsFactory->create(
+            $assetKeywords[$assetId] = $this->assetKeywordsFactory->create(
                 [
                     'data' => [
                         'asset_id' => $assetId,

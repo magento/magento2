@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryApi\Api;
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-
 /**
  * A command which executes the media gallery asset save operation.
  * @api
