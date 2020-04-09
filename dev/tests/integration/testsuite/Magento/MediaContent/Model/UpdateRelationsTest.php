@@ -34,8 +34,8 @@ class UpdateRelationsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->create(UpdateRelationsInterface::class);
-        $this->getAssetIds = Bootstrap::getObjectManager()->create(GetAssetIdsUsedInContentInterface::class);
+        $this->service = Bootstrap::getObjectManager()->get(UpdateRelationsInterface::class);
+        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsUsedInContentInterface::class);
     }
 
     /**

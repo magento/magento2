@@ -27,7 +27,7 @@ class ExtractAssetsFromContentTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->create(ExtractAssetsFromContentInterface::class);
+        $this->service = Bootstrap::getObjectManager()->get(ExtractAssetsFromContentInterface::class);
     }
 
     /**

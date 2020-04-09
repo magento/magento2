@@ -46,10 +46,10 @@ class AssignGetUnassignTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->assign = Bootstrap::getObjectManager()->create(AssignAssetsInterface::class);
-        $this->getAssetIds = Bootstrap::getObjectManager()->create(GetAssetIdsUsedInContentInterface::class);
-        $this->getContent = Bootstrap::getObjectManager()->create(GetContentWithAssetsInterface::class);
-        $this->unassign = Bootstrap::getObjectManager()->create(UnassignAssetsInterface::class);
+        $this->assign = Bootstrap::getObjectManager()->get(AssignAssetsInterface::class);
+        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsUsedInContentInterface::class);
+        $this->getContent = Bootstrap::getObjectManager()->get(GetContentWithAssetsInterface::class);
+        $this->unassign = Bootstrap::getObjectManager()->get(UnassignAssetsInterface::class);
     }
 
     /**
