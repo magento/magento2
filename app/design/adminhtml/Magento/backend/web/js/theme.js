@@ -345,6 +345,25 @@ define('globalSearch', [
             this.input.on('focus.activateGlobalSearchForm', function () {
                 self.field.addClass(self.options.fieldActiveClass);
             });
+
+            $(document).keydown(function (e) {
+                var inputs = [
+                    'input',
+                    'select',
+                    'textarea'
+                ];
+
+                if (e.which !== 191 || // forward slash - '/'
+                    inputs.indexOf(e.target.tagName.toLowerCase()) !== -1 ||
+                    e.target.isContentEditable
+                ) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                self.input.focus();
+            });
         }
     });
 
