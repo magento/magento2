@@ -9,7 +9,6 @@
     <blacklist>
         <patterns>
             <pattern name="captcha">/^captcha/</pattern>
-            <pattern name="catalog">/^catalog\/product/</pattern>
             <pattern name="customer">/^customer/</pattern>
             <pattern name="downloadable">/^downloadable/</pattern>
             <pattern name="import">/^import/</pattern>

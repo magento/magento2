@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Test\Unit\Plugin\Product\Gallery;
+namespace Magento\MediaGalleryCatalog\Test\Unit\Plugin\Product\Gallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\MediaGallery\Plugin\Product\Gallery\Processor;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,7 +24,7 @@ class ProcessorTest extends TestCase
     private const STUB_FILE_NAME = 'file';
 
     /**
-     * @var DeleteByPathInterface|MockObject
+     * @var DeleteAssetsByPathsInterface|MockObject
      */
     private $deleteMediaAssetByPathMock;
 
@@ -57,7 +56,7 @@ class ProcessorTest extends TestCase
         $this->processorSubjectMock = $this->createMock(ProcessorSubject::class);
         $this->productMock = $this->createMock(Product::class);
 
-        $this->deleteMediaAssetByPathMock = $this->getMockBuilder(DeleteByPathInterface::class)
+        $this->deleteMediaAssetByPathMock = $this->getMockBuilder(DeleteAssetsByPathsInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['execute'])
             ->getMockForAbstractClass();

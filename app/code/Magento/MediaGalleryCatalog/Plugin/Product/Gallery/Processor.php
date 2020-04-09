@@ -3,25 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Plugin\Product\Gallery;
+namespace Magento\MediaGalleryCatalog\Plugin\Product\Gallery;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
 use Psr\Log\LoggerInterface;
 
 /**
- * Ensures that metadata is removed from the database when a product image has been deleted.
+ * Ensures that metadata is removed from the database when an image has been deleted (from legacy media gallery)
  */
 class Processor
 {
     /**
-     * @var DeleteByPathInterface
+     * @var DeleteAssetsByPathsInterface
      */
-    private $deleteMediaAssetByPath;
+    private $deleteByPaths;
 
     /**
      * @var LoggerInterface
@@ -31,14 +30,14 @@ class Processor
     /**
      * Processor constructor.
      *
-     * @param DeleteByPathInterface $deleteMediaAssetByPath
+     * @param DeleteAssetsByPathsInterface $deleteByPaths
      * @param LoggerInterface $logger
      */
     public function __construct(
-        DeleteByPathInterface $deleteMediaAssetByPath,
+        DeleteAssetsByPathsInterface $deleteByPaths,
         LoggerInterface $logger
     ) {
-        $this->deleteMediaAssetByPath = $deleteMediaAssetByPath;
+        $this->deleteByPaths = $deleteByPaths;
         $this->logger = $logger;
     }
 
@@ -49,7 +48,6 @@ class Processor
      * @param ProcessorSubject $result
      * @param Product $product
      * @param string $file
-     *
      * @return ProcessorSubject
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -65,7 +63,7 @@ class Processor
         }
 
         try {
-            $this->deleteMediaAssetByPath->execute($file);
+            $this->deleteByPaths->execute([$file]);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
