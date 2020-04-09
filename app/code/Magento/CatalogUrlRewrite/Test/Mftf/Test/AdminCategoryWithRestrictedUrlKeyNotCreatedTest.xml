@@ -17,7 +17,6 @@
             <testCaseId value="MC-17515"/>
             <useCaseId value="MAGETWO-69825"/>
             <group value="CatalogUrlRewrite"/>
-            <group value="urlRewrite"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
