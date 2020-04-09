@@ -569,7 +569,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
-                    ->method('addErrorMessage')
+                    ->method('addError')
                     ->with(
                         __(
                             'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -597,7 +597,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     . 'Please wait and try again later.'
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addErrorMessage')
+                    ->method('addError')
                     ->with($message)
                     ->willReturnSelf();
                 $this->session->expects($this->once())
