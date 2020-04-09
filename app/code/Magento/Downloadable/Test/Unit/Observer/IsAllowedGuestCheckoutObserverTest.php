@@ -32,7 +32,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     /**
      * @var MockObject|Config
      */
-    private $scopeConfig;
+    private $scopeConfigMock;
 
     /**
      * @var MockObject|DataObject
@@ -60,7 +60,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(Config::class)
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isSetFlag', 'getValue'])
             ->getMock();
@@ -87,7 +87,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))->getObject(
             IsAllowedGuestCheckoutObserver::class,
             [
-                'scopeConfig' => $this->scopeConfig,
+                'scopeConfig' => $this->scopeConfigMock,
             ]
         );
     }
@@ -146,7 +146,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->method('getQuote')
             ->will($this->returnValue($quote));
 
-        $this->scopeConfig->expects($this->any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(
                 'catalog/downloadable/disable_guest_checkout',
@@ -219,7 +219,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->method('getQuote')
             ->will($this->returnValue($quote));
 
-        $this->scopeConfig->expects($this->once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
                 'catalog/downloadable/disable_guest_checkout',
