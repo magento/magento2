@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -72,7 +72,7 @@ class Save implements SaveInterface
 
             $connection->insertOnDuplicate(
                 $tableName,
-                array_filter($this->objectProcessor->buildOutputDataArray($mediaAsset, AssetInterface::class))
+                $this->filterData($this->objectProcessor->buildOutputDataArray($mediaAsset, AssetInterface::class))
             );
             return (int) $connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
@@ -80,5 +80,29 @@ class Save implements SaveInterface
             $message = __('An error occurred during media asset save: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }
+    }
+
+    /**
+     * Filter data to get flat array without null values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function filterData(array $data): array
+    {
+        $filteredData = [];
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            if (is_array($value)) {
+                continue;
+            }
+            if (is_object($value)) {
+                continue;
+            }
+            $filteredData[$key] = $value;
+        }
+        return $filteredData;
     }
 }

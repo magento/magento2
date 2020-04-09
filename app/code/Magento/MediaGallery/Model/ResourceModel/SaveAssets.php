@@ -66,7 +66,7 @@ class SaveAssets implements SaveAssetsInterface
             try {
                 $connection->insertOnDuplicate(
                     $tableName,
-                    array_filter($this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class))
+                    $this->filterData($this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class))
                 );
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
@@ -84,5 +84,29 @@ class SaveAssets implements SaveAssetsInterface
                 )
             );
         }
+    }
+
+    /**
+     * Filter data to get flat array without null values
+     *
+     * @param array $data
+     * @return array
+     */
+    private function filterData(array $data): array
+    {
+        $filteredData = [];
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            if (is_array($value)) {
+                continue;
+            }
+            if (is_object($value)) {
+                continue;
+            }
+            $filteredData[$key] = $value;
+        }
+        return $filteredData;
     }
 }
