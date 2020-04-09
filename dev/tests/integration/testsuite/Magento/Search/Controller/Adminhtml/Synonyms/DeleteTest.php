@@ -29,7 +29,7 @@ class DeleteTest extends AbstractBackendController
      */
     public function testExecute(): void
     {
-        $synonymGroupModel=$this->gettestFixture();
+        $synonymGroupModel=$this->getTestFixture();
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(['group_id' => $synonymGroupModel->getGroupId()]);
         $this->dispatch('backend/search/synonyms/delete');
@@ -53,7 +53,7 @@ class DeleteTest extends AbstractBackendController
      *
      * @return SynonymGroup
      */
-    private function gettestFixture(): SynonymGroup
+    private function getTestFixture(): SynonymGroup
     {
         /** @var Collection */
         $synonymGroupCollection = Bootstrap::getObjectManager()->get(Collection::class);
