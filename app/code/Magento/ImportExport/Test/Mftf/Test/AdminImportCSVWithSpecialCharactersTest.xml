@@ -30,6 +30,6 @@
             <argument name="importFile" value="importSpecChars.csv"/>
         </actionGroup>
         <see selector="{{AdminImportHeaderSection.messageNote}}" userInput='File must be saved in UTF-8 encoding for proper import' stepKey="seeNoteMessage"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput='File is valid! To start import process press "Import" button' stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput='File is valid! To start import process press "Import" button' stepKey="seeSuccessMessage"/>
     </test>
 </tests>
