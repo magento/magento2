@@ -16,7 +16,12 @@
             <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
         </arguments>
     </type>
-    <type name="Magento\Email\Model\Template" shared="false" />
+    <type name="Magento\Email\Model\Template">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+            <argument name="assetRepo" xsi:type="object" shared="false">Magento\Framework\View\Asset\Repository</argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
             <argument name="metadata" xsi:type="array">
