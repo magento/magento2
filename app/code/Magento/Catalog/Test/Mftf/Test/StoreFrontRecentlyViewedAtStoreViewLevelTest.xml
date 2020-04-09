@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StoreFrontRecentlyViewedAtStoreViewLevelTest">
         <annotations>
             <stories value="Recently Viewed Product"/>
@@ -37,7 +37,6 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewOne">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
-
             <magentoCron stepKey="runCronIndex" groups="index"/>
 
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store view-->
@@ -96,7 +95,7 @@
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.name$)}}" stepKey="goToStore1ProductPage3"/>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
-       <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
             <argument name="productPosition" value="2"/>
         </actionGroup>
@@ -129,7 +128,7 @@
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
         <assertNotContains stepKey="assertNotSeeProduct3">
             <actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
-			      <expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+            <expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
         </assertNotContains>
 
         <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
@@ -146,8 +145,8 @@
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
         <assertNotContains stepKey="assertNotSeeProduct1">
-			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
-			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
+            <actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
+            <expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
         </assertNotContains>
     </test>
 </tests>
