@@ -142,7 +142,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $label = $this->getAttribute()->getStoreLabel();
         $rules = $this->getAttribute()->getValidateRules();
-        $extension = $this->fileIo->getPathInfo($value['name'])[PATHINFO_EXTENSION];
+        $extension = $this->fileIo->getPathInfo($value['name'])['extension'];
 
         if (!empty($rules['file_extensions'])) {
             $extensions = explode(',', $rules['file_extensions']);
