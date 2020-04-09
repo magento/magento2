@@ -18,11 +18,12 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="FixedBundleProduct" stepKey="createFixedBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

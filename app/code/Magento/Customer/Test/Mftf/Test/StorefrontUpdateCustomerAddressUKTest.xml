@@ -14,7 +14,7 @@
             <title value="Update Customer Address (UK) in Storefront"/>
             <description value="Test log in to Storefront and Update Customer Address (UK) in Storefront"/>
             <testCaseId value="MC-10911"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
         </annotations>
