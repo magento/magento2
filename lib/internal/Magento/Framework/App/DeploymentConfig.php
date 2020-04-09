@@ -140,7 +140,7 @@ class DeploymentConfig
      */
     private function load()
     {
-        if (null === $this->data || empty($this->data)) {
+        if (empty($this->data)) {
             $this->data = $this->reader->load();
             if ($this->overrideData) {
                 $this->data = array_replace($this->data, $this->overrideData);
