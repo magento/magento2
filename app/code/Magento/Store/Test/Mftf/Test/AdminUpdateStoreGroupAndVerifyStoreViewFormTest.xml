@@ -34,7 +34,7 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteUpdatedStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open created Store group in grid-->

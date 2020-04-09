@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class PageActions
+ * Class prepare Page Actions
  */
 class PageActions extends Column
 {
@@ -111,6 +111,7 @@ class PageActions extends Column
                         ),
                         'label' => __('View'),
                         '__disableTmpl' => true,
+                        'target' => '_blank'
                     ];
                 }
             }

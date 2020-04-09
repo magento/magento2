@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ProductVideo\Test\TestCase\UpdateProductVideoTest" summary="Add Video to PCF">
         <variation name="UpdateProductVideoTestVariation1" summary="Edit Youtube URL" ticketId="MAGETWO-43664">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productVideo/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/16342611</data>
@@ -39,6 +40,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="GetVideoInfoTestVariation1" summary="Validate Youtube video info" ticketId="MAGETWO-43663">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productVideo/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/WMp2PvU2qi8</data>

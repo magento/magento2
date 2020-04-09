@@ -38,7 +38,7 @@
                 <argument name="product" value="updateVirtualProductTierPriceInStock"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openProductEditPageBySKU">

@@ -20,7 +20,8 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>

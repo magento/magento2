@@ -6,76 +6,145 @@
 
 namespace Magento\Multishipping\Test\Unit\Model\Cart;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Cart\CartTotalRepository;
+use Magento\Quote\Model\Cart\Totals as QuoteTotals;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Address\Rate as QuoteAddressRate;
+use Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin
+     * Stub cart id
+     */
+    private const STUB_CART_ID = 10;
+
+    /**
+     * Stub shipping method
+     */
+    private const STUB_SHIPPING_METHOD = 'flatrate_flatrate';
+
+    /**
+     * Stub shipping price
+     */
+    private const STUB_SHIPPING_PRICE = '10.00';
+
+    /**
+     * @var CartTotalRepositoryPlugin
      */
     private $modelRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartTotalRepository|MockObject
+     */
+    private $quoteTotalRepositoryMock;
+
+    /**
+     * @var CartRepositoryInterface|MockObject
      */
     private $quoteRepositoryMock;
 
+    /**
+     * @var QuoteTotals|MockObject
+     */
+    private $quoteTotalsMock;
+
+    /**
+     * @var QuoteAddress|MockObject
+     */
+    private $shippingAddressMock;
+
+    /**
+     * @var QuoteAddressRate|MockObject
+     */
+    private $shippingRateMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $storeMock;
+
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->modelRepository = new \Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin(
-            $this->quoteRepositoryMock
+        $objectManager = new ObjectManager($this);
+        $this->quoteTotalsMock = $this->createPartialMock(
+            QuoteTotals::class,
+            [
+                'getStore',
+                'getShippingAddress',
+                'getIsMultiShipping'
+            ]
         );
+        $this->shippingAddressMock = $this->createPartialMock(
+            QuoteAddress::class,
+            [
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getShippingAmount'
+            ]
+        );
+        $this->shippingRateMock = $this->createPartialMock(
+            QuoteAddressRate::class,
+            [
+                'getPrice'
+            ]
+        );
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteTotalRepositoryMock = $this->createMock(CartTotalRepository::class);
+        $this->modelRepository = $objectManager->getObject(CartTotalRepositoryPlugin::class, [
+            'quoteRepository' => $this->quoteRepositoryMock
+        ]);
     }
 
     /**
-     * Test quotTotal from cartRepository after get($cartId) function is called
+     * Test quoteTotal from cartRepository after get($cartId) function is called
      */
-    public function testAfterGet()
+    public function testAfterGetQuoteTotalAddedShippingPrice()
     {
-        $cartId = "10";
-        $shippingMethod = 'flatrate_flatrate';
-        $shippingPrice = '10.00';
-        $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Cart\Totals::class,
-            [
-            'getStore',
-            'getShippingAddress',
-            'getIsMultiShipping'
-            ]
-        );
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
-        $shippingAddressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [
-            'getShippingMethod',
-            'getShippingRateByCode',
-            'getShippingAmount'
-            ]
-        );
-        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with(self::STUB_CART_ID)
+            ->willReturn($this->quoteTotalsMock);
+        $this->quoteTotalsMock->expects($this->once())
+            ->method('getIsMultiShipping')
+            ->willReturn(true);
+        $this->quoteTotalsMock->expects($this->any())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
 
-        $shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
-        $shippingAddressMock->expects($this->any())->method('getShippingAmount')->willReturn($shippingPrice);
-        $shippingRateMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address\Rate::class,
-            [
-            'getPrice'
-            ]
-        );
-        $shippingAddressMock->expects($this->once())->method('getShippingRateByCode')->willReturn($shippingRateMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getShippingMethod')
+            ->willReturn(self::STUB_SHIPPING_METHOD);
+        $this->shippingAddressMock->expects($this->any())
+            ->method('getShippingAmount')
+            ->willReturn(self::STUB_SHIPPING_PRICE);
 
-        $shippingRateMock->expects($this->once())->method('getPrice')->willReturn($shippingPrice);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getShippingRateByCode')
+            ->willReturn($this->shippingRateMock);
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->any())->method('getBaseCurrency')->willReturnSelf();
+        $this->shippingRateMock->expects($this->once())
+            ->method('getPrice')
+            ->willReturn(self::STUB_SHIPPING_PRICE);
+
+        $this->quoteTotalsMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())
+            ->method('getBaseCurrency')
+            ->willReturnSelf();
 
         $this->modelRepository->afterGet(
-            $this->createMock(\Magento\Quote\Model\Cart\CartTotalRepository::class),
-            $quoteMock,
-            $cartId
+            $this->quoteTotalRepositoryMock,
+            $this->quoteTotalsMock,
+            self::STUB_CART_ID
         );
     }
 }

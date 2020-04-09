@@ -30,6 +30,7 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
             <createData entity="CustomBraintreeConfigurationData" stepKey="CustomBraintreeConfigurationData"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
@@ -105,7 +106,13 @@
         <grabTextFrom selector="{{CheckoutOrderSummarySection.additionalAddress}}" stepKey="additionalAddress"/>
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
         <see userInput="Billing Address" stepKey="seeBillingAddress"/>
-        <assertEquals stepKey="assertValuesAreEqual" actual="$billingAddr" expected="$shippingAddr"/>
-        <assertNotEquals stepKey="assertValuesAreNotEqual" actual="$billingAddr" expected="$additionalAddress"/>
+        <assertEquals stepKey="assertValuesAreEqual">
+			<actualResult type="const">$billingAddr</actualResult>
+			<expectedResult type="const">$shippingAddr</expectedResult>
+        </assertEquals>
+        <assertNotEquals stepKey="assertValuesAreNotEqual">
+			<actualResult type="const">$billingAddr</actualResult>
+			<expectedResult type="const">$additionalAddress</expectedResult>
+        </assertNotEquals>
     </test>
 </tests>

@@ -31,7 +31,7 @@
             </createData>
 
             <!-- Assign attribute to set -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
                 <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
@@ -81,7 +81,7 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -92,7 +92,7 @@
         </actionGroup>
 
         <!-- Disable Child Product -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openSimpleProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct">
             <argument name="productId" value="$createSimpleProduct.id$"/>
         </actionGroup>
         <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
