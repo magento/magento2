@@ -17,7 +17,7 @@
 
         <before>
             <!-- Login As Admin User -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Navigate To Marketing Search Terms Grid -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchTermPage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
