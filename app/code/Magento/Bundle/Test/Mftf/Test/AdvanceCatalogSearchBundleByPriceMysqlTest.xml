@@ -19,7 +19,7 @@
             <group value="Bundle"/>
             <group value="SearchEngineMysql"/>
             <skip>
-                <issueId value="MC-18948"/>
+                <issueId value="MC-20539"/>
             </skip>
         </annotations>
         <before>

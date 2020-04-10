@@ -20,7 +20,7 @@
             <group value="CatalogSearch"/>
             <group value="SearchEngineMysql"/>
             <skip>
-                <issueId value="MC-18948"/>
+                <issueId value="MC-20539"/>
             </skip>
         </annotations>
         <before>

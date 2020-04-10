@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
 /**
- * Implementation of the notification about MySQL search being deprecated.
+ * Implementation of the notification about MySQL search being removed.
  *
- * @deprecated
  * @see \Magento\ElasticSearch
  */
-class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
+class MySQLSearchRemovalNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
     /**
      * @var \Magento\Framework\Search\EngineResolverInterface
@@ -44,8 +43,8 @@ class MySQLSearchDeprecationNotification implements \Magento\Framework\Setup\Pat
     {
         if ($this->searchEngineResolver->getCurrentSearchEngine() === 'mysql') {
             $message = <<<MESSAGE
-Catalog Search is currently configured to use the MySQL engine, which has been deprecated. Consider migrating to one of
-the Elasticsearch engines now to ensure there are no service interruptions during your next upgrade.
+Catalog Search is currently configured to use the MySQL engine, which has been deprecated and removed. Migrate to one of
+the Elasticsearch engines to ensure there are no service interruptions.
 MESSAGE;
 
             $this->notifier->addNotice(__('Deprecation Notice'), __($message));

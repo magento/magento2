@@ -112,19 +112,4 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($defaultEngine, $this->model->getCurrentSearchEngine());
     }
-
-    /**
-     * Test getCurrentSearchEngine
-     * @expectedException \Exception
-     */
-    public function testGetCurrentSearchEngineWithoutEngine()
-    {
-        $engine = null;
-
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->willReturn($engine);
-
-        $this->model->getCurrentSearchEngine();
-    }
 }
