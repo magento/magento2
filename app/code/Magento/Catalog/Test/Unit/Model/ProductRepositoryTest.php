@@ -42,12 +42,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 
 /**
- * Class ProductRepositoryTest
- * @package Magento\Catalog\Test\Unit\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -175,7 +174,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @var ProductExtensionInterface|MockObject
      */
-    private $ProductExtensionInterface;
+    private $productExtension;
 
     /**
      * @var Json|MockObject

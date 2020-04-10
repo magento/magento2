@@ -15,19 +15,20 @@ use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResourceModel\Website\Link|MockObject */
     private $productWebsiteLink;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface|MockObject */
     private $storeManager;
 
     /** @var SaveHandler */
     private $saveHandler;
 
-    /** @var  ProductInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ProductInterface|MockObject */
     private $product;
 
     public function setUp()
