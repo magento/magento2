@@ -6,12 +6,8 @@
 
 namespace Magento\Translation\Controller;
 
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 
 /**
@@ -20,41 +16,12 @@ use Magento\Translation\Model\ResourceModel\StringUtils;
 class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        /* Called getConfig as workaround for setConfig bug */
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->objectManager->get(
-            StoreManagerInterface::class
-        )->getStore(
-            'default'
-        )->getConfig(
-            'dev/translate_inline/active'
-        );
-        $this->objectManager->get(
-            MutableScopeConfigInterface::class
-        )->setValue(
-            'dev/translate_inline/active',
-            true,
-            ScopeInterface::SCOPE_STORE,
-            'default'
-        );
-        parent::setUp();
-    }
-
-    /**
      * @param array $postData
      * @param string $expected
      *
      * @return void
      * @dataProvider indexActionDataProvider
+     * @magentoConfigFixture default_store dev/translate_inline/active 1
      */
     public function testIndexAction(array $postData, string $expected): void
     {

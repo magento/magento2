@@ -10,12 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontInlineTranslationOnCheckoutTest">
         <annotations>
+            <features value="Translation"/>
             <stories value="Inline Translation"/>
-            <title value="[Inline Translation] Inline translate on Checkout"/>
+            <title value="Inline translate on Checkout"/>
             <description value="As merchant I want to be able to rename text labels on Checkout steps"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-11505"/>
-            <useCaseId value="MC-31016"/>
+            <testCaseId value="MC-26322"/>
+            <useCaseId value="MC-31663"/>
             <group value="translation"/>
             <group value="checkout"/>
             <group value="developer_mode_only"/>
@@ -103,8 +104,11 @@
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
             <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart1">
+            <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <!-- 1. Enable Translate Inline For Storefront-->
@@ -376,8 +380,11 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterFullClean"/>
 
         <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage1">
             <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart2">
+            <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCartTranslated"/>
