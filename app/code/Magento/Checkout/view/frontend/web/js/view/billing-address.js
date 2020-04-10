@@ -163,6 +163,10 @@ function (
                     selectBillingAddress(newBillingAddress);
                     checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
                     checkoutData.setNewCustomerBillingAddress(addressData);
+                } else {
+                    this.focusInvalid();
+
+                    return false;
                 }
             }
             this.updateAddresses();
