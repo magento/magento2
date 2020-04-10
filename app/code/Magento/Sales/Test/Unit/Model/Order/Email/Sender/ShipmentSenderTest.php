@@ -12,6 +12,10 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
  */
 class ShipmentSenderTest extends AbstractSenderTest
 {
+    private const SHIPMENT_ID = 1;
+
+    private const ORDER_ID = 1;
+
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
      */
@@ -40,6 +44,7 @@ class ShipmentSenderTest extends AbstractSenderTest
             \Magento\Sales\Model\Order\Shipment::class,
             [
                 'getStore',
+                'getId',
                 '__wakeup',
                 'getOrder',
                 'setSendEmail',
@@ -54,6 +59,11 @@ class ShipmentSenderTest extends AbstractSenderTest
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+
+        $this->shipmentMock->method('getId')
+            ->willReturn(self::SHIPMENT_ID);
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
@@ -148,7 +158,9 @@ class ShipmentSenderTest extends AbstractSenderTest
                 ->with(
                     [
                         'order' => $this->orderMock,
+                        'order_id' => self::ORDER_ID,
                         'shipment' => $this->shipmentMock,
+                        'shipment_id' => self::SHIPMENT_ID,
                         'comment' => $customerNoteNotify ? $comment : '',
                         'billing' => $addressMock,
                         'payment_html' => 'payment',
@@ -288,7 +300,9 @@ class ShipmentSenderTest extends AbstractSenderTest
             ->with(
                 [
                     'order' => $this->orderMock,
+                    'order_id' => self::ORDER_ID,
                     'shipment' => $this->shipmentMock,
+                    'shipment_id' => self::SHIPMENT_ID,
                     'comment' => '',
                     'billing' => $addressMock,
                     'payment_html' => 'payment',
