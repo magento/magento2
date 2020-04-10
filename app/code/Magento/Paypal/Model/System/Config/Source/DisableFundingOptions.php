@@ -33,10 +33,10 @@ class DisableFundingOptions
     public function toOptionArray(): array
     {
         return array_map(
-            function ($k, $v) {
+            function ($key, $value) {
                 return [
-                    'value' => $k,
-                    'label' => __($v)
+                    'value' => $key,
+                    'label' => __($value)
                 ];
             },
             array_keys($this->disallowedFundingOptions),

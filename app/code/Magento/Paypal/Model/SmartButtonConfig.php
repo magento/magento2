@@ -41,9 +41,16 @@ class SmartButtonConfig
     private $scopeConfig;
 
     /**
+     * Maps the old checkout SDK configuration values to the current ones
      * @var array
      */
     private $disallowedFundingMap;
+
+    /**
+     * These payment methods will be added as parameters to the SDK url to disable them.
+     * @var array
+     */
+    private $unsupportedPaymentMethods;
 
     /**
      * Base url for Paypal SDK
@@ -56,13 +63,15 @@ class SmartButtonConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param array $defaultStyles
      * @param array $disallowedFundingMap
+     * @param array $unsupportedPaymentMethods
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
         $defaultStyles = [],
-        $disallowedFundingMap = []
+        $disallowedFundingMap = [],
+        $unsupportedPaymentMethods = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -70,6 +79,7 @@ class SmartButtonConfig
         $this->scopeConfig = $scopeConfig;
         $this->defaultStyles = $defaultStyles;
         $this->disallowedFundingMap = $disallowedFundingMap;
+        $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
     }
 
     /**
@@ -93,9 +103,7 @@ class SmartButtonConfig
         $disallowedFunding = implode(",", $this->getDisallowedFunding());
 
         return [
-            'merchantId' => $merchantId,
             'environment' => ( $isSandbox ? 'sandbox' : 'production'),
-            'locale' => $locale,
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
@@ -156,18 +164,26 @@ class SmartButtonConfig
      */
     private function getDisallowedFunding(): array
     {
-        $disallowedFunding = $this->config->getValue('disable_funding_options');
-        $isGuestPayPalAvailable = $this->config->getValue('solution_type') === PayPalConfig::EC_SOLUTION_TYPE_SOLE;
-        $disallowedFundingArray = $disallowedFunding ? explode(',', $disallowedFunding) : [];
-        $disallowedFundingArray = !$isGuestPayPalAvailable && !in_array('CARD', $disallowedFundingArray)
+        $disallowedFundingConfig = $this->config->getValue('disable_funding_options');
+        $disallowedFundingArray = $disallowedFundingConfig ? explode(',', $disallowedFundingConfig) : [];
+
+        //Disable "card" method if guest PayPal checkout is disabled
+        $isGuestPayPalCheckoutEnabled
+            = $this->config->getValue('solution_type') === PayPalConfig::EC_SOLUTION_TYPE_SOLE;
+        $disallowedFundingArray = !$isGuestPayPalCheckoutEnabled && !in_array('CARD', $disallowedFundingArray)
             ? array_merge_recursive(['CARD'], $disallowedFundingArray)
             : $disallowedFundingArray;
 
         // Map old configuration values to current ones
-        return array_map(function ($oldValue) {
+        $disallowedFundingArray = array_map(function ($oldValue) {
             return $this->disallowedFundingMap[$oldValue] ?? $oldValue;
         },
             $disallowedFundingArray);
+
+        //disable unsupported payment methods
+        $disallowedFundingArray = array_merge($disallowedFundingArray, $this->unsupportedPaymentMethods);
+
+        return $disallowedFundingArray;
     }
 
     /**
