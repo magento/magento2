@@ -9,47 +9,50 @@ namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\TierPriceInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
+class ConfigurablePriceResolverTest extends TestCase
 {
     /**
-     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LowestPriceOptionsProviderInterface|MockObject
      */
     private $lowestPriceOptionsProvider;
 
     /**
-     * @var \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
+     * @var ConfigurablePriceResolver
      */
     protected $resolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var MockObject|Configurable
      */
     protected $configurable;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var MockObject|PriceResolverInterface
      */
     protected $priceResolver;
 
     protected function setUp()
     {
-        $className = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class;
+        $className = Configurable::class;
         $this->configurable = $this->createPartialMock($className, ['getUsedProducts']);
 
-        $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
+        $className = PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
         $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
-            \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver::class,
+            ConfigurablePriceResolver::class,
             [
                 'priceResolver' => $this->priceResolver,
                 'configurable' => $this->configurable,
@@ -69,13 +72,13 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     public function testResolvePrice($variantPrices, $expectedPrice)
     {
         $product = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
+            Product::class
         )->disableOriginalConstructor()->getMock();
 
         $product->expects($this->never())->method('getSku');
 
         $products = array_map(function () {
-            return $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            return $this->getMockBuilder(Product::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }, $variantPrices);
@@ -149,9 +152,9 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
      * Retrieve mock of \Magento\Framework\Pricing\Amount\AmountInterface object
      *
      * @param float $amount
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getAmountMock($amount)
+    private function getAmountMock($amount): MockObject
     {
         $amountMock = $this->getMockBuilder(AmountInterface::class)
             ->setMethods(['getValue', 'getBaseAmount'])
@@ -170,9 +173,9 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
      * Retrieve mock of \Magento\Catalog\Pricing\Price\TierPriceInterface object
      *
      * @param array $amounts
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getTierPriceMock(array $amounts)
+    private function getTierPriceMock(array $amounts): MockObject
     {
         $tierPrices = [];
         foreach ($amounts as $amount) {
@@ -192,10 +195,10 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve mock of \Magento\Framework\Pricing\PriceInfo\Base object
      *
-     * @param PHPUnit_Framework_MockObject_MockObject $tierPriceMock
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @param MockObject $tierPriceMock
+     * @return MockObject
      */
-    private function getPriceInfoMock(PHPUnit_Framework_MockObject_MockObject $tierPriceMock)
+    private function getPriceInfoMock(MockObject $tierPriceMock): MockObject
     {
         $priceInfoMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
@@ -213,11 +216,11 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve mocks of \Magento\ConfigurableProduct\Model\Product\Type\Configurable object
      *
-     * @param PHPUnit_Framework_MockObject_MockObject[] $productMocks
-     * @param PHPUnit_Framework_MockObject_MockObject $product
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @param MockObject[] $productMocks
+     * @param MockObject $product
+     * @return MockObject
      */
-    private function getProductTypeMock(array $productMocks, PHPUnit_Framework_MockObject_MockObject $product)
+    private function getProductTypeMock(array $productMocks, MockObject $product): MockObject
     {
         $productTypeMock = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
@@ -302,7 +305,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
                     [
                         'simple_price' => 0,
                         'tier_prices' => []
-                    ],[
+                    ], [
                         'simple_price' => 10,
                         'tier_prices' => []
                     ],
@@ -313,7 +316,8 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
                 ],
                 $expectedPrice = 0.00,
             ],
-            'Multiple variants at simple price 10 without tier prices, simple price 15 with tier prices 10, 5, simple price 20 with tier prices 15, 10. 4.5, should return 4.5 (float)' => [
+            'Multiple variants at simple price 10 without tier prices, simple price 15 with tier prices 10, 5,' .
+            ' simple price 20 with tier prices 15, 10. 4.5, should return 4.5 (float)' => [
                 $variantPrices = [
                     [
                         'simple_price' => 10,
