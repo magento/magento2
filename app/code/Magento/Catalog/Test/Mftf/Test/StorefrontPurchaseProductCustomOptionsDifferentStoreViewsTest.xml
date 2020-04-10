@@ -200,7 +200,7 @@
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickFirstRowOrderGridActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 

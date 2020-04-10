@@ -84,7 +84,7 @@
         <!-- Create invoice -->
         <comment userInput="Create invoice" stepKey="createInvoice"/>
 
-        <actionGroup ref="AdminClickFirstRowOrderGridActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
@@ -95,7 +95,7 @@
         <comment userInput="Create Shipment for the order" stepKey="createShipmentForOrder"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage2"/>
         <waitForPageLoad time="30" stepKey="waitForOrderListPageLoading"/>
-        <actionGroup ref="AdminClickFirstRowOrderGridActionGroup" stepKey="openOrderPageForShip"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrderPageForShip"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitForShipmentPagePage"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>

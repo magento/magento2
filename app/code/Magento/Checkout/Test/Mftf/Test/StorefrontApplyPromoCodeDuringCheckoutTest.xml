@@ -84,7 +84,7 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickFirstRowOrderGridActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <scrollTo selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="scrollToOrderTotalSection"/>
         <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$$createProduct.price$$" stepKey="checkTotal"/>
     </test>

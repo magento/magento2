@@ -94,7 +94,7 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickFirstRowOrderGridActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!--Verify that Created order is in Processing status-->
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus"/>
