@@ -17,10 +17,10 @@
             <severity value="CRITICAL"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
-<!--            <group value="SearchEngineMysql"/>-->
-<!--            <skip>-->
-<!--                <issueId value="MC-18948"/>-->
-<!--            </skip>-->
+            <group value="SearchEngineElasticsearch"/>
+            <skip>
+                <issueId value="MC-21228"/>
+            </skip>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
             <argument name="productName" value="abc"/>

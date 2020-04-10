@@ -17,10 +17,10 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-20389"/>
             <group value="ConfigurableProduct"/>
-<!--            <group value="SearchEngineMysql"/>-->
-<!--            <skip>-->
-<!--                <issueId value="MC-18948"/>-->
-<!--            </skip>-->
+            <group value="SearchEngineElasticsearch"/>
+            <skip>
+                <issueId value="MC-21228"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>

@@ -17,10 +17,10 @@
             <description value="New user signup and browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
-<!--            <group value="SearchEngineMysql"/>-->
-<!--            <skip>-->
-<!--                <issueId value="MC-18948"/>-->
-<!--            </skip>-->
+            <group value="SearchEngineElasticsearch"/>
+            <skip>
+                <issueId value="MC-21228"/>
+            </skip>
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
