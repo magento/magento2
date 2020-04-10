@@ -5,9 +5,14 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleListTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for module list
+ */
+class ModuleListTest extends TestCase
 {
     /**
      * Fixture for all modules' meta-information
@@ -24,12 +29,12 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     private static $enabledFixture = ['foo' => 1, 'bar' => 0];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $loader;
 
