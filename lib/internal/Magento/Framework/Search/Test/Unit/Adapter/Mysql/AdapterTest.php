@@ -10,7 +10,7 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Mysql Adapter test
+ * Mysql search adapter test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

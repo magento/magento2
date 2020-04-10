@@ -13,7 +13,7 @@ use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AdapterTest
+ * Mysql search adapter test
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled

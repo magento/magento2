@@ -43,6 +43,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $objectManager = Bootstrap::getObjectManager();
         $layer = $objectManager->create(\Magento\Catalog\Model\Layer\Category::class);
         /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
