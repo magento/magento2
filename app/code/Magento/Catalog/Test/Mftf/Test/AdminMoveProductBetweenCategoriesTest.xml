@@ -158,7 +158,7 @@
 
         <!-- # Category should open successfully # <product1> should be absent on the page -->
         <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
 
         <!-- Log in to the backend: Admin user is logged in-->

@@ -30,12 +30,16 @@
                 <field key="name">Product Simple AAA</field>
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+            <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
+            <magentoCLI stepKey="flushConfigCache" command="cache:flush config"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
 
         <after>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPageDefaults"/>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
@@ -57,6 +61,9 @@
         </actionGroup>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <dontSeeInCurrentUrl stepKey="assertRedirectedToFirstPage" url="?p=2"/>
+
         <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
             <argument name="product" value="$createFirstProduct$"/>
         </actionGroup>
