@@ -8,13 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Login As Customer Login action is absent on Customer page -->
-    <actionGroup name="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup">
+    <!-- Verify Login As Customer Login action is works properly from Customer page -->
+    <actionGroup name="AdminLoginAsCustomerLoginFromCustomerPageActionGroup">
         <arguments>
             <argument name="customerId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
-        <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>
+        <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
+        <switchToNextTab stepKey="switchToNewTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

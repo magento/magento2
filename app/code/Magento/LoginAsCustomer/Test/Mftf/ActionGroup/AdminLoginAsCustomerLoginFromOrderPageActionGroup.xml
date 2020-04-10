@@ -8,13 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Login As Customer Login action is absent on Order page -->
-    <actionGroup name="AdminLoginAsCustomerAbsentOnOrderPageActionGroup">
+    <!-- Verify Login As Customer Login action is works properly from Order grid page -->
+    <actionGroup name="AdminLoginAsCustomerLoginFromOrderPageActionGroup">
         <arguments>
             <argument name="orderId" type="string"/>
         </arguments>
         <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="gotoOrderPage"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
-        <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
+        <switchToNextTab stepKey="switchToNewTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

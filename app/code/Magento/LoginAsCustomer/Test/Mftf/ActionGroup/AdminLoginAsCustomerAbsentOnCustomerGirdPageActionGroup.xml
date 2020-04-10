@@ -11,6 +11,7 @@
     <!-- Verify Login As Customer Login action is absent on Customer grid page -->
     <actionGroup name="AdminLoginAsCustomerAbsentOnCustomerGridPageActionGroup">
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="gotoCustomerGridPage"/>
+        <waitForPageLoad stepKey="waitForCustomerGridPageLoad"/>
         <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>
     </actionGroup>
 </actionGroups>

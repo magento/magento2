@@ -11,6 +11,7 @@
     <!-- Verify Login As Customer is not available by direct url -->
     <actionGroup name="AdminLoginAsCustomerLogPageNotAvailableActionGroup">
         <amOnPage url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="openAdminLoginAsCustomerLogPage"/>
+        <waitForPageLoad stepKey="waitForLoginAsCustomerLogPageLoad"/>
         <see selector="{{AdminHeaderSection.pageHeading}}" userInput="404 Error" stepKey="see404PageHeading"/>
     </actionGroup>
 </actionGroups>
