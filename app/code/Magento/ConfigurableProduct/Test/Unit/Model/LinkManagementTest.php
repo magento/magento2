@@ -149,7 +149,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getData'])
             ->getMock();
-        $extensionAttributesMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -158,7 +158,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
                     'setConfigurableProductLinks'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $optionMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductAttribute', 'getPosition', 'getAttributeId'])

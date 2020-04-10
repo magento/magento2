@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
-use Magento\Catalog\Api\Data\ProductExtension;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Website\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
@@ -27,10 +27,10 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->websiteLink = $this->getMockBuilder(ResourceModel\Website\Link::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributes = $this->getMockBuilder(ProductExtension::class)
+        $this->extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['setWebsiteIds', 'getWebsiteIds'])
             ->disableArgumentCloning()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->readHandler = new ReadHandler($this->websiteLink);
     }
 

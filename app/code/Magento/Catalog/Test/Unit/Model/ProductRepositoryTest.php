@@ -175,7 +175,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @var ProductExtensionInterface|MockObject
      */
-    private $productExtension;
+    private $ProductExtensionInterface;
 
     /**
      * @var Json|MockObject
