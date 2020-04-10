@@ -7,28 +7,16 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOrderChangeByCustomerEmailActionGroup">
+    <actionGroup name="AdminOrderBulkActionOnGridActionGroup">
         <annotations>
             <description>
-                Changes all orders found by Customer Email field on Admin Order Grid page.
+                Massive action for all rows on Admin Order Grid page.
             </description>
         </annotations>
         <arguments>
-            <argument name="customerEmail" type="string"/>
             <argument name="actionLabel" type="string" defaultValue="Cancel"/>
         </arguments>
 
-        <!-- Filter orders by Customer Email -->
-        <click selector="{{AdminDataGridFilterSection.filterExpand}}" stepKey="openOrderFilters"/>
-        <fillField
-            selector="{{AdminDataGridFilterSection.inputFieldByNameAttr('customer_email')}}"
-            userInput="{{customerEmail}}"
-            stepKey="fillCustomerEmailFilter"
-        />
-        <click selector="{{AdminDataGridFilterSection.apply}}" stepKey="applyOrderFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitAfterApplyFilters"/>
-
-        <!-- Change found orders -->
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
         <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="selectAllOrders"/>
         <click selector="{{AdminGridSelectRows.bulkActionDropdown}}" stepKey="clickActionDropdown"/>
