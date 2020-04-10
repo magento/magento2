@@ -33,6 +33,7 @@
 
             <!--Create New Customer-->
             <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
 
