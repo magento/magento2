@@ -152,10 +152,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $productId = $object->getProductId();
         if ($this->processIndexEvents) {
-            $this->addCommitCallback(function () use ($productId) {
-                $this->stockIndexerProcessor->reindexRow($productId);
-            });
-
+            $this->stockIndexerProcessor->reindexRow($productId);
         }
         $fields = [
             'is_in_stock',
