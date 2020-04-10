@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CatalogProductsSection">
+        <element name="catalogItem" type="button" selector="//*[@id='menu-magento-catalog-catalog']/a/span"/>
+        <element name="productItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-products']/a"/>
+        <element name="storesItem" type="button" selector="//*[@id='menu-magento-backend-stores']/a/span"/>
+        <element name="searchDefaultLabelField" type="input" selector="//*[@id='attributeGrid_filter_frontend_label']"/>
+        <element name="searchButton" type="button" selector="//div[@class='admin__filter-actions']//*[contains(text(), 'Search')]"/>
+        <element name="storesProductItem" type="button" selector="//*[@data-ui-id='menu-magento-catalog-catalog-attributes-attributes']/a"/>
+        <element name="createdAttributeItem" type="button" selector="//td[contains(@class, 'col-label') and normalize-space()='design']"/>
+        <element name="deleteAttributeItem" type="button" selector="//*[@id='delete']"/>
+        <element name="okButton" type="button" selector="//footer[@class='modal-footer']//*[contains(text(),'OK')]"/>
+        <element name="messageSuccessSavedProduct" type="button" selector="//div[@data-ui-id='messages-message-success']"/>
+        <element name="resetFilter" type="button" selector="//span[contains(text(), 'Reset Filter')]"/>
+    </section>
+</sections>

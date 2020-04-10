@@ -20,7 +20,7 @@
             <group value="Cms"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Cms Pages -->
             <createData entity="_newDefaultCmsPage" stepKey="createFirstCmsPage"/>
