@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct8"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct9"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct10"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
