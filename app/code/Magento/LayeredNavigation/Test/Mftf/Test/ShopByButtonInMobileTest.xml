@@ -19,7 +19,7 @@
             <group value="LayeredNavigation"/>
             <group value="SearchEngineElasticsearch"/>
 <!--            <skip>-->
-<!--                <issueId value="MC-18948"/>-->
+<!--                <issueId value="MC-21228"/>-->
 <!--            </skip>-->
         </annotations>
         <before>
