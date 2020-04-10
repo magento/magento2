@@ -69,10 +69,22 @@ class SearchResultApplier implements SearchResultApplierInterface
         foreach ($items as $item) {
             $ids[] = (int)$item->getId();
         }
-        $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
-        $orderList = join(',', $ids);
-        $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-        $this->collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
+        $this->collection->getSelect()
+            ->where('e.entity_id IN (?)', $ids)
+            ->reset(\Magento\Framework\DB\Select::ORDER);
+        $sortOrder = $this->searchResult->getSearchCriteria()
+            ->getSortOrders();
+        if (!empty($sortOrder['price']) && $this->collection->getLimitationFilters()->isUsingPriceIndex()) {
+            $sortDirection = $sortOrder['price'];
+            $this->collection->getSelect()
+                ->order(
+                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$sortDirection}")
+                );
+        } else {
+            $orderList = join(',', $ids);
+            $this->collection->getSelect()
+                ->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
+        }
     }
 
     /**
