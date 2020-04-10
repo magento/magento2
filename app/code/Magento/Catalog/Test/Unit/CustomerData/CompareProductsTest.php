@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\CustomerData;
@@ -17,8 +16,10 @@ use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompareProductsTest extends \PHPUnit\Framework\TestCase
+class CompareProductsTest extends TestCase
 {
     /**
      * @var CompareProducts
@@ -26,27 +27,27 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Compare|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $helperMock;
-
-    /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $productUrlMock;
-
-    /**
-     * @var Output|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $outputHelperMock;
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Compare|MockObject
+     */
+    private $helperMock;
+
+    /**
+     * @var Url|MockObject
+     */
+    private $productUrlMock;
+
+    /**
+     * @var Output|MockObject
+     */
+    private $outputHelperMock;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
@@ -58,6 +59,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         ProductInterface::NAME => 'getName'
     ];
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -92,9 +96,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare compare items collection.
      *
      * @param array $items
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getItemCollectionMock(array $items) : \PHPUnit_Framework_MockObject_MockObject
+    private function getItemCollectionMock(array $items):MockObject
     {
         $itemCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -113,7 +117,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * @param array $dataSet
      * @return array
      */
-    private function prepareProductsWithCorrespondingMocks(array $dataSet) : array
+    private function prepareProductsWithCorrespondingMocks(array $dataSet):array
     {
         $items = [];
         $urlMap = [];
@@ -152,9 +156,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
      * Prepare mock of product object.
      *
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getProductMock(array $data) : \PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock(array $data):MockObject
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -169,7 +173,10 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         return $product;
     }
 
-    public function testGetSectionData()
+    /**
+     * @return void
+     */
+    public function testGetSectionData():void
     {
         $dataSet = [
             ['id' => 1, 'name' => 'product#1'],
@@ -227,7 +234,10 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetSectionDataNoItems()
+    /**
+     * @return void
+     */
+    public function testGetSectionDataNoItems():void
     {
         $count = 0;
 
@@ -252,7 +262,10 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetSectionDataSingleItem()
+    /**
+     * @return void
+     */
+    public function testGetSectionDataSingleItem():void
     {
         $count = 1;
 
