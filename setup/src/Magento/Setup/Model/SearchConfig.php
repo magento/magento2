@@ -69,7 +69,8 @@ class SearchConfig
     {
         if (isset($searchOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
             $selectedEngine = $searchOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE];
-            if (!in_array($selectedEngine, SearchConfigOptionsList::AVAILABLE_SEARCH_ENGINES)) {
+            $availableEngines = $this->searchConfigOptionsList->getAvailableSearchEngineList();
+            if (!isset($availableEngines[$selectedEngine])) {
                 throw new SetupException("Search engine '{$selectedEngine}' is not an available search engine.");
             }
         }

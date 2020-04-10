@@ -17,8 +17,6 @@ use Magento\Framework\Setup\Option\TextConfigOption;
  */
 class SearchConfigOptionsList
 {
-    const AVAILABLE_SEARCH_ENGINES = ['elasticsearch5', 'elasticsearch6', 'elasticsearch7'];
-
     /**
      * Input key for the options
      */
@@ -30,7 +28,6 @@ class SearchConfigOptionsList
     const INPUT_KEY_ELASTICSEARCH_PASSWORD = 'elasticsearch-password';
     const INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX = 'elasticsearch-index-prefix';
     const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
-    const INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION = 'skip-elasticsearch-validation';
 
     /**
      * Default values
@@ -52,9 +49,9 @@ class SearchConfigOptionsList
             new SelectConfigOption(
                 self::INPUT_KEY_SEARCH_ENGINE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                self::AVAILABLE_SEARCH_ENGINES,
+                array_keys($this->getAvailableSearchEngineList()),
                 '',
-                'Search engine.',
+                'Search engine. Values: ' . implode(', ', array_keys($this->getAvailableSearchEngineList())),
                 self::DEFAULT_SEARCH_ENGINE
             ),
             new TextConfigOption(
@@ -102,12 +99,6 @@ class SearchConfigOptionsList
                 '',
                 'Elasticsearch server timeout.',
                 self::DEFAULT_ELASTICSEARCH_TIMEOUT
-            ),
-            new FlagConfigOption(
-                self::INPUT_KEY_ELASTICSEARCH_SKIP_VALIDATION,
-                '',
-                'Skip Elasticsearch connection validation.',
-                null
             )
         ];
     }

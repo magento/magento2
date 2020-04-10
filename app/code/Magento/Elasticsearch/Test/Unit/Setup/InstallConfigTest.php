@@ -112,30 +112,4 @@ class InstallConfigTest extends TestCase
 
         $this->installConfig->configure($inputOptions);
     }
-
-    public function testConfigureWithSkipValidation()
-    {
-        $inputOptions = [
-            'search-engine' => 'elasticsearch5',
-            'elasticsearch-host' => 'localhost',
-            'elasticsearch-port' => '9200',
-            'skip-elasticsearch-validation' => true
-        ];
-
-        $this->configWriterMock
-            ->expects($this->at(0))
-            ->method('save')
-            ->with('catalog/search/engine', 'elasticsearch5');
-        $this->configWriterMock
-            ->expects($this->at(1))
-            ->method('save')
-            ->with('catalog/search/elasticsearch5_server_hostname', 'localhost');
-        $this->configWriterMock
-            ->expects($this->at(2))
-            ->method('save')
-            ->with('catalog/search/elasticsearch5_server_port', '9200');
-        $this->validatorMock->expects($this->never())->method('validate');
-
-        $this->installConfig->configure($inputOptions);
-    }
 }
