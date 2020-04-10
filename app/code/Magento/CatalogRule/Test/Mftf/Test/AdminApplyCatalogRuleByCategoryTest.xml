@@ -27,7 +27,7 @@
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>

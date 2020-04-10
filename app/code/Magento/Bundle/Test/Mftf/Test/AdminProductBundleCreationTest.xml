@@ -23,9 +23,9 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <!-- Admin Login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>

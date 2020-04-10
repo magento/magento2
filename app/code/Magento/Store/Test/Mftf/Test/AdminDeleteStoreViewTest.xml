@@ -51,8 +51,7 @@
         </actionGroup>
 
         <!--Go to storefront and verify AssertStoreNotOnFrontend-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
         <dontSee selector="{{StorefrontHeaderSection.storeViewList(storeViewData.name)}}" stepKey="dontSeeAssertStoreViewNameOnStorefront"/>
     </test>
 </tests>
