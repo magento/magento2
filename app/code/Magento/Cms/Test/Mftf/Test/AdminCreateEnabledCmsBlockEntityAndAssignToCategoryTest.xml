@@ -40,6 +40,7 @@
             <argument name="value" value="Static block only"/>
         </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <actionGroup ref="AssertStorefrontTextOnCategoryPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>
