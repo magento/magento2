@@ -29,7 +29,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout" />
         </after>
 
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="OpenAdminCatergoryIndexPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenAdminCatergoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="ClickOnAddRootButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="FillCategoryField"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>

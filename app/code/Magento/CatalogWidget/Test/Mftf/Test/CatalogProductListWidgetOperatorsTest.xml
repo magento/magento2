@@ -53,8 +53,7 @@
         </actionGroup>
 
         <!--Go to Catalog > Categories (choose category where created products)-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoadAddProducts" after="onCategoryIndexPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandAll" after="waitForCategoryPageLoadAddProducts"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickCategoryLink"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
