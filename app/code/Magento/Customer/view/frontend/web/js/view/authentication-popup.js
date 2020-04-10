@@ -55,7 +55,10 @@ define([
             if (this.modalWindow) {
                 $(this.modalWindow).modal('openModal');
             } else {
-                require(['Magento_Ui/js/modal/alert'], function (alert) {
+                require([
+                    'mage/translate',
+                    'Magento_Ui/js/modal/alert'
+                ], function ($t, alert) {
                     alert({
                         content: $t('Guest checkout is disabled.')
                     });
@@ -86,6 +89,8 @@ define([
                     loginAction(loginData);
                 }
             });
+
+            return false;
         }
     });
 });
