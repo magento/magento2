@@ -60,10 +60,11 @@ var config = {
     }
 };
 
+/* eslint-disable max-depth */
 /**
  * Adds polyfills only for browser contexts which prevents bundlers from including them.
  */
-if (typeof window !== "undefined" && window.document) {
+if (typeof window !== 'undefined' && window.document) {
     /**
      * Polyfill localStorage and sessionStorage for browsers that do not support them.
      */
@@ -78,6 +79,7 @@ if (typeof window !== "undefined" && window.document) {
         config.deps.push('mage/polyfill');
     }
 }
+/* eslint-enable max-depth */
 
 require(['jquery'], function ($) {
     'use strict';
