@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+//phpcs:ignore
 $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
@@ -101,6 +102,7 @@ return [
             'header'      => 'Step 5: Configure Catalog Search',
             'controller'  => 'configureCatalogSearchController',
             'nav'         => true,
+            'validate'    => true,
             'order'       => 6,
             'type'        => 'install'
         ],

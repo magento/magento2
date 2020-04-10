@@ -133,29 +133,46 @@ class RequestDataConverter
     private function convertSearchConfigForm(array $source): array
     {
         $result = [];
+        if (!isset($source['search'])) {
+            return $result;
+        }
         $result[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE] =
-            isset($source['search']['engine']) ? $source['search']['engine'] : '';
+            $this->getValueFromArray($source['search'], 'engine', '');
 
         $esConfig = $source['search']['elasticsearch'];
         $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_HOST] =
-            isset($esConfig['hostname']) ? $esConfig['hostname'] : '';
+            $this->getValueFromArray($esConfig, 'hostname', '');
         $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PORT] =
-            isset($esConfig['port']) ? $esConfig['port'] : '';
+            $this->getValueFromArray($esConfig, 'port', '');
         $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX] =
-            isset($esConfig['indexPrefix']) ? $esConfig['indexPrefix'] : '';
+            $this->getValueFromArray($esConfig, 'indexPrefix', '');
         $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_TIMEOUT] =
-            isset($esConfig['timeout']) ? $esConfig['timeout'] : '';
+            $this->getValueFromArray($esConfig, 'timeout', '');
+
         if (isset($esConfig['enableAuth']) && true === $esConfig['enableAuth']) {
             $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] = $esConfig['enableAuth'];
             $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_USERNAME] =
-                isset($esConfig['username']) ? $esConfig['username'] : '';
+                $this->getValueFromArray($esConfig, 'username', '');
             $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_PASSWORD] =
-                isset($esConfig['password']) ? $esConfig['password'] : '';
+                $this->getValueFromArray($esConfig, 'password', '');
         } else {
             $result[SearchConfigOptionsList::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH] =
-                isset($esConfig['enableAuth']) ? $esConfig['enableAuth'] : false;
+                $this->getValueFromArray($esConfig, 'enableAuth', false);
         }
 
         return $result;
+    }
+
+    /**
+     * Get value from array by key, or return default
+     *
+     * @param array $array
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    private function getValueFromArray(array $array, string $key, $defaultValue = null)
+    {
+        return isset($array[$key]) ? $array[$key] : $defaultValue;
     }
 }

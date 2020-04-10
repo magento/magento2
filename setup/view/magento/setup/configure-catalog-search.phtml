@@ -83,10 +83,16 @@
                     tooltip-trigger="focus"
                     tooltip-append-to-body="true"
                     type="text"
+                    ng-class="{'invalid' : searchConfig.elasticsearchHost.$invalid && searchConfig.submitted}"
                     name="elasticsearchHost"
                     ng-model="search.config.elasticsearch.hostname"
                     required
                 >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchHost.$invalid">
+                        Hostname is required.
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row form-row">
@@ -104,10 +110,17 @@
                     tooltip-trigger="focus"
                     tooltip-append-to-body="true"
                     type="text"
+                    ng-pattern="/^[0-9]+$/"
+                    ng-class="{'invalid' : searchConfig.elasticsearchPort.$invalid && searchConfig.submitted}"
                     name="elasticsearchPort"
                     ng-model="search.config.elasticsearch.port"
                     required
                 >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchPort.$invalid">
+                        Port is required and must be a numeric value.
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row form-row">
@@ -187,7 +200,6 @@
                     type="text"
                     name="elasticsearchIndexPrefix"
                     ng-model="search.config.elasticsearch.indexPrefix"
-                    required
                 >
             </div>
         </div>
@@ -206,10 +218,17 @@
                     tooltip-trigger="focus"
                     tooltip-append-to-body="true"
                     type="text"
+                    ng-pattern="/^[0-9]+$/"
+                    ng-class="{'invalid' : searchConfig.elasticsearchTimeout.$invalid && searchConfig.submitted}"
                     name="elasticsearchTimeout"
                     ng-model="search.config.elasticsearch.timeout"
                     required
                 >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchTimeout.$invalid">
+                        Please enter a number greater than 0.
+                    </span>
+                </div>
             </div>
         </div>
         <div class="row form-row">

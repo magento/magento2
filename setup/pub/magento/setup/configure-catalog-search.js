@@ -76,5 +76,5 @@ angular.module('configure-catalog-search', ['ngStorage', 'ngSanitize'])
                         'An unknown error occurred. Please check configuration and try again.';
                     $scope.checking = false;
                 });
-        }
+        };
     }]);
