@@ -21,10 +21,7 @@
 
         <before>
             <!--Create product-->
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product" entity="SimpleProduct">
-                <requiredEntity createDataKey="category"/>
-            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
         </before>
 
         <!--Go to Storefront-->
@@ -41,9 +38,13 @@
             <argument name="message" value="Thank you for registering with Main Website Store."/>
         </actionGroup>
 
-        <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
-            <argument name="product" value="$$product$$"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
         </actionGroup>
 
         <!--Proceed to shipment-->
@@ -58,6 +59,7 @@
 
         <!--Fill cart data-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
@@ -71,8 +73,7 @@
 
         <after>
             <!--Delete created Product-->
-            <deleteData stepKey="deleteProduct" createDataKey="product"/>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
         </after>
     </test>
 </tests>
