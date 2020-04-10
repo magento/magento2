@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -64,9 +63,8 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      *
      * @param SaleableInterface|Product $product
      * @return float
-     * @throws LocalizedException
      */
-    public function resolvePrice(SaleableInterface $product)
+    public function resolvePrice(SaleableInterface $product): float
     {
         $price = null;
 
@@ -89,7 +87,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param SaleableInterface|Product $product
      * @return bool
      */
-    private function hasTierPrice(SaleableInterface $product)
+    private function hasTierPrice(SaleableInterface $product): bool
     {
         /** @var ProductInterface $subProduct */
         foreach ($this->getChildProducts($product) as $subProduct) {
@@ -108,7 +106,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param ProductInterface $product
      * @return array
      */
-    private function getTierPriceList(ProductInterface $product)
+    private function getTierPriceList(ProductInterface $product): array
     {
         $productInfo = $product->getPriceInfo();
         /** @var TierPrice $tierPrice*/
@@ -123,7 +121,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param SaleableInterface|Product $product
      * @return ProductInterface[]
      */
-    private function getChildProducts(SaleableInterface $product)
+    private function getChildProducts(SaleableInterface $product): array
     {
         $configurableProduct = $product->getTypeInstance();
         if ($configurableProduct instanceof Configurable) {
@@ -139,7 +137,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param SaleableInterface|Product $product
      * @return float
      */
-    private function getMinimalTierPrice(SaleableInterface $product)
+    private function getMinimalTierPrice(SaleableInterface $product): float
     {
         $tierPrices = [];
         foreach ($this->getChildProducts($product) as $subProduct) {
@@ -157,6 +155,6 @@ class ConfigurablePriceResolver implements PriceResolverInterface
             return min($tierPrices);
         }
 
-        return (float) 0;
+        return 0;
     }
 }

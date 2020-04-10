@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\TierPriceInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -88,49 +87,6 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
 
         $actualPrice = $this->resolver->resolvePrice($product);
         self::assertSame($expectedPrice, $actualPrice);
-    }
-
-    /**
-     * @return array
-     */
-    public function resolvePriceDataProvider()
-    {
-        return [
-            'Single variant at price 0.00 (float), should return 0.00 (float)' => [
-                $variantPrices = [
-                    0.00,
-                ],
-                $expectedPrice = 0.00,
-            ],
-            'Single variant at price 5 (integer), should return 5.00 (float)' => [
-                $variantPrices = [
-                    5,
-                ],
-                $expectedPrice = 5.00,
-            ],
-            'Single variants at price null (null), should return 0.00 (float)' => [
-                $variantPrices = [
-                    null,
-                ],
-                $expectedPrice = 0.00,
-            ],
-            'Multiple variants at price 0, 10, 20, should return 0.00 (float)' => [
-                $variantPrices = [
-                    0,
-                    10,
-                    20,
-                ],
-                $expectedPrice = 0.00,
-            ],
-            'Multiple variants at price 10, 0, 20, should return 0.00 (float)' => [
-                $variantPrices = [
-                    10,
-                    0,
-                    20,
-                ],
-                $expectedPrice = 0.00,
-            ],
-        ];
     }
 
     /**
@@ -272,6 +228,49 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productMocks);
 
         return $productTypeMock;
+    }
+
+    /**
+     * @return array
+     */
+    public function resolvePriceDataProvider()
+    {
+        return [
+            'Single variant at price 0.00 (float), should return 0.00 (float)' => [
+                $variantPrices = [
+                    0.00,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Single variant at price 5 (integer), should return 5.00 (float)' => [
+                $variantPrices = [
+                    5,
+                ],
+                $expectedPrice = 5.00,
+            ],
+            'Single variants at price null (null), should return 0.00 (float)' => [
+                $variantPrices = [
+                    null,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 0, 10, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    0,
+                    10,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
+            'Multiple variants at price 10, 0, 20, should return 0.00 (float)' => [
+                $variantPrices = [
+                    10,
+                    0,
+                    20,
+                ],
+                $expectedPrice = 0.00,
+            ],
+        ];
     }
 
     /**
