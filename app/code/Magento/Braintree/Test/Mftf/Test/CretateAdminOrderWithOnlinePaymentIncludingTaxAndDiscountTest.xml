@@ -43,8 +43,10 @@
                 <field key="group_id">3</field>
             </createData>
 
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
             <!--Login as Admin User-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

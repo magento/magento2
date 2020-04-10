@@ -43,7 +43,6 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      *
      * @param string $methodCode
      * @param string $methodTitle
@@ -89,7 +88,6 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      */
     public function testSetPurchaseOrderPaymentMethod()
     {
@@ -101,7 +99,7 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
+    cart_id: "{$maskedQuoteId}",
     payment_method: {
       code: "{$methodCode}"
       purchase_order_number: "{$poNumber}"
@@ -147,7 +145,7 @@ QUERY;
         return <<<QUERY
 mutation {
   setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
+    cart_id: "{$maskedQuoteId}",
     payment_method: {
       code: "{$methodCode}"
     }
