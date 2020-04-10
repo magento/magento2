@@ -68,8 +68,7 @@
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
