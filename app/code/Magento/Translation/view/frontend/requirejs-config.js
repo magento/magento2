@@ -13,7 +13,6 @@ var config = {
         }
     },
     deps: [
-        'mage/translate-inline',
         'mageTranslationDictionary'
     ]
 };
