@@ -71,8 +71,7 @@
         </after>
 
         <!--Create product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
 
         <!--Open created product-->
@@ -97,8 +96,7 @@
         </actionGroup>
 
         <!--Go to "Catalog" -> "Products". Open created product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductPage"/>
         <click selector="{{AdminProductGridSection.productGridNameProduct($$product.name$$)}}" stepKey="openCreatedProduct"/>
         <waitForPageLoad stepKey="waitForCreatedProductOpened"/>
 
