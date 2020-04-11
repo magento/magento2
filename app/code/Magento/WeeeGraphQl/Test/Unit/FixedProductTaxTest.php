@@ -17,7 +17,7 @@ use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\WeeeGraphQl\Model\Resolver\FixedProductTax;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class FixedProductTaxTest extends TestCase
 {
@@ -51,7 +51,7 @@ class FixedProductTaxTest extends TestCase
     /**
      * Build the Testing Environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getExtensionAttributes'])
