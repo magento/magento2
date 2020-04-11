@@ -18,6 +18,9 @@
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
             <argument name="productName" value="abc"/>

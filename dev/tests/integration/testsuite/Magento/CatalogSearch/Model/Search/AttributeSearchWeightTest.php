@@ -62,7 +62,6 @@ class AttributeSearchWeightTest extends TestCase
     /**
      * Perform search by word and check founded product order in different cases.
      *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @dataProvider attributeSearchWeightDataProvider
@@ -78,6 +77,7 @@ class AttributeSearchWeightTest extends TestCase
         array $attributeWeights,
         array $expectedProductNames
     ): void {
+        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $this->updateAttributesWeight($attributeWeights);
         $actualProductNames = $this->quickSearchByQuery->execute($searchQuery)->getColumnValues('name');
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');

@@ -18,6 +18,9 @@
             <testCaseId value="MC-20389"/>
             <group value="ConfigurableProduct"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
