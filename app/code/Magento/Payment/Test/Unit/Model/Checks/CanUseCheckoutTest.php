@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,19 @@
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\CanUseCheckout;
+use Magento\Payment\Model\Checks\CanUseCheckout;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\TestCase;
 
-class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
+class CanUseCheckoutTest extends TestCase
 {
     /**
      * @var CanUseCheckout
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new CanUseCheckout();
     }
@@ -26,11 +29,11 @@ class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods(
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
         $paymentMethod = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
+            MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseCheckout')->will(
             $this->returnValue($expectation)

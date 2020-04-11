@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,16 +7,18 @@
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
 use Magento\Payment\Model\Checks\CanUseForCountry;
+use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
+class CanUseForCountryTest extends TestCase
 {
-    /**
-     * Expected country id
-     */
-    const EXPECTED_COUNTRY_ID = 1;
+    private const EXPECTED_COUNTRY_ID = 1;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryProvider;
 
@@ -25,10 +27,10 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->countryProvider = $this->createMock(
-            \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider::class
+            CountryProvider::class
         );
         $this->_model = new CanUseForCountry($this->countryProvider);
     }
@@ -39,12 +41,12 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods(
+        $quoteMock = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
 
         $paymentMethod = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
+            MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID

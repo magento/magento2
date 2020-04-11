@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,9 @@
 namespace Magento\Payment\Test\Unit\Gateway\Http\Converter\Soap;
 
 use Magento\Payment\Gateway\Http\Converter\Soap\ObjectToArrayConverter;
+use PHPUnit\Framework\TestCase;
 
-class ObjectToArrayConverterTest extends \PHPUnit\Framework\TestCase
+class ObjectToArrayConverterTest extends TestCase
 {
     public function testConvert()
     {

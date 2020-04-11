@@ -1,31 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
+use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Payment\Gateway\Http\Client\Soap;
+use Magento\Payment\Gateway\Http\ConverterInterface;
+use Magento\Payment\Gateway\Http\TransferInterface;
+use Magento\Payment\Model\Method\Logger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SoapTest extends \PHPUnit\Framework\TestCase
+class SoapTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $clientFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $client;
 
@@ -34,18 +40,18 @@ class SoapTest extends \PHPUnit\Framework\TestCase
      */
     private $gatewayClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\Logger::class
+            Logger::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientFactory = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Soap\ClientFactory::class
+            ClientFactory::class
         )->getMock();
         $this->converter = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Http\ConverterInterface::class
+            ConverterInterface::class
         )->getMockForAbstractClass();
         $this->client = $this->getMockBuilder(\SoapClient::class)
             ->setMethods(['__setSoapHeaders', '__soapCall', '__getLastRequest'])
@@ -133,12 +139,12 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns prepared transfer object
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getTransferObject()
     {
         $transferObject = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Http\TransferInterface::class
+            TransferInterface::class
         )->setMethods(['__setSoapHeaders', 'getBody', 'getClientConfig', 'getMethod'])->getMockForAbstractClass();
 
         $transferObject->expects(static::any())

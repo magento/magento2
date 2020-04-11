@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,10 +7,6 @@ namespace Magento\Payment\Test\Unit\Block\Adminhtml\Transparent;
 
 use Magento\Payment\Block\Adminhtml\Transparent\Form;
 
-/**
- * Class FormTesting extended test class, used to substitute calls to parent methods
- * @package Magento\Payment\Test\Unit\Block\Adminhtml\Transparent
- */
 class FormTesting extends Form
 {
     /**

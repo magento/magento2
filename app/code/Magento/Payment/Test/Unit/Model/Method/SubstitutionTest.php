@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,28 +6,33 @@
 
 namespace Magento\Payment\Test\Unit\Model\Method;
 
-class SubstitutionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\Method\Substitution;
+use PHPUnit\Framework\TestCase;
+
+class SubstitutionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Payment\Model\Method\Substitution
+     * @var Substitution
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject(\Magento\Payment\Model\Method\Substitution::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->model = $this->objectManager->getObject(Substitution::class);
     }
 
     public function testGetTitle()
     {
         $infoMock = $this->getMockBuilder(
-            \Magento\Payment\Model\Info::class
+            Info::class
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -39,7 +44,7 @@ class SubstitutionTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getAdditionalInformation'
         )->with(
-            \Magento\Payment\Model\Method\Substitution::INFO_KEY_TITLE
+            Substitution::INFO_KEY_TITLE
         )->will(
             $this->returnValue(
                 $expectedResult

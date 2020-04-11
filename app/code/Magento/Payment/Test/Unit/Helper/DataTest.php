@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,43 +6,53 @@
 
 namespace Magento\Payment\Test\Unit\Helper;
 
-use \Magento\Payment\Helper\Data;
-
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
-    /** @var \Magento\Payment\Helper\Data */
+    /** @var Data */
     private $helper;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var MockObject */
     private $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var MockObject */
     private $initialConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var MockObject */
     private $methodFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $appEmulation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\Payment\Helper\Data::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $className = Data::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $layoutFactoryMock = $arguments['layoutFactory'];
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
@@ -81,11 +91,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testGetMethodInstanceWithException()
     {
+        $this->expectException('UnexpectedValueException');
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn(null);
@@ -106,7 +114,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnValue(
                     [
-                        \Magento\Payment\Helper\Data::XML_PATH_PAYMENT_METHODS => [
+                        Data::XML_PATH_PAYMENT_METHODS => [
                             $methodA['code'] => $methodA['data'],
                             $methodB['code'] => $methodB['data'],
                             'empty' => [],
@@ -119,19 +127,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects(new MethodInvokedAtIndex(0))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code']))
-            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
+            ->will($this->returnValue(AbstractMethod::class));
         $this->scopeConfig->expects(new MethodInvokedAtIndex(1))
             ->method('getValue')
             ->with(
                 sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodB['code'])
             )
-            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
+            ->will($this->returnValue(AbstractMethod::class));
         $this->scopeConfig->expects(new MethodInvokedAtIndex(2))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, 'empty'))
             ->will($this->returnValue(null));
 
-        $methodInstanceMockA = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInstanceMockA = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
@@ -141,7 +149,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('sort_order', null)
             ->will($this->returnValue($methodA['data']['sort_order']));
 
-        $methodInstanceMockB = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInstanceMockB = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
@@ -170,13 +178,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
 
-        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setMethod', 'toHtml'])
             ->getMock();
@@ -195,13 +203,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $blockType = 'method_block_type';
 
-        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+        $infoMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setInfo', 'toHtml'])
             ->getMock();
@@ -220,13 +228,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
-        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+        $infoMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $paymentBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        $paymentBlockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'toHtml', 'setInfo'])
             ->getMock();
@@ -239,7 +247,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentBlockMock);
         $paymentBlockMock->expects($this->once())->method('setInfo')->with($infoMock);
         $paymentBlockMock->expects($this->once())->method('setArea')
-            ->with(\Magento\Framework\App\Area::AREA_FRONTEND)
+            ->with(Area::AREA_FRONTEND)
             ->willReturnSelf();
         $paymentBlockMock->expects($this->once())->method('setIsSecureMode')
             ->with($secureMode);

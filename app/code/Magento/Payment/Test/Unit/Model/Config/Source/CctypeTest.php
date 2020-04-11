@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,17 @@
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Cctype;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Config\Source\Cctype;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CctypeTest extends \PHPUnit\Framework\TestCase
+class CctypeTest extends TestCase
 {
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $_paymentConfig;
 
@@ -22,10 +25,10 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paymentConfig = $this->getMockBuilder(
-            \Magento\Payment\Model\Config::class
+            Config::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->_model = new Cctype($this->_paymentConfig);

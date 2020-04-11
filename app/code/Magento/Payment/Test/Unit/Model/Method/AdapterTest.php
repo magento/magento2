@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,12 +18,14 @@ use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit\Framework\TestCase
+class AdapterTest extends TestCase
 {
     /**
      * @var MockObject|ManagerInterface
@@ -75,7 +77,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManager = $this->createMock(ManagerInterface::class);
         $this->valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
@@ -89,7 +91,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->formBlockType = '\FormBlock';
         $this->infoBlockType = '\InfoBlock';
 
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         $this->adapter = new Adapter(
             $this->eventManager,

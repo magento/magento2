@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,20 +10,21 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Method\Cc;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\TestCase;
 
-class CcTest extends \PHPUnit\Framework\TestCase
+class CcTest extends TestCase
 {
     /**
      * @var Cc
      */
     private $ccModel;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);
     }
-    
+
     public function testAssignData()
     {
         $additionalData = [
