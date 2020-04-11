@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,14 @@
 
 namespace Magento\Marketplace\Test\Unit\Controller\Partners;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Marketplace\Controller\Adminhtml\Partners\Index;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\HTTP\PhpEnvironment\Response;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\View\Element\BlockInterface;
+use Magento\Marketplace\Controller\Adminhtml\Partners\Index;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {

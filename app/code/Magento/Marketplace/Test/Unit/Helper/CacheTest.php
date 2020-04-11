@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\Marketplace\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Config\CacheInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Marketplace\Helper\Cache;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Marketplace\Helper\Cache;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CacheTest extends TestCase
 {

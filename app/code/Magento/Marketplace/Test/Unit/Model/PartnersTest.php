@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,11 +6,11 @@
 
 namespace Magento\Marketplace\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Marketplace\Model\Partners;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Marketplace\Helper\Cache;
+use Magento\Marketplace\Model\Partners;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PartnersTest extends TestCase
 {
@@ -103,7 +103,7 @@ class PartnersTest extends TestCase
             ->method('post');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
             ->will($this->returnValue($curlMock));
