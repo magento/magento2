@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for AgreementsConfigProvider.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AgreementsConfigProviderTest extends TestCase
 {
