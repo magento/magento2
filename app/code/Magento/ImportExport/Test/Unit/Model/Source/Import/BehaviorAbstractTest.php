@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,7 +9,9 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Source\Import;
 
-class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\AbstractBehaviorTestCase
+use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
+
+class BehaviorAbstractTest extends AbstractBehaviorTestCase
 {
     /**
      * Source array data
@@ -28,12 +30,12 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
         ['value' => 'key_2', 'label' => 'label_2'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Source\Import\AbstractBehavior::class,
+            AbstractBehavior::class,
             [[]],
             '',
             false,
