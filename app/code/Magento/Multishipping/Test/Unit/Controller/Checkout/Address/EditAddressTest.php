@@ -72,13 +72,16 @@ class EditAddressTest extends TestCase
      * @var MockObject
      */
     protected $request;
+    /**
+     * @var Multishipping|MockObject
+     */
+    private $checkoutMock;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->configMock = $this->createMock(Config::class);
-        $this->checkoutMock =
-            $this->createMock(Multishipping::class);
+        $this->checkoutMock = $this->createMock(Multishipping::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
         $this->viewMock = $this->createMock(ViewInterface::class);
