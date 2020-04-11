@@ -40,8 +40,8 @@
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridFirst"/>
-            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="{{deleteProductSecondAttribute.default_label}}">
-                <argument name="productAttributeLabel" value="productAttributeColor"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductSecondAttribute">
+                <argument name="productAttributeLabel" value="{{productAttributeColor.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
