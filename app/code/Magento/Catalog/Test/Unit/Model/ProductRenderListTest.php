@@ -167,16 +167,16 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchResult);
         $searchResult->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($searchCriteria);
+        $searchResult->expects($this->once())
+            ->method('setTotalCount')
+            ->with(null);
+        $searchResult->expects($this->once())
             ->method('setItems')
             ->with([
                 1 => $productRender
             ]);
-        $searchResult->expects($this->once())
-            ->method('setTotalCount')
-            ->with(1);
-        $searchResult->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($searchCriteria);
 
         $this->assertEquals($searchResult, $this->model->getList($searchCriteria, $storeId, $currencyCode));
     }
