@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,8 +23,8 @@ use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Verification for Media class
@@ -78,11 +78,11 @@ class MediaTest extends TestCase
     private $directoryMediaMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryPubMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
         $this->sync = $this->createMock(Synchronization::class);
@@ -130,7 +130,7 @@ class MediaTest extends TestCase
         $this->responseMock = $this->createMock(Response::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->mediaModel);
     }
