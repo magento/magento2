@@ -227,6 +227,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch5</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
