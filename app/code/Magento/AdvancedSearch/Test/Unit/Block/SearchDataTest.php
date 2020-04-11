@@ -6,55 +6,60 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Search\Model\QueryFactoryInterface;
+use Magento\Search\Model\Query;
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
+use Magento\AdvancedSearch\Block\SearchData;
+use Magento\Search\Model\QueryInterface;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
-class SearchDataTest extends \PHPUnit\Framework\TestCase
+class SearchDataTest extends TestCase
 {
-    /** @var  \Magento\Framework\View\Element\Template\Context|MockObject */
+    /** @var  Context|MockObject */
     private $context;
 
     /**
-     * @var \Magento\Search\Model\QueryFactoryInterface|MockObject
+     * @var QueryFactoryInterface|MockObject
      */
     private $queryFactory;
 
     /**
-     * @var \Magento\Search\Model\Query|MockObject
+     * @var Query|MockObject
      */
     private $searchQuery;
 
     /**
-     * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|MockObject
+     * @var SuggestedQueriesInterface|MockObject
      */
     private $dataProvider;
 
     /**
-     * @var \Magento\AdvancedSearch\Block\SearchData
+     * @var SearchData
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dataProvider = $this->getMockBuilder(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class)
+        $this->dataProvider = $this->getMockBuilder(SuggestedQueriesInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems', 'isResultsCountEnabled'])
             ->getMockForAbstractClass();
 
-        $this->searchQuery = $this->getMockBuilder(\Magento\Search\Model\QueryInterface::class)
+        $this->searchQuery = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQueryText'])
             ->getMockForAbstractClass();
-        $this->queryFactory = $this->getMockBuilder(\Magento\Search\Model\QueryFactoryInterface::class)
+        $this->queryFactory = $this->getMockBuilder(QueryFactoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
         $this->queryFactory->expects($this->once())
             ->method('get')
             ->will($this->returnValue($this->searchQuery));
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->block = $this->getMockBuilder(\Magento\AdvancedSearch\Block\SearchData::class)->setConstructorArgs(
+        $this->context = $this->createMock(Context::class);
+        $this->block = $this->getMockBuilder(SearchData::class)->setConstructorArgs(
             [
                 $this->context,
                 $this->dataProvider,

@@ -5,44 +5,50 @@
  */
 namespace Magento\AdvancedSearch\Test\Unit\Controller\Adminhtml\Search\System\Config;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Request\Http;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Filter\StripTags;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\App\Action\Context;
 use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
- * Class TestConnectionTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TestConnectionTest extends \PHPUnit\Framework\TestCase
+class TestConnectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|MockObject
      */
     private $clientResolverMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $clientMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $resultJson;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Filter\StripTags|\PHPUnit_Framework_MockObject_MockObject
+     * @var StripTags|MockObject
      */
     private $tagFilterMock;
 
@@ -56,17 +62,17 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParams']);
+        $helper = new ObjectManager($this);
+        $this->requestMock = $this->createPartialMock(Http::class, ['getParams']);
         $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
-        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
-                    \Magento\Backend\App\Action\Context::class,
+                    Context::class,
                     [
                         'request' => $this->requestMock
                     ]
@@ -76,23 +82,21 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
 
-        $this->clientResolverMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientResolver::class)
+        $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
+        $this->clientMock = $this->createMock(ClientInterface::class);
 
-        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultJson = $this->createMock(Json::class);
 
-        $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
+        $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->tagFilterMock = $this->getMockBuilder(\Magento\Framework\Filter\StripTags::class)
+        $this->tagFilterMock = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();

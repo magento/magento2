@@ -6,6 +6,8 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Client;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
@@ -13,24 +15,24 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 
-class ClientResolverTest extends \PHPUnit\Framework\TestCase
+class ClientResolverTest extends TestCase
 {
     /**
-     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|MockObject
      */
     private $model;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
@@ -78,11 +80,9 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(ClientInterface::class, $result);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateExceptionThrown()
     {
+        $this->expectException('InvalidArgumentException');
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('engineFactoryClass'))
             ->will($this->returnValue('t'));
@@ -90,11 +90,9 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
         $this->model->create('engineName');
     }
 
-    /**
-     * @expectedException LogicException
-     */
     public function testCreateLogicException()
     {
+        $this->expectException('LogicException');
         $this->model->create('input');
     }
 

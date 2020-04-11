@@ -6,33 +6,41 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Customer\Model\ResourceModel\Group;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Search\Model\EngineResolver;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
 use Magento\Framework\Search\EngineResolverInterface;
 
-class CustomerGroupTest extends \PHPUnit\Framework\TestCase
+class CustomerGroupTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Group
+     * @var MockObject|Group
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface
+     * @var MockObject|ClientOptionsInterface
      */
     protected $customerOptionsMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     protected $engineResolverMock;
 
@@ -41,14 +49,14 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->subjectMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Group::class);
+        $this->subjectMock = $this->createMock(Group::class);
         $this->customerOptionsMock = $this->createMock(
-            \Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class
+            ClientOptionsInterface::class
         );
         $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -57,11 +65,11 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
         $this->engineResolverMock = $this->createPartialMock(
-            \Magento\Search\Model\EngineResolver::class,
+            EngineResolver::class,
             ['getCurrentSearchEngine']
         );
         $this->model = new CustomerGroup(
@@ -89,8 +97,8 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Group::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
-        $groupMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
-        $groupMock->expects($this->any())
+        $groupMock->method('isObjectNew')->will($this->returnValue($isObjectNew));
+        $groupMock
             ->method('dataHasChangedFor')
             ->with('tax_class_id')
             ->will($this->returnValue($isTaxClassIdChanged));
@@ -103,7 +111,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
+            ->with(Fulltext::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
 
         $this->assertEquals(
