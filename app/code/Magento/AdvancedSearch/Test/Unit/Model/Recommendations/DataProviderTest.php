@@ -7,20 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Recommendations;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\AdvancedSearch\Model\Recommendations\DataProvider;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\AdvancedSearch\Model\ResourceModel\Recommendations;
 use Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory;
+use Magento\Catalog\Model\Layer as SearchLayer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\QueryResult;
 use Magento\Search\Model\QueryResultFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\Layer as SearchLayer;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\QueryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,16 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Customer\Model\ResourceModel\Group;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Search\Model\EngineResolver;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Customer\Model\ResourceModel\Group;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CustomerGroupTest extends TestCase
 {

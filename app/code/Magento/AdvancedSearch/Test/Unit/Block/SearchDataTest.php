@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,14 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Search\Model\QueryFactoryInterface;
-use Magento\Search\Model\Query;
-use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\AdvancedSearch\Block\SearchData;
+use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Search\Model\Query;
+use Magento\Search\Model\QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SearchDataTest extends TestCase
 {

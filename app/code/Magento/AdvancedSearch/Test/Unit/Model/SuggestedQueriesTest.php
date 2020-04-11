@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedSearch\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
 use Magento\AdvancedSearch\Model\SuggestedQueries;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Search\Model\EngineResolver;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
-use Magento\Search\Model\QueryInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Search\Model\EngineResolver;
+use Magento\Search\Model\QueryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SuggestedQueriesTest extends TestCase
 {

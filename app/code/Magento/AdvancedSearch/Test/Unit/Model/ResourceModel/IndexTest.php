@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +6,19 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\ResourceModel;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\Indexer\MultiDimensionProvider;
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\AdvancedSearch\Model\ResourceModel\Index;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\MultiDimensionProvider;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

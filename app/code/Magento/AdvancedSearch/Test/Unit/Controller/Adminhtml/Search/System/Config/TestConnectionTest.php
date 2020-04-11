@@ -1,21 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedSearch\Test\Unit\Controller\Adminhtml\Search\System\Config;
 
-use PHPUnit\Framework\TestCase;
+use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\Http;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Filter\StripTags;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\App\Action\Context;
-use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
