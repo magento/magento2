@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,16 +7,15 @@ namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Vault\Model\PaymentToken;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Vault\Model\PaymentTokenFactory;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CreditCardTokenFactoryTest
- */
-class CreditCardTokenFactoryTest extends \PHPUnit\Framework\TestCase
+class CreditCardTokenFactoryTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface|MockObject
@@ -33,13 +32,13 @@ class CreditCardTokenFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
         $tokenTypes = [
-            'account' => \Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT,
-            'credit_card' => \Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD
+            'account' => PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT,
+            'credit_card' => PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD
         ];
 
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
@@ -58,7 +57,7 @@ class CreditCardTokenFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->paymentToken);
 
-        $this->paymentToken->setType(\Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD);
+        $this->paymentToken->setType(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD);
 
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->factory->create();
