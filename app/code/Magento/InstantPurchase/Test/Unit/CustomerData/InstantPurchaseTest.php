@@ -8,19 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\CustomerData;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\InstantPurchase\CustomerData\InstantPurchase as CustomerData;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\InstantPurchase\CustomerData\InstantPurchase as CustomerData;
 use Magento\InstantPurchase\Model\InstantPurchaseInterface as InstantPurchaseModel;
+use Magento\InstantPurchase\Model\InstantPurchaseOption;
 use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
 use Magento\InstantPurchase\Model\Ui\PaymentTokenFormatter;
 use Magento\InstantPurchase\Model\Ui\ShippingMethodFormatter;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\InstantPurchase\Model\InstantPurchaseOption;
-use Magento\Customer\Model\Customer;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for InstantPurchase Customer Data

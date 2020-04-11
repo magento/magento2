@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\Block;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\InstantPurchase\Block\Button;
 use Magento\InstantPurchase\Model\Config;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for button block

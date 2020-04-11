@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\Model\Ui;
 
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\InstantPurchase\Model\Ui\ShippingMethodFormatter;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ShippingMethodFormatterTest extends TestCase

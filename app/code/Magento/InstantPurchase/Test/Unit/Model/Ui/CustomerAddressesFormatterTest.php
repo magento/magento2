@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\Model\Ui;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
 use Magento\Customer\Model\Address;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Directory\Model\Country;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerAddressesFormatterTest extends TestCase
