@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\CacheInvalidate\Model\PurgeCache;
-use PHPUnit\Framework\MockObject\MockObject;
-use Laminas\Http\Client\Adapter\Socket;
-use Magento\Framework\Cache\InvalidateLogger;
-use Magento\PageCache\Model\Cache\Server;
-use Magento\CacheInvalidate\Model\SocketFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Laminas\Http\Client\Adapter\Exception\RuntimeException;
+use Laminas\Http\Client\Adapter\Socket;
 use Laminas\Uri\UriFactory;
+use Magento\CacheInvalidate\Model\PurgeCache;
+use Magento\CacheInvalidate\Model\SocketFactory;
+use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Cache\Server;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PurgeCacheTest extends TestCase
 {

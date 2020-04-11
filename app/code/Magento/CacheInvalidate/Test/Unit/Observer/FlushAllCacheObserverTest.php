@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\CacheInvalidate\Model\PurgeCache;
 use Magento\CacheInvalidate\Observer\FlushAllCacheObserver;
 use Magento\Framework\Event\Observer;
 use Magento\PageCache\Model\Config;
-use Magento\CacheInvalidate\Model\PurgeCache;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FlushAllCacheObserverTest extends TestCase
 {
