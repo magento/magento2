@@ -37,14 +37,12 @@ class BulkManagementTest extends TestCase
     private $entityManager;
 
     /**
-     * @var BulkSummaryInterfaceFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var BulkSummaryInterfaceFactory|MockObject
      */
     private $bulkSummaryFactory;
 
     /**
-     * @var CollectionFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $operationCollectionFactory;
 

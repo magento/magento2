@@ -40,6 +40,10 @@ class OperationManagementTest extends TestCase
      * @var MockObject
      */
     private $loggerMock;
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPoolMock;
 
     protected function setUp(): void
     {
