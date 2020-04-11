@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,15 +8,14 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\ResponseHandler;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\ResponseHandler\SignUp;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class SignUpTest extends \PHPUnit\Framework\TestCase
+class SignUpTest extends TestCase
 {
     public function testHandleResult()
     {
         $accessToken = 'access-token-123';
-        $analyticsToken = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $analyticsToken = $this->createMock(AnalyticsToken::class);
         $analyticsToken->expects($this->once())
             ->method('storeToken')
             ->with($accessToken);
