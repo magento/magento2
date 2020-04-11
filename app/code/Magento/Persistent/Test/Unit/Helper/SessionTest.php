@@ -54,6 +54,11 @@ class SessionTest extends TestCase
     private $session;
 
     /**
+     * @var MockObject|ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Setup environment
      */
     protected function setUp(): void
