@@ -6,54 +6,60 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\GoogleAdwords\Model\Validator\Factory;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Framework\Validator\Builder;
+use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_configurationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_vbFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_vbMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_validatorMock;
 
     /**
-     * @var \Magento\GoogleAdwords\Model\Validator\Factory
+     * @var Factory
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_vbFactoryMock = $this->createPartialMock(
-            \Magento\Framework\Validator\UniversalFactory::class,
+            UniversalFactory::class,
             ['create']
         );
-        $this->_vbMock = $this->createMock(\Magento\Framework\Validator\Builder::class);
-        $this->_validatorMock = $this->createMock(\Magento\Framework\Validator\ValidatorInterface::class);
+        $this->_vbMock = $this->createMock(Builder::class);
+        $this->_validatorMock = $this->createMock(ValidatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->_factory = $objectManager->getObject(
-            \Magento\GoogleAdwords\Model\Validator\Factory::class,
+            Factory::class,
             ['validatorBuilderFactory' => $this->_vbFactoryMock]
         );
     }
@@ -71,13 +77,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->method(
             'create'
         )->with(
-            \Magento\Framework\Validator\Builder::class,
+            Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Regex',
                         'type' => '',
-                        'class' => \Magento\Framework\Validator\Regex::class,
+                        'class' => Regex::class,
                         'options' => [
                             'arguments' => ['pattern' => '/^[0-9a-f]{6}$/i'],
                             'methods' => [
@@ -120,13 +126,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->method(
             'create'
         )->with(
-            \Magento\Framework\Validator\Builder::class,
+            Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Int',
                         'type' => '',
-                        'class' => \Magento\Framework\Validator\IntUtils::class,
+                        'class' => IntUtils::class,
                         'options' => [
                             'methods' => [
                                 [

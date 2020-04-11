@@ -5,16 +5,19 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Filter;
 
-class UppercaseTitleTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\GoogleAdwords\Model\Filter\UppercaseTitle;
+
+class UppercaseTitleTest extends TestCase
 {
     /**
-     * @var \Magento\GoogleAdwords\Model\Filter\UppercaseTitle
+     * @var UppercaseTitle
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\GoogleAdwords\Model\Filter\UppercaseTitle();
+        $this->_model = new UppercaseTitle();
     }
 
     /**
