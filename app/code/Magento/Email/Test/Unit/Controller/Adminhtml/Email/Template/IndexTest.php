@@ -29,52 +29,57 @@ class IndexTest extends TestCase
     /**
      * @var Index
      */
-    protected $indexController;
+    private $indexController;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
      * @var \Magento\Framework\App\Request|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var View|MockObject
      */
-    protected $viewMock;
+    private $viewMock;
 
     /**
      * @var Layout|MockObject
      */
-    protected $layoutMock;
+    private $layoutMock;
 
     /**
      * @var Menu|MockObject
      */
-    protected $menuBlockMock;
+    private $menuBlockMock;
 
     /**
      * @var Breadcrumbs|MockObject
      */
-    protected $breadcrumbsBlockMock;
+    private $breadcrumbsBlockMock;
 
     /**
      * @var Page|MockObject
      */
-    protected $resultPageMock;
+    private $resultPageMock;
 
     /**
      * @var Config|MockObject
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
      * @var Title|MockObject
      */
-    protected $pageTitleMock;
+    private $pageTitleMock;
+
+    /**
+     * @var MockObject|Registry
+     */
+    private $registryMock;
 
     protected function setUp(): void
     {

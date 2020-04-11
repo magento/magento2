@@ -23,37 +23,42 @@ class PreviewTest extends TestCase
     /**
      * @var Preview
      */
-    protected $object;
+    private $object;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
      * @var View|MockObject
      */
-    protected $viewMock;
+    private $viewMock;
 
     /**
      * @var RequestInterface|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var Page|MockObject
      */
-    protected $pageMock;
+    private $pageMock;
 
     /**
      * @var Config|MockObject
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
      * @var Title|MockObject
      */
-    protected $pageTitleMock;
+    private $pageTitleMock;
+
+    /**
+     * @var MockObject|Registry
+     */
+    private $coreRegistryMock;
 
     protected function setUp(): void
     {
