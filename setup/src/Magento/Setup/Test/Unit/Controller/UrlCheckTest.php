@@ -6,8 +6,8 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\UrlCheck;
-use Zend\Stdlib\RequestInterface;
-use Zend\View\Model\JsonModel;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\View\Model\JsonModel;
 use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

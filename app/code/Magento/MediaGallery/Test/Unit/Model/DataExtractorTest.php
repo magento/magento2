@@ -9,10 +9,9 @@ namespace Magento\MediaGallery\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset;
+use Magento\MediaGallery\Model\DataExtractor;
 use Magento\MediaGallery\Model\Keyword;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGallery\Model\DataExtractor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,8 +53,13 @@ class DataExtractorTest extends TestCase
                 'data' => $data,
             ]
         );
-        $receivedData = $this->dataExtractor->extract($model, $interfaceClass);
-        $this->checkValues($expectedData, $receivedData, $model);
+        if ($interfaceClass) {
+            $receivedData = $this->dataExtractor->extract($model, $interfaceClass);
+            $this->checkAssetValues($expectedData, $receivedData, $model);
+        } else {
+            $receivedData = $this->dataExtractor->extract($model);
+            $this->checkKeyWordValues($expectedData, $receivedData, $model);
+        }
     }
 
     /**
@@ -63,13 +67,27 @@ class DataExtractorTest extends TestCase
      * @param array $data
      * @param object $model
      */
-    protected function checkValues(array $expectedData, array $data, $model)
+    private function checkAssetValues(array $expectedData, array $data, $model)
     {
         foreach ($expectedData as $expectedDataKey => $expectedDataItem) {
             $this->assertEquals($data[$expectedDataKey] ?? null, $model->{$expectedDataItem['method']}());
             $this->assertEquals($data[$expectedDataKey] ?? null, $expectedDataItem['value']);
         }
-        $this->assertEquals(array_keys($expectedData), array_keys($expectedData));
+        $this->assertEquals(array_keys($expectedData), array_keys($data));
+    }
+
+    /**
+     * @param array $expectedData
+     * @param array $data
+     * @param object $model
+     */
+    private function checkKeyWordValues(array $expectedData, array $data, $model)
+    {
+        foreach ($expectedData as $expectedDataKey => $expectedDataItem) {
+            $this->assertEquals($data[$expectedDataKey] ?? null, $model->{$expectedDataItem['method']}());
+            $this->assertEquals($data[$expectedDataKey] ?? null, $expectedDataItem['value']);
+        }
+        $this->assertEquals(array_keys($expectedData), array_keys(array_slice($data, 0, 2)));
     }
 
     /**
@@ -102,13 +120,17 @@ class DataExtractorTest extends TestCase
                         'value' => 'content_type',
                         'method' => 'getContentType',
                     ],
+                    'height' => [
+                        'value' => 4,
+                        'method' => 'getHeight',
+                    ],
                     'width' => [
                         'value' => 3,
                         'method' => 'getWidth',
                     ],
-                    'height' => [
-                        'value' => 4,
-                        'method' => 'getHeight',
+                    'size' => [
+                        'value' => 300,
+                        'method' => 'getSize',
                     ],
                     'created_at' => [
                         'value' => '2019-11-28 10:40:09',
@@ -122,7 +144,7 @@ class DataExtractorTest extends TestCase
             ],
             'Keyword conversion without interface' => [
                 Keyword::class,
-                null,
+                '',
                 [
                     'id' => [
                         'value' => 2,

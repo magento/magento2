@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <!-- Create First StoreView  -->
