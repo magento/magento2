@@ -5,67 +5,78 @@
  */
 namespace Magento\Robots\Test\Unit\Model\Config;
 
-class ValueTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Robots\Model\Config\Value;
+use Magento\Framework\Model\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Registry;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
+
+class ValueTest extends TestCase
 {
     /**
-     * @var \Magento\Robots\Model\Config\Value
+     * @var Value
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     private $registry;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeListInterface|MockObject
      */
     private $typeList;
 
     /**
-     * @var \Magento\Store\Model\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResolver|MockObject
      */
     private $storeResolver;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->typeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
+        $this->typeList = $this->getMockBuilder(TypeListInterface::class)
             ->getMockForAbstractClass();
 
-        $this->storeResolver = $this->getMockBuilder(\Magento\Store\Model\StoreResolver::class)
+        $this->storeResolver = $this->getMockBuilder(StoreResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Robots\Model\Config\Value(
+        $this->model = new Value(
             $this->context,
             $this->registry,
             $this->scopeConfig,
@@ -82,7 +93,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
 
         $this->storeManager->expects($this->once())
             ->method('getStore')
@@ -93,7 +104,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeId);
 
         $expected = [
-            \Magento\Robots\Model\Config\Value::CACHE_TAG . '_' . $storeId,
+            Value::CACHE_TAG . '_' . $storeId,
         ];
         $this->assertEquals($expected, $this->model->getIdentities());
     }
