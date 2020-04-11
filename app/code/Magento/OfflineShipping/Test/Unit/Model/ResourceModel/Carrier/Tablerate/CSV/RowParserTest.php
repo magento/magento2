@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,14 +10,16 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnReso
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\LocationDirectory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser
  */
-class RowParserTest extends \PHPUnit\Framework\TestCase
+class RowParserTest extends TestCase
 {
     /**
-     * @var  ColumnResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var  ColumnResolver|MockObject
      */
     private $columnResolverMock;
 
@@ -27,14 +29,14 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
     private $rowParser;
 
     /**
-     * @var LocationDirectory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocationDirectory|MockObject
      */
     private $locationDirectoryMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->locationDirectoryMock = $this->getMockBuilder(LocationDirectory::class)
             ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
@@ -102,10 +104,10 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
      * @param $expectedMessage
      * @throws null|RowException
      * @dataProvider parseWithExceptionDataProvider
-     * @expectedException \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException
      */
     public function testParseWithException(array $rowData, $conditionFullName, array $columnValueMap, $expectedMessage)
     {
+        $this->expectException('Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException');
         $rowNumber = 120;
         $websiteId = 58;
         $conditionShortName = 'condition_short_name';
@@ -194,7 +196,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
      * @param $websiteId
      * @param $conditionShortName
      * @return array
-     * @throws \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowException
+     * @throws RowException
      */
     private function parse($rowData, $conditionFullName, $rowNumber, $websiteId, $conditionShortName, $columnValueMap)
     {
