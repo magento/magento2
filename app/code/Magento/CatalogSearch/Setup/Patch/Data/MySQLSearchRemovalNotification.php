@@ -7,33 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Notification\NotifierInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+
 /**
  * Implementation of the notification about MySQL search being removed.
  *
  * @see \Magento\ElasticSearch
  */
-class MySQLSearchRemovalNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
+class MySQLSearchRemovalNotification implements DataPatchInterface
 {
     /**
-     * @var \Magento\Framework\Search\EngineResolverInterface
-     */
-    private $searchEngineResolver;
-
-    /**
-     * @var \Magento\Framework\Notification\NotifierInterface
+     * @var NotifierInterface
      */
     private $notifier;
 
     /**
-     * @param \Magento\Framework\Search\EngineResolverInterface $searchEngineResolver
-     * @param \Magento\Framework\Notification\NotifierInterface $notifier
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param NotifierInterface $notifier
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\Search\EngineResolverInterface $searchEngineResolver,
-        \Magento\Framework\Notification\NotifierInterface $notifier
+        NotifierInterface $notifier,
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->searchEngineResolver = $searchEngineResolver;
         $this->notifier = $notifier;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -41,7 +45,7 @@ class MySQLSearchRemovalNotification implements \Magento\Framework\Setup\Patch\D
      */
     public function apply()
     {
-        if ($this->searchEngineResolver->getCurrentSearchEngine() === 'mysql') {
+        if ($this->scopeConfig->getValue('catalog/search/engine') === 'mysql') {
             $message = <<<MESSAGE
 Catalog Search is currently configured to use the MySQL engine, which has been deprecated and removed. Migrate to one of
 the Elasticsearch engines to ensure there are no service interruptions.
