@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,14 @@
 namespace Magento\Store\Test\Unit\Model\Message;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\Message\EmptyGroupCategory;
+use Magento\Store\Model\ResourceModel\Group\Collection;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
+class EmptyGroupCategoryTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -37,7 +38,7 @@ class EmptyGroupCategoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 

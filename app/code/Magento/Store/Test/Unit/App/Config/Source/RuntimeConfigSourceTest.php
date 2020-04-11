@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,15 +10,17 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
+class RuntimeConfigSourceTest extends TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
@@ -28,16 +30,16 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
     private $configSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceConnection;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);

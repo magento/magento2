@@ -1,28 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Store\Model\Group;
-use Magento\Store\Model\ScopeTreeProvider;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\Website;
+use Magento\Store\Model\ScopeTreeProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Store\Model\ScopeTreeProvider
  */
-class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
+class ScopeTreeProviderTest extends TestCase
 {
     /**
      * @var ScopeTreeProvider
@@ -30,21 +28,21 @@ class ScopeTreeProviderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WebsiteRepositoryInterface
+     * @var MockObject|WebsiteRepositoryInterface
      */
     private $websiteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GroupRepositoryInterface
+     * @var MockObject|GroupRepositoryInterface
      */
     private $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StoreRepositoryInterface
+     * @var MockObject|StoreRepositoryInterface
      */
     private $storeRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
         $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);

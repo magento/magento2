@@ -1,19 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Initial;
 
+use Magento\Framework\App\Config\Initial;
+use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope;
-use Magento\Framework\App\Config\Scope\Converter;
+use PHPUnit\Framework\TestCase;
 
-class DefaultScopeTest extends \PHPUnit\Framework\TestCase
+class DefaultScopeTest extends TestCase
 {
     public function testGet()
     {
-        $initialConfig = $this->getMockBuilder(\Magento\Framework\App\Config\Initial::class)
+        $initialConfig = $this->getMockBuilder(Initial::class)
             ->disableOriginalConstructor()
             ->getMock();
         $initialConfig->expects($this->once())

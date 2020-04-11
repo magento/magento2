@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,28 +6,28 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Config;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\ResourceModel\Store\Collection;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\StoreRepository;
-use Magento\Framework\App\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
+class StoreRepositoryTest extends TestCase
 {
     /**
-     * @var StoreFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreFactory|MockObject
      */
     protected $storeFactory;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $storeCollectionFactory;
 
@@ -42,11 +42,11 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
     private $storeRepository;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $appConfigMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->storeFactory = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])
@@ -74,12 +74,10 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
         $deploymentProperty->setValue($this->storeRepository, $this->appConfigMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
-     */
     public function testGetWithException()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The store that was requested wasn\'t found. Verify the store and try again.');
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,12 +124,10 @@ class StoreRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($storeMock, $this->storeRepository->getById(1));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The store that was requested wasn't found. Verify the store and try again.
-     */
     public function testGetByIdWithException()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The store that was requested wasn\'t found. Verify the store and try again.');
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,32 +7,37 @@
 namespace Magento\Store\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /** @var  Website */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
-    /** @var  Select | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Select|MockObject */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->select =  $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->select =  $this->createMock(Select::class);
         $this->resourceMock = $this->createPartialMock(
             ResourceConnection::class,
             [
@@ -41,7 +46,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            Mysql::class,
             [
                 'isTableExists',
                 'select',
@@ -53,7 +58,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
                 'where'
             ]
         );
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->model = $objectManagerHelper->getObject(
             Website::class,

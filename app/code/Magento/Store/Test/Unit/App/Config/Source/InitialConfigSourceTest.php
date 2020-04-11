@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,12 +9,13 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
 use Magento\Store\App\Config\Source\InitialConfigSource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritdoc
  */
-class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
+class InitialConfigSourceTest extends TestCase
 {
     /**
      * @var Reader|Mock
@@ -39,7 +40,7 @@ class InitialConfigSourceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->readerMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
