@@ -1,35 +1,43 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
+use Magento\Catalog\Model\Product;
+use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Model\LinkFactory;
 use Magento\Downloadable\Model\Product\TypeHandler\Link;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Link
  */
-class LinkTest extends \PHPUnit\Framework\TestCase
+class LinkTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|MockObject
      */
     private $linkResource;
 
     /**
-     * @var \Magento\Downloadable\Model\LinkFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkFactory|MockObject
      */
     private $linkFactory;
 
@@ -38,10 +46,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->linkFactory = $this->getMockBuilder(\Magento\Downloadable\Model\LinkFactory::class)
+        $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -49,10 +57,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['deleteItems'])
             ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $this->metadataMock = $this->createMock(EntityMetadata::class);
         $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
@@ -70,7 +78,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider saveDataProvider
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|MockObject $product
      * @param array $data
      * @param array $modelData
      */
@@ -102,7 +110,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                             'sort_order' => '0',
                             'title' => 'Downloadable Product Link',
                             'sample' => [
-                                'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
+                                'type' => Download::LINK_TYPE_FILE,
                                 'url' => null,
                                 'file' => json_encode(
                                     [
@@ -115,7 +123,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                                     ]
                                 ),
                             ],
-                            'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
+                            'type' => Download::LINK_TYPE_FILE,
                             'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
                             'link_url' => null,
                             'is_delete' => 0,
@@ -128,7 +136,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                             'is_delete' => 0,
                             'sample_id' => 0,
                             'title' => 'Downloadable Product Sample Title',
-                            'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
+                            'type' => Download::LINK_TYPE_FILE,
                             'file' => json_encode(
                                 [
                                     [
@@ -148,7 +156,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                     'product_id' => 1,
                     'sort_order' => '0',
                     'title' => 'Downloadable Product Link',
-                    'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
+                    'type' => Download::LINK_TYPE_FILE,
                     'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
                     'link_url' => null,
                     'number_of_downloads' => 15,
@@ -159,7 +167,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|MockObject $product
      * @param array $data
      * @param array $expectedItems
      * @dataProvider deleteDataProvider
@@ -210,10 +218,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|MockObject $product
      * @param array $modelData
      * @param bool $isUnlimited
-     * @return \Magento\Downloadable\Model\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Link|MockObject
      */
     private function createLinkkModel($product, array $modelData, $isUnlimited)
     {
@@ -275,12 +283,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      * @param int $storeId
      * @param int $storeWebsiteId
      * @param array $websiteIds
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product|MockObject
      * @internal param bool $isUnlimited
      */
     private function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -303,7 +311,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())
             ->method('getWebsiteIds')
             ->will($this->returnValue($websiteIds));
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMock();
