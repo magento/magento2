@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Authorization\Model\ResourceModel\Rules;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\Acl\RootResource;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

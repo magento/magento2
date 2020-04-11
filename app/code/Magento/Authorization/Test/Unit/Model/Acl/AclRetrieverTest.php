@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,20 +6,20 @@
 
 namespace Magento\Authorization\Test\Unit\Model\Acl;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Authorization\Model\Rules;
-use Magento\Framework\Acl;
-use Magento\Framework\Acl\Builder;
-use Psr\Log\LoggerInterface;
 use Magento\Authorization\Model\Acl\AclRetriever;
-
 use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\ResourceModel\Rules\Collection as RulesCollection;
 use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory as RulesCollectionFactory;
 use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\Rules;
+
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Acl;
+use Magento\Framework\Acl\Builder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

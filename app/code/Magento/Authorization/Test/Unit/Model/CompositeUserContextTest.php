@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\Authorization\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use \Magento\Authorization\Model\CompositeUserContext;
-
+use Magento\Authorization\Model\CompositeUserContext;
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CompositeUserContextTest extends TestCase
 {
