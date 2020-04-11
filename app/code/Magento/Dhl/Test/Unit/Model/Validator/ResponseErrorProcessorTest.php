@@ -6,11 +6,12 @@
 
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
+class ResponseErrorProcessorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -22,7 +23,7 @@ class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $responseErrorProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
