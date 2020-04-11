@@ -19,6 +19,10 @@ use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CountryInformationAcquirerTest extends TestCase
 {
     /**
@@ -45,6 +49,10 @@ class CountryInformationAcquirerTest extends TestCase
      * @var ObjectManager
      */
     protected $objectManager;
+    /**
+     * @var MockObject|Data
+     */
+    private $directoryHelper;
 
     /**
      * Setup the test
@@ -53,17 +61,10 @@ class CountryInformationAcquirerTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = CountryInformationFactory::class;
-        $this->countryInformationFactory = $this->createPartialMock($className, ['create']);
-
-        $className = RegionInformationFactory::class;
-        $this->regionInformationFactory = $this->createPartialMock($className, ['create']);
-
-        $className = Data::class;
-        $this->directoryHelper = $this->createPartialMock($className, ['getCountryCollection', 'getRegionData']);
-
-        $className = StoreManager::class;
-        $this->storeManager = $this->createPartialMock($className, ['getStore']);
+        $this->countryInformationFactory = $this->createPartialMock(CountryInformationFactory::class, ['create']);
+        $this->regionInformationFactory = $this->createPartialMock(RegionInformationFactory::class, ['create']);
+        $this->directoryHelper = $this->createPartialMock(Data::class, ['getCountryCollection', 'getRegionData']);
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
 
         $this->model = $this->objectManager->getObject(
             CountryInformationAcquirer::class,
