@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,17 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\LayeredNavigation\Block\Navigation;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\FilterList;
 use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
+use Magento\Catalog\Model\Layer\FilterList;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Catalog\Model\Category;
+use Magento\Framework\View\LayoutInterface;
+use Magento\LayeredNavigation\Block\Navigation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class NavigationTest extends TestCase
 {

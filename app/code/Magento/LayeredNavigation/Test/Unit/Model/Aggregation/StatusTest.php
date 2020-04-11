@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,9 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Model\Aggregation;
 
-use PHPUnit\Framework\TestCase;
-use Magento\LayeredNavigation\Model\Aggregation\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\LayeredNavigation\Model\Aggregation\Status;
+use PHPUnit\Framework\TestCase;
 
 class StatusTest extends TestCase
 {
