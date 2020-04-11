@@ -1,23 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\CheckoutAgreements\Model\AgreementsConfigProvider;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
-use Magento\Framework\Escaper;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
-use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
-use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+use Magento\CheckoutAgreements\Model\AgreementsConfigProvider;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for AgreementsConfigProvider.

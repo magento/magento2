@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,15 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsList;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
-use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CheckoutAgreementsListTest extends TestCase
 {

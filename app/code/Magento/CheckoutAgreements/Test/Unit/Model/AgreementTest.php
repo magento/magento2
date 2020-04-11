@@ -1,14 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
 use Magento\CheckoutAgreements\Model\Agreement;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 class AgreementTest extends TestCase
 {

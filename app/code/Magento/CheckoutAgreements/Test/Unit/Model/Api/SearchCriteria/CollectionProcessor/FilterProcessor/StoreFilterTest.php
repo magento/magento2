@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,10 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
 
-use Magento\Framework\Api\Filter;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
-use PHPUnit\Framework\TestCase;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\StoreFilter;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
+use Magento\Framework\Api\Filter;
+use PHPUnit\Framework\TestCase;
 
 class StoreFilterTest extends TestCase
 {

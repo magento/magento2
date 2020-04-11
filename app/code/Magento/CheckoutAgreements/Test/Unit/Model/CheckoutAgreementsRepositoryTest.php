@@ -1,25 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
-use Magento\CheckoutAgreements\Model\AgreementFactory;
-use Magento\Store\Model\Store;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
+use Magento\CheckoutAgreements\Model\AgreementFactory;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

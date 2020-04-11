@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,20 +6,20 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
-use PHPUnit\Framework\TestCase;
-use Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
-use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
+use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentExtension;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
-use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
