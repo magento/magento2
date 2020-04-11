@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -22,31 +26,31 @@ class ProductRepositoryTest extends WebapiAbstract
     const CONFIGURABLE_PRODUCT_SKU = 'configurable-product-sku';
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\Entity\Attribute
+     * @var Attribute
      */
     protected $configurableAttribute;
 
     /**
-     * Execute per test initialization
+     * @inheritdoc
      */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->eavConfig = $this->objectManager->get(\Magento\Eav\Model\Config::class);
+        $this->eavConfig = $this->objectManager->get(Config::class);
     }
 
     /**
-     * Execute per test cleanup
+     * @inheritdoc
      */
     public function tearDown()
     {
@@ -54,16 +58,26 @@ class ProductRepositoryTest extends WebapiAbstract
         parent::tearDown();
     }
 
+    /**
+     * Retrieve configurable attribute options
+     *
+     * @return array
+     */
     protected function getConfigurableAttributeOptions()
     {
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection */
+        /** @var Collection $optionCollection */
         $optionCollection = $this->objectManager->create(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
+            Collection::class
         );
         $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
         return $options;
     }
 
+    /**
+     * Create configurable product by web api
+     *
+     * @return array
+     */
     protected function createConfigurableProduct()
     {
         $productId1 = 10;
@@ -254,7 +268,6 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals([$productId1], $resultConfigurableProductLinks);
 
         //adding back the product links, the option value should be restored
-        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links']
             = [$productId1, $productId2];
         //set the value for required attribute
@@ -286,7 +299,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $nonExistingId
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -362,7 +375,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'The product was unable to be saved. Please try again.';
+        $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -389,7 +402,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -415,7 +428,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+                'httpMethod' => Request::HTTP_METHOD_POST
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -440,7 +453,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE
+                'httpMethod' => Request::HTTP_METHOD_DELETE
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -475,7 +488,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
+                'httpMethod' => Request::HTTP_METHOD_PUT
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class ConnectionManagerTest
+ *  Test for Magento\Elasticsearch\SearchAdapter\ConnectionManager
  */
 class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -81,7 +81,7 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConnectionSuccessfull()
     {
-        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $client = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientFactory->expects($this->once())
