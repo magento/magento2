@@ -1,34 +1,36 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model;
 
-/**
- * Class \Magento\Cron\Model\Config
- */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Cron\Model\Config;
+use Magento\Cron\Model\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Cron\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $_configData;
 
     /**
-     * @var \Magento\Cron\Model\Config
+     * @var Config
      */
     protected $_config;
 
     /**
      * Prepare data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configData = $this->getMockBuilder(
-            \Magento\Cron\Model\Config\Data::class
+            Data::class
         )->disableOriginalConstructor()->getMock();
-        $this->_config = new \Magento\Cron\Model\Config($this->_configData);
+        $this->_config = new Config($this->_configData);
     }
 
     /**

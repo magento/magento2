@@ -1,27 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
 
+use Magento\Cron\Model\Config\Converter\Db;
 use Magento\Framework\App\Config;
-use Magento\GoogleAdwords\Block\Code;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test reading for cron parameters from data base storage
- *
- * @package Magento\Cron\Test\Unit\Model\Config\Reader
  */
-class DbTest extends \PHPUnit\Framework\TestCase
+class DbTest extends TestCase
 {
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Cron\Model\Config\Converter\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var Db|MockObject
      */
     protected $_converter;
 
@@ -33,12 +33,12 @@ class DbTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_converter = new \Magento\Cron\Model\Config\Converter\Db();
+        $this->_converter = new Db();
         $this->_reader = new \Magento\Cron\Model\Config\Reader\Db($this->config, $this->_converter);
     }
 
