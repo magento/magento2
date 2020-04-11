@@ -1,23 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Model\Session;
-use Magento\Framework\Session\Config\ConfigInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\Model\Context;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Persistent\Model\Session;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase
 {

@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Block\Header;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Customer\Helper\View;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\View\Element\Template\Context;
+use Magento\Customer\Helper\View;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Block\Header\Additional;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Persistent\Block\Header\Additional;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

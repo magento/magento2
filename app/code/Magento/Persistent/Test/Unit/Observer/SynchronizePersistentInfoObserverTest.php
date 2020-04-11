@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,14 +7,14 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\SynchronizePersistentInfoObserver;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event;
+use Magento\Persistent\Observer\SynchronizePersistentInfoObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SynchronizePersistentInfoObserverTest extends TestCase
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,14 +7,14 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\ClearExpiredCronJobObserver;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
-use Magento\Persistent\Model\SessionFactory;
 use Magento\Cron\Model\Schedule;
 use Magento\Persistent\Model\Session;
+use Magento\Persistent\Model\SessionFactory;
+use Magento\Persistent\Observer\ClearExpiredCronJobObserver;
 use Magento\Store\Model\ResourceModel\Website\Collection;
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ClearExpiredCronJobObserverTest extends TestCase
 {

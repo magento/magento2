@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Customer\CustomerData\Customer;
+use Magento\Customer\Model\Session;
+use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Model\Plugin\CustomerData;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Data;
-use Magento\Customer\Model\Session;
-use Magento\Customer\CustomerData\Customer;
+use PHPUnit\Framework\TestCase;
 
 class CustomerDataTest extends TestCase
 {

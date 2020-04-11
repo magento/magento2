@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,13 +7,13 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Event\Observer;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\SessionFactory;
-use Magento\Framework\Event\Observer;
+use Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SynchronizePersistentOnLogoutObserverTest extends TestCase
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,16 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Helper\Session;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Model\QuoteManager;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use \Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
 {
@@ -134,7 +134,7 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
     public function testExecuteWithNonexistentCart()
     {
         $customerId = 1;
-        $exception = new NoSuchEntityException;
+        $exception = new NoSuchEntityException();
 
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);

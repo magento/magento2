@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,16 +7,16 @@
 
 namespace Magento\Persistent\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Helper\Session;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Data;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Customer\Model\GroupManagement;
-use Magento\Quote\Model\Quote\Address;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class QuoteManagerTest extends TestCase
 {

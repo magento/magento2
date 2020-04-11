@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +6,19 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\RequestInterface;
-use Magento\Persistent\Helper\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Framework\Event\Observer;
-use Magento\Persistent\Model\QuoteManager;
 use Magento\Framework\Event\ManagerInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,15 +7,15 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\SetQuotePersistentDataObserver;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Model\Quote;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Helper\Session;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\SetQuotePersistentDataObserver;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Observer test for setting "is_persistent" value to quote

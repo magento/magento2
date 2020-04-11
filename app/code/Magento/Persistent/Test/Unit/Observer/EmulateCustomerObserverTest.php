@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,16 +7,16 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Observer\EmulateCustomerObserver;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Framework\Event\Observer;
-use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Api\Data\CustomerInterface;
+use PHPUnit\Framework\TestCase;
 
 class EmulateCustomerObserverTest extends TestCase
 {

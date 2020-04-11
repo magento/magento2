@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,16 +7,16 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Persistent\Config;
+use Magento\Persistent\Model\Persistent\ConfigFactory;
 use Magento\Persistent\Observer\ApplyBlockPersistentDataObserver;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Model\Persistent\ConfigFactory;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Persistent\Model\Persistent\Config;
+use PHPUnit\Framework\TestCase;
 
 class ApplyBlockPersistentDataObserverTest extends TestCase
 {

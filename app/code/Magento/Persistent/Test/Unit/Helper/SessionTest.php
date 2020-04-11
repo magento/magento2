@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session as SessionHelper;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Persistent\Helper\Data as DataHelper;
-use Magento\Persistent\Model\SessionFactory;
+use Magento\Persistent\Helper\Session as SessionHelper;
 use Magento\Persistent\Model\Session;
+use Magento\Persistent\Model\SessionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class \Magento\Persistent\Test\Unit\Helper\SessionTest

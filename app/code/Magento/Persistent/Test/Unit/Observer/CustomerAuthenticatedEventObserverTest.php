@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,13 +7,13 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\CustomerAuthenticatedEventObserver;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Persistent\Model\QuoteManager;
-use Magento\Framework\App\RequestInterface;
+use Magento\Persistent\Observer\CustomerAuthenticatedEventObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CustomerAuthenticatedEventObserverTest extends TestCase
 {

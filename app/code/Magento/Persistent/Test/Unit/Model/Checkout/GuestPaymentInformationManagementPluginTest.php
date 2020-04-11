@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,17 @@
 
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Checkout\Model\GuestPaymentInformationManagement;
+use Magento\Framework\Data\Collection;
 use Magento\Persistent\Helper\Data;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Persistent\Model\Checkout\GuestPaymentInformationManagementPlugin;
-use Magento\Checkout\Model\GuestPaymentInformationManagement;
-use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\Data\Collection;
+use Magento\Quote\Api\Data\PaymentInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class GuestPaymentInformationManagementPluginTest extends TestCase
 {

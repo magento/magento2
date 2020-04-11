@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Model\Checkout\ConfigProviderPlugin;
+use Magento\Checkout\Model\DefaultConfigProvider;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
-use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Checkout\Model\DefaultConfigProvider;
-use Magento\Quote\Model\QuoteIdMask;
+use Magento\Persistent\Model\Checkout\ConfigProviderPlugin;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ConfigProviderPluginTest extends TestCase
 {

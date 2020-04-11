@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Session\SessionManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Persistent\Observer\RefreshCustomerData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RefreshCustomerDataTest extends TestCase
 {

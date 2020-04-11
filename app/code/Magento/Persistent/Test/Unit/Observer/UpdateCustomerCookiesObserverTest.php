@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,15 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\UpdateCustomerCookiesObserver;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Observer\UpdateCustomerCookiesObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class UpdateCustomerCookiesTest

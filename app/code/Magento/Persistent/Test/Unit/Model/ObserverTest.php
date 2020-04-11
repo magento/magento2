@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,16 @@
 
 namespace Magento\Persistent\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Model\Observer;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\View;
 use Magento\Framework\Escaper;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Observer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ObserverTest extends TestCase
 {
@@ -56,7 +56,6 @@ class ObserverTest extends TestCase
 
     protected function setUp(): void
     {
-
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->persistentSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

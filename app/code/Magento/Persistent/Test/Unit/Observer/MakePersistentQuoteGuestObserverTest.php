@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,15 +7,15 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Controller\Index;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Observer\MakePersistentQuoteGuestObserver;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Controller\Index;
-use Magento\Framework\Event\Observer;
-use Magento\Persistent\Helper\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Model\QuoteManager;
-use Magento\Framework\Event;
+use PHPUnit\Framework\TestCase;
 
 class MakePersistentQuoteGuestObserverTest extends TestCase
 {

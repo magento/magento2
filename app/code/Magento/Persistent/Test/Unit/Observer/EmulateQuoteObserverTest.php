@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,17 +7,17 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\EmulateQuoteObserver;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event;
-use Magento\Framework\App\Request\Http;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Observer\EmulateQuoteObserver;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

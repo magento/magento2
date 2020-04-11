@@ -8,16 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver;
-use Magento\Persistent\Helper\Data;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SetCheckoutSessionPersistentDataObserverTest extends TestCase
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,13 +7,13 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Persistent\Helper\Session;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Data;
-use Magento\Persistent\Model\QuoteManager;
 use Magento\Framework\Event\Observer;
-use \Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RemovePersistentCookieOnRegisterObserverTest extends TestCase
 {

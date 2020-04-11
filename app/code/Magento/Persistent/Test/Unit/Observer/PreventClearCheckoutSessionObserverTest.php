@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,14 +7,14 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Controller\Index;
+use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Observer\PreventClearCheckoutSessionObserver;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Customer\Model\Session;
-use Magento\Persistent\Helper\Data;
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event;
-use Magento\Persistent\Controller\Index;
+use PHPUnit\Framework\TestCase;
 
 class PreventClearCheckoutSessionObserverTest extends TestCase
 {

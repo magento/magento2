@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Model\Factory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Persistent\Model\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {

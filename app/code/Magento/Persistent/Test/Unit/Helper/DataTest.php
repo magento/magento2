@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Module\Dir\Reader;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Persistent\Helper\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Persistent\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
