@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\SwaggerWebapi\Test\Unit\Model\SchemaType;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapi\Model\SchemaType\Rest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RestTest extends TestCase
 {
