@@ -7,63 +7,73 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class MakePersistentQuoteGuestObserverTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Persistent\Observer\MakePersistentQuoteGuestObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Persistent\Controller\Index;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Framework\Event;
+
+class MakePersistentQuoteGuestObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\MakePersistentQuoteGuestObserver
+     * @var MakePersistentQuoteGuestObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $actionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->actionMock = $this->createMock(\Magento\Persistent\Controller\Index::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->actionMock = $this->createMock(Index::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->sessionHelperMock = $this->createMock(Session::class);
+        $this->helperMock = $this->createMock(Data::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
+        $this->quoteManagerMock = $this->createMock(QuoteManager::class);
         $this->eventManagerMock =
-            $this->createPartialMock(\Magento\Framework\Event::class, ['getControllerAction', '__wakeUp']);
+            $this->createPartialMock(Event::class, ['getControllerAction', '__wakeUp']);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
             ->will($this->returnValue($this->eventManagerMock));
-        $this->model = new \Magento\Persistent\Observer\MakePersistentQuoteGuestObserver(
+        $this->model = new MakePersistentQuoteGuestObserver(
             $this->sessionHelperMock,
             $this->helperMock,
             $this->customerSessionMock,

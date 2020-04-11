@@ -7,40 +7,48 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class CustomerAuthenticatedEventObserverTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Persistent\Observer\CustomerAuthenticatedEventObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Framework\App\RequestInterface;
+
+class CustomerAuthenticatedEventObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\CustomerAuthenticatedEventObserver
+     * @var CustomerAuthenticatedEventObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->model = new \Magento\Persistent\Observer\CustomerAuthenticatedEventObserver(
+        $this->customerSessionMock = $this->createMock(Session::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->quoteManagerMock = $this->createMock(QuoteManager::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->model = new CustomerAuthenticatedEventObserver(
             $this->customerSessionMock,
             $this->requestMock,
             $this->quoteManagerMock

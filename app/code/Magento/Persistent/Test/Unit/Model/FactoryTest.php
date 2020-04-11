@@ -5,25 +5,31 @@
  */
 namespace Magento\Persistent\Test\Unit\Model;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Persistent\Model\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Persistent\Model\Factory
+     * @var Factory
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_factory = $helper->getObject(
-            \Magento\Persistent\Model\Factory::class,
+            Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }

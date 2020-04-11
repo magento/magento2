@@ -6,40 +6,47 @@
 
 namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
-class CustomerDataTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Persistent\Model\Plugin\CustomerData;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Persistent\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Customer\CustomerData\Customer;
+
+class CustomerDataTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Model\Plugin\CustomerData
+     * @var CustomerData
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->subjectMock = $this->createMock(\Magento\Customer\CustomerData\Customer::class);
-        $this->plugin = new \Magento\Persistent\Model\Plugin\CustomerData(
+        $this->subjectMock = $this->createMock(Customer::class);
+        $this->plugin = new CustomerData(
             $this->helperMock,
             $this->customerSessionMock,
             $this->persistentSessionMock
