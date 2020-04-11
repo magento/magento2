@@ -1,75 +1,90 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\Config\View;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Image;
+use Magento\Framework\Image\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Swatches\Helper\Media;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Helper to move images from tmp to catalog directory
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MediaTest extends \PHPUnit\Framework\TestCase
+class MediaTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Media\Config */
+    /** @var MockObject|Config */
     protected $mediaConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
+    /** @var MockObject|Filesystem */
     protected $fileSystemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface */
+    /** @var MockObject|WriteInterface */
     protected $writeInstanceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database */
+    /** @var MockObject|Database */
     protected $fileStorageDbMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /** @var MockObject|StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Factory */
+    /** @var MockObject|Factory */
     protected $imageFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
+    /** @var MockObject|\Magento\Framework\View\Config */
     protected $viewConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write */
+    /** @var MockObject|Write */
     protected $mediaDirectoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store */
+    /** @var MockObject|Store */
     protected $storeMock;
 
-    /** @var \Magento\Swatches\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var Media|ObjectManager */
     protected $mediaHelperObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->mediaConfigMock = $this->createMock(\Magento\Catalog\Model\Product\Media\Config::class);
-        $this->writeInstanceMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $this->mediaConfigMock = $this->createMock(Config::class);
+        $this->writeInstanceMock = $this->createMock(WriteInterface::class);
         $this->fileStorageDbMock = $this->createPartialMock(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class,
+            Database::class,
             ['checkDbUsage', 'getUniqueFilename', 'renameFile']
         );
 
-        $this->storeManagerMock = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStore']);
 
-        $this->imageFactoryMock = $this->createMock(\Magento\Framework\Image\Factory::class);
+        $this->imageFactoryMock = $this->createMock(Factory::class);
 
         $this->viewConfigMock = $this->createMock(\Magento\Framework\View\Config::class);
 
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getBaseUrl']);
+        $this->storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
-        $this->mediaDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $this->fileSystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
+        $this->mediaDirectoryMock = $this->createMock(Write::class);
+        $this->fileSystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->fileSystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->mediaDirectoryMock));
 
         $this->mediaHelperObject = $objectManager->getObject(
-            \Magento\Swatches\Helper\Media::class,
+            Media::class,
             [
                 'mediaConfig' => $this->mediaConfigMock,
                 'filesystem' => $this->fileSystemMock,
@@ -147,7 +162,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->willReturn('attribute/swatch/e/a/earth.png');
 
-        $image = $this->createPartialMock(\Magento\Framework\Image::class, [
+        $image = $this->createPartialMock(Image::class, [
                 'resize',
                 'save',
                 'keepTransparency',
@@ -167,7 +182,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSwatchMediaUrl()
     {
-        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getBaseUrl']);
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
         $this->storeManagerMock
             ->expects($this->once())
@@ -247,7 +262,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
 
     protected function generateImageConfig()
     {
-        $configMock = $this->createMock(\Magento\Framework\Config\View::class);
+        $configMock = $this->createMock(View::class);
 
         $this->viewConfigMock
             ->expects($this->atLeastOnce())
