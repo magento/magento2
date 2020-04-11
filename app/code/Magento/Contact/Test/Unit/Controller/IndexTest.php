@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,32 +6,37 @@
 
 namespace Magento\Contact\Test\Unit\Controller;
 
+use Magento\Contact\Controller\Index;
 use Magento\Contact\Model\ConfigInterface;
+use Magento\Contact\Test\Unit\Controller\Stub\IndexStub;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
      * Controller instance
      *
-     * @var \Magento\Contact\Controller\Index
+     * @var Index
      */
     private $controller;
 
     /**
      * Module config instance
      *
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
         $context = $this->getMockBuilder(
-            \Magento\Framework\App\Action\Context::class
+            Context::class
         )->setMethods(
             ['getRequest', 'getResponse']
         )->disableOriginalConstructor(
@@ -53,7 +58,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
-        $this->controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
+        $this->controller = new IndexStub(
             $context,
             $this->configMock
         );
@@ -61,11 +66,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Dispatch test
-     *
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatch()
     {
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
         $this->configMock->method('isEnabled')->willReturn(false);
 
         $this->controller->dispatch(

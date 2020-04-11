@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -8,34 +8,40 @@ namespace Magento\Contact\Test\Unit\Model;
 
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Mail;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MailTest extends \PHPUnit\Framework\TestCase
+class MailTest extends TestCase
 {
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportBuilder|MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $storeManagerMock;
 
@@ -44,16 +50,16 @@ class MailTest extends \PHPUnit\Framework\TestCase
      */
     private $mail;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
-        $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->urlMock = $this->createMock(UrlInterface::class);
         $this->transportBuilderMock = $this->getMockBuilder(
-            \Magento\Framework\Mail\Template\TransportBuilder::class
+            TransportBuilder::class
         )->disableOriginalConstructor(
         )->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(
-            \Magento\Framework\Translate\Inline\StateInterface::class
+            StateInterface::class
         )->disableOriginalConstructor(
         )->getMock();
 
@@ -72,7 +78,7 @@ class MailTest extends \PHPUnit\Framework\TestCase
         $email = 'reply-to@example.com';
         $templateVars = ['comment' => 'Comment'];
 
-        $transport = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $store = $this->createMock(StoreInterface::class);
         $store->expects($this->once())->method('getId')->willReturn(555);

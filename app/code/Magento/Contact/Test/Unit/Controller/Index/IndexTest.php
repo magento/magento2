@@ -1,48 +1,55 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
+use Magento\Contact\Controller\Index\Index;
 use Magento\Contact\Model\ConfigInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
-     * @var \Magento\Contact\Controller\Index\Index
+     * @var Index
      */
     private $controller;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $url;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
         $context = $this->getMockBuilder(
-            \Magento\Framework\App\Action\Context::class
+            Context::class
         )->setMethods(
             ['getRequest', 'getResponse', 'getResultFactory', 'getUrl']
         )->disableOriginalConstructor(
         )->getMock();
 
-        $this->url = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
+        $this->url = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
 
         $context->expects($this->any())
             ->method('getUrl')
@@ -51,13 +58,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue(
-                $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMockForAbstractClass()
+                $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()
             ));
 
         $context->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue(
-                $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMockForAbstractClass()
+                $this->getMockBuilder(ResponseInterface::class)->getMockForAbstractClass()
             ));
 
         $this->resultFactory = $this->getMockBuilder(
@@ -69,7 +76,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getResultFactory')
             ->will($this->returnValue($this->resultFactory));
 
-        $this->controller = new \Magento\Contact\Controller\Index\Index(
+        $this->controller = new Index(
             $context,
             $this->configMock
         );
