@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ImportExport\Api\Data\ExportInfoInterface;
-use Magento\Framework\ObjectManagerInterface;
-use \Psr\Log\LoggerInterface;
+use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Model\Export\AbstractEntity;
+use Magento\ImportExport\Model\Export\Adapter\Factory as AdapterFactory;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory as EntityFactory;
-use Magento\ImportExport\Model\Export\Adapter\Factory as AdapterFactory;
-use Magento\ImportExport\Model\Export\AbstractEntity;
+use Psr\Log\LoggerInterface;
 
 /**
  * Factory for Export Info
@@ -85,10 +86,11 @@ class ExportInfoFactory
      * @param string $entity
      * @param string $exportFilter
      * @param array $skipAttr
+     * @param string $fieldsEnclosure
      * @return ExportInfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create($fileFormat, $entity, $exportFilter, $skipAttr)
+    public function create($fileFormat, $entity, $exportFilter, $skipAttr, $fieldsEnclosure)
     {
         $writer = $this->getWriter($fileFormat);
         $entityAdapter = $this->getEntityAdapter(
@@ -96,13 +98,16 @@ class ExportInfoFactory
             $fileFormat,
             $exportFilter,
             $skipAttr,
+            $fieldsEnclosure,
             $writer->getContentType()
         );
         $fileName = $this->generateFileName($entity, $entityAdapter, $writer->getFileExtension());
-        /** @var ExportInfoInterface $exportInfo */
+
+        /** @var ExtendedExportInfoInterface $exportInfo */
         $exportInfo = $this->objectManager->create(ExportInfoInterface::class);
         $exportInfo->setExportFilter($this->serializer->serialize($exportFilter));
         $exportInfo->setSkipAttr($skipAttr);
+        $exportInfo->setFieldsEnclosure($fieldsEnclosure);
         $exportInfo->setFileName($fileName);
         $exportInfo->setEntity($entity);
         $exportInfo->setFileFormat($fileFormat);
@@ -139,11 +144,12 @@ class ExportInfoFactory
      * @param string $fileFormat
      * @param string $exportFilter
      * @param array $skipAttr
+     * @param string $fieldsEnclosure
      * @param string $contentType
      * @return \Magento\ImportExport\Model\Export\AbstractEntity|AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getEntityAdapter($entity, $fileFormat, $exportFilter, $skipAttr, $contentType)
+    private function getEntityAdapter($entity, $fileFormat, $exportFilter, $skipAttr, $fieldsEnclosure, $contentType)
     {
         $entities = $this->exportConfig->getEntities();
         if (isset($entities[$entity])) {
@@ -181,6 +187,7 @@ class ExportInfoFactory
                 'entity' => $entity,
                 'exportFilter' => $exportFilter,
                 'skipAttr' => $skipAttr,
+                'fields_enclosure' => $fieldsEnclosure,
                 'contentType' => $contentType,
             ]
         );

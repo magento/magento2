@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Api\Data;
 
 /**
- * Extended export interface for implementation of Skipped Attributes which are missing from the basic interface
+ * Extended export interface for implementation of fields which are missing from the basic interface
  */
 interface ExtendedExportInfoInterface extends ExportInfoInterface
 {
@@ -26,4 +26,19 @@ interface ExtendedExportInfoInterface extends ExportInfoInterface
      * @return mixed
      */
     public function setSkipAttr($skipAttr);
+
+    /**
+     * Returns fields enclosure
+     *
+     * @return string
+     */
+    public function getFieldsEnclosure();
+
+    /**
+     * Set fields enclosure
+     *
+     * @param string $fieldsEnclosure
+     * @return void
+     */
+    public function setFieldsEnclosure($fieldsEnclosure);
 }
