@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
-use PHPUnit\Framework\TestCase;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Rule\Model\Condition\Combine;
-use Magento\Framework\DataObject;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\DataObject;
+use Magento\Rule\Model\Condition\Combine;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation
