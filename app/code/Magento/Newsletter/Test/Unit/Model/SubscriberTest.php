@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -22,8 +22,8 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Subscriber model functionality
@@ -100,7 +100,7 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->newsletterData = $this->createMock(Data::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
@@ -233,12 +233,11 @@ class SubscriberTest extends TestCase
 
     /**
      * Test to try unsubscribe customer from newsletters with wrong confirmation code
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
     public function testUnsubscribeException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('This is an invalid subscription confirmation code.');
         $this->subscriber->setCode(111);
         $this->subscriber->setCheckCode(222);
 
