@@ -15,6 +15,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Model\WebapiRoleLocator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class WebapiRoleLocatorTest extends TestCase
 {
     /**
@@ -46,6 +49,11 @@ class WebapiRoleLocatorTest extends TestCase
      * @var Role
      */
     protected $role;
+
+    /**
+     * @var ObjectManager
+     */
+    private $_objectManager;
 
     protected function setUp(): void
     {
