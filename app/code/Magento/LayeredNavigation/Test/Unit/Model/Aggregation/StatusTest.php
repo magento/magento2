@@ -6,21 +6,23 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Model\Aggregation;
 
+use PHPUnit\Framework\TestCase;
+use Magento\LayeredNavigation\Model\Aggregation\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+class StatusTest extends TestCase
 {
-    /** @var \Magento\LayeredNavigation\Model\Aggregation\Status */
+    /** @var Status */
     private $resolver;
 
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->resolver = $this->objectManagerHelper->getObject(
-            \Magento\LayeredNavigation\Model\Aggregation\Status::class
+            Status::class
         );
     }
 
