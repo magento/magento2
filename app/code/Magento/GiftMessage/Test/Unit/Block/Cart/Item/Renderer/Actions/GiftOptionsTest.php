@@ -31,6 +31,11 @@ class GiftOptionsTest extends TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
+    /**
+     * @var MockObject|CompositeConfigProvider
+     */
+    private $compositeConfigProvider;
+
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
