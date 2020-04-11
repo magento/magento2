@@ -5,37 +5,45 @@
  */
 namespace Magento\Cookie\Test\Unit\Controller\Index;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Cookie\Controller\Index\NoCookies;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class NoCookiesTest extends \PHPUnit\Framework\TestCase
+class NoCookiesTest extends TestCase
 {
     /**
-     * @var \Magento\Cookie\Controller\Index\NoCookies
+     * @var NoCookies
      */
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\ManagerInterface
+     * @var MockObject|ManagerInterface
      */
     private $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\Http
+     * @var MockObject|\Magento\Framework\App\Response\Http
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\RedirectInterface
+     * @var MockObject|RedirectInterface
      */
     private $redirectResponseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\ViewInterface
+     * @var MockObject|ViewInterface
      */
     protected $viewMock;
 
@@ -43,22 +51,22 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
     const REDIRECT_PATH = '\a\path';
     const REDIRECT_ARGUMENTS = '&arg1key=arg1value';
 
-    public function setup()
+    public function setup(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectResponseMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
+        $this->redirectResponseMock = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
-        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
 
         $this->controller = $objectManager->getObject(
-            \Magento\Cookie\Controller\Index\NoCookies::class,
+            NoCookies::class,
             [
                 'eventManager' => $this->eventManagerMock,
                 'request' => $this->requestMock,
@@ -79,7 +87,7 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
-                        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $redirect);
+                        $this->assertInstanceOf(DataObject::class, $redirect);
                         $redirect->setRedirectUrl(self::REDIRECT_URL);
                         return true;
                     }
@@ -108,7 +116,7 @@ class NoCookiesTest extends \PHPUnit\Framework\TestCase
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
-                        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $redirect);
+                        $this->assertInstanceOf(DataObject::class, $redirect);
                         $redirect->setArguments(self::REDIRECT_ARGUMENTS);
                         $redirect->setPath(self::REDIRECT_PATH);
                         $redirect->setRedirect(self::REDIRECT_URL);

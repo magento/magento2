@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Cookie\Test\Unit\Block;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Cookie\Block\RequireCookie;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -15,27 +17,27 @@ use Magento\Framework\View\Element\Template\Context;
 /**
  * Class \Magento\Cookie\Test\Unit\Block\RequireCookieTest
  */
-class RequireCookieTest extends \PHPUnit\Framework\TestCase
+class RequireCookieTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequireCookie
+     * @var MockObject|RequireCookie
      */
     private $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
      * Setup Environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()

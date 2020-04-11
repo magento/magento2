@@ -5,29 +5,36 @@
  */
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Cookie\Model\Config\Backend\Domain;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Model\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
 
 /**
  * Test \Magento\Cookie\Model\Config\Backend\Domain
  */
-class DomainTest extends \PHPUnit\Framework\TestCase
+class DomainTest extends TestCase
 {
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractResource|MockObject */
     protected $resourceMock;
 
-    /** @var \Magento\Cookie\Model\Config\Backend\Domain */
+    /** @var Domain */
     protected $domain;
 
     /**
-     * @var  CookieDomainValidator | \PHPUnit_Framework_MockObject_MockObject
+     * @var  CookieDomainValidator|MockObject
      */
     protected $validatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $eventDispatcherMock = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $eventDispatcherMock = $this->createMock(Manager::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects(
             $this->any()
         )->method(
@@ -36,7 +43,7 @@ class DomainTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($eventDispatcherMock)
         );
 
-        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
+        $this->resourceMock = $this->createPartialMock(AbstractResource::class, [
                 '_construct',
                 'getConnection',
                 'getIdFieldName',
@@ -48,12 +55,12 @@ class DomainTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->validatorMock = $this->getMockBuilder(
-            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
+            CookieDomainValidator::class
         )->disableOriginalConstructor()
             ->getMock();
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->domain = $helper->getObject(
-            \Magento\Cookie\Model\Config\Backend\Domain::class,
+            Domain::class,
             [
                 'context' => $contextMock,
                 'resource' => $this->resourceMock,

@@ -8,34 +8,38 @@
 
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Module\ModuleResource;
+use Magento\Cookie\Model\Config\Backend\Path;
 use Magento\Framework\Session\Config\Validator\CookiePathValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PathTest extends \PHPUnit\Framework\TestCase
+class PathTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookiePathValidator */
+    /** @var MockObject|CookiePathValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var MockObject|ModuleResource */
     private $resourceMock;
 
-    /** @var \Magento\Cookie\Model\Config\Backend\Path */
+    /** @var Path */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->getMockBuilder(
-            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
+            CookiePathValidator::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
+        $this->resourceMock = $this->getMockBuilder(ModuleResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Cookie\Model\Config\Backend\Path::class,
+            Path::class,
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock
@@ -45,12 +49,11 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Method is not publicly accessible, so it must be called through parent
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid cookie path
      */
     public function testBeforeSaveException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Invalid cookie path');
         $invalidCookiePath = 'invalid path';
         $this->validatorMock->expects($this->once())
             ->method('isValid')
