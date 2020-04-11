@@ -29,7 +29,6 @@
             <!--Cancel orders-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
-            <waitForLoadingMaskToDisappear stepKey="waitAfterClearFilters"/>
             <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
                 <argument name="columnLabel" value="Customer Email"/>
             </actionGroup>

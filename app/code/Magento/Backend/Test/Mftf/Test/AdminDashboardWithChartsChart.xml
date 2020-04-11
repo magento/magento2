@@ -34,7 +34,6 @@
             <!-- Reset admin order filter -->
             <comment userInput="Reset admin order filter" stepKey="resetAdminOrderFilter"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForLoadingOrderGrid"/>
             <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
