@@ -1,27 +1,43 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Observer;
 
+use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Captcha\Observer\CheckUserCreateObserver;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Session\SessionManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
+class CheckUserCreateObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Captcha\Observer\CheckUserCreateObserver
+     * @var CheckUserCreateObserver
      */
     protected $checkUserCreateObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_actionFlag;
 
@@ -31,47 +47,47 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
     protected $_messageManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_urlManager;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var CaptchaStringResolver|MockObject
      */
     protected $captchaStringResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_captcha;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $redirect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $this->createMock(\Magento\Captcha\Helper\Data::class);
-        $this->_actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $this->_messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->_session = $this->createMock(\Magento\Framework\Session\SessionManager::class);
-        $this->_urlManager = $this->createMock(\Magento\Framework\Url::class);
-        $this->captchaStringResolver = $this->createMock(\Magento\Captcha\Observer\CaptchaStringResolver::class);
-        $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->_objectManager = new ObjectManager($this);
+        $this->_helper = $this->createMock(Data::class);
+        $this->_actionFlag = $this->createMock(ActionFlag::class);
+        $this->_messageManager = $this->createMock(ManagerInterface::class);
+        $this->_session = $this->createMock(SessionManager::class);
+        $this->_urlManager = $this->createMock(Url::class);
+        $this->captchaStringResolver = $this->createMock(CaptchaStringResolver::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->checkUserCreateObserver = $this->_objectManager->getObject(
-            \Magento\Captcha\Observer\CheckUserCreateObserver::class,
+            CheckUserCreateObserver::class,
             [
                 'helper' => $this->_helper,
                 'actionFlag' => $this->_actionFlag,
@@ -82,7 +98,7 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
                 'captchaStringResolver' => $this->captchaStringResolver
             ]
         );
-        $this->_captcha = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $this->_captcha = $this->createMock(DefaultModel::class);
     }
 
     public function testCheckUserCreateRedirectsError()
@@ -93,7 +109,7 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
         $redirectRoutePath = '*/*/create';
         $redirectUrl = 'http://magento.com/customer/account/create/';
 
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $request = $this->createMock(Http::class);
 
         $this->redirect->expects(
             $this->once()
@@ -119,7 +135,7 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($redirectUrl)
         );
 
-        $controller = $this->createMock(\Magento\Framework\App\Action\Action::class);
+        $controller = $this->createMock(Action::class);
         $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
         $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
         $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
@@ -158,12 +174,12 @@ class CheckUserCreateObserverTest extends \PHPUnit\Framework\TestCase
             'set'
         )->with(
             '',
-            \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
+            Action::FLAG_NO_DISPATCH,
             true
         );
 
         $this->checkUserCreateObserver->execute(
-            new \Magento\Framework\Event\Observer(['controller_action' => $controller])
+            new Observer(['controller_action' => $controller])
         );
     }
 }

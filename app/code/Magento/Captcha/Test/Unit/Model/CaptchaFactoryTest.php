@@ -1,29 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model;
 
-class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Model\CaptchaFactory;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class CaptchaFactoryTest extends TestCase
 {
     /**@var \PHPUnit_Framework_MockObject_MockObject */
     protected $_objectManagerMock;
 
-    /** @var \Magento\Captcha\Model\CaptchaFactory */
+    /** @var CaptchaFactory */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new \Magento\Captcha\Model\CaptchaFactory($this->_objectManagerMock);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_model = new CaptchaFactory($this->_objectManagerMock);
     }
 
     public function testCreatePositive()
     {
         $captchaType = 'default';
 
-        $defaultCaptchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $defaultCaptchaMock = $this->createMock(DefaultModel::class);
 
         $this->_objectManagerMock->expects(
             $this->once()

@@ -1,43 +1,56 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Cron;
 
-class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Cron\DeleteExpiredImages;
+use Magento\Captcha\Helper\Data;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\Constraint\IsIdentical;
+use PHPUnit\Framework\Constraint\IsNull;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DeleteExpiredImagesTest extends TestCase
 {
     /**
      * CAPTCHA helper
      *
-     * @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $_helper;
 
     /**
      * CAPTCHA helper
      *
-     * @var \Magento\Captcha\Helper\Adminhtml\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data|MockObject
      */
     protected $_adminHelper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Captcha\Cron\DeleteExpiredImages
+     * @var DeleteExpiredImages
      */
     protected $_deleteExpiredImages;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     protected $_directory;
 
@@ -49,13 +62,13 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_helper = $this->createMock(\Magento\Captcha\Helper\Data::class);
+        $this->_helper = $this->createMock(Data::class);
         $this->_adminHelper = $this->createMock(\Magento\Captcha\Helper\Adminhtml\Data::class);
-        $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->_directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_filesystem = $this->createMock(Filesystem::class);
+        $this->_directory = $this->createMock(Write::class);
+        $this->_storeManager = $this->createMock(StoreManager::class);
 
         $this->_filesystem->expects(
             $this->once()
@@ -65,7 +78,7 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_directory)
         );
 
-        $this->_deleteExpiredImages = new \Magento\Captcha\Cron\DeleteExpiredImages(
+        $this->_deleteExpiredImages = new DeleteExpiredImages(
             $this->_helper,
             $this->_adminHelper,
             $this->_filesystem,
@@ -92,7 +105,7 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
                 'getConfig'
             )->with(
                 $this->equalTo('timeout'),
-                new \PHPUnit\Framework\Constraint\IsIdentical($website->getDefaultStore())
+                new IsIdentical($website->getDefaultStore())
             )->will(
                 $this->returnValue($timeout)
             );
@@ -105,7 +118,7 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
             'getConfig'
         )->with(
             $this->equalTo('timeout'),
-            new \PHPUnit\Framework\Constraint\IsNull()
+            new IsNull()
         )->will(
             $this->returnValue($timeout)
         );
@@ -129,8 +142,8 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function getExpiredImages()
     {
-        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['__wakeup', 'getDefaultStore']);
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['__wakeup']);
+        $website = $this->createPartialMock(Website::class, ['__wakeup', 'getDefaultStore']);
+        $store = $this->createPartialMock(Store::class, ['__wakeup']);
         $website->expects($this->any())->method('getDefaultStore')->will($this->returnValue($store));
         $time = time();
         return [
