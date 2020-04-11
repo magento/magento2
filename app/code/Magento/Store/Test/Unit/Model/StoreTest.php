@@ -632,7 +632,7 @@ class StoreTest extends TestCase
         $useSecureInFrontend = true,
         $secureBaseUrl = 'https://example.com:443'
     ) {
-        /* @var ReinitableConfigInterface|PHPUnit_Framework_MockObject_MockObject $configMock */
+        /* @var ReinitableConfigInterface|MockObject $configMock */
         $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $configMock->expects($this->any())
             ->method('getValue')
