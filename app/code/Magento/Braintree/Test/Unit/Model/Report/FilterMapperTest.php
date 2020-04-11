@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,33 +9,33 @@ use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface;
 use Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool;
 use Magento\Braintree\Model\Report\FilterMapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class FilterMapperTest
- *
  * Test for class \Magento\Braintree\Model\Report\FilterMapper
  */
-class FilterMapperTest extends \PHPUnit\Framework\TestCase
+class FilterMapperTest extends TestCase
 {
     /**
-     * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeSearchAdapter|MockObject
      */
     private $braintreeSearchAdapterMock;
 
     /**
-     * @var AppliersPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppliersPool|MockObject
      */
     private $appliersPoolMock;
 
     /**
-     * @var ApplierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplierInterface|MockObject
      */
     private $applierMock;
 
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $methods = [
             'id',

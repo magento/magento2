@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,14 +8,13 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\Request\ChannelDataBuilder;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Gateway\Config\Config;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PaymentDataBuilderTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
+class ChannelDataBuilderTest extends TestCase
 {
     /**
      * @var ProductMetadataInterface|MockObject
@@ -35,7 +34,7 @@ class ChannelDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()

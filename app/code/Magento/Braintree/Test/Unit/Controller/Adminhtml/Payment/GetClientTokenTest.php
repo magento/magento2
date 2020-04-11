@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,12 +14,13 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Controller\Adminhtml\Payment\GetClientToken
  */
-class GetClientTokenTest extends \PHPUnit\Framework\TestCase
+class GetClientTokenTest extends TestCase
 {
     /**
      * @var GetClientToken
@@ -46,7 +47,7 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
      */
     private $resultFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

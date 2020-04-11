@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,15 +15,14 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\ResultInterface as CommandResultInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetNonceTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetNonceTest extends \PHPUnit\Framework\TestCase
+class GetNonceTest extends TestCase
 {
     /**
      * @var GetNonce
@@ -65,7 +64,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
      */
     private $commandResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initResultFactoryMock();
 

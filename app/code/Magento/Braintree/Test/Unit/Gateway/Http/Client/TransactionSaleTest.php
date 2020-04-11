@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,13 +10,14 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Tests \Magento\Braintree\Gateway\Http\Client\TransactionSale.
  */
-class TransactionSaleTest extends \PHPUnit\Framework\TestCase
+class TransactionSaleTest extends TestCase
 {
     /**
      * @var TransactionSale
@@ -36,7 +37,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -61,12 +62,11 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      * Runs test placeRequest method (exception)
      *
      * @return void
-     *
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Test messages
      */
     public function testPlaceRequestException()
     {
+        $this->expectException('Magento\Payment\Gateway\Http\ClientException');
+        $this->expectExceptionMessage('Test messages');
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(
@@ -138,7 +138,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      */
     private function getResponseObject()
     {
-        $obj = new \stdClass;
+        $obj = new \stdClass();
         $obj->success = true;
 
         return $obj;

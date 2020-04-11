@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,18 @@
 namespace Magento\Braintree\Test\Unit\Observer;
 
 use Magento\Braintree\Block\Paypal\Button;
+use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AddPaypalShortcutsTest
- *
  * @see \Magento\Braintree\Observer\AddPaypalShortcuts
  */
-class AddPaypalShortcutsTest extends \PHPUnit\Framework\TestCase
+class AddPaypalShortcutsTest extends TestCase
 {
     /**
      * Tests PayPal shortcuts observer.
@@ -31,18 +31,18 @@ class AddPaypalShortcutsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        /** @var Observer|\PHPUnit_Framework_MockObject_MockObject $observerMock */
+        /** @var Observer|MockObject $observerMock */
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Event|\PHPUnit_Framework_MockObject_MockObject $eventMock */
+        /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)
             ->setMethods(['getContainer'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ShortcutButtons|\PHPUnit_Framework_MockObject_MockObject $shortcutButtonsMock */
+        /** @var ShortcutButtons|MockObject $shortcutButtonsMock */
         $shortcutButtonsMock = $this->getMockBuilder(ShortcutButtons::class)
             ->disableOriginalConstructor()
             ->getMock();

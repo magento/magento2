@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,17 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\RiskDataHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class RiskDataHandlerTest
- *
  * @see \Magento\Braintree\Gateway\Response\RiskDataHandler
  */
-class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
+class RiskDataHandlerTest extends TestCase
 {
     /**
      * @var RiskDataHandler
@@ -32,7 +31,7 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()

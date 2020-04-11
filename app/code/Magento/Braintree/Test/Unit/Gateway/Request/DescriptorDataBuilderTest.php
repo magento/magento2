@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,12 +10,10 @@ use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DescriptorDataBuilderTest
- */
-class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
+class DescriptorDataBuilderTest extends TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -32,7 +30,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

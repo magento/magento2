@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,11 +8,10 @@ namespace Magento\Braintree\Test\Unit\Helper;
 use Magento\Braintree\Helper\CcType;
 use Magento\Braintree\Model\Adminhtml\Source\CcType as CcTypeSource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CcTypeTest
- */
-class CcTypeTest extends \PHPUnit\Framework\TestCase
+class CcTypeTest extends TestCase
 {
 
     /**
@@ -25,10 +24,10 @@ class CcTypeTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    /** @var \Magento\Braintree\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Braintree\Model\Adminhtml\Source\CcType|MockObject */
     private $ccTypeSource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

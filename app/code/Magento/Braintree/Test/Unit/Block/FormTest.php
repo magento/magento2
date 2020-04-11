@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,12 +14,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Block\Form.
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     public static $baseCardTypes = [
         'AE' => 'American Express',
@@ -65,7 +66,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $storeId = '1';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();

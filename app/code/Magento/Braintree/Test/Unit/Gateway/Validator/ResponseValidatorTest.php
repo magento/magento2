@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,12 +14,10 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ResponseValidatorTest
- */
-class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
+class ResponseValidatorTest extends TestCase
 {
     /**
      * @var ResponseValidator
@@ -36,7 +34,7 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultInterfaceFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -50,11 +48,9 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testValidateReadResponseException()
     {
+        $this->expectException('InvalidArgumentException');
         $validationSubject = [
             'response' => null
         ];
@@ -62,11 +58,9 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->responseValidator->validate($validationSubject);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testValidateReadResponseObjectException()
     {
+        $this->expectException('InvalidArgumentException');
         $validationSubject = [
             'response' => ['object' => null]
         ];

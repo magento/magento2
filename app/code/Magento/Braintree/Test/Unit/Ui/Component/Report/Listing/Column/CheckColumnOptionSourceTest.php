@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,11 +8,9 @@ namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Listing\Column;
 use Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType;
 use Magento\Braintree\Ui\Component\Report\Listing\Column\Status;
 use Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CheckColumnOptionSourceTest
- */
-class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
+class CheckColumnOptionSourceTest extends TestCase
 {
     public function testPaymentTypeSource()
     {

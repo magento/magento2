@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,12 +11,13 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\RefundDataBuilder.
  */
-class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
+class RefundDataBuilderTest extends TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -43,7 +44,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $transactionId = 'xsd7n';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->paymentModelMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()

@@ -13,12 +13,13 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\VaultCaptureDataBuilder.
  */
-class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
+class VaultCaptureDataBuilderTest extends TestCase
 {
     /**
      * @var VaultCaptureDataBuilder
@@ -108,12 +109,11 @@ class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a builder execution if Payment Token doesn't exist.
-     *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage The Payment Token is not available to perform the request.
      */
     public function testBuildWithoutPaymentToken(): void
     {
+        $this->expectException('Magento\Payment\Gateway\Command\CommandException');
+        $this->expectExceptionMessage('The Payment Token is not available to perform the request.');
         $amount = 30.00;
         $buildSubject = [
             'payment' => $this->paymentDO,

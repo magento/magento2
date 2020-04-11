@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,19 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Http\Client\TransactionRefund;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
 /**
  * Tests \Magento\Braintree\Gateway\Http\Client\TransactionRefund.
  */
-class TransactionRefundTest extends \PHPUnit\Framework\TestCase
+class TransactionRefundTest extends TestCase
 {
     /**
      * @var TransactionRefund
@@ -47,7 +48,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -70,12 +71,11 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     *
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Test messages
      */
     public function testPlaceRequestException()
     {
+        $this->expectException('Magento\Payment\Gateway\Http\ClientException');
+        $this->expectExceptionMessage('Test messages');
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(
@@ -102,7 +102,7 @@ class TransactionRefundTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceRequestSuccess()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->success = true;
         $this->adapterMock->expects($this->once())
             ->method('refund')

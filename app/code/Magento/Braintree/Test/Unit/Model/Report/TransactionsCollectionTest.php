@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,14 +11,13 @@ use Magento\Braintree\Model\Report\FilterMapper;
 use Magento\Braintree\Model\Report\TransactionsCollection;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TransactionsCollectionTest
- *
  * Test for class \Magento\Braintree\Model\Report\TransactionsCollection
  */
-class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
+class TransactionsCollectionTest extends TestCase
 {
     /**
      * @var BraintreeAdapter|MockObject
@@ -48,7 +47,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transactionMapMock = $this->getMockBuilder(DocumentInterface::class)
             ->disableOriginalConstructor()

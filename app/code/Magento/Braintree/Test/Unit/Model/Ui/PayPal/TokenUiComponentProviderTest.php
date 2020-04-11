@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,15 +7,13 @@ namespace Magento\Braintree\Test\Unit\Model\Ui\PayPal;
 
 use Magento\Braintree\Model\Ui\PayPal\TokenUiComponentProvider;
 use Magento\Framework\UrlInterface;
-use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Vault\Model\Ui\TokenUiComponentInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TokenUiComponentProviderTest
- */
-class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
+class TokenUiComponentProviderTest extends TestCase
 {
     /**
      * @var UrlInterface|MockObject
@@ -42,7 +40,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $componentProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentFactory = $this->getMockBuilder(TokenUiComponentInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -52,7 +50,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        
+
         $this->paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $this->componentProvider = new TokenUiComponentProvider(
@@ -78,11 +76,11 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->componentFactory->expects(static::once())
             ->method('create')
             ->willReturn($this->tokenComponent);
-        
+
         $this->paymentToken->expects(static::once())
             ->method('getPublicHash')
             ->willReturn($hash);
-        
+
         $this->urlBuilder->expects(static::once())
             ->method('getUrl');
 
