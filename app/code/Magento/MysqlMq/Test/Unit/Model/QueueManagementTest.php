@@ -39,8 +39,7 @@ class QueueManagementTest extends TestCase
     private $dateTime;
 
     /**
-     * @var MessageStatusCollectionFactory
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageStatusCollectionFactory|MockObject
      */
     private $messageStatusCollectionFactory;
 
