@@ -6,78 +6,90 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
+use PHPUnit\Framework\TestCase;
+use Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentExtension;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GuestValidationTest extends \PHPUnit\Framework\TestCase
+class GuestValidationTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation
+     * @var GuestValidation
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $agreementsValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $paymentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $extensionAttributesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $checkoutAgreementsListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $agreementsFilterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->agreementsValidatorMock = $this->createMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
-        $this->subjectMock = $this->createMock(\Magento\Checkout\Api\GuestPaymentInformationManagementInterface::class);
-        $this->paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
-        $this->addressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $this->agreementsValidatorMock = $this->createMock(AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->createMock(GuestPaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->createMock(PaymentInterface::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
         $this->extensionAttributesMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\PaymentExtension::class,
+            PaymentExtension::class,
             ['getAgreementIds']
         );
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+            CheckoutAgreementsListInterface::class
         );
         $this->agreementsFilterMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+            ActiveStoreAgreementsFilter::class
         );
 
-        $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation(
+        $this->model = new GuestValidation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
             $this->checkoutAgreementsListMock,
@@ -95,7 +107,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);
@@ -117,11 +129,9 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $cartId = 100;
         $email = 'email@example.com';
         $agreements = [1, 2, 3];
@@ -130,7 +140,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);

@@ -5,19 +5,21 @@
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CheckoutAgreements\Model\AgreementModeOptions;
 
-class AgreementModeOptionsTest extends \PHPUnit\Framework\TestCase
+class AgreementModeOptionsTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions
+     * @var AgreementModeOptions
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\CheckoutAgreements\Model\AgreementModeOptions::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(AgreementModeOptions::class);
     }
 
     public function testGetOptionsArray()
