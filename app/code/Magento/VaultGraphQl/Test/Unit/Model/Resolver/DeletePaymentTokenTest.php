@@ -171,12 +171,11 @@ class DeletePaymentTokenTest extends TestCase
 
     /**
      * Test mutation when customer isn't authorized.
-     *
-     * @expectedException \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCustomerNotAuthorized()
     {
+        $this->expectException('Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException');
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
         $isCustomer = false;
 
         $this->contextMock
