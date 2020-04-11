@@ -9,6 +9,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Interface StockState
@@ -50,12 +51,11 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return bool
      */
-    public function verifyStock($productId, $scopeId = null)
+    public function verifyStock($productId, $scopeId = null): bool
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->verifyStock($stockItem);
     }
 
@@ -64,12 +64,11 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return bool
      */
-    public function verifyNotification($productId, $scopeId = null)
+    public function verifyNotification($productId, $scopeId = null): bool
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->verifyNotification($stockItem);
     }
 
@@ -79,15 +78,13 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $scopeId
-     * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
-    public function checkQty($productId, $qty, $scopeId = null)
+    public function checkQty($productId, $qty, $scopeId = null): bool
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->checkQty($stockItem, $qty);
     }
 
@@ -100,12 +97,11 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return float
      */
-    public function suggestQty($productId, $qty, $scopeId = null)
+    public function suggestQty($productId, $qty, $scopeId = null): float
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->suggestQty($stockItem, $qty);
     }
 
@@ -116,12 +112,11 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return float
      */
-    public function getStockQty($productId, $scopeId = null)
+    public function getStockQty($productId, $scopeId = null): float
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->getStockQty($stockItem);
     }
 
@@ -129,14 +124,13 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $websiteId
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
-    public function checkQtyIncrements($productId, $qty, $websiteId = null)
+    public function checkQtyIncrements($productId, $qty, $websiteId = null): DataObject
     {
-        // if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+
         return $this->stockStateProvider->checkQtyIncrements($stockItem, $qty);
     }
 
@@ -148,12 +142,11 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
+    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null): int
     {
-        // if ($scopeId === null) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        // }
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+
         return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
     }
 }
