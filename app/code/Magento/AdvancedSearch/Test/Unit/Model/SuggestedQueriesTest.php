@@ -53,8 +53,7 @@ class SuggestedQueriesTest extends TestCase
             ->willReturn('my_engine');
 
         /**
-         * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
-         *     \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|MockObject
          */
         $suggestedQueriesMock = $this->createMock(SuggestedQueriesInterface::class);
         $suggestedQueriesMock
