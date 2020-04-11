@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,14 @@
 
 namespace Magento\Checkout\Test\Unit\Controller\Stub;
 
-class OnepageStub extends \Magento\Checkout\Controller\Onepage
+use Magento\Checkout\Controller\Onepage;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+
+class OnepageStub extends Onepage
 {
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @return ResponseInterface|ResultInterface|void
      */
     public function execute()
     {
