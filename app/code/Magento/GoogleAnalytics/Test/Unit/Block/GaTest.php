@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,7 @@
 
 namespace Magento\GoogleAnalytics\Test\Unit\Block;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Cookie\Helper\Cookie;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
@@ -18,8 +16,10 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -188,7 +188,7 @@ class GaTest extends TestCase
         ];
         $this->gaBlock->setData('page_name', $pageName);
         $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
-        
+
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
