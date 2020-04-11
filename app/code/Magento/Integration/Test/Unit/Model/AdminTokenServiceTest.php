@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,20 @@
 
 namespace Magento\Integration\Test\Unit\Model;
 
+use Magento\Integration\Model\AdminTokenService;
+use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection;
+use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Integration\Model\AdminTokenService class.
  */
-class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
+class AdminTokenServiceTest extends TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
     protected $_tokenService;
@@ -29,36 +37,36 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
      * |\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
-    /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CredentialsValidator|MockObject */
     protected $validatorHelperMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Token|MockObject */
     private $_tokenMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_tokenFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
+        $this->_tokenFactoryMock = $this->getMockBuilder(TokenFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->_tokenFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
 
-        $this->_userModelMock = $this->getMockBuilder(\Magento\User\Model\User::class)
+        $this->_userModelMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $this->_tokenMock = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['getToken', 'loadByAdminId', 'delete', '__wakeup'])->getMock();
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
-            \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
+            Collection::class
         )->disableOriginalConstructor()->setMethods(
             ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
+            CollectionFactory::class
         )->setMethods(['create'])->disableOriginalConstructor()->getMock();
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())
@@ -66,10 +74,10 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->_tokenModelCollectionMock));
 
         $this->validatorHelperMock = $this->getMockBuilder(
-            \Magento\Integration\Model\CredentialsValidator::class
+            CredentialsValidator::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->_tokenService = new \Magento\Integration\Model\AdminTokenService(
+        $this->_tokenService = new AdminTokenService(
             $this->_tokenFactoryMock,
             $this->_userModelMock,
             $this->_tokenModelCollectionFactoryMock,
@@ -114,12 +122,10 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         $this->_tokenService->revokeAdminAccessToken(null);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens couldn't be revoked.
-     */
     public function testRevokeAdminAccessTokenCannotRevoked()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The tokens couldn\'t be revoked.');
         $exception = new \Exception();
         $adminId = 1;
         $this->_tokenModelCollectionMock->expects($this->once())
