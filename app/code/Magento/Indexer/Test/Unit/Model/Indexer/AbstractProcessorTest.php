@@ -1,31 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
-class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractProcessorTest extends TestCase
 {
     const INDEXER_ID = 'stub_indexer_id';
 
     /**
-     * @var \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub
+     * @var AbstractProcessorStub
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $_indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate']
         );
-        $this->model = new \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub(
+        $this->model = new AbstractProcessorStub(
             $this->_indexerRegistryMock
         );
     }
@@ -124,7 +128,7 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
     public function testIsIndexerScheduled()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub::INDEXER_ID
+            AbstractProcessorStub::INDEXER_ID
         )->willReturnSelf();
         $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn(false);
         $this->model->isIndexerScheduled();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,12 +9,15 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Indexer\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -31,17 +34,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProvider|MockObject
      */
     private $dependencyInfoProviderMock;
 
@@ -53,10 +56,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * Set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);
+        $this->configMock = $this->createMock(Config::class);
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,7 +80,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     protected function getObjectManagerReturnValueMap()
     {
         $result = parent::getObjectManagerReturnValueMap();
-        $result[] = [\Magento\Framework\Indexer\ConfigInterface::class, $this->configMock];
+        $result[] = [ConfigInterface::class, $this->configMock];
         $result[] = [DependencyInfoProvider::class, $this->dependencyInfoProviderMock];
         return $result;
     }
@@ -226,11 +229,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array|null $methods
      * @param array $data
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|StateInterface
+     * @return MockObject|StateInterface
      */
     private function getStateMock(array $methods = null, array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StateInterface $state */
+        /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
             ->setMethods($methods)
             ->disableOriginalConstructor()
