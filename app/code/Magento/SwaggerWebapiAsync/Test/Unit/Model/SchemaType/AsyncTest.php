@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\SwaggerWebapiAsync\Test\Unit\Model\SchemaType;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\SwaggerWebapiAsync\Model\SchemaType\Async;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class AsyncTest extends TestCase
 {
