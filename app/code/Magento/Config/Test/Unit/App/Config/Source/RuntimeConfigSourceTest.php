@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,35 +11,36 @@ use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Class for retrieving runtime configuration from database.
- * @package Magento\Config\Test\Unit\App\Config\Source
  */
-class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
+class RuntimeConfigSourceTest extends TestCase
 {
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|MockObject
      */
     private $scopeCodeResolver;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|MockObject
      */
     private $converter;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     private $configItem;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     private $configItemTwo;
 
@@ -48,7 +49,7 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $configSource;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
