@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,18 @@
 
 namespace Magento\Rule\Test\Unit\Model\Renderer;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Rule\Model\AbstractModel;
+use Magento\Rule\Model\Action\Collection;
+use Magento\Rule\Model\Renderer\Actions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionsTest extends \PHPUnit\Framework\TestCase
+class ActionsTest extends TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Renderer\Actions
+     * @var Actions
      */
     protected $actions;
 
@@ -21,27 +27,27 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|MockObject
      */
     protected $_element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->actions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Actions::class);
+        $this->actions = $this->objectManagerHelper->getObject(Actions::class);
         $this->_element = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             ['getRule']
         );
     }
 
     public function testRender()
     {
-        $rule = $this->getMockBuilder(\Magento\Rule\Model\AbstractModel::class)
+        $rule = $this->getMockBuilder(AbstractModel::class)
             ->setMethods(['getActions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $actions = $this->createPartialMock(\Magento\Rule\Model\Action\Collection::class, ['asHtmlRecursive']);
+        $actions = $this->createPartialMock(Collection::class, ['asHtmlRecursive']);
 
         $this->_element->expects($this->any())
             ->method('getRule')
