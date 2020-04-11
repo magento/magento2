@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Version\Test\Unit\Controller\Index;
 
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Version\Controller\Index\Index as VersionIndex;
