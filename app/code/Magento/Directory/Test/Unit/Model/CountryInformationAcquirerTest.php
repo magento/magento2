@@ -1,63 +1,72 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\Country;
+use Magento\Directory\Model\CountryInformationAcquirer;
+use Magento\Directory\Model\Data\CountryInformation;
+use Magento\Directory\Model\Data\CountryInformationFactory;
+use Magento\Directory\Model\Data\RegionInformation;
+use Magento\Directory\Model\Data\RegionInformationFactory;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CountryInformationAcquirerTest
- */
-class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
+class CountryInformationAcquirerTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\CountryInformationAcquirer
+     * @var CountryInformationAcquirer
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $regionInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Directory\Model\Data\CountryInformationFactory::class;
+        $className = CountryInformationFactory::class;
         $this->countryInformationFactory = $this->createPartialMock($className, ['create']);
 
-        $className = \Magento\Directory\Model\Data\RegionInformationFactory::class;
+        $className = RegionInformationFactory::class;
         $this->regionInformationFactory = $this->createPartialMock($className, ['create']);
 
-        $className = \Magento\Directory\Helper\Data::class;
+        $className = Data::class;
         $this->directoryHelper = $this->createPartialMock($className, ['getCountryCollection', 'getRegionData']);
 
-        $className = \Magento\Store\Model\StoreManager::class;
+        $className = StoreManager::class;
         $this->storeManager = $this->createPartialMock($className, ['getStore']);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Directory\Model\CountryInformationAcquirer::class,
+            CountryInformationAcquirer::class,
             [
                 'countryInformationFactory' => $this->countryInformationFactory,
                 'regionInformationFactory' => $this->regionInformationFactory,
@@ -72,11 +81,11 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountriesInfo()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        /** @var Store $store */
+        $store = $this->createMock(Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $testCountryInfo = $this->objectManager->getObject(\Magento\Directory\Model\Country::class);
+        $testCountryInfo = $this->objectManager->getObject(Country::class);
         $testCountryInfo->setData('country_id', 'US');
         $testCountryInfo->setData('iso2_code', 'US');
         $testCountryInfo->setData('iso3_code', 'USA');
@@ -88,10 +97,10 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $regions = ['US' => ['TX' => ['code' => 'TX', 'name' => 'Texas']]];
         $this->directoryHelper->expects($this->once())->method('getRegionData')->willReturn($regions);
 
-        $countryInfo = $this->objectManager->getObject(\Magento\Directory\Model\Data\CountryInformation::class);
+        $countryInfo = $this->objectManager->getObject(CountryInformation::class);
         $this->countryInformationFactory->expects($this->once())->method('create')->willReturn($countryInfo);
 
-        $regionInfo = $this->objectManager->getObject(\Magento\Directory\Model\Data\RegionInformation::class);
+        $regionInfo = $this->objectManager->getObject(RegionInformation::class);
         $this->regionInformationFactory->expects($this->once())->method('create')->willReturn($regionInfo);
 
         $result = $this->model->getCountriesInfo();
@@ -111,25 +120,25 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountryInfo()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        /** @var Store $store */
+        $store = $this->createMock(Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $testCountryInfo = $this->objectManager->getObject(\Magento\Directory\Model\Country::class);
+        $testCountryInfo = $this->objectManager->getObject(Country::class);
         $testCountryInfo->setData('country_id', 'AE');
         $testCountryInfo->setData('iso2_code', 'AE');
         $testCountryInfo->setData('iso3_code', 'ARE');
         $testCountryInfo->setData('name_default', 'United Arab Emirates');
         $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
 
-        $countryCollection = $this->createMock(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+        $countryCollection = $this->createMock(Collection::class);
         $countryCollection->expects($this->once())->method('load')->willReturnSelf();
         $countryCollection->expects($this->once())->method('getItemById')->with('AE')->willReturn($testCountryInfo);
 
         $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
         $this->directoryHelper->expects($this->once())->method('getRegionData')->willReturn([]);
 
-        $countryInfo = $this->objectManager->getObject(\Magento\Directory\Model\Data\CountryInformation::class);
+        $countryInfo = $this->objectManager->getObject(CountryInformation::class);
         $this->countryInformationFactory->expects($this->once())->method('create')->willReturn($countryInfo);
 
         $result = $this->model->getCountryInfo('AE');
@@ -142,24 +151,23 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * test GetGetCountryInfoNotFound
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The country isn't available.
      */
     public function testGetCountryInfoNotFound()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The country isn\'t available.');
+        /** @var Store $store */
+        $store = $this->createMock(Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $testCountryInfo = $this->objectManager->getObject(\Magento\Directory\Model\Country::class);
+        $testCountryInfo = $this->objectManager->getObject(Country::class);
         $testCountryInfo->setData('country_id', 'AE');
         $testCountryInfo->setData('iso2_code', 'AE');
         $testCountryInfo->setData('iso3_code', 'ARE');
         $testCountryInfo->setData('name_default', 'United Arab Emirates');
         $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
 
-        $countryCollection = $this->createMock(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+        $countryCollection = $this->createMock(Collection::class);
         $countryCollection->expects($this->once())->method('load')->willReturnSelf();
 
         $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
