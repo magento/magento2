@@ -6,14 +6,18 @@
 
 namespace Magento\Marketplace\Test\Unit\Block;
 
-class PartnersTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Marketplace\Block\Partners;
+
+class PartnersTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @var MockObject|Partners
      */
     private $partnersBlockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partnersBlockMock = $this->getPartnersBlockMock(
             [
@@ -42,17 +46,17 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @return MockObject|Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Block\Partners::class, $methods);
+        return $this->createPartialMock(Partners::class, $methods);
     }
 
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @return MockObject|\Magento\Marketplace\Model\Partners
      */
     public function getPartnersModelMock($methods)
     {

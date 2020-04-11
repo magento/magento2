@@ -6,10 +6,16 @@
 
 namespace Magento\Marketplace\Test\Unit\Model;
 
-class PartnersTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Marketplace\Model\Partners;
+use Magento\Framework\HTTP\Client\Curl;
+use Magento\Marketplace\Helper\Cache;
+
+class PartnersTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @var MockObject|Partners
      */
     private $partnersModelMock;
 
@@ -33,7 +39,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
                     }
                  }';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partnersModelMock = $this->getPartnersModelMock(
             [
@@ -119,7 +125,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @return MockObject|\Magento\Marketplace\Block\Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
@@ -129,30 +135,30 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @return MockObject|Partners
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Model\Partners::class, $methods, []);
+        return $this->createPartialMock(Partners::class, $methods, []);
     }
 
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return MockObject|Curl
      */
     public function getCurlMock($methods)
     {
-        return $this->createPartialMock(\Magento\Framework\HTTP\Client\Curl::class, $methods, []);
+        return $this->createPartialMock(Curl::class, $methods, []);
     }
 
     /**
      * Gets cache mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return MockObject|Curl
      */
     public function getCacheMock($methods)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Helper\Cache::class, $methods, []);
+        return $this->createPartialMock(Cache::class, $methods, []);
     }
 }

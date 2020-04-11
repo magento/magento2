@@ -6,14 +6,22 @@
 
 namespace Magento\Marketplace\Test\Unit\Controller\Index;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Marketplace\Controller\Adminhtml\Index\Index;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+
+class IndexTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject| \Magento\Marketplace\Controller\Adminhtml\Index\Index
+     * @var MockObject|Index
      */
     private $indexControllerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexControllerMock = $this->getControllerIndexMock(['getResultPageFactory']);
     }
@@ -56,42 +64,42 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets index controller mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Controller\Adminhtml\Index\Index
+     * @return MockObject|Index
      */
     public function getControllerIndexMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Controller\Adminhtml\Index\Index::class, $methods);
+        return $this->createPartialMock(Index::class, $methods);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Result\PageFactory
+     * @return MockObject|PageFactory
      */
     public function getResultPageFactoryMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Framework\View\Result\PageFactory::class, $methods, []);
+        return $this->createPartialMock(PageFactory::class, $methods, []);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Config
+     * @return MockObject|Config
      */
     public function getConfigMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Framework\View\Page\Config::class, $methods, []);
+        return $this->createPartialMock(Config::class, $methods, []);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Title
+     * @return MockObject|Title
      */
     public function getTitleMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Framework\View\Page\Title::class, $methods, []);
+        return $this->createPartialMock(Title::class, $methods, []);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Title
+     * @return MockObject|Title
      */
     public function getPageMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Framework\View\Result\Page::class, $methods, []);
+        return $this->createPartialMock(Page::class, $methods, []);
     }
 }

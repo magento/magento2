@@ -6,32 +6,37 @@
 
 namespace Magento\Marketplace\Test\Unit\Helper;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Config\CacheInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Marketplace\Helper\Cache;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
-class CacheTest extends \PHPUnit\Framework\TestCase
+class CacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  SerializerInterface|MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Marketplace\Helper\Cache
+     * @var Cache
      */
     private $cacheHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
+        $this->cache = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->cacheHelper = $objectManagerHelper->getObject(
-            \Magento\Marketplace\Helper\Cache::class,
+            Cache::class,
             [
                 'cache' => $this->cache,
                 'serializer' => $this->serializer,
