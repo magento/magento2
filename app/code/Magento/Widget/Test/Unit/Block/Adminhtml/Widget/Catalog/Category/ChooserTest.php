@@ -21,6 +21,9 @@ use Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ChooserTest extends TestCase
 {
     /**

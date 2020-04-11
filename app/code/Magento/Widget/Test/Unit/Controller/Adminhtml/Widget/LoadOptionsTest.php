@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoadOptionsTest extends TestCase
 {
