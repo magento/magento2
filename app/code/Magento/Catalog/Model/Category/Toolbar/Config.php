@@ -24,6 +24,7 @@ class Config
     private $categoryConfig;
 
     /**
+     * Config constructor.
      * @param CurrentCategory $currentCategory
      * @param CategoryConfig $categoryConfig
      */

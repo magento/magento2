@@ -26,6 +26,7 @@ class CurrentCategory
     private $repository;
 
     /**
+     * CurrentCategory constructor.
      * @param RequestInterface $request
      * @param CategoryRepositoryInterface $categoryRepository
      */

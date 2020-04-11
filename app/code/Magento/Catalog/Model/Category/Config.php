@@ -19,6 +19,7 @@ class Config
     private $scopeConfig;
 
     /**
+     * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(ScopeConfigInterface $scopeConfig)

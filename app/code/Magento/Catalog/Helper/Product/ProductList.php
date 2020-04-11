@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
@@ -38,12 +39,21 @@ class ProductList
     protected $_defaultAvailableLimit  = [10 => 10,20 => 20,50 => 50];
 
     /**
+     * @var ToolbarConfig
+     */
+    private $toolbarConfig;
+
+    /**
+     * ProductList constructor.
      * @param ScopeConfigInterface $scopeConfig
+     * @param ToolbarConfig $toolbarConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ToolbarConfig $toolbarConfig
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->toolbarConfig = $toolbarConfig;
     }
 
     /**
@@ -92,6 +102,16 @@ class ProductList
             $options = $this->getAvailableViewMode();
         }
         return current(array_keys($options));
+    }
+
+    /**
+     * Get default sort field
+     *
+     * @return null|string
+     */
+    public function getDefaultSortField()
+    {
+        return $this->toolbarConfig->getOrderField();
     }
 
     /**

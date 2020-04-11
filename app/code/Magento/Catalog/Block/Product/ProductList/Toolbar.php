@@ -768,7 +768,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     protected function getOrderField()
     {
