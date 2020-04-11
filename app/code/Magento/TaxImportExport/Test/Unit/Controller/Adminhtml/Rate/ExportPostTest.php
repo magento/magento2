@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,17 @@
 
 namespace Magento\TaxImportExport\Test\Unit\Controller\Adminhtml\Rate;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\Store;
+use Magento\Tax\Model\Calculation\Rate\Title;
 use Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DataObject;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\ResourceModel\Store\Collection;
-use Magento\Tax\Model\Calculation\Rate\Title;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestCase;
 
 class ExportPostTest extends TestCase
 {
