@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Authorization\Model\ResourceModel\Rules;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Acl\Data\CacheInterface;
@@ -83,7 +84,7 @@ class RulesTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -179,12 +180,11 @@ class RulesTest extends TestCase
 
     /**
      * Test LocalizedException throw case.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage TestException
      */
     public function testLocalizedExceptionOccurance()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('TestException');
         $exceptionPhrase = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
             ->setMethods(['render'])
@@ -192,7 +192,7 @@ class RulesTest extends TestCase
 
         $exceptionPhrase->method('render')->willReturn('TestException');
 
-        $exception = new \Magento\Framework\Exception\LocalizedException($exceptionPhrase);
+        $exception = new LocalizedException($exceptionPhrase);
 
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
