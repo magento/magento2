@@ -8,44 +8,43 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\SmartButtonConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SmartButtonConfigTest
- */
-class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
+class SmartButtonConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Paypal\Model\SmartButtonConfig
+     * @var SmartButtonConfig
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
+        /** @var MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
