@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
@@ -13,20 +16,20 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 /**
  * Unit test for Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler
  */
-class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
+class ConfigurableProductHandlerTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler
+     * @var ConfigurableProductHandler
      */
     private $configurableProductHandler;
 
     /**
-     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Configurable|MockObject
      */
     private $configurableMock;
 
     /**
-     * @var ConfigurableProductsProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductsProvider|MockObject
      */
     private $configurableProductsProviderMock;
 
@@ -36,17 +39,17 @@ class ConfigurableProductHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableMock = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
+            Configurable::class,
             ['getChildrenIds']
         );
         $this->configurableProductsProviderMock = $this->createPartialMock(
-            \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider::class,
+            ConfigurableProductsProvider::class,
             ['getIds']
         );
-        $this->ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
+        $this->ruleMock = $this->createMock(Rule::class);
 
         $this->configurableProductHandler = new ConfigurableProductHandler(
             $this->configurableMock,
