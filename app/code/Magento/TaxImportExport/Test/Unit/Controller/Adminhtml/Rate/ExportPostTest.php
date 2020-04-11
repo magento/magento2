@@ -18,6 +18,9 @@ use Magento\TaxImportExport\Controller\Adminhtml\Rate\ExportPost;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExportPostTest extends TestCase
 {
     /**
