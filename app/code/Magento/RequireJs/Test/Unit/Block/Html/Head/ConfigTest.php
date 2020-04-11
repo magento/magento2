@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,16 @@
 
 namespace Magento\RequireJs\Test\Unit\Block\Html\Head;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\Context;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\RequireJs\Model\FileManager;
 use Magento\Framework\View\Asset\ConfigInterface;
-use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
-use \Magento\RequireJs\Block\Html\Head\Config;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\LayoutInterface;
+use Magento\RequireJs\Block\Html\Head\Config;
+use Magento\RequireJs\Model\FileManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {

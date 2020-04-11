@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,18 @@
 
 namespace Magento\RequireJs\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\RequireJs\Config;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use \Magento\RequireJs\Model\FileManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\RequireJs\Config;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\Repository;
+use Magento\RequireJs\Model\FileManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FileManagerTest extends TestCase
 {
