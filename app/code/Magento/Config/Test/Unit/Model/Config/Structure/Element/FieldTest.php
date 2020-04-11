@@ -147,23 +147,6 @@ class FieldTest extends TestCase
         $this->assertEquals(__('element tooltip'), $this->_model->getTooltip());
     }
 
-    public function testGetTooltipCreatesTooltipBlock()
-    {
-        $this->_model->setData(['tooltip_block' => \Magento\Config\Block\Tooltip::class], 'scope');
-        $tooltipBlock = $this->createMock(BlockInterface::class);
-        $tooltipBlock->expects($this->once())->method('toHtml')->will($this->returnValue('tooltip block'));
-        $this->_blockFactoryMock->expects(
-            $this->once()
-        )->method(
-            'createBlock'
-        )->with(
-            \Magento\Config\Block\Tooltip::class
-        )->will(
-            $this->returnValue($tooltipBlock)
-        );
-        $this->assertEquals('tooltip block', $this->_model->getTooltip());
-    }
-
     public function testGetTypeReturnsTextByDefault()
     {
         $this->assertEquals('text', $this->_model->getType());

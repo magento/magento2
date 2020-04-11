@@ -45,6 +45,11 @@ class MapperTest extends TestCase
      * @var MockObject
      */
     protected $_fieldFactoryMock;
+    
+    /**
+     * @var MockObject|ScopeConfigInterface
+     */
+    private $_scopeConfigMock;
 
     protected function setUp(): void
     {
