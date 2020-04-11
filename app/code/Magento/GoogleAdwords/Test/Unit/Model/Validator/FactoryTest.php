@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,15 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\GoogleAdwords\Model\Validator\Factory;
-use Magento\Framework\Validator\UniversalFactory;
-use Magento\Framework\Validator\Builder;
-use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Builder;
 use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Framework\Validator\ValidatorInterface;
+use Magento\GoogleAdwords\Model\Validator\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {

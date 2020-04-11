@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\GoogleAdwords\Helper\Data;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleAdwords\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {

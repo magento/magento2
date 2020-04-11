@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Magento\GoogleAdwords\Model\Filter\UppercaseTitle;
+use PHPUnit\Framework\TestCase;
 
 class UppercaseTitleTest extends TestCase
 {

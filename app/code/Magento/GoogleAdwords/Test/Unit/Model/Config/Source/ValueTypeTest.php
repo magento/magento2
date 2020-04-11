@@ -1,14 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Config\Source;
 
-use PHPUnit\Framework\TestCase;
-use Magento\GoogleAdwords\Model\Config\Source\ValueType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAdwords\Helper\Data;
+use Magento\GoogleAdwords\Model\Config\Source\ValueType;
+use PHPUnit\Framework\TestCase;
 
 class ValueTypeTest extends TestCase
 {

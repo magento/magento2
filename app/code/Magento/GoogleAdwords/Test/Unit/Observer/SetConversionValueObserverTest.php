@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Observer;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\GoogleAdwords\Observer\SetConversionValueObserver;
-use Magento\Framework\Registry;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\GoogleAdwords\Helper\Data;
+use Magento\GoogleAdwords\Observer\SetConversionValueObserver;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SetConversionValueObserverTest extends TestCase
 {
