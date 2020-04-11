@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,32 +6,32 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Http\Context;
-use Magento\Rule\Model\Condition\Sql\Builder;
-use Magento\CatalogWidget\Model\Rule;
-use Magento\Widget\Helper\Conditions;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\DesignInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Store\Model\Store;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Directory\Model\Currency;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Render;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Rule\Model\Condition\Combine;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
-
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogWidget\Block\Product\ProductsList;
+use Magento\CatalogWidget\Model\Rule;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Rule\Model\Condition\Combine;
+use Magento\Rule\Model\Condition\Sql\Builder;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+
+use Magento\Widget\Helper\Conditions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

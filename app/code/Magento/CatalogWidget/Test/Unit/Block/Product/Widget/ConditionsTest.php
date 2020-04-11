@@ -1,31 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Test\Unit\Block\Product\Widget;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Widget\Model\Widget\Instance;
-use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Form\Element\Fieldset;
-use Magento\Rule\Model\Condition\Combine;
-use Magento\Framework\View\Element\Template\File\Resolver;
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\Element\Template\File\Validator;
-use Magento\Framework\View\TemplateEnginePool;
-use Magento\Framework\View\TemplateEngineInterface;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Backend\Block\Template\Context;
 use Magento\CatalogWidget\Block\Product\Widget\Conditions;
 use Magento\CatalogWidget\Model\Rule;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\Template\File\Resolver;
+use Magento\Framework\View\Element\Template\File\Validator;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\TemplateEngineInterface;
+use Magento\Framework\View\TemplateEnginePool;
+use Magento\Rule\Model\Condition\Combine;
+use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\CatalogWidget\Block\Product\Widget\Conditions

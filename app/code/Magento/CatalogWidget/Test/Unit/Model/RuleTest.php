@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogWidget\Model\Rule;
-use Magento\CatalogWidget\Model\Rule\Condition\CombineFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\CatalogWidget\Model\Rule\Condition\Combine;
+use Magento\CatalogWidget\Model\Rule\Condition\CombineFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RuleTest extends TestCase
 {

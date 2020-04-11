@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
-use PHPUnit\Framework\TestCase;
-use Magento\CatalogWidget\Model\Rule\Condition\Combine;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\CatalogWidget\Model\Rule\Condition\ProductFactory;
-use Magento\CatalogWidget\Model\Rule\Condition\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogWidget\Model\Rule\Condition\Combine;
+use Magento\CatalogWidget\Model\Rule\Condition\Product;
+use Magento\CatalogWidget\Model\Rule\Condition\ProductFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CombineTest extends TestCase
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,15 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
-use PHPUnit\Framework\TestCase;
 use Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions;
 use Magento\CatalogWidget\Model\Rule;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\CatalogWidget\Model\Rule\Condition\Product;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\CatalogWidget\Model\Rule\Condition\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ConditionsTest extends TestCase
 {
