@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,21 @@
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
+use Magento\Catalog\Model\Category;
+use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRuleProcessor|MockObject
      */
     protected $productRuleProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     protected $subject;
 
@@ -25,13 +29,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRuleProcessor = $this->createMock(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
+            ProductRuleProcessor::class
         );
         $this->subject = $this->createPartialMock(
-            \Magento\Catalog\Model\Category::class,
+            Category::class,
             ['getChangedProductIds', '__wakeUp']
         );
 
