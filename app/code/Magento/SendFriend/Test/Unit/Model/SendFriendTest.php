@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\SendFriend\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SendFriend\Helper\Data;
 use Magento\SendFriend\Model\SendFriend;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\SendFriend\Helper\Data;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test SendFriend

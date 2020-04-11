@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,13 @@
 
 namespace Magento\SendFriend\Test\Unit\Block;
 
-use PHPUnit\Framework\TestCase;
-use Magento\SendFriend\Block\Send;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\SendFriend\Model\SendFriend;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\SendFriend\Block\Send;
+use Magento\SendFriend\Model\SendFriend;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SendTest extends TestCase
 {
