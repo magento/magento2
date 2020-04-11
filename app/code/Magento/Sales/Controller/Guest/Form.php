@@ -63,7 +63,7 @@ class Form extends \Magento\Framework\App\Action\Action implements HttpGetAction
     public function execute()
     {
         if ($this->customerSession->isLoggedIn()) {
-            return $this->resultRedirectFactory->create()->setPath('customer/account/');
+            return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
 
         $resultPage = $this->resultPageFactory->create();
