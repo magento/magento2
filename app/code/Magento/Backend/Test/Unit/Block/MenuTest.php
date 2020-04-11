@@ -1,56 +1,58 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Menu as MenuModel;
-use Magento\Backend\Block\Menu;
-use Magento\Backend\Model\UrlInterface;
-use Magento\Backend\Model\Menu\Filter\IteratorFactory;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Backend\Model\Menu\Config;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\Menu;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Menu as MenuModel;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Filter\IteratorFactory;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MenuTest extends \PHPUnit\Framework\TestCase
+class MenuTest extends TestCase
 {
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $activeItemMock;
 
     /**
-     * @var MenuModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuModel|MockObject
      */
     private $menuModelMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
     /**
-     * @var IteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IteratorFactory|MockObject
      */
     private $iteratorFactoryMock;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $authSessionMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $menuConfigMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     private $localeResolverMock;
 
@@ -60,12 +62,12 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var MenuItemChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuItemChecker|MockObject
      */
     private $menuItemCheckerMock;
 
     /**
-     * @var AnchorRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnchorRenderer|MockObject
      */
     private $anchorRendererMock;
 
@@ -74,7 +76,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     private $menu;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->activeItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()

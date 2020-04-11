@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,21 +10,23 @@ use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AnchorRendererTest extends \PHPUnit\Framework\TestCase
+class AnchorRendererTest extends TestCase
 {
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $activeMenuItemMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $menuItemMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -34,7 +36,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var MenuItemChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var MenuItemChecker|MockObject
      */
     private $menuItemCheckerMock;
 
@@ -43,7 +45,7 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
      */
     private $anchorRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->activeMenuItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()

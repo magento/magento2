@@ -1,37 +1,40 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Plugin\MassactionKey;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MassactionKeyTest extends \PHPUnit\Framework\TestCase
+class MassactionKeyTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Plugin\MassactionKey
+     * @var MassactionKey
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractAction
+     * @var MockObject|AbstractAction
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->subjectMock = $this->createMock(\Magento\Backend\App\AbstractAction::class);
+        $this->subjectMock = $this->createMock(AbstractAction::class);
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,
             [],
@@ -44,7 +47,7 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
-            \Magento\Backend\App\Action\Plugin\MassactionKey::class,
+            MassactionKey::class,
             [
                 'subject' => $this->subjectMock,
                 'request' => $this->requestMock,
