@@ -11,10 +11,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Observer\SubmitObserver;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,11 +33,6 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
      * @var OrderSender|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderSenderMock;
-
-    /**
-     * @var InvoiceSender|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $invoiceSender;
 
     /**
      * @var Observer|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +61,6 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
-        $this->invoiceSender = $this->createMock(InvoiceSender::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getOrder'])
@@ -81,8 +72,7 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->model = new SubmitObserver(
             $this->loggerMock,
-            $this->orderSenderMock,
-            $this->invoiceSender
+            $this->orderSenderMock
         );
     }
 
@@ -92,20 +82,9 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
     public function testSendEmail()
     {
         $this->paymentMock->method('getOrderPlaceRedirectUrl')->willReturn('');
-        $invoice = $this->createMock(Invoice::class);
-        $invoiceCollection = $this->createMock(Collection::class);
-        $invoiceCollection->method('getItems')
-            ->willReturn([$invoice]);
-
-        $this->orderMock->method('getInvoiceCollection')
-            ->willReturn($invoiceCollection);
         $this->orderMock->method('getCanSendNewEmailFlag')->willReturn(true);
         $this->orderSenderMock->expects($this->once())
             ->method('send')->willReturn(true);
-        $this->invoiceSender->expects($this->once())
-            ->method('send')
-            ->with($invoice)
-            ->willReturn(true);
         $this->loggerMock->expects($this->never())
             ->method('critical');
 
