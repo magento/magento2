@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,14 @@
 
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
+use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Xml\Security;
 use Magento\Sales\Exception\DocumentValidationException;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Framework\Xml\Security;
-use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Dhl\Model\Validator\XmlValidator;
-use Magento\Shipping\Model\Simplexml\Element;
+use PHPUnit\Framework\TestCase;
 
 class XmlValidatorTest extends TestCase
 {
