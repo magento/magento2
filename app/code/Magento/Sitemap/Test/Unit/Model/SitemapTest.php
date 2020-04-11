@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -73,33 +73,33 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     private $fileMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var ItemProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemProviderMock;
 
     /**
-     * @var ConfigReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sitemapCategoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
@@ -163,12 +163,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check not allowed sitemap path validation
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define a correct path.
      */
     public function testNotAllowedPath()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please define a correct path.');
         $model = $this->getModelMock();
         $model->setSitemapPath('../');
         $model->beforeSave();
@@ -176,12 +175,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check not exists sitemap path validation
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please create the specified folder "/" before saving the sitemap.
      */
     public function testPathNotExists()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please create the specified folder "/" before saving the sitemap.');
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
@@ -192,12 +190,11 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check not writable sitemap path validation
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please make sure that "/" is writable by the web-server.
      */
     public function testPathNotWritable()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please make sure that "/" is writable by the web-server.');
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);
