@@ -5,33 +5,40 @@
  */
 namespace Magento\CatalogWidget\Test\Unit\Model;
 
-class RuleTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\CatalogWidget\Model\Rule;
+use Magento\CatalogWidget\Model\Rule\Condition\CombineFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\CatalogWidget\Model\Rule\Condition\Combine;
+
+class RuleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule
+     * @var Rule
      */
     protected $rule;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CombineFactory|MockObject
      */
     protected $combineFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
+        $this->objectManager = new ObjectManager($this);
+        $this->combineFactory = $this->getMockBuilder(CombineFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->rule = $this->objectManager->getObject(
-            \Magento\CatalogWidget\Model\Rule::class,
+            Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
@@ -40,7 +47,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
+        $condition = $this->getMockBuilder(Combine::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();

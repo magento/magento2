@@ -6,39 +6,47 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
+use PHPUnit\Framework\TestCase;
+use Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions;
+use Magento\CatalogWidget\Model\Rule;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\CatalogWidget\Model\Rule\Condition\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ConditionsTest extends \PHPUnit\Framework\TestCase
+class ConditionsTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions
+     * @var Conditions
      */
     protected $controller;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|MockObject
      */
     protected $rule;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->rule = $this->createMock(\Magento\CatalogWidget\Model\Rule::class);
-        $this->response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->rule = $this->createMock(Rule::class);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setBody', 'sendResponse'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -46,7 +54,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions::class,
+            Conditions::class,
             [
                 'rule' => $this->rule,
                 'response' => $this->response
@@ -56,7 +64,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager = $arguments['context']->getObjectManager();
         $this->controller = $objectManagerHelper->getObject(
-            \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions::class,
+            Conditions::class,
             $arguments
         );
     }
@@ -69,7 +77,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(2))->method('getParam')->with('form')
             ->will($this->returnValue('request_form_param_value'));
 
-        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
+        $condition = $this->getMockBuilder(Product::class)
             ->setMethods([
                 'setId',
                 'setType',
@@ -82,7 +90,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $condition->expects($this->once())->method('setId')->with('1--1')->will($this->returnSelf());
         $condition->expects($this->once())->method('setType')
-            ->with(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
+            ->with(Product::class)
             ->will($this->returnSelf());
         $condition->expects($this->once())->method('setRule')->with($this->rule)->will($this->returnSelf());
         $condition->expects($this->once())->method('setPrefix')->with('conditions')->will($this->returnSelf());
