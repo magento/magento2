@@ -1,15 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Search\Model\Autocomplete;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\Autocomplete;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
+use Magento\Search\Model\Autocomplete\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AutocompleteTest extends \PHPUnit\Framework\TestCase
+class AutocompleteTest extends TestCase
 {
     /**
      * @var Autocomplete
@@ -17,16 +20,16 @@ class AutocompleteTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataProviderInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|MockObject
      */
     private $firstDataProvider;
 
     /**
-     * @var DataProviderInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|MockObject
      */
     private $secondDataProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -44,18 +47,18 @@ class AutocompleteTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model = $helper->getObject(
-            \Magento\Search\Model\Autocomplete::class,
+            Autocomplete::class,
             ['dataProviders' => $dataProviders]
         );
     }
 
     public function testGetItems()
     {
-        $firstItemMock = $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
+        $firstItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('FirstItem')
             ->getMock();
-        $secondItemMock = $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
+        $secondItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('SecondItem')
             ->getMock();

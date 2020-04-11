@@ -1,28 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\SearchEngine\Config;
+use Magento\Search\Model\SearchEngine\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Search\Model\SearchEngine\Config\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $dataStorageMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dataStorage = $this->createMock(\Magento\Search\Model\SearchEngine\Config\Data::class);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->dataStorage = $this->createMock(Data::class);
+        $this->objectManager = new ObjectManager($this);
     }
 
     public function testGetDeclaredFeatures()
     {
         $config = $this->objectManager->getObject(
-            \Magento\Search\Model\SearchEngine\Config::class,
+            Config::class,
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
@@ -32,7 +38,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testIsFeatureSupported()
     {
         $config = $this->objectManager->getObject(
-            \Magento\Search\Model\SearchEngine\Config::class,
+            Config::class,
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);

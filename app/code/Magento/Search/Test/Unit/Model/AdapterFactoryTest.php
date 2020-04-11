@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,27 +6,30 @@
 namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\AdapterFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
+class AdapterFactoryTest extends TestCase
 {
     /**
-     * @var AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|MockObject
      */
     private $adapterFactory;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|MockObject
      */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
@@ -45,7 +48,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('ClassName'));
 
-        $adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
+        $adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -54,14 +57,12 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($adapter));
 
         $result = $this->adapterFactory->create(['input']);
-        $this->assertInstanceOf(\Magento\Framework\Search\AdapterInterface::class, $result);
+        $this->assertInstanceOf(AdapterInterface::class, $result);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateExceptionThrown()
     {
+        $this->expectException('InvalidArgumentException');
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('ClassName'));
 
@@ -72,11 +73,9 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $this->adapterFactory->create(['input']);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testCreateLogicException()
     {
+        $this->expectException('LogicException');
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('Class'));
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,25 +12,27 @@ use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
+class ResultPageBuilderTest extends TestCase
 {
     /** @var ResultPageBuilder */
     private $model;
 
-    /** @var PageFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PageFactory|MockObject */
     private $resultPageFactoryMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|MockObject */
     private $engineResolverMock;
 
-    /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface|MockObject */
     private $searchFeatureConfigMock;
 
-    /** @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     private $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
