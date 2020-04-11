@@ -32,6 +32,11 @@ class AccountPaymentTokenFactoryTest extends TestCase
      */
     private $factory;
 
+    /**
+     * @var PaymentTokenFactory
+     */
+    private $paymentTokenFactory;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
