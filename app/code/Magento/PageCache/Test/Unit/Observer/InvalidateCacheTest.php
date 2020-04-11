@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,15 +6,23 @@
  */
 namespace Magento\PageCache\Test\Unit\Observer;
 
-class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\TypeList;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Event\Observer;
+use Magento\PageCache\Model\Config;
+use Magento\PageCache\Observer\InvalidateCache;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InvalidateCacheTest extends TestCase
 {
-    /** @var \Magento\PageCache\Observer\InvalidateCache */
+    /** @var InvalidateCache */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var MockObject|Config */
     protected $_configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\TypeListInterface */
+    /** @var  MockObject|TypeListInterface */
     protected $_typeListMock;
 
     /**
@@ -25,14 +33,14 @@ class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
-        $this->_typeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeList::class);
+        $this->_configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
+        $this->_typeListMock = $this->createMock(TypeList::class);
 
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->observerMock = $this->createMock(Observer::class);
 
-        $this->_model = new \Magento\PageCache\Observer\InvalidateCache(
+        $this->_model = new InvalidateCache(
             $this->_configMock,
             $this->_typeListMock
         );
