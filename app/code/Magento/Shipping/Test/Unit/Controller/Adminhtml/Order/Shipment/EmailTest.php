@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,11 @@
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
 
 /**
- * Class EmailTest
- *
- * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends \PHPUnit\Framework\TestCase
@@ -24,7 +21,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     protected $shipmentEmail;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
