@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -78,7 +78,7 @@ class ContextPluginTest extends TestCase
      */
     protected $contextPlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 

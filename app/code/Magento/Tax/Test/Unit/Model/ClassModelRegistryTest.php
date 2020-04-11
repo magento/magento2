@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,41 +7,46 @@
 namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\ClassModelFactory;
+use Magento\Tax\Model\ClassModelRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for TaxRuleRegistry
  */
-class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
+class ClassModelRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Model\ClassModelRegistry
+     * @var ClassModelRegistry
      */
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModelFactory
+     * @var MockObject|ClassModelFactory
      */
     private $classModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModel
+     * @var MockObject|ClassModel
      */
     private $classModelMock;
 
     const CLASS_MODEL = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->classModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\ClassModelFactory::class)
+        $this->classModelFactoryMock = $this->getMockBuilder(ClassModelFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->taxRuleRegistry = $objectManager->getObject(
-            \Magento\Tax\Model\ClassModelRegistry::class,
+            ClassModelRegistry::class,
             ['taxClassModelFactory' => $this->classModelFactoryMock]
         );
-        $this->classModelMock = $this->getMockBuilder(\Magento\Tax\Model\ClassModel::class)
+        $this->classModelMock = $this->getMockBuilder(ClassModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->classModelFactoryMock->expects($this->any())
@@ -49,11 +54,9 @@ class ClassModelRegistryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->classModelMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testUpdateTaxClassNotExistingEntity()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $taxClassId = 1;
 
         $this->classModelMock

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,14 +13,15 @@ use Magento\Framework\App\Response\Http as Response;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Model\Rate\Provider as RatesProvider;
 use Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Tax\Model\Rate\Provider as RatesProvider;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for AjaxLoadTest
  */
-class AjaxLoadRatesTest extends \PHPUnit\Framework\TestCase
+class AjaxLoadRatesTest extends TestCase
 {
     /**
      * @var Request | MockObject
@@ -50,7 +51,7 @@ class AjaxLoadRatesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

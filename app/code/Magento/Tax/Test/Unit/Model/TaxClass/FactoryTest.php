@@ -1,29 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\TaxClass\Factory;
+use Magento\Tax\Model\TaxClass\Type\Customer;
+use Magento\Tax\Model\TaxClass\Type\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
      * @dataProvider createDataProvider
      *
      * @param string $classType
      * @param string $className
-     * @param \PHPUnit_Framework_MockObject_MockObject $classTypeMock
+     * @param MockObject $classTypeMock
      */
     public function testCreate($classType, $className, $classTypeMock)
     {
         $classMock = $this->createPartialMock(
-            \Magento\Tax\Model\ClassModel::class,
+            ClassModel::class,
             ['getClassType', 'getId', '__wakeup']
         );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($classType));
         $classMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -35,7 +44,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($classTypeMock)
         );
 
-        $taxClassFactory = new \Magento\Tax\Model\TaxClass\Factory($objectManager);
+        $taxClassFactory = new Factory($objectManager);
         $this->assertEquals($classTypeMock, $taxClassFactory->create($classMock));
     }
 
@@ -44,17 +53,17 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function createDataProvider()
     {
-        $customerClassMock = $this->createMock(\Magento\Tax\Model\TaxClass\Type\Customer::class);
-        $productClassMock = $this->createMock(\Magento\Tax\Model\TaxClass\Type\Product::class);
+        $customerClassMock = $this->createMock(Customer::class);
+        $productClassMock = $this->createMock(Product::class);
         return [
             [
-                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER,
-                \Magento\Tax\Model\TaxClass\Type\Customer::class,
+                ClassModel::TAX_CLASS_TYPE_CUSTOMER,
+                Customer::class,
                 $customerClassMock,
             ],
             [
-                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT,
-                \Magento\Tax\Model\TaxClass\Type\Product::class,
+                ClassModel::TAX_CLASS_TYPE_PRODUCT,
+                Product::class,
                 $productClassMock
             ]
         ];
@@ -64,16 +73,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $wrongClassType = 'TYPE';
         $classMock = $this->createPartialMock(
-            \Magento\Tax\Model\ClassModel::class,
+            ClassModel::class,
             ['getClassType', 'getId', '__wakeup']
         );
         $classMock->expects($this->once())->method('getClassType')->will($this->returnValue($wrongClassType));
 
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $taxClassFactory = new \Magento\Tax\Model\TaxClass\Factory($objectManager);
+        $taxClassFactory = new Factory($objectManager);
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage(sprintf('Invalid type of tax class "%s"', $wrongClassType));
         $taxClassFactory->create($classMock);
     }

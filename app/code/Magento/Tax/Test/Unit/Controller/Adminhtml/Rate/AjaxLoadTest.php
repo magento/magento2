@@ -1,16 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rate;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-/**
- * Test for AjaxLoadTest
- */
 class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -74,8 +71,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
         $rateMock = $objectManager->getObject(
             \Magento\Tax\Model\Calculation\Rate::class,
             [
-                'data' =>
-                    [
+                'data' => [
                         'tax_country_id' => 'US',
                         'tax_region_id' => 2,
                         'tax_postcode' => null,
@@ -111,8 +107,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
 
         $jsonObject->expects($this->once())
             ->method('setData')
-            ->with(['success' => true, 'error_message' => '', 'result'=>
-                $returnArray,
+            ->with(['success' => true, 'error_message' => '', 'result'=> $returnArray,
             ]);
 
         $this->resultFactory->expects($this->any())
@@ -140,7 +135,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
     public function testExecuteLocalizedException()
     {
         $taxRateId=999;
-        $exceptionMessage='No such entity with taxRateId = '.$taxRateId;
+        $exceptionMessage='No such entity with taxRateId = ' . $taxRateId;
         $noSuchEntityEx= new NoSuchEntityException(__($exceptionMessage));
 
         $objectManager = new ObjectManager($this);

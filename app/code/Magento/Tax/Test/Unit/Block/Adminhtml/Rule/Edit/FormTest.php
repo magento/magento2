@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,22 +8,23 @@ namespace Magento\Tax\Test\Unit\Block\Adminhtml\Rule\Edit;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Block\Adminhtml\Rule\Edit\Form;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Rate\Source;
 use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Tax Rule Edit Form
  *
  * Class FormTest
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @var Form
@@ -75,7 +76,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 

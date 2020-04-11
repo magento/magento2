@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,20 +10,21 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Block\Grid\Renderer\Codes;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Tax Rates codes column of Tax Rules grid.
  *
  * Class CodesTest
  */
-class CodesTest extends \PHPUnit\Framework\TestCase
+class CodesTest extends TestCase
 {
     /**
      * @var Codes
      */
     private $codes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $escaper = $this->getMockBuilder(Escaper::class)
@@ -33,7 +34,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnCallback(
                 function ($str) {
-                    return 'ESCAPED:' .$str;
+                    return 'ESCAPED:' . $str;
                 }
             );
         $context = $this->getMockBuilder(Context::class)

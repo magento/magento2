@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,8 +12,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CartTest extends TestCase
 {
@@ -47,7 +47,7 @@ class CartTest extends TestCase
      */
     private $cart;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutSession = $this->createMock(Session::class);
         $this->checkoutHelper = $this->createMock(Data::class);
@@ -57,7 +57,7 @@ class CartTest extends TestCase
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
-        
+
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,

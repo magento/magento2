@@ -1,15 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Type;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ProductTest extends TestCase
 {
     public function testIsAssignedToObjects()
     {
-        $collectionClassName = \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class;
+        $collectionClassName = AbstractCollection::class;
         $collectionMock = $this->getMockBuilder($collectionClassName)
             ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()->getMock();
         $collectionMock->expects($this->once())->method('addAttributeToFilter')
@@ -17,12 +22,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $collectionMock->expects($this->once())->method('getSize')
             ->will($this->returnValue(1));
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getCollection', '__wakeup', 'getEntityId'])
             ->disableOriginalConstructor()->getMock();
         $productMock->expects($this->once())->method('getCollection')->will($this->returnValue($collectionMock));
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Product */
         $model = $objectManagerHelper->getObject(
             \Magento\Tax\Model\TaxClass\Type\Product::class,

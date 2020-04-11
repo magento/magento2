@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,42 +8,47 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation\Rule;
+use Magento\Tax\Model\Calculation\RuleFactory;
+use Magento\Tax\Model\Calculation\TaxRuleRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for TaxRuleRegistry
  *
  */
-class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
+class TaxRuleRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Model\Calculation\TaxRuleRegistry
+     * @var TaxRuleRegistry
      */
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\RuleFactory
+     * @var MockObject|RuleFactory
      */
     private $taxRuleModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\Rule
+     * @var MockObject|Rule
      */
     private $taxRuleModelMock;
 
     const TAX_RULE_ID = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->taxRuleModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RuleFactory::class)
+        $this->taxRuleModelFactoryMock = $this->getMockBuilder(RuleFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->taxRuleRegistry = $objectManager->getObject(
-            \Magento\Tax\Model\Calculation\TaxRuleRegistry::class,
+            TaxRuleRegistry::class,
             ['taxRuleModelFactory' => $this->taxRuleModelFactoryMock]
         );
-        $this->taxRuleModelMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rule::class)
+        $this->taxRuleModelMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
