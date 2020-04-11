@@ -114,7 +114,7 @@ class SessionTest extends TestCase
      */
     protected function _getOrderMock($incrementId, $orderId)
     {
-        /** @var $order \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
+        /** @var $order MockObject|\Magento\Sales\Model\Order */
         $order = $this->getMockBuilder(
             Order::class
         )->disableOriginalConstructor()->setMethods(

@@ -10,6 +10,9 @@ use Magento\Checkout\Controller\Onepage;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class OnepageStub extends Onepage
 {
     /**

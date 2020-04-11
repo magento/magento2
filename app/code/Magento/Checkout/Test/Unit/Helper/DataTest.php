@@ -152,9 +152,6 @@ class DataTest extends TestCase
         $this->assertSame($this->helper, $this->helper->sendPaymentFailedEmail($quoteMock, 'test message'));
     }
 
-    /**
-     * @return MockObject
-     */
     public function testGetCheckout()
     {
         $this->assertEquals($this->checkoutSession, $this->helper->getCheckout());
