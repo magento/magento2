@@ -168,8 +168,7 @@
 
         <!-- Assert product in mini cart -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertProductInMiniCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="productPrice" value="$$createSimpleProduct.price$$"/>
