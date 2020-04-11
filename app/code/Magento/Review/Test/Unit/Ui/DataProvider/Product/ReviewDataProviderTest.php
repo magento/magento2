@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,14 +7,13 @@ namespace Magento\Review\Test\Unit\Ui\DataProvider\Product;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
+use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Ui\DataProvider\Product\ReviewDataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReviewDataProviderTest
- */
-class ReviewDataProviderTest extends \PHPUnit\Framework\TestCase
+class ReviewDataProviderTest extends TestCase
 {
     /**
      * @var ReviewDataProvider
@@ -27,21 +26,21 @@ class ReviewDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
