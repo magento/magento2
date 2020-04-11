@@ -32,7 +32,7 @@ class IndexTest extends TestCase
     /**
      * Prepare test preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
