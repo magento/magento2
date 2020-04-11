@@ -20,7 +20,7 @@ class CanViewNotificationTest extends TestCase
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|MockObject */
+    /** @var Logger|MockObject */
     private $viewerLoggerMock;
 
     /** @var ProductMetadataInterface|MockObject */
@@ -29,10 +29,10 @@ class CanViewNotificationTest extends TestCase
     /** @var Session|MockObject */
     private $sessionMock;
 
-    /** @var  Log|MockObject */
+    /** @var Log|MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var MockObject|CacheInterface */
     private $cacheStorageMock;
 
     public function setUp(): void
