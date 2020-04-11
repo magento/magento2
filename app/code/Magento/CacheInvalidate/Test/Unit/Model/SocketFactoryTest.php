@@ -5,11 +5,15 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-class SocketFactoryTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\CacheInvalidate\Model\SocketFactory;
+use Laminas\Http\Client\Adapter\Socket;
+
+class SocketFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $factory = new \Magento\CacheInvalidate\Model\SocketFactory();
-        $this->assertInstanceOf(\Laminas\Http\Client\Adapter\Socket::class, $factory->create());
+        $factory = new SocketFactory();
+        $this->assertInstanceOf(Socket::class, $factory->create());
     }
 }
