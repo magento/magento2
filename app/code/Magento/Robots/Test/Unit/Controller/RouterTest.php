@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,14 @@
 
 namespace Magento\Robots\Test\Unit\Controller;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\ActionFactory;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Router\ActionList;
-use Magento\Framework\App\Route\ConfigInterface;
-use Magento\Robots\Controller\Router;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Route\ConfigInterface;
+use Magento\Framework\App\Router\ActionList;
 use Magento\Robots\Controller\Index\Index;
+use Magento\Robots\Controller\Router;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {

@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Robots\Test\Unit\Model\Config;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Robots\Model\Config\Value;
-use Magento\Framework\Model\Context;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Registry;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Store\Model\StoreResolver;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Robots\Model\Config\Value;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ValueTest extends TestCase
 {

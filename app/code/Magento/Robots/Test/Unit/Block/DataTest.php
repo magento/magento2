@@ -1,22 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Robots\Test\Unit\Block;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Robots\Block\Data;
-use Magento\Framework\View\Element\Context;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Robots\Model\Robots;
-use Magento\Store\Model\StoreResolver;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Robots\Model\Config\Value;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\View\Element\Context;
+use Magento\Robots\Block\Data;
+use Magento\Robots\Model\Config\Value;
+use Magento\Robots\Model\Robots;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {

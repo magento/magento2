@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Robots\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Robots\Model\Robots;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RobotsTest extends TestCase
 {
