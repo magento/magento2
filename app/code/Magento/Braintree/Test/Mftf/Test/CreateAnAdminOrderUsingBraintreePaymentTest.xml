@@ -23,7 +23,7 @@
         </annotations>
         <before>
             <!--Login As Admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--CreateNewProduct-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -33,6 +33,7 @@
 
             <!--Create New Customer-->
             <createData stepKey="createCustomer" entity="Simple_US_Customer"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
 
@@ -93,7 +94,7 @@
 
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Delete Product-->
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>

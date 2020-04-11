@@ -10,7 +10,7 @@ namespace Magento\CatalogSearch\Controller\Result;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
- * Test cases for catalog quick search using mysql search engine.
+ * Test cases for catalog quick search using search engine.
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled

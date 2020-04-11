@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\App\Media;
 use Magento\MediaStorage\Model\File\Storage\Config;
@@ -74,7 +75,12 @@ class MediaTest extends TestCase
     /**
      * @var Read|MockObject
      */
-    private $directoryMock;
+    private $directoryMediaMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryPubMock;
 
     protected function setUp()
     {
@@ -96,12 +102,30 @@ class MediaTest extends TestCase
             ->will($this->returnValue($this->sync));
 
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
-
+        $this->directoryPubMock = $this->getMockForAbstractClass(
+            WriteInterface::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['isReadable', 'getAbsolutePath']
+        );
+        $this->directoryMediaMock = $this->getMockForAbstractClass(
+            WriteInterface::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getAbsolutePath']
+        );
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::PUB)
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturnMap([
+                [DirectoryList::PUB, DriverPool::FILE, $this->directoryPubMock],
+                [DirectoryList::MEDIA, DriverPool::FILE, $this->directoryMediaMock],
+            ]);
 
         $this->responseMock = $this->createMock(Response::class);
     }
@@ -116,17 +140,17 @@ class MediaTest extends TestCase
         $this->mediaModel = $this->getMediaModel();
 
         $filePath = '/absolute/path/to/test/file.png';
-        $this->directoryMock->expects($this->any())
+        $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
-            ->will($this->returnValueMap(
-                [
-                    [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH, $filePath],
-                ]
-            ));
+            ->with(null)
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+        $this->directoryPubMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->will($this->returnValue($filePath));
         $this->configMock->expects($this->once())->method('save');
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
-        $this->directoryMock->expects($this->once())
+        $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->will($this->returnValue(true));
@@ -140,18 +164,18 @@ class MediaTest extends TestCase
 
         $filePath = '/absolute/path/to/test/file.png';
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
-        $this->directoryMock->expects($this->once())
+        $this->directoryMediaMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(null)
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+        $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->will($this->returnValue(true));
-        $this->directoryMock->expects($this->any())
+        $this->directoryPubMock->expects($this->once())
             ->method('getAbsolutePath')
-            ->will($this->returnValueMap(
-                [
-                    [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH, $filePath],
-                ]
-            ));
+            ->with(self::RELATIVE_FILE_PATH)
+            ->will($this->returnValue($filePath));
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->assertSame($this->responseMock, $this->mediaModel->launch());
     }
@@ -161,11 +185,11 @@ class MediaTest extends TestCase
         $this->mediaModel = $this->getMediaModel();
 
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
-        $this->directoryMock->expects($this->once())
+        $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
-            ->with()
+            ->with(null)
             ->will($this->returnValue(self::MEDIA_DIRECTORY));
-        $this->directoryMock->expects($this->once())
+        $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->will($this->returnValue(false));
@@ -205,16 +229,10 @@ class MediaTest extends TestCase
     public function testExceptionWhenIsAllowedReturnsFalse()
     {
         $this->mediaModel = $this->getMediaModel(false);
-
-        $filePath = '/absolute/path/to/test/file.png';
-        $this->directoryMock->expects($this->any())
+        $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
-            ->will($this->returnValueMap(
-                [
-                    [null, self::MEDIA_DIRECTORY],
-                    [self::RELATIVE_FILE_PATH, $filePath],
-                ]
-            ));
+            ->with(null)
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
         $this->configMock->expects($this->once())->method('save');
 
         $this->expectException(LogicException::class);

@@ -67,7 +67,9 @@ define([
                 sidebar._removeItemAfter(elem);
                 expect(mocks['Magento_Customer/js/customer-data'].get).toHaveBeenCalledWith('cart');
                 expect(jQuery('body').trigger).toHaveBeenCalledWith('ajax:removeFromCart', {
-                    'productIds': ['5']
+                    'productIds': ['5'], 'productInfo': [{
+                        'id': '5'
+                    }]
                 });
             });
 

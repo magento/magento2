@@ -17,6 +17,8 @@
             <argument name="shippingMethod" defaultValue="" type="string"/>
         </arguments>
 
+        <waitForLoadingMaskToDisappear stepKey="waitForCartTotalsLoaded"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForCartGrandTotalVisible"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
