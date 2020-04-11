@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,12 +15,11 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class SubmitObserverTest
- */
-class SubmitObserverTest extends \PHPUnit\Framework\TestCase
+class SubmitObserverTest extends TestCase
 {
     /**
      * @var SubmitObserver
@@ -28,41 +27,41 @@ class SubmitObserverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var OrderSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderSender|MockObject
      */
     private $orderSenderMock;
 
     /**
-     * @var InvoiceSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceSender|MockObject
      */
     private $invoiceSender;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     private $observerMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $quoteMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);

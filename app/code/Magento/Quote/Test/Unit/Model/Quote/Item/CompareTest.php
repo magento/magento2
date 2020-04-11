@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,54 +6,60 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-/**
- * Class CompareTest
- */
-class CompareTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Serialize\JsonValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Compare;
+use Magento\Quote\Model\Quote\Item\Option;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CompareTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Compare
+     * @var Compare
      */
     private $helper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $itemMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $comparedMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var Option|MockObject
      */
     private $optionMock;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonValidator|MockObject
      */
     private $jsonValidatorMock;
 
     /**
      * test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['__wakeup', 'getProductId', 'getOptions']
         );
         $this->comparedMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['__wakeup', 'getProductId', 'getOptions']
         );
         $this->optionMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item\Option::class,
+            Option::class,
             ['__wakeup', 'getCode', 'getValue']
         );
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -65,13 +71,13 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->jsonValidatorMock = $this->getMockBuilder(\Magento\Framework\Serialize\JsonValidator::class)
+        $this->jsonValidatorMock = $this->getMockBuilder(JsonValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->helper = $objectManagerHelper->getObject(
-            \Magento\Quote\Model\Quote\Item\Compare::class,
+            Compare::class,
             [
                 'serializer' => $serializer,
                 'jsonValidator' => $this->jsonValidatorMock
@@ -82,7 +88,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $code
      * @param mixed $value
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getOptionMock($code, $value)
     {
@@ -239,7 +245,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
                     $this->getOptionMock('option-1', $comparedOptionValue)
                 ]
             );
-        
+
         $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }
