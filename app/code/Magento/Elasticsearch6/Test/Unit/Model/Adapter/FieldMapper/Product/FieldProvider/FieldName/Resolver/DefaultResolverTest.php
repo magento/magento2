@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
@@ -18,7 +19,7 @@ use Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\Field
 /**
  * @SuppressWarnings(PHPMD)
  */
-class DefaultResolverTest extends \PHPUnit\Framework\TestCase
+class DefaultResolverTest extends TestCase
 {
     /**
      * @var DefaultResolver
@@ -40,7 +41,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
