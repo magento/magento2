@@ -10,13 +10,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProcessingErrorAggregatorTest extends TestCase
 {
     /**
-     * @var ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorFactory|MockObject
      */
     protected $processingErrorFactoryMock;
 

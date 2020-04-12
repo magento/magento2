@@ -53,7 +53,7 @@ class AbstractTest extends AbstractImportTestCase
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|MockObject */
         $source = $this->getMockForAbstractClass(
             AbstractSource::class,
             [],

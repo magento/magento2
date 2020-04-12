@@ -20,6 +20,9 @@ use Magento\ImportExport\Model\Report\ReportProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidateTest extends TestCase
 {
     /**

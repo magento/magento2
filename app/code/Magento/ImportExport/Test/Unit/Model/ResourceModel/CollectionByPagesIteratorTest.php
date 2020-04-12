@@ -11,6 +11,7 @@ use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -42,7 +43,7 @@ class CollectionByPagesIteratorTest extends TestCase
         $pageSize = 2;
         $pageCount = 3;
 
-        /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $callbackMock MockObject */
         $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass(
@@ -54,7 +55,7 @@ class CollectionByPagesIteratorTest extends TestCase
         $entityFactory = $this->createMock(EntityFactory::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collectionMock AbstractDb|MockObject */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])

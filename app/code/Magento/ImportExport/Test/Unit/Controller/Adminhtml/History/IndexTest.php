@@ -31,7 +31,7 @@ class IndexTest extends TestCase
     protected $indexController;
 
     /**
-     * @var ResultFactory|\PhpUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactory;
 

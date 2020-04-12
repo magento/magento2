@@ -97,7 +97,7 @@ class ZipTest extends TestCase
                 [],
                 ]
             );
-        } catch (\PHPUnit\Framework\Error $e) {
+        } catch (\Throwable $e) {
             // Suppress any errors due to no control of Zip object dependency instantiation.
         }
     }

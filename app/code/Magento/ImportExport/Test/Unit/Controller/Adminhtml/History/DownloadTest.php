@@ -59,7 +59,7 @@ class DownloadTest extends TestCase
     protected $downloadController;
 
     /**
-     * $var \Magento\ImportExport\Helper\Report|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Report|MockObject
      */
     protected $reportHelper;
 
