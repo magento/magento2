@@ -8,11 +8,12 @@ namespace Magento\Captcha\Test\Unit\Model;
 use Magento\Captcha\Model\CaptchaFactory;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CaptchaFactoryTest extends TestCase
 {
-    /**@var \PHPUnit_Framework_MockObject_MockObject */
+    /**@var MockObject */
     protected $_objectManagerMock;
 
     /** @var CaptchaFactory */

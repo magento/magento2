@@ -34,7 +34,7 @@ class CheckUserEditObserverTest extends TestCase
     /** @var ActionFlag|MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /* @var \Magento\Framework\Message\ManagerInterface|MockObject */
     protected $messageManagerMock;
 
     /** @var RedirectInterface|MockObject */

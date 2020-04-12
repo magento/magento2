@@ -41,8 +41,8 @@ class CheckUserCreateObserverTest extends TestCase
      */
     protected $_actionFlag;
 
-    /*
-     * @var \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @var MockObject
      */
     protected $_messageManager;
 

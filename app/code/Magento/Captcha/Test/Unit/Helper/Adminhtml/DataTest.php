@@ -8,12 +8,13 @@ namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 use Magento\Captcha\Helper\Adminhtml\Data;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data |MockObject
      */
     protected $_model;
 
