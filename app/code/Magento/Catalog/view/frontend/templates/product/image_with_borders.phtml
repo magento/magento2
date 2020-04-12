@@ -7,12 +7,11 @@
 <?php
 /** @var $block \Magento\Catalog\Block\Product\Image */
 /** @var $escaper \Magento\Framework\Escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
-<span class="product-image-container"
-      style="width:<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>px;">
-    <span class="product-image-wrapper"
-          style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
+<span class="product-image-container">
+    <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
@@ -23,3 +22,11 @@
             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
 </span>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'width:' . $escaper->escapeHtmlAttr($block->getWidth()) . 'px;',
+    'span.product-image-container'
+) ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'padding-bottom: '. ($block->getRatio() * 100) . '%;',
+    'span.product-image-wrapper'
+) ?>

@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Csp\Api\InlineUtilInterface $csp */
 ?>
-<script>
+<?php $scriptString = <<<script
     require([
         'uiLayout',
         'jquery'
@@ -25,5 +27,7 @@
             $('body').trigger('contentUpdated');
         })
     })
-</script>
+script;
+?>
+<?= /* @noEscape */ $csp->renderTag('script', [], $scriptString) ?>
 <!-- ko template: getTemplate() --><!-- /ko -->

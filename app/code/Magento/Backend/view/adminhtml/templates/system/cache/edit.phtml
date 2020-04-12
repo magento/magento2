@@ -59,17 +59,18 @@ script;
                                         "')) {{$clickAction}}"; ?>
                                     <?php //phpcs:enable ?>
                                 <?php endif; ?>
-                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>
-                                    <?= /* @noEscape */ $secureRenderer->renderEventListener(
-                                        'onclick',
-                                        /* @noEscape */ $clickAction
-                                    ) ?>
-                                <?php endif; ?>
+                                <button
                                     id="<?= $block->escapeHtmlAttr($_button['name']) ?>"
                                     type="button"
                                     class="scalable
+                                <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>
+                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        /* @noEscape */ $clickAction,
+                                        '#' . $block->escapeHtmlAttr($_button['name'])
+                                    ) ?>
+                                <?php endif; ?>
                                 <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif;?>"
-                                        style=""
                                 ><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span>
                                 </button>
                                 <?php if (isset($_button['comment'])): ?> <br />
@@ -96,16 +97,16 @@ script;
                     <tr>
                         <td class="label"><label><?= $block->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
                         <td class="value">
-                            <button
-                                <?= /* @noEscape */ $secureRenderer->renderEventListener(
-                                    'onclick',
-                                    "setCacheAction('jscss_action', this)"
-                                ) ?>
-                                    id='jscss_action'
+                            <button id='jscss_action'
                                     type="button"
                                     class="scalable">
                                 <span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span>
                             </button>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                "setCacheAction('jscss_action', this)",
+                                '#jscss_action'
+                            ) ?>
                         </td>
                     </tr>
                 </tbody>

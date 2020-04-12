@@ -31,8 +31,8 @@
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' :
                 $block->getTabUrl($_tab) ?>
 
-            <li class="admin__page-nav-item" <?php if ($block->getTabIsHidden($_tab)): ?> style="display:none"<?php
-            endif; ?><?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
+            <li class="admin__page-nav-item" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
+                <?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
                 <a href="<?=  $block->escapeUrl($_tabHref) ?>"
                    id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
                    name="<?=  $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>"
@@ -72,9 +72,15 @@
                     <?= /* @noEscape */ $block->getUiId('tab', 'content', $_tab->getId()) ?>>
                     <?= /* @noEscape */ $block->getTabContent($_tab) ?>
                 </div>
+                <?php if ($block->getTabIsHidden($_tab)): ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        'display:none',
+                        'li.admin__page-nav-item#' . $block->escapeHtmlAttr($block->getTabId($_tab))
+                    ); ?>
+                <?php endif; ?>
                 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                     'display:none',
-                    '#' . $block->escapeHtmlAttr($block->getTabId($_tab))
+                    'div#' . $block->escapeHtmlAttr($block->getTabId($_tab))
                 ); ?>
             </li>
         <?php endforeach; ?>

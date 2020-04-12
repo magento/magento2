@@ -5,14 +5,12 @@
  */
 
 /** @var Magento\Braintree\Block\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 ?>
-<fieldset class="admin__fieldset payment-method"
-          id="payment_form_<?= /* @noEscape */ $code ?>"
-          style="display:none"
-    >
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= /* @noEscape */ $code ?>">
     <div class="admin__field _required">
         <label class="label admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_type" >
             <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
@@ -20,9 +18,9 @@ $ccType = $block->getInfoData('cc_type');
         <div class="admin__field-control control">
             <select id="<?= /* @noEscape */ $code ?>_cc_type" name="payment[cc_type]"
                     class="required-entry select admin__control-select validate-cc-type-select">
-                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
+                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
                     <option value="<?= $block->escapeHtml($typeCode) ?>"
-                        <?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif; ?>>
+                        <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach; ?>
@@ -59,7 +57,7 @@ $ccType = $block->getInfoData('cc_type');
             </div>
         </div>
     </div>
-    <?php if ($block->hasVerification()) : ?>
+    <?php if ($block->hasVerification()): ?>
         <div class="admin__field _required">
             <label class="label admin__field-label">
                 <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
@@ -75,7 +73,7 @@ $ccType = $block->getInfoData('cc_type');
         </div>
     <?php endif; ?>
 
-    <?php if ($block->isVaultEnabled()) : ?>
+    <?php if ($block->isVaultEnabled()): ?>
         <div class="field-tooltip-content">
             <input type="checkbox"
                    id="<?= /* @noEscape */ $code ?>_vault"
@@ -89,5 +87,7 @@ $ccType = $block->getInfoData('cc_type');
 
     <input type="hidden" id="<?= /* @noEscape */ $code ?>_payment_method_nonce"
            name="payment[payment_method_nonce]"/>
-    <input type="submit" name="Submit" style="display: none;">
+    <input type="submit" name="Submit">
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display;none', 'input[name=\'Submit\']') ?>
 </fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display;none', 'payment_form_' . /* @noEscape */ $code) ?>

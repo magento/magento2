@@ -29,46 +29,53 @@
 
 <?php $i = 0; if ($block->getValues() !== null): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
-        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"
-            class="gallery">
+        <?php $trId = $block->getElement()->getHtmlId() . '_tr_' . $block->escapeHtmlAttr($image->getValueId()); ?>
+        <tr id="<?= /* @noEscape */ $trId ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
-            <td class="gallery" align="center" style="vertical-align:bottom;">
+            <?php $typeId = $block->getElement()->getHtmlId() . '_image_' . $block->escapeHtmlAttr($type);
+            $imgId =  $typeId . '_' . $block->escapeHtmlAttr($image->getValueId()); ?>
+            <td class="gallery" align="center" id="<?= /* @noEscape */ $typeId ?>">
             <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>"
+               id = <?= /* @noEscape */ 'a_' . $imgId ?>
                target="_blank"
-               <?= /* @noEscape */ $secureRenderer->renderEventListener(
-                   'onclick',
-                   "imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?=
-                $block->escapeHtmlAttr($block->escapeJs($type)) ?>_<?=
-                 $block->escapeHtmlAttr($block->escapeJs($image->getValueId())) ?>');return false;"
-               ) ?>
-            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= $block->escapeHtmlAttr($type)
-            ?>_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"
+            <img id="<?= /* @noEscape */ $imgId ?>"
                  src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @noEscape */ time() ?>"
                  alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>"
                  title="<?= $block->escapeHtmlAttr($image->getValue()) ?>"
                  height="25"
                  class="small-image-preview v-middle"/>
             </a><br/>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onclick',
+                    "imagePreview('<?= $imgId ?>');return false;",
+                    '#a_' . $imgId
+                ) ?>
             <input type="file"
                    name="<?= $block->escapeHtmlAttr($block->getElement()->getName())
                     ?>_<?= $block->escapeHtmlAttr($type) ?>[<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
-                   size="1"></td>
+                   size="1">
+            </td>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', 'td#' . $typeId) ?>
         <?php endforeach; ?>
-        <td class="gallery" align="center" style="vertical-align:bottom;">
+        <td class="gallery" align="center" id="<?= /* @noEscape */ $trId . '_td_input' ?>">
             <input type="input"
                    name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName())
                     ?>[position][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($image->getPosition()) ?>"
                    id="<?= $block->getElement()->getHtmlId()
                     ?>_position_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"
-                   size="3"/></td>
-        <td class="gallery" align="center"
-            style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?>
+                   size="3"/>
+        </td>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', $trId . '_td_input') ?>
+        <td class="gallery" align="center" id="<?= /* @noEscape */ $trId . '_td_delete' ?>">
+            <?= $block->getDeleteButtonHtml($image->getValueId()) ?>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName())
                     ?>[delete][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
                    id="<?= $block->getElement()->getHtmlId()
-                    ?>_delete_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"/></td>
+                    ?>_delete_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"/>
+        </td>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', $trId . '_td_delete') ?>
         </tr>
     <?php endforeach; ?>
 <?php endif; ?>
