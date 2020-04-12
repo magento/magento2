@@ -1,67 +1,78 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Model\MergeDataProvider;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class ChildrenUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator */
+    /** @var ChildrenUrlRewriteGenerator */
     private $childrenUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $category;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $childrenCategoriesProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $categoryUrlRewriteGeneratorFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $categoryUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $mergeDataProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $serializerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $categoryRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->childrenCategoriesProvider = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider::class
+            ChildrenCategoriesProvider::class
         )->disableOriginalConstructor()->getMock();
-        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()->getMock();
         $this->categoryUrlRewriteGeneratorFactory = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory::class
+            CategoryUrlRewriteGeneratorFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::class
+            CategoryUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->categoryRepository = $this->getMockBuilder(
-            \Magento\Catalog\Model\CategoryRepository::class
+            CategoryRepository::class
         )->disableOriginalConstructor()->getMock();
         $mergeDataProviderFactory = $this->createPartialMock(
-            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
+            MergeDataProviderFactory::class,
             ['create']
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
+        $this->mergeDataProvider = new MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->childrenUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator::class,
+            ChildrenUrlRewriteGenerator::class,
             [
                 'childrenCategoriesProvider' => $this->childrenCategoriesProvider,
                 'categoryUrlRewriteGeneratorFactory' => $this->categoryUrlRewriteGeneratorFactory,
@@ -85,7 +96,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $saveRewritesHistory = 'flag';
         $childId = 2;
 
-        $childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $childCategory = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()->getMock();
         $childCategory->expects($this->once())->method('setData')
             ->with('save_rewrites_history', $saveRewritesHistory);
@@ -97,13 +108,13 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($saveRewritesHistory));
         $this->categoryUrlRewriteGeneratorFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->categoryUrlRewriteGenerator));
-        $url1 = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializerMock);
+        $url1 = new UrlRewrite([], $this->serializerMock);
         $url1->setRequestPath('category-1')
             ->setStoreId(1);
-        $url2 = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializerMock);
+        $url2 = new UrlRewrite([], $this->serializerMock);
         $url2->setRequestPath('category-2')
             ->setStoreId(2);
-        $url3 = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializerMock);
+        $url3 = new UrlRewrite([], $this->serializerMock);
         $url3->setRequestPath('category-1')
             ->setStoreId(1);
         $this->categoryUrlRewriteGenerator->expects($this->once())->method('generate')
