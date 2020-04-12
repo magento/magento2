@@ -24,27 +24,27 @@ use PHPUnit\Framework\TestCase;
 class AjaxLoadRatesTest extends TestCase
 {
     /**
-     * @var Request | MockObject
+     * @var Request|MockObject
      */
     private $request;
 
     /**
-     * @var Response | MockObject
+     * @var Response|MockObject
      */
     private $resultFactory;
 
     /**
-     * @var RatesProvider | MockObject
+     * @var RatesProvider|MockObject
      */
     private $ratesProvider;
 
     /**
-     * @var Context | MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var SearchCriteriaBuilder | MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 

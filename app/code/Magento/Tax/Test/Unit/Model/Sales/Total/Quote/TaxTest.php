@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Sales\Total\Quote\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -769,7 +770,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $shippingMock = $this->createMock(\Magento\Quote\Api\Data\ShippingInterface::class);
         $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
-        /** @var $address \Magento\Quote\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $address \Magento\Quote\Model\Quote\Address|MockObject */
         $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(

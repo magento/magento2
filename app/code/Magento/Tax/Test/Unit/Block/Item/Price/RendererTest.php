@@ -9,6 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\Store;
 use Magento\Tax\Block\Item\Price\Renderer;
@@ -311,7 +312,7 @@ class RendererTest extends TestCase
             ->method('getOrder')
             ->will($this->returnValue($orderMock));
 
-        $invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Model\Invoice\Item::class)
+        $invoiceItemMock = $this->getMockBuilder(InvoiceItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderItem', '__wakeup', 'getStoreId'])
             ->getMock();

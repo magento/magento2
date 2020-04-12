@@ -69,17 +69,11 @@ class AdjustmentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $storeConfigMock = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));

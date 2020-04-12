@@ -200,7 +200,7 @@ class UnitBaseCalculatorTest extends TestCase
      */
     protected function getMockItem()
     {
-        /** @var $mockItem \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $mockItem MockObject */
         $mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

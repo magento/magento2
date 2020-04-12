@@ -25,42 +25,42 @@ class TaxRuleCollectionTest extends TestCase
     protected $model;
 
     /**
-     * @var TaxRuleRepositoryInterface | MockObject
+     * @var TaxRuleRepositoryInterface|MockObject
      */
     protected $ruleServiceMock;
 
     /**
-     * @var EntityFactory | MockObject
+     * @var EntityFactory|MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var FilterBuilder | MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var SearchCriteriaBuilder | MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var SortOrderBuilder | MockObject
+     * @var SortOrderBuilder|MockObject
      */
     protected $sortOrderBuilderMock;
 
     /**
-     * @var SearchCriteria | MockObject
+     * @var SearchCriteria|MockObject
      */
     protected $searchCriteriaMock;
 
     /**
-     * @var TaxRateSearchResultsInterface | MockObject
+     * @var TaxRateSearchResultsInterface|MockObject
      */
     protected $searchResultsMock;
 
     /**
-     * @var Rule | MockObject
+     * @var Rule|MockObject
      */
     protected $taxRuleMock;
 

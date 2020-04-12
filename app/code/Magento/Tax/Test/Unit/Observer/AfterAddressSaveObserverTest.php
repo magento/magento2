@@ -125,7 +125,7 @@ class AfterAddressSaveObserverTest extends TestCase
             ->method('isCatalogPriceDisplayAffectedByTax')
             ->willReturn($isCatalogPriceDisplayAffectedByTax);
 
-        /* @var \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Model\Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -20,6 +20,9 @@ use Magento\Tax\Observer\CustomerLoggedInObserver;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerLoggedInObserverTest extends TestCase
 {
     /**
@@ -152,7 +155,7 @@ class CustomerLoggedInObserverTest extends TestCase
             ->method('getGroupId')
             ->willReturn(1);
 
-        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $address */
+        /* @var \Magento\Customer\Api\Data\AddressInterface|MockObject $address */
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

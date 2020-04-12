@@ -76,8 +76,7 @@ class TaxRuleRepositoryTest extends TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
-     * \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |MockObject
      */
     private $collectionProcessor;
 

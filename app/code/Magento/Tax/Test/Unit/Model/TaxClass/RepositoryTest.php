@@ -68,8 +68,7 @@ class RepositoryTest extends TestCase
     protected $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
-     *  \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |MockObject
      */
     private $collectionProcessor;
 
