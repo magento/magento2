@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,53 +6,57 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RegularPriceTest
- */
-class RegularPriceTest extends \PHPUnit\Framework\TestCase
+class RegularPriceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Price\RegularPrice
+     * @var RegularPrice
      */
     protected $regularPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Calculator|MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
-        $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
+        $this->saleableItemMock = $this->createMock(Product::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
+        $this->calculatorMock = $this->createMock(Calculator::class);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->regularPrice = new RegularPrice(
             $this->saleableItemMock,

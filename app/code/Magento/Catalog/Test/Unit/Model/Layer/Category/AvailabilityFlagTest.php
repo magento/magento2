@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,14 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\State;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AvailabilityFlagTest extends \PHPUnit\Framework\TestCase
+class AvailabilityFlagTest extends TestCase
 {
     /**
      * @var array
@@ -16,31 +21,31 @@ class AvailabilityFlagTest extends \PHPUnit\Framework\TestCase
     protected $filters;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $stateMock;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\AvailabilityFlag
+     * @var AvailabilityFlag
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->filterMock = $this->createMock(\Magento\Catalog\Model\Layer\Filter\AbstractFilter::class);
+        $this->filterMock = $this->createMock(AbstractFilter::class);
         $this->filters = [$this->filterMock];
-        $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
-        $this->stateMock = $this->createMock(\Magento\Catalog\Model\Layer\State::class);
+        $this->layerMock = $this->createMock(Layer::class);
+        $this->stateMock = $this->createMock(State::class);
         $this->model = new AvailabilityFlag();
     }
 

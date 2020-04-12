@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,15 +9,13 @@ use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\ReadHandler;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Catalog\Model\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReadHandlerTest
- */
-class ReadHandlerTest extends \PHPUnit\Framework\TestCase
+class ReadHandlerTest extends TestCase
 {
     /**
      * @var ReadHandler
@@ -42,7 +40,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryLinkFactory = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
             ->disableOriginalConstructor()

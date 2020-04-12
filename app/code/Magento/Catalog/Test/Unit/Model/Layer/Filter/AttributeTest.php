@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,28 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filter\StripTags;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
-    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute|MockObject */
+    /** @var  Attribute|MockObject */
     private $filterAttribute;
 
     /**
@@ -22,62 +35,62 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|MockObject */
+    /** @var  AbstractFrontend|MockObject */
     private $frontend;
 
-    /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
+    /** @var  State|MockObject */
     private $state;
 
     /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
     private $attribute;
 
-    /** @var \Magento\Framework\App\RequestInterface|MockObject */
+    /** @var RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory|MockObject */
+    /** @var  AttributeFactory|MockObject */
     private $filterAttributeFactory;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
+    /** @var  ItemFactory|MockObject */
     private $filterItemFactory;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface|MockObject */
+    /** @var  StoreManagerInterface|MockObject */
     private $storeManager;
 
-    /** @var  \Magento\Catalog\Model\Layer|MockObject */
+    /** @var  Layer|MockObject */
     private $layer;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder|MockObject */
+    /** @var  DataBuilder|MockObject */
     private $itemDataBuilder;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory */
-        $this->filterItemFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\ItemFactory::class)
+        /** @var ItemFactory $filterItemFactory */
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        /** @var StoreManagerInterface $storeManager */
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        /** @var \Magento\Catalog\Model\Layer $layer */
-        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
+        /** @var Layer $layer */
+        $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState'])
             ->getMock();
-        /** @var \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder */
-        $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
+        /** @var DataBuilder $itemDataBuilder */
+        $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItemData', 'build'])
             ->getMock();
 
         $this->filterAttribute = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute::class
+            Attribute::class
         )->disableOriginalConstructor()
             ->setMethods(['getCount', 'applyFilterToCollection'])
             ->getMock();
@@ -87,7 +100,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
 
         $this->filterAttributeFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory::class
+            AttributeFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -97,7 +110,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->filterAttribute));
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter'])
             ->getMock();
@@ -105,7 +118,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getState')
             ->will($this->returnValue($this->state));
 
-        $this->frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
+        $this->frontend = $this->getMockBuilder(AbstractFrontend::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOption', 'getSelectOptions'])
             ->getMock();
@@ -117,12 +130,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getFrontend')
             ->will($this->returnValue($this->frontend));
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
 
-        $stripTagsFilter = $this->getMockBuilder(\Magento\Framework\Filter\StripTags::class)
+        $stripTagsFilter = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -130,7 +143,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->will($this->returnArgument(0));
 
-        $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+        $string = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['strlen'])
             ->getMock();
@@ -254,11 +267,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param string $label
      * @param string $value
      * @param int $count
-     * @return \Magento\Catalog\Model\Layer\Filter\Item|MockObject
+     * @return Item|MockObject
      */
     private function createFilterItem($index, $label, $value, $count)
     {
-        $filterItem = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
+        $filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();

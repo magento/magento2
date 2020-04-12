@@ -1,32 +1,36 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
 
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Config\Source\ListSort;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ListSortTest extends \PHPUnit\Framework\TestCase
+class ListSortTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Config\Source\ListSort
+     * @var ListSort
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $catalogConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
+        $this->catalogConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()->getMock();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Config\Source\ListSort::class,
+            ListSort::class,
             ['catalogConfig' => $this->catalogConfig]
         );
     }

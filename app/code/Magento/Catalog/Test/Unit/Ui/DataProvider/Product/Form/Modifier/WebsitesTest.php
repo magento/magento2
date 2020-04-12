@@ -1,22 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Websites;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\Store as StoreView;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class WebsitesTest test the meta data and website data for different websites
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WebsitesTest extends AbstractModifierTest
@@ -29,32 +30,32 @@ class WebsitesTest extends AbstractModifierTest
     const SECOND_WEBSITE_ID = 2;
 
     /**
-     * @var WebsiteRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteRepositoryInterface|MockObject
      */
     protected $websiteRepositoryMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreRepositoryInterface|MockObject
      */
     protected $storeRepositoryMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
     protected $secondWebsiteMock;
 
@@ -64,52 +65,52 @@ class WebsitesTest extends AbstractModifierTest
     protected $assignedWebsites;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|MockObject
      */
     protected $groupMock;
 
     /**
-     * @var StoreView|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreView|MockObject
      */
     protected $storeViewMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::PRODUCT_ID);
         $this->assignedWebsites = [self::SECOND_WEBSITE_ID];
-        $this->websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
+        $this->websiteMock = $this->getMockBuilder(Website::class)
             ->setMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->secondWebsiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
+        $this->secondWebsiteMock = $this->getMockBuilder(Website::class)
             ->setMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->websiteRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
+        $this->websiteRepositoryMock = $this->getMockBuilder(WebsiteRepositoryInterface::class)
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
         $this->websiteRepositoryMock->expects($this->any())
             ->method('getDefault')
             ->willReturn($this->websiteMock);
-        $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\GroupRepositoryInterface::class)
+        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
-        $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
+        $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
             ->setMethods(['getList'])
             ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $this->locatorMock->expects($this->any())
             ->method('getWebsiteIds')
             ->willReturn($this->assignedWebsites);
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['isSingleStoreMode', 'getWebsites'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->method('getWebsites')
@@ -117,7 +118,7 @@ class WebsitesTest extends AbstractModifierTest
         $this->storeManagerMock->expects($this->any())
             ->method('isSingleStoreMode')
             ->willReturn(false);
-        $this->groupMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Group\Collection::class)
+        $this->groupMock = $this->getMockBuilder(Collection::class)
             ->setMethods(['getId', 'getName', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -155,7 +156,7 @@ class WebsitesTest extends AbstractModifierTest
     }
 
     /**
-     * @return \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Websites
+     * @return Websites
      */
     protected function createModel()
     {

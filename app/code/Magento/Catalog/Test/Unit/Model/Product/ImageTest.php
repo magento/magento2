@@ -1,127 +1,142 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
+use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Image\Factory;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Image
+     * @var Image
      */
     private $image;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|MockObject
      */
     private $coreFileHelper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Image\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     private $factory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocalInterface|MockObject
      */
     private $imageAsset;
 
     /**
-     * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageFactory|MockObject
      */
     private $viewAssetImageFactory;
 
     /**
-     * @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderFactory|MockObject
      */
     private $viewAssetPlaceholderFactory;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheManager;
 
     /**
-     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ParamsBuilder|MockObject
      */
     private $paramsBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->context = $this->createMock(\Magento\Framework\Model\Context::class);
-        $this->cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
+        $this->context = $this->createMock(Context::class);
+        $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->any())->method('getCacheManager')->will($this->returnValue($this->cacheManager));
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getWebsite'])->getMock();
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()
+        $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()
             ->setMethods(['getId', '__sleep', '__wakeup', 'getBaseUrl'])->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://magento.com/media/'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->config = $this->getMockBuilder(\Magento\Catalog\Model\Product\Media\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->setMethods(['getBaseMediaPath'])->disableOriginalConstructor()->getMock();
         $this->config->expects($this->any())->method('getBaseMediaPath')->will($this->returnValue('catalog/product'));
-        $this->coreFileHelper = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+        $this->coreFileHelper = $this->getMockBuilder(Database::class)
             ->setMethods(['saveFile', 'deleteFolder'])->disableOriginalConstructor()->getMock();
 
-        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
+        $this->mediaDirectory = $this->getMockBuilder(Write::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'isFile', 'isExist', 'getAbsolutePath'])
             ->getMock();
 
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->mediaDirectory));
-        $this->factory = $this->createMock(\Magento\Framework\Image\Factory::class);
+        $this->factory = $this->createMock(Factory::class);
 
         $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
@@ -132,7 +147,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->serializer = $this->getMockBuilder(
-            \Magento\Framework\Serialize\SerializerInterface::class
+            SerializerInterface::class
         )->getMockForAbstractClass();
         $this->serializer->expects($this->any())
             ->method('serialize')
@@ -153,7 +168,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->image = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Image::class,
+            Image::class,
             [
                 'context' => $this->context,
                 'storeManager' => $this->storeManager,
@@ -168,7 +183,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
+        $this->imageAsset = $this->getMockBuilder(LocalInterface::class)
             ->getMockForAbstractClass();
         $objectManager->setBackwardCompatibleProperty(
             $this->image,
@@ -310,7 +325,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     public function testSetWatermark()
     {
-        $website = $this->getMockBuilder(\Magento\Store\Model\Website::class)->disableOriginalConstructor()
+        $website = $this->getMockBuilder(Website::class)->disableOriginalConstructor()
             ->setMethods(['getId', '__sleep', '__wakeup'])->getMock();
         $website->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));

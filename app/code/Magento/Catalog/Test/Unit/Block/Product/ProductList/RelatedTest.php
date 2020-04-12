@@ -1,24 +1,29 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
-class RelatedTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Product\ProductList\Related;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class RelatedTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Related
+     * @var Related
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject(\Magento\Catalog\Block\Product\ProductList\Related::class);
+        $objectManager = new ObjectManager($this);
+        $this->block = $objectManager->getObject(Related::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -26,11 +31,11 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $productTag = ['compare_item_1'];
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(Product::class);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
 
         $itemsCollection = new \ReflectionProperty(
-            \Magento\Catalog\Block\Product\ProductList\Related::class,
+            Related::class,
             '_itemCollection'
         );
         $itemsCollection->setAccessible(true);
@@ -52,7 +57,7 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
     public function testCanItemsAddToCart($isComposite, $isSaleable, $hasRequiredOptions, $canItemsAddToCart)
     {
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['isComposite', 'isSaleable', 'getRequiredOptions']
         );
         $product->expects($this->any())->method('isComposite')->willReturn($isComposite);
@@ -60,7 +65,7 @@ class RelatedTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())->method('getRequiredOptions')->willReturn($hasRequiredOptions);
 
         $itemsCollection = new \ReflectionProperty(
-            \Magento\Catalog\Block\Product\ProductList\Related::class,
+            Related::class,
             '_itemCollection'
         );
         $itemsCollection->setAccessible(true);

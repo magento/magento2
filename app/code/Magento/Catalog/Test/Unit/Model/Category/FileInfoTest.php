@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,10 +11,10 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Test for Magento\Catalog\Model\Category\FileInfo class.
@@ -61,7 +61,7 @@ class FileInfoTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();

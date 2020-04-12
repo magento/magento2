@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,16 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
-use \PHPUnit\Framework\TestCase;
-use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
-use \Magento\Catalog\Model\Product;
-use \Magento\Framework\View\Element\Template\Context;
-use \Magento\Framework\Registry;
-use \Magento\Framework\Pricing\PriceCurrencyInterface;
-use \Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
+use Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\View\Attributes
@@ -23,37 +25,37 @@ use \Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
 class AttributesTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Phrase
+     * @var Phrase
      */
     private $phrase;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @var MockObject|AbstractAttribute
      */
     private $attribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @var MockObject|AbstractFrontend
      */
     private $frontendAttribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     private $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\Template\Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry
+     * @var MockObject|Registry
      */
     private $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var MockObject|PriceCurrencyInterface
      */
     private $priceCurrencyInterface;
 
@@ -62,7 +64,7 @@ class AttributesTest extends TestCase
      */
     private $attributesBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this
             ->getMockBuilder(AbstractAttribute::class)

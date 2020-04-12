@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,15 +8,24 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\TierPrice;
+use Magento\Catalog\Model\Product\Type\Price;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Data\Group;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Price Test
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     const KEY_TIER_PRICE = 'tier_price';
     const PRICE_SCOPE_GLOBAL = 0;
@@ -33,45 +42,45 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductTierPriceInterfaceFactory|MockObject
      */
     protected $tpFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|MockObject
      */
     protected $websiteMock;
 
     private $tierPriceExtensionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->product = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product::class);
+        $this->product = $this->objectManagerHelper->getObject(Product::class);
 
         $this->tpFactory = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
+            ProductTierPriceInterfaceFactory::class,
             ['create']
         );
 
-        $this->websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId']);
+        $this->websiteMock = $this->createPartialMock(Website::class, ['getId']);
         $storeMangerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             false,
@@ -84,7 +93,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->websiteMock));
 
         $this->scopeConfigMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             [],
             '',
             false,
@@ -93,10 +102,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ['getValue']
         );
 
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $group = $this->createMock(Group::class);
         $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagementMock =
-            $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
+            $this->createMock(GroupManagementInterface::class);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
             ->will($this->returnValue($group));
         $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
@@ -104,7 +113,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Type\Price::class,
+            Price::class,
             [
                 'tierPriceFactory' => $this->tpFactory,
                 'config' => $this->scopeConfigMock,
@@ -168,7 +177,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->will(
                 $this->returnCallback(
                     function () {
-                        return $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
+                        return $this->objectManagerHelper->getObject(TierPrice::class);
                     }
                 )
             );
@@ -179,12 +188,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(null);
-        $tp1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
+        $tp1 = $this->objectManagerHelper->getObject(TierPrice::class);
         $tp1->setValue(10);
         $tp1->setCustomerGroupId(1);
         $tp1->setQty(11);
         $tp1->setExtensionAttributes($tierPriceExtensionMock);
-        $tp2 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
+        $tp2 = $this->objectManagerHelper->getObject(TierPrice::class);
         $tp2->setValue(20);
         $tp2->setCustomerGroupId(2);
         $tp2->setQty(22);

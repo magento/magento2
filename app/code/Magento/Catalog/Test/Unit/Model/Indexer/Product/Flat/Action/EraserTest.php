@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,42 +7,52 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
-class EraserTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product\Flat\Indexer;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class EraserTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $indexerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser
+     * @var Eraser
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $resource = $this->createMock(ResourceConnection::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
-        $this->indexerHelper = $this->createMock(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $this->indexerHelper = $this->createMock(Indexer::class);
         $this->indexerHelper->expects($this->any())->method('getTable')->will($this->returnArgument(0));
         $this->indexerHelper->expects($this->any())->method('getFlatTableName')->will($this->returnValueMap([
             [1, 'store_1_flat'],
             [2, 'store_2_flat'],
         ]));
 
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->model = new \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser(
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->model = new Eraser(
             $resource,
             $this->indexerHelper,
             $this->storeManager
@@ -52,7 +62,7 @@ class EraserTest extends \PHPUnit\Framework\TestCase
     public function testRemoveDeletedProducts()
     {
         $productsToDeleteIds = [1, 2];
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $select->expects($this->once())
             ->method('from')
             ->with(['product_table' => 'catalog_product_entity'])
@@ -76,9 +86,9 @@ class EraserTest extends \PHPUnit\Framework\TestCase
 
     public function testDeleteProductsFromStoreForAllStores()
     {
-        $store1 = $this->createMock(\Magento\Store\Model\Store::class);
+        $store1 = $this->createMock(Store::class);
         $store1->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $store2 = $this->createMock(\Magento\Store\Model\Store::class);
+        $store2 = $this->createMock(Store::class);
         $store2->expects($this->any())->method('getId')->will($this->returnValue(2));
         $this->storeManager->expects($this->once())->method('getStores')
             ->will($this->returnValue([$store1, $store2]));

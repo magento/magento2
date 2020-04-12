@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,45 +7,43 @@ namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\View\Asset\Image;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ImageTest
- */
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\View\Asset\Image
+     * @var Image
      */
     protected $model;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncryptorInterface|MockObject
      */
     protected $encryptor;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $context;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     private $assetRepo;
 
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaConfig = $this->createMock(ConfigInterface::class);
         $this->encryptor = $this->createMock(EncryptorInterface::class);
@@ -128,7 +126,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with($readableParams, $this->anything())
             ->willReturn($hashPath);
         static::assertEquals(
-            $absolutePath . '/cache/'. $hashPath . $filePath,
+            $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getPath()
         );
     }

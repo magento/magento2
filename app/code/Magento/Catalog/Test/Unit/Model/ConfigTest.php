@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,10 +6,26 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\TypeFactory;
+use Magento\Catalog\Model\ResourceModel\ConfigFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Group;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @covers \Magento\Catalog\Model\Config::loadAttributeSets
@@ -18,22 +34,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testLoadAttributeSets()
     {
         $setCollectionFactory = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
-            \Magento\Catalog\Model\Config::class,
+            Config::class,
             ['setCollectionFactory' => $setCollectionFactory]
         );
         $setItem = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\Set::class,
+            Set::class,
             ['getEntityTypeId', 'getAttributeSetName', '__wakeup']
         );
         $setItem->expects($this->once())->method('getEntityTypeId')->will($this->returnValue(1));
         $setItem->expects($this->once())->method('getAttributeSetName')->will($this->returnValue('name'));
         $setCollection = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
+            Collection::class,
             ['load']
         );
         $setCollection->expects($this->once())->method('load')->will($this->returnValue([1 => $setItem]));
@@ -72,13 +88,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory::class,
             ['create']
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
-            \Magento\Catalog\Model\Config::class,
+            Config::class,
             ['groupCollectionFactory' => $groupCollectionFactory]
         );
         $setItem = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\Group::class,
+            Group::class,
             ['getAttributeSetId', 'getAttributeGroupName', '__wakeup']
         );
         $setItem->expects($this->once())->method('getAttributeSetId')->will($this->returnValue(1));
@@ -122,13 +138,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadProductTypes()
     {
-        $productTypeFactory = $this->createPartialMock(\Magento\Catalog\Model\Product\TypeFactory::class, ['create']);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $productTypeFactory = $this->createPartialMock(TypeFactory::class, ['create']);
+        $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
-            \Magento\Catalog\Model\Config::class,
+            Config::class,
             ['productTypeFactory' => $productTypeFactory]
         );
-        $typeCollection = $this->createPartialMock(\Magento\Catalog\Model\Product\Type::class, ['getOptionArray']);
+        $typeCollection = $this->createPartialMock(Type::class, ['getOptionArray']);
         $typeCollection->expects($this->once())->method('getOptionArray')->will($this->returnValue([1 => 'name']));
         $productTypeFactory
             ->expects($this->any())
@@ -168,10 +184,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSourceOptionId($expected, $data, $search)
     {
-        $object = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getAllOptions']);
+        $object = $this->createPartialMock(DataObject::class, ['getAllOptions']);
         $object->expects($this->once())->method('getAllOptions')->will($this->returnValue($data));
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $model = $objectManager->getObject(\Magento\Catalog\Model\Config::class);
+        $objectManager = new ObjectManager($this);
+        $model = $objectManager->getObject(Config::class);
         $this->assertEquals($expected, $model->getSourceOptionId($object, $search));
     }
 
@@ -200,14 +216,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'code';
 
         $attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             ['getStoreLabel', 'getAttributeCode', '__wakeup']
         );
         $attribute->expects($this->any())->method('getStoreLabel')->will($this->returnValue($storeLabel));
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
 
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(Store::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $store->expects($this->any())->method('getId')->will($this->returnValue($storeId));
 
@@ -220,7 +236,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config->expects($this->any())->method('getAttributesUsedForSortBy')->will($this->returnValue($attributesData));
 
         $configFactory =
-            $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\ConfigFactory::class, ['create']);
+            $this->createPartialMock(ConfigFactory::class, ['create']);
         $configFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($config));
 
         $eavConfig = $this->createPartialMock(
@@ -232,9 +248,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $eavConfig->expects($this->once())->method('getAttribute')->with($entityType, $attributeData['attribute_code'])
             ->will($this->returnValue($attribute));
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
-            \Magento\Catalog\Model\Config::class,
+            Config::class,
             ['configFactory' => $configFactory, 'storeManager' => $storeManager, 'eavConfig' => $eavConfig]
         );
 
@@ -285,13 +301,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetProductListDefaultSortBy()
     {
         $scopeConfig = $this->createPartialMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             ['getValue', 'isSetFlag']
         );
         $scopeConfig->expects($this->once())->method('getValue')
             ->with('catalog/frontend/default_sort_by', 'store', null)->will($this->returnValue(1));
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $model = $objectManager->getObject(\Magento\Catalog\Model\Config::class, ['scopeConfig' => $scopeConfig]);
+        $objectManager = new ObjectManager($this);
+        $model = $objectManager->getObject(Config::class, ['scopeConfig' => $scopeConfig]);
         $this->assertEquals(1, $model->getProductListDefaultSortBy());
     }
 }

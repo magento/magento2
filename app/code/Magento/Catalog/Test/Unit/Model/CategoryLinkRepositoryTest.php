@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,14 +15,15 @@ use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Catalog\Model\CategoryLinkRepository
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
+class CategoryLinkRepositoryTest extends TestCase
 {
     /**
      * @var CategoryLinkRepository
@@ -52,7 +53,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productResourceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

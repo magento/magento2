@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -20,68 +20,70 @@ use Magento\Framework\Url;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductViewCounterTest extends \PHPUnit\Framework\TestCase
+class ProductViewCounterTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Ui\ProductViewCounter|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductViewCounter|MockObject
      */
     private $productViewCounter;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepository|MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var ProductRenderCollectorComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRenderCollectorComposite|MockObject
      */
     private $productRenderCollectorCompositeMock;
 
     /**
-     * @var Hydrator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hydrator|MockObject
      */
     private $hydratorMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     private $urlMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var ProductRenderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRenderFactory|MockObject
      */
     private $productRenderFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

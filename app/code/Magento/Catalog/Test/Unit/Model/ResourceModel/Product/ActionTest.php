@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
@@ -101,7 +100,7 @@ class ActionTest extends TestCase
      */
     private $productCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -1,15 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
+class CatalogEavValidationRulesTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -24,7 +26,7 @@ class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->catalogEavValidationRules = $this->objectManagerHelper->getObject(CatalogEavValidationRules::class);
@@ -40,8 +42,8 @@ class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild($frontendInput, $frontendClass, array $eavConfig, array $expectedResult)
     {
-        /** @var \Magento\Catalog\Api\Data\ProductAttributeInterface|MockObject $attribute */
-        $attribute = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class);
+        /** @var ProductAttributeInterface|MockObject $attribute */
+        $attribute = $this->createMock(ProductAttributeInterface::class);
 
         $attribute->expects($this->once())
             ->method('getFrontendInput')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,30 +6,43 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
-class TreeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\CategoryTreeInterface;
+use Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Tree;
+use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TreeTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ResourceModel\Category\Tree
+     * @var MockObject|Tree
      */
     protected $categoryTreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @var MockObject|Collection
      */
     protected $categoryCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
+     * @var MockObject|CategoryTreeInterfaceFactory
      */
     protected $treeFactoryMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -44,35 +57,35 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     protected $node;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     * @var TreeFactory
      */
     private $treeResourceFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $this->categoryTreeMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Tree::class
+            Tree::class
         )->disableOriginalConstructor()->getMock();
 
         $this->categoryCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+            Collection::class
         )->disableOriginalConstructor()->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManagerInterface::class
+            StoreManagerInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $this->treeResourceFactoryMock = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class
+            TreeFactory::class
         );
         $this->treeResourceFactoryMock->method('create')
             ->willReturn($this->categoryTreeMock);
 
         $methods = ['create'];
         $this->treeFactoryMock =
-            $this->createPartialMock(\Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory::class, $methods);
+            $this->createPartialMock(CategoryTreeInterfaceFactory::class, $methods);
 
         $this->tree = $this->objectManager
             ->getObject(
@@ -90,12 +103,12 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetNode()
     {
         $category = $this->getMockBuilder(
-            \Magento\Catalog\Model\Category::class
+            Category::class
         )->disableOriginalConstructor()->getMock();
         $category->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
 
         $node = $this->getMockBuilder(
-            \Magento\Framework\Data\Tree\Node::class
+            Node::class
         )->disableOriginalConstructor()->getMock();
 
         $node->expects($this->once())->method('loadChildren');
@@ -103,7 +116,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo(1))
             ->will($this->returnValue($node));
 
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
@@ -119,7 +132,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRootNode()
     {
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->once())->method('getRootCategoryId')->will($this->returnValue(2));
         $store->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -130,7 +143,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $this->categoryCollection->expects($this->once())->method('setStoreId')->will($this->returnSelf());
 
         $node = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Tree::class
+            Tree::class
         )->disableOriginalConstructor()
         ->getMock();
         $node->expects($this->once())->method('addCollectionData')
@@ -147,7 +160,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $depth = 2;
         $currentLevel = 1;
 
-        $treeNodeMock1 = $this->createMock(\Magento\Catalog\Api\Data\CategoryTreeInterface::class);
+        $treeNodeMock1 = $this->createMock(CategoryTreeInterface::class);
         $treeNodeMock1->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
         $treeNodeMock1->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
@@ -164,7 +177,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $treeNodeMock1->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
 
-        $treeNodeMock2 = $this->createMock(\Magento\Catalog\Api\Data\CategoryTreeInterface::class);
+        $treeNodeMock2 = $this->createMock(CategoryTreeInterface::class);
         $treeNodeMock2->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
         $treeNodeMock2->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
@@ -184,7 +197,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
         $this->treeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
-        $node = $this->getMockBuilder(\Magento\Framework\Data\Tree\Node::class)->disableOriginalConstructor()
+        $node = $this->getMockBuilder(Node::class)->disableOriginalConstructor()
             ->setMethods(
                 [
                     'hasChildren',
@@ -215,7 +228,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeWhenChildrenAreNotExist()
     {
         $currentLevel = 1;
-        $treeNodeMock = $this->createMock(\Magento\Catalog\Api\Data\CategoryTreeInterface::class);
+        $treeNodeMock = $this->createMock(CategoryTreeInterface::class);
         $this->treeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($treeNodeMock));
         $treeNodeMock->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
@@ -233,7 +246,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $treeNodeMock->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
 
-        $node = $this->getMockBuilder(\Magento\Framework\Data\Tree\Node::class)->disableOriginalConstructor()
+        $node = $this->getMockBuilder(Node::class)->disableOriginalConstructor()
             ->setMethods(
                 [
                     'hasChildren',

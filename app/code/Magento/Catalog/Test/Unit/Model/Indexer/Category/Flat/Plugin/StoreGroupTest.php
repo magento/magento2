@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,16 +12,18 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Group as GroupModel;
 use Magento\Store\Model\ResourceModel\Group;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreGroupTest extends \PHPUnit\Framework\TestCase
+class StoreGroupTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     * @var MockObject|State
      */
     protected $stateMock;
 
@@ -31,21 +33,21 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Group
+     * @var MockObject|Group
      */
     protected $subjectMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GroupModel
+     * @var MockObject|GroupModel
      */
     protected $groupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,

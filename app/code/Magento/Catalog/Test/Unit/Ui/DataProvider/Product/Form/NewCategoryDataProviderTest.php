@@ -1,15 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use PHPUnit\Framework\TestCase;
 
-class NewCategoryDataProviderTest extends \PHPUnit\Framework\TestCase
+class NewCategoryDataProviderTest extends TestCase
 {
     /**
      * @var NewCategoryDataProvider
@@ -26,7 +27,7 @@ class NewCategoryDataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $collectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);

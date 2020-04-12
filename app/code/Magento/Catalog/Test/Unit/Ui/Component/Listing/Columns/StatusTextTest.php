@@ -1,28 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class StatusTextTest
- */
 class StatusTextTest extends AbstractColumnTest
 {
     const STATUS_ID = 1;
     const STATUS_TEXT = 'Enabled';
 
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|MockObject
      */
     protected $statusMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

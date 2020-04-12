@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -13,16 +13,18 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
+class AttributeSetFinderTest extends TestCase
 {
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $productCollection;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $productCollectionFactory;
 
@@ -31,7 +33,7 @@ class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeSetFinder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()

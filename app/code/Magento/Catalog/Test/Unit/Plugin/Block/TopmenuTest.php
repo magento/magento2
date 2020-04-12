@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,62 +6,73 @@
 
 namespace Magento\Catalog\Test\Unit\Plugin\Block;
 
+use Magento\Catalog\Helper\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
+use Magento\Catalog\Plugin\Block\Topmenu;
+use Magento\Framework\Data\Tree;
+use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TopmenuTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TopmenuTest extends \PHPUnit\Framework\TestCase
+class TopmenuTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Plugin\Block\Topmenu
+     * @var Topmenu
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var MockObject|Store
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver
+     * @var MockObject|Resolver
      */
     protected $layerResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer
+     * @var MockObject|Layer
      */
     protected $catalogLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var MockObject|CollectionFactory
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @var MockObject|Collection
      */
     protected $categoryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Category
+     * @var MockObject|Category
      */
     protected $categoryHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var MockObject|\Magento\Catalog\Model\Category
      */
     protected $childrenCategoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var MockObject|\Magento\Catalog\Model\Category
      */
     protected $categoryMock;
 
@@ -70,24 +81,24 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $rootCategoryId = 2;
         $categoryParentId = 3;
         $categoryParentIds = [1, 2, 3];
 
         $this->childrenCategoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
-        $this->categoryHelperMock = $this->_getCleanMock(\Magento\Catalog\Helper\Category::class);
-        $this->catalogLayerMock = $this->_getCleanMock(\Magento\Catalog\Model\Layer::class);
+        $this->categoryHelperMock = $this->_getCleanMock(Category::class);
+        $this->catalogLayerMock = $this->_getCleanMock(Layer::class);
         $this->categoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
-        $this->layerResolverMock = $this->_getCleanMock(\Magento\Catalog\Model\Layer\Resolver::class);
-        $this->storeMock = $this->_getCleanMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerMock = $this->_getCleanMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->layerResolverMock = $this->_getCleanMock(Resolver::class);
+        $this->storeMock = $this->_getCleanMock(Store::class);
+        $this->storeManagerMock = $this->_getCleanMock(StoreManagerInterface::class);
         $this->categoryCollectionMock = $this->_getCleanMock(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+            Collection::class
         );
         $this->categoryCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory::class,
+            StateDependentCollectionFactory::class,
             ['create']
         );
 
@@ -115,7 +126,7 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->categoryCollectionMock);
 
         $this->block = (new ObjectManager($this))->getObject(
-            \Magento\Catalog\Plugin\Block\Topmenu::class,
+            Topmenu::class,
             [
                 'catalogCategory' => $this->categoryHelperMock,
                 'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
@@ -129,7 +140,7 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      * Get clean mock by class name
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getCleanMock($className)
     {
@@ -142,9 +153,9 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeGetHtml()
     {
-        $treeMock = $this->createMock(\Magento\Framework\Data\Tree::class);
+        $treeMock = $this->createMock(Tree::class);
 
-        $parentCategoryNodeMock = $this->_getCleanMock(\Magento\Framework\Data\Tree\Node::class);
+        $parentCategoryNodeMock = $this->_getCleanMock(Node::class);
         $parentCategoryNodeMock->expects($this->once())->method('getTree')->will($this->returnValue($treeMock));
         $parentCategoryNodeMock->expects($this->once())->method('addChild');
 

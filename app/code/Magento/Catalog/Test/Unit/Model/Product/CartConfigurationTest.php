@@ -1,11 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class CartConfigurationTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CartConfiguration;
+use PHPUnit\Framework\TestCase;
+
+class CartConfigurationTest extends TestCase
 {
     /**
      * @param string $productType
@@ -15,8 +19,8 @@ class CartConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsProductConfigured($productType, $config, $expected)
     {
-        $cartConfiguration = new \Magento\Catalog\Model\Product\CartConfiguration();
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $cartConfiguration = new CartConfiguration();
+        $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($productType));
         $this->assertEquals($expected, $cartConfiguration->isProductConfigured($productMock, $config));
     }

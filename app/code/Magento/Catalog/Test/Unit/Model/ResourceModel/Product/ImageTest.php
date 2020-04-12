@@ -7,23 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Catalog\Model\ResourceModel\Product\Image;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Query\BatchIteratorInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\DB\Query\BatchIteratorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ImageTest
- * @package Magento\Catalog\Test\Unit\Model\ResourceModel\Product
- */
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -45,7 +43,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager =
-            new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            new ObjectManager($this);
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->method('getConnection')
@@ -58,7 +56,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return MockObject
      */
-    protected function getVisibleImagesSelectMock(): MockObject
+    protected function getVisibleImagesSelectMock(): \PHPUnit\Framework\MockObject\MockObject
     {
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -83,7 +81,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return MockObject
      */
-    protected function getUsedImagesSelectMock(): MockObject
+    protected function getUsedImagesSelectMock(): \PHPUnit\Framework\MockObject\MockObject
     {
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -323,7 +321,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @return \Closure
      */
     protected function getBatchIteratorCallback(
-        MockObject $selectMock,
+        \PHPUnit\Framework\MockObject\MockObject $selectMock,
         int $batchCount
     ): \Closure {
         $iteratorCallback = function () use ($batchCount, $selectMock): array {

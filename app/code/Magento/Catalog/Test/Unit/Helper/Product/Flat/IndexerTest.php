@@ -1,81 +1,96 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 
+use Magento\Catalog\Helper\Product\Flat\Indexer;
+use Magento\Catalog\Model\ResourceModel\ConfigFactory;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Mview\View\Changelog;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexerTest extends \PHPUnit\Framework\TestCase
+class IndexerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @var Indexer
      */
     protected $_model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
+     * @var Changelog|MockObject
      */
     protected $_changelogMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $contextMock = $this->createMock(Context::class);
 
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
         $flatHelperMock = $this->createPartialMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            Indexer::class,
             ['isAddChildData']
         );
         $flatHelperMock->expects($this->any())->method('isAddChildData')->will($this->returnValue(true));
 
-        $eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
+        $eavConfigMock = $this->createMock(Config::class);
 
         $attributeConfigMock = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
 
         $resourceConfigFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
+            ConfigFactory::class,
             ['create']
         );
 
-        $eavFactoryMock = $this->createPartialMock(\Magento\Eav\Model\Entity\AttributeFactory::class, ['create']);
+        $eavFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
 
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->_connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            Mysql::class,
             ['getTables', 'dropTable']
         );
 
-        $this->_changelogMock = $this->createPartialMock(\Magento\Framework\Mview\View\Changelog::class, ['getName']);
+        $this->_changelogMock = $this->createPartialMock(Changelog::class, ['getName']);
 
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManager = new ObjectManager($this);
         $this->_model = $this->_objectManager->getObject(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            Indexer::class,
             [
                 'context' => $contextMock,
                 'resource' => $this->_resourceMock,
@@ -236,7 +251,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     {
         $stores = [];
         foreach ($storeIds as $storeId) {
-            $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__sleep', '__wakeup']);
+            $store = $this->createPartialMock(Store::class, ['getId', '__sleep', '__wakeup']);
             $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
             $stores[] = $store;
         }

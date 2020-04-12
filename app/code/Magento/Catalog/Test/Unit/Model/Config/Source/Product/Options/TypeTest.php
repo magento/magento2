@@ -1,34 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source\Product\Options;
 
+use Magento\Catalog\Model\Config\Source\Product\Options\Type;
+use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TypeTest extends \PHPUnit\Framework\TestCase
+class TypeTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Config\Source\Product\Options\Type
+     * @var Type
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $productOptionConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productOptionConfig = $this->getMockBuilder(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class)
+        $this->productOptionConfig = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods(['getAll'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Config\Source\Product\Options\Type::class,
+            Type::class,
             ['productOptionConfig' => $this->productOptionConfig]
         );
     }

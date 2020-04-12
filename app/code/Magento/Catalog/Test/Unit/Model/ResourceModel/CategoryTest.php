@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
@@ -21,11 +22,13 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
      * @var Category
@@ -33,74 +36,74 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $category;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var Adapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Adapter|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|MockObject
      */
     private $entityType;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $managerMock;
 
     /**
-     * @var Category\TreeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category\TreeFactory|MockObject
      */
     protected $treeFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|MockObject
      */
     private $indexerProcessorMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
         $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
@@ -121,7 +124,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->factoryMock = $this->getMockBuilder(Factory::class)->disableOriginalConstructor()->getMock();
         $this->managerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
-        $this->treeFactoryMock = $this->getMockBuilder(Category\TreeFactory::class)
+        $this->treeFactoryMock = $this->getMockBuilder(TreeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)

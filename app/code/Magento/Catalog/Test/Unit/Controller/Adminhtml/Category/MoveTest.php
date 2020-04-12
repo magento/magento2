@@ -1,73 +1,86 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Category\Move;
+use Magento\Catalog\Model\Category;
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Messages;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class MoveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MoveTest extends \PHPUnit\Framework\TestCase
+class MoveTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
     private $layoutFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Category\Move
+     * @var Move
      */
     private $moveController;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManager;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->resultJsonFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
+        $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutFactoryMock = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
+        $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->fillContext();
 
         $this->moveController = new Move(
@@ -82,7 +95,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     private function fillContext()
     {
         $this->request = $this
-            ->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -102,26 +115,26 @@ class MoveTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWithGenericException()
     {
-        $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $messagesCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
+        $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->request->expects($this->exactly(2))
@@ -130,14 +143,14 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Catalog\Model\Category::class)
+            ->with(Category::class)
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [Config::class, $wysiwygConfig]]);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Exception(__('Some exception')));
+            ->willThrowException(new \Exception('Some exception'));
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('There was a category move error.'));
@@ -148,7 +161,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $messageBlock->expects($this->once())
             ->method('setMessages')
             ->with($messagesCollection);
-        $resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $messageBlock->expects($this->once())
@@ -173,26 +186,26 @@ class MoveTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLocalizedException()
     {
         $exceptionMessage = 'Sorry, but we can\'t find the new category you selected.';
-        $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $messagesCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
+        $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->request->expects($this->exactly(2))
@@ -201,11 +214,11 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Catalog\Model\Category::class)
+            ->with(Category::class)
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('addExceptionMessage');
         $this->messageManager->expects($this->once())
@@ -215,7 +228,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $messageBlock->expects($this->once())
             ->method('setMessages')
             ->with($messagesCollection);
-        $resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $messageBlock->expects($this->once())
@@ -232,7 +245,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
+            ->willThrowException(new LocalizedException(__($exceptionMessage)));
         $this->resultJsonFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -242,26 +255,26 @@ class MoveTest extends \PHPUnit\Framework\TestCase
 
     public function testSuccessfulCategorySave()
     {
-        $messagesCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $messagesCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
+        $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($messageBlock);
-        $wysiwygConfig = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Config::class)
+        $wysiwygConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->request->expects($this->exactly(2))
@@ -270,11 +283,11 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Catalog\Model\Category::class)
+            ->with(Category::class)
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfig]]);
+            ->willReturnMap([[Registry::class, $registry], [Config::class, $wysiwygConfig]]);
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)
@@ -282,7 +295,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
         $messageBlock->expects($this->once())
             ->method('setMessages')
             ->with($messagesCollection);
-        $resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $messageBlock->expects($this->once())

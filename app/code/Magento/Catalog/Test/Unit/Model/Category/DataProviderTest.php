@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -107,7 +107,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
             ->disableOriginalConstructor()

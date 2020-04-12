@@ -1,150 +1,167 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Category\CollectionFilter;
+use Magento\Catalog\Model\Layer\Category\StateKey;
+use Magento\Catalog\Model\Layer\ContextInterface;
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Catalog\Model\Layer\StateFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class LayerTest extends \PHPUnit\Framework\TestCase
+class LayerTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     private $category;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     private $registry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\StateKey|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateKey|MockObject
      */
     private $stateKeyGenerator;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateFactory|MockObject
      */
     private $stateFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $state;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFilter|MockObject
      */
     private $collectionFilter;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $collection;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemCollectionProviderInterface|MockObject
      */
     private $collectionProvider;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $filter;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractFilter|MockObject
      */
     private $abstractFilter;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryRepositoryInterface|MockObject
      */
     private $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     private $currentCategory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->category = $this->getMockBuilder(Category::class)
             ->setMethods(['getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->setMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->store = $this->getMockBuilder(Store::class)
             ->setMethods(['getRootCategoryId', 'getFilters', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $this->stateKeyGenerator = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category\StateKey::class)
+        $this->stateKeyGenerator = $this->getMockBuilder(StateKey::class)
             ->setMethods(['toString'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionFilter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category\CollectionFilter::class)
+        $this->collectionFilter = $this->getMockBuilder(CollectionFilter::class)
             ->setMethods(['filter'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->collectionProvider = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface::class
+            ItemCollectionProviderInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->filter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
+        $this->filter = $this->getMockBuilder(Item::class)
             ->setMethods(['getFilter', 'getValueString'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->abstractFilter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\AbstractFilter::class)
+        $this->abstractFilter = $this->getMockBuilder(AbstractFilter::class)
             ->setMethods(['getRequestVar'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Catalog\Model\Layer\ContextInterface::class)
+        $this->context = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getStateKey', 'getCollectionFilter'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -155,28 +172,28 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())->method('getCollectionProvider')
             ->will($this->returnValue($this->collectionProvider));
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stateFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\StateFactory::class)
+        $this->stateFactory = $this->getMockBuilder(StateFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stateFactory->expects($this->any())->method('create')->will($this->returnValue($this->state));
 
-        $this->collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+        $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $this->currentCategory = $this->createPartialMock(
-            \Magento\Catalog\Model\Category::class,
+            Category::class,
             ['getId', '__wakeup']
         );
 
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Layer::class,
+            Layer::class,
             [
                 'registry' => $this->registry,
                 'storeManager' => $this->storeManager,
@@ -189,7 +206,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetState()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Layer\State::class, $this->model->getState());
+        $this->assertInstanceOf(State::class, $this->model->getState());
     }
 
     public function testGetStateKey()
@@ -220,9 +237,9 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->collection));
 
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $result);
+        $this->assertInstanceOf(Collection::class, $result);
         $result = $this->model->getProductCollection();
-        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $result);
+        $this->assertInstanceOf(Collection::class, $result);
     }
 
     public function testApply()
@@ -243,7 +260,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->abstractFilter->expects($this->once())->method('getRequestVar')->will($this->returnValue('t'));
 
         $result = $this->model->apply();
-        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $result);
+        $this->assertInstanceOf(Layer::class, $result);
     }
 
     public function testPrepareProductCollection()
@@ -255,12 +272,12 @@ class LayerTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($this->collection), $this->equalTo($this->category));
 
         $result = $this->model->prepareProductCollection($this->collection);
-        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $result);
+        $this->assertInstanceOf(Layer::class, $result);
     }
 
     public function testGetCurrentStore()
     {
-        $this->assertInstanceOf(\Magento\Store\Model\Store::class, $this->model->getCurrentStore());
+        $this->assertInstanceOf(Store::class, $this->model->getCurrentStore());
     }
 
     public function testSetNewCurrentCategoryIfCurrentCategoryIsAnother()
@@ -276,7 +293,7 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn($this->currentCategory);
 
-        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
+        $this->assertInstanceOf(Layer::class, $this->model->setCurrentCategory($categoryId));
         $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));
     }
 
@@ -291,37 +308,31 @@ class LayerTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn($this->category);
 
-        $this->assertInstanceOf(\Magento\Catalog\Model\Layer::class, $this->model->setCurrentCategory($categoryId));
+        $this->assertInstanceOf(Layer::class, $this->model->setCurrentCategory($categoryId));
         $this->assertEquals($this->category, $this->model->getData('current_category'));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct the category.
-     */
     public function testSetNewCurrentCategoryIfCategoryIsNotFound()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please correct the category.');
         $this->categoryRepository->expects($this->once())->method('get')
             ->will($this->throwException(new NoSuchEntityException()));
 
         $this->model->setCurrentCategory(1);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Must be category model instance or its id.
-     */
     public function testSetCurrentCategoryInstanceOfException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Must be category model instance or its id.');
         $this->model->setCurrentCategory(null);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please correct the category.
-     */
     public function testSetCurrentCategoryNotFoundException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please correct the category.');
         $this->category->expects($this->once())->method('getId')->will($this->returnValue(null));
 
         $this->model->setCurrentCategory($this->category);

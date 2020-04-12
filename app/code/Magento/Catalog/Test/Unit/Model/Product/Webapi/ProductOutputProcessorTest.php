@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,8 +10,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
+use PHPUnit\Framework\TestCase;
 
-class ProductOutputProcessorTest extends \PHPUnit\Framework\TestCase
+class ProductOutputProcessorTest extends TestCase
 {
     /**
      * @var Request
@@ -28,7 +29,7 @@ class ProductOutputProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $productOutputProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(
             Request::class,

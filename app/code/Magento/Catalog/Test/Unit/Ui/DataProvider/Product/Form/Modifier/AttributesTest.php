@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,28 +9,26 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class AttributesTest
- */
 class AttributesTest extends AbstractModifierTest
 {
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     protected $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)

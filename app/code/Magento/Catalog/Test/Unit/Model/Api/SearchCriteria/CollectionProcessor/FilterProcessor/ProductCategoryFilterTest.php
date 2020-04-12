@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,25 +8,27 @@ namespace Magento\Catalog\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor
 use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
+class ProductCategoryFilterTest extends TestCase
 {
     /** @var ProductCategoryFilter */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ProductCategoryFilter();
     }
 
     public function testApply()
     {
-        /** @var Filter|\PHPUnit_Framework_MockObject_MockObject $filterMock */
+        /** @var Filter|MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,12 +49,12 @@ class ProductCategoryFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyWithoutCondition()
     {
-        /** @var Filter|\PHPUnit_Framework_MockObject_MockObject $filterMock */
+        /** @var Filter|MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

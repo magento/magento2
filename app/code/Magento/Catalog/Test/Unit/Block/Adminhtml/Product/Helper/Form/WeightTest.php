@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -42,7 +42,7 @@ class WeightTest extends TestCase
      */
     protected $localeFormat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weightSwitcher = $this->createPartialMock(
             Radios::class,

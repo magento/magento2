@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -22,13 +22,14 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test product attribute add/edit advanced form tab
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedTest extends \PHPUnit\Framework\TestCase
+class AdvancedTest extends TestCase
 {
     /**
      * @var Advanced
@@ -73,7 +74,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->registry = $this->createMock(Registry::class);

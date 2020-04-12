@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,21 +6,25 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Indexer;
 
-class ActiveTableSwitcherTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use PHPUnit\Framework\TestCase;
+
+class ActiveTableSwitcherTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     * @var ActiveTableSwitcher
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->model = new \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher();
+        $this->model = new ActiveTableSwitcher();
     }
 
     public function testSwitch()
     {
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $tableName = 'tableName';

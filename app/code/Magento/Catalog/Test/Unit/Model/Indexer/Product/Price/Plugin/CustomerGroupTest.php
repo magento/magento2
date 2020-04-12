@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,11 +14,12 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CustomerGroup plugin
  */
-class CustomerGroupTest extends \PHPUnit\Framework\TestCase
+class CustomerGroupTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -50,7 +51,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
      */
     private $proceedMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
