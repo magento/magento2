@@ -41,7 +41,7 @@ class StockItemTest extends TestCase
     protected $typeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStateInterface|MockObject
      */
     protected $stockStateMock;
 
