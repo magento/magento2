@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test ot to save currency symbol controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends TestCase
 {

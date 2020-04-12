@@ -40,7 +40,7 @@ class CurrencyTest extends TestCase
 
         $blockMock = $this->createMock(BlockInterface::class);
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|MockObject */
         $layoutMock = $this->getMockForAbstractClass(
             LayoutInterface::class,
             [],
