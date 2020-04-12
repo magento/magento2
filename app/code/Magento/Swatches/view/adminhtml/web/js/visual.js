@@ -182,7 +182,7 @@ define([
                  * Bind remove button
                  */
                 bindRemoveButtons: function () {
-                    jQuery('#swatch-visual-options-panel').on('click', '.delete-option', this.remove.bind(this));
+                    jQuery('body').on('click', '#swatch-visual-options-panel .delete-option', this.remove.bind(this));
                 },
 
                 /**
@@ -250,9 +250,9 @@ define([
             jQuery('body').trigger('processStart');
             swatchVisualOption.renderWithDelay(config.attributesData, 0, 100, 300);
             swatchVisualOption.bindRemoveButtons();
-            jQuery('#swatch-visual-options-panel').on(
+            jQuery('body').on(
                 'click',
-                '.colorpicker_handler',
+                '#swatch-visual-options-panel .colorpicker_handler',
                 swatchVisualOption.initColorPicker
             );
         });
