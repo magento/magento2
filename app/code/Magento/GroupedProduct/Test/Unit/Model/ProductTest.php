@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Product\Image\CacheFactory;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Type\Simple as SimpleProductType;
 use Magento\Catalog\Model\ProductLink\CollectionProvider;
 use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
@@ -399,7 +400,7 @@ class ProductTest extends TestCase
             ->willReturn([$inputGroupLink]);
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
-        $typeInstanceMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Simple::class)
+        $typeInstanceMock = $this->getMockBuilder(SimpleProductType::class)
             ->setMethods(["getSku"])
             ->getMock();
         $typeInstanceMock->expects($this->atLeastOnce())->method('getSku')->willReturn("Simple Product 1");
