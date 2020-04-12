@@ -20,6 +20,9 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveHandlerTest extends TestCase
 {
     /**

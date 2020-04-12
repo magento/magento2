@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Webapi\ParamOverriderCartId;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +29,10 @@ class ParamOverriderCartIdTest extends TestCase
      * @var UserContextInterface
      */
     private $userContext;
+    /**
+     * @var MockObject
+     */
+    private $cartManagement;
 
     protected function setUp(): void
     {

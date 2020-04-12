@@ -21,6 +21,9 @@ use Magento\Quote\Model\Quote\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PaymentMethodManagementTest extends TestCase
 {
     /**

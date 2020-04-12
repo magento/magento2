@@ -20,6 +20,9 @@ use Magento\Quote\Model\ShippingAssignmentFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingAssignmentProcessorTest extends TestCase
 {
     /**
