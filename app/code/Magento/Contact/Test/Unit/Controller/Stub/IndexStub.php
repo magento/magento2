@@ -10,6 +10,9 @@ use Magento\Contact\Controller\Index;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class IndexStub extends Index
 {
     /**
