@@ -269,7 +269,8 @@ class VsCodeTest extends TestCase
                     'urn:magento:framework:Acl/etc/acl.xsd' => 'vendor/magento/framework/Acl/etc/acl.xsd',
                     'urn:magento:module:Magento_Store:etc/config.xsd' => 'vendor/magento/module-store/etc/config.xsd',
                     'urn:magento:module:Magento_Cron:etc/crontab.xsd' => 'vendor/magento/module-cron/etc/crontab.xsd',
-                    'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd' => 'vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd',
+                    'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd' =>
+                        'vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd',
                 ],
                 $invalidContent,
             ],
