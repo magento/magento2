@@ -66,9 +66,6 @@ class MenuTest extends TestCase
         $localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $menuItemChecker = $this->getMockBuilder(MenuItemChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
