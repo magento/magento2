@@ -109,7 +109,7 @@ class LabelGeneratorTest extends TestCase
             ->willReturn($this->getShippingMethodMock());
 
         /**
-         * @var $shipmentMock \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+         * @var $shipmentMock \Magento\Sales\Model\Order\Shipment|MockObject
          */
         $shipmentMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
@@ -176,7 +176,7 @@ class LabelGeneratorTest extends TestCase
             ->willReturn($trackMock);
 
         /**
-         * @var $requestMock \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+         * @var $requestMock \Magento\Framework\App\RequestInterface|MockObject
          */
         $requestMock = $this->createMock(RequestInterface::class);
         $this->labelGenerator->create($shipmentMock, $requestMock);

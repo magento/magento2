@@ -128,7 +128,7 @@ class ViewTest extends TestCase
         );
 
         $objectManager = new ObjectManager($this);
-        $this->context = $objectManager->getObject(
+        $context = $objectManager->getObject(
             Context::class,
             [
                 'request' => $this->requestMock,
@@ -138,7 +138,7 @@ class ViewTest extends TestCase
         $this->controller = $objectManager->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View::class,
             [
-                'context' => $this->context,
+                'context' => $context,
                 'shipmentLoader' => $this->shipmentLoaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock

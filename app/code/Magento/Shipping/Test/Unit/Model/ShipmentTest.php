@@ -19,6 +19,9 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShipmentTest extends TestCase
 {
     /**
