@@ -35,7 +35,7 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $_requestMock = $this->createMock(RequestInterface::class);
 
         $page = $this->createMock(Page::class);
         $page->expects($this->once())->method('getId')->will($this->returnValue(3));
