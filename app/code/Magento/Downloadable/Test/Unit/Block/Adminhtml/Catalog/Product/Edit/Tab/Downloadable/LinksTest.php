@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @deprecated Class replaced by other element
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinksTest extends TestCase
 {

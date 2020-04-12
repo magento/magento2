@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Link
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkTest extends TestCase
 {

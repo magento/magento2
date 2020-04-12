@@ -101,7 +101,7 @@ class LinkRepositoryTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sampleDataObjectFactory = $this->getMockBuilder(
+        $sampleDataObjectFactory = $this->getMockBuilder(
             SampleInterfaceFactory::class
         )->setMethods(['create'])
             ->disableOriginalConstructor()
