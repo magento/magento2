@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Data\CollectionModifier;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,28 +22,28 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\ProductRenderRepository */
     private $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \MockObject */
     private $collectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \MockObject */
     private $collectionProcessorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \MockObject */
     private $productRenderCollectorCompositeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \MockObject */
     private $productRenderSearchResultsFactoryMock;
 
-    /** @var \Magento\Catalog\Model\ProductRenderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductRenderFactory|\MockObject */
     private $productRenderFactoryMock;
 
-    /** @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Config|\MockObject */
     private $configMock;
 
-    /** @var Visibility|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Visibility|\MockObject */
     private $productVisibility;
 
-    /** @var CollectionModifier|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionModifier|\MockObject */
     private $collectionModifier;
 
     public function setUp()
