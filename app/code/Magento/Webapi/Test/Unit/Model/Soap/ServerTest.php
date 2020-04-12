@@ -21,6 +21,9 @@ use Magento\Webapi\Model\Soap\Wsdl\Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ServerTest extends TestCase
 {
     /** @var Server */
