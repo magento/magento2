@@ -71,8 +71,6 @@ class CronTest extends TestCase
 
     /**
      * Test case when cron is disabled in config
-     *
-     * @return Cron
      */
     public function testRunCronCronDisabledFromConfig()
     {
@@ -88,8 +86,6 @@ class CronTest extends TestCase
 
     /**
      * Test case when cron is enabled in config
-     *
-     * @return Cron
      */
     public function testRunCronCronEnabledFromConfig()
     {
