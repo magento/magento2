@@ -71,8 +71,7 @@ class HandleTest extends TestCase
     private $uiFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface|
-     *      \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface|MockObject
      */
     private $dataProviderMock;
 

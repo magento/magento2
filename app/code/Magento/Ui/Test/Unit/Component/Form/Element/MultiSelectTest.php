@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form\Element\MultiSelect;
 
 /**
