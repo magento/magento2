@@ -29,9 +29,9 @@ class ConfigTest extends TestCase
     {
         $config = $this->objectManager->getObject(
             Config::class,
-            ['dataStorage' => $this->dataStorage]
+            ['dataStorage' => $this->dataStorageMock]
         );
-        $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
+        $this->dataStorageMock->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
     }
 
@@ -39,9 +39,9 @@ class ConfigTest extends TestCase
     {
         $config = $this->objectManager->getObject(
             Config::class,
-            ['dataStorage' => $this->dataStorage]
+            ['dataStorage' => $this->dataStorageMock]
         );
-        $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
+        $this->dataStorageMock->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(true, $config->isFeatureSupported('synonyms', 'mysql'));
     }
 }

@@ -33,11 +33,11 @@ class AutocompleteTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->firstDataProvider = $this->getMockBuilder(\Magento\Search\Model\DataProviderInterface::class)
+        $this->firstDataProvider = $this->getMockBuilder(DataProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMock();
-        $this->secondDataProvider = $this->getMockBuilder(\Magento\Search\Model\DataProviderInterface::class)
+        $this->secondDataProvider = $this->getMockBuilder(DataProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMock();

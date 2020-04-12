@@ -20,6 +20,9 @@ use Magento\Search\Model\QueryFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends TestCase
 {
     /** @var RequestInterface|MockObject */

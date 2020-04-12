@@ -54,6 +54,11 @@ class ReportTest extends TestCase
      */
     private $reportController;
 
+    /**
+     * @var MockObject|Context
+     */
+    private $contextMock;
+
     public function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
