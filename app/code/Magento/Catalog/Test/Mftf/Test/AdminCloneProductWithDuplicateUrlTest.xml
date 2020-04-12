@@ -20,7 +20,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category and product-->
             <comment userInput="Create category and product" stepKey="commentCreateCategoryAndProduct"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
