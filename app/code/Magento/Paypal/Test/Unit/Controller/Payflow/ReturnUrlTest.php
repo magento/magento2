@@ -16,6 +16,7 @@ use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
 use Magento\Paypal\Model\Config;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -143,7 +144,7 @@ class ReturnUrlTest extends TestCase
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
-        $this->quote = $this->getMockBuilder(CartInterface::class)
+        $quote = $this->getMockBuilder(CartInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

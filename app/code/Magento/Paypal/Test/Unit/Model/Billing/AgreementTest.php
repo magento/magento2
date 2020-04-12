@@ -106,7 +106,7 @@ class AgreementTest extends TestCase
 
     /**
      * @param $baData
-     * @return \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject|
+     * @return \Magento\Payment\Helper\Data|MockObject
      */
     private function importOrderPaymentCommonPart($baData)
     {

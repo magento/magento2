@@ -40,7 +40,7 @@ class CheckoutTest extends TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \'Magento\Quote\Model\Quote
+     * @var MockObject|Quote
      */
     protected $quoteMock;
 

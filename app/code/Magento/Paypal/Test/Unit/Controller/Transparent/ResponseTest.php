@@ -79,7 +79,7 @@ class ResponseTest extends TestCase
             ->setMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->viewMock = $this->getMockBuilder(ViewInterface::class)
+        $viewMock = $this->getMockBuilder(ViewInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->coreRegistryMock = $this->getMockBuilder(Registry::class)

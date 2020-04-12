@@ -37,7 +37,7 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
     protected $_event;
 
     /**
-     * @var Agreement Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AgreementFactory|MockObject
      */
     protected $_agreementFactory;
 

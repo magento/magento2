@@ -257,22 +257,22 @@ class CartTest extends TestCase
     /**
      * Prepare invalid data for cart
      *
-     * @param array $values
+     * @param array $data
      * @param bool $transferDiscount
      * @return float
      */
-    protected function _prepareInvalidModelData($values, $transferDiscount)
+    protected function _prepareInvalidModelData($data, $transferDiscount)
     {
         $taxContainer = new DataObject(
             [
-                'base_discount_tax_compensation_amount' => $values['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' => $values['base_shipping_discount_tax_compensation_amnt'],
+                'base_discount_tax_compensation_amount' => $data['base_discount_tax_compensation_amount'],
+                'base_shipping_discount_tax_compensation_amnt' => $data['base_shipping_discount_tax_compensation_amnt'],
             ]
         );
-        $expectedSubtotal = $values['base_subtotal'];
+        $expectedSubtotal = $data['base_subtotal'];
         if ($transferDiscount) {
             $this->_model->setTransferDiscountAsItem();
-            $expectedSubtotal -= $values['base_discount_amount'];
+            $expectedSubtotal -= $data['base_discount_amount'];
         }
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects(
@@ -287,28 +287,28 @@ class CartTest extends TestCase
         )->method(
             'getBaseSubtotal'
         )->will(
-            $this->returnValue($values['base_subtotal'])
+            $this->returnValue($data['base_subtotal'])
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseTaxAmount'
         )->will(
-            $this->returnValue($values['base_tax_amount'])
+            $this->returnValue($data['base_tax_amount'])
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseShippingAmount'
         )->will(
-            $this->returnValue($values['base_shipping_amount'])
+            $this->returnValue($data['base_shipping_amount'])
         );
         $this->_salesModel->expects(
             $this->once()
         )->method(
             'getBaseDiscountAmount'
         )->will(
-            $this->returnValue($values['base_discount_amount'])
+            $this->returnValue($data['base_discount_amount'])
         );
         $this->_salesModel->expects(
             $this->once()
@@ -317,7 +317,7 @@ class CartTest extends TestCase
         )->with(
             'base_grand_total'
         )->will(
-            $this->returnValue($values['base_grand_total'])
+            $this->returnValue($data['base_grand_total'])
         );
         return $expectedSubtotal;
     }

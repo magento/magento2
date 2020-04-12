@@ -25,6 +25,10 @@ class BillingAgreementConfigProviderTest extends TestCase
      * @var AgreementFactory|MockObject
      */
     protected $agreementFactoryMock;
+    /**
+     * @var BillingAgreementConfigProvider
+     */
+    private $configProvider;
 
     protected function setUp(): void
     {

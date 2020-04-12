@@ -65,10 +65,9 @@ class PlaceOrderTest extends ExpressTest
         $this->objectManagerCallback = function ($className) use ($code, $oldCallback) {
             $instance = call_user_func($oldCallback, $className);
             if ($className == AgreementsValidator::class) {
-                $exception = $this->getMock(
+                $exception = $this->createPartialMock(
                     ProcessableException::class,
-                    ['getUserMessage'],
-                    ['message', $code]
+                    ['getUserMessage']
                 );
                 $exception->expects($this->any())
                     ->method('getUserMessage')

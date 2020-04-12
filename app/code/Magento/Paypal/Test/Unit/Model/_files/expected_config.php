@@ -95,35 +95,6 @@ return [
             'isGuestCheckoutAllowed' => true
         ]
     ],
-    'mini_cart' => [
-        'cart',
-        'en',
-        false,
-        null,
-        'horizontal',
-        'small',
-        'pillow',
-        'installment',
-        'blue',
-        'my_label',
-        'br',
-        [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
-            'styles' => [
-                'layout' => 'vertical',
-                'size' => 'responsive',
-                'color' => 'gold',
-                'shape' => 'rect',
-                'label' => 'paypal'
-            ],
-            'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
-        ]
-    ],
     'product' => [
         'cart',
         'en',
