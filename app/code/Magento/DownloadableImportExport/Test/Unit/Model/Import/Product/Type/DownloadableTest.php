@@ -81,17 +81,16 @@ class DownloadableTest extends AbstractImportTestCase
     protected $directoryWriteMock;
 
     /**
-     * @var |\PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $uploaderHelper;
 
     /**
-     * @var |\PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $downloadableHelper;
 
     /**
-     * Set up
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
