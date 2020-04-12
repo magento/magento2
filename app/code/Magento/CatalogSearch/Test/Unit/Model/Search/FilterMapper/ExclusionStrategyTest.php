@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,21 +6,29 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\Framework\DB\Select;
+use Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
+class ExclusionStrategyTest extends TestCase
 {
     /**
      * @var ExclusionStrategy
@@ -28,26 +36,26 @@ class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $aliasResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->adapterMock = $this->createMock(AdapterInterface::class);
@@ -56,20 +64,20 @@ class ExclusionStrategyTest extends \PHPUnit\Framework\TestCase
         $this->aliasResolverMock = $this->createMock(AliasResolver::class);
 
         $this->indexScopeResolverMock = $this->createMock(
-            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+            IndexScopeResolverInterface::class
         );
         $this->tableResolverMock = $this->createMock(
-            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+            IndexScopeResolver::class
         );
-        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
-        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionMock = $this->createMock(Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
-        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContextMock = $this->createMock(Context::class);
         $this->httpContextMock->method('getValue')->willReturn(1);
 
         $this->model = new ExclusionStrategy(

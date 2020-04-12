@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,16 +14,23 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class QueryBuilderTest extends \PHPUnit\Framework\TestCase
+class QueryBuilderTest extends TestCase
 {
     /**
      * @var QueryBuilder
@@ -31,26 +38,26 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $scopeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $inventoryConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
@@ -62,15 +69,15 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->adapterMock);
 
         $this->indexScopeResolverMock = $this->createMock(
-            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+            IndexScopeResolverInterface::class
         );
-        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
-        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionMock = $this->createMock(Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
 
