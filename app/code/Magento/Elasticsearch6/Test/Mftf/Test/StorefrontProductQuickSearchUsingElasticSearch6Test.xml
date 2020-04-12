@@ -46,15 +46,15 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchSimpleProduct">
             <argument name="phrase" value="AAA"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogSearchPage">
-            <argument name="product" value="$createFirstProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertSecondProductIsMissingOnCatalogSearchPage">
             <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickNextPageCatalogSearchPager"/>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogSearchPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnCatalogSearchPage">
             <argument name="productName" value="$createFirstProduct.name$"/>
@@ -64,11 +64,11 @@
 
         <dontSeeInCurrentUrl stepKey="assertRedirectedToFirstPage" url="?p=2"/>
 
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createFirstProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
     </test>
 </tests>
