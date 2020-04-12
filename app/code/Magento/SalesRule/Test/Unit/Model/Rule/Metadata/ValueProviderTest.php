@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Magento\SalesRule\Model\Rule\Metadata\ValueProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValueProviderTest extends TestCase
 {

@@ -12,6 +12,7 @@ use Magento\SalesRule\Api\Data\ConditionInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionInterface;
 use Magento\SalesRule\Api\Data\RuleInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleLabelInterface;
 use Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory;
 use Magento\SalesRule\Model\Converter\ToDataModel;
 use Magento\SalesRule\Model\Data\Condition;
@@ -206,10 +207,10 @@ class ToDataModelTest extends TestCase
             ->setMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
             ->getMock();
 
-        $dataLabel = $this->getMockBuilder(\Magento\SalesRule\Api\Data\RuleLabel::class)
+        $dataLabel = $this->getMockBuilder(RuleLabelInterface::class)
             ->setMethods(['setStoreId', 'setStoreLabel', 'setStoreLabels'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $dataCondition = $this->getMockBuilder(Condition::class)
             ->setMethods(['setData'])

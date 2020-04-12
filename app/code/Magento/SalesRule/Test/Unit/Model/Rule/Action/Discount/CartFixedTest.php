@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartFixedTest extends TestCase
 {

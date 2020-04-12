@@ -37,7 +37,7 @@ class CollectionTest extends TestCase
     protected $loggerMock;
 
     /**
-     * \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fetchStrategy;
 

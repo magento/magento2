@@ -215,7 +215,7 @@ class ProductTest extends TestCase
      */
     public function testValidateCategoriesIgnoresVisibility(): void
     {
-        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
@@ -228,7 +228,7 @@ class ProductTest extends TestCase
             ->expects($this->any())
             ->method('setQuoteItemPrice')
             ->willReturnSelf();
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
@@ -264,7 +264,7 @@ class ProductTest extends TestCase
             ->method('getAttribute')
             ->willReturn('');
 
-        /* @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
@@ -287,7 +287,7 @@ class ProductTest extends TestCase
             ->with('quote_item_price')
             ->willReturn($productPrice);
 
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', 'getProduct'])

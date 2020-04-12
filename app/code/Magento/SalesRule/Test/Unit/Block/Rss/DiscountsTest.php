@@ -83,7 +83,6 @@ class DiscountsTest extends TestCase
         $this->urlBuilderInterface = $this->createMock(UrlInterface::class);
         $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
         $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
-        $this->discounts = $this->createMock(Discounts::class);
         $this->rssModel = $this->createPartialMock(Discounts::class, [
                 '__wakeup',
                 'getDiscountCollection'
@@ -105,7 +104,6 @@ class DiscountsTest extends TestCase
             \Magento\SalesRule\Block\Rss\Discounts::class,
             [
                 'storeManager' => $this->storeManagerInterface,
-                'rssModel' => $this->discounts,
                 'rssUrlBuilder' => $this->rssBuilderInterface,
                 'urlBuilder' => $this->urlBuilderInterface,
                 'request' => $this->requestInterface,
