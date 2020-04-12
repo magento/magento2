@@ -22,8 +22,7 @@ use PHPUnit\Framework\TestCase;
 class TierpriceTest extends TestCase
 {
     /**
-     * @var Tierprice
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var Tierprice|MockObject
      */
     private $productAttributeBackendTierprice;
 

@@ -58,8 +58,7 @@ class BasePriceStorageTest extends TestCase
     private $storeRepository;
 
     /**
-     * @var InvalidSkuProcessor
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var InvalidSkuProcessor|MockObject
      */
     private $invalidSkuProcessor;
 

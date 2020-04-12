@@ -21,9 +21,6 @@ class ProductFrontendActionSectionTest extends TestCase
     /** @var MockObject */
     protected $synchronizerMock;
 
-    /** @var \SafeReflectionClass|MockObject */
-    protected $safeReflectionClassMock;
-
     /** @var Config|MockObject */
     private $appConfigMock;
 
@@ -34,9 +31,6 @@ class ProductFrontendActionSectionTest extends TestCase
     {
         $this->synchronizerMock = $this
             ->getMockBuilder(Synchronizer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->safeReflectionClassMock = $this->getMockBuilder(\SafeReflectionClass::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->appConfigMock = $this->getMockBuilder(Config::class)

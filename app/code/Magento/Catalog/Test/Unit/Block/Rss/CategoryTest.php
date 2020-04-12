@@ -11,7 +11,7 @@ use Magento\Catalog\Block\Rss\Category;
 use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Customer\Model\Session;

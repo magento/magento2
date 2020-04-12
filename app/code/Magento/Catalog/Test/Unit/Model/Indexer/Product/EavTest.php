@@ -18,11 +18,6 @@ use PHPUnit\Framework\TestCase;
 class EavTest extends TestCase
 {
     /**
-     * @var Eav
-     */
-    protected $_model;
-
-    /**
      * @var Row|MockObject
      */
     protected $_productEavIndexerRow;
@@ -41,6 +36,10 @@ class EavTest extends TestCase
      * @var CacheContext|MockObject
      */
     protected $cacheContextMock;
+    /**
+     * @var Eav
+     */
+    private $model;
 
     protected function setUp(): void
     {

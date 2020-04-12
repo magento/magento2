@@ -79,9 +79,6 @@ abstract class ProductTest extends TestCase
         $eventManager = $this->getMockBuilder(Manager::class)
             ->setMethods(['dispatch'])->disableOriginalConstructor()->getMock();
         $eventManager->expects($this->any())->method('dispatch')->will($this->returnSelf());
-        $title = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->setMethods(['add', 'prepend'])->disableOriginalConstructor()->getMock();
-        $title->expects($this->any())->method('prepend')->withAnyParameters()->will($this->returnSelf());
         $requestInterfaceMock = $this->getMockBuilder(Http::class)->setMethods(
             ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
         )->disableOriginalConstructor()->getMock();
@@ -112,7 +109,6 @@ abstract class ProductTest extends TestCase
                 'getResultFactory'
             ]);
 
-        $this->context->expects($this->any())->method('getTitle')->will($this->returnValue($title));
         $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
         $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));

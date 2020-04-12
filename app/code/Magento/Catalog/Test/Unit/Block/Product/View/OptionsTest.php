@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options as ProductOptions;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
@@ -70,7 +71,7 @@ class OptionsTest extends TestCase
             \Magento\Catalog\Model\Product\Option::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optValFactoryMock]
         );
-        $dateBlock = $this->getMockBuilder(\Magento\Backend\Block\Catalog\Product\Composite\Fieldset\Options::class)
+        $dateBlock = $this->getMockBuilder(ProductOptions::class)
             ->setMethods(['setProduct', 'setOption'])
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()

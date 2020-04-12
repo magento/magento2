@@ -69,8 +69,7 @@ class TierPriceValidatorTest extends TestCase
     private $validationResult;
 
     /**
-     * @var InvalidSkuProcessor
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var InvalidSkuProcessor|MockObject
      */
     private $invalidSkuProcessor;
 

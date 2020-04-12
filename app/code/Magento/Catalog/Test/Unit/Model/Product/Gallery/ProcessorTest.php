@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for catalog product Media Gallery attribute processor.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProcessorTest extends TestCase
 {

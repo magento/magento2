@@ -20,6 +20,9 @@ use Magento\Theme\Block\Html\Pager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ToolbarTest extends TestCase
 {
     /**

@@ -17,6 +17,9 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryTest extends TestCase
 {
     /**

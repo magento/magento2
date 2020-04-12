@@ -168,21 +168,18 @@ class SaveTest extends TestCase
             $postData['store_id'] = $storeId;
         }
         /**
-         * @var Redirect
-         * |\PHPUnit_Framework_MockObject_MockObject $resultRedirectMock
+         * @var Redirect|MockObject $resultRedirectMock
          */
         $resultRedirectMock = $this->createMock(Redirect::class);
         /**
-         * @var Messages
-         * |\PHPUnit_Framework_MockObject_MockObject $blockMock
+         * @var Messages|MockObject $blockMock
          */
         $blockMock = $this->createPartialMock(
             Messages::class,
             ['setMessages', 'getGroupedHtml']
         );
         /**
-         * @var \Magento\Catalog\Model\Category
-         * |\PHPUnit_Framework_MockObject_MockObject $categoryMock
+         * @var \Magento\Catalog\Model\Category|MockObject $categoryMock
          */
         $categoryMock = $this->createPartialMock(Category::class, [
                 'setStoreId',
@@ -204,8 +201,7 @@ class SaveTest extends TestCase
                 'toArray'
             ]);
         /**
-         * @var \Magento\Catalog\Model\Category
-         * |\PHPUnit_Framework_MockObject_MockObject $parentCategoryMock
+         * @var \Magento\Catalog\Model\Category|MockObject $parentCategoryMock
          */
         $parentCategoryMock = $this->createPartialMock(Category::class, [
                 'setStoreId',
@@ -222,23 +218,19 @@ class SaveTest extends TestCase
                 'getId'
             ]);
         /**
-         * @var Session
-         * |\PHPUnit_Framework_MockObject_MockObject $sessionMock
+         * @var Session|MockObject $sessionMock
          */
         $sessionMock = $this->createMock(Session::class);
         /**
-         * @var Registry
-         * |\PHPUnit_Framework_MockObject_MockObject $registryMock
+         * @var Registry|MockObject $registryMock
          */
         $registryMock = $this->createPartialMock(Registry::class, ['register']);
         /**
-         * @var Config
-         * |\PHPUnit_Framework_MockObject_MockObject $wysiwygConfigMock
+         * @var Config|MockObject $wysiwygConfigMock
          */
         $wysiwygConfigMock = $this->createPartialMock(Config::class, ['setStoreId']);
         /**
-         * @var StoreManagerInterface
-         * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
+         * @var StoreManagerInterface|MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(
             StoreManagerInterface::class,
@@ -250,8 +242,7 @@ class SaveTest extends TestCase
             ['getStore', 'getRootCategoryId']
         );
         /**
-         * @var Layout
-         * |\PHPUnit_Framework_MockObject_MockObject $layoutMock
+         * @var Layout|MockObject $layoutMock
          */
         $layoutMock = $this->getMockForAbstractClass(
             Layout::class,
@@ -263,13 +254,11 @@ class SaveTest extends TestCase
             ['getMessagesBlock']
         );
         /**
-         * @var Json
-         * |\PHPUnit_Framework_MockObject_MockObject $resultJsonMock
+         * @var Json|MockObject $resultJsonMock
          */
         $resultJsonMock = $this->createPartialMock(Config::class, ['setData']);
         /**
-         * @var Collection
-         * |\PHPUnit_Framework_MockObject_MockObject $messagesMock
+         * @var Collection|MockObject $messagesMock
          */
         $messagesMock = $this->createMock(Collection::class);
 

@@ -42,8 +42,7 @@ class CustomOptionProcessorTest extends TestCase
     protected $extensionFactory;
 
     /**
-     * @var CustomOptionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomOptionFactory|MockObject
      */
     protected $customOptionFactory;
 

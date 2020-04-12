@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Layout;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 use Magento\Framework\View\PageLayout\Config;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LayoutTest extends TestCase
@@ -20,8 +21,7 @@ class LayoutTest extends TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var BuilderInterface
-     * |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var BuilderInterface|MockObject */
     protected $pageLayoutBuilder;
 
     protected function setUp(): void

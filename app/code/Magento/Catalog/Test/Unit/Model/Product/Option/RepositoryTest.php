@@ -59,7 +59,7 @@ class RepositoryTest extends TestCase
     {
         $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->optionResourceMock = $this->createMock(Option::class);
-        $this->converterMock = $this->createMock(Converter::class);
+        $converterMock = $this->createMock(Converter::class);
         $this->optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
         $this->productMock = $this->createMock(Product::class);
         $optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
@@ -78,7 +78,7 @@ class RepositoryTest extends TestCase
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
-            $this->converterMock,
+            $converterMock,
             $this->optionCollectionFactory,
             $optionFactory,
             $metadataPool

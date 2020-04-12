@@ -19,6 +19,9 @@ use Magento\Indexer\Model\Indexer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ActionTest extends TestCase
 {
     /**

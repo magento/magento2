@@ -17,6 +17,7 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -91,10 +92,10 @@ class AjaxTest extends TestCase
         $optionsBlock->expects($this->once())->method('setProduct')->with($product)->will($this->returnSelf());
         $optionsBlock->expects($this->once())->method('getOptionValues')->will($this->returnValue([]));
 
-        $layout = $this->getMockBuilder(\Magento\Framework\View\Layout\Element\Layout::class)
+        $layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['createBlock'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $layout->expects($this->once())->method('createBlock')
             ->with(Option::class)
             ->will($this->returnValue($optionsBlock));

@@ -31,8 +31,7 @@ class ImageEntryConverterTest extends TestCase
     protected $mediaGalleryEntryMock;
 
     /**
-     * @var DataObjectHelper
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
     protected $dataObjectHelperMock;
 
