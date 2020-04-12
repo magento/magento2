@@ -10,6 +10,9 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class ActionStub extends Action
 {
     /**

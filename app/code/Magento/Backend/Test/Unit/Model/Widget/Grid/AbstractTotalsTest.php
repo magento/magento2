@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class AbstractTotalsTest extends TestCase
 {
     /**
-     * @var $_model \PHPUnit_Framework_MockObject_MockObject
+     * @var $_model MockObject
      */
     protected $_model;
 

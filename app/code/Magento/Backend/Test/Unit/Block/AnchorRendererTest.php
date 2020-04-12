@@ -31,11 +31,6 @@ class AnchorRendererTest extends TestCase
     private $escaperMock;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
      * @var MenuItemChecker|MockObject
      */
     private $menuItemCheckerMock;
@@ -44,6 +39,10 @@ class AnchorRendererTest extends TestCase
      * @var AnchorRenderer
      */
     private $anchorRenderer;
+    /**
+     * @var MockObject
+     */
+    private $menuItemWithoutChildrenMock;
 
     protected function setUp(): void
     {
@@ -63,8 +62,8 @@ class AnchorRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->anchorRenderer =  $this->objectManagerHelper->getObject(
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->anchorRenderer =  $objectManagerHelper->getObject(
             AnchorRenderer::class,
             [
                 'menuItemChecker' => $this->menuItemCheckerMock,

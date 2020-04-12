@@ -31,9 +31,6 @@ class MassactionKeyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->closureMock = function () {
-            return 'Expected';
-        };
         $this->subjectMock = $this->createMock(AbstractAction::class);
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,

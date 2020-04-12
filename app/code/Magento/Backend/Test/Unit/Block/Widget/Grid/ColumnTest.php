@@ -17,6 +17,9 @@ use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ColumnTest extends TestCase
 {
     /**
