@@ -24,8 +24,8 @@ class NewVideoTest extends TestCase
      */
     protected $contextMock;
 
-    /*
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+    /**
+     * @var MockObject|\Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 

@@ -21,8 +21,7 @@ class ReadHandlerTest extends TestCase
     /**
      * Subject of testing.
      *
-     * @var ReadHandler
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadHandler|MockObject
      */
     protected $subject;
 

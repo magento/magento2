@@ -83,8 +83,7 @@ class RetrieveImageTest extends TestCase
     protected $abstractAdapter;
 
     /**
-     * @var RetrieveImage
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var RetrieveImage|MockObject
      */
     protected $image;
 

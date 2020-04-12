@@ -15,14 +15,18 @@ use PHPUnit\Framework\TestCase;
 
 class ChangeTemplateObserverTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     public function testChangeTemplate()
     {
         /** @var MockObject|Observer $observer */
         $observer = $this->createPartialMock(Observer::class, ['getBlock']);
 
         /**
-         * @var MockObject
-         * |\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
+         * @var MockObject|\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
          */
         $block = $this->createMock(NewVideo::class);
         $block->expects($this->once())
