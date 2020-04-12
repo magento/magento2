@@ -44,8 +44,8 @@ class CreditCardTokenFactoryTest extends TestCase
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->paymentTokenFactory = new PaymentTokenFactory($this->objectManager, $tokenTypes);
-        $this->factory = new CreditCardTokenFactory($this->objectManager, $this->paymentTokenFactory);
+        $paymentTokenFactory = new PaymentTokenFactory($this->objectManager, $tokenTypes);
+        $this->factory = new CreditCardTokenFactory($this->objectManager, $paymentTokenFactory);
     }
 
     /**
