@@ -24,7 +24,7 @@ class ConfigurableTest extends TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_invFramework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 

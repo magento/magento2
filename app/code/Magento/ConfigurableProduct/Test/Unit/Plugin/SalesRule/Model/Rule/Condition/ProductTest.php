@@ -132,7 +132,7 @@ class ProductTest extends TestCase
             ->with($this->equalTo('special_price'))
             ->willReturn(false);
 
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['setProduct', 'getProduct', 'getChildren'])
@@ -215,7 +215,7 @@ class ProductTest extends TestCase
             ->with($this->equalTo('special_price'))
             ->willReturn(true);
 
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['setProduct', 'getProduct'])
@@ -246,7 +246,7 @@ class ProductTest extends TestCase
             ->with($this->equalTo('special_price'))
             ->willReturn(false);
 
-        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['setProduct', 'getProduct', 'getChildren'])

@@ -27,8 +27,7 @@ class ConfigurableAttributeDataTest extends TestCase
     protected $configurableAttributeData;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|
-     * \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|MockObject
      */
     protected $attributeMock;
 
