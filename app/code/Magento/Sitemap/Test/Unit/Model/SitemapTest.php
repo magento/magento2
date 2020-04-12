@@ -26,6 +26,7 @@ use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -73,26 +74,26 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
     private $fileMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var ItemProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ItemProviderInterface|MockObject
      */
     private $itemProviderMock;
 
     /**
-     * @var ConfigReaderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigReaderInterface|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     private $request;
     /**
-     * @var Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     private $store;
 
@@ -399,7 +400,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedFile
      * @param int $expectedWrites
      * @param array $robotsInfo
-     * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
+     * @return Sitemap|MockObject
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareSitemapModelMock(
@@ -505,7 +506,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      * Get model mock object
      *
      * @param bool $mockBeforeSave
-     * @return Sitemap|PHPUnit_Framework_MockObject_MockObject
+     * @return Sitemap|MockObject
      */
     protected function getModelMock($mockBeforeSave = false)
     {
