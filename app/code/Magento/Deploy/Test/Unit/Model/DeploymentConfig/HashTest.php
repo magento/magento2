@@ -62,7 +62,7 @@ class HashTest extends TestCase
         $this->flagMock = $this->getMockBuilder(Flag::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configHashGeneratorMock = $this->getMockBuilder(Generator::class)
