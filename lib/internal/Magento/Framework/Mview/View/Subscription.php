@@ -118,8 +118,9 @@ class Subscription implements SubscriptionInterface
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
-                // Use the column name from specific subscription instead of
-                // use from the one which is currently updated.
+                // Use the column name from specific linked view instead of
+                // using from the one which is currently updated for all
+                // the views.
                 $subscriptions = $view->getSubscriptions();
                 $subscription = $subscriptions[$this->getTableName()];
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
@@ -151,8 +152,9 @@ class Subscription implements SubscriptionInterface
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
-                // Use the column name from specific subscription instead of
-                // use from the one which is currently updated.
+                // Use the column name from specific linked view instead of
+                // using from the one which is currently updated for all
+                // the views.
                 $subscriptions = $view->getSubscriptions();
                 $subscription = $subscriptions[$this->getTableName()];
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
