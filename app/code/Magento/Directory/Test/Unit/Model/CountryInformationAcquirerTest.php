@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
