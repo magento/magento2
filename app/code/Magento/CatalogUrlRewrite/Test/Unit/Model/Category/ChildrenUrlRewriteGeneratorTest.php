@@ -19,6 +19,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ChildrenUrlRewriteGeneratorTest extends TestCase
 {
     /** @var ChildrenUrlRewriteGenerator */

@@ -20,6 +20,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CurrentUrlRewritesRegeneratorTest extends TestCase
 {
     /** @var CurrentUrlRewritesRegenerator */

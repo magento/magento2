@@ -127,7 +127,7 @@ class UrlRewriteHandlerTest extends TestCase
      */
     public function testGenerateProductUrlRewrites()
     {
-        /* @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject $category */
+        /* @var \Magento\Catalog\Model\Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
             ->setMethods(['getEntityId', 'getStoreId', 'getData', 'getChangedProductIds'])
             ->disableOriginalConstructor()
@@ -149,7 +149,7 @@ class UrlRewriteHandlerTest extends TestCase
                 null
             );
 
-        /* @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject $childCategory1 */
+        /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(Category::class)
             ->setMethods(['getEntityId'])
             ->disableOriginalConstructor()
@@ -158,7 +158,7 @@ class UrlRewriteHandlerTest extends TestCase
             ->method('getEntityId')
             ->willReturn(100);
 
-        /* @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject $childCategory1 */
+        /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory2 = $this->getMockBuilder(Category::class)
             ->setMethods(['getEntityId'])
             ->disableOriginalConstructor()
