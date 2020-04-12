@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,35 +13,33 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\App\Request\Http;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConfigurableTest
- */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
-     * @var Magento\ConfigurableProduct\Model\Product\VariationHandler|MockObject
+     * @var VariationHandler|MockObject
      */
     private $variationHandler;
 
     /**
-     * @var Magento\Framework\App\Request\Http|MockObject
+     * @var Http|MockObject
      */
     private $request;
 
     /**
-     * @var Magento\ConfigurableProduct\Helper\Product\Options\Factory|MockObject
+     * @var Factory|MockObject
      */
     private $optionFactory;
 
     /**
-     * @var Magento\Catalog\Model\Product|MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper|MockObject
+     * @var Helper|MockObject
      */
     private $subject;
 
@@ -53,7 +51,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->variationHandler = $this->getMockBuilder(VariationHandler::class)
             ->disableOriginalConstructor()

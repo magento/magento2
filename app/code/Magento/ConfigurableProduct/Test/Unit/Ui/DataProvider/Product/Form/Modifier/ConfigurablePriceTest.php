@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,6 +6,7 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice as ConfigurablePriceModifier;
 
 class ConfigurablePriceTest extends AbstractModifierTest
@@ -27,7 +28,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
     {
         $this->productMock->expects($this->any())
             ->method('getTypeId')
-            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+            ->willReturn(Configurable::TYPE_CODE);
 
         $metaResult = $this->getModel()->modifyMeta($metaInput);
         $this->assertEquals($metaResult, $metaOutput);
@@ -73,8 +74,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                         'arguments' => [
                                             'data' => [
                                                 'config' => [
-                                                    'component' =>
-                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
                                                 ],
                                             ],
                                         ],
@@ -103,8 +103,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                         'arguments' => [
                                             'data' => [
                                                 'config' => [
-                                                    'component' =>
-                                                        'Magento_ConfigurableProduct/js/components/price-configurable'
+                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
                                                 ]
                                             ]
                                         ]

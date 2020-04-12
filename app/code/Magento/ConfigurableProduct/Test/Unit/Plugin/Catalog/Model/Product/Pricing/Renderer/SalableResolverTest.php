@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -24,7 +24,7 @@ class SalableResolverTest extends TestCase
      */
     private $salableResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeConfigurable = $this->createMock(TypeConfigurable::class);
         $this->salableResolver = new SalableResolverPlugin($this->typeConfigurable);

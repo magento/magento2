@@ -1,44 +1,56 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Validator;
 
-class PluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Validator;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\Product\Validator\Plugin;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Json\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PluginTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Validator\Plugin
+     * @var Plugin
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     protected $responseMock;
 
@@ -53,32 +65,32 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $proceedResult = [1, 2, 3];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonDecode']);
+        $this->eventManagerMock = $this->createMock(Manager::class);
+        $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->jsonHelperMock = $this->createPartialMock(Data::class, ['jsonDecode']);
         $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getData', 'getAttributes', 'setTypeId']
         );
         $this->requestMock = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
+            Http::class,
             ['getPost', 'getParam', '__wakeup', 'has']
         );
         $this->responseMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
+            DataObject::class,
             ['setError', 'setMessage', 'setAttributes']
         );
         $this->arguments = [$this->productMock, $this->requestMock, $this->responseMock];
 
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\Validator::class);
-        $this->plugin = new \Magento\ConfigurableProduct\Model\Product\Validator\Plugin(
+        $this->subjectMock = $this->createMock(Validator::class);
+        $this->plugin = new Plugin(
             $this->eventManagerMock,
             $this->productFactoryMock,
             $this->jsonHelperMock
@@ -102,7 +114,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class)
+        $plugin = $this->getMockBuilder(Plugin::class)
             ->setMethods(['_validateProductVariations'])
             ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
             ->getMock();
@@ -147,7 +159,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     {
         $matrix = ['products'];
 
-        $plugin = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class)
+        $plugin = $this->getMockBuilder(Plugin::class)
             ->setMethods(['_validateProductVariations'])
             ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
             ->getMock();
@@ -313,13 +325,13 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param bool $isValid
      * @internal param array $attributes
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @return MockObject|Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function createProduct($index, $id, $isValid = true)
     {
         $productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getAttributes', 'addData', 'setAttributeSetId', 'validate']
         );
         $this->productFactoryMock->expects($this->at($index))
@@ -336,11 +348,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $attributeCode
      * @param $isUserDefined
      * @param $isRequired
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return MockObject|AbstractAttribute
      */
     private function createAttribute($attributeCode, $isUserDefined, $isRequired)
     {
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getIsUserDefined', 'getIsRequired'])
             ->getMock();

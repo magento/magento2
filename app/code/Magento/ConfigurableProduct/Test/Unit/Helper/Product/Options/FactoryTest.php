@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,14 +14,13 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class FactoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
      * @var Configurable|MockObject
@@ -56,7 +55,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -87,11 +86,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\ConfigurableProduct\Helper\Product\Options\Factory::create
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided attribute can not be used with configurable product.
      */
     public function testCreateWithException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Provided attribute can not be used with configurable product.');
         $attributeId = 90;
         $data = [
             ['attribute_id' => $attributeId, 'values' => [

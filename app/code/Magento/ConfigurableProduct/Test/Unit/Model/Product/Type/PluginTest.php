@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,12 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
-/**
- * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\PluginTest
- */
-class PluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Type;
+use Magento\ConfigurableProduct\Model\Product\Type\Plugin;
+use Magento\Framework\Module\Manager;
+use PHPUnit\Framework\TestCase;
+
+class PluginTest extends TestCase
 {
     /**
      * @param array $expected
@@ -18,13 +20,13 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterGetOptionArray(array $expected, array $data)
     {
-        $moduleManagerMock = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isOutputEnabled']);
+        $moduleManagerMock = $this->createPartialMock(Manager::class, ['isOutputEnabled']);
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
             ->with('Magento_ConfigurableProduct')
             ->will($this->returnValue($data['is_module_output_enabled']));
 
-        $model = new \Magento\ConfigurableProduct\Model\Product\Type\Plugin($moduleManagerMock);
+        $model = new Plugin($moduleManagerMock);
         $this->assertEquals(
             $expected,
             $model->afterGetOptionArray($data['subject'], $data['result'])
@@ -36,7 +38,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     public function afterGetOptionArrayDataProvider()
     {
-        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $productTypeMock = $this->createMock(Type::class);
         return [
             [
                 [

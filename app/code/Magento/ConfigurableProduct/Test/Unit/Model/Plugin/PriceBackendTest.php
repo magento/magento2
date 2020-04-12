@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,12 +12,10 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Plugin\PriceBackend;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PriceBackendTest
- */
-class PriceBackendTest extends \PHPUnit\Framework\TestCase
+class PriceBackendTest extends TestCase
 {
     const CLOSURE_VALUE = 'CLOSURE';
 
@@ -41,7 +39,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
      */
     private $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->priceBackendPlugin = $objectManager->getObject(PriceBackend::class);

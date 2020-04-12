@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,7 +10,7 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOpti
 
 class CustomOptionsTest extends AbstractModifierTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->arrayManagerMock->expects($this->any())

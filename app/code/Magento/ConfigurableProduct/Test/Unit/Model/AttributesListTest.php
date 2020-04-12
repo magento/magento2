@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,39 +6,47 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
-class AttributesListTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\ConfigurableProduct\Model\AttributesList;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributesListTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\AttributesList
+     * @var AttributesList
      */
     protected $attributeListModel;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     protected $attributeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionMock = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
+            Collection::class
         );
 
-        /** @var  \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactoryMock */
+        /** @var  CollectionFactory $collectionFactoryMock */
         $collectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
         $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
         $this->attributeMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            Attribute::class,
             $methods
         );
         $this->collectionMock
@@ -46,7 +54,7 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->will($this->returnValue(['id' => $this->attributeMock]));
 
-        $this->attributeListModel = new \Magento\ConfigurableProduct\Model\AttributesList(
+        $this->attributeListModel = new AttributesList(
             $collectionFactoryMock
         );
     }
@@ -72,7 +80,7 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
         $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
 
-        $source = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
+        $source = $this->createMock(AbstractSource::class);
         $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue(['options']));
         $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
 

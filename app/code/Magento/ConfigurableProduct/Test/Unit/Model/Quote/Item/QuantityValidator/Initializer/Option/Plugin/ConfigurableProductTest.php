@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct
     as InitializerOptionPlugin;
+use Magento\Quote\Model\Quote\Item;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
+class ConfigurableProductTest extends TestCase
 {
     /**
      * @param array $data
@@ -17,11 +20,11 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
     public function testAfterGetStockItem(array $data)
     {
         $subjectMock = $this->createMock(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class
+            Option::class
         );
 
         $quoteItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['getProductType', '__wakeup']
         );
         $quoteItemMock->expects($this->once())

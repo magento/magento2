@@ -1,28 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\Configurable;
 
-class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
+use Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributeSelectorTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector
+     * @var AttributeSelector
      */
     protected $attributeSelector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $helper = new ObjectManager($this);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->attributeSelector = $helper->getObject(
-            \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector::class,
+            AttributeSelector::class,
             ['urlBuilder' => $this->urlBuilder]
         );
     }

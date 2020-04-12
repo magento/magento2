@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,53 +6,59 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LockValidatorTest extends \PHPUnit\Framework\TestCase
+class LockValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Attribute\LockValidator
+     * @var LockValidator
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->select = $this->getMockBuilder(Select::class)
             ->setMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,7 +90,7 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @return EntityMetadata|MockObject
      */
     private function getMetaDataMock()
     {
@@ -99,18 +105,16 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
         return $metadata;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This attribute is used in configurable products.
-     */
     public function testValidateException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('This attribute is used in configurable products.');
         $this->validate(true);
     }
 
     /**
      * @param $exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function validate($exception)
     {
@@ -121,8 +125,8 @@ class LockValidatorTest extends \PHPUnit\Framework\TestCase
 
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
-        $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        /** @var AbstractModel|MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
             ->setMethods(['getAttributeId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
