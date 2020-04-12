@@ -26,7 +26,7 @@ class InvalidateCacheTest extends TestCase
     protected $_typeListMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject|
+     * @var \Magento\Framework\Event\Observer|MockObject
      */
     protected $observerMock;
 
