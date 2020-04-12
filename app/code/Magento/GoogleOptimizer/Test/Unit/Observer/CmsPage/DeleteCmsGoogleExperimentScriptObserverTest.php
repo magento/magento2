@@ -6,7 +6,6 @@
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 
 use Magento\Cms\Model\Page;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -35,8 +34,6 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->_codeMock = $this->createMock(Code::class);
-        $_requestMock = $this->createMock(RequestInterface::class);
-
         $page = $this->createMock(Page::class);
         $page->expects($this->once())->method('getId')->will($this->returnValue(3));
         $event = $this->createPartialMock(Event::class, ['getObject']);
