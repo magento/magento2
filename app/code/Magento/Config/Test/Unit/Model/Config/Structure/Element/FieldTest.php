@@ -172,21 +172,6 @@ class FieldTest extends TestCase
         $this->assertTrue($this->_model->hasBackendModel());
     }
 
-    public function testGetBackendModelCreatesBackendModel()
-    {
-        $this->_backendFactoryMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            \Magento\Framework\Model\Name::class
-        )->will(
-            $this->returnValue('backend_model_object')
-        );
-        $this->_model->setData(['backend_model' => \Magento\Framework\Model\Name::class], 'scope');
-        $this->assertEquals('backend_model_object', $this->_model->getBackendModel());
-    }
-
     public function testGetSectionId()
     {
         $this->_model->setData(['id' => 'fieldId', 'path' => 'sectionId/groupId/subgroupId'], 'scope');
