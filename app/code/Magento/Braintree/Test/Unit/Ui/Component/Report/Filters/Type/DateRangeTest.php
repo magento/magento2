@@ -92,7 +92,7 @@ class DateRangeTest extends TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
-        /** @var FormDate PHPUnit_Framework_MockObject_MockObject|$uiComponent */
+        /** @var FormDate|MockObject $uiComponent */
         $uiComponent = $this->getMockBuilder(FormDate::class)->disableOriginalConstructor()->getMock();
 
         $uiComponent->expects($this->any())

@@ -16,19 +16,15 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigProviderTest extends TestCase
 {
-    /**
-     * @var Config|MockObject
-     */
+    private const STUB_IMAGE_SRC = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png';
+
+    /** @var Config|MockObject */
     private $config;
 
-    /**
-     * @var ResolverInterface|MockObject
-     */
+    /** @var ResolverInterface|MockObject */
     private $localeResolver;
 
-    /**
-     * @var ConfigProvider
-     */
+    /** @var ConfigProvider */
     private $configProvider;
 
     protected function setUp(): void
@@ -97,7 +93,7 @@ class ConfigProviderTest extends TestCase
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
                             'locale' => 'en_US',
-                            'paymentAcceptanceMarkSrc' => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
+                            'paymentAcceptanceMarkSrc' => self::STUB_IMAGE_SRC,
                             'vaultCode' => ConfigProvider::PAYPAL_VAULT_CODE,
                             'skipOrderReview' => false,
                             'paymentIcon' => [

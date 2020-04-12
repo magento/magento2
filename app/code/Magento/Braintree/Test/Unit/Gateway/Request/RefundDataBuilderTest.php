@@ -139,9 +139,9 @@ class RefundDataBuilderTest extends TestCase
     /**
      * Creates mock object for PaymentDataObjectInterface
      *
-     * @return PaymentDataObjectInterface|MockObject
+     * @return void
      */
-    private function initPaymentDOMock()
+    private function initPaymentDOMock(): void
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentDOMock->expects(self::once())

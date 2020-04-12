@@ -142,18 +142,16 @@ class ShippingMethodUpdaterTest extends TestCase
      */
     private function getBillingAddressMock(MockObject $quoteMock)
     {
-        if (!isset($this->billingAddressMock)) {
-            $this->billingAddressMock = $this->getMockBuilder(Address::class)
+         $billingAddressMock = $this->getMockBuilder(Address::class)
                 ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        }
 
         $quoteMock->expects(self::any())
             ->method('getBillingAddress')
-            ->willReturn($this->billingAddressMock);
+            ->willReturn($billingAddressMock);
 
-        return $this->billingAddressMock;
+        return $billingAddressMock;
     }
 
     /**
