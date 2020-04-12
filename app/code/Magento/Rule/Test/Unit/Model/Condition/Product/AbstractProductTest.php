@@ -18,6 +18,9 @@ use Magento\Rule\Model\Condition\Product\AbstractProduct;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractProductTest extends TestCase
 {
     /**
