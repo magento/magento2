@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateDisabledTextTermEntityTest" extends="AdminUpdateDisabledHtmlTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Update disabled Text checkout agreement"/>
+            <description value="Admin should be able to update disabled Text checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14665"/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <after>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{activeHtmlTerm.name}}"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+            <argument name="term" value="disabledTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openUpdateTerm">
+            <argument name="termName" value="{{disabledTextTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
+            <argument name="term" value="activeHtmlTerm"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
+            <argument name="termName" value="{{activeHtmlTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeHtmlTerm.checkboxText}}"/>
+        </actionGroup>
+    </test>
+</tests>

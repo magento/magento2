@@ -22,7 +22,7 @@
             <!-- Create Customer -->
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
