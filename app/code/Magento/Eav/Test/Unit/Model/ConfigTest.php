@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,66 +9,73 @@ use Magento\Eav\Model\Cache\Type as Cache;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeFactory|MockObject
      */
     protected $typeFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
     protected $cacheStateMock;
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UniversalFactory|MockObject
      */
     protected $universalFactoryMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Type|MockObject
      */
     private $typeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-        $this->typeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\TypeFactory::class)
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock =
-            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheStateMock = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->universalFactoryMock = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
+        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
