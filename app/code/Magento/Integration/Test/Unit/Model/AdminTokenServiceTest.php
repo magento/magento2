@@ -24,17 +24,16 @@ class AdminTokenServiceTest extends TestCase
     /** \Magento\Integration\Model\AdminTokenService */
     protected $_tokenService;
 
-    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\Oauth\TokenFactory|MockObject */
     protected $_tokenFactoryMock;
 
-    /** \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\User\Model\User|MockObject */
     protected $_userModelMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory|MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var CredentialsValidator|MockObject */

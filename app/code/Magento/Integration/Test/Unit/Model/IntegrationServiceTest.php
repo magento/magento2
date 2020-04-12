@@ -19,17 +19,11 @@ use PHPUnit\Framework\TestCase;
 class IntegrationServiceTest extends TestCase
 {
     const VALUE_INTEGRATION_ID = 1;
-
     const VALUE_INTEGRATION_NAME = 'Integration Name';
-
     const VALUE_INTEGRATION_ANOTHER_NAME = 'Another Integration Name';
-
     const VALUE_INTEGRATION_EMAIL = 'test@magento.com';
-
     const VALUE_INTEGRATION_SETUP_BACKEND = 0;
-
     const VALUE_INTEGRATION_ENDPOINT = 'http://magento.ll/endpoint';
-
     const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
     /** @var MockObject */
@@ -73,7 +67,7 @@ class IntegrationServiceTest extends TestCase
             Integration::ID => self::VALUE_INTEGRATION_ID,
             Integration::NAME => self::VALUE_INTEGRATION_NAME,
             Integration::EMAIL => self::VALUE_INTEGRATION_EMAIL,
-            Integration::EMAIL => self::VALUE_INTEGRATION_ENDPOINT,
+            Integration::ENDPOINT => self::VALUE_INTEGRATION_ENDPOINT,
             Integration::SETUP_TYPE => self::VALUE_INTEGRATION_SETUP_BACKEND,
         ];
         $this->_integrationFactory->expects(

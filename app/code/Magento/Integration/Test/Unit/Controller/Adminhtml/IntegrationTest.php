@@ -58,9 +58,6 @@ abstract class IntegrationTest extends TestCase
     /** @var ObjectManagerInterface|MockObject */
     protected $_objectManagerMock;
 
-    /** @var \Magento\Backend\Model\View\Layout\Filter\Acl|MockObject */
-    protected $_layoutFilterMock;
-
     /** @var ScopeConfigInterface|MockObject */
     protected $_configMock;
 
@@ -167,9 +164,6 @@ abstract class IntegrationTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->_layoutFilterMock = $this->getMockBuilder(
-            \Magento\Backend\Model\Layout\Filter\Acl::class
-        )->disableOriginalConstructor()->getMock();
         $this->_backendSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['__call', 'getIntegrationData'])
             ->disableOriginalConstructor()
@@ -368,7 +362,6 @@ abstract class IntegrationTest extends TestCase
     {
         $map = [
             [ScopeConfigInterface::class, $this->_configMock],
-            [\Magento\Backend\Model\Layout\Filter\Acl::class, $this->_layoutFilterMock],
             [Session::class, $this->_backendSessionMock],
             [TranslateInterface::class, $this->_translateModelMock],
             [ScopeInterface::class, $this->_configScopeMock],

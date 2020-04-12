@@ -22,16 +22,16 @@ class CustomerTokenServiceTest extends TestCase
     /** \Magento\Integration\Model\CustomerTokenService */
     protected $_tokenService;
 
-    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\Oauth\TokenFactory|MockObject */
     protected $_tokenFactoryMock;
 
-    /** \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Customer\Api\AccountManagementInterface|MockObject */
     protected $_accountManagementMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \PHPUnit_Framework_MockObject_MockObject */
+    /** MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var CredentialsValidator|MockObject */
