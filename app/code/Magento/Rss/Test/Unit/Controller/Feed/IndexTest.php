@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Rss\Controller\Feed\Index
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexTest extends TestCase
 {
