@@ -124,14 +124,6 @@ class NewActionTest extends TestCase
         )->disableOriginalConstructor()
             ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
-        $labelGenerator = $this->getMockBuilder(LabelGenerator::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $shipmentSender = $this->getMockBuilder(ShipmentSender::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods([])
