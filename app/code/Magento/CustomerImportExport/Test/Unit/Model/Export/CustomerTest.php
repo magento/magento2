@@ -159,7 +159,7 @@ class CustomerTest extends TestCase
      */
     public function getWebsites($withDefault = false)
     {
-        $websites = [];
+        $websites = $this->_websites;
         if (!$withDefault) {
             unset($websites[0]);
         }
@@ -182,7 +182,7 @@ class CustomerTest extends TestCase
      */
     public function getStores($withDefault = false)
     {
-        $stores = [];
+        $stores = $this->_websites;
         if (!$withDefault) {
             unset($stores[0]);
         }

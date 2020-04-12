@@ -28,6 +28,7 @@ use Magento\ImportExport\Model\Export\Factory;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -204,7 +205,7 @@ class AddressTest extends TestCase
      */
     public function getWebsites($withDefault = false)
     {
-        $websites = [];
+        $websites = $this->_websites;
         if (!$withDefault) {
             unset($websites[0]);
         }
@@ -241,7 +242,7 @@ class AddressTest extends TestCase
             $this->createMock(GroupFactory::class),
             $this->createMock(\Magento\Customer\Model\AttributeFactory::class),
         ];
-        /** @var $customer \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $customer \Magento\Customer\Model\Customer|MockObject */
         $customer = $this->_objectManager->getObject(\Magento\Customer\Model\Customer::class, $arguments);
 
         foreach ($callbacks as $callback) {

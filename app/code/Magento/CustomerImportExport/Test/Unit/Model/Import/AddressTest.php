@@ -139,8 +139,7 @@ class AddressTest extends TestCase
     protected $_objectManagerMock;
 
     /**
-     * @var ProcessingErrorAggregatorInterface
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorAggregatorInterface|MockObject
      */
     protected $errorAggregator;
 
@@ -279,7 +278,7 @@ class AddressTest extends TestCase
      */
     protected function _createCustomerStorageMock()
     {
-        /** @var $customerStorage Storage|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $customerStorage Storage|MockObject */
         $customerStorage = $this->createMock(Storage::class);
         $customerStorage->expects($this->any())
             ->method('getCustomerId')

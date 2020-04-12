@@ -92,8 +92,7 @@ class CustomerCompositeTest extends TestCase
     protected $_scopeConfigMock;
 
     /**
-     * @var ProcessingErrorAggregatorInterface
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorAggregatorInterface|MockObject
      */
     protected $errorAggregator;
 
@@ -103,14 +102,12 @@ class CustomerCompositeTest extends TestCase
     protected $error;
 
     /**
-     * @var ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessingErrorFactory|MockObject
      */
     protected $errorFactory;
 
     /**
-     * @var Processor
-     * |\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     private $indexerProcessor;
 
