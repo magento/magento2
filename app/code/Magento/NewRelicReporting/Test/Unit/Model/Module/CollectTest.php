@@ -44,8 +44,7 @@ class CollectTest extends TestCase
     protected $moduleFactoryMock;
 
     /**
-     * @var CollectionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $moduleCollectionFactoryMock;
 

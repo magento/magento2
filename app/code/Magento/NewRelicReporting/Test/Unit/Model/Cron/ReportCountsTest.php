@@ -55,8 +55,7 @@ class ReportCountsTest extends TestCase
     protected $countsModelMock;
 
     /**
-     * @var CollectionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $countsCollectionFactoryMock;
 
