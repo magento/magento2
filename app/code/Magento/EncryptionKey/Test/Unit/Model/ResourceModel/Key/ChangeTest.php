@@ -52,7 +52,7 @@ class ChangeTest extends TestCase
     /** @var TransactionManagerInterface */
     protected $transactionMock;
 
-    /** @var |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $objRelationMock;
 
     /** @var Random|MockObject */
