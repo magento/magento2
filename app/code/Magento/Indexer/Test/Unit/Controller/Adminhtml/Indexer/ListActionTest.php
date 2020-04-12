@@ -19,6 +19,9 @@ use Magento\Framework\View\Result\Page;
 use Magento\Indexer\Controller\Adminhtml\Indexer\ListAction;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ListActionTest extends TestCase
 {
     /**
@@ -94,12 +97,12 @@ class ListActionTest extends TestCase
                 'getMessageManager'
             ]);
 
-        $this->response = $this->createPartialMock(
+        $response = $this->createPartialMock(
             ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
 
-        $this->request = $this->getMockForAbstractClass(
+        $request = $this->getMockForAbstractClass(
             RequestInterface::class,
             ['getParam', 'getRequest'],
             '',
@@ -139,8 +142,8 @@ class ListActionTest extends TestCase
 
         $this->items = $this->createPartialMock(Item::class, ['getParentItems']);
 
-        $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
-        $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
+        $this->contextMock->expects($this->any())->method("getRequest")->willReturn($request);
+        $this->contextMock->expects($this->any())->method("getResponse")->willReturn($response);
         $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->view));
 
         $this->page = $this->createPartialMock(Page::class, ['getConfig']);

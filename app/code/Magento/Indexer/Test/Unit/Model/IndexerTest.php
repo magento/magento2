@@ -18,6 +18,9 @@ use Magento\Indexer\Model\Indexer\StateFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexerTest extends TestCase
 {
     /**
