@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ChooserTest extends TestCase
 {
