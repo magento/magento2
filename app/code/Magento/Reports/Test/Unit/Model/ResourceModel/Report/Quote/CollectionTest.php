@@ -40,7 +40,7 @@ class CollectionTest extends TestCase
 
     public function testGetSelectCountSql()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collection MockObject */
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Collection::class)
             ->setMethods(['getSelect'])
             ->disableOriginalConstructor()
@@ -57,7 +57,7 @@ class CollectionTest extends TestCase
 
     public function testPrepareActiveCartItems()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collection MockObject */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class)
@@ -79,7 +79,7 @@ class CollectionTest extends TestCase
 
     public function testLoadWithFilter()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $collection MockObject */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $constructArgs['eventManager'] = $this->createMock(ManagerInterface::class);
