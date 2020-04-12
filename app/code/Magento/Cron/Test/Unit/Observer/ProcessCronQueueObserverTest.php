@@ -109,11 +109,6 @@ class ProcessCronQueueObserverTest extends TestCase
     protected $appStateMock;
 
     /**
-     * @var LockManagerInterface|MockObject
-     */
-    private $lockManagerMock;
-
-    /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule|MockObject
      */
     protected $scheduleResource;
@@ -165,11 +160,11 @@ class ProcessCronQueueObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
+        $lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->lockManagerMock->method('lock')->willReturn(true);
-        $this->lockManagerMock->method('unlock')->willReturn(true);
+        $lockManagerMock->method('lock')->willReturn(true);
+        $lockManagerMock->method('unlock')->willReturn(true);
 
         $this->observer = $this->createMock(Observer::class);
 
@@ -195,15 +190,15 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->scheduleResource->method('getConnection')->willReturn($connection);
         $connection->method('delete')->willReturn(1);
 
-        $this->statFactory = $this->getMockBuilder(StatFactory::class)
+        $statFactory = $this->getMockBuilder(StatFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stat = $this->getMockBuilder(Stat::class)
+        $stat = $this->getMockBuilder(Stat::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statFactory->expects($this->any())->method('create')->willReturn($this->stat);
+        $statFactory->expects($this->any())->method('create')->willReturn($stat);
 
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
@@ -217,8 +212,8 @@ class ProcessCronQueueObserverTest extends TestCase
             $phpExecutableFinderFactory,
             $this->loggerMock,
             $this->appStateMock,
-            $this->statFactory,
-            $this->lockManagerMock
+            $statFactory,
+            $lockManagerMock
         );
     }
 
