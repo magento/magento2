@@ -113,23 +113,16 @@ class Subscription implements SubscriptionInterface
                 ->setEvent($event)
                 ->setTable($this->resource->getTableName($this->tableName));
 
-            $trigger->addStatement($this->buildStatement($event, $this->getView()->getChangelog()));
+            $trigger->addStatement($this->buildStatement($event, $this->getView()->getChangelog(), $this->getColumnName()));
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
-                // Store current column name for reverting back later.
-                $originalColumnName = $this->getColumnName();
-
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
                 // Use the column name from specific subscription instead of
                 // use from the one which is currently updated.
                 $subscriptions = $view->getSubscriptions();
                 $subscription = $subscriptions[$this->getTableName()];
-                $this->columnName = $subscription['column'];
-                $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
-
-                // Revert back the column name.
-                $this->columnName = $originalColumnName;
+                $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
             }
 
             $this->connection->dropTrigger($trigger->getName());
@@ -157,19 +150,12 @@ class Subscription implements SubscriptionInterface
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
-                // Store current column name for reverting back later.
-                $originalColumnName = $this->columnName;
-
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
                 // Use the column name from specific subscription instead of
                 // use from the one which is currently updated.
                 $subscriptions = $view->getSubscriptions();
                 $subscription = $subscriptions[$this->getTableName()];
-                $this->columnName = $subscription['column'];
-                $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
-
-                // Revert back the column name.
-                $this->columnName = $originalColumnName;
+                $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
             }
 
             $this->connection->dropTrigger($trigger->getName());
@@ -216,9 +202,10 @@ class Subscription implements SubscriptionInterface
      *
      * @param string $event
      * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
+     * @param string $subscriptionColumnName
      * @return string
      */
-    protected function buildStatement($event, $changelog)
+    protected function buildStatement($event, $changelog, $subscriptionColumnName)
     {
         switch ($event) {
             case Trigger::EVENT_INSERT:
@@ -258,7 +245,7 @@ class Subscription implements SubscriptionInterface
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
             $this->connection->quoteIdentifier($changelog->getColumnName()),
-            $this->connection->quoteIdentifier($this->getColumnName())
+            $this->connection->quoteIdentifier($subscriptionColumnName)
         );
     }
 
