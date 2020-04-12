@@ -51,7 +51,7 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return bool
      */
-    public function verifyStock($productId, $scopeId = null): bool
+    public function verifyStock($productId, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
@@ -64,7 +64,7 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return bool
      */
-    public function verifyNotification($productId, $scopeId = null): bool
+    public function verifyNotification($productId, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
@@ -78,9 +78,10 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $scopeId
+     * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
-    public function checkQty($productId, $qty, $scopeId = null): bool
+    public function checkQty($productId, $qty, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
@@ -97,7 +98,7 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return float
      */
-    public function suggestQty($productId, $qty, $scopeId = null): float
+    public function suggestQty($productId, $qty, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
@@ -112,7 +113,7 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return float
      */
-    public function getStockQty($productId, $scopeId = null): float
+    public function getStockQty($productId, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
@@ -126,7 +127,7 @@ class StockState implements StockStateInterface
      * @param int $websiteId
      * @return DataObject
      */
-    public function checkQtyIncrements($productId, $qty, $websiteId = null): DataObject
+    public function checkQtyIncrements($productId, $qty, $websiteId = null)
     {
         $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
@@ -142,7 +143,7 @@ class StockState implements StockStateInterface
      * @param int $scopeId
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null): int
+    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {
         $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
