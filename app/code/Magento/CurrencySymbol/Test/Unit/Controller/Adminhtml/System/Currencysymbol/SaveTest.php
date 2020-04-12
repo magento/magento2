@@ -132,7 +132,7 @@ class SaveTest extends TestCase
             ->with(__('You applied the custom currency symbols.'));
 
         $redirect = $this->createMock(Redirect::class);
-        $redirect->expects($this->once())->method('setPath')->with('*')->willReturnSelf();
+        $redirect->expects($this->once())->method('setPath')->with('adminhtml/*/')->willReturnSelf();
         $this->resultRedirectFactory->method('create')->willReturn($redirect);
 
         $this->assertEquals($redirect, $this->action->execute());

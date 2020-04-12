@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+
 /**
  * Class checks dropdown attribute displaying on frontend
  *
@@ -75,6 +77,43 @@ class DropdownAttributeTest extends AbstractAttributeTest
                 'expected_attribute_value' => '&lt;h2&gt;Option 2&lt;/h2&gt;',
             ],
         ];
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testAttributePerStoreView(): void
+    {
+        $this->processMultiStoreView(
+            'simple2',
+            ScopedAttributeInterface::SCOPE_STORE,
+            'Option 3',
+            'fixturestore'
+        );
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_two_websites.php
+     *
+     * @return void
+     */
+    public function testAttributePerWebsites(): void
+    {
+        $this->processMultiStoreView(
+            'simple-on-two-websites',
+            ScopedAttributeInterface::SCOPE_WEBSITE,
+            'Option 3',
+            'fixture_second_store'
+        );
     }
 
     /**

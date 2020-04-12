@@ -8,6 +8,10 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 
+/**
+ * Test for \Magento\Elasticsearch\Model\Indexer\IndexerHandler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -41,7 +45,7 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
     private $indexNameResolver;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $client;
 
@@ -89,8 +93,8 @@ class IndexerHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
-            ->setMethods(['ping'])
+        $this->client = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
+            ->setMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
             ->disableOriginalConstructor()
             ->getMock();
 

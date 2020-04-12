@@ -72,22 +72,6 @@ class DecimalFilterTest extends AbstractFiltersTest
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function updateProducts(array $products, string $attributeCode): void
-    {
-        $attribute = $this->attributeRepository->get($attributeCode);
-
-        foreach ($products as $productSku => $value) {
-            $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);
-            $product->addData(
-                [$attribute->getAttributeCode() => $value]
-            );
-            $this->productRepository->save($product);
-        }
-    }
-
-    /**
      * @return array
      */
     public function getFiltersWithCustomAttributeDataProvider(): array
@@ -98,7 +82,10 @@ class DecimalFilterTest extends AbstractFiltersTest
                 'attribute_data' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
-            'used_in_navigation_with_results' => [
+
+            /* @TODO: Should be uncommented in MC-16650 */
+
+            /*'used_in_navigation_with_results' => [
                 'products_data' => [
                     'simple1000' => 10.00,
                     'simple1001' => 20.00,
@@ -116,7 +103,7 @@ class DecimalFilterTest extends AbstractFiltersTest
                         'count' => 1,
                     ],
                 ],
-            ],
+            ],*/
         ];
     }
 }

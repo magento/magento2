@@ -29,27 +29,31 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns Items options as array
+     *
      * @return array
      */
     public function getItemOptions()
     {
-        $result = [];
+        $result = [[]];
         if ($options = $this->getItem()->getOrderItem()->getProductOptions()) {
             if (isset($options['options'])) {
-                $result = array_merge($result, $options['options']);
+                $result[] = $options['options'];
             }
             if (isset($options['additional_options'])) {
-                $result = array_merge($result, $options['additional_options']);
+                $result[] = $options['additional_options'];
             }
             if (isset($options['attributes_info'])) {
-                $result = array_merge($result, $options['attributes_info']);
+                $result[] = $options['attributes_info'];
             }
         }
 
-        return $result;
+        return array_merge(...$result);
     }
 
     /**
+     * Formats the value in HTML
+     *
      * @param string|array $value
      * @return string
      */
@@ -70,7 +74,9 @@ class DefaultItems extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @param mixed $item
+     * Returns Product SKU for Item provided
+     *
+     * @param OrderItem $item
      * @return mixed
      */
     public function getSku($item)

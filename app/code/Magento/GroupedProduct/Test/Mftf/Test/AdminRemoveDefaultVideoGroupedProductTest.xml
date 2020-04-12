@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-203"/>
             <group value="GroupedProduct"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>

@@ -155,6 +155,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     private static $routesWhitelist = null;
 
     /**
+     * Redundant dependencies whitelist
+     *
+     * @var array|null
+     */
+    private static $redundantDependenciesWhitelist = null;
+
+    /**
      * @var RouteMapper
      */
     private static $routeMapper = null;
@@ -185,6 +192,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         self::_prepareMapLayoutHandles();
 
         self::getLibraryWhiteLists();
+        self::getRedundantDependenciesWhiteLists();
 
         self::_initDependencies();
         self::_initThemes();
@@ -204,6 +212,26 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
             }
         }
+    }
+
+    /**
+     * Initialize redundant dependencies whitelist
+     *
+     * @return array
+     */
+    private static function getRedundantDependenciesWhiteLists(): array
+    {
+        if (is_null(self::$redundantDependenciesWhitelist)) {
+            $redundantDependenciesWhitelistFilePattern =
+                realpath(__DIR__) . '/_files/dependency_test/whitelist/redundant_dependencies_*.php';
+            $redundantDependenciesWhitelist = [];
+            foreach (glob($redundantDependenciesWhitelistFilePattern) as $fileName) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $redundantDependenciesWhitelist = array_merge($redundantDependenciesWhitelist, include $fileName);
+            }
+            self::$redundantDependenciesWhitelist = $redundantDependenciesWhitelist;
+        }
+        return self::$redundantDependenciesWhitelist;
     }
 
     /**
@@ -532,6 +560,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (array_keys(self::$mapDependencies) as $module) {
             $result = [];
             $redundant = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT);
+            if (isset(self::$redundantDependenciesWhitelist[$module])) {
+                $redundant = array_diff($redundant, self::$redundantDependenciesWhitelist[$module]);
+            }
             if (!empty($redundant)) {
                 $result[] = sprintf(
                     "\r\nModule %s: %s [%s]",

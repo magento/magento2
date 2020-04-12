@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Plugin;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -47,6 +48,24 @@ class CouponUsagesTest extends \PHPUnit\Framework\TestCase
     private $order;
 
     /**
+     * @var OrderService
+     */
+    private $orderService;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->coupon = $this->objectManager->get(Coupon::class);
+        $this->usage = $this->objectManager->get(Usage::class);
+        $this->couponUsage = $this->objectManager->get(DataObject::class);
+        $this->order = $this->objectManager->get(Order::class);
+        $this->orderService = $this->objectManager->get(OrderService::class);
+    }
+
+    /**
      * Test increasing coupon usages after after order placing and decreasing after order cancellation.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -62,7 +81,7 @@ class CouponUsagesTest extends \PHPUnit\Framework\TestCase
         $this->order->loadByIncrementId($orderId);
 
         // Make sure coupon usages value is incremented then order is placed.
-        $this->order->place();
+        $this->orderService->place($this->order);
         $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $this->coupon->getId());
         $this->coupon->loadByCode($couponCode);
 
@@ -76,7 +95,7 @@ class CouponUsagesTest extends \PHPUnit\Framework\TestCase
         );
 
         // Make sure order coupon usages value is decremented then order is cancelled.
-        $this->order->cancel();
+        $this->orderService->cancel($this->order->getId());
         $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $this->coupon->getId());
         $this->coupon->loadByCode($couponCode);
 
@@ -88,14 +107,5 @@ class CouponUsagesTest extends \PHPUnit\Framework\TestCase
             0,
             $this->couponUsage->getTimesUsed()
         );
-    }
-
-    protected function setUp()
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->coupon = $this->objectManager->get(Coupon::class);
-        $this->usage = $this->objectManager->get(Usage::class);
-        $this->couponUsage = $this->objectManager->get(DataObject::class);
-        $this->order = $this->objectManager->get(Order::class);
     }
 }

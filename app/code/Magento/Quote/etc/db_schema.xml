@@ -56,7 +56,7 @@
         <column xsi:type="varchar" name="customer_lastname" nullable="true" length="255" comment="Customer Lastname"/>
         <column xsi:type="varchar" name="customer_suffix" nullable="true" length="40" comment="Customer Suffix"/>
         <column xsi:type="datetime" name="customer_dob" on_update="false" nullable="true" comment="Customer Dob"/>
-        <column xsi:type="varchar" name="customer_note" nullable="true" length="255" comment="Customer Note"/>
+        <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="smallint" name="customer_note_notify" padding="5" unsigned="true" nullable="true"
                 identity="false" default="1" comment="Customer Note Notify"/>
         <column xsi:type="smallint" name="customer_is_guest" padding="5" unsigned="true" nullable="true"

@@ -23,24 +23,11 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->_helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);
     }
 
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
-     * @magentoDbIsolation disabled
-     */
     public function testGetListUrl()
     {
         /** @var $empty \Magento\Catalog\Helper\Product\Compare */
         $empty = $this->_objectManager->create(\Magento\Catalog\Helper\Product\Compare::class);
         $this->assertContains('/catalog/product_compare/index/', $empty->getListUrl());
-
-        $this->_populateCompareList();
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $id1 = $productRepository->get('simple1')->getId();
-        $id2 = $productRepository->get('simple2')->getId();
-        $this->assertRegExp(
-            '#/catalog/product_compare/index/items/(?:' . $id1 . '%2C' . $id2 . '|' . $id2 . '%2C' . $id1. ')/#',
-            $this->_helper->getListUrl()
-        );
     }
 
     public function testGetAddUrl()

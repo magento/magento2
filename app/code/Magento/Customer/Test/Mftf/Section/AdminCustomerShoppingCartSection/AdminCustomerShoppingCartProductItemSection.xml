@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerShoppingCartProductItemSection">
+        <element name="productItem" type="button" selector="#dt-products"/>
+        <element name="productNameFilter" type="input" selector="#source_products_filter_name"/>
+        <element name="searchButton" type="button" selector="//*[@id='anchor-content']//button[@title='Search']"/>
+        <element name="firstProductCheckbox" type="checkbox" selector="//*[@id='source_products_table']/tbody/tr[1]//*[@name='source_products']"/>
+        <element name="addSelectionsToMyCartButton" type="button" selector="//*[@id='products_search']/div[1]//*[text()='Add selections to my cart']"/>
+        <element name="addedProductName" type="text" selector="//*[@id='order-items_grid']//*[text()='{{var}}']" parameterized="true"/>
+    </section>
+</sections>

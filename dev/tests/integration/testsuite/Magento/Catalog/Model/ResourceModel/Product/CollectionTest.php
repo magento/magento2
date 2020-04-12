@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Collection test
+ * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -287,8 +287,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeTierPriceToFilter($condition): void
     {
-        $this->collection->addAttributeToFilter('tier_price', $condition);
-        $this->assertEquals(1, $this->collection->getSize());
+        $size = $this->collection->addAttributeToFilter('tier_price', $condition)->getSize();
+        $this->assertEquals(1, $size);
     }
 
     /**
@@ -314,8 +314,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeIsSaleableToFilter($condition): void
     {
-        $this->collection->addAttributeToFilter('is_saleable', $condition);
-        $this->assertEquals(1, $this->collection->getSize());
+        $size = $this->collection->addAttributeToFilter('is_saleable', $condition)->getSize();
+        $this->assertEquals(1, $size);
     }
 
     /**

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCheckoutCartItemWeeeSection">
+        <element name="productWeeePriceByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'price')]//span[contains(@class,'weee')]" parameterized="true"/>
+        <element name="productWeeeSubtotalByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'weee')]" parameterized="true"/>
+        <element name="productWeeePriceExcludingTaxByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'price')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'weee')]" parameterized="true"/>
+        <element name="productWeeeSubtotalExcludingTaxByName" type="text" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'weee')]" parameterized="true"/>
+    </section>
+</sections>

@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-109"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-32197"/>
+            </skip>
         </annotations>
 
         <!-- Replacing steps in base AdminAddDefaultVideoSimpleProductTest -->

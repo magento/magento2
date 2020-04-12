@@ -15,6 +15,7 @@ use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class CompareProductsTest extends \PHPUnit\Framework\TestCase
@@ -45,6 +46,11 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var array
      */
     private $productValueMap = [
@@ -65,6 +71,9 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $this->outputHelperMock = $this->getMockBuilder(Output::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -73,7 +82,8 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             [
                 'helper' => $this->helperMock,
                 'productUrl' => $this->productUrlMock,
-                'outputHelper' => $this->outputHelperMock
+                'outputHelper' => $this->outputHelperMock,
+                'scopeConfig'  => $this->scopeConfigMock
             ]
         );
     }
@@ -109,6 +119,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $urlMap = [];
         $outputMap = [];
         $helperMap = [];
+        $productScopeMap = [];
 
         $count = count($dataSet);
 
@@ -119,6 +130,7 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
             $outputMap[] = [$item, $data['name'], 'name', 'productName#' . $data['id']];
             $helperMap[] = [$item, 'http://remove.url/' . $data['id']];
             $urlMap[] = [$item, [], 'http://product.url/' . $data['id']];
+            $productScopeMap[] = [$item, 'store-' . $data['id']];
         }
 
         $this->productUrlMock->expects($this->exactly($count))
@@ -193,19 +205,22 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
                         'id' => 1,
                         'product_url' => 'http://product.url/1',
                         'name' => 'productName#1',
-                        'remove_url' => 'http://remove.url/1'
+                        'remove_url' => 'http://remove.url/1',
+                        'productScope' => null
                     ],
                     [
                         'id' => 2,
                         'product_url' => 'http://product.url/2',
                         'name' => 'productName#2',
-                        'remove_url' => 'http://remove.url/2'
+                        'remove_url' => 'http://remove.url/2',
+                        'productScope' => null
                     ],
                     [
                         'id' => 3,
                         'product_url' => 'http://product.url/3',
                         'name' => 'productName#3',
-                        'remove_url' => 'http://remove.url/3'
+                        'remove_url' => 'http://remove.url/3',
+                        'productScope' => null
                     ]
                 ]
             ],
@@ -276,7 +291,8 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
                         'id' => 12345,
                         'product_url' => 'http://product.url/12345',
                         'name' => 'productName#12345',
-                        'remove_url' => 'http://remove.url/12345'
+                        'remove_url' => 'http://remove.url/12345',
+                        'productScope' => null
                     ]
                 ]
             ],

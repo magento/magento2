@@ -535,4 +535,84 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL);
         $switchPriceScope->execute($observer);
     }
+
+    /**
+     * Verify that "stock status" filter correctly applies to export result
+     *
+     * @param string $value
+     * @param array $productsIncluded
+     * @param array $productsNotIncluded
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
+     * @dataProvider filterByQuantityAndStockStatusDataProvider
+     */
+    public function testFilterByQuantityAndStockStatus(
+        string $value,
+        array $productsIncluded,
+        array $productsNotIncluded
+    ) {
+        $exportData = $this->doExport(['quantity_and_stock_status' => $value]);
+        foreach ($productsIncluded as $productName) {
+            $this->assertContains($productName, $exportData);
+        }
+        foreach ($productsNotIncluded as $productName) {
+            $this->assertNotContains($productName, $exportData);
+        }
+    }
+    /**
+     * @return array
+     */
+    public function filterByQuantityAndStockStatusDataProvider(): array
+    {
+        return [
+            [
+                '',
+                [
+                    'Simple Product OOS',
+                    'Simple Product Not Visible',
+                    'Simple Product Visible and InStock'
+                ],
+                [
+                ]
+            ],
+            [
+                '1',
+                [
+                    'Simple Product Not Visible',
+                    'Simple Product Visible and InStock'
+                ],
+                [
+                    'Simple Product OOS'
+                ]
+            ],
+            [
+                '0',
+                [
+                    'Simple Product OOS'
+                ],
+                [
+                    'Simple Product Not Visible',
+                    'Simple Product Visible and InStock'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param array $filters
+     * @return string
+     */
+    private function doExport(array $filters = []): string
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => $filters
+            ]
+        );
+        return $this->model->export();
+    }
 }

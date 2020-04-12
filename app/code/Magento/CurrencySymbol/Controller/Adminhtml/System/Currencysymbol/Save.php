@@ -67,6 +67,6 @@ class Save extends CurrencysymbolController implements HttpPostActionInterface
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        return $resultRedirect->setPath('*');
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

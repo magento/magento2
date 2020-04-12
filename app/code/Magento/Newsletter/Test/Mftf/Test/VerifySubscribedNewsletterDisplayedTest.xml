@@ -21,7 +21,7 @@
 
         <before>
             <!--Log in to Magento as admin.-->
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="Second"/>
                 <argument name="websiteCode" value="Base2"/>
@@ -49,7 +49,7 @@
             </actionGroup>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--Go to store front (default) and click Create an Account.-->
@@ -57,7 +57,7 @@
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
-        <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="customerOnLogoutPage"/>
         <waitForPageLoad stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
         <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">

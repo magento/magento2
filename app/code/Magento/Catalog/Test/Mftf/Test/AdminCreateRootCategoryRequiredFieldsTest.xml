@@ -20,13 +20,13 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="LoginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory" />
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout" />
         </after>
 
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="OpenAdminCatergoryIndexPage"/>

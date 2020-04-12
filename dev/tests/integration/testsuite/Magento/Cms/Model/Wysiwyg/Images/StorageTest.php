@@ -9,9 +9,12 @@ namespace Magento\Cms\Model\Wysiwyg\Images;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Test methods of class Storage
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
@@ -259,5 +262,88 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
+    }
+
+    /**
+     * Test that getThumbnailUrl() returns correct URL for root folder or sub-folders images
+     *
+     * @param string $directory
+     * @param string $filename
+     * @param string $expectedUrl
+     * @return void
+     * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
+     * @dataProvider getThumbnailUrlDataProvider
+     */
+    public function testGetThumbnailUrl(string $directory, string $filename, string $expectedUrl): void
+    {
+        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
+        $directory = implode('/', array_filter([rtrim($root, '/'), trim($directory, '/')]));
+        $path = $directory . '/' . $filename;
+        $this->generateImage($path);
+        $this->storage->resizeFile($path);
+        $collection = $this->storage->getFilesCollection($directory, 'image');
+        $paths = [];
+        foreach ($collection as $item) {
+            $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
+        }
+        $this->assertEquals([$expectedUrl], $paths);
+        $this->storage->deleteFile($path);
+    }
+
+    /**
+     * Provide scenarios for testing getThumbnailUrl()
+     *
+     * @return array
+     */
+    public function getThumbnailUrlDataProvider(): array
+    {
+        return [
+            [
+                '/',
+                'image1.png',
+                '/pub/media/.thumbs/image1.png'
+            ],
+            [
+                '/cms',
+                'image2.png',
+                '/pub/media/.thumbscms/image2.png'
+            ],
+            [
+                '/cms/pages',
+                'image3.png',
+                '/pub/media/.thumbscms/pages/image3.png'
+            ]
+        ];
+    }
+
+    /**
+     * Generate a dummy image of the given width and height.
+     *
+     * @param string $path
+     * @param int $width
+     * @param int $height
+     * @return string
+     */
+    private function generateImage(string $path, int $width = 1024, int $height = 768)
+    {
+        $dir = dirname($path);
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        $file = fopen($path, 'wb');
+        $filename = basename($path);
+        ob_start();
+        $image = imagecreatetruecolor($width, $height);
+        switch (substr($filename, strrpos($filename, '.'))) {
+            case '.jpeg':
+                imagejpeg($image);
+                break;
+            case '.png':
+                imagepng($image);
+                break;
+        }
+        fwrite($file, ob_get_clean());
+        return $path;
     }
 }

@@ -11,32 +11,32 @@
             <label>Shipping Settings</label>
             <tab>sales</tab>
             <resource>Magento_Shipping::config_shipping</resource>
-            <group id="origin" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="origin" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1">
                 <label>Origin</label>
-                <field id="country_id" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="country_id" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Country</label>
                     <frontend_class>countries</frontend_class>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
-                <field id="region_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="region_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Region/State</label>
                 </field>
-                <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>ZIP/Postal Code</label>
                 </field>
-                <field id="city" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="city" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1">
                     <label>City</label>
                 </field>
-                <field id="street_line1" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="street_line1" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1">
                     <label>Street Address</label>
                 </field>
-                <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
                     <label>Street Address Line 2</label>
                 </field>
             </group>
             <group id="shipping_policy" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Shipping Policy Parameters</label>
-                <field id="enable_shipping_policy" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="enable_shipping_policy" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Apply custom Shipping Policy</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
