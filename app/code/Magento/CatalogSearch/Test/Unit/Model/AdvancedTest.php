@@ -38,11 +38,6 @@ class AdvancedTest extends TestCase
     protected $resource;
 
     /**
-     * @var MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
-     */
-    protected $resourceProvider;
-
-    /**
      * @var MockObject[]|Attribute[]
      */
     protected $attributes;
@@ -85,13 +80,6 @@ class AdvancedTest extends TestCase
             Advanced::class,
             ['prepareCondition', '__wakeup', 'getIdFieldName']
         );
-
-        $this->resourceProvider = $this->getMockBuilder(
-            \Magento\CatalogSearch\Model\ResourceModel\ResourceProvider::class
-        )
-            ->setMethods(['getResource', 'getResourceCollection', 'getAdvancedResultCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->dataCollection = $this->createPartialMock(\Magento\Framework\Data\Collection::class, ['getIterator']);
 
@@ -259,7 +247,6 @@ class AdvancedTest extends TestCase
             \Magento\CatalogSearch\Model\Advanced::class,
             [
                 'registry' => $registry,
-                'resourceProvider' => $this->resourceProvider,
                 'data' => ['attributes' => $this->dataCollection],
                 'advancedFactory' => $advancedFactory,
                 'productCollectionFactory' => $productCollectionFactory,

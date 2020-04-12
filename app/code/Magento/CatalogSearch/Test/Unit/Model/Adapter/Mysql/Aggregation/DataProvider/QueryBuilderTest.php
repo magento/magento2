@@ -32,30 +32,32 @@ use PHPUnit\Framework\TestCase;
  */
 class QueryBuilderTest extends TestCase
 {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder */
     private $model;
 
-    /**
-     * @var MockObject
-     */
+    /** @var MockObject */
     private $resourceConnectionMock;
 
-    /**
-     * @var MockObject
-     */
+    /** @var MockObject */
     private $scopeResolverMock;
 
-    /**
-     * @var MockObject
-     */
+    /** @var MockObject */
     private $adapterMock;
 
-    /**
-     * @var MockObject
-     */
+    /** @var MockObject */
     private $inventoryConfigMock;
+
+    /** @var IndexScopeResolverInterface|MockObject */
+    private $indexScopeResolverMock;
+
+    /** @var Dimension|MockObject */
+    private $dimensionMock;
+
+    /** @var DimensionFactory|MockObject */
+    private $dimensionFactoryMock;
+
+    /** @var StoreManagerInterface|MockObject */
+    private $storeManagerMock;
 
     protected function setUp(): void
     {

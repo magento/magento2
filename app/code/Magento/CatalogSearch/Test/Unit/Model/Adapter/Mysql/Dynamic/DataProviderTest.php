@@ -31,45 +31,38 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
-    /**
-     * @var DataProvider
-     */
+    /**@var DataProvider */
     private $model;
 
-    /**
-     * @var Session|MockObject
-     */
+    /**@var Session|MockObject */
     private $sessionMock;
 
-    /**
-     * @var ResourceConnection|MockObject
-     */
+    /**@var ResourceConnection|MockObject */
     private $resourceConnectionMock;
 
-    /**
-     * @var Range|MockObject
-     */
+    /**@var Range|MockObject */
     private $rangeMock;
 
-    /**
-     * @var MockObject
-     */
+    /**@var MockObject */
     private $adapterMock;
 
-    /**
-     * @var DataProviderInterface|MockObject
-     */
+    /**@var DataProviderInterface|MockObject */
     private $mysqlDataProviderMock;
 
-    /**
-     * @var IntervalFactory|MockObject
-     */
+    /**@var IntervalFactory|MockObject */
     private $intervalFactoryMock;
 
-    /**
-     * @var StoreManager|MockObject
-     */
+    /**@var StoreManager|MockObject */
     private $storeManagerMock;
+
+    /**@var IndexScopeResolverInterface|MockObject */
+    private $indexScopeResolverMock;
+
+    /**@var Dimension|MockObject */
+    private $dimensionMock;
+
+    /**@var DimensionFactory|MockObject */
+    private $dimensionFactoryMock;
 
     protected function setUp(): void
     {

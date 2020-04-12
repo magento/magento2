@@ -38,56 +38,41 @@ class ExclusionStrategyTest extends TestCase
     /**
      * @var MockObject
      */
-    private $resourceConnectionMock;
-
-    /**
-     * @var MockObject
-     */
-    private $adapterMock;
-
-    /**
-     * @var MockObject
-     */
     private $storeManagerMock;
-
-    /**
-     * @var MockObject
-     */
-    private $aliasResolverMock;
 
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
-        $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
+        $resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
+        $resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->aliasResolverMock = $this->createMock(AliasResolver::class);
+        $aliasResolverMock = $this->createMock(AliasResolver::class);
 
-        $this->indexScopeResolverMock = $this->createMock(
+        $indexScopeResolverMock = $this->createMock(
             IndexScopeResolverInterface::class
         );
-        $this->tableResolverMock = $this->createMock(
+        $tableResolverMock = $this->createMock(
             IndexScopeResolver::class
         );
-        $this->dimensionMock = $this->createMock(Dimension::class);
-        $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
-        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $dimensionMock = $this->createMock(Dimension::class);
+        $dimensionFactoryMock = $this->createMock(DimensionFactory::class);
+        $dimensionFactoryMock->method('create')->willReturn($dimensionMock);
         $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
-        $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
-        $this->httpContextMock = $this->createMock(Context::class);
-        $this->httpContextMock->method('getValue')->willReturn(1);
+        $indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
+        $httpContextMock = $this->createMock(Context::class);
+        $httpContextMock->method('getValue')->willReturn(1);
 
         $this->model = new ExclusionStrategy(
-            $this->resourceConnectionMock,
+            $resourceConnectionMock,
             $this->storeManagerMock,
-            $this->aliasResolverMock,
-            $this->tableResolverMock,
-            $this->dimensionFactoryMock,
-            $this->indexScopeResolverMock,
-            $this->httpContextMock
+            $aliasResolverMock,
+            $tableResolverMock,
+            $dimensionFactoryMock,
+            $indexScopeResolverMock,
+            $httpContextMock
         );
     }
 

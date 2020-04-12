@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Category
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends TestCase
 {

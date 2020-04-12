@@ -41,7 +41,7 @@ class TermDropdownStrategyTest extends TestCase
     private $aliasResolver;
 
     /**
-     * SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectBuilder|MockObject
      */
     private $selectBuilder;
 

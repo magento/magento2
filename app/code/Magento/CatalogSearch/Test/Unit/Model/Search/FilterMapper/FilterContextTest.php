@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterContextTest extends TestCase
 {
