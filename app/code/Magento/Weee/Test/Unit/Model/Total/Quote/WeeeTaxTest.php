@@ -137,21 +137,21 @@ class WeeeTaxTest extends TestCase
         if ($isWeeeTaxable) {
             $i = 1;
             $weeeTaxDetails = [];
-            foreach ($itemWeeeTaxDetails as $itemData) {
+            foreach ($itemWeeeTaxDetails as $data) {
                 $code = 'weee' . ($i++) . '-myWeeeCode';
                 $map[$code] = $itemMock;
                 $weeeTaxDetails[] = [
                     CTC::KEY_TAX_DETAILS_TYPE => 'weee',
                     CTC::KEY_TAX_DETAILS_CODE => $code,
-                    CTC::KEY_TAX_DETAILS_PRICE_EXCL_TAX => $itemData['weee_tax_applied_amount'],
-                    CTC::KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX => $itemData['base_weee_tax_applied_amount'],
-                    CTC::KEY_TAX_DETAILS_PRICE_INCL_TAX => $itemData['weee_tax_applied_amount_incl_tax'],
-                    CTC::KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX => $itemData['base_weee_tax_applied_amount_incl_tax'],
-                    CTC::KEY_TAX_DETAILS_ROW_TOTAL => $itemData['weee_tax_applied_row_amount'],
-                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL => $itemData['base_weee_tax_applied_row_amnt'],
-                    CTC::KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX => $itemData['weee_tax_applied_row_amount_incl_tax'],
-                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX => $itemData['base_weee_tax_applied_row_amnt_incl_tax'],
-                    ];
+                    CTC::KEY_TAX_DETAILS_PRICE_EXCL_TAX => $data['weee_tax_applied_amount'],
+                    CTC::KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX => $data['base_weee_tax_applied_amount'],
+                    CTC::KEY_TAX_DETAILS_PRICE_INCL_TAX => $data['weee_tax_applied_amount_incl_tax'],
+                    CTC::KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX => $data['base_weee_tax_applied_amount_incl_tax'],
+                    CTC::KEY_TAX_DETAILS_ROW_TOTAL => $data['weee_tax_applied_row_amount'],
+                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL => $data['base_weee_tax_applied_row_amnt'],
+                    CTC::KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX => $data['weee_tax_applied_row_amount_incl_tax'],
+                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX => $data['base_weee_tax_applied_row_amnt_incl_tax'],
+                ];
             }
             $extraDetails = [
                 'weee' => [

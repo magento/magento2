@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
+use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
 use Magento\Weee\Pricing\Render\Adjustment;
 use PHPUnit\Framework\TestCase;
 
@@ -72,18 +73,11 @@ class AdjustmentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $storeConfigMock = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));
@@ -100,7 +94,7 @@ class AdjustmentTest extends TestCase
      */
     public function testGetAdjustmentCode()
     {
-        $this->assertEquals(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
+        $this->assertEquals(PricingAdjustment::ADJUSTMENT_CODE, $this->model->getAdjustmentCode());
     }
 
     /**

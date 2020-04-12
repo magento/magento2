@@ -44,7 +44,7 @@ class TaxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
@@ -67,7 +67,7 @@ class TaxTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->model = $this->objectManager->getObject(
+        $this->model = $objectManager->getObject(
             Tax::class,
             [
                 'context' => $contextMock,
