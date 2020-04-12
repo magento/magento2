@@ -38,14 +38,6 @@ class FormTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
-            ->getMockForAbstractClass();
-
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
-            ->getMockForAbstractClass();
-
         $context = $objectManagerHelper->getObject(Context::class);
 
         $this->methodMock = $this->getMockBuilder(TransparentInterface::class)
