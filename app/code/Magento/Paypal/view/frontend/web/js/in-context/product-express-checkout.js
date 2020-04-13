@@ -98,7 +98,6 @@ define([
             this._super();
             this.clientConfig.quoteId = '';
             this.clientConfig.customerId = '';
-            this.clientConfig.commit = false;
 
             return this.clientConfig;
         }

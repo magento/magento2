@@ -55,7 +55,7 @@ class SmartButtonConfig
     /**
      * Base url for Paypal SDK
      */
-    const BASE_URL = 'https://www.paypal.com/sdk/js?';
+    private const BASE_URL = 'https://www.paypal.com/sdk/js?';
 
     /**
      * @param ResolverInterface $localeResolver
@@ -95,43 +95,31 @@ class SmartButtonConfig
             ScopeInterface::SCOPE_STORE
         );
 
-        $isSandbox = (int)$this->config->getValue('sandbox_flag');
-        $clientId = $isSandbox ?
-            $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
-        $merchantId = $this->config->getValue('merchant_id');
-        $locale = $this->localeResolver->getLocale();
-        $disallowedFunding = implode(",", $this->getDisallowedFunding());
-
         return [
-            'environment' => ( $isSandbox ? 'sandbox' : 'production'),
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
-            'sdkUrl' => $this->generatePaypalSdkUrl($clientId, $merchantId, $locale, $disallowedFunding)
+            'sdkUrl' => $this->generatePaypalSdkUrl()
         ];
     }
 
     /**
      * Generate the url to download the Paypal SDK
      *
-     * @param string $clientId
-     * @param string $merchantId
-     * @param string $locale
-     * @param string $disallowedFunding
      * @return string
      */
-    private function generatePaypalSdkUrl(
-        string $clientId,
-        string $merchantId,
-        string $locale,
-        string $disallowedFunding
-    ) : string {
+    private function generatePaypalSdkUrl() : string
+    {
+        $clientId = (int)$this->config->getValue('sandbox_flag') ?
+            $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
+        $disallowedFunding = implode(",", $this->getDisallowedFunding());
+
         $params =
             [
                 'client-id' => $clientId,
                 'commit' => 'false',
-                'merchant-id' => $merchantId,
-                'locale' => $locale,
+                'merchant-id' => $this->config->getValue('merchant_id'),
+                'locale' => $this->localeResolver->getLocale(),
                 'intent' => $this->getIntent(),
             ];
         if ($disallowedFunding) {

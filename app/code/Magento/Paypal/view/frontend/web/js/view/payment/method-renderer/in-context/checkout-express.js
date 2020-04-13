@@ -75,10 +75,7 @@ define([
             this._super();
             this.clientConfig.quoteId = window.checkoutConfig.quoteData['entity_id'];
             this.clientConfig.customerId = window.customerData.id;
-            this.clientConfig.merchantId = this.merchantId;
-            this.clientConfig.clientId = this.clientId;
             this.clientConfig.button = 0;
-            this.clientConfig.commit = true;
 
             return this.clientConfig;
         },

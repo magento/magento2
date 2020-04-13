@@ -19,12 +19,12 @@ define([
             button: clientConfig.button
         };
 
-        return $.Deferred(function (defer) {
-            clientConfig.rendererComponent.beforePayment(defer.resolve, defer.reject).then(function () {
+        return $.Deferred(function (deferred) {
+            clientConfig.rendererComponent.beforePayment(deferred.resolve, deferred.reject).then(function () {
                 $.post(clientConfig.getTokenUrl, params).done(function (res) {
-                    clientConfig.rendererComponent.afterPayment(res, defer.resolve, defer.reject);
+                    clientConfig.rendererComponent.afterPayment(res, deferred.resolve, deferred.reject);
                 }).fail(function (jqXHR, textStatus, err) {
-                    clientConfig.rendererComponent.catchPayment(err, defer.resolve, defer.reject);
+                    clientConfig.rendererComponent.catchPayment(err, deferred.resolve, deferred.reject);
                 });
             });
         }).promise();
@@ -40,12 +40,12 @@ define([
             'form_key': clientConfig.formKey
         };
 
-        return $.Deferred(function (defer) {
-            clientConfig.rendererComponent.beforeOnAuthorize(defer.resolve, defer.reject, actions).then(function () {
+        return $.Deferred(function (deferred) {
+            clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions).then(function () {
                 $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
-                    clientConfig.rendererComponent.afterOnAuthorize(res, defer.resolve, defer.reject, actions);
+                    clientConfig.rendererComponent.afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
                 }).fail(function (jqXHR, textStatus, err) {
-                    clientConfig.rendererComponent.catchOnAuthorize(err, defer.resolve, defer.reject);
+                    clientConfig.rendererComponent.catchOnAuthorize(err, deferred.resolve, deferred.reject);
                 });
             });
         }).promise();

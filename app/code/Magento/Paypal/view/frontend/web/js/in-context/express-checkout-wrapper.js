@@ -184,8 +184,6 @@ define([
          * @return {Object}
          */
         prepareClientConfig: function () {
-            this.clientConfig.client = {};
-            this.clientConfig.client[this.clientConfig.environment] = this.clientConfig.merchantId;
             this.clientConfig.rendererComponent = this;
             this.clientConfig.formKey = $.mage.cookies.get('form_key');
 
