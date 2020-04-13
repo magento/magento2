@@ -30,10 +30,10 @@ class ConnectionValidator
     /**
      * Checks Elasticsearch Connection
      *
-     * @param string $searchEngine
+     * @param string|null $searchEngine if empty, uses the currently configured engine
      * @return bool true if the connection succeeded, false otherwise
      */
-    public function validate(string $searchEngine): bool
+    public function validate(string $searchEngine = null): bool
     {
         try {
             $client = $this->clientResolver->create($searchEngine);

@@ -63,7 +63,8 @@ class InstallConfig implements InstallConfigInterface
             $configKey = $this->searchConfigMapping[$inputKey];
             $this->configWriter->save(self::CATALOG_SEARCH . $configKey, $inputValue);
         }
-        if (!$this->validator->validate($inputOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
+        $searchEngine = $inputOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE] ?? null;
+        if (!$this->validator->validate($searchEngine)) {
             throw new InputException(
                 __(
                     'Connection to Elasticsearch cannot be established. '

@@ -50,12 +50,11 @@ class SearchConfig
         $searchConfigOptions = $this->extractSearchOptions($inputOptions);
         if (!empty($searchConfigOptions[SearchConfigOptionsList::INPUT_KEY_SEARCH_ENGINE])) {
             $this->validateSearchEngineSelection($searchConfigOptions);
-
-            try {
-                $this->installConfig->configure($searchConfigOptions);
-            } catch (InputException $e) {
-                throw new SetupException($e->getMessage());
-            }
+        }
+        try {
+            $this->installConfig->configure($searchConfigOptions);
+        } catch (InputException $e) {
+            throw new SetupException($e->getMessage());
         }
     }
 
