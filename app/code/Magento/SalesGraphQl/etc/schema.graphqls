@@ -27,16 +27,6 @@ type ReorderItemsOutput {
     userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of reordering errors.")
 }
 
-type CheckoutUserInputError @doc(description:"An error encountered while adding an item the the cart."){
-    message: String! @doc(description: "Localized error message")
-    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
-    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
-}
-
 enum CheckoutUserInputErrorCodes {
     REORDER_NOT_AVAILABLE
-    PRODUCT_NOT_FOUND
-    NOT_SALABLE
-    INSUFFICIENT_STOCK
-    UNDEFINED
 }
