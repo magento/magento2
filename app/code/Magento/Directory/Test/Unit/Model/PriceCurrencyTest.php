@@ -46,9 +46,6 @@ class PriceCurrencyTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-
         $objectManager = new ObjectManager($this);
         $this->priceCurrency = $objectManager->getObject(
             PriceCurrency::class,
