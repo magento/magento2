@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Form\Element;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Backend\Block\Template\Context;
 
 /**
  * Backend image gallery item renderer
@@ -29,10 +30,10 @@ class Gallery extends \Magento\Backend\Block\Template implements
     protected $_template = 'Magento_Backend::widget/form/element/gallery.phtml';
 
     /**
-     * @param Template\Context $context
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(Template\Context $context, array $data = [])
+    public function __construct(Context $context, array $data = [])
     {
         $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);

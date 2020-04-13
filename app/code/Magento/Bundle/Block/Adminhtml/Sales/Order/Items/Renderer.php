@@ -7,6 +7,8 @@ namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Adminhtml sales order item renderer
@@ -39,9 +41,8 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         array $data = [],
         Json $serializer = null
     ) {
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(Json::class);
-
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
@@ -51,7 +52,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param string $value
      * @param int $length
      * @param string $etc
-     * @param string &$remainder
+     * @param string $remainder
      * @param bool $breakWords
      * @return string
      */

@@ -23,6 +23,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Output;
 
 /**
  * Product list
@@ -88,6 +90,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Output::class);
         parent::__construct(
             $context,
             $data

@@ -17,6 +17,20 @@ use Magento\Framework\App\ObjectManager;
 class Js
 {
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
+     * @param SecureHtmlRenderer $htmlRenderer
+     */
+    public function __construct(
+        SecureHtmlRenderer $htmlRenderer
+    ) {
+        $this->secureRenderer = $htmlRenderer;
+    }
+
+    /**
      * Retrieve framed javascript
      *
      * @param   string $script
@@ -24,9 +38,8 @@ class Js
      */
     public function getScript($script)
     {
-        $secureHtmlRenderer = ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         $scriptString = '//<![CDATA[' . "\n{$script}\n" . '//]]>';
 
-        return /* @noEscape */ $secureHtmlRenderer->renderTag('script', [], $scriptString, false);
+        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 }

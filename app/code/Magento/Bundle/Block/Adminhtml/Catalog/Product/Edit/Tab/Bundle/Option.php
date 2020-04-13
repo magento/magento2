@@ -9,6 +9,8 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Block for rendering option of bundle product
@@ -70,6 +72,7 @@ class Option extends \Magento\Backend\Block\Widget
         $this->_coreRegistry = $registry;
         $this->_optionTypes = $optionTypes;
         $this->_yesno = $yesno;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 
