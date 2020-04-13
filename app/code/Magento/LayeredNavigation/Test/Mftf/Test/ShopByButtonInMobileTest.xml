@@ -18,9 +18,6 @@
             <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
             <group value="SearchEngineElasticsearch"/>
-<!--            <skip>-->
-<!--                <issueId value="MC-21228"/>-->
-<!--            </skip>-->
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
@@ -53,6 +50,8 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <!-- Check storefront mobile view for shop by button is functioning as expected -->
         <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

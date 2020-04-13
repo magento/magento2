@@ -13,6 +13,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxWithCrossBorderApplied" />
         </variation>
         <variation name="TaxWithCrossBorderTestVariation2">
+            <data name="issue" xsi:type="string">MC-20537: Fix MTF tests to work with elasticsearch</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="salesRule/dataset" xsi:type="string">cart_rule</data>
             <data name="configData" xsi:type="string">cross_border_enabled_price_incl_tax, display_excluding_including_tax</data>
