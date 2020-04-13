@@ -35,8 +35,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePurchaseOrderConfigData.path}} {{DisablePurchaseOrderConfigData.value}}" stepKey="disablePurchaseOrderPayment"/>

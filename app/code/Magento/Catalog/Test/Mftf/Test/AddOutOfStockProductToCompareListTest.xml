@@ -47,8 +47,7 @@
         <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
         <!--Clear cache and reindex-->
         <comment userInput="Clear cache and reindex" stepKey="cleanCache"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProductPage"/>
         <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPage2"/>

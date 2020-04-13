@@ -73,8 +73,7 @@
         </actionGroup>
 
         <!--Clear cache and reindex-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         <!--Verify Product in store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>

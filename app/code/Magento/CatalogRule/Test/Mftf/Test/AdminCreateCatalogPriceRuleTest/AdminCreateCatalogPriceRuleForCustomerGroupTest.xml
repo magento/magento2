@@ -47,8 +47,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
         <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory1"/>

@@ -126,8 +126,7 @@
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Reindex and flash cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <!-- Open Storefront product page and assert created configurable product -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">

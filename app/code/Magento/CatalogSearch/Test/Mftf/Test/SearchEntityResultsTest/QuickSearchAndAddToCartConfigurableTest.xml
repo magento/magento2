@@ -26,8 +26,7 @@
             </actionGroup>
 
             <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>

@@ -190,8 +190,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         <!--Assert configurable product in category-->
         <comment userInput="Assert configurable product in category" stepKey="commentAssertProductInCategoryPage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>

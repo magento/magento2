@@ -27,8 +27,7 @@
         </before>
 
         <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>

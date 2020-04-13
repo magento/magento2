@@ -164,8 +164,7 @@
             <!-- Create Customer Account -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
             <!-- Place order with options according to dataset -->
             <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">

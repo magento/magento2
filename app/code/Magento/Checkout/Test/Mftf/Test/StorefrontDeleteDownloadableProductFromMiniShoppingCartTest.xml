@@ -27,8 +27,7 @@
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createDownloadableProduct"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>

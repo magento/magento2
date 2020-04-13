@@ -30,8 +30,7 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple2"/>
             </updateData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>

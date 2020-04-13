@@ -45,8 +45,7 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <!-- Delete data -->

@@ -31,8 +31,7 @@
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="ProductWithUnicode"/>
         </actionGroup>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="ProductWithUnicode"/>

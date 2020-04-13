@@ -138,8 +138,7 @@
         <click selector="{{AdminProductFiltersSection.enable}}" stepKey="ClickOnEnable"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex2"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <!--Confirm bundle products have been enabled-->
         <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageEnabled"/>

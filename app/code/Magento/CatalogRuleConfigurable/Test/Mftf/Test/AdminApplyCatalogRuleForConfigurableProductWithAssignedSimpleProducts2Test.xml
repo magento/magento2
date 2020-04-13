@@ -190,7 +190,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">

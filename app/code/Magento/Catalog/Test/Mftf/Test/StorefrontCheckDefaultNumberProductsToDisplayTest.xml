@@ -188,8 +188,7 @@
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
 
         <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         <!-- Open storefront on the category page -->
         <comment userInput="Open storefront on the category page" stepKey="commentOpenStorefront"/>

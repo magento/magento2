@@ -102,8 +102,7 @@
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>

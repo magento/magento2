@@ -94,8 +94,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
         <!--Reindex and flush cache-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
         <!--Switch to 'Default Store View' scope and open product page-->
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreView">
             <argument name="storeViewName" value="'Default Store View'"/>

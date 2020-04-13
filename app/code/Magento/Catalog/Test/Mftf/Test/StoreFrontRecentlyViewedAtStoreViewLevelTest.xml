@@ -64,8 +64,7 @@
 
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
+            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
 
         </after>
 
