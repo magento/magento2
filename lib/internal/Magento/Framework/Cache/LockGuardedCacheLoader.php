@@ -48,22 +48,34 @@ class LockGuardedCacheLoader
     private $loadTimeout;
 
     /**
-     * LockGuardedCacheLoader constructor.
+     * Minimal delay timeout in ms.
+     * Delay will be applied as rand($minimalDelayTimeout, $delayTimeout)
+     * in order to desynchronize multiple clients trying
+     * to acquire the lock for the same resource at the same time
+     *
+     * @var int
+     */
+    private $minimalDelayTimeout;
+
+    /**
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
      * @param int $loadTimeout
+     * @param int $minimalDelayTimeout
      */
     public function __construct(
         LockManagerInterface $locker,
         int $lockTimeout = 10000,
         int $delayTimeout = 20,
-        int $loadTimeout = 10000
+        int $loadTimeout = 10000,
+        int $minimalDelayTimeout = 5
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;
         $this->delayTimeout = $delayTimeout;
         $this->loadTimeout = $loadTimeout;
+        $this->minimalDelayTimeout = $minimalDelayTimeout;
     }
 
     /**
@@ -100,7 +112,8 @@ class LockGuardedCacheLoader
             }
 
             if ($cachedData === false) {
-                usleep($this->delayTimeout * 1000);
+                $lookupTimeout = rand($this->minimalDelayTimeout, $this->delayTimeout);
+                usleep($lookupTimeout * 1000);
                 $cachedData = $dataLoader();
             }
         }
