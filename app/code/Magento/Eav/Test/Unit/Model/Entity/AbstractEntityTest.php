@@ -306,7 +306,7 @@ class AbstractEntityTest extends TestCase
                 ]
             ]
         );
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|MockObject */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])

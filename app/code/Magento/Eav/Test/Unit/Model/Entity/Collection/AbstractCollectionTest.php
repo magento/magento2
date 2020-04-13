@@ -105,7 +105,7 @@ class AbstractCollectionTest extends TestCase
         /** @var AdapterInterface|MockObject */
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->statementMock = $this->createPartialMock(Mysql::class, ['fetch']);
-        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\DB\Select|MockObject $selectMock */
         $selectMock = $this->createMock(Select::class);
         $this->coreEntityFactoryMock->expects(
             $this->any()

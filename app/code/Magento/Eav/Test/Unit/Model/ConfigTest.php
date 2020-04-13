@@ -20,6 +20,9 @@ use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends TestCase
 {
     /**
