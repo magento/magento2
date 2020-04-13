@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!-- Login Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Store View English -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>

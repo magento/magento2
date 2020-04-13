@@ -298,9 +298,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function getWebsites($withDefault = false)
     {
         $websites = [];
-        if (!$withDefault) {
-            unset($websites[0]);
-        }
         foreach ($this->_websites as $id => $code) {
             if (!$withDefault && $id == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                 continue;
@@ -331,97 +328,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create mock for custom behavior test
-     *
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getModelMockForTestImportDataWithCustomBehaviour()
-    {
-        // input data
-        $customBehaviorRows = [
-            [
-                AbstractEntity::COLUMN_ACTION => 'update',
-                Address::COLUMN_ADDRESS_ID => $this->_customBehaviour['update_id'],
-            ],
-            [
-                AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
-                Address::COLUMN_ADDRESS_ID => $this->_customBehaviour['delete_id']
-            ],
-        ];
-        $updateResult = [
-            'entity_row_new' => [],
-            'entity_row_update' => $this->_customBehaviour['update_id'],
-            'attributes' => [],
-            'defaults' => [],
-        ];
-        // entity adapter mock
-        $modelMock = $this->createPartialMock(
-            \Magento\CustomerImportExport\Model\Import\Address::class,
-            [
-                'validateRow',
-                '_prepareDataForUpdate',
-                '_saveAddressEntities',
-                '_saveAddressAttributes',
-                '_saveCustomerDefaults',
-                '_deleteAddressEntities',
-                '_mergeEntityAttributes',
-                'getErrorAggregator',
-                'getCustomerStorage',
-                'prepareCustomerData',
-            ]
-        );
-        //Adding behaviours
-        $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
-        $availableBehaviors->setAccessible(true);
-        $availableBehaviors->setValue($modelMock, $this->_availableBehaviors);
-        // mock to imitate data source model
-        $dataSourceMock = $this->createPartialMock(
-            \Magento\ImportExport\Model\ResourceModel\Import\Data::class,
-            ['getNextBunch', '__wakeup', 'getIterator']
-        );
-        $dataSourceMock->expects($this->at(0))->method('getNextBunch')->will($this->returnValue($customBehaviorRows));
-        $dataSourceMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
-        $dataSourceMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn($this->getMockForAbstractClass(\Iterator::class));
-
-        $dataSourceModel = new \ReflectionProperty(
-            \Magento\CustomerImportExport\Model\Import\Address::class,
-            '_dataSourceModel'
-        );
-        $dataSourceModel->setAccessible(true);
-        $dataSourceModel->setValue($modelMock, $dataSourceMock);
-        // mock expects for entity adapter
-        $modelMock->expects($this->any())->method('validateRow')->will($this->returnValue(true));
-        $modelMock->expects($this->any())
-            ->method('getErrorAggregator')
-            ->will($this->returnValue($this->errorAggregator));
-        $modelMock->expects($this->any())->method('_prepareDataForUpdate')->will($this->returnValue($updateResult));
-        $modelMock->expects(
-            $this->any()
-        )->method(
-            '_saveAddressEntities'
-        )->will(
-            $this->returnCallback([$this, 'validateSaveAddressEntities'])
-        );
-        $modelMock->expects($this->any())->method('_saveAddressAttributes')->will($this->returnValue($modelMock));
-        $modelMock->expects($this->any())->method('_saveCustomerDefaults')->will($this->returnValue($modelMock));
-        $modelMock->expects(
-            $this->any()
-        )->method(
-            '_deleteAddressEntities'
-        )->will(
-            $this->returnCallback([$this, 'validateDeleteAddressEntities'])
-        );
-        $modelMock->expects($this->any())->method('_mergeEntityAttributes')->will($this->returnValue([]));
-        $modelMock->expects($this->any())
-            ->method('getCustomerStorage')
-            ->willReturn($this->_createCustomerStorageMock());
-
-        return $modelMock;
-    }
-
-    /**
      * Create mock for customer address model class
      *
      * @return Address|\PHPUnit_Framework_MockObject_MockObject
@@ -449,7 +355,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             new \Magento\Framework\Stdlib\DateTime(),
             $this->createMock(\Magento\Customer\Model\Address\Validator\Postcode::class),
             $this->_getModelDependencies(),
-            $this->countryWithWebsites
+            $this->countryWithWebsites,
+            $this->createMock(\Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage::class),
+            $this->createMock(\Magento\Customer\Model\Indexer\Processor::class)
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
@@ -604,20 +512,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $attributeMapping,
             'Default address attribute mapping array must have a default shipping column.'
         );
-    }
-
-    /**
-     * Test if correct methods are invoked according to different custom behaviours
-     *
-     * @covers \Magento\CustomerImportExport\Model\Import\Address::_importData
-     */
-    public function testImportDataWithCustomBehaviour()
-    {
-        $this->_model = $this->_getModelMockForTestImportDataWithCustomBehaviour();
-        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM]);
-
-        // validation in validateSaveAddressEntities and validateDeleteAddressEntities
-        $this->_model->importData();
     }
 
     /**

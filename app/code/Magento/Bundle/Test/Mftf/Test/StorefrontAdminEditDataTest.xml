@@ -19,9 +19,10 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
@@ -103,7 +104,10 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="onPageShoppingCart1"/>
         <waitForPageLoad stepKey="waitForCartPageLoad1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalAfter"/>
-        <assertNotEquals expected="{$grabTotalBefore}" expectedType="string" actual="{$grabTotalAfter}" actualType="string"  stepKey="assertNotEquals"/>
+        <assertNotEquals stepKey="assertNotEquals">
+			<actualResult type="string">{$grabTotalAfter}</actualResult>
+			<expectedResult type="string">{$grabTotalBefore}</expectedResult>
+        </assertNotEquals>
 
         <!-- Delete the bundled product -->
         <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">

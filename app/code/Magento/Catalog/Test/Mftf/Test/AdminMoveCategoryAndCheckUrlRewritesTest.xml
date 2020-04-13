@@ -14,14 +14,17 @@
             <description value="Login as admin, move category from one to another and check category url rewrites"/>
             <testCaseId value="MC-6494"/>
             <features value="Catalog"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
                 <field key="is_active">true</field>
             </createData>
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>

@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\Paypal\Block\Express\InContext\Minicart\Button;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 
 /** @var \Magento\Paypal\Block\Express\InContext\Component $block */
 
 $configuration = [
-    'id' => Button::PAYPAL_BUTTON_ID,
+    'id' => SmartButton::PAYPAL_BUTTON_ID,
     'path' => $block->getUrl(
         'paypal/express/gettoken',
         [
@@ -21,17 +21,18 @@ $configuration = [
         'locale' => $block->getLocale(),
         'environment' => $block->getEnvironment(),
         'button' => [
-            Button::PAYPAL_BUTTON_ID,
+            SmartButton::PAYPAL_BUTTON_ID,
         ]
     ]
 ];
 
 ?>
-<div style="display: none;" id="<?= /* @noEscape */ Button::PAYPAL_BUTTON_ID ?>"></div>
+<div style="display: none;" id="<?= /* @noEscape */ SmartButton::PAYPAL_BUTTON_ID ?>"></div>
 <script type="text/x-magento-init">
     {
         "*": {
-            "Magento_Paypal/js/in-context/express-checkout": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($configuration) ?>
+            "Magento_Paypal/js/in-context/express-checkout":
+            <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($configuration) ?>
         }
     }
 </script>
