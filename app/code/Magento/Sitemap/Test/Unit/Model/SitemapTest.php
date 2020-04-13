@@ -7,6 +7,7 @@ namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
@@ -27,11 +28,12 @@ use Magento\Sitemap\Model\SitemapItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SitemapTest extends \PHPUnit\Framework\TestCase
+class SitemapTest extends TestCase
 {
     /**
      * @var Data
@@ -194,7 +196,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
      */
     public function testPathNotWritable()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Please make sure that "/" is writable by the web-server.');
         $this->directoryMock->expects($this->once())
             ->method('isExist')
@@ -208,17 +210,16 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
         $model->beforeSave();
     }
 
-    //@codingStandardsIgnoreStart
     /**
      * Check invalid chars in sitemap filename validation
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.
      * No spaces or other characters are allowed.
      */
-    //@codingStandardsIgnoreEnd
     public function testFilenameInvalidChars()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.'
+        );
         $this->directoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(true);
