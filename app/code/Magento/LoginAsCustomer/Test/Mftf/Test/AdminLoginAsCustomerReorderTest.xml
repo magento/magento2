@@ -8,14 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminLoginAsCustomerPlaceOrderTest">
+    <test name="AdminLoginAsCustomerReorderTest">
         <annotations>
             <features value="Login As Customer"/>
             <stories value="Place order and reorder"/>
-            <title value="Admin user login as customer and place order"/>
+            <title value="Admin user login as customer and reorder existing order"/>
             <description
-                value="Verify that admin user can place order using 'Login as customer' functionality"/>
-            <severity value="BLOCKER"/>
+                value="Verify that admin user can reorder using 'Login as customer' functionality"/>
+            <severity value="MAJOR"/>
             <group value="login_as_customer"/>
         </annotations>
         <before>
@@ -39,10 +39,9 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login As Customer from Customer grid page -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
-                     stepKey="loginAsCustomer">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        <!-- Login to storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
 
         <!-- Place Order as Customer -->
@@ -57,14 +56,31 @@
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
 
+        <!-- Log out from storefront as Customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
+
+        <!-- Login As Customer from Customer grid page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+                     stepKey="loginAsCustomer">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+
+        <!-- Make reorder -->
+        <actionGroup ref="StorefrontCustomerReorderActionGroup" stepKey="makeReorder">
+            <argument name="orderNumber" value="{$grabOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabReorderId"/>
+
         <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
         <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageOrderCreatedByAdmin">
-            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="orderId" value="{grabReorderId}"/>
         </actionGroup>
 
         <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
         <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageOrderCreatedByAdmin">
-            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="orderId" value="{grabReorderId}"/>
         </actionGroup>
+
     </test>
 </tests>
