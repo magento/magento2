@@ -78,7 +78,7 @@ class MediaTest extends TestCase
     private $directoryMediaMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|MockObject
      */
     private $directoryPubMock;
 
