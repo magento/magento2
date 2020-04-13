@@ -43,7 +43,7 @@ class MySQLSearchRemovalNotification implements DataPatchInterface
     /**
      * @inheritdoc
      */
-    public function apply()
+    public function apply(): DataPatchInterface
     {
         if ($this->scopeConfig->getValue('catalog/search/engine') === 'mysql') {
             $message = <<<MESSAGE
@@ -53,6 +53,7 @@ MESSAGE;
 
             $this->notifier->addNotice(__('Deprecation Notice'), __($message));
         }
+        return $this;
     }
 
     /**
