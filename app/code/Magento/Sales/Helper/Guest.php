@@ -272,9 +272,9 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         $lastName = $postData['oar_billing_lastname'];
         $zip = $postData['oar_zip'];
         $billingAddress = $order->getBillingAddress();
-        return strtolower($lastName) === strtolower($billingAddress->getLastname()) &&
-            ($type === 'email' && strtolower($email) === strtolower($billingAddress->getEmail()) ||
-                $type === 'zip' && strtolower($zip) === strtolower($billingAddress->getPostcode()));
+        return strtolower(trim($lastName)) === strtolower(trim($billingAddress->getLastname())) &&
+            ($type === 'email' && strtolower(trim($email)) === strtolower(trim($billingAddress->getEmail())) ||
+                $type === 'zip' && strtolower(trim($zip)) === strtolower(trim($billingAddress->getPostcode())));
     }
 
     /**
