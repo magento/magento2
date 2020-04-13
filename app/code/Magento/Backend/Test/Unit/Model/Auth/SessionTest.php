@@ -18,38 +18,41 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Backend\App\Config | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\Framework\Session\Config | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sessionConfig;
+    private $sessionConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Session\Storage | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var \Magento\Framework\Acl\Builder | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $aclBuilder;
+    private $aclBuilder;
 
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->cookieMetadataFactory = $this->createPartialMock(

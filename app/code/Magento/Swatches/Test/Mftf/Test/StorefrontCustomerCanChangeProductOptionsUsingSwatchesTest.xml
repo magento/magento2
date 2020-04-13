@@ -45,7 +45,7 @@
 
         <!-- Go to shopping cart and update option of configurable product -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCartPage"/>
-        <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatches" stepKey="updateConfigurableProductInTheCart">
+        <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatchesActionGroup" stepKey="updateConfigurableProductInTheCart">
             <argument name="product" value="_defaultProduct"/>
             <argument name="productOption" value="e74d3c"/>
         </actionGroup>

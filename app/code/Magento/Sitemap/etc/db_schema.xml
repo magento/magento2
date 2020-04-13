@@ -9,13 +9,13 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="sitemap" resource="default" engine="innodb" comment="XML Sitemap">
         <column xsi:type="int" name="sitemap_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Sitemap Id"/>
+                comment="Sitemap ID"/>
         <column xsi:type="varchar" name="sitemap_type" nullable="true" length="32" comment="Sitemap Type"/>
         <column xsi:type="varchar" name="sitemap_filename" nullable="true" length="32" comment="Sitemap Filename"/>
         <column xsi:type="varchar" name="sitemap_path" nullable="true" length="255" comment="Sitemap Path"/>
         <column xsi:type="timestamp" name="sitemap_time" on_update="false" nullable="true" comment="Sitemap Time"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store id"/>
+                default="0" comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="sitemap_id"/>
         </constraint>

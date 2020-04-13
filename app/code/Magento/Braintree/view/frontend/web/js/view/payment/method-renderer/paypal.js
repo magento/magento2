@@ -269,6 +269,7 @@ define([
                  */
                 onError: function () {
                     self.showError($t('Payment ' + self.getTitle() + ' can\'t be initialized'));
+                    self.reInitPayPal();
                 }
             }, self.paypalButtonSelector);
         },
@@ -336,7 +337,7 @@ define([
             }
 
             return {
-                line1: address.street[0],
+                line1: _.isUndefined(address.street) || _.isUndefined(address.street[0]) ? '' : address.street[0],
                 city: address.city,
                 state: address.regionCode,
                 postalCode: address.postcode,

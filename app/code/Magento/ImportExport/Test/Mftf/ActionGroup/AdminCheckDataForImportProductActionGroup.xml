@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCheckDataForImportProductActionGroup">
+        <arguments>
+            <argument name="behavior" type="string" defaultValue="Add/Update"/>
+            <argument name="importFile" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <waitForPageLoad stepKey="adminImportMainSectionLoad"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="{{behavior}}" stepKey="selectImportBehaviorOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="{{importFile}}" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

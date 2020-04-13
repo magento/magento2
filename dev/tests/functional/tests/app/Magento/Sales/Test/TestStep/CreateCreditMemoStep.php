@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Checkout\Test\Fixture\Cart;
@@ -100,7 +102,6 @@ class CreateCreditMemoStep implements TestStepInterface
             if ($hasChangeTotals) {
                 $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
             }
-
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
 
@@ -139,7 +140,7 @@ class CreateCreditMemoStep implements TestStepInterface
         ];
 
         foreach ($compareData as $fieldName => $fieldValue) {
-            if (isset($data['form_data'][$fieldName]) && $fieldValue != $data['form_data'][$fieldName]) {
+            if (isset($data['form_data'][$fieldName]) && $fieldValue !== $data['form_data'][$fieldName]) {
                 return true;
             }
         }

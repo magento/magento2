@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -272,7 +273,9 @@ class Shipping implements RateCollectorInterface
      */
     private function prepareCarrier(string $carrierCode, RateRequest $request): AbstractCarrier
     {
-        $carrier = $this->_carrierFactory->create($carrierCode, $request->getStoreId());
+        $carrier = $this->isShippingCarrierAvailable($carrierCode)
+            ? $this->_carrierFactory->create($carrierCode, $request->getStoreId())
+            : null;
         if (!$carrier) {
             throw new \RuntimeException('Failed to initialize carrier');
         }
@@ -360,6 +363,7 @@ class Shipping implements RateCollectorInterface
     {
         $allItems = $request->getAllItems();
         $fullItems = [];
+        $weightItems = [];
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
@@ -425,15 +429,13 @@ class Shipping implements RateCollectorInterface
 
             if (!empty($decimalItems)) {
                 foreach ($decimalItems as $decimalItem) {
-                    $fullItems = array_merge(
-                        $fullItems,
-                        array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight'])
-                    );
+                    $weightItems[] = array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight']);
                 }
             } else {
-                $fullItems = array_merge($fullItems, array_fill(0, $qty, $itemWeight));
+                $weightItems[] = array_fill(0, $qty, $itemWeight);
             }
         }
+        $fullItems = array_merge($fullItems, ...$weightItems);
         sort($fullItems);
 
         return $this->_makePieces($fullItems, $maxWeight);
@@ -531,5 +533,19 @@ class Shipping implements RateCollectorInterface
     {
         $this->_availabilityConfigField = $code;
         return $this;
+    }
+
+    /**
+     * Checks availability of carrier.
+     *
+     * @param string $carrierCode
+     * @return bool
+     */
+    private function isShippingCarrierAvailable(string $carrierCode): bool
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'carriers/' . $carrierCode . '/' . $this->_availabilityConfigField,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

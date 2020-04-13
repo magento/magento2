@@ -16,7 +16,8 @@ define([
     var defaultRendererTemplate = {
         parent: '${ $.$data.parentName }',
         name: '${ $.$data.name }',
-        component: 'Magento_Checkout/js/view/shipping-information/address-renderer/default'
+        component: 'Magento_Checkout/js/view/shipping-information/address-renderer/default',
+        provider: 'checkoutProvider'
     };
 
     return Component.extend({

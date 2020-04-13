@@ -88,7 +88,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -96,7 +96,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -104,7 +104,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -112,7 +112,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceFile()
     {
@@ -131,7 +131,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -139,7 +139,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -147,7 +147,8 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return ContextInterface
      */
     public function getContext()
@@ -156,7 +157,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {
@@ -191,20 +192,21 @@ class Image implements LocalInterface
 
     /**
      * Converting bool into a string representation
-     * @param $miscParams
+     *
+     * @param array $miscParams
      * @return array
      */
-    private function convertToReadableFormat($miscParams)
+    private function convertToReadableFormat(array $miscParams)
     {
         $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
         $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');
         $miscParams['quality'] = 'q:' . ($miscParams['quality'] ?? 'empty');
         $miscParams['angle'] = 'r:' . ($miscParams['angle'] ?? 'empty');
-        $miscParams['keep_aspect_ratio'] = (isset($miscParams['keep_aspect_ratio']) ? '' : 'non') . 'proportional';
-        $miscParams['keep_frame'] = (isset($miscParams['keep_frame']) ? '' : 'no') . 'frame';
-        $miscParams['keep_transparency'] = (isset($miscParams['keep_transparency']) ? '' : 'no') . 'transparency';
-        $miscParams['constrain_only'] = (isset($miscParams['constrain_only']) ? 'do' : 'not') . 'constrainonly';
-        $miscParams['background'] = isset($miscParams['background'])
+        $miscParams['keep_aspect_ratio'] = (!empty($miscParams['keep_aspect_ratio']) ? '' : 'non') . 'proportional';
+        $miscParams['keep_frame'] = (!empty($miscParams['keep_frame']) ? '' : 'no') . 'frame';
+        $miscParams['keep_transparency'] = (!empty($miscParams['keep_transparency']) ? '' : 'no') . 'transparency';
+        $miscParams['constrain_only'] = (!empty($miscParams['constrain_only']) ? 'do' : 'not') . 'constrainonly';
+        $miscParams['background'] = !empty($miscParams['background'])
             ? 'rgb' . implode(',', $miscParams['background'])
             : 'nobackground';
         return $miscParams;

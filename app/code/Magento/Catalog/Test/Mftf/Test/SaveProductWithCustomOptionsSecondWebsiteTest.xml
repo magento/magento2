@@ -14,12 +14,12 @@
             <stories value="Purchase a product with Custom Options of different types"/>
             <title value="You should be able to save a product with custom options assigned to a different website"/>
             <description value="Custom Options should not be split when saving the product after assigning to a different website"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-91436"/>
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create new website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="Second Website"/>
@@ -49,14 +49,14 @@
             <see userInput="You saved the store view." stepKey="seeSaveMessage" />
         </before>
         <after>
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+        <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         <!--Create a Simple Product with Custom Options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
         <waitForPageLoad stepKey="waitForCatalogProductGrid"/>

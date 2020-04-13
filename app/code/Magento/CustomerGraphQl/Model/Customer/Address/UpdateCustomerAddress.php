@@ -66,6 +66,9 @@ class UpdateCustomerAddress
      */
     public function execute(AddressInterface $address, array $data): void
     {
+        if (isset($data['country_code'])) {
+            $data['country_id'] = $data['country_code'];
+        }
         $this->validateData($data);
 
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));

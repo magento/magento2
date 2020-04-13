@@ -49,6 +49,9 @@ class ModuleConfigStatusCommandTest extends TestCase
         $this->assertEquals($expectedOutput, $tester->getDisplay());
     }
 
+    /**
+     * @return array
+     */
     public function executeDataProvider()
     {
         $successMessage = 'The modules configuration is up to date.' . PHP_EOL;

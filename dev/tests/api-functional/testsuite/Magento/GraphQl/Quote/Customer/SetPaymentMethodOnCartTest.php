@@ -234,12 +234,8 @@ QUERY;
     {
         return [
             'missed_cart_id' => [
-                'payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
+                'cart_id: "", payment_method: {code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"}',
                 'Required parameter "cart_id" is missing.'
-            ],
-            'missed_payment_method' => [
-                'cart_id: "cart_id_value"',
-                'Required parameter "code" for "payment_method" is missing.'
             ],
             'missed_payment_method_code' => [
                 'cart_id: "cart_id_value", payment_method: {code: ""}',
@@ -255,7 +251,6 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -292,7 +287,7 @@ mutation {
       payment_method: {
           code: "$methodCode"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code

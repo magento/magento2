@@ -812,7 +812,7 @@
         <column xsi:type="smallint" name="disabled" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Is Disabled"/>
         <column xsi:type="int" name="record_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Record Id"/>
+                comment="Record ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="record_id"/>
         </constraint>
@@ -1085,7 +1085,7 @@
         <column xsi:type="int" name="value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1114,7 +1114,7 @@
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_DEC_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1205,7 +1205,7 @@
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Default store id for website"/>
+                comment="Default store ID for website"/>
         <column xsi:type="date" name="website_date" comment="Website Date"/>
         <column xsi:type="float" name="rate" unsigned="false" nullable="true" default="1" comment="Rate"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -1238,7 +1238,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_cfg_opt_agr_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_cfg_opt_agr_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Config Option Aggregate Temp Table">
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
@@ -1279,7 +1279,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_cfg_opt_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_cfg_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Config Option Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1327,7 +1327,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_final_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_final_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Final Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1375,7 +1375,7 @@
             <column name="website_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_opt_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Option Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1418,7 +1418,7 @@
             <column name="option_id"/>
         </constraint>
     </table>
-    <table name="catalog_product_index_price_opt_agr_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_opt_agr_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Option Aggregate Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1452,7 +1452,7 @@
         <column xsi:type="int" name="value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1470,7 +1470,7 @@
             <column name="value"/>
         </index>
     </table>
-    <table name="catalog_product_index_eav_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_eav_tmp" resource="default" engine="innodb"
            comment="Catalog Product EAV Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1481,7 +1481,7 @@
         <column xsi:type="int" name="value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1489,13 +1489,13 @@
             <column name="value"/>
             <column name="source_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_TMP_VALUE" indexType="btree">
             <column name="value"/>
         </index>
     </table>
@@ -1510,7 +1510,7 @@
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_DEC_IDX_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1528,7 +1528,7 @@
             <column name="value"/>
         </index>
     </table>
-    <table name="catalog_product_index_eav_decimal_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_eav_decimal_tmp" resource="default" engine="innodb"
            comment="Catalog Product EAV Decimal Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1539,7 +1539,7 @@
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="CAT_PRD_IDX_EAV_DEC_TMP_ENTT_ID_ATTR_ID_STORE_ID_VAL_SOURCE_ID">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1547,13 +1547,13 @@
             <column name="value"/>
             <column name="source_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_EAV_DECIMAL_TMP_VALUE" indexType="btree">
             <column name="value"/>
         </index>
     </table>
@@ -1592,7 +1592,7 @@
             <column name="min_price"/>
         </index>
     </table>
-    <table name="catalog_product_index_price_tmp" resource="default" engine="memory"
+    <table name="catalog_product_index_price_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Temp Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
@@ -1617,17 +1617,17 @@
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="hash">
+        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="btree">
             <column name="min_price"/>
         </index>
     </table>
-    <table name="catalog_category_product_index_tmp" resource="default" engine="memory"
+    <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Category ID"/>
@@ -1646,7 +1646,7 @@
             <column name="product_id"/>
             <column name="store_id"/>
         </constraint>
-        <index referenceId="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="hash">
+        <index referenceId="CAT_CTGR_PRD_IDX_TMP_PRD_ID_CTGR_ID_STORE_ID" indexType="btree">
             <column name="product_id"/>
             <column name="category_id"/>
             <column name="store_id"/>
@@ -1681,7 +1681,7 @@
         <column xsi:type="int" name="value" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1710,7 +1710,7 @@
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false"
                 comment="Value"/>
         <column xsi:type="int" name="source_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Original entity Id for attribute value"/>
+                default="0" comment="Original entity ID for attribute value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="attribute_id"/>
@@ -1801,14 +1801,14 @@
     <table name="catalog_product_frontend_action" resource="default" engine="innodb"
            comment="Catalog Product Frontend Action Table">
         <column xsi:type="bigint" name="action_id" padding="20" unsigned="true" nullable="false" identity="true"
-                comment="Product Action Id"/>
+                comment="Product Action ID"/>
         <column xsi:type="varchar" name="type_id" nullable="false" length="64" comment="Type of product action"/>
         <column xsi:type="int" name="visitor_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Visitor Id"/>
+                comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="bigint" name="added_at" padding="20" unsigned="false" nullable="false" identity="false"
                 comment="Added At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

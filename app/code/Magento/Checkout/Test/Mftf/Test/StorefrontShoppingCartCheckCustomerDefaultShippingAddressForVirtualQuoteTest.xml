@@ -39,7 +39,7 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!-- Step 3: Go to Shopping Cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingcart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingcart"/>
         <!-- Step 4: Open Estimate Tax section -->
         <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
         <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCountry"/>

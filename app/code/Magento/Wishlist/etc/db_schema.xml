@@ -64,11 +64,11 @@
     </table>
     <table name="wishlist_item_option" resource="default" engine="innodb" comment="Wishlist Item Option Table">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Option Id"/>
+                comment="Option ID"/>
         <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Wishlist Item Id"/>
+                comment="Wishlist Item ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

@@ -30,6 +30,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default_store store/information/name Test Store
      */
     public function testGetStoreConfig()
     {
@@ -62,7 +63,8 @@ class StoreConfigResolverTest extends GraphQlAbstract
     secure_base_url,
     secure_base_link_url,
     secure_base_static_url,
-    secure_base_media_url
+    secure_base_media_url,
+    store_name
   }
 }
 QUERY;
@@ -89,5 +91,6 @@ QUERY;
             $response['storeConfig']['secure_base_static_url']
         );
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $response['storeConfig']['secure_base_media_url']);
+        $this->assertEquals('Test Store', $response['storeConfig']['store_name']);
     }
 }

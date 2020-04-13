@@ -25,17 +25,5 @@
     </actionGroup>
 
     <!-- Open the Minicart and check Configurable Product -->
-    <actionGroup name="StorefrontOpenMinicartAndCheckConfigurableProductActionGroup">
-        <annotations>
-            <description>Validates that the provided Option Price is present and correct in the Mini Shopping Cart on the Storefront.</description>
-        </annotations>
-        <arguments>
-            <argument name="product"/>
-            <argument name="optionProduct"/>
-        </arguments>
 
-        <waitForElement selector="{{StorefrontMinicartSection.productLinkByName(product.name)}}" stepKey="waitForMinicartProduct"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
-        <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontMinicartSection.productPriceByName(product.name)}}" stepKey="assertProductPrice"/>
-    </actionGroup>
 </actionGroups>

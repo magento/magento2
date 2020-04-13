@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddDefaultImageSimpleProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Storefront Fotorama arrows test"/>
+            <description value="Check arrows next to the thumbs are not visible than there is room for all pictures."/>
+            <severity value="BLOCKER"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Open Product for edit -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="findCreatedProductInGrid">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToEditProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Add images to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addThirdImageToProduct">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="productUrl" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Assert Fotorama arrows aren't visible -->
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButton"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="dontSeeNextButton"/>
+    </test>
+</tests>

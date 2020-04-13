@@ -199,7 +199,7 @@ class MassAssignGroupTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Some message.'));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Some message.');
 
         $this->massAction->execute();

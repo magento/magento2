@@ -53,7 +53,7 @@ class GiftMessage extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -73,7 +73,7 @@ class GiftMessage extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -101,24 +101,28 @@ class GiftMessage extends AbstractModifier
             'children'
         );
         $fieldPath = $this->arrayManager->findPath(static::FIELD_MESSAGE_AVAILABLE, $meta, null, 'children');
-        $groupConfig = $this->arrayManager->get($containerPath, $meta);
         $fieldConfig = $this->arrayManager->get($fieldPath, $meta);
 
-        $meta = $this->arrayManager->merge($containerPath, $meta, [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'formElement' => 'container',
-                        'componentType' => 'container',
-                        'component' => 'Magento_Ui/js/form/components/group',
-                        'label' => $groupConfig['arguments']['data']['config']['label'],
-                        'breakLine' => false,
-                        'sortOrder' => $fieldConfig['arguments']['data']['config']['sortOrder'],
-                        'dataScope' => '',
+        $meta = $this->arrayManager->merge(
+            $containerPath,
+            $meta,
+            [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'formElement' => 'container',
+                            'componentType' => 'container',
+                            'component' => 'Magento_Ui/js/form/components/group',
+                            'label' => false,
+                            'required' => false,
+                            'breakLine' => false,
+                            'sortOrder' => $fieldConfig['arguments']['data']['config']['sortOrder'],
+                            'dataScope' => '',
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
         $meta = $this->arrayManager->merge(
             $containerPath,
             $meta,

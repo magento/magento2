@@ -40,15 +40,6 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @inheritDoc
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        //$this->session->unsCustomerGroupData();
-    }
-
-    /**
      * Test new group form.
      */
     public function testNewActionNoCustomerGroupDataInSession()
@@ -199,7 +190,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/customer/group/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(['"code" is required. Enter and try again.']),
+            $this->equalTo([htmlspecialchars('"code" is required. Enter and try again.')]),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -292,7 +283,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/customer/group/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(['"code" is required. Enter and try again.']),
+            $this->equalTo([htmlspecialchars('"code" is required. Enter and try again.')]),
             MessageInterface::TYPE_ERROR
         );
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);

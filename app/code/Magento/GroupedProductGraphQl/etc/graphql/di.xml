@@ -29,4 +29,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="grouped" xsi:type="object">Magento\GroupedProductGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

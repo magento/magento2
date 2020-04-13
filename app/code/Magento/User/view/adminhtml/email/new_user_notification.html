@@ -6,7 +6,13 @@
 -->
 <!--@subject {{trans "New admin user '%user_name' created" user_name=$user.name}} @-->
 <!--@vars {
-"var store.getFrontendName()|escape":"Store Name"
+"var store.frontend_name":"Store Name",
+"var user.name":"User Name",
+"var user.first_name":"User First Name",
+"var user.last_name":"User Last Name",
+"var user.email":"User Email",
+"var store_email":"Store Email",
+"var store_phone":"Store Phone"
 } @-->
 
 {{trans "Hello,"}}
@@ -15,4 +21,4 @@
 {{trans "If you have not authorized this action, please contact us immediately at %store_email" store_email=$store_email |escape}}{{depend store_phone}} {{trans "or call us at %store_phone" store_phone=$store_phone |escape}}{{/depend}}.
 
 {{trans "Thanks,"}}
-{{var store.getFrontendName()}}
+{{var store.frontend_name}}

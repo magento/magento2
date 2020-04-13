@@ -12,7 +12,7 @@
         <strategy>css selector</strategy>
         <fields>
             <is_active>
-                <input>select</input>
+                <input>switcher</input>
             </is_active>
             <website_ids>
                 <selector>[name='website_ids']</selector>

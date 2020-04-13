@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -45,10 +46,12 @@ class IsSubscribed implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var Customer $customer */
+        /** @var CustomerInterface $customer */
         $customer = $value['model'];
+        $customerId = (int)$customer->getId();
+        $websiteId = (int)$customer->getWebsiteId();
+        $status = $this->subscriberFactory->create()->loadByCustomer($customerId, $websiteId)->isSubscribed();
 
-        $status = $this->subscriberFactory->create()->loadByCustomerId((int)$customer->getId())->isSubscribed();
         return (bool)$status;
     }
 }

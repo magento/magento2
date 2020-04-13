@@ -7,12 +7,15 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Save
+ * Class used for saving mass updated products attributes.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute implements HttpPostActionInterface
@@ -48,6 +51,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $bulkSize;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $timezone;
+
+    /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -56,6 +69,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
      * @param int $bulkSize
+     * @param TimezoneInterface $timezone
+     * @param Config $eavConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,
@@ -65,7 +81,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Framework\DataObject\IdentityGeneratorInterface $identityService,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Authorization\Model\UserContextInterface $userContext,
-        int $bulkSize = 100
+        int $bulkSize = 100,
+        TimezoneInterface $timezone = null,
+        Config $eavConfig = null
     ) {
         parent::__construct($context, $attributeHelper);
         $this->bulkManagement = $bulkManagement;
@@ -74,6 +92,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->serializer = $serializer;
         $this->userContext = $userContext;
         $this->bulkSize = $bulkSize;
+        $this->timezone = $timezone ?: ObjectManager::getInstance()
+            ->get(TimezoneInterface::class);
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
+            ->get(Config::class);
     }
 
     /**
@@ -122,11 +144,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private function sanitizeProductAttributes($attributesData)
     {
-        $dateFormat = $this->_objectManager->get(TimezoneInterface::class)->getDateFormat(\IntlDateFormatter::SHORT);
-        $config = $this->_objectManager->get(\Magento\Eav\Model\Config::class);
+        $dateFormat = $this->timezone->getDateFormat(\IntlDateFormatter::SHORT);
 
         foreach ($attributesData as $attributeCode => $value) {
-            $attribute = $config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+            if ($attributeCode === ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                continue;
+            }
+
+            $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
             if (!$attribute->getAttributeId()) {
                 unset($attributesData[$attributeCode]);
                 continue;

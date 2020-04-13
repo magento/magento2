@@ -11,7 +11,7 @@
         <column xsi:type="int" name="bookmark_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Bookmark identifier"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="User Id"/>
+                comment="User ID"/>
         <column xsi:type="varchar" name="namespace" nullable="false" length="255" comment="Bookmark namespace"/>
         <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Bookmark Identifier"/>
         <column xsi:type="smallint" name="current" padding="6" unsigned="false" nullable="false" identity="false"

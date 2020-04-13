@@ -29,6 +29,11 @@ class Escaper
     private $logger;
 
     /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    private $translateInline;
+
+    /**
      * @var string[]
      */
     private $notAllowedTags = ['script', 'img', 'embed', 'iframe', 'video', 'source', 'object', 'audio'];
@@ -80,7 +85,7 @@ class Escaper
                 set_error_handler(
                     function ($errorNumber, $errorString) {
                         // phpcs:ignore Magento2.Exceptions.DirectThrow
-                        throw new \Exception($errorString, $errorNumber);
+                        throw new \InvalidArgumentException($errorString, $errorNumber);
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
@@ -95,6 +100,7 @@ class Escaper
                 }
                 restore_error_handler();
 
+                $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);
                 $this->removeNotAllowedAttributes($domDocument);
                 $this->escapeText($domDocument);
@@ -141,7 +147,7 @@ class Escaper
             . '\']'
         );
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
+            if ($node->nodeName != '#text') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
@@ -161,6 +167,21 @@ class Escaper
         );
         foreach ($nodes as $node) {
             $node->parentNode->removeAttribute($node->nodeName);
+        }
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function removeComments(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
+        $nodes = $xpath->query('//comment()');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
         }
     }
 
@@ -289,9 +310,9 @@ class Escaper
     }
 
     /**
-     * Escape quotes in java script
+     * Escape single quotes/apostrophes ('), or other specified $quote character in javascript
      *
-     * @param string|array $data
+     * @param string|string[]|array $data
      * @param string $quote
      * @return string|array
      * @deprecated 100.2.0
@@ -318,8 +339,11 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
+        $data = html_entity_decode((string)$data);
+        $this->getTranslateInline()->processResponseBody($data);
+
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers(html_entity_decode((string)$data)),
+            $this->escapeScriptIdentifiers($data),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
@@ -420,5 +444,20 @@ class Escaper
         }
 
         return $allowedTags;
+    }
+
+    /**
+     * Resolve inline translator.
+     *
+     * @return \Magento\Framework\Translate\InlineInterface
+     */
+    private function getTranslateInline()
+    {
+        if ($this->translateInline === null) {
+            $this->translateInline = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Translate\InlineInterface::class);
+        }
+
+        return $this->translateInline;
     }
 }

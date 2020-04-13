@@ -39,14 +39,14 @@
         </actionGroup>
 
         <!-- Add simple product to cart and go to checkout-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
         <!-- Click "+ New Address" and Fill new address-->
         <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addAddress"/>
-        <actionGroup ref="LoggedInCheckoutWithOneAddressFieldWithoutStateField" stepKey="changeAddress">
+        <actionGroup ref="LoggedInCheckoutWithOneAddressFieldWithoutStateFieldActionGroup" stepKey="changeAddress">
             <argument name="Address" value="UK_Not_Default_Address"/>
             <argument name="classPrefix" value="._show"/>
         </actionGroup>

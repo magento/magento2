@@ -149,25 +149,26 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             $sampleMock->expects($this->any())->method('getId')->willReturn($sampleData['id']);
         }
         $sampleMock->expects($this->any())->method('getTitle')->will($this->returnValue($sampleData['title']));
-        $sampleMock->expects($this->any())->method('getSortOrder')->will($this->returnValue(
-            $sampleData['sort_order']
-        ));
+        $sampleMock->expects($this->any())->method('getSortOrder')->will(
+            $this->returnValue($sampleData['sort_order'])
+        );
 
         if (isset($sampleData['sample_type'])) {
-            $sampleMock->expects($this->any())->method('getSampleType')->will($this->returnValue(
-                $sampleData['sample_type']
-            ));
+            $sampleMock->expects($this->any())->method('getSampleType')->will(
+                $this->returnValue($sampleData['sample_type'])
+            );
         }
         if (isset($sampleData['sample_url'])) {
-            $sampleMock->expects($this->any())->method('getSampleUrl')->will($this->returnValue(
-                $sampleData['sample_url']
-            ));
+            $sampleMock->expects($this->any())->method('getSampleUrl')->will(
+                $this->returnValue($sampleData['sample_url'])
+            );
         }
         if (isset($sampleData['sample_file'])) {
-            $sampleMock->expects($this->any())->method('getSampleFile')->will($this->returnValue(
-                $sampleData['sample_file']
-            ));
+            $sampleMock->expects($this->any())->method('getSampleFile')->will(
+                $this->returnValue($sampleData['sample_file'])
+            );
         }
+
         return $sampleMock;
     }
 
@@ -353,6 +354,8 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             'id' => $sampleId,
             'title' => '',
             'sort_order' => 1,
+            'sample_type' => 'url',
+            'sample_url' => 'https://google.com',
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
@@ -414,10 +417,12 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
             'sort_order' => 21,
             'sample_type' => 'file',
             'sample_url' => null,
-            'sample_file' => '/r/o/rock.melody.ogg'
+            'sample_file' => '/r/o/rock.melody.ogg',
         ];
 
-        $sampleMock = $this->createPartialMock(\Magento\Downloadable\Model\Sample::class, [
+        $sampleMock = $this->createPartialMock(
+            \Magento\Downloadable\Model\Sample::class,
+            [
                 'getId',
                 'getStoreTitle',
                 'getTitle',
@@ -426,8 +431,9 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getSampleUrl',
                 'getSortOrder',
                 'getData',
-                '__wakeup'
-            ]);
+                '__wakeup',
+            ]
+        );
 
         $sampleInterfaceMock = $this->createMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
 

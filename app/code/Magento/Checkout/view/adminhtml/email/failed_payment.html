@@ -6,13 +6,13 @@
 -->
 <!--@subject {{trans "Payment Transaction Failed Reminder"}} @-->
 <!--@vars {
-"var billingAddress.format('html')|raw":"Billing Address",
+"var billingAddressHtml|raw":"Billing Address",
 "var checkoutType":"Checkout Type",
 "var customerEmail":"Customer Email",
 "var customer":"Customer Name",
 "var dateAndTime":"Date and Time of Transaction",
 "var paymentMethod":"Payment Method",
-"var shippingAddress.format('html')|raw":"Shipping Address",
+"var shippingAddressHtml|raw":"Shipping Address",
 "var shippingMethod":"Shipping Method",
 "var items|raw":"Shopping Cart Items",
 "var total":"Total",
@@ -44,11 +44,11 @@
     </li>
     <li>
         <strong>{{trans "Billing Address:"}}</strong><br />
-        {{var billingAddress.format('html')|raw}}
+        {{var billingAddressHtml|raw}}
     </li>
     <li>
         <strong>{{trans "Shipping Address:"}}</strong><br />
-        {{var shippingAddress.format('html')|raw}}
+        {{var shippingAddressHtml|raw}}
     </li>
     <li>
         <strong>{{trans "Shipping Method:"}}</strong><br />

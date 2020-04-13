@@ -10,31 +10,33 @@
  * @see \Magento\Theme\Block\Html\Pager
  */
 ?>
-<?php if ($block->getCollection()->getSize()) : ?>
+<?php if ($block->getCollection()->getSize()): ?>
 
-    <?php if ($block->getUseContainer()) : ?>
+    <?php if ($block->getUseContainer()): ?>
     <div class="pager">
     <?php endif ?>
 
-        <?php if ($block->getShowAmounts()) : ?>
+        <?php if ($block->getShowAmounts()): ?>
         <p class="toolbar-amount">
             <span class="toolbar-number">
-            <?php if ($block->getLastPageNum()>1) : ?>
-                <?= $block->escapeHtml(__('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())) ?>
-            <?php elseif ($block->getTotalNum() == 1) : ?>
+            <?php if ($block->getLastPageNum()>1): ?>
+                <?= $block->escapeHtml(
+                    __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum())
+                ) ?>
+            <?php elseif ($block->getTotalNum() == 1): ?>
                 <?= $block->escapeHtml(__('%1 Item', $block->getTotalNum())) ?>
-            <?php else : ?>
+            <?php else: ?>
                 <?= $block->escapeHtml(__('%1 Item(s)', $block->getTotalNum())) ?>
             <?php endif; ?>
             </span>
         </p>
         <?php endif ?>
 
-        <?php if ($block->getLastPageNum()>1) : ?>
+        <?php if ($block->getLastPageNum()>1): ?>
         <div class="pages">
             <strong class="label pages-label" id="paging-label"><?= $block->escapeHtml(__('Page')) ?></strong>
             <ul class="items pages-items" aria-labelledby="paging-label">
-            <?php if (!$block->isFirstPage()) : ?>
+            <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
                     <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
                     <a class="<?= $block->escapeHtmlAttr($text ? 'link ' : 'action ') ?> previous"
@@ -46,7 +48,7 @@
                 </li>
             <?php endif;?>
 
-            <?php if ($block->canShowFirst()) : ?>
+            <?php if ($block->canShowFirst()): ?>
                 <li class="item">
                     <a class="page first" href="<?= $block->escapeUrl($block->getFirstPageUrl()) ?>">
                         <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
@@ -55,7 +57,7 @@
                 </li>
             <?php endif;?>
 
-            <?php if ($block->canShowPreviousJump()) : ?>
+            <?php if ($block->canShowPreviousJump()): ?>
                 <li class="item">
                     <a class="page previous jump"
                        title=""
@@ -65,15 +67,15 @@
                 </li>
             <?php endif;?>
 
-            <?php foreach ($block->getFramePages() as $_page) : ?>
-                <?php if ($block->isPageCurrent($_page)) : ?>
+            <?php foreach ($block->getFramePages() as $_page): ?>
+                <?php if ($block->isPageCurrent($_page)): ?>
                     <li class="item current">
                         <strong class="page">
                             <span class="label"><?= $block->escapeHtml(__('You\'re currently reading page')) ?></span>
                             <span><?= $block->escapeHtml($_page) ?></span>
                         </strong>
                     </li>
-                <?php else : ?>
+                <?php else: ?>
                     <li class="item">
                         <a href="<?= $block->escapeUrl($block->getPageUrl($_page)) ?>" class="page">
                             <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
@@ -83,7 +85,7 @@
                 <?php endif;?>
             <?php endforeach;?>
 
-            <?php if ($block->canShowNextJump()) : ?>
+            <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
                     <a class="page next jump" title="" href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
                         <span>...</span>
@@ -91,7 +93,7 @@
                 </li>
             <?php endif;?>
 
-            <?php if ($block->canShowLast()) : ?>
+            <?php if ($block->canShowLast()): ?>
               <li class="item">
                   <a class="page last" href="<?= $block->escapeUrl($block->getLastPageUrl()) ?>">
                       <span class="label"><?= $block->escapeHtml(__('Page')) ?></span>
@@ -100,7 +102,7 @@
               </li>
             <?php endif;?>
 
-            <?php if (!$block->isLastPage()) : ?>
+            <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
                     <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
                     <a class="<?= /* @noEscape */ $text ? 'link ' : 'action ' ?> next"
@@ -115,13 +117,13 @@
         </div>
         <?php endif; ?>
 
-    <?php if ($block->isShowPerPage()) : ?>
+    <?php if ($block->isShowPerPage()): ?>
         <div class="limiter">
             <strong class="limiter-label"><?= $block->escapeHtml(__('Show')) ?></strong>
             <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options">
-                <?php foreach ($block->getAvailableLimit() as $_key => $_limit) : ?>
-                    <option value="<?= $block->escapeHtmlAttr($block->getLimitUrl($_key)) ?>"
-                        <?php if ($block->isLimitCurrent($_key)) : ?>
+                <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+                    <option value="<?= $block->escapeUrl($block->getLimitUrl($_key)) ?>"
+                        <?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($_limit) ?>
                     </option>
@@ -131,7 +133,7 @@
         </div>
     <?php endif ?>
 
-    <?php if ($block->getUseContainer()) : ?>
+    <?php if ($block->getUseContainer()): ?>
     </div>
     <?php endif ?>
 

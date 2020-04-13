@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Error\ClientAware;
+use Magento\Framework\Exception\AggregateExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,13 +36,20 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     public function handle(array $errors, callable $formatter): array
     {
-        return array_map(
-            function (ClientAware $error) use ($formatter) {
-                $this->logger->error($error);
-
-                return $formatter($error);
-            },
-            $errors
-        );
+        $formattedErrors = [];
+        foreach ($errors as $error) {
+            $this->logger->error($error);
+            $previousError = $error->getPrevious();
+            if ($previousError instanceof AggregateExceptionInterface && !empty($previousError->getErrors())) {
+                $aggregatedErrors = $previousError->getErrors();
+                foreach ($aggregatedErrors as $aggregatedError) {
+                    $this->logger->error($aggregatedError);
+                    $formattedErrors[] = $formatter($aggregatedError);
+                }
+            } else {
+                $formattedErrors[] = $formatter($error);
+            }
+        }
+        return $formattedErrors;
     }
 }

@@ -115,7 +115,7 @@ class TierPrice extends AbstractModifier
                             'dataType' => Price::NAME,
                             'component' => 'Magento_Ui/js/form/components/group',
                             'label' => __('Price'),
-                            'enableLabel' => true,
+                            'showLabel' => false,
                             'dataScope' => '',
                             'additionalClasses' => 'control-grouped',
                             'sortOrder' => isset($priceMeta['arguments']['data']['config']['sortOrder'])

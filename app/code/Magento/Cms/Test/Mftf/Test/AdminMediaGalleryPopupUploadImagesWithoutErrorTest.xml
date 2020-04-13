@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryPopupUploadImagesWithoutErrorTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Spinner is Always Displayed on Media Gallery popup"/>
+            <title value="Media Gallery popup upload images without error"/>
+            <description value="Media Gallery popup upload images without error"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-18962"/>
+            <useCaseId value="MC-18709"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <!--Enable WYSIWYG options-->
+            <comment userInput="Enable WYSIWYG options" stepKey="commentEnableWYSIWYG"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYGEditor"/>
+            <magentoCLI command="config:set cms/wysiwyg/editor 'TinyMCE 4'" stepKey="setValueWYSIWYGEditor"/>
+            <!--Create block-->
+            <comment userInput="Create block" stepKey="commentCreateBlock"/>
+            <createData entity="Sales25offBlock" stepKey="createBlock"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <!--Disable WYSIWYG options-->
+            <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open created block page and add image-->
+        <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$createBlock$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImage">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
+        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnSecondTime"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Switch to content frame and click on image-->
+        <comment userInput="Switch to content frame and click on image" stepKey="commentSwitchToIframe"/>
+        <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrame"/>
+        <click selector="{{BlockContentSection.image}}" stepKey="clickImage"/>
+        <switchToIFrame stepKey="switchBack"/>
+        <!--Add image second time and assert-->
+        <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
+        <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImageSecondTime">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrameSecondTime"/>
+        <seeElement selector="{{BlockContentSection.image}}" stepKey="seeImageElement"/>
+    </test>
+</tests>

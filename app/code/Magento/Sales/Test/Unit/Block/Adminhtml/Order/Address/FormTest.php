@@ -95,6 +95,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
                 '_orderCreate' => $this->orderCreate
             ]
         );
+
+        // Do not display VAT validation button on edit order address form
+        // Emulate fix done in controller
+        /** @see \Magento\Sales\Controller\Adminhtml\Order\Address::execute */
+        $this->addressBlock->setDisplayVatValidationButton(false);
     }
 
     public function testGetForm()

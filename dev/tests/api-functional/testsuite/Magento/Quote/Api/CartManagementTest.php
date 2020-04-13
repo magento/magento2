@@ -310,21 +310,20 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
      */
-    public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
+    public function testAssignCustomerCartMerged()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         // Customer has a quote with reserved order ID test_order_1 (see fixture)
         /** @var $customerQuote \Magento\Quote\Model\Quote */
         $customerQuote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
-            ->load('test_order_1', 'reserved_order_id');
-        $customerQuote->setIsActive(1)->save();
+            ->load('test_order_item_with_items', 'reserved_order_id');
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
+        $expectedQuoteItemsQty = $customerQuote->getItemsQty() + $quote->getItemsQty();
 
         $cartId = $quote->getId();
         $customerId = $customer->getId();
@@ -346,11 +345,13 @@ class CartManagementTest extends WebapiAbstract
             'customerId' => $customerId,
             'storeId' => 1,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
 
-        $this->expectExceptionMessage(
-            "The customer can't be assigned to the cart because the customer already has an active cart."
-        );
+        $mergedQuote = $this->objectManager
+            ->create(\Magento\Quote\Model\Quote::class)
+            ->load('test01', 'reserved_order_id');
+
+        $this->assertEquals($expectedQuoteItemsQty, $mergedQuote->getItemsQty());
     }
 
     /**

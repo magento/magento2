@@ -7,6 +7,7 @@ namespace Magento\Checkout\Model;
 
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\FilterBuilder;
@@ -17,7 +18,7 @@ use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class SessionTest
+ * Checkout Session model test.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -52,6 +53,35 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $this->customerSession = $this->objectManager->get(CustomerSession::class);
         $this->checkoutSession = $this->objectManager->create(Session::class);
+    }
+
+    /**
+     * Tests that quote items and totals are correct when product becomes unavailable.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetQuoteWithUnavailableProduct()
+    {
+        $reservedOrderId = 'test01';
+        $quoteGrandTotal = 10;
+
+        $quote = $this->getQuote($reservedOrderId);
+        $this->assertEquals(1, $quote->getItemsCount());
+        $this->assertCount(1, $quote->getItems());
+        $this->assertEquals($quoteGrandTotal, $quote->getShippingAddress()->getBaseGrandTotal());
+
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+        $product->setStatus(Status::STATUS_DISABLED);
+        $productRepository->save($product);
+        $this->checkoutSession->setQuoteId($quote->getId());
+        $quote = $this->checkoutSession->getQuote();
+
+        $this->assertEquals(0, $quote->getItemsCount());
+        $this->assertEmpty($quote->getItems());
+        $this->assertEquals(0, $quote->getShippingAddress()->getBaseGrandTotal());
     }
 
     /**

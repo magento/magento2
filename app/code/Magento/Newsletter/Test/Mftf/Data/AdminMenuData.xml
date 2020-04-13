@@ -19,8 +19,8 @@
         <data key="dataUiId">magento-newsletter-newsletter-subscriber</data>
     </entity>
     <entity name="AdminMenuMarketingCommunicationsNewsletterTemplate">
-        <data key="pageTitle">Newsletter Template</data>
-        <data key="title">Newsletter Template</data>
+        <data key="pageTitle">Newsletter Templates</data>
+        <data key="title">Newsletter Templates</data>
         <data key="dataUiId">magento-newsletter-newsletter-template</data>
     </entity>
     <entity name="AdminMenuReportsMarketingNewsletterProblemReports">

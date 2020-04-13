@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+
+    <section name="AdminIntegrationsGridSection">
+        <element name="add" type="button" selector=".page-actions .add"/>
+        <element name="messageByType" type="block" selector="#messages .message-{{messageType}}" parameterized="true"/>
+        <element name="name" type="input" selector=".data-grid-filters #integrationGrid_filter_name"/>
+        <element name="search" type="input" selector=".admin__filter-actions button[title=Search]"/>
+        <element name="remove" type="button" selector=".data-grid .delete"/>
+        <element name="submitButton" type="button" selector=".action-primary.action-accept" timeout="30"/>
+        <element name="rowByIndex" type="text" selector="tr[data-role='row']:nth-of-type({{var1}})" parameterized="true" timeout="30"/>
+        <element name="edit" type="button" selector=".data-grid .edit"/>
+    </section>
+</sections>

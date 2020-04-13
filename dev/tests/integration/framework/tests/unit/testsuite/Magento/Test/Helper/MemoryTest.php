@@ -21,16 +21,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     {
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
         $this->_shell->expects(
-            $this->at(0)
-        )->method(
-            'execute'
-        )->with(
-            $this->stringStartsWith('tasklist.exe ')
-        )->will(
-            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found')))
-        );
-        $this->_shell->expects(
-            $this->at(1)
+            $this->once()
         )->method(
             'execute'
         )->with(
@@ -44,7 +35,16 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     public function testGetRealMemoryUsageWin()
     {
         $this->_shell->expects(
-            $this->once()
+            $this->at(0)
+        )->method(
+            'execute'
+        )->with(
+            $this->stringStartsWith('ps ')
+        )->will(
+            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found')))
+        );
+        $this->_shell->expects(
+            $this->at(1)
         )->method(
             'execute'
         )->with(

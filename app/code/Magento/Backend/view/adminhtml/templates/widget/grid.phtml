@@ -170,6 +170,9 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
         <?php if ($block->getSortableUpdateCallback()) : ?>
                 <?= $block->escapeJs($block->getJsObjectName()) ?>.sortableUpdateCallback = <?= /* @noEscape */ $block->getSortableUpdateCallback() ?>;
         <?php endif; ?>
+        <?php if ($block->getFilterKeyPressCallback()) : ?>
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
+        <?php endif; ?>
         <?= $block->escapeJs($block->getJsObjectName()) ?>.bindSortable();
         <?php if ($block->getRowInitCallback()) : ?>
                 <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;

@@ -15,22 +15,25 @@
             <title value="Create attribute set with new product attribute"/>
             <description value="Admin should be able to create attribute set with new product attribute"/>
             <testCaseId value="MC-10884"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         </before>
         <after>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="goToAttributeSetByName" stepKey="filterProductAttributeSetGridByLabel">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
@@ -38,17 +41,17 @@
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassignedAttr"/>
 
         <!-- Assign attribute in the group -->
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
-        <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!-- Assert an attribute in the group-->
-        <actionGroup ref="goToAttributeSetByName" stepKey="filterProductAttributeSetGridByLabel2">
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel2">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup2"/>

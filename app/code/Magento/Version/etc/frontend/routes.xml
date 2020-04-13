@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
         <route id="magento_version" frontName="magento_version">
-            <module name="Magento_Version" />
+            <module name="Magento_Version"/>
         </route>
     </router>
 </config>

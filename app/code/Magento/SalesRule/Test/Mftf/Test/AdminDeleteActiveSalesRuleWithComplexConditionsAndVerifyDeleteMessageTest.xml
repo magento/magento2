@@ -16,13 +16,10 @@
             <severity value="CRITICAL"/>
             <group value="salesRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17175"/>
-            </skip>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create active cart price rule-->
             <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
@@ -60,10 +57,12 @@
             <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
                 <argument name="rule" value="ActiveSalesRuleWithComplexConditions"/>
             </actionGroup>
+            <generateDate date="+1 minute" format="m/d/Y" stepKey="generateStartDate"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$generateStartDate}" stepKey="fillStartDate"/>
             <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertVerifyCartPriceRuleSuccessSaveMessage"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete active cart price rule-->

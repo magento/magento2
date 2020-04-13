@@ -24,44 +24,20 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    /**
-     * Include app code
-     */
     const INCLUDE_APP_CODE = 1;
 
-    /**
-     * Include tests
-     */
     const INCLUDE_TESTS = 2;
 
-    /**
-     * Include dev tools
-     */
     const INCLUDE_DEV_TOOLS = 4;
 
-    /**
-     * Include templates
-     */
     const INCLUDE_TEMPLATES = 8;
 
-    /**
-     * Include lib files
-     */
     const INCLUDE_LIBS = 16;
 
-    /**
-     * Include pub code
-     */
     const INCLUDE_PUB_CODE = 32;
 
-    /**
-     * Include non classes
-     */
     const INCLUDE_NON_CLASSES = 64;
 
-    /**
-     * Include setup
-     */
     const INCLUDE_SETUP = 128;
 
     /**
@@ -395,11 +371,11 @@ class Files
             }
             $globPaths = [BP . '/app/etc/config.xml', BP . '/app/etc/*/config.xml'];
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
-            $files = [];
+            $files = [[]];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
+                $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = $files;
+            self::$_cache[$cacheKey] = array_merge(...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -679,6 +655,7 @@ class Files
                         }
                     }
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($files, $moduleFiles);
                 }
             }
@@ -713,8 +690,10 @@ class Files
                 );
 
                 if ($params['with_metainfo']) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($files, $themeFiles);
                 }
             }
@@ -925,14 +904,12 @@ class Files
         $area = '*';
         $locale = '*';
         $result = [];
-        $moduleWebPath = [];
         $moduleLocalePath = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $moduleWebPath[] = $moduleDir . "/view/{$area}/web";
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
 
-        $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
+        $this->accumulateStaticFiles($area, $filePattern, $result);
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
         $this->accumulateThemeStaticFiles($area, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
@@ -1043,6 +1020,8 @@ class Files
     /**
      * Parse meta-info of a static file in module
      *
+     * @deprecated Replaced with method accumulateStaticFiles()
+     *
      * @param string $file
      * @return array
      */
@@ -1060,6 +1039,29 @@ class Files
             }
         }
         return [];
+    }
+
+    /**
+     * Search static files from all modules by the specified pattern and accumulate meta-info
+     *
+     * @param string $area
+     * @param string $filePattern
+     * @param array $result
+     * @return void
+     */
+    private function accumulateStaticFiles($area, $filePattern, array &$result)
+    {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $moduleWebPath = $moduleDir . "/view/{$area}/web";
+
+            foreach (self::getFiles([$moduleWebPath], $filePattern) as $absolutePath) {
+                $localPath = substr($absolutePath, strlen($moduleDir) + 1);
+                if (preg_match('/^view\/([a-z]+)\/web\/(.+)$/i', $localPath, $matches) === 1) {
+                    list(, $parsedArea, $parsedPath) = $matches;
+                    $result[] = [$parsedArea, '', '', $moduleName, $parsedPath, $absolutePath];
+                }
+            }
+        }
     }
 
     /**

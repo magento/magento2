@@ -53,11 +53,11 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->deploymentConfig->expects($this->once())
+        $this->deploymentConfig->expects($this->any())
             ->method('get')
             ->with('db')
             ->willReturn(true);
-        $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($this->connection);
+        $this->resourceConnection->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
         $selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
         $selectMock->expects($this->any())->method('from')->willReturnSelf();

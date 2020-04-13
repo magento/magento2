@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
@@ -118,13 +118,15 @@ class UrlRewriteHandler
         $this->productCollectionFactory = $productCollectionFactory;
         $this->categoryBasedProductRewriteGenerator = $categoryBasedProductRewriteGenerator;
 
-        $objectManager = ObjectManager::getInstance();
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: $objectManager->get(MergeDataProviderFactory::class);
+        $mergeDataProviderFactory = $mergeDataProviderFactory
+            ?? ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
-        $this->serializer = $serializer ?: $objectManager->get(Json::class);
+        $this->serializer = $serializer
+            ?? ObjectManager::getInstance()->get(Json::class);
         $this->productScopeRewriteGenerator = $productScopeRewriteGenerator
-            ?: $objectManager->get(ProductScopeRewriteGenerator::class);
-        $this->scopeConfig = $scopeConfig ?? $objectManager->get(ScopeConfigInterface::class);
+            ?? ObjectManager::getInstance()->get(ProductScopeRewriteGenerator::class);
+        $this->scopeConfig = $scopeConfig
+            ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -207,18 +209,14 @@ class UrlRewriteHandler
         foreach ($categoryIds as $categoryId) {
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::ENTITY_ID =>
-                        $categoryId,
-                    UrlRewrite::ENTITY_TYPE =>
-                        CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::ENTITY_ID => $categoryId,
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::METADATA =>
-                        $this->serializer->serialize(['category_id' => $categoryId]),
-                    UrlRewrite::ENTITY_TYPE =>
-                        ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
         }
@@ -252,7 +250,7 @@ class UrlRewriteHandler
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
 
-        foreach ($productCollection as $product) {
+        foreach ($this->getProducts($productCollection) as $product) {
             if (isset($this->isSkippedProduct[$category->getEntityId()]) &&
                 in_array($product->getId(), $this->isSkippedProduct[$category->getEntityId()])
             ) {
@@ -268,6 +266,27 @@ class UrlRewriteHandler
         }
 
         return $mergeDataProvider->getData();
+    }
+
+    /**
+     * Get products from provided collection
+     *
+     * @param Collection $collection
+     * @return \Generator|Product[]
+     */
+    private function getProducts(Collection $collection): \Generator
+    {
+        $collection->setPageSize(1000);
+        $pageCount = $collection->getLastPageNumber();
+        $currentPage = 1;
+        while ($currentPage <= $pageCount) {
+            $collection->setCurPage($currentPage);
+            foreach ($collection as $key => $product) {
+                yield $key => $product;
+            }
+            $collection->clear();
+            $currentPage++;
+        }
     }
 
     /**

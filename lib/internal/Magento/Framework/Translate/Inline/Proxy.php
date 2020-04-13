@@ -55,7 +55,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
     }
 
     /**
-     * Sleep magic method.
+     * Remove links to other objects.
      *
      * @return array
      */

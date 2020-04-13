@@ -23,7 +23,7 @@
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="{{product.description}}" stepKey="fillFieldDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitVisibleSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitVisibleSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

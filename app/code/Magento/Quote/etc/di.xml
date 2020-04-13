@@ -18,7 +18,7 @@
     <preference for="Magento\Quote\Api\Data\CartInterface" type="Magento\Quote\Model\Quote" />
     <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
     <preference for="Magento\Quote\Api\CartRepositoryInterface" type="Magento\Quote\Model\QuoteRepository" />
-    <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Quote\Model\CartSearchResults" />
     <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="Magento\Quote\Model\PaymentMethodManagement" />
     <preference for="Magento\Quote\Api\Data\PaymentInterface" type="Magento\Quote\Model\Quote\Payment" />
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />

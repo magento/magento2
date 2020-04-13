@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Rendering popup email template.
  */
-class Popup extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Popup extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

@@ -6,6 +6,8 @@
 namespace Magento\Rule\Model\Condition;
 
 /**
+ * Combine
+ *
  * @api
  * @since 100.0.2
  */
@@ -22,6 +24,8 @@ class Combine extends AbstractCondition
     protected $_logger;
 
     /**
+     * Construct
+     *
      * @param Context $context
      * @param array $data
      */
@@ -54,6 +58,8 @@ class Combine extends AbstractCondition
     /* start aggregator methods */
 
     /**
+     * Load aggregation options
+     *
      * @return $this
      */
     public function loadAggregatorOptions()
@@ -63,6 +69,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return agregator selected options
+     *
      * @return array
      */
     public function getAggregatorSelectOptions()
@@ -75,6 +83,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Get Agregator name
+     *
      * @return string
      */
     public function getAggregatorName()
@@ -83,6 +93,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return agregator element
+     *
      * @return object
      */
     public function getAggregatorElement()
@@ -112,6 +124,8 @@ class Combine extends AbstractCondition
     /* end aggregator methods */
 
     /**
+     * Load value options
+     *
      * @return $this
      */
     public function loadValueOptions()
@@ -121,6 +135,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Adds condition
+     *
      * @param object $condition
      * @return $this
      */
@@ -134,7 +150,7 @@ class Combine extends AbstractCondition
         $conditions[] = $condition;
 
         if (!$condition->getId()) {
-            $condition->setId($this->getId() . '--' . sizeof($conditions));
+            $condition->setId($this->getId() . '--' . count($conditions));
         }
 
         $this->setData($this->getPrefix(), $conditions);
@@ -142,6 +158,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Return value element type
+     *
      * @return string
      */
     public function getValueElementType()
@@ -181,6 +199,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As xml
+     *
      * @param string $containerKey
      * @param string $itemKey
      * @return string
@@ -202,6 +222,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Load array
+     *
      * @param array $arr
      * @param string $key
      * @return $this
@@ -230,6 +252,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Load xml
+     *
      * @param array|string $xml
      * @return $this
      */
@@ -247,6 +271,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As html
+     *
      * @return string
      */
     public function asHtml()
@@ -263,6 +289,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Get new child element
+     *
      * @return $this
      */
     public function getNewChildElement()
@@ -282,6 +310,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As html recursive
+     *
      * @return string
      */
     public function asHtmlRecursive()
@@ -300,6 +330,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As string
+     *
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -311,6 +343,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * As string recursive
+     *
      * @param int $level
      * @return string
      */
@@ -324,6 +358,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Validate
+     *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
@@ -374,6 +410,8 @@ class Combine extends AbstractCondition
     }
 
     /**
+     * Set js From object
+     *
      * @param \Magento\Framework\Data\Form $form
      * @return $this
      */

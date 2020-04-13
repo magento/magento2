@@ -9,7 +9,6 @@ namespace Magento\GraphQl\Tax;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
@@ -38,6 +37,12 @@ class ProductViewTest extends GraphQlAbstract
     /** @var \Magento\Tax\Model\Calculation\Rule[] */
     private $fixtureTaxRules;
 
+    /** @var string */
+    private $defaultRegionSystemSetting;
+
+    /** @var string */
+    private $defaultPriceDisplayType;
+
     /**
      * @var StoreManagerInterface
      */
@@ -52,19 +57,26 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+
+        $this->defaultRegionSystemSetting = $scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_DEFAULT_REGION
+        );
+
+        $this->defaultPriceDisplayType = $scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE
+        );
+
         //default state tax calculation AL
         $config->saveConfig(
             Config::CONFIG_XML_PATH_DEFAULT_REGION,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             1
         );
 
         $config->saveConfig(
             Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            3,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            3
         );
         $this->getFixtureTaxRates();
         $this->getFixtureTaxRules();
@@ -72,6 +84,9 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->reinit();
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
     }
 
     public function tearDown()
@@ -82,16 +97,12 @@ class ProductViewTest extends GraphQlAbstract
         //default state tax calculation AL
         $config->saveConfig(
             Config::CONFIG_XML_PATH_DEFAULT_REGION,
-            null,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            $this->defaultRegionSystemSetting
         );
 
         $config->saveConfig(
             Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            $this->defaultPriceDisplayType
         );
         $taxRules = $this->getFixtureTaxRules();
         if (count($taxRules)) {
@@ -107,6 +118,10 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->reinit();
+
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
     }
 
     /**
@@ -192,11 +207,6 @@ QUERY;
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -253,7 +263,23 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
+        $pricesTypes = [
+            'minimalPrice',
+            'regularPrice',
+            'maximalPrice',
+        ];
+        foreach ($pricesTypes as $priceType) {
+            if (isset($actualResponse['price'][$priceType]['amount']['value'])) {
+                $actualResponse['price'][$priceType]['amount']['value'] =
+                    round($actualResponse['price'][$priceType]['amount']['value'], 4);
+            }
+
+            if (isset($actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'])) {
+                $actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'] =
+                    round($actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'], 4);
+            }
+        }
+        // product_object_field_name, expected_value
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -263,7 +289,7 @@ QUERY;
                 [
                     'minimalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -271,7 +297,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.286501,
+                                            'value' => 0.2865,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',
@@ -281,7 +307,7 @@ QUERY;
                     ],
                     'regularPrice' => [
                         'amount' => [
-                            'value' => 10.750001,
+                            'value' => 10.7500,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -289,7 +315,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.750001,
+                                            'value' => 0.7500,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',
@@ -299,7 +325,7 @@ QUERY;
                     ],
                     'maximalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -307,7 +333,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.286501,
+                                            'value' => 0.2865,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',

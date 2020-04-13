@@ -30,4 +30,14 @@ class AbstractCollectionStub extends \Magento\Eav\Model\Entity\Collection\Abstra
     {
         return $this->_init(\Magento\Framework\DataObject::class, 'test_entity_model');
     }
+
+    /**
+     * Retrieve collection empty item
+     *
+     * @return \Magento\Framework\DataObject
+     */
+    public function getNewEmptyItem()
+    {
+        return new \Magento\Framework\DataObject();
+    }
 }
