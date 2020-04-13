@@ -29,15 +29,6 @@ class SearchConfigOptionsList
     const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
 
     /**
-     * Default values
-     */
-    const DEFAULT_SEARCH_ENGINE = 'elasticsearch7';
-    const DEFAULT_ELASTICSEARCH_HOST = 'localhost';
-    const DEFAULT_ELASTICSEARCH_PORT = '9200';
-    const DEFAULT_ELASTICSEARCH_INDEX_PREFIX = 'magento2';
-    const DEFAULT_ELASTICSEARCH_TIMEOUT = 15;
-
-    /**
      * Get options list for search engine configuration
      *
      * @return AbstractConfigOption[]

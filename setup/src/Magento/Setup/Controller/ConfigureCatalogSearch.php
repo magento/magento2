@@ -23,6 +23,22 @@ class ConfigureCatalogSearch extends AbstractActionController
     private $searchConfigOptionsList;
 
     /**
+     * Default values to prefill form
+     *
+     * @var array
+     */
+    private $prefillConfigValues = [
+        'engine' => 'elasticsearch7',
+        'elasticsearch' => [
+            'hostname' => 'localhost',
+            'port' => '9200',
+            'timeout' => '15',
+            'indexPrefix' => 'magento2',
+            'enableAuth' => false
+        ]
+    ];
+
+    /**
      * @param SearchConfigOptionsList $searchConfigOptionsList
      */
     public function __construct(SearchConfigOptionsList $searchConfigOptionsList)
@@ -51,17 +67,6 @@ class ConfigureCatalogSearch extends AbstractActionController
      */
     public function defaultParametersAction(): JsonModel
     {
-        $defaults = [
-            'engine' => SearchConfigOptionsList::DEFAULT_SEARCH_ENGINE,
-            'elasticsearch' => [
-                'hostname' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_HOST,
-                'port' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_PORT,
-                'timeout' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_TIMEOUT,
-                'indexPrefix' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_INDEX_PREFIX,
-                'enableAuth' => false
-            ]
-        ];
-
-        return new JsonModel($defaults);
+        return new JsonModel($this->prefillConfigValues);
     }
 }
