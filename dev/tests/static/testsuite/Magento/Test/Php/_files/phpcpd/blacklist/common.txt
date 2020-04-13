@@ -218,3 +218,4 @@ Magento/InventoryAdminUi/Controller/Adminhtml
 Magento/Newsletter/Model/Queue
 Magento/Framework/Mail/Template
 Magento/CheckoutAgreements/Model/Checkout/Plugin
+Magento/Developer/Test/Unit/Console/Command/DevTestsRunCommandTest.php
