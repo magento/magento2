@@ -17,22 +17,22 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $path;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeType;
 
     /**
-     * @var null|string|\PHPUnit_Framework_MockObject_MockObject
+     * @var null|string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCode;
 
@@ -42,9 +42,14 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $engines = [];
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
+
+    /**
+     * @var string
+     */
+    private $defaultEngine = 'defaultentengine';
 
     /**
      * Setup
@@ -70,7 +75,8 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
             $this->loggerMock,
             $this->path,
             $this->scopeType,
-            $this->scopeCode
+            $this->scopeCode,
+            $this->defaultEngine
         );
     }
 
@@ -93,38 +99,48 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrentSearchEngineDefaultEngine()
     {
-        $engine = 'nonexistentengine';
-        $defaultEngine = 'defaultentengine';
+        $configEngine = 'nonexistentengine';
 
-        $this->scopeConfig->expects($this->at(0))
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturn($engine);
-
-        $this->scopeConfig->expects($this->at(1))
-            ->method('getValue')
-            ->willReturn($defaultEngine);
+            ->willReturn($configEngine);
 
         $this->loggerMock->expects($this->any())
             ->method('error')
             ->with(
-                "{$engine} search engine doesn't exist. Falling back to {$defaultEngine}"
+                "{$configEngine} search engine doesn't exist. Falling back to {$this->defaultEngine}"
             );
 
-        $this->assertEquals($defaultEngine, $this->model->getCurrentSearchEngine());
+        $this->assertEquals($this->defaultEngine, $this->model->getCurrentSearchEngine());
     }
 
     /**
      * Test getCurrentSearchEngine
-     * @expectedException \Exception
      */
-    public function testGetCurrentSearchEngineWithoutEngine()
+    public function testGetCurrentSearchEngineDefaultEngineNonExistent()
     {
-        $engine = null;
+        $configEngine = 'nonexistentengine';
+        $this->defaultEngine = 'nonexistenddefaultengine';
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturn($engine);
+            ->willReturn($configEngine);
 
-        $this->model->getCurrentSearchEngine();
+        $this->loggerMock->expects($this->any())
+            ->method('error')
+            ->with(
+                'Default search engine is not configured, fallback is not possible'
+            );
+
+        $model = new EngineResolver(
+            $this->scopeConfig,
+            $this->engines,
+            $this->loggerMock,
+            $this->path,
+            $this->scopeType,
+            $this->scopeCode,
+            $this->defaultEngine
+        );
+        $this->assertEquals($this->defaultEngine, $model->getCurrentSearchEngine());
     }
 }

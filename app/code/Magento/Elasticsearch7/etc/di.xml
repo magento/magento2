@@ -85,6 +85,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="string">elasticsearch7</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch7</argument>
         </arguments>
     </type>
 

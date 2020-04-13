@@ -35,7 +35,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create product widget -->
             <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
@@ -51,7 +51,7 @@
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reset Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = Website-->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeWebsite.path}} {{RecentlyViewedProductScopeWebsite.value}}" stepKey="RecentlyViewedProductScopeWebsite"/>
             <!-- Delete Products and Category -->
@@ -66,7 +66,7 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessage"/>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterAddedProductToCart"/>
         <!--Add to compare Simple Product and Simple Product 2-->
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSimpleProduct1ToCompare" >

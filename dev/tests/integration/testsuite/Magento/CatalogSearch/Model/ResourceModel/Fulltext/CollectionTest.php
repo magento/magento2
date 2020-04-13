@@ -13,7 +13,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
-        $this->markTestSkipped("MC-18948: Mysql Search Engine is deprecated");
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
     }
 
     /**

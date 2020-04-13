@@ -30,38 +30,45 @@
                 <field key="name">Product Simple AAA</field>
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+            <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
+            <magentoCLI stepKey="flushConfigCache" command="cache:flush config"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
 
         <after>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPageDefaults"/>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchSimpleProduct">
             <argument name="phrase" value="AAA"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogSearchPage">
-            <argument name="product" value="$createFirstProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstProductOnCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertSecondProductIsMissingOnCatalogSearchPage">
             <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickNextPageCatalogSearchPager"/>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSecondProductOnCatalogSearchPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="assertFirstProductIsMissingOnCatalogSearchPage">
             <argument name="productName" value="$createFirstProduct.name$"/>
         </actionGroup>
         <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="2" stepKey="selectDisplayedProductInGridPerPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createFirstProduct$"/>
+
+        <dontSeeInCurrentUrl stepKey="assertRedirectedToFirstPage" url="?p=2"/>
+
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertFirstProductDisplayedOnCatalogSearchPage">
+            <argument name="productName" value="$createFirstProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
-            <argument name="product" value="$createSecondProduct$"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSecondProductDisplayedOnCatalogSearchPage">
+            <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
     </test>
 </tests>
