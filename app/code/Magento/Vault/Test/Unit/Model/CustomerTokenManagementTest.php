@@ -9,7 +9,7 @@ use Magento\Customer\Model\Session;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentTokenManagement;
-use  PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTokenManagementTest extends TestCase
