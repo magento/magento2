@@ -144,10 +144,6 @@ class ReturnUrlTest extends TestCase
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
-        $quote = $this->getMockBuilder(CartInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
