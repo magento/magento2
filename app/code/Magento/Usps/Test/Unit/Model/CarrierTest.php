@@ -308,7 +308,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getXmlFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getXmlFactory(): MockObject
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
@@ -332,7 +332,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getRateFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getRateFactory(): MockObject
     {
         $rateFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -351,7 +351,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getRateMethodFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getRateMethodFactory(): MockObject
     {
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
@@ -372,7 +372,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getHttpClientFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getHttpClientFactory(): MockObject
     {
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
             ->disableOriginalConstructor()
@@ -394,7 +394,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getProductCollectionFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getProductCollectionFactory(): MockObject
     {
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
