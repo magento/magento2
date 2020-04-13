@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 class PreprocessorTest extends TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var AliasResolver|MockObject
      */
     private $aliasResolver;
 
@@ -93,7 +93,7 @@ class PreprocessorTest extends TestCase
     private $metadataPoolMock;
 
     /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $customerSessionMock;
 
