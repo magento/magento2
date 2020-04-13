@@ -12,8 +12,13 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\ConfigFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for smart button config
+ */
+class SmartButtonConfigTest extends TestCase
 {
     /**
      * @var \Magento\Paypal\Model\SmartButtonConfig
@@ -21,15 +26,18 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
@@ -37,12 +45,12 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
+        /** @var MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -122,6 +130,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get config data provider
+     *
      * @return array
      */
     public function getConfigDataProvider()
@@ -130,6 +140,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get default styles
+     *
      * @return array
      */
     private function getDefaultStyles()
@@ -138,6 +150,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get allowed fundings
+     *
      * @return array
      */
     private function getAllowedFundings()
