@@ -98,7 +98,7 @@ class StockState implements StockStateInterface
     }
 
     /**
-     * Returns suggested qty that satisfies qty increments/minQty/maxQty/minSaleQty/maxSaleQty conditions else original qty
+     * Returns suggested qty that satisfies qty increments/minQty/maxQty/minSaleQty/maxSaleQty else returns original qty
      *
      * @param int $productId
      * @param float $qty
