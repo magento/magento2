@@ -17,7 +17,7 @@ use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use  PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

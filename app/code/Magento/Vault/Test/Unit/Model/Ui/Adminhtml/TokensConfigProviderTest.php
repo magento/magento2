@@ -29,7 +29,7 @@ use Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use  PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -525,7 +525,7 @@ class TokensConfigProviderTest extends TestCase
      * @param mixed $value
      * @param int $atIndex
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function createExpectedFilter($field, $value, $atIndex)
     {
@@ -552,7 +552,7 @@ class TokensConfigProviderTest extends TestCase
      * @param int $customerId
      * @param int $entityId
      * @param string $vaultProviderCode
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getSearchCriteria($customerId, $entityId, $vaultProviderCode)
     {

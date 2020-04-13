@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use  PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class VaultConfigProviderTest extends TestCase
