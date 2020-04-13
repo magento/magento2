@@ -101,11 +101,6 @@ class LinkRepositoryTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $sampleDataObjectFactory = $this->getMockBuilder(
-            SampleInterfaceFactory::class
-        )->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->contentValidatorMock = $this->createMock(ContentValidator::class);
         $this->contentUploaderMock = $this->createMock(
             ContentUploaderInterface::class
