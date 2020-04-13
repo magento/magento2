@@ -47,8 +47,8 @@ class MySQLSearchRemovalNotification implements DataPatchInterface
     {
         if ($this->scopeConfig->getValue('catalog/search/engine') === 'mysql') {
             $message = <<<MESSAGE
-Catalog Search is currently configured to use the MySQL engine, which has been deprecated and removed. Migrate to one of
-the Elasticsearch engines to ensure there are no service interruptions.
+Catalog Search is currently configured to use the MySQL engine, which has been deprecated and removed.
+Migrate to an Elasticsearch engine to ensure there are no service interruptions.
 MESSAGE;
 
             $this->notifier->addNotice(__('Deprecation Notice'), __($message));
