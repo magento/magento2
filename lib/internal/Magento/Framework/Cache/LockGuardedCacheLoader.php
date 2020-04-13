@@ -49,9 +49,6 @@ class LockGuardedCacheLoader
 
     /**
      * Minimal delay timeout in ms.
-     * Delay will be applied as rand($minimalDelayTimeout, $delayTimeout)
-     * in order to desynchronize multiple clients trying
-     * to acquire the lock for the same resource at the same time
      *
      * @var int
      */
@@ -112,8 +109,7 @@ class LockGuardedCacheLoader
             }
 
             if ($cachedData === false) {
-                $lookupTimeout = rand($this->minimalDelayTimeout, $this->delayTimeout);
-                usleep($lookupTimeout * 1000);
+                usleep($this->getLookupTimeout() * 1000);
                 $cachedData = $dataLoader();
             }
         }
@@ -131,7 +127,7 @@ class LockGuardedCacheLoader
     public function lockedCleanData(string $lockName, callable $dataCleaner)
     {
         while ($this->locker->isLocked($lockName)) {
-            usleep($this->delayTimeout * 1000);
+            usleep($this->getLookupTimeout() * 1000);
         }
         try {
             if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
@@ -140,5 +136,19 @@ class LockGuardedCacheLoader
         } finally {
             $this->locker->unlock($lockName);
         }
+    }
+
+    /**
+     * Delay will be applied as rand($minimalDelayTimeout, $delayTimeout).
+     * This helps to desynchronize multiple clients trying
+     * to acquire the lock for the same resource at the same time
+     *
+     * @return int
+     */
+    private function getLookupTimeout()
+    {
+        $lookupTimeout = rand($this->minimalDelayTimeout, $this->delayTimeout);
+
+        return $lookupTimeout;
     }
 }
