@@ -37,8 +37,7 @@ class Config
     }
 
     /**
-     * Returns an order field from a category default_sort_by attribute,
-     * or if it is not set, the default sort field value from the configuration.
+     * Returns a category default_sort_by attribute, or default sort field from the configuration.
      *
      * @return string
      */
