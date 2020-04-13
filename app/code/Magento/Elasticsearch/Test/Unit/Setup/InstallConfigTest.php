@@ -112,4 +112,11 @@ class InstallConfigTest extends TestCase
 
         $this->installConfig->configure($inputOptions);
     }
+
+    public function testConfigureWithEmptyInput()
+    {
+        $this->configWriterMock->expects($this->never())->method('save');
+        $this->validatorMock->expects($this->once())->method('validate')->with(null)->willReturn(true);
+        $this->installConfig->configure([]);
+    }
 }

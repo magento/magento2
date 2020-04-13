@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -49,7 +48,7 @@ class SearchConfigOptionsListTest extends TestCase
         $this->assertEquals('elasticsearch-port', $optionsList[2]->getName());
 
         $this->assertArrayHasKey(3, $optionsList);
-        $this->assertInstanceOf(FlagConfigOption::class, $optionsList[3]);
+        $this->assertInstanceOf(TextConfigOption::class, $optionsList[3]);
         $this->assertEquals('elasticsearch-enable-auth', $optionsList[3]->getName());
 
         $this->assertArrayHasKey(4, $optionsList);
