@@ -205,16 +205,17 @@ class AddressTest extends TestCase
      */
     public function getWebsites($withDefault = false)
     {
-        $websites = $this->_websites;
-        if (!$withDefault) {
-            unset($websites[0]);
-        }
+        $websites = [];
         foreach ($this->_websites as $id => $code) {
             if (!$withDefault && $id == Store::DEFAULT_STORE_ID) {
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
             $websites[$id] = new DataObject($websiteData);
+        }
+
+        if (!$withDefault) {
+            unset($websites[0]);
         }
 
         return $websites;

@@ -159,16 +159,16 @@ class CustomerTest extends TestCase
      */
     public function getWebsites($withDefault = false)
     {
-        $websites = $this->_websites;
-        if (!$withDefault) {
-            unset($websites[0]);
-        }
+        $websites = [];
         foreach ($this->_websites as $id => $code) {
             if (!$withDefault && $id == Store::DEFAULT_STORE_ID) {
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
             $websites[$id] = new DataObject($websiteData);
+        }
+        if (!$withDefault) {
+            unset($websites[0]);
         }
 
         return $websites;
@@ -182,16 +182,16 @@ class CustomerTest extends TestCase
      */
     public function getStores($withDefault = false)
     {
-        $stores = $this->_websites;
-        if (!$withDefault) {
-            unset($stores[0]);
-        }
+        $stores = [];
         foreach ($this->_stores as $id => $code) {
             if (!$withDefault && $id == 0) {
                 continue;
             }
             $storeData = ['id' => $id, 'code' => $code];
             $stores[$id] = new DataObject($storeData);
+        }
+        if (!$withDefault) {
+            unset($stores[0]);
         }
 
         return $stores;
