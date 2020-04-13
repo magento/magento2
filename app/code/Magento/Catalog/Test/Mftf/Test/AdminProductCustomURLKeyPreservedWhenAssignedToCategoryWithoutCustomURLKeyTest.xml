@@ -76,7 +76,7 @@
             <argument name="productSku" value="$createSimpleProductSecond.sku$"/>
         </actionGroup>
 
-        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
         <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />

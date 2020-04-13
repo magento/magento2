@@ -75,9 +75,9 @@
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
 
         <!-- Fill the custom options values -->
-        <actionGroup ref="StorefrontSelectOptionDropDownActionGroup" stepKey="selectFirstOption">
-            <argument name="optionTitle" value="ProductOptionValueDropdown"/>
-                <argument name="option" value="ProductOptionValueWithSkuDropdown1.title"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionValueDropdown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueWithSkuDropdown1.title}}"/>
         </actionGroup>
         <fillField selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" userInput="OptionField" stepKey="fillProductOptionInputField"/>
 
@@ -168,8 +168,7 @@
 
         <!-- Assert product in mini cart -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertProductInMiniCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="productPrice" value="$$createSimpleProduct.price$$"/>
