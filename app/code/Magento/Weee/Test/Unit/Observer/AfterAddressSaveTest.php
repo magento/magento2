@@ -24,26 +24,26 @@ class AfterAddressSaveTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     private $observerMock;
 
     /**
      * Module manager
      *
-     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     private $weeeHelperMock;
 
