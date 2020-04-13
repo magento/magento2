@@ -17,14 +17,8 @@ use Magento\Ui\Config\Reader\DefinitionFactory;
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
-    /**
-     * ID in the storage cache
-     */
     const CACHE_ID = 'ui_component_configuration_definition_data';
 
-    /**
-     * Search pattern
-     */
     const SEARCH_PATTERN = '%s.xml';
 
     /**
@@ -123,7 +117,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function get($key, $default = null)
     {
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
+        return $this->data[$key] ?? $default;
     }
 
     /**

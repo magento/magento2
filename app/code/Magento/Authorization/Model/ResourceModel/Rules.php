@@ -6,58 +6,63 @@
 
 namespace Magento\Authorization\Model\ResourceModel;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Backend\App\AbstractAction;
+use Magento\Framework\Acl\Builder;
+use Magento\Framework\Acl\Data\CacheInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Psr\Log\LoggerInterface;
 
 /**
  * Admin rule resource model
  */
-class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Rules extends AbstractDb
 {
     /**
      * Root ACL resource
      *
-     * @var \Magento\Framework\Acl\RootResource
+     * @var RootResource
      */
     protected $_rootResource;
 
     /**
-     * @var \Magento\Framework\Acl\Builder
+     * @var Builder
      */
     protected $_aclBuilder;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @var CacheInterface
      */
     private $aclDataCache;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Acl\Builder $aclBuilder
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Acl\RootResource $rootResource
+     * @param Context $context
+     * @param Builder $aclBuilder
+     * @param LoggerInterface $logger
+     * @param RootResource $rootResource
+     * @param CacheInterface $aclDataCache
      * @param string $connectionName
-     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Acl\Builder $aclBuilder,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Acl\RootResource $rootResource,
-        $connectionName = null,
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
+        Context $context,
+        Builder $aclBuilder,
+        LoggerInterface $logger,
+        RootResource $rootResource,
+        CacheInterface $aclDataCache,
+        $connectionName = null
     ) {
         $this->_aclBuilder = $aclBuilder;
         parent::__construct($context, $connectionName);
         $this->_rootResource = $rootResource;
         $this->_logger = $logger;
-        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Acl\Data\CacheInterface::class
-        );
+        $this->aclDataCache = $aclDataCache;
     }
 
     /**
@@ -75,7 +80,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Authorization\Model\Rules $rule
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
@@ -107,7 +112,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
                     /** Give basic admin permissions to any admin */
-                    $postedResources[] = \Magento\Backend\App\AbstractAction::ADMIN_RESOURCE;
+                    $postedResources[] = AbstractAction::ADMIN_RESOURCE;
                     $acl = $this->_aclBuilder->getAcl();
                     /** @var $resource \Magento\Framework\Acl\AclResource */
                     foreach ($acl->getResources() as $resourceId) {
@@ -125,7 +130,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $connection->commit();
             $this->aclDataCache->clean();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $connection->rollBack();
             throw $e;
         } catch (\Exception $e) {

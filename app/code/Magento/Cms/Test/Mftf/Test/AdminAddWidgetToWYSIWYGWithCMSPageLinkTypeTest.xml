@@ -15,11 +15,11 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: CMS page link"/>
             <description value="Admin should be able to create a CMS page with widget type: CMS page link"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83781"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
@@ -67,7 +67,7 @@
         <see userInput="Home page" stepKey="seeHomepageWidget" />
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

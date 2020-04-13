@@ -115,7 +115,7 @@
                     <label>Enable Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template_hints_storefront_show_with_parameter" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Hints for Storefront with URL Parameter</label>
                     <depends>
                         <field id="*/*/template_hints_storefront">1</field>
@@ -123,7 +123,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Use URL parameter to enable template path hints for Storefront</comment>
                 </field>
-                <field id="template_hints_parameter_value" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="template_hints_parameter_value" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Parameter Value</label>
                     <depends>
                         <field id="*/*/template_hints_storefront">1</field>

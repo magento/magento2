@@ -311,7 +311,6 @@
             margin-right: 30px;
 
             &.print {
-                &:extend(.abs-action-print all);
                 display: none;
                 margin: 0;
             }
@@ -589,6 +588,7 @@
 
     .order-actions-toolbar {
         .action.print {
+            &:extend(.abs-action-print all);
             display: block;
             float: right;
         }
@@ -709,7 +709,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) { 
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
     .order-links {
         .item {
             margin: 0 @tab-control__margin-right 0 0;

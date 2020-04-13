@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Fedex\Model\Source;
 
-class Generic implements \Magento\Framework\Option\ArrayInterface
+/**
+ * Fedex generic source implementation
+ */
+class Generic implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @var \Magento\Fedex\Model\Carrier
@@ -36,9 +40,19 @@ class Generic implements \Magento\Framework\Option\ArrayInterface
     {
         $configData = $this->_shippingFedex->getCode($this->_code);
         $arr = [];
-        foreach ($configData as $code => $title) {
-            $arr[] = ['value' => $code, 'label' => $title];
+        if ($configData) {
+            $arr = array_map(
+                function ($code, $title) {
+                    return [
+                        'value' => $code,
+                        'label' => $title
+                    ];
+                },
+                array_keys($configData),
+                $configData
+            );
         }
+
         return $arr;
     }
 }

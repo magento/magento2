@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -46,7 +46,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront -->
@@ -65,8 +65,7 @@
         <waitForPageLoad stepKey="waitForMiniCartPanelToAppear"/>
 
         <!-- Assert Product in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>
