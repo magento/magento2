@@ -446,7 +446,7 @@ class IndexBuilder
      * @param Product $product
      * @return $this
      * @throws \Exception
-     * @deprecated
+     * @deprecated 101.1.5
      * @see ReindexRuleProduct::execute
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
