@@ -8,10 +8,15 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 /**
  * AbstractCollection test
  *
+ * Test for AbstractCollection class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 {
+    const ATTRIBUTE_CODE = 'any_attribute';
+    const ATTRIBUTE_ID_STRING = '15';
+    const ATTRIBUTE_ID_INT = 15;
+
     /**
      * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -105,6 +110,26 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $entityMock = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
         $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entityMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+
+        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
+        $attributeMock->expects($this->any())->method('isStatic')->willReturn(false);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn(self::ATTRIBUTE_CODE);
+        $attributeMock->expects($this->any())->method('getBackendTable')->willReturn('eav_entity_int');
+        $attributeMock->expects($this->any())->method('getBackendType')->willReturn('int');
+        $attributeMock->expects($this->any())->method('getId')->willReturn(self::ATTRIBUTE_ID_STRING);
+
+        $entityMock
+            ->expects($this->any())
+            ->method('getAttribute')
+            ->with(self::ATTRIBUTE_CODE)
+            ->willReturn($attributeMock);
+
+        $this->configMock
+            ->expects($this->any())
+            ->method('getAttribute')
+            ->with(null, self::ATTRIBUTE_CODE)
+            ->willReturn($attributeMock);
 
         $this->validatorFactoryMock->expects(
             $this->any()
@@ -191,6 +216,34 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->model->removeItemByKey($testId);
         $this->assertCount($count - 1, $this->model->getItems());
         $this->assertNull($this->model->getItemById($testId));
+    }
+
+    /**
+     * @dataProvider getItemsDataProvider
+     */
+    public function testAttributeIdIsInt($values)
+    {
+        $this->resourceHelperMock->expects($this->any())->method('getLoadAttributesSelectGroups')->willReturn([]);
+        $this->fetchStrategyMock->expects($this->any())->method('fetchAll')->will($this->returnValue($values));
+        $selectMock = $this->coreResourceMock->getConnection()->select();
+        $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('join')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('where')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('columns')->willReturn($selectMock);
+
+        $this->model
+            ->addAttributeToSelect(self::ATTRIBUTE_CODE)
+            ->_loadEntities()
+            ->_loadAttributes();
+
+        $_selectAttributesActualValue = $this->readAttribute($this->model, '_selectAttributes');
+
+        $this->assertAttributeEquals(
+            [self::ATTRIBUTE_CODE => self::ATTRIBUTE_ID_STRING],
+            '_selectAttributes',
+            $this->model
+        );
+        $this->assertSame($_selectAttributesActualValue[self::ATTRIBUTE_CODE], self::ATTRIBUTE_ID_INT);
     }
 
     /**

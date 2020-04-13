@@ -18,7 +18,7 @@ class UpdaterSuccessTest extends \PHPUnit\Framework\TestCase
         /** @var $controller UpdaterSuccess */
         $controller = new UpdaterSuccess($maintenanceMode);
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

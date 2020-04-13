@@ -14,12 +14,14 @@
             <stories value="System Integration"/>
             <title value="Admin system integration"/>
             <description value="Admin Deletes Created Integration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28027"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Navigate To Integrations Page -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
                 <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
@@ -36,7 +38,7 @@
             <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- TEST BODY -->
