@@ -768,6 +768,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns an order field for a collection.
+     *
      * @return null|string
      */
     protected function getOrderField()

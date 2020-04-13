@@ -10,8 +10,6 @@ use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class ProductList
- *
  * @api
  * @since 100.0.2
  */

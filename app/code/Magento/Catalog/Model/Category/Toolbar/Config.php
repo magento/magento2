@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Category\Toolbar;
 
 use Magento\Catalog\Model\Category\Config as CategoryConfig;
-use Magento\Catalog\Service\CurrentCategory;
+use Magento\Catalog\Model\CurrentCategory;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Config
@@ -37,6 +37,9 @@ class Config
     }
 
     /**
+     * Returns an order field from a category default_sort_by attribute,
+     * or if it is not set, the default sort field value from the configuration.
+     *
      * @return string
      */
     public function getOrderField(): string

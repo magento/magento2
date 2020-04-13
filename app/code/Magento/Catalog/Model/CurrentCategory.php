@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Service;
+namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\Category;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -39,7 +38,10 @@ class CurrentCategory
     }
 
     /**
-     * @param null $storeId
+     * Returns a category based on an id request parameter.
+     *
+     * @param int|null $storeId
+     *
      * @return CategoryInterface|Category
      * @throws NoSuchEntityException
      */

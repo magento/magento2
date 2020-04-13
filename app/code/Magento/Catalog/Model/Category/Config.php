@@ -28,6 +28,8 @@ class Config
     }
 
     /**
+     * Returns a sort field from the configuration
+     *
      * @param string|int|null $scopeCode
      * @return string
      */
