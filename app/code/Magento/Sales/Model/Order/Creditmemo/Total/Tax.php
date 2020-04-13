@@ -110,7 +110,7 @@ class Tax extends AbstractTotal
             }
             
             $allowedTax = $invoice->getTaxAmount() - $taxRefunded - $creditmemo->getTaxAmount();
-            $allowedBaseTax = $invoice->getBaseTaxInvoiced() - $baseTaxRefunded - $creditmemo->getBaseTaxAmount();
+            $allowedBaseTax = $invoice->getBaseTaxAmount() - $baseTaxRefunded - $creditmemo->getBaseTaxAmount();
             
         } else {
             $orderShippingAmount = $order->getShippingAmount();
