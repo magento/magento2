@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerPlaceOrderTest">
+        <annotations>
+            <features value="Login As Customer"/>
+            <stories value="Place order and reorder"/>
+            <title value="Admin user login as customer and place order"/>
+            <description
+                value="Verify that admin user can place order using 'Login as customer' functionality"/>
+            <severity value="BLOCKER"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login As Customer from Customer grid page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+                     stepKey="loginAsCustomer">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+
+        <!-- Place Order as Customer -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCart"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+
+        <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageOrderCreatedByAdmin">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageOrderCreatedByAdmin">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+    </test>
+</tests>
