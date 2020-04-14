@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
@@ -11,7 +12,7 @@ use Magento\Downloadable\Model\Link\Builder;
 use Magento\Downloadable\Helper\Download;
 
 /**
- * Class BuilderTest
+ * Unit test for downloadable products' builder link class
  */
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -68,7 +69,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->linkMock = $this->getMockBuilder(LinkInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
             [
@@ -160,6 +161,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         if (isset($data['is_unlimited'])) {
             $this->linkMock->expects($this->once())->method('setNumberOfDownloads')->with(0);
         }
+        $useDefaultTitle = $data['use_default_title'] ?? false;
+        if ($useDefaultTitle) {
+            $this->linkMock->expects($this->once())->method('setTitle')->with(null);
+        }
         if (isset($data['price'])) {
             $this->linkMock->expects($this->once())->method('getPrice')->willReturn($data['price']);
         } else {
@@ -219,6 +224,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                 [
                     'file' => 'cXVlIHRhbA==',
                     'type' => 'file',
+                    'use_default_title' => '1',
                     'sample' => [
                         'file' => 'cXVlIHRhbA==',
                         'type' => 'file'

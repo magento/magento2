@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRedirectToAdminPanelOnLogoClickFromWizardPageTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Navigate to dashboard from Setup Wizard Page"/>
+            <title value="Navigate to dashboard after click on logo on Setup Wizard Page"/>
+            <description value="Check navigate to dashboard after click on logo on Setup Wizard Page"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToSetupWizardPageActionGroup" stepKey="navigateToSetupWizardPage"/>
+        <actionGroup ref="AdminClickLogoActionGroup" stepKey="clickOnLogo"/>
+        <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="checkTheDashboardPage"/>
+    </test>
+</tests>

@@ -12,11 +12,13 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\SmartButtonConfig;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\ConfigFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class SmartButtonConfigTest
+ * Test for smart button config
  */
-class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
+class SmartButtonConfigTest extends TestCase
 {
     /**
      * @var \Magento\Paypal\Model\SmartButtonConfig
@@ -24,15 +26,18 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
@@ -40,12 +45,12 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject $scopeConfigMock */
+        /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $configFactoryMock */
+        /** @var MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -65,6 +70,7 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $page
      * @param string $locale
+     * @param bool $isCustomize
      * @param string $disallowedFundings
      * @param string $layout
      * @param string $size
@@ -73,6 +79,7 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $color
      * @param string $installmentPeriodLabel
      * @param string $installmentPeriodLocale
+     * @param string $isPaypalGuestCheckoutEnabled
      * @param array $expected
      * @dataProvider getConfigDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -89,13 +96,19 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
         string $color,
         string $installmentPeriodLabel,
         string $installmentPeriodLocale,
+        string $isPaypalGuestCheckoutEnabled,
         array $expected = []
     ) {
-        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn($locale);
+        $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->will(
             $this->returnValueMap(
                 [
                     ['merchant_id', null, 'merchant'],
+                    [
+                        'solution_type',
+                        null,
+                        $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                    ],
                     ['sandbox_flag', null, true],
                     ['disable_funding_options', null, $disallowedFundings],
                     ["{$page}_page_button_customize", null, $isCustomize],
@@ -117,6 +130,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get config data provider
+     *
      * @return array
      */
     public function getConfigDataProvider()
@@ -125,6 +140,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get default styles
+     *
      * @return array
      */
     private function getDefaultStyles()
@@ -133,6 +150,8 @@ class SmartButtonConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get allowed fundings
+     *
      * @return array
      */
     private function getAllowedFundings()

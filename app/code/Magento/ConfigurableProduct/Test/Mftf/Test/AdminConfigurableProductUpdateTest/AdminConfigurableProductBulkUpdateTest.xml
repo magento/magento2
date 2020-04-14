@@ -29,7 +29,7 @@
             <createData entity="ApiConfigurableProduct" stepKey="createProduct3">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>

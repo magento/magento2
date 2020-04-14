@@ -98,7 +98,7 @@ class OperationRepository implements OperationRepositoryInterface
 
         /** @var OperationInterface $operation */
         $operation = $this->operationFactory->create($data);
-        return $this->entityManager->save($operation);
+        return $operation;
     }
 
     /**

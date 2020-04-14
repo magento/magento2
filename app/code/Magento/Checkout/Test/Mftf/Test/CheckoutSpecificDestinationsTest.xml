@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="defaultCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Go to configuration general page-->
