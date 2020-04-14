@@ -43,6 +43,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Escaper $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -56,7 +57,8 @@ class Rss extends \Magento\Wishlist\Helper\Data
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerRepository = $customerRepository;
@@ -70,7 +72,8 @@ class Rss extends \Magento\Wishlist\Helper\Data
             $postDataHelper,
             $customerViewHelper,
             $wishlistProvider,
-            $productRepository
+            $productRepository,
+            $escaper
         );
     }
 
