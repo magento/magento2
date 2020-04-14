@@ -5,14 +5,27 @@
  */
 namespace Magento\Config\Block\System\Config;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Element\Dependence;
+use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Config\App\Config\Type\System;
+use Magento\Config\Block\System\Config\Form\Field\File;
+use Magento\Config\Block\System\Config\Form\Field\Image;
+use Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific;
+use Magento\Config\Model\Config;
+use Magento\Config\Model\Config\Factory;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
 
 /**
  * System config form block
@@ -22,7 +35,7 @@ use Magento\Framework\DataObject;
  * @api
  * @since 100.0.2
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     const SCOPE_DEFAULT = 'default';
 
@@ -40,21 +53,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Backend config data instance
      *
-     * @var \Magento\Config\Model\Config
+     * @var Config
      */
     protected $_configDataObject;
 
     /**
      * Default fieldset rendering block
      *
-     * @var \Magento\Config\Block\System\Config\Form\Fieldset
+     * @var Form\Fieldset
      */
     protected $_fieldsetRenderer;
 
     /**
      * Default field rendering block
      *
-     * @var \Magento\Config\Block\System\Config\Form\Field
+     * @var Form\Field
      */
     protected $_fieldRenderer;
 
@@ -75,35 +88,35 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Backend Config model factory
      *
-     * @var \Magento\Config\Model\Config\Factory
+     * @var Factory
      */
     protected $_configFactory;
 
     /**
      * Magento\Framework\Data\FormFactory
      *
-     * @var \Magento\Framework\Data\FormFactory
+     * @var FormFactory
      */
     protected $_formFactory;
 
     /**
      * System config structure
      *
-     * @var \Magento\Config\Model\Config\Structure
+     * @var Structure
      */
     protected $_configStructure;
 
     /**
      * Form fieldset factory
      *
-     * @var \Magento\Config\Block\System\Config\Form\Fieldset\Factory
+     * @var Form\Fieldset\Factory
      */
     protected $_fieldsetFactory;
 
     /**
      * Form field factory
      *
-     * @var \Magento\Config\Block\System\Config\Form\Field\Factory
+     * @var Form\Field\Factory
      */
     protected $_fieldFactory;
 
@@ -126,33 +139,41 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private $elementVisibility;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Config\Model\Config\Factory $configFactory
-     * @param \Magento\Config\Model\Config\Structure $configStructure
-     * @param \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory
-     * @param \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Factory $configFactory
+     * @param Structure $configStructure
+     * @param Form\Fieldset\Factory $fieldsetFactory
+     * @param Form\Field\Factory $fieldFactory
      * @param array $data
      * @param SettingChecker|null $settingChecker
+     * @param DeploymentConfig|null $appConfig
+     * @param ElementVisibilityInterface|null $elementVisibility
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Config\Model\Config\Factory $configFactory,
-        \Magento\Config\Model\Config\Structure $configStructure,
-        \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
-        \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Factory $configFactory,
+        Structure $configStructure,
+        Form\Fieldset\Factory $fieldsetFactory,
+        Form\Field\Factory $fieldFactory,
         array $data = [],
-        SettingChecker $settingChecker = null
+        ?SettingChecker $settingChecker = null,
+        ?DeploymentConfig $appConfig = null,
+        ?ElementVisibilityInterface $elementVisibility = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_configFactory = $configFactory;
         $this->_configStructure = $configStructure;
         $this->_fieldsetFactory = $fieldsetFactory;
         $this->_fieldFactory = $fieldFactory;
-        $this->settingChecker = $settingChecker ?: ObjectManager::getInstance()->get(SettingChecker::class);
+        $this->settingChecker = $settingChecker ?? ObjectManager::getInstance()->get(SettingChecker::class);
+        $this->appConfig = $appConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->elementVisibility = $elementVisibility
+            ?? ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
 
         $this->_scopeLabels = [
             self::SCOPE_DEFAULT => __('[GLOBAL]'),
@@ -262,12 +283,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Return dependency block object
      *
-     * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
+     * @return Dependence
      */
     protected function _getDependence()
     {
         if (!$this->getChildBlock('element_dependence')) {
-            $this->addChild('element_dependence', \Magento\Backend\Block\Widget\Form\Element\Dependence::class);
+            $this->addChild('element_dependence', Dependence::class);
         }
         return $this->getChildBlock('element_dependence');
     }
@@ -296,7 +317,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // Extends for config data
         $extraConfigGroups = [];
 
-        /** @var $element \Magento\Config\Model\Config\Structure\Element\Field */
+        /** @var $element Field */
         foreach ($group->getChildren() as $element) {
             if ($element instanceof \Magento\Config\Model\Config\Structure\Element\Group) {
                 $this->_initGroup($element, $section, $fieldset);
@@ -322,16 +343,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize form element
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
-     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
+     * @param Field $field
+     * @param Fieldset $fieldset
      * @param string $path
      * @param string $fieldPrefix
      * @param string $labelPrefix
      * @return void
      */
     protected function _initElement(
-        \Magento\Config\Model\Config\Structure\Element\Field $field,
-        \Magento\Framework\Data\Form\Element\Fieldset $fieldset,
+        Field $field,
+        Fieldset $fieldset,
         $path,
         $fieldPrefix = '',
         $labelPrefix = ''
@@ -399,11 +420,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get data of field by path
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param Field $field
      * @param string $path
      * @return mixed|null|string
      */
-    private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    private function getFieldData(Field $field, $path)
     {
         $data = $this->getAppConfigDataValue($path);
 
@@ -566,13 +587,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function canUseDefaultValue($fieldValue)
     {
-        if ($this->getScope() == self::SCOPE_STORES && $fieldValue) {
-            return true;
-        }
-        if ($this->getScope() == self::SCOPE_WEBSITES && $fieldValue) {
-            return true;
-        }
-        return false;
+        return $fieldValue &&
+            ($this->getScope() == self::SCOPE_STORES || $this->getScope() == self::SCOPE_WEBSITES);
     }
 
     /**
@@ -583,10 +599,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function canUseWebsiteValue($fieldValue)
     {
-        if ($this->getScope() == self::SCOPE_STORES && $fieldValue) {
-            return true;
-        }
-        return false;
+        return $this->getScope() == self::SCOPE_STORES && $fieldValue;
     }
 
     /**
@@ -598,10 +611,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function isCanRestoreToDefault($fieldValue)
     {
-        if ($this->getScope() == self::SCOPE_DEFAULT && $fieldValue) {
-            return true;
-        }
-        return false;
+        return $this->getScope() == self::SCOPE_DEFAULT && $fieldValue;
     }
 
     /**
@@ -639,9 +649,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($showInStore == 1) {
             return $this->_scopeLabels[self::SCOPE_STORES];
-        } elseif ($showInWebsite == 1) {
+        }
+
+        if ($showInWebsite == 1) {
             return $this->_scopeLabels[self::SCOPE_WEBSITES];
         }
+
         return $this->_scopeLabels[self::SCOPE_DEFAULT];
     }
 
@@ -696,9 +709,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return [
-            'allowspecific' => \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
-            'image' => \Magento\Config\Block\System\Config\Form\Field\Image::class,
-            'file' => \Magento\Config\Block\System\Config\Form\Field\File::class
+            'allowspecific' => Allowspecific::class,
+            'image' => Image::class,
+            'file' => File::class
         ];
     }
 
@@ -746,10 +759,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get css class for "shared" functionality
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param Field $field
      * @return string
      */
-    protected function _getSharedCssClass(\Magento\Config\Model\Config\Structure\Element\Field $field)
+    protected function _getSharedCssClass(Field $field)
     {
         $sharedClass = '';
         if ($field->getAttribute('shared') && $field->getConfigPath()) {
@@ -762,11 +775,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get css class for "requires" functionality
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param Field $field
      * @param string $fieldPrefix
      * @return string
      */
-    protected function _getRequiresCssClass(\Magento\Config\Model\Config\Structure\Element\Field $field, $fieldPrefix)
+    protected function _getRequiresCssClass(Field $field, $fieldPrefix)
     {
         $requiresClass = '';
         $requiredPaths = array_merge($field->getRequiredFields($fieldPrefix), $field->getRequiredGroups($fieldPrefix));
@@ -781,34 +794,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Retrieve Deployment Configuration object.
-     *
-     * @deprecated 100.1.2
-     * @return DeploymentConfig
-     */
-    private function getAppConfig()
-    {
-        if ($this->appConfig === null) {
-            $this->appConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
-        }
-        return $this->appConfig;
-    }
-
-    /**
      * Check Path is Readonly
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param Field $field
      * @param string $path
      * @return boolean
      */
-    private function isReadOnly(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    private function isReadOnly(Field $field, $path)
     {
         $isReadOnly = $this->settingChecker->isReadOnly(
             $path,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         if (!$isReadOnly) {
-            $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
+            $isReadOnly = $this->elementVisibility->isDisabled($field->getPath())
                 ?: $this->settingChecker->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         }
         return $isReadOnly;
@@ -822,33 +821,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     private function getAppConfigDataValue($path)
     {
-        $appConfig = $this->getAppConfig()->get(System::CONFIG_TYPE);
+        $appConfig = $this->appConfig->get(System::CONFIG_TYPE);
         $scope = $this->getScope();
         $scopeCode = $this->getStringScopeCode();
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $data = new DataObject(isset($appConfig[$scope]) ? $appConfig[$scope] : []);
+            $data = new DataObject($appConfig[$scope] ?? []);
         } else {
-            $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
+            $data = new DataObject($appConfig[$scope][$scopeCode] ?? []);
         }
         return $data->getData($path);
-    }
-
-    /**
-     * Gets instance of ElementVisibilityInterface.
-     *
-     * @return ElementVisibilityInterface
-     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed.
-     * @since 100.2.0
-     */
-    public function getElementVisibility()
-    {
-        if (null === $this->elementVisibility) {
-            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
-        }
-
-        return $this->elementVisibility;
     }
 }

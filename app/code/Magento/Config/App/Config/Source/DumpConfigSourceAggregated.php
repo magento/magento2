@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\App\Config\Source;
 
-use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
@@ -77,20 +77,17 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $rules;
 
     /**
-     * @param ExcludeList $excludeList Is not used anymore as it was deprecated, use TypePool instead.
+     * @param TypePool $typePool
      * @param array $sources
-     * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ExcludeList $excludeList,
+        TypePool $typePool,
         array $sources = [],
-        TypePool $typePool = null,
         array $rules = []
     ) {
+        $this->typePool = $typePool;
         $this->sources = $sources;
-        $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
         $this->rules = $rules;
     }
 
@@ -161,8 +158,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             return false;
         }
 
-        $defaultRule = isset($this->rules['default']) ?
-            $this->rules['default'] : self::RULE_TYPE_INCLUDE;
+        $defaultRule = $this->rules['default'] ?? self::RULE_TYPE_INCLUDE;
 
         foreach ($this->rules as $type => $rule) {
             if ($type === 'default') {

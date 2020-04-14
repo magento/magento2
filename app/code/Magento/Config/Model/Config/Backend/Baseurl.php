@@ -5,17 +5,26 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Asset\MergeService;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Baseurl extends \Magento\Framework\App\Config\Value
+class Baseurl extends Value
 {
     /**
-     * @var \Magento\Framework\View\Asset\MergeService
+     * @var MergeService
      */
     protected $_mergeService;
 
@@ -25,34 +34,37 @@ class Baseurl extends \Magento\Framework\App\Config\Value
     private $urlValidator;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\View\Asset\MergeService $mergeService
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param MergeService $mergeService
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
+     * @param UrlValidator|null $urlValidator
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\View\Asset\MergeService $mergeService,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        Context $context,
+        Registry $registry,
+        ScopeConfigInterface $config,
+        TypeListInterface $cacheTypeList,
+        MergeService $mergeService,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?UrlValidator $urlValidator = null
     ) {
-        $this->_mergeService = $mergeService;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        $this->_mergeService = $mergeService;
+        $this->urlValidator = $urlValidator ?? ObjectManager::getInstance()->get(UrlValidator::class);
     }
 
     /**
      * Validate a base URL field value
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
@@ -61,12 +73,11 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $field = $this->getFieldConfig();
             $label = $field && is_array($field) ? $field['label'] : 'value';
             $msg = __('Invalid %1. %2', $label, $e->getMessage());
-            $error = new \Magento\Framework\Exception\LocalizedException($msg, $e);
-            throw $error;
+            throw new LocalizedException($msg, $e);
         }
     }
 
@@ -128,12 +139,12 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function _assertValuesOrUrl(array $values, $value)
     {
         if (!in_array($value, $values) && !$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Value must be a URL or one of placeholders: %1', implode(',', $values))
             );
         }
@@ -145,14 +156,14 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function _assertStartsWithValuesOrUrl(array $values, $value)
     {
         $quoted = array_map('preg_quote', $values, array_fill(0, count($values), '/'));
         if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Specify a URL or path that starts with placeholder(s): %1, and ends with "/".',
                     implode(', ', $values)
@@ -167,7 +178,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @param array $values
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function _assertStartsWithValuesOrUrlOrEmpty(array $values, $value)
     {
@@ -176,10 +187,9 @@ class Baseurl extends \Magento\Framework\App\Config\Value
         }
         try {
             $this->_assertStartsWithValuesOrUrl($values, $value);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $msg = __('%1 An empty value is allowed as well.', $e->getMessage());
-            $error = new \Magento\Framework\Exception\LocalizedException($msg, $e);
-            throw $error;
+            throw new LocalizedException($msg, $e);
         }
     }
 
@@ -188,12 +198,12 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @param string $value
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function _validateFullyQualifiedUrl($value)
     {
         if (!$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Specify a fully qualified URL.'));
+            throw new LocalizedException(__('Specify a fully qualified URL.'));
         }
     }
 
@@ -205,7 +215,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      */
     private function _isFullyQualifiedUrl($value)
     {
-        return preg_match('/\/$/', $value) && $this->getUrlValidator()->isValid($value, ['http', 'https']);
+        return preg_match('/\/$/', $value) && $this->urlValidator->isValid($value, ['http', 'https']);
     }
 
     /**
@@ -226,19 +236,5 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             }
         }
         return parent::afterSave();
-    }
-
-    /**
-     * Get URL Validator
-     *
-     * @deprecated 100.2.0
-     * @return UrlValidator
-     */
-    private function getUrlValidator()
-    {
-        if (!$this->urlValidator) {
-            $this->urlValidator = ObjectManager::getInstance()->get(UrlValidator::class);
-        }
-        return $this->urlValidator;
     }
 }

@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Structure;
 
 use Magento\Config\Model\Config\StructureElementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -26,21 +27,17 @@ abstract class AbstractElement implements StructureElementInterface
     protected $_data = [];
 
     /**
-     * Current configuration scope
-     *
      * @var string
      */
     protected $_scope;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     protected $moduleManager;
 
@@ -50,13 +47,19 @@ abstract class AbstractElement implements StructureElementInterface
     private $elementVisibility;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param StoreManagerInterface $storeManager
+     * @param Manager $moduleManager
+     * @param ElementVisibilityInterface|null $elementVisibility
      */
-    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
-    {
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        Manager $moduleManager,
+        ?ElementVisibilityInterface $elementVisibility = null
+    ) {
         $this->_storeManager = $storeManager;
         $this->moduleManager = $moduleManager;
+        $this->elementVisibility = $elementVisibility
+            ?? ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
     }
 
     /**
@@ -154,7 +157,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function isVisible()
     {
-        if ($this->getElementVisibility()->isHidden($this->getPath())) {
+        if ($this->elementVisibility->isHidden($this->getPath())) {
             return false;
         }
 
@@ -219,23 +222,5 @@ abstract class AbstractElement implements StructureElementInterface
     public function getPath($fieldPrefix = '')
     {
         return $this->_getPath($this->getId(), $fieldPrefix);
-    }
-
-    /**
-     * Get instance of ElementVisibilityInterface.
-     *
-     * @return ElementVisibilityInterface
-     * @deprecated 100.2.0 Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed.
-     * @since 100.2.0
-     */
-    public function getElementVisibility()
-    {
-        if (null === $this->elementVisibility) {
-            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
-        }
-
-        return $this->elementVisibility;
     }
 }

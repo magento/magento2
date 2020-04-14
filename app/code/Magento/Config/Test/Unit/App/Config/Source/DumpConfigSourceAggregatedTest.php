@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
-use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
+class DumpConfigSourceAggregatedTest extends TestCase
 {
     /**
      * @var ConfigSourceInterface|MockObject
@@ -23,11 +25,6 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
      * @var ConfigSourceInterface|MockObject
      */
     private $sourceTwoMock;
-
-    /**
-     * @var ExcludeList|MockObject
-     */
-    private $excludeListMock;
 
     /**
      * @var TypePool|MockObject
@@ -51,9 +48,6 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->sourceTwoMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
-        $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->typePoolMock = $this->getMockBuilder(TypePool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,8 +86,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
 
-        $this->typePoolMock->expects($this->any())
-            ->method('isPresent')
+        $this->typePoolMock->method('isPresent')
             ->willReturnMap([
                 ['web/unsecure/without_type', TypePool::TYPE_SENSITIVE, false],
                 ['web/secure/environment_type', TypePool::TYPE_ENVIRONMENT, true],
@@ -103,24 +96,25 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit\Framework\TestCase
                 ['web/another_key/sensitive_type', TypePool::TYPE_SENSITIVE, true],
             ]);
 
-        $this->model = new DumpConfigSourceAggregated(
-            $this->excludeListMock,
+        $this->model = $this->objectManagerHelper->getObject(
+            DumpConfigSourceAggregated::class,
             [
-                [
-                    'source' => $this->sourceTwoMock,
-                    'sortOrder' => 100
+                'typePool' => $this->typePoolMock,
+                'sources' => [
+                    [
+                        'source' => $this->sourceTwoMock,
+                        'sortOrder' => 100
+                    ],
+                    [
+                        'source' => $this->sourceMock,
+                        'sortOrder' => 10
+                    ]
                 ],
-                [
-                    'source' => $this->sourceMock,
-                    'sortOrder' => 10
-                ],
-
-            ],
-            $this->typePoolMock,
-            [
-                'default' => 'include',
-                'sensitive' => 'exclude',
-                'environment' => 'exclude',
+                'rules' => [
+                    'default' => 'include',
+                    'sensitive' => 'exclude',
+                    'environment' => 'exclude'
+                ]
             ]
         );
     }
