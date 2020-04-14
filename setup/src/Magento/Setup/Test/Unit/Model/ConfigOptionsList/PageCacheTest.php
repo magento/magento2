@@ -91,7 +91,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server'=> '',
                             'port' => '',
@@ -120,7 +120,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => 'foo.bar',
                             'port' => '9000',
