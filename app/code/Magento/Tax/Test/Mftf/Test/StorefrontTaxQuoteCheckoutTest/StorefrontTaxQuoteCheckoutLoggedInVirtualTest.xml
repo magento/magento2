@@ -75,11 +75,17 @@
         </after>
 
         <!-- Fill out form for a new user with address -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-            <argument name="Customer" value="Simple_US_Customer_NY"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
         </actionGroup>
 
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
 

@@ -9,6 +9,7 @@
     <testCase name="Magento\Integration\Test\TestCase\ReAuthorizeTokensIntegrationEntityTest" summary="Re-Authorize Tokens for the Integration" ticketId="MAGETWO-29648">
         <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1">
             <data name="description" xsi:type="string">Re-authorize integration</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessReauthorizeMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensAfterReauthorize" />
         </variation>
