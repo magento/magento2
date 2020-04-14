@@ -10,22 +10,24 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Website;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /** @var  Website */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|MockObject
      */
     protected $resourceMock;
 
-    /** @var  Select | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Select | MockObject */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
     protected $connectionMock;
 
