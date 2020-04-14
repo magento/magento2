@@ -10,13 +10,15 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="IdentityOfDefaultBillingAndShippingAddressTest">
         <annotations>
-            <features value="Customer"/>
+            <features value="Checkout"/>
             <stories value="Customer checkout"/>
             <title value="Checking assignment of default billing address after placing an order"/>
             <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94108"/>
+            <useCaseId value="MAGETWO-62891"/>
             <group value="checkout"/>
-            <testCaseId value="MAGETWO-62891"/>
+            <group value="customer"/>
         </annotations>
 
         <before>
@@ -25,7 +27,7 @@
         </before>
 
         <!-- Go to Storefront Homepage -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="GoToStorefrontHomepage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomepage"/>
 
         <!-- Fill out form for a new user with address -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
@@ -40,10 +42,10 @@
 
         <!-- Add product to cart -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$createProduct$$"/>
+            <argument name="product" value="$createProduct$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
 
@@ -58,20 +60,24 @@
 
         <!-- Fill Cart data -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
-        <click selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
+        <checkOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
 
+        <!-- Place Order -->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
+
         <!-- Go To My Account Page -->
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage" />
 
         <!-- Assert That Shipping And Billing Address are the same -->
         <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
-        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
 
         <after>
+            <!-- Logout Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
             <!-- Delete created Product -->
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
@@ -80,7 +86,7 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromAdmin">
                 <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
     </test>
