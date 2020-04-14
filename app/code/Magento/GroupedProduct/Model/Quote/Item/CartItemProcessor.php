@@ -15,7 +15,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     /**
      * @var ObjectFactory
      */
-    protected $objectFactory;
+    private $objectFactory;
 
     /**
      * CartItemProcessor constructor.
