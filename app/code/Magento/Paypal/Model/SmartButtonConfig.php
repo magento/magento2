@@ -15,8 +15,6 @@ use Magento\Paypal\Model\Config as PayPalConfig;
 
 /**
  * Provides configuration values for PayPal in-context checkout
- *
- * Class SmartButtonConfig
  */
 class SmartButtonConfig
 {
@@ -155,26 +153,24 @@ class SmartButtonConfig
      */
     private function getDisallowedFunding(): array
     {
-        $disallowedFundingConfig = $this->config->getValue('disable_funding_options');
-        $disallowedFundingArray = $disallowedFundingConfig ? explode(',', $disallowedFundingConfig) : [];
+        $disallowedFunding = $this->config->getValue('disable_funding_options');
+        $result = $disallowedFunding ? explode(',', $disallowedFunding) : [];
 
-        //Disable "card" method if guest PayPal checkout is disabled
-        $isGuestPayPalCheckoutEnabled
-            = $this->config->getValue('solution_type') === PayPalConfig::EC_SOLUTION_TYPE_SOLE;
-        $disallowedFundingArray = !$isGuestPayPalCheckoutEnabled && !in_array('CARD', $disallowedFundingArray)
-            ? array_merge_recursive(['CARD'], $disallowedFundingArray)
-            : $disallowedFundingArray;
+        // PayPal Guest Checkout Credit Card Icons only available when Guest Checkout option is enabled
+        if ($this->isPaypalGuestCheckoutAllowed() === false && !in_array('CARD', $result)) {
+            array_push($result, 'CARD');
+        }
 
         // Map old configuration values to current ones
-        $disallowedFundingArray = array_map(function ($oldValue) {
+        $result = array_map(function ($oldValue) {
             return $this->disallowedFundingMap[$oldValue] ?? $oldValue;
         },
-            $disallowedFundingArray);
+            $result);
 
         //disable unsupported payment methods
-        $disallowedFundingArray = array_merge($disallowedFundingArray, $this->unsupportedPaymentMethods);
+        $result = array_merge($disallowedFundingArray, $this->unsupportedPaymentMethods);
 
-        return $disallowedFundingArray;
+        return $result;
     }
 
     /**
@@ -234,5 +230,15 @@ class SmartButtonConfig
         }
 
         return $styles;
+    }
+
+    /**
+     * Returns if is allowed PayPal Guest Checkout.
+     *
+     * @return bool
+     */
+    private function isPaypalGuestCheckoutAllowed(): bool
+    {
+        return $this->config->getValue('solution_type') === Config::EC_SOLUTION_TYPE_SOLE;
     }
 }
