@@ -16,7 +16,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserTab"/>
         <waitForPageLoad stepKey="waitForUserRoleTabOpened"/>
-        <see selector="{{AdminMessagesSection.errorMessage}}" userInput='"Expiration date" must be later than the current date.'
+        <see selector="{{AdminMessagesSection.error}}" userInput='"Expiration date" must be later than the current date.'
              stepKey="seeErrorMessage"/>
     </actionGroup>
 </actionGroups>
