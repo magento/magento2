@@ -243,26 +243,19 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('customerCountryCode'));
         $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue(null));
 
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getCustomerGroupId')
             ->will($this->returnValue('customerGroupId'));
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
-        $this->groupManagementMock->expects($this->once())
-            ->method('getDefaultGroup')
-            ->will($this->returnValue($this->groupInterfaceMock));
-        $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue('defaultCustomerGroupId'));
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
-        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('defaultCustomerGroupId');
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-
         /** SUT execution */
         $this->model->execute($this->observerMock);
     }
