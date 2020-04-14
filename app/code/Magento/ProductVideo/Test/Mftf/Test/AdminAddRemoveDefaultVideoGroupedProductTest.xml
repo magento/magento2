@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddRemoveDefaultVideoGroupedProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
         <annotations>
-            <features value="GroupedProduct"/>
+            <features value="ProductVideo"/>
             <stories value="Add/remove images and videos for all product types and category"/>
             <title value="Admin should be able to add/remove default product video for a Grouped Product"/>
             <description value="Admin should be able to add/remove default product video for a Grouped Product"/>

@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddRemoveDefaultVideoSimpleProductTest">
         <annotations>
-            <features value="Catalog"/>
+            <features value="ProductVideo"/>
             <stories value="Add/remove images and videos for all product types and category"/>
             <title value="Admin should be able to add/remove default product video for a Simple Product"/>
             <description value="Admin should be able to add/remove default product video for a Simple Product"/>
@@ -23,7 +23,7 @@
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <!-- Login to Admin page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <createData entity="DefaultProductVideoConfig" stepKey="setYoutubeApiKeyDefaultConfig"/>
