@@ -241,7 +241,10 @@ class RemoveItemTest extends TestCase
             ->method('validate')
             ->with($this->requestMock)
             ->willReturn(true);
-        $this->requestMock->expects($this->once())->method('getParam')->with('item_id')->willReturn($itemId);
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('item_id')
+            ->willReturn($itemId);
 
         $exception = new \Zend_Db_Exception($dbError);
 
@@ -252,7 +255,10 @@ class RemoveItemTest extends TestCase
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $this->sidebarMock->expects($this->once())->method('getResponseData')->with($message)->willReturn($responseData);
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with($message)
+            ->willReturn($responseData);
 
         $resultJson = $this->createMock(ResultJson::class);
         $resultJson->expects($this->once())
