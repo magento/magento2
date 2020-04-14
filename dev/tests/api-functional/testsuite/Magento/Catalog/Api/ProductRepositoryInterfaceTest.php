@@ -8,19 +8,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
-use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
-use Magento\Integration\Api\AdminTokenServiceInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\WebsiteRepository;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -28,6 +22,12 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -280,7 +280,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 1,
-                (int) $website->getId(),
+                (int)$website->getId(),
             ]
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
@@ -491,7 +491,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'stock_item' => $this->getStockItemData()
@@ -1097,6 +1096,86 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with pagination
+     *
+     * @param int $pageSize
+     * @param int $currentPage
+     * @param int $expectedCount
+     *
+     * @magentoAppIsolation enabled
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @dataProvider productPaginationDataProvider
+     */
+    public function testGetListPagination(int $pageSize, int $currentPage, int $expectedCount)
+    {
+        $fixtureProducts = 5;
+
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        $categoryFilter = $filterBuilder->setField('category_id')
+            ->setValue(333)
+            ->create();
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->addFilters([$categoryFilter]);
+        $searchCriteriaBuilder->setPageSize($pageSize);
+        $searchCriteriaBuilder->setCurrentPage($currentPage);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals($fixtureProducts, $searchResult['total_count']);
+        $this->assertCount($expectedCount, $searchResult['items']);
+    }
+
+    /**
+     * Keep in mind: Fixture contains 5 products
+     *
+     * @return array
+     */
+    public function productPaginationDataProvider()
+    {
+        return [
+            'expect-all-items' => [
+                'pageSize' => 10,
+                'currentPage' => 1,
+                'expectedCount' => 5
+            ],
+            'expect-page=size-items' => [
+                'pageSize' => 2,
+                'currentPage' => 1,
+                'expectedCount' => 2
+            ],
+            'expect-less-than-pagesize-elements' => [
+                'pageSize' => 3,
+                'currentPage' => 2,
+                'expectedCount' => 2
+            ],
+            'expect-no-items' => [
+                'pageSize' => 100,
+                'currentPage' => 99,
+                'expectedCount' => 0
+            ]
+        ];
+    }
+
+    /**
      * Test getList() method with multiple filter groups and sorting and pagination
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
@@ -1133,7 +1212,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $sortOrder = $sortOrderBuilder->setField('meta_title')->setDirection(SortOrder::SORT_DESC)->create();
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
         $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
         $searchCriteriaBuilder->addFilters([$filter5]);
@@ -1393,8 +1472,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response[self::KEY_TIER_PRICES] = [];
         $response = $this->updateProduct($response);
-        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
-        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
 
         // delete the product with tier prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -1618,7 +1695,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 0,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
         ];
 
@@ -1728,8 +1804,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Test design settings authorization
      *
      * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
-     * @throws \Throwable
      * @return void
+     * @throws \Throwable
      */
     public function testSaveDesign(): void
     {

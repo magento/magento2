@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\Backend\Image;
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Catalog\Model\Category\Image as CategoryImage;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -99,6 +100,11 @@ class DataProviderTest extends TestCase
     private $auth;
 
     /**
+     * @var CategoryImage|MockObject
+     */
+    private $categoryImage;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -155,6 +161,11 @@ class DataProviderTest extends TestCase
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
             ->disableOriginalConstructor()->getMock();
+
+        $this->categoryImage = $this->createPartialMock(
+            CategoryImage::class,
+            ['getUrl']
+        );
     }
 
     /**
@@ -185,7 +196,8 @@ class DataProviderTest extends TestCase
                 'categoryFactory' => $this->categoryFactory,
                 'pool' => $this->modifierPool,
                 'auth' => $this->auth,
-                'arrayUtils' => $this->arrayUtils
+                'arrayUtils' => $this->arrayUtils,
+                'categoryImage' => $this->categoryImage,
             ]
         );
 
@@ -324,8 +336,8 @@ class DataProviderTest extends TestCase
         $categoryMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn(['image' => $attributeMock]);
-        $categoryMock->expects($this->once())
-            ->method('getImageUrl')
+        $this->categoryImage->expects($this->once())
+            ->method('getUrl')
             ->willReturn($categoryUrl);
 
         $this->registry->expects($this->once())

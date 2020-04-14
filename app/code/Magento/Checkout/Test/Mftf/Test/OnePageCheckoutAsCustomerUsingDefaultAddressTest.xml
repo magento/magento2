@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -82,7 +82,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>

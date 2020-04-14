@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product -->
@@ -35,8 +35,8 @@
             </actionGroup>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
 
             <!-- Delete attribute set -->
@@ -45,7 +45,7 @@
             </actionGroup>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create configurable product -->
@@ -122,8 +122,7 @@
         </actionGroup>
 
         <!-- Assert child products are not displayed separately: two next step -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
-        <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFirstChildProduct"/>

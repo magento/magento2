@@ -15,7 +15,7 @@ class CustomerLogoutTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 

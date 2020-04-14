@@ -12,7 +12,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
     protected $response;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\Headers */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Http\Headers */
     protected $headers;
 
     protected function setUp()
@@ -22,7 +22,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             ['getHeaders', 'send', 'clearHeader']
         );
         $this->headers = $this->createPartialMock(
-            \Zend\Http\Headers::class,
+            \Laminas\Http\Headers::class,
             ['has', 'get', 'current', 'removeHeader']
         );
     }
@@ -117,7 +117,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = \Zend\Http\Header\GenericHeader::fromString('Header-name: header-value');
+        $header = \Laminas\Http\Header\GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())
@@ -152,7 +152,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = \Zend\Http\Header\GenericHeader::fromString('Header-name: header-value');
+        $header = \Laminas\Http\Header\GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())

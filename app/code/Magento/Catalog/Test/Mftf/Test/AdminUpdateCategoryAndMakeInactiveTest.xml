@@ -13,17 +13,17 @@
             <title value="Update category, make inactive"/>
             <description value="Login as admin and update category and  make it Inactive"/>
             <testCaseId value="MC-6060"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCreatedCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open category page-->

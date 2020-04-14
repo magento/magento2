@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCatalogInventoryChangeManageStockActionGroup">
+        <annotations>
+            <description>Opens advanced inventory modal if it has not opened yet. Sets Manage stock value.</description>
+        </annotations>
+        <arguments>
+            <argument name="manageStock" type="string" defaultValue="Yes"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductFormSection.advancedInventoryLink}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" visible="false" stepKey="openAdvancedInventoryWindow"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="waitForAdvancedInventoryModalWindowOpen"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckManageStockConfigSetting"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="{{manageStock}}" stepKey="changeManageStock"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButton"/>
+    </actionGroup>
+</actionGroups>
