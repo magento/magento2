@@ -5,4 +5,5 @@
  */
 
 use \Magento\Framework\Component\ComponentRegistrar;
+
 ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TranslationGraphQl', __DIR__);

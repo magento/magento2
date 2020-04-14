@@ -1,3 +1,5 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
 type Query {
     translate (
         locale: String @doc(description: "Desired Locale eg: en_US or ca_FR")

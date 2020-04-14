@@ -14,8 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TranslateInterface;
 
 /**
- * Class Translations
- * @package Magento\TranslationGraphQl\Model\Resolver
+ * Resolver for retrieving translated phrases
  */
 class Translations implements ResolverInterface
 {

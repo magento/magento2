@@ -15,8 +15,7 @@ use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
- * Class AvailableLocales
- * @package Magento\TranslationGraphQl\Model\Resolver
+ * Retrieval of available locales configured for all store views
  */
 class AvailableLocales implements ResolverInterface
 {
@@ -63,7 +62,8 @@ class AvailableLocales implements ResolverInterface
      *
      * @return array
      */
-    private function getLocales(): array {
+    private function getLocales(): array
+    {
         $locales = [];
         $stores = $this->storeRepository->getList();
 

@@ -255,6 +255,7 @@
         "magento/module-theme": "*",
         "magento/module-theme-graph-ql": "*",
         "magento/module-translation": "*",
+        "magento/module-translation-graph-ql": "*",
         "magento/module-ui": "*",
         "magento/module-ups": "*",
         "magento/module-url-rewrite": "*",
