@@ -48,22 +48,31 @@ class LockGuardedCacheLoader
     private $loadTimeout;
 
     /**
-     * LockGuardedCacheLoader constructor.
+     * Minimal delay timeout in ms.
+     *
+     * @var int
+     */
+    private $minimalDelayTimeout;
+
+    /**
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
      * @param int $loadTimeout
+     * @param int $minimalDelayTimeout
      */
     public function __construct(
         LockManagerInterface $locker,
         int $lockTimeout = 10000,
         int $delayTimeout = 20,
-        int $loadTimeout = 10000
+        int $loadTimeout = 10000,
+        int $minimalDelayTimeout = 5
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;
         $this->delayTimeout = $delayTimeout;
         $this->loadTimeout = $loadTimeout;
+        $this->minimalDelayTimeout = $minimalDelayTimeout;
     }
 
     /**
@@ -100,7 +109,7 @@ class LockGuardedCacheLoader
             }
 
             if ($cachedData === false) {
-                usleep($this->delayTimeout * 1000);
+                usleep($this->getLookupTimeout() * 1000);
                 $cachedData = $dataLoader();
             }
         }
@@ -118,7 +127,7 @@ class LockGuardedCacheLoader
     public function lockedCleanData(string $lockName, callable $dataCleaner)
     {
         while ($this->locker->isLocked($lockName)) {
-            usleep($this->delayTimeout * 1000);
+            usleep($this->getLookupTimeout() * 1000);
         }
         try {
             if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
@@ -127,5 +136,19 @@ class LockGuardedCacheLoader
         } finally {
             $this->locker->unlock($lockName);
         }
+    }
+
+    /**
+     * Delay will be applied as rand($minimalDelayTimeout, $delayTimeout).
+     * This helps to desynchronize multiple clients trying
+     * to acquire the lock for the same resource at the same time
+     *
+     * @return int
+     */
+    private function getLookupTimeout()
+    {
+        $lookupTimeout = rand($this->minimalDelayTimeout, $this->delayTimeout);
+
+        return $lookupTimeout;
     }
 }
