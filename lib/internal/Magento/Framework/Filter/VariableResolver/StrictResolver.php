@@ -59,13 +59,8 @@ class StrictResolver implements VariableResolverInterface
             }
         }
 
-        if (isset($stackArgs[$last]['variable'])
-            && (is_scalar($stackArgs[$last]['variable']) || is_array($stackArgs[$last]['variable']) ||
-                $stackArgs[$last]['variable'] instanceof Collection ||
-                $stackArgs[$last]['variable'] instanceof Phrase)
-        ) {
-            // If value for construction exists set it
-            $result = $stackArgs[$last]['variable'];
+        if (isset($stackArgs[$last]['variable'])) {
+            $result = $this->assignResolvedVariable($stackArgs[$last]['variable']);
         }
 
         return $result;
@@ -171,5 +166,26 @@ class StrictResolver implements VariableResolverInterface
                 || $stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
                 || is_array($stackArgs[$i - 1]['variable'])
             );
+    }
+
+    /**
+     * Assign resolved variable
+     *
+     * @param $stackArg mixed
+     * @return mixed|null
+     */
+    private function assignResolvedVariable($stackArg)
+    {
+        $result = null;
+        if (isset($stackArg) && (
+            is_scalar($stackArg) || is_array($stackArg) ||
+            $stackArg instanceof Collection || $stackArg instanceof Phrase
+            )
+        ) {
+            // If value for construction exists set it
+            $result = $stackArg;
+        }
+
+        return $result;
     }
 }
