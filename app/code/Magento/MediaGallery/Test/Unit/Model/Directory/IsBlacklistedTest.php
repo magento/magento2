@@ -9,7 +9,6 @@ namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Directory\IsBlacklisted;
-use Magento\MediaGallery\Model\Directory\Config;
 use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

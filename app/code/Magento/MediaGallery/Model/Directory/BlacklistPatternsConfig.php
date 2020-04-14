@@ -13,7 +13,7 @@ use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
 /**
  * Media gallery directory config
  */
-class Config implements BlacklistPatternsConfigInterface
+class BlacklistPatternsConfig implements BlacklistPatternsConfigInterface
 {
     private const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
 

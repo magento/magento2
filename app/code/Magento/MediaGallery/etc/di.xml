@@ -9,9 +9,6 @@
     <preference for="Magento\MediaGalleryApi\Api\Data\KeywordInterface" type="Magento\MediaGallery\Model\Keyword"/>
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetInterface" type="Magento\MediaGallery\Model\Asset"/>
     <preference for="Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface" type="Magento\MediaGallery\Model\AssetKeywords"/>
-
-    <preference for="Magento\MediaGallery\Model\Directory\ConfigInterface" type="Magento\MediaGallery\Model\Directory\Config"/>
-
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface" type="Magento\MediaGallery\Model\Asset\Command\GetById"/>
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" type="Magento\MediaGallery\Model\Asset\Command\Save"/>
     <preference for="Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface" type="Magento\MediaGallery\Model\Asset\Command\GetByPath"/>
@@ -53,11 +50,11 @@
             <argument name="cacheId" xsi:type="string">Media_Gallery_Patterns_CacheId</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGallery\Model\Directory\Config">
+    <type name="Magento\MediaGallery\Model\Directory\BlacklistPatternsConfig">
         <arguments>
             <argument name="data" xsi:type="object">Magento\MediaGallery\Model\Directory\Config\Data</argument>
         </arguments>
     </type>
 
-    <preference for="Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface" type="Magento\MediaGallery\Model\Directory\Config"/>
+    <preference for="Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface" type="Magento\MediaGallery\Model\Directory\BlacklistPatternsConfig"/>
 </config>
