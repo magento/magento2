@@ -45,7 +45,7 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- Delete data -->

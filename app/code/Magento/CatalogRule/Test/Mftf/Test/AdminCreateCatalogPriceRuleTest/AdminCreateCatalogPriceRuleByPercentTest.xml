@@ -25,7 +25,7 @@
             </createData>
 
             <!-- Perform reindex and flush cache -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
             <!-- log in and create the price rule -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

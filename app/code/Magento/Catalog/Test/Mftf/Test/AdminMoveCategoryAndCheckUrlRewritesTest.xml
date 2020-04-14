@@ -23,7 +23,7 @@
                 <field key="is_active">true</field>
             </createData>
             <!-- Perform reindex and flush cache -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData createDataKey="createDefaultCategory" stepKey="deleteCategory"/>

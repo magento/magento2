@@ -125,8 +125,8 @@
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <!-- Reindex and flash cache -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <!-- Reindex-->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Open Storefront product page and assert created configurable product -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">

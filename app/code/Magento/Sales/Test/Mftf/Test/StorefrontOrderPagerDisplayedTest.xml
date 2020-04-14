@@ -89,8 +89,8 @@
             <!-- Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <!-- Reindex and flush the cache to display products on the category page -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <!-- Reindex to display products on the category page -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- Delete category and products -->

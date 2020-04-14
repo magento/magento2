@@ -71,8 +71,8 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <!-- Perform reindex-->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
@@ -114,7 +114,7 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- Reindex -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Assert that the rule isn't present on the Category page -->
         <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>

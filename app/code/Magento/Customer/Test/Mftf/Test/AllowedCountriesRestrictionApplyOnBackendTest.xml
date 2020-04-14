@@ -60,7 +60,7 @@
             <actionGroup ref="SetWebsiteCountryOptionsToDefaultActionGroup" stepKey="setCountryOptionsToDefault"/>
             <createData entity="CustomerAccountSharingSystemValue" stepKey="setAccountSharingToSystemValue"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Check that all countries are allowed initially and get amount-->
         <comment userInput="Check that all countries are allowed initially and get amount" stepKey="checkAllCountriesAreAllowed"/>

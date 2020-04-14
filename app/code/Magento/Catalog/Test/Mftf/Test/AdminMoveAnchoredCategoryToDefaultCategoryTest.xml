@@ -70,7 +70,7 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
 
         <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!--Open Category in store front page-->
         <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>

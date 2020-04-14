@@ -54,7 +54,8 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct11">
                 <field key="price">110.00</field>
             </createData>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="cache:clean config" stepKey="flushConfigCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>

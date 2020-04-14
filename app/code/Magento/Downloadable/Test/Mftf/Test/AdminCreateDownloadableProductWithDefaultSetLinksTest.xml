@@ -76,7 +76,7 @@
 
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Find downloadable product in grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>

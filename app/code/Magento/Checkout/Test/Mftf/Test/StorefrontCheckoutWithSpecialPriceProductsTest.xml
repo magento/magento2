@@ -90,7 +90,7 @@
             <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
             <waitForPageLoad time='60' stepKey="waitForSpecialPriceProductSaved"/>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSaveSuccessMessage1"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

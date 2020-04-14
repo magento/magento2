@@ -54,8 +54,8 @@
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <!-- Perform reindex-->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>

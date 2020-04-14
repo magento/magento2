@@ -60,8 +60,8 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
-        <!--Clear cache and reindex-->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <!--Reindex-->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         <!--Verify product is visible in category front page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>

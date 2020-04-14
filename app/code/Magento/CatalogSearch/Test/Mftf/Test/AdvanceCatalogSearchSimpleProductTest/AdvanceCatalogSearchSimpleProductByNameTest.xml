@@ -13,8 +13,8 @@
             <group value="CatalogSearch"/>
         </annotations>
 
-        <!-- Perform reindex and flush cache -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <!-- Perform reindex-->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="search">

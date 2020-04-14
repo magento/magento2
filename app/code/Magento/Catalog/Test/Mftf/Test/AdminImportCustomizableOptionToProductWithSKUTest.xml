@@ -32,7 +32,7 @@
             </createData>
 
             <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>

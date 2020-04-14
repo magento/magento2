@@ -43,7 +43,7 @@
             <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

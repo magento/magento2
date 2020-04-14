@@ -24,7 +24,8 @@
             </createData>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1"/>
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="cache:clean config" stepKey="flushConfigCache"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

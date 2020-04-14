@@ -110,7 +110,8 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="cache:clean config" stepKey="flushConfigCache"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>

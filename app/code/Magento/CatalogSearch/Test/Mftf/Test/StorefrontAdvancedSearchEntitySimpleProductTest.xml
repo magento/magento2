@@ -31,8 +31,8 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
-        <!-- Perform reindex and flush cache -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <!-- Perform reindex-->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- 1. Navigate to Frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>

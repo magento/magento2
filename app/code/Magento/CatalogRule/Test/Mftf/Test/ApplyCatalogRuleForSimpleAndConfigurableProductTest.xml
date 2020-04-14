@@ -111,7 +111,7 @@
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>

@@ -25,8 +25,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
-            <!--Clear cache and reindex-->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <!--Clear cache-->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

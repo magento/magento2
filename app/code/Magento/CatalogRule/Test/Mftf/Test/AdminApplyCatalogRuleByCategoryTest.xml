@@ -78,7 +78,7 @@
 
         <!-- 3. Save and apply the new catalog price rule -->
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- 4. Verify the storefront -->
         <amOnPage url="$$createCategoryOne.name$$.html" stepKey="goToCategoryOne"/>

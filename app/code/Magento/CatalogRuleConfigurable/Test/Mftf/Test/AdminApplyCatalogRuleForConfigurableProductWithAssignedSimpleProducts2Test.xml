@@ -190,7 +190,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Login to storefront from customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">

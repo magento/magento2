@@ -332,8 +332,8 @@
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
-            <!--Do reindex and flush cache-->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <!--Do reindex-->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>

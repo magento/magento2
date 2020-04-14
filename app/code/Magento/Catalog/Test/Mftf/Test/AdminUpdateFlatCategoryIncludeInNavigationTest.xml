@@ -30,7 +30,7 @@
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
@@ -67,7 +67,7 @@
         <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Run full reindex and clear caches -->
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         <!--Open Index Management Page -->
         <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
         <waitForPageLoad stepKey="waitForIndexPageToBeLoaded"/>

@@ -74,7 +74,7 @@
             </actionGroup>
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Create widget for recently viewed products-->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContentBefore">

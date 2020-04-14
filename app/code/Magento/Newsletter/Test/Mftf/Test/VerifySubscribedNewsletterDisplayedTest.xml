@@ -47,7 +47,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second"/>
             </actionGroup>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

@@ -64,7 +64,7 @@
 
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         </after>
 

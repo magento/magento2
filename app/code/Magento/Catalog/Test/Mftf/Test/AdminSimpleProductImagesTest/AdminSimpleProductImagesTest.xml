@@ -143,7 +143,7 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
-        <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>

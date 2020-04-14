@@ -39,7 +39,7 @@
             <getData entity="GetProduct" stepKey="arg3">
                 <requiredEntity createDataKey="simple2"/>
             </getData>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>

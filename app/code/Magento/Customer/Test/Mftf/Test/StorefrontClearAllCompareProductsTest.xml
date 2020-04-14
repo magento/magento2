@@ -102,7 +102,7 @@
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
 
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>

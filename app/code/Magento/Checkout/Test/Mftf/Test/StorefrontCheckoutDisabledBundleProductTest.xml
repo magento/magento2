@@ -36,7 +36,7 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <actionGroup ref="AdminReindexAndFlushCacheActionGroup" stepKey="reindexAndFlushCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- Delete category -->
