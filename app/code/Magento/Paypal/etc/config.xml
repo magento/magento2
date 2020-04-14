@@ -109,6 +109,7 @@
                 <cgi_url>https://payflowlink.paypal.com</cgi_url>
                 <transaction_url_test_mode>https://pilot-payflowpro.paypal.com</transaction_url_test_mode>
                 <transaction_url>https://payflowpro.paypal.com</transaction_url>
+                <fmf>0</fmf>
                 <avs_street>0</avs_street>
                 <avs_zip>0</avs_zip>
                 <avs_international>0</avs_international>

@@ -7,6 +7,7 @@ namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\Connector;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -57,22 +58,24 @@ class SignUp
     }
 
     /**
-     * Execute scheduled subscription operation
+     * Execute scheduled subscription operation.
+     *
      * In case of failure writes message to notifications inbox
      *
      * @return bool
+     * @throws NotFoundException
      */
     public function execute()
     {
-        $attemptsCount = $this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+        $attemptsCount = (int)$this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
 
-        if (($attemptsCount === null) || ($attemptsCount <= 0)) {
+        if ($attemptsCount <= 0) {
             $this->deleteAnalyticsCronExpr();
             $this->flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
             return false;
         }
 
-        $attemptsCount -= 1;
+        $attemptsCount--;
         $this->flagManager->saveFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
         $signUpResult = $this->connector->execute('signUp');
         if ($signUpResult === false) {

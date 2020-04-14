@@ -474,8 +474,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             $layer->setCurrentCategory($origCategory);
         }
 
-        $this->addToolbarBlock($collection);
-
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',
             ['collection' => $collection]

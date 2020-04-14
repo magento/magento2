@@ -187,10 +187,6 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
             ->method('getProductCollection')
             ->will($this->returnValue($this->prodCollectionMock));
 
-        $this->layoutMock->expects($this->once())
-            ->method('getBlock')
-            ->will($this->returnValue($this->toolbarMock));
-
         $this->assertEquals(
             [$categoryTag, $productTag],
             $this->block->getIdentities()

@@ -13,12 +13,12 @@
             <title value="Update category, check default URL key on the custom store view"/>
             <description value="Login as admin and update category and check default URL Key on custom store view"/>
             <testCaseId value="MC-6063"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
                 <requiredEntity createDataKey="rootCategory"/>

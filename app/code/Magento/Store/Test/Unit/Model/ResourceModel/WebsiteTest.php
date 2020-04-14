@@ -10,22 +10,24 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Website;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /** @var  Website */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|MockObject
      */
     protected $resourceMock;
 
-    /** @var  Select | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Select | MockObject */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
     protected $connectionMock;
 
@@ -80,11 +82,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->connectionMock);
 
         $this->connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($mainTable)
-            ->willReturn(true);
-
-        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->select);
 
@@ -94,41 +91,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->connectionMock->expects($this->once())
-            ->method('fetchAll')
-            ->with($this->select)
-            ->willReturn($data);
-
-        $this->assertEquals($data, $this->model->readAllWebsites());
-    }
-
-    public function testReadAllWebsitesNoDbTable()
-    {
-        $data = [];
-        $mainTable = 'no_store_website_table';
-
-        $this->resourceMock->expects($this->once())
-            ->method('getTableName')
-            ->willReturn($mainTable);
-
-        $this->resourceMock->expects($this->atLeastOnce())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-
-        $this->connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($mainTable)
-            ->willReturn(false);
-
-        $this->connectionMock->expects($this->never())
-            ->method('select')
-            ->willReturn($this->select);
-
-        $this->select->expects($this->never())
-            ->method('from')
-            ->with($mainTable)
-            ->willReturnSelf();
-
-        $this->connectionMock->expects($this->never())
             ->method('fetchAll')
             ->with($this->select)
             ->willReturn($data);

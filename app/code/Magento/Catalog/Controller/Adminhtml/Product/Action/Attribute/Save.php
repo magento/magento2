@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
@@ -157,6 +158,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $dateFormat = $this->timezone->getDateFormat(\IntlDateFormatter::SHORT);
 
         foreach ($attributesData as $attributeCode => $value) {
+            if ($attributeCode === ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                continue;
+            }
+
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
 
             if (!$attribute->getAttributeId()) {

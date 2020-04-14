@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sitemap\Model\Sitemap;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use PHPUnit\Framework\TestCase;
 
 /**
