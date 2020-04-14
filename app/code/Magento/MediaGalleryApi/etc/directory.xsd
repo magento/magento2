@@ -29,7 +29,7 @@
     <xs:complexType name="patternsType">
         <xs:annotation>
             <xs:documentation>
-                List of directory paths regexp patterns
+                List of directory paths RegExp patterns
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
