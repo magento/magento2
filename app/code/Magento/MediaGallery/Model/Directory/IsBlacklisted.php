@@ -15,14 +15,14 @@ use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 class IsBlacklisted implements IsPathBlacklistedInterface
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      */
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
     }

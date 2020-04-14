@@ -12,7 +12,7 @@ use Magento\Framework\Config\DataInterface;
 /**
  * Media gallery directory config
  */
-class Config
+class Config implements ConfigInterface
 {
     private const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
 
@@ -30,24 +30,12 @@ class Config
     }
 
     /**
-     * Get config value by key.
-     *
-     * @param string|null $key
-     * @param string|null $default
-     * @return array
-     */
-    public function get($key = null, $default = null)
-    {
-        return $this->data->get($key, $default);
-    }
-
-    /**
      * Returns list of blacklist regexp patterns
      *
      * @return array
      */
     public function getBlacklistPatterns() : array
     {
-        return $this->get(self::XML_PATH_BLACKLIST_PATTERNS);
+        return $this->data->get(self::XML_PATH_BLACKLIST_PATTERNS);
     }
 }
