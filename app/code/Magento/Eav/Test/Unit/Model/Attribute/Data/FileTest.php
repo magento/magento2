@@ -17,6 +17,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for Magento\Eav\Model\Attribute\Data\File class.
@@ -31,15 +32,18 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EncoderInterface
+     * @var MockObject|EncoderInterface
      */
     protected $urlEncoder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fileValidatorMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $timezoneMock = $this->createMock(TimezoneInterface::class);
