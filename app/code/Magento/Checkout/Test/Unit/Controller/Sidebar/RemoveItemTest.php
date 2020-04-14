@@ -231,12 +231,12 @@ class RemoveItemTest extends TestCase
         $itemId = 1;
         $dbError = 'Error';
         $message = __('An unspecified error occurred. Please contact us for assistance.');
-        $response = [
+        $responseData = [
             'success' => false,
             'error_message' => $message,
         ];
 
-        $this->getPropertyValue($this->removeItem, 'formKeyValidator')
+        $this->formKeyValidatorMock
             ->expects($this->once())
             ->method('validate')
             ->with($this->requestMock)
@@ -252,19 +252,18 @@ class RemoveItemTest extends TestCase
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $this->sidebarMock->expects($this->once())->method('getResponseData')->with($message)->willReturn($response);
-        $encodedResponse = json_encode($response);
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->willReturn($encodedResponse);
+        $this->sidebarMock->expects($this->once())->method('getResponseData')->with($message)->willReturn($responseData);
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with($encodedResponse)
-            ->willReturn($this->responseMock);
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
 
-        $this->removeItem->execute();
+        $this->action->execute();
     }
 
     public function testExecuteWhenFormKeyValidationFailed()
