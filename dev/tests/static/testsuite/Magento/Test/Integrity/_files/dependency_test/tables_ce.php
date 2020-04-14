@@ -190,7 +190,6 @@ return [
     'oauth_consumer'                              => 'Magento\Integration',
     'oauth_nonce'                                 => 'Magento\Integration',
     'oauth_token'                                 => 'Magento\Integration',
-    'authorizenet_debug'                          => 'Magento\Authorizenet',
     'admin_passwords'                             => 'Magento\User',
     'paypal_cert'                                 => 'Magento\Paypal',
     'paypal_payment_transaction'                  => 'Magento\Paypal',
