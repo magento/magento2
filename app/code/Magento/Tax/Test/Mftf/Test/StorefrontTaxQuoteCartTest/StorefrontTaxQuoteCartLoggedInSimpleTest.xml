@@ -96,7 +96,7 @@
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>

@@ -89,7 +89,7 @@
         <waitForPageLoad stepKey="waitForElementAdded2"/>
 
         <!-- Go to the shopping cart page and edit the first product -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="onPageShoppingCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart"/>
         <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
@@ -106,7 +106,7 @@
         <waitForPageLoad stepKey="waitForElementAdded3"/>
 
         <!-- Go to the shopping cart page -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="onPageShoppingCart2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
         <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>

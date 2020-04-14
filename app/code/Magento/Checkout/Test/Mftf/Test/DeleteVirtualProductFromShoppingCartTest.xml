@@ -38,7 +38,7 @@
         </actionGroup>
 
         <!-- Remove product from cart -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>

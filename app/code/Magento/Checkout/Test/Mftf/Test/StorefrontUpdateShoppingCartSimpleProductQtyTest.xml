@@ -36,7 +36,7 @@
         </after>
 
         <!-- Go to the shopping cart -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="amOnPageShoppingCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
 
         <!-- Change the product QTY -->
         <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{quoteQty3Price123.qty}}" stepKey="changeCartQty"/>

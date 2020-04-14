@@ -65,7 +65,7 @@
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
 
         <!--Go to cart page, update qty and proceed to checkout-->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <see userInput="Shopping Cart" stepKey="seeCartPageIsOpened"/>
         <fillField selector="{{CheckoutCartProductSection.qty($$createProduct.name$$)}}" userInput="2" stepKey="updateProductQty"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>

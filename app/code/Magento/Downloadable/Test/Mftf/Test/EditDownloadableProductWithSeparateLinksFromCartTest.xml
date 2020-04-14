@@ -95,7 +95,7 @@
         </actionGroup>
 
         <!-- Step 4: Open cart -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
         <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$51.99"
              stepKey="assertProductPriceInCart"/>
 

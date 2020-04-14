@@ -41,7 +41,7 @@
         </actionGroup>
 
         <!-- Go to the cart page and verify we see the product -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="gotoCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>

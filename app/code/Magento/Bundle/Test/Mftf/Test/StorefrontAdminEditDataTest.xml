@@ -80,7 +80,7 @@
         <waitForPageLoad stepKey="waitForElementAdded"/>
 
         <!-- Go to the shopping cart page and grab the value of the option title -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="onPageShoppingCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalBefore"/>
 
         <!-- Find the product that we just created using the product grid -->
@@ -100,7 +100,7 @@
         <see stepKey="assertSuccess2" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
         <!-- Go to the shopping cart page and make sure the title has changed -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="onPageShoppingCart1"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart1"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalAfter"/>
         <assertNotEquals stepKey="assertNotEquals">
 			<actualResult type="string">{$grabTotalAfter}</actualResult>

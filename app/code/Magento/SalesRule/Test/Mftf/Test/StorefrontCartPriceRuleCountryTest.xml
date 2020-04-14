@@ -71,7 +71,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Should not see the discount yet because we have not set country -->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="openEstimateShippingSection"/>
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShipping"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
