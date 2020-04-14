@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\ConfigureCatalogSearch;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use PHPUnit\Framework\TestCase;
-use Zend\View\Model\ViewModel;
 
 class ConfigureCatalogSearchTest extends TestCase
 {

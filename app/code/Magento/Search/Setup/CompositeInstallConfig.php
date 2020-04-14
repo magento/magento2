@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Search\Setup;
 
-use Magento\Config\Model\Config\Backend\Admin\Custom;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * Composite object uses the proper InstallConfigInterface implementation for the engine being configured
@@ -22,17 +21,19 @@ class CompositeInstallConfig implements InstallConfigInterface
     private $installConfigList;
 
     /**
-     * @var ScopeConfigInterface
+     * @var EngineResolverInterface
      */
-    private $scopeConfig;
+    private $engineResolver;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * @param EngineResolverInterface $engineResolver
      * @param InstallConfigInterface[] $installConfigList
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, array $installConfigList)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        EngineResolverInterface $engineResolver,
+        array $installConfigList
+    ) {
+        $this->engineResolver = $engineResolver;
         $this->installConfigList = $installConfigList;
     }
 
@@ -44,7 +45,7 @@ class CompositeInstallConfig implements InstallConfigInterface
         if (isset($inputOptions['search-engine'])) {
             $searchEngine = $inputOptions['search-engine'];
         } else {
-            $searchEngine = $this->scopeConfig->getValue(Custom::XML_PATH_CATALOG_SEARCH_ENGINE);
+            $searchEngine = $this->engineResolver->getCurrentSearchEngine();
         }
 
         if (!isset($this->installConfigList[$searchEngine])) {
