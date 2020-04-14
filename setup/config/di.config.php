@@ -8,8 +8,8 @@ return [
     'di' => [
         'instance' => [
             'preference' => [
-                \Zend\EventManager\EventManagerInterface::class => 'EventManager',
-                \Zend\ServiceManager\ServiceLocatorInterface::class => \Zend\ServiceManager\ServiceManager::class,
+                \Laminas\EventManager\EventManagerInterface::class => 'EventManager',
+                \Laminas\ServiceManager\ServiceLocatorInterface::class => \Laminas\ServiceManager\ServiceManager::class,
                 \Magento\Framework\DB\LoggerInterface::class => \Magento\Framework\DB\Logger\Quiet::class,
                 \Magento\Framework\Locale\ConfigInterface::class => \Magento\Framework\Locale\Config::class,
                 \Magento\Framework\Filesystem\DriverInterface::class =>

@@ -7,8 +7,8 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Composer\InfoCommand;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Controller for other components grid on select version page
@@ -40,13 +40,13 @@ class OtherComponentsGrid extends AbstractActionController
     /**
      * No index action, return 404 error page
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Laminas\View\Model\ViewModel;
         $view->setTemplate('/error/404.phtml');
-        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Laminas\Http\Response::STATUS_CODE_404);
         return $view;
     }
 

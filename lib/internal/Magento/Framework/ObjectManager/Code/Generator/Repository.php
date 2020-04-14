@@ -11,8 +11,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
-use Zend\Code\Reflection\MethodReflection;
-use Zend\Code\Reflection\ParameterReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * Class Repository
@@ -23,7 +23,7 @@ use Zend\Code\Reflection\ParameterReflection;
 class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
-     * Entity type
+     * Entity type repository
      */
     const ENTITY_TYPE = 'repository';
 
@@ -130,6 +130,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
 
     /**
      * Returns source collection factory property name
+     *
      * @return string
      */
     protected function _getSourceCollectionFactoryPropertyName()
@@ -620,7 +621,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _validateData()
     {
