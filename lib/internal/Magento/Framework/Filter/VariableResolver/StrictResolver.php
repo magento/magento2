@@ -9,10 +9,12 @@ declare(strict_types=1);
 namespace Magento\Framework\Filter\VariableResolver;
 
 use Magento\Email\Model\AbstractTemplate;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\Template\Tokenizer\VariableFactory;
 use Magento\Framework\Filter\VariableResolverInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Resolves variables allowing only scalar values
@@ -58,7 +60,9 @@ class StrictResolver implements VariableResolverInterface
         }
 
         if (isset($stackArgs[$last]['variable'])
-            && (is_scalar($stackArgs[$last]['variable']) || is_array($stackArgs[$last]['variable']))
+            && (is_scalar($stackArgs[$last]['variable']) || is_array($stackArgs[$last]['variable']) ||
+                $stackArgs[$last]['variable'] instanceof Collection ||
+                $stackArgs[$last]['variable'] instanceof Phrase)
         ) {
             // If value for construction exists set it
             $result = $stackArgs[$last]['variable'];
