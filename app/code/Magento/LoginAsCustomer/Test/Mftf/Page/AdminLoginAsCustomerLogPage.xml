@@ -8,5 +8,9 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:/Page/etc/PageObject.xsd">
-    <page name="AdminLoginAsCustomerLogPage" url="admin/loginascustomer/login/" area="admin" module="Magento_LoginAsCustomer"/>
+    <page name="AdminLoginAsCustomerLogPage" url="loginascustomer/login/" area="admin" module="Magento_LoginAsCustomer">
+        <section name="AdminLoginAsCustomerLogToolbarSection"/>
+        <section name="AdminLoginAsCustomerLogFiltersSection"/>
+        <section name="AdminLoginAsCustomerLogGridSection"/>
+    </page>
 </pages>

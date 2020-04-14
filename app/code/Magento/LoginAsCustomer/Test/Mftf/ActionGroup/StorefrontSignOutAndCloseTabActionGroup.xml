@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Customer sing out and close tab -->
+    <!-- Customer sign out and close tab -->
     <actionGroup name="StorefrontSignOutAndCloseTabActionGroup">
         <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
         <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>

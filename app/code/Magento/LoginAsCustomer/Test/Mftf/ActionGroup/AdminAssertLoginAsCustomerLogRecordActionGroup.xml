@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert Login As Customer Log record is correct -->
+    <actionGroup name="AdminAssertLoginAsCustomerLogRecordActionGroup">
+        <arguments>
+            <argument name="rowNumber" type="string"/>
+            <argument name="adminId" type="string"/>
+            <argument name="customerId" type="string"/>
+        </arguments>
+        <seeInCurrentUrl url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="checkUrl"/>
+        <see selector="{{AdminLoginAsCustomerLogGridSection.adminIdInRow(rowNumber)}}" userInput="{{adminId}}" stepKey="seeCorrectAdminId"/>
+        <see selector="{{AdminLoginAsCustomerLogGridSection.customerIdInRow(rowNumber)}}" userInput="{{customerId}}" stepKey="seeCorrectCustomerId"/>
+    </actionGroup>
+</actionGroups>
