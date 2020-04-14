@@ -113,17 +113,12 @@ class Subscription implements SubscriptionInterface
                 ->setEvent($event)
                 ->setTable($this->resource->getTableName($this->tableName));
 
-            $trigger->addStatement($this->buildStatement($event, $this->getView()->getChangelog(), $this->getColumnName()));
+            $trigger->addStatement($this->buildStatement($event, $this->getView()));
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
-                // Use the column name from specific linked view instead of
-                // using from the one which is currently updated for all
-                // the views.
-                $subscriptions = $view->getSubscriptions();
-                $subscription = $subscriptions[$this->getTableName()];
-                $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
+                $trigger->addStatement($this->buildStatement($event, $view));
             }
 
             $this->connection->dropTrigger($trigger->getName());
@@ -152,12 +147,7 @@ class Subscription implements SubscriptionInterface
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
-                // Use the column name from specific linked view instead of
-                // using from the one which is currently updated for all
-                // the views.
-                $subscriptions = $view->getSubscriptions();
-                $subscription = $subscriptions[$this->getTableName()];
-                $trigger->addStatement($this->buildStatement($event, $view->getChangelog(), $subscription['column']));
+                $trigger->addStatement($this->buildStatement($event, $view));
             }
 
             $this->connection->dropTrigger($trigger->getName());
@@ -203,12 +193,18 @@ class Subscription implements SubscriptionInterface
      * Build trigger statement for INSERT, UPDATE, DELETE events
      *
      * @param string $event
-     * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
-     * @param string $subscriptionColumnName
+     * @param \Magento\Framework\Mview\ViewInterface $view
      * @return string
      */
-    protected function buildStatement($event, $changelog, $subscriptionColumnName)
+    protected function buildStatement($event, $view)
     {
+        // Get the subscription for the specific view and specific table.
+        // We will use column name from it.
+        $subscription = $view->getSubscriptions()[$this->getTableName()];
+
+        // Get the changelog from View to get changelog column name.
+        $changelog = $view->getChangelog();
+
         switch ($event) {
             case Trigger::EVENT_INSERT:
                 $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
@@ -247,7 +243,7 @@ class Subscription implements SubscriptionInterface
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
             $this->connection->quoteIdentifier($changelog->getColumnName()),
-            $this->connection->quoteIdentifier($subscriptionColumnName)
+            $this->connection->quoteIdentifier($subscription['column'])
         );
     }
 
