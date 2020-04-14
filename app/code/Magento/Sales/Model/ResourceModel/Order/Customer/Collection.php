@@ -7,9 +7,14 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Customer;
 
+/**
+ * Customer collection
+ */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
+     * @inheritDoc
+     *
      * @return $this
      */
     protected function _initSelect()
