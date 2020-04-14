@@ -183,8 +183,8 @@ class Adjustment extends AbstractAdjustment
      */
     public function getDataPriceType()
     {
-        if ( $this->getData('price_type') !== 'finalPrice' && $priceType = $this->getData('price_type')){
-            return 'base' . ucfirst($priceType);
+        if ($this->getData('price_type') && $this->getData('price_type') !== 'finalPrice') {
+            return 'base' . ucfirst($this->getData('price_type'));
         }
         return 'basePrice';
     }
