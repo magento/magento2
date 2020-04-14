@@ -47,14 +47,14 @@
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRates">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Click "Save" to apply the rates we found.' stepKey="seeImportMessage"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHE." stepKey="seeWarningMessageForCHE"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for RHD." stepKey="seeWarningMessageForRHD"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHW." stepKey="seeWarningMessageForCHW"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Click "Save" to apply the rates we found.' stepKey="seeImportMessage"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHE." stepKey="seeWarningMessageForCHE"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for RHD." stepKey="seeWarningMessageForRHD"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for CHW." stepKey="seeWarningMessageForCHW"/>
         <actionGroup ref="AdminSaveCurrencyRatesActionGroup" stepKey="saveCurrencyRates"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => CHE" rate' stepKey="seeCHEMessageAfterSave"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => CHE" rate' stepKey="seeCHEMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
         <!--Go to the Storefront and check currency rates-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
@@ -74,6 +74,6 @@
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="Too many pairs. Maximum of 10 is supported for the free version." stepKey="seeTooManyPairsMessage"/>
+        <see selector="{{AdminMessagesSection.warning}}" userInput="Too many pairs. Maximum of 10 is supported for the free version." stepKey="seeTooManyPairsMessage"/>
     </test>
 </tests>
