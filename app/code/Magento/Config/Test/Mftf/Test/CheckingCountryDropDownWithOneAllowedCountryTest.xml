@@ -24,7 +24,7 @@
         <after>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
@@ -35,8 +35,14 @@
          <!--Flush Magento Cache-->
         <magentoCLI stepKey="flushCache" command="cache:flush"/>
          <!--Create a customer account from Storefront-->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createAnAccount">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
         </actionGroup>
         <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
         <click selector="{{StorefrontCustomerAddressSection.country}}" stepKey="clickToExpandCountryDropDown"/>

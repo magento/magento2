@@ -1512,17 +1512,18 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         }
         // attempt to fetch region_id from directory
         if ($address->getCountryId() && $address->getRegion()) {
-            $regions = $this->_countryFactory->create()->loadByCode(
-                $address->getCountryId()
-            )->getRegionCollection()->addRegionCodeOrNameFilter(
-                $address->getRegion()
-            )->setPageSize(
-                1
-            );
-            $regionItems = $regions->getItems();
-            $region = array_shift($regionItems);
-            $address->setRegionId($region->getId());
-            $address->setExportedKeys(array_merge($address->getExportedKeys(), ['region_id']));
+            $regions = $this->_countryFactory->create()
+                ->loadByCode($address->getCountryId())
+                ->getRegionCollection()
+                ->addRegionCodeOrNameFilter($address->getRegion())
+                ->setPageSize(1);
+
+            if ($regions->count()) {
+                $regionItems = $regions->getItems();
+                $region = array_shift($regionItems);
+                $address->setRegionId($region->getId());
+                $address->setExportedKeys(array_merge($address->getExportedKeys(), ['region_id']));
+            }
         }
     }
 
@@ -1624,7 +1625,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             case 'year':
                 return 'Year';
             default:
-                break;
+                return '';
         }
     }
 
@@ -1653,7 +1654,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             case 'active':
                 return 'Active';
             default:
-                break;
+                return '';
         }
     }
 
@@ -1694,7 +1695,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             case 'Voided':
                 return \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED;
             default:
-                break;
+                return null;
         }
     }
 
@@ -1712,7 +1713,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_DENY:
                 return 'Deny';
             default:
-                break;
+                return null;
         }
     }
 
