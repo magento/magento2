@@ -5,17 +5,25 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Sales\Model\ResourceModel\Order;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class OrderSenderTest extends AbstractSenderTest
 {
+    private const ORDER_ID = 1;
+
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
+     * @var OrderSender
      */
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityAbstract|MockObject
      */
     protected $orderResourceMock;
 
@@ -24,17 +32,20 @@ class OrderSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->orderResourceMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order::class,
+            Order::class,
             ['saveAttribute']
         );
 
         $this->identityContainerMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Email\Container\OrderIdentity::class,
+            OrderIdentity::class,
             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
+
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->sender = new OrderSender(
             $this->templateContainerMock,
@@ -86,7 +97,7 @@ class OrderSenderTest extends AbstractSenderTest
                     ->method('getCopyMethod')
                     ->willReturn('copy');
 
-                $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+                $addressMock = $this->createMock(Address::class);
 
                 $this->addressRenderer->expects($this->any())
                     ->method('format')
@@ -127,6 +138,7 @@ class OrderSenderTest extends AbstractSenderTest
                     ->with(
                         [
                             'order' => $this->orderMock,
+                            'order_id' => self::ORDER_ID,
                             'billing' => $addressMock,
                             'payment_html' => 'payment',
                             'store' => $this->storeMock,
@@ -237,7 +249,7 @@ class OrderSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
     {
         $address = 'address_test';
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
         $customerName = 'test customer';
         $frontendStatusLabel = 'Complete';
@@ -260,7 +272,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->method('getCopyMethod')
             ->willReturn('copy');
 
-        $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
+        $addressMock = $this->createMock(Address::class);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')
@@ -295,6 +307,7 @@ class OrderSenderTest extends AbstractSenderTest
             ->with(
                 [
                     'order' => $this->orderMock,
+                    'order_id' => self::ORDER_ID,
                     'billing' => $addressMock,
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
