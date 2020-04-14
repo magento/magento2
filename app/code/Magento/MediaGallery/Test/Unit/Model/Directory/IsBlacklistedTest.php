@@ -10,6 +10,7 @@ namespace Magento\MediaGallery\Test\Unit\Model\Directory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Directory\IsBlacklisted;
 use Magento\MediaGallery\Model\Directory\Config;
+use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +25,7 @@ class IsBlacklistedTest extends TestCase
     private $object;
 
     /**
-     * @var Config|MockObject
+     * @var BlacklistPatternsConfigInterface|MockObject
      */
     private $config;
 
@@ -33,8 +34,8 @@ class IsBlacklistedTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
-        $this->config->expects($this->at(0))->method('getBlacklistPatterns')->willReturn([
+        $this->config = $this->getMockBuilder(BlacklistPatternsConfigInterface::class)->disableOriginalConstructor()->getMock();
+        $this->config->expects($this->at(0))->method('get')->willReturn([
             'tmp' => '/pub\/media\/tmp/',
             'captcha' => '/pub\/media\/captcha/'
         ]);

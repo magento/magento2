@@ -17,6 +17,7 @@ interface CreateDirectoriesByPathsInterface
      * Create new directories by provided paths
      *
      * @param string[] $paths
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(array $paths): void;

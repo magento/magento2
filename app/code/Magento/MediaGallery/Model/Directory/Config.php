@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\Directory;
 
 use Magento\Framework\Config\DataInterface;
+use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
 
 /**
  * Media gallery directory config
  */
-class Config
+class Config implements BlacklistPatternsConfigInterface
 {
     private const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
 
@@ -30,24 +31,12 @@ class Config
     }
 
     /**
-     * Get config value by key.
-     *
-     * @param string|null $key
-     * @param string|null $default
-     * @return array
-     */
-    public function get($key = null, $default = null)
-    {
-        return $this->data->get($key, $default);
-    }
-
-    /**
      * Returns list of blacklist regexp patterns
      *
      * @return array
      */
-    public function getBlacklistPatterns() : array
+    public function get() : array
     {
-        return $this->get(self::XML_PATH_BLACKLIST_PATTERNS);
+        return $this->data->get(self::XML_PATH_BLACKLIST_PATTERNS);
     }
 }

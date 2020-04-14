@@ -27,11 +27,6 @@ class SaveAssets implements SaveAssetsInterface
     private $resourceConnection;
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $objectProcessor;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -40,16 +35,13 @@ class SaveAssets implements SaveAssetsInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataObjectProcessor $objectProcessor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataObjectProcessor $objectProcessor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->objectProcessor = $objectProcessor;
         $this->logger = $logger;
     }
 
@@ -66,7 +58,18 @@ class SaveAssets implements SaveAssetsInterface
             try {
                 $connection->insertOnDuplicate(
                     $tableName,
-                    $this->filterData($this->objectProcessor->buildOutputDataArray($asset, AssetInterface::class))
+                    [
+                        'id' => $asset->getId(),
+                        'path' => $asset->getPath(),
+                        'title' => $asset->getTitle(),
+                        'source' => $asset->getSource(),
+                        'content_type' => $asset->getContentType(),
+                        'width' => $asset->getWidth(),
+                        'height' => $asset->getHeight(),
+                        'size' => $asset->getSize(),
+                        'created_at' => $asset->getCreatedAt(),
+                        'updated_at' => $asset->getUpdatedAt(),
+                    ]
                 );
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
@@ -84,29 +87,5 @@ class SaveAssets implements SaveAssetsInterface
                 )
             );
         }
-    }
-
-    /**
-     * Filter data to get flat array without null values
-     *
-     * @param array $data
-     * @return array
-     */
-    private function filterData(array $data): array
-    {
-        $filteredData = [];
-        foreach ($data as $key => $value) {
-            if ($value === null) {
-                continue;
-            }
-            if (is_array($value)) {
-                continue;
-            }
-            if (is_object($value)) {
-                continue;
-            }
-            $filteredData[$key] = $value;
-        }
-        return $filteredData;
     }
 }

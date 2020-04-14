@@ -29,11 +29,6 @@ class Save implements SaveInterface
     private $resourceConnection;
 
     /**
-     * @var DataObjectProcessor
-     */
-    private $objectProcessor;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -42,16 +37,13 @@ class Save implements SaveInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataObjectProcessor $objectProcessor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataObjectProcessor $objectProcessor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->objectProcessor = $objectProcessor;
         $this->logger = $logger;
     }
 
@@ -72,37 +64,24 @@ class Save implements SaveInterface
 
             $connection->insertOnDuplicate(
                 $tableName,
-                $this->filterData($this->objectProcessor->buildOutputDataArray($mediaAsset, AssetInterface::class))
+                [
+                    'id' => $mediaAsset->getId(),
+                    'path' => $mediaAsset->getPath(),
+                    'title' => $mediaAsset->getTitle(),
+                    'source' => $mediaAsset->getSource(),
+                    'content_type' => $mediaAsset->getContentType(),
+                    'width' => $mediaAsset->getWidth(),
+                    'height' => $mediaAsset->getHeight(),
+                    'size' => $mediaAsset->getSize(),
+                    'created_at' => $mediaAsset->getCreatedAt(),
+                    'updated_at' => $mediaAsset->getUpdatedAt(),
+                ]
             );
-            return (int) $connection->lastInsertId($tableName);
+            return (int)$connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during media asset save: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }
-    }
-
-    /**
-     * Filter data to get flat array without null values
-     *
-     * @param array $data
-     * @return array
-     */
-    private function filterData(array $data): array
-    {
-        $filteredData = [];
-        foreach ($data as $key => $value) {
-            if ($value === null) {
-                continue;
-            }
-            if (is_array($value)) {
-                continue;
-            }
-            if (is_object($value)) {
-                continue;
-            }
-            $filteredData[$key] = $value;
-        }
-        return $filteredData;
     }
 }

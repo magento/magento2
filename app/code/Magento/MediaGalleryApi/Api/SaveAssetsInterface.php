@@ -18,6 +18,7 @@ interface SaveAssetsInterface
      * Save media asset. The saved asset can later be retrieved by path
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetInterface[] $assets
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(array $assets): void;

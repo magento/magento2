@@ -10,7 +10,7 @@ namespace Magento\MediaGalleryCatalog\Test\Unit\Plugin\Product\Gallery;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\MediaGalleryCatalog\Plugin\Product\Gallery\Processor;
+use Magento\MediaGalleryCatalog\Plugin\Product\Gallery\RemoveAssetAfterRemoveImage;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Unit test for \Magento\MediaGalleryCatalog\Plugin\Product\Gallery\Processor
  */
-class ProcessorTest extends TestCase
+class RemoveAssetAfterRemoveImageTest extends TestCase
 {
     private const STUB_FILE_NAME = 'file';
 
@@ -44,7 +44,7 @@ class ProcessorTest extends TestCase
     private $productMock;
 
     /**
-     * @var Processor
+     * @var RemoveAssetAfterRemoveImage
      */
     private $plugin;
 
@@ -60,7 +60,7 @@ class ProcessorTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
-            Processor::class,
+            RemoveAssetAfterRemoveImage::class,
             [
                 'deleteByPaths' => $this->deleteMediaAssetByPathMock,
                 'logger' => $this->loggerMock

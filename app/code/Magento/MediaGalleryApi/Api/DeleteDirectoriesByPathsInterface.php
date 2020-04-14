@@ -17,6 +17,7 @@ interface DeleteDirectoriesByPathsInterface
      * Deletes the existing folders
      *
      * @param string[] $paths
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function execute(array $paths): void;

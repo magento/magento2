@@ -56,4 +56,6 @@
             <argument name="data" xsi:type="object">Magento\MediaGallery\Model\Directory\Config\Data</argument>
         </arguments>
     </type>
+
+    <preference for="Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface" type="Magento\MediaGallery\Model\Directory\Config"/>
 </config>

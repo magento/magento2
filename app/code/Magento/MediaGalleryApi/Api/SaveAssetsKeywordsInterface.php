@@ -17,6 +17,7 @@ interface SaveAssetsKeywordsInterface
      * Save assets keywords
      *
      * @param \Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface[] $assetKeywords
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(array $assetKeywords): void;

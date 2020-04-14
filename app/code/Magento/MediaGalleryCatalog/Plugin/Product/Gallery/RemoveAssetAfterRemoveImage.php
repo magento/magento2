@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Ensures that metadata is removed from the database when an image has been deleted (from legacy media gallery)
  */
-class Processor
+class RemoveAssetAfterRemoveImage
 {
     /**
      * @var DeleteAssetsByPathsInterface
