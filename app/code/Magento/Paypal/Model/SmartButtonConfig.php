@@ -95,11 +95,12 @@ class SmartButtonConfig
             ScopeInterface::SCOPE_STORE
         );
 
+
         return [
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
-            'sdkUrl' => $this->generatePaypalSdkUrl()
+            'sdkUrl' => $this->generatePaypalSdkUrl($page)
         ];
     }
 
@@ -108,16 +109,18 @@ class SmartButtonConfig
      *
      * @return string
      */
-    private function generatePaypalSdkUrl() : string
+    private function generatePaypalSdkUrl(string $page) : string
     {
         $clientId = (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
         $disallowedFunding = implode(",", $this->getDisallowedFunding());
 
+        $commit = $page === 'checkout' ? 'true' : 'false';
+
         $params =
             [
                 'client-id' => $clientId,
-                'commit' => 'false',
+                'commit' => $commit,
                 'merchant-id' => $this->config->getValue('merchant_id'),
                 'locale' => $this->localeResolver->getLocale(),
                 'intent' => $this->getIntent(),
