@@ -18,6 +18,7 @@
                 <label>Catalog Search</label>
                 <field id="engine" canRestore="1">
                     <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
+                    <comment>If not specified, Default Search Engine will be used.</comment>
                 </field>
                 <field id="min_query_length" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minimal Query Length</label>
