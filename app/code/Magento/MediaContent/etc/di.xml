@@ -12,7 +12,11 @@
     <preference for="Magento\MediaContentApi\Api\GetContentWithAssetsInterface" type="Magento\MediaContent\Model\GetContentWithAssets"/>
     <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetsFromContent"/>
     <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
+    <preference for="Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface" type="Magento\MediaContent\Model\DeleteContentAssetLinks"/>
+    <preference for="Magento\MediaContentApi\Api\SaveContentAssetLinksInterface" type="Magento\MediaContent\Model\SaveContentAssetLinks"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
+    <preference for="Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface" type="Magento\MediaContent\Model\ContentAssetLink"/>
+    <preference for="Magento\MediaContent\Model\Content\ConfigInterface" type="Magento\MediaContent\Model\Content\Config"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\MediaGalleryAssetDeleteByPath" />
     </type>

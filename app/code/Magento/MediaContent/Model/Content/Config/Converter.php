@@ -14,8 +14,19 @@ use Magento\Framework\Config\ConverterInterface;
  */
 class Converter implements ConverterInterface
 {
+    /*
+     * Search tag name
+     */
     private const SEARCH_TAG_NAME = 'search';
+
+    /**
+     * Patterns tag name
+     */
     private const PATTERNS_TAG_NAME = 'patterns';
+
+    /**
+     * Pattern tag name
+     */
     private const PATTERN_TAG_NAME = 'pattern';
 
     /**
@@ -29,7 +40,7 @@ class Converter implements ConverterInterface
         $result = [];
 
         if (!$source instanceof \DOMDocument) {
-            return $result;
+            throw new \InvalidArgumentException('The source should be instance of DOMDocument');
         }
 
         foreach ($source->getElementsByTagName(self::SEARCH_TAG_NAME) as $search) {

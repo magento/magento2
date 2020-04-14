@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\MediaContentApi\Api\Data;
+
+use Magento\MediaContentApi\Api\Data\ContentAssetLinkExtensionInterface;
+
+/**
+ * Data interface representing the identificator of content. I.e. short description field of product entity with id 42
+ * @api
+ */
+interface ContentAssetLinkInterface
+{
+    /**
+     * Id of the entity containing content with media
+     *
+     * @return int
+     */
+    public function getContentId(): ContentIdentityInterface;
+
+    /**
+     * Array of assets related to the content entity
+     *
+     * @return array
+     */
+    public function getAssetId(): int;
+
+    /**
+     * @return string
+     */
+    public function getField() : string;
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\MediaContentApi\Api\Data\ContentAssetLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes(): ContentAssetLinkExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\MediaContentApi\Api\Data\ContentAssetLinkExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(ContentAssetLinkExtensionInterface $extensionAttributes): void;
+}
