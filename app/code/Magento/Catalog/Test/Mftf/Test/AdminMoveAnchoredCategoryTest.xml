@@ -30,12 +30,8 @@
             <createData entity="_defaultProduct" stepKey="productTwo">
                 <requiredEntity createDataKey="simpleSubCategoryOne"/>
             </createData>
-
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="cron:run" arguments="--group='index'" stepKey="firstRunToScheduleJobs"/>
-            <magentoCLI command="cron:run" arguments="--group='index'" stepKey="secondRunToExecuteJobs"/>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -55,8 +51,7 @@
             <argument name="parentCategory" value="$simpleSubCategoryTwo.name$"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
-        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened1"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage1"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatTopCategoryIsSubCategoryTwo"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="mouseOverSubCategoryTwo"/>
         <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryTwo"/>
@@ -97,8 +92,7 @@
             <argument name="parentCategory" value="Default Category"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
-        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened2"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage2"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="verifyThatSubCategoryOneIsTopCategory"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatSubCategoryTwoIsTopCategory"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="mouseOverTopSubCategoryOne"/>

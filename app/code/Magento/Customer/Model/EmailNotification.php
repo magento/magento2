@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
@@ -15,6 +16,8 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Data\CustomerSecure;
 
 /**
  * Customer email notification
@@ -124,7 +127,7 @@ class EmailNotification implements EmailNotificationInterface
         $this->customerViewHelper = $customerViewHelper;
         $this->dataProcessor = $dataProcessor;
         $this->scopeConfig = $scopeConfig;
-        $this->senderResolver = $senderResolver ?: ObjectManager::getInstance()->get(SenderResolverInterface::class);
+        $this->senderResolver = $senderResolver ?? ObjectManager::getInstance()->get(SenderResolverInterface::class);
     }
 
     /**
@@ -139,7 +142,7 @@ class EmailNotification implements EmailNotificationInterface
         CustomerInterface $savedCustomer,
         $origCustomerEmail,
         $isPasswordChanged = false
-    ) {
+    ): void {
         if ($origCustomerEmail != $savedCustomer->getEmail()) {
             if ($isPasswordChanged) {
                 $this->emailAndPasswordChanged($savedCustomer, $origCustomerEmail);
@@ -164,7 +167,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $email
      * @return void
      */
-    private function emailAndPasswordChanged(CustomerInterface $customer, $email)
+    private function emailAndPasswordChanged(CustomerInterface $customer, $email): void
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -190,7 +193,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $email
      * @return void
      */
-    private function emailChanged(CustomerInterface $customer, $email)
+    private function emailChanged(CustomerInterface $customer, $email): void
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -215,7 +218,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @return void
      */
-    private function passwordReset(CustomerInterface $customer)
+    private function passwordReset(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -252,15 +255,15 @@ class EmailNotification implements EmailNotificationInterface
         $templateParams = [],
         $storeId = null,
         $email = null
-    ) {
-        $templateId = $this->scopeConfig->getValue($template, 'store', $storeId);
+    ): void {
+        $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
         if ($email === null) {
             $email = $customer->getEmail();
         }
 
         /** @var array $from */
         $from = $this->senderResolver->resolve(
-            $this->scopeConfig->getValue($sender, 'store', $storeId),
+            $this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId),
             $storeId
         );
 
@@ -278,15 +281,15 @@ class EmailNotification implements EmailNotificationInterface
      * Create an object with data merged from Customer and CustomerSecure
      *
      * @param CustomerInterface $customer
-     * @return \Magento\Customer\Model\Data\CustomerSecure
+     * @return CustomerSecure
      */
-    private function getFullCustomerObject($customer)
+    private function getFullCustomerObject($customer): CustomerSecure
     {
         // No need to flatten the custom attributes or nested objects since the only usage is for email templates and
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerData = $this->dataProcessor
-            ->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
+            ->buildOutputDataArray($customer, CustomerInterface::class);
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;
@@ -299,7 +302,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param int|string|null $defaultStoreId
      * @return int
      */
-    private function getWebsiteStoreId($customer, $defaultStoreId = null)
+    private function getWebsiteStoreId($customer, $defaultStoreId = null): int
     {
         if ($customer->getWebsiteId() != 0 && empty($defaultStoreId)) {
             $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
@@ -314,7 +317,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @return void
      */
-    public function passwordReminder(CustomerInterface $customer)
+    public function passwordReminder(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -338,7 +341,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param CustomerInterface $customer
      * @return void
      */
-    public function passwordResetConfirmation(CustomerInterface $customer)
+    public function passwordResetConfirmation(CustomerInterface $customer): void
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -373,7 +376,7 @@ class EmailNotification implements EmailNotificationInterface
         $backUrl = '',
         $storeId = 0,
         $sendemailStoreId = null
-    ) {
+    ): void {
         $types = self::TEMPLATE_TYPES;
 
         if (!isset($types[$type])) {
