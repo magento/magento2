@@ -22,7 +22,7 @@ class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     {
         $result = '';
         if ($row->getData('error_file') != '') {
-            $result = '<p> ' . $row->getData('error_file') .  '</p><a href="'
+            $result = '<p> ' . $this->escapeHtml($row->getData('error_file')) .  '</p><a href="'
                 . $this->getUrl('*/*/download', ['filename' => $row->getData('error_file')]) . '">'
                 . __('Download')
                 . '</a>';
