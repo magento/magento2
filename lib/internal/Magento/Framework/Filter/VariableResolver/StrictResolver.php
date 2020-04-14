@@ -171,7 +171,7 @@ class StrictResolver implements VariableResolverInterface
     /**
      * Assign resolved variable
      *
-     * @param $stackArg mixed
+     * @param mixed $stackArg
      * @return mixed|null
      */
     private function assignResolvedVariable($stackArg)
