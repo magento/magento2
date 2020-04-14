@@ -6,101 +6,136 @@
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+use Magento\Checkout\Api\Data\PaymentDetailsInterface;
+use Magento\Checkout\Api\Data\ShippingInformationInterface;
+use Magento\Checkout\Model\PaymentDetailsFactory;
+use Magento\Checkout\Model\ShippingInformationManagement;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\CartExtension;
+use Magento\Quote\Api\Data\CartExtensionFactory;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
+use Magento\Quote\Api\Data\TotalsInterface;
+use Magento\Quote\Api\PaymentMethodManagementInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\Shipping;
+use Magento\Quote\Model\ShippingAssignment;
+use Magento\Quote\Model\ShippingAssignmentFactory;
+use Magento\Quote\Model\ShippingFactory;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
+ * Test for \Magento\Checkout\Model\ShippingInformationManagement.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
+class ShippingInformationManagementTest extends TestCase
 {
+    private const STUB_CART_ID = 100;
+
+    private const STUB_ITEMS_COUNT = 99;
+
+    private const STUB_CARRIER_CODE = 'carrier_code';
+
+    private const STUB_SHIPPING_METHOD = 'shipping_method';
+
+    private const STUB_ERROR_MESSAGE = 'error message';
+
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ShippingInformationManagement
+     */
+    private $model;
+
+    /**
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentMethodManagementInterface|MockObject
      */
-    protected $paymentMethodManagementMock;
+    private $paymentMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentDetailsFactory|MockObject
      */
-    protected $paymentDetailsFactoryMock;
+    private $paymentDetailsFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartTotalRepositoryInterface|MockObject
      */
-    protected $cartTotalsRepositoryMock;
+    private $cartTotalsRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface|MockObject
      */
-    protected $quoteRepositoryMock;
+    private $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
-    protected $shippingAddressMock;
+    private $shippingAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
-    protected $quoteMock;
+    private $quoteMock;
 
     /**
-     * @var \Magento\Checkout\Model\ShippingInformationManagement
-     */
-    protected $model;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingAssignmentFactory|MockObject
      */
     private $shippingAssignmentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartExtensionFactory|MockObject
      */
     private $cartExtensionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingFactory|MockObject
      */
     private $shippingFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartExtension|MockObject
      */
     private $cartExtensionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingAssignment|MockObject
      */
     private $shippingAssignmentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shippingMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteAddressValidator|MockObject
      */
     private $addressValidatorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->paymentMethodManagementMock = $this->createMock(
-            \Magento\Quote\Api\PaymentMethodManagementInterface::class
-        );
+        $this->objectManager = new ObjectManager($this);
+        $this->paymentMethodManagementMock = $this->createMock(PaymentMethodManagementInterface::class);
         $this->paymentDetailsFactoryMock = $this->createPartialMock(
-            \Magento\Checkout\Model\PaymentDetailsFactory::class,
+            PaymentDetailsFactory::class,
             ['create']
         );
-        $this->cartTotalsRepositoryMock = $this->createMock(\Magento\Quote\Api\CartTotalRepositoryInterface::class);
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->cartTotalsRepositoryMock = $this->createMock(CartTotalRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->shippingAddressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
+            Address::class,
             [
                 'getSaveInAddressBook',
                 'getSameAsBilling',
@@ -120,7 +155,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             [
                 'isVirtual',
                 'getItemsCount',
@@ -134,24 +169,22 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'getExtensionAttributes',
                 'setExtensionAttributes',
                 'setBillingAddress'
-            ],
-            [],
-            '',
-            false
+            ]
         );
 
-        $this->shippingAssignmentFactoryMock =
-            $this->createPartialMock(\Magento\Quote\Model\ShippingAssignmentFactory::class, ['create']);
-        $this->cartExtensionFactoryMock =
-            $this->createPartialMock(\Magento\Quote\Api\Data\CartExtensionFactory::class, ['create']);
-        $this->shippingFactoryMock =
-            $this->createPartialMock(\Magento\Quote\Model\ShippingFactory::class, ['create']);
-        $this->addressValidatorMock = $this->createMock(
-            \Magento\Quote\Model\QuoteAddressValidator::class
+        $this->shippingAssignmentFactoryMock = $this->createPartialMock(
+            ShippingAssignmentFactory::class,
+            ['create']
         );
+        $this->cartExtensionFactoryMock = $this->createPartialMock(
+            CartExtensionFactory::class,
+            ['create']
+        );
+        $this->shippingFactoryMock = $this->createPartialMock(ShippingFactory::class, ['create']);
+        $this->addressValidatorMock = $this->createMock(QuoteAddressValidator::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Checkout\Model\ShippingInformationManagement::class,
+            ShippingInformationManagement::class,
             [
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'paymentDetailsFactory' => $this->paymentDetailsFactoryMock,
@@ -166,59 +199,80 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping method can't be set for an empty cart. Add an item to cart and try again.
+     * Save address with `InputException`
+     *
+     * @return void
      */
-    public function testSaveAddressInformationIfCartIsEmpty()
+    public function testSaveAddressInformationIfCartIsEmpty(): void
     {
-        $cartId = 100;
-        $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+        $cartId = self::STUB_CART_ID;
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(0);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
 
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage(
+            'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.'
+        );
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 
     /**
+     * Sets shipping assignments
+     *
      * @param string $shippingMethod
+     * @return void
      */
-    private function setShippingAssignmentsMocks($shippingMethod)
+    private function setShippingAssignmentsMocks($shippingMethod): void
     {
-        $this->quoteMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
-        $this->shippingAddressMock->expects($this->once())->method('setLimitCarrier');
+        $this->quoteMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn(null);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setLimitCarrier');
         $this->cartExtensionMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\CartExtension::class,
+            CartExtension::class,
             ['getShippingAssignments', 'setShippingAssignments']
         );
         $this->cartExtensionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->cartExtensionMock);
-        $this->cartExtensionMock->expects($this->once())->method('getShippingAssignments')->willReturn(null);
+        $this->cartExtensionMock->expects($this->once())
+            ->method('getShippingAssignments')
+            ->willReturn(null);
 
-        $this->shippingAssignmentMock = $this->createMock(
-            \Magento\Quote\Model\ShippingAssignment::class
-        );
+        $this->shippingAssignmentMock = $this->createMock(ShippingAssignment::class);
         $this->shippingAssignmentFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->shippingAssignmentMock);
-        $this->shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn(null);
+        $this->shippingAssignmentMock->expects($this->once())
+            ->method('getShipping')
+            ->willReturn(null);
 
-        $this->shippingMock = $this->createMock(\Magento\Quote\Model\Shipping::class);
-        $this->shippingFactoryMock->expects($this->once())->method('create')->willReturn($this->shippingMock);
+        $shippingMock = $this->createMock(Shipping::class);
+        $this->shippingFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($shippingMock);
 
-        $this->shippingMock->expects($this->once())
+        $shippingMock->expects($this->once())
             ->method('setAddress')
             ->with($this->shippingAddressMock)
             ->willReturnSelf();
-        $this->shippingMock->expects($this->once())->method('setMethod')->with($shippingMethod)->willReturnSelf();
+        $shippingMock->expects($this->once())
+            ->method('setMethod')
+            ->with($shippingMethod)
+            ->willReturnSelf();
 
         $this->shippingAssignmentMock->expects($this->once())
             ->method('setShipping')
-            ->with($this->shippingMock)
+            ->with($shippingMock)
             ->willReturnSelf();
 
         $this->cartExtensionMock->expects($this->once())
@@ -233,38 +287,50 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
+     * Save address with `StateException`
+     *
+     * @return void
      */
-    public function testSaveAddressInformationIfShippingAddressNotSet()
+    public function testSaveAddressInformationIfShippingAddressNotSet(): void
     {
-        $cartId = 100;
-        $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+        $cartId = self::STUB_CART_ID;
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
 
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(null);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn(null);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(100);
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(self::STUB_ITEMS_COUNT);
 
+        $this->expectException(StateException::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The shipping information was unable to be saved. Verify the input data and try again.
+     * Save address with `LocalizedException`
+     *
+     * @return void
      */
-    public function testSaveAddressInformationIfCanNotSaveQuote()
+    public function testSaveAddressInformationWithLocalizedException(): void
     {
-        $cartId = 100;
-        $carrierCode = 'carrier_code';
-        $shippingMethod = 'shipping_method';
-        $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+        $cartId = self::STUB_CART_ID;
+        $carrierCode = self::STUB_CARRIER_CODE;
+        $shippingMethod = self::STUB_SHIPPING_METHOD;
+        $errorMessage = self::STUB_ERROR_MESSAGE;
+        $exception = new LocalizedException(__($errorMessage));
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
         $this->addressValidatorMock->expects($this->exactly(2))
             ->method('validateForCart');
@@ -277,38 +343,125 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingCarrierCode')
+            ->willReturn($carrierCode);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingMethodCode')
+            ->willReturn($shippingMethod);
 
-        $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
+        $billingAddress = $this->createMock(AddressInterface::class);
+        $addressInformationMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
 
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn('USA');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(100);
-        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddress)->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(self::STUB_ITEMS_COUNT);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsMultiShipping')
+            ->with(false)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('setBillingAddress')
+            ->with($billingAddress)
+            ->willReturnSelf();
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->quoteMock)
+            ->willThrowException($exception);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'The shipping information was unable to be saved. Error: "' . $errorMessage . '"'
+        );
+        $this->model->saveAddressInformation($cartId, $addressInformationMock);
+    }
+
+    /**
+     * Save address with `InputException`
+     *
+     * @return void
+     */
+    public function testSaveAddressInformationIfCanNotSaveQuote(): void
+    {
+        $cartId = self::STUB_CART_ID;
+        $carrierCode = self::STUB_CARRIER_CODE;
+        $shippingMethod = self::STUB_SHIPPING_METHOD;
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
+
+        $this->addressValidatorMock->expects($this->exactly(2))
+            ->method('validateForCart');
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
+
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingCarrierCode')
+            ->willReturn($carrierCode);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingMethodCode')
+            ->willReturn($shippingMethod);
+
+        $billingAddress = $this->createMock(AddressInterface::class);
+        $addressInformationMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
+
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn('USA');
+
+        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(self::STUB_ITEMS_COUNT);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsMultiShipping')
+            ->with(false)->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('setBillingAddress')
+            ->with($billingAddress)
+            ->willReturnSelf();
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
             ->willThrowException(new \Exception());
 
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage(
+            'The shipping information was unable to be saved. Verify the input data and try again.'
+        );
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Carrier with such method not found: carrier_code, shipping_method
+     * Save address with `NoSuchEntityException`
+     *
+     * @return void
      */
-    public function testSaveAddressInformationIfCarrierCodeIsInvalid()
+    public function testSaveAddressInformationIfCarrierCodeIsInvalid(): void
     {
-        $cartId = 100;
-        $carrierCode = 'carrier_code';
-        $shippingMethod = 'shipping_method';
-        $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+        $cartId = self::STUB_CART_ID;
+        $carrierCode = self::STUB_CARRIER_CODE;
+        $shippingMethod = self::STUB_SHIPPING_METHOD;
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
         $this->addressValidatorMock->expects($this->exactly(2))
             ->method('validateForCart');
@@ -320,39 +473,70 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingCarrierCode')
+            ->willReturn($carrierCode);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingMethodCode')
+            ->willReturn($shippingMethod);
 
-        $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $billingAddress = $this->createMock(AddressInterface::class);
+        $addressInformationMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn('USA');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(100);
-        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddress)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->shippingAddressMock);
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(self::STUB_ITEMS_COUNT);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsMultiShipping')
+            ->with(false)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('setBillingAddress')
+            ->with($billingAddress)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock);
 
-        $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getShippingMethod')
+            ->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with($shippingMethod)
             ->willReturn(false);
 
+        $this->expectException(NoSuchEntityException::class);
+        $this->expectExceptionMessage(
+            'Carrier with such method not found: ' . self::STUB_CARRIER_CODE . ', ' . self::STUB_SHIPPING_METHOD
+        );
+
         $this->model->saveAddressInformation($cartId, $addressInformationMock);
     }
 
-    public function testSaveAddressInformation()
+    /**
+     * Save address info test
+     *
+     * @return void
+     */
+    public function testSaveAddressInformation(): void
     {
-        $cartId = 100;
-        $carrierCode = 'carrier_code';
-        $shippingMethod = 'shipping_method';
-        $addressInformationMock = $this->createMock(\Magento\Checkout\Api\Data\ShippingInformationInterface::class);
+        $cartId = self::STUB_CART_ID;
+        $carrierCode = self::STUB_CARRIER_CODE;
+        $shippingMethod = self::STUB_SHIPPING_METHOD;
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
         $this->addressValidatorMock->expects($this->exactly(2))
             ->method('validateForCart');
@@ -364,40 +548,62 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
-        $addressInformationMock->expects($this->once())->method('getShippingCarrierCode')->willReturn($carrierCode);
-        $addressInformationMock->expects($this->once())->method('getShippingMethodCode')->willReturn($shippingMethod);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingCarrierCode')
+            ->willReturn($carrierCode);
+        $addressInformationMock->expects($this->once())
+            ->method('getShippingMethodCode')
+            ->willReturn($shippingMethod);
 
-        $billingAddress = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $addressInformationMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddress);
-        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn('USA');
+        $billingAddress = $this->createMock(AddressInterface::class);
+        $addressInformationMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddress);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn('USA');
 
         $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
 
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(100);
-        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddress)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->shippingAddressMock);
+        $this->quoteMock->expects($this->once())
+            ->method('getItemsCount')
+            ->willReturn(self::STUB_ITEMS_COUNT);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsMultiShipping')
+            ->with(false)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('setBillingAddress')
+            ->with($billingAddress)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock);
 
-        $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getShippingMethod')
+            ->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with($shippingMethod)
             ->willReturn('rates');
 
-        $paymentDetailsMock = $this->createMock(\Magento\Checkout\Api\Data\PaymentDetailsInterface::class);
-        $this->paymentDetailsFactoryMock->expects($this->once())->method('create')->willReturn($paymentDetailsMock);
+        $paymentDetailsMock = $this->createMock(PaymentDetailsInterface::class);
+        $this->paymentDetailsFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($paymentDetailsMock);
 
-        $paymentMethodMock = $this->createMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
+        $paymentMethodMock = $this->createMock(PaymentMethodInterface::class);
         $this->paymentMethodManagementMock->expects($this->once())
             ->method('getList')
             ->with($cartId)
             ->willReturn([$paymentMethodMock]);
 
-        $cartTotalsMock = $this->createMock(\Magento\Quote\Api\Data\TotalsInterface::class);
+        $cartTotalsMock = $this->createMock(TotalsInterface::class);
         $this->cartTotalsRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
@@ -407,7 +613,9 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setPaymentMethods')
             ->with([$paymentMethodMock])
             ->willReturnSelf();
-        $paymentDetailsMock->expects($this->once())->method('setTotals')->with()->willReturnSelf($cartTotalsMock);
+        $paymentDetailsMock->expects($this->once())
+            ->method('setTotals')
+            ->willReturn($cartTotalsMock);
 
         $this->assertEquals(
             $paymentDetailsMock,

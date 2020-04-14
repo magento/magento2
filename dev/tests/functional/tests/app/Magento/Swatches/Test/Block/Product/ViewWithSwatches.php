@@ -55,10 +55,10 @@ class ViewWithSwatches extends View
         $swatchAttributesData = [];
         $swatchAttributes = $this->_rootElement->getElements($this->swatchAttributesSelector);
         foreach ($swatchAttributes as $swatchAttribute) {
-            $attributeCode = $swatchAttribute->getAttribute('attribute-code');
+            $attributeCode = $swatchAttribute->getAttribute('data-attribute-code');
             $swatchAttributesData[$attributeCode] = [
                 'attribute_code' => $attributeCode,
-                'attribute_id' => $swatchAttribute->getAttribute('attribute-id'),
+                'attribute_id' => $swatchAttribute->getAttribute('data-attribute-id'),
                 'label' => $swatchAttribute->find($this->swatchAttributesLabelSelector)->getText(),
                 'options' => $this->getSwatchAttributeOptionsData($swatchAttribute),
             ];
@@ -77,7 +77,7 @@ class ViewWithSwatches extends View
         $optionsData = [];
         $options = $swatchAttribute->getElements($this->swatchAttributeOptionsSelector);
         foreach ($options as $option) {
-            $optionId = $option->getAttribute('option-id');
+            $optionId = $option->getAttribute('data-option-id');
             $optionsData[$optionId] = [
                 'option_id' => $optionId,
                 'label' => $option->getText(),

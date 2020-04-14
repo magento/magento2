@@ -25,6 +25,7 @@ class StockTest extends TestCase
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $collectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
         $collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($selectMock);
+        $collectionMock->expects($this->atLeastOnce())->method('getTable')->willReturn('cataloginventory_stock_item');
 
         $selectMock->expects($this->once())
             ->method('joinLeft')

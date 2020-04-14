@@ -13,8 +13,8 @@ use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class ProductTest
- * @package Magento\CatalogImportExport\Test\Unit\Model\Import
+ * Test import entity product model
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -547,6 +547,17 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($testTable, $tableData, ['value']);
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+        $attribute->expects($this->once())->method('getId')->willReturn(1);
+        $resource = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAttribute'])
+            ->getMock();
+        $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
+        $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
         $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
         $this->assertEquals($this->importProduct, $object);

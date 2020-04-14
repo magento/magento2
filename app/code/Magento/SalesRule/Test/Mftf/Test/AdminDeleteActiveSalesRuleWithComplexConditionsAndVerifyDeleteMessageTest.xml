@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create active cart price rule-->
             <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
@@ -62,7 +62,7 @@
             <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertVerifyCartPriceRuleSuccessSaveMessage"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete active cart price rule-->

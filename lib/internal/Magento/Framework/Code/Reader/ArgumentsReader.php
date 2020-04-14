@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+/**
+ * The class arguments reader
+ */
 class ArgumentsReader
 {
     const NO_DEFAULT_VALUE = 'NO-DEFAULT';
@@ -54,7 +57,7 @@ class ArgumentsReader
             return $output;
         }
 
-        $constructor = new \Zend\Code\Reflection\MethodReflection($class->getName(), '__construct');
+        $constructor = new \Laminas\Code\Reflection\MethodReflection($class->getName(), '__construct');
         foreach ($constructor->getParameters() as $parameter) {
             $name = $parameter->getName();
             $position = $parameter->getPosition();
@@ -90,10 +93,10 @@ class ArgumentsReader
      * Process argument type.
      *
      * @param \ReflectionClass $class
-     * @param \Zend\Code\Reflection\ParameterReflection $parameter
+     * @param \Laminas\Code\Reflection\ParameterReflection $parameter
      * @return string
      */
-    private function processType(\ReflectionClass $class, \Zend\Code\Reflection\ParameterReflection $parameter)
+    private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
         if ($parameter->getClass()) {
             return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();

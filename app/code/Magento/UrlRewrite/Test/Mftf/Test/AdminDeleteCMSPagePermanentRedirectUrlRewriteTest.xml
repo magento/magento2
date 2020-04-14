@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCMSPagePermanentRedirectUrlRewriteTest">
+        <annotations>
+            <stories value="Delete CMS Page Permanent Redirect URL rewrite"/>
+            <title value="Delete CMS Page Permanent Redirect URL rewrite"/>
+            <description value="Login as Admin and create custom CMS page UrlRewrite and add Permanent redirect type and delete Permanent redirect URL rewrite"/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open CMS Edit Page and Get the CMS ID -->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Open UrlRewrite Edit page and update the fields and fill the created CMS Page Target Path -->
+        <actionGroup ref="AdminAddCustomUrlRewriteActionGroup" stepKey="addCustomUrlRewrite">
+            <argument name="customUrlRewriteValue" value="Custom"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
+            <argument name="redirectTypeValue" value="Permanent (301)"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+            <argument name="description" value="Created New CMS Page."/>
+        </actionGroup>
+
+        <!-- Assert updated CMS page Url Rewrite in Grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="{{defaultCmsPage.title}}"/>
+            <argument name="redirectType" value="Permanent (301)"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+        </actionGroup>
+
+        <!--  Assert initial CMS page Url Rewrite in Grid-->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
+            <argument name="redirectPath" value="$$createCMSPage.identifier$$"/>
+            <argument name="redirectType" value="No"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+        </actionGroup>
+
+        <!-- Assert added Request Path redirects to the CMS Page on Store Front -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront">
+            <argument name="page" value="{{defaultCmsPage.title}}"/>
+        </actionGroup>
+
+        <!-- Assert added CMS redirect in Store Front -->
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="assertCMSPage">
+            <argument name="cmsTitle" value="$$createCMSPage.title$$"/>
+            <argument name="cmsContent" value="$$createCMSPage.content$$"/>
+            <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
+        </actionGroup>
+
+        <!-- Assert initial request path directs to the CMS Page on Store Front -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront1">
+            <argument name="page" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+
+        <!-- Assert initial CMS redirect in Store Front   -->
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="assertCMSPage1">
+            <argument name="cmsTitle" value="$$createCMSPage.title$$"/>
+            <argument name="cmsContent" value="$$createCMSPage.content$$"/>
+            <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
+        </actionGroup>
+
+        <!--Delete added CMS Page Url Rewrite and verify AssertUrlRewriteDeletedMessage-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteUrlRewrite">
+            <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
+        </actionGroup>
+
+        <!--Search and verify AssertUrlRewriteNotInGrid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
+            <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
+        </actionGroup>
+
+        <!--Verify AssertPageByUrlRewriteIsNotFound-->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
+            <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
+        </actionGroup>
+    </test>
+</tests>
