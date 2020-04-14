@@ -50,6 +50,9 @@ class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => false
                     ]
                 ]
             ]
@@ -83,6 +86,9 @@ class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 // @codingStandardsIgnoreStart
@@ -102,6 +108,9 @@ class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
                         ],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'consumerClass1' does not exist and thus cannot be used as 'consumerInstance'"

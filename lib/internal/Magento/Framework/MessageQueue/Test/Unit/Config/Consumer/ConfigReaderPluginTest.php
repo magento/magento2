@@ -23,12 +23,12 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var ConsumerConfigCompositeReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConsumerConfigCompositeReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
@@ -78,7 +78,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'consumerInstance' => 'type1',
                 'handlers' => ['handlerConfig1_1_1', 'handlerConfig1_1_2', 'handlerConfig1_2_1'],
                 'connection' => 'connection1',
-                'maxMessages' => 100
+                'maxMessages' => 100,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer2' => [
                 'name' => 'consumer2',
@@ -86,7 +89,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'consumerInstance' => 'type2',
                 'handlers' => [],
                 'connection' => 'connection2',
-                'maxMessages' => 2
+                'maxMessages' => 2,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer0' => []
         ];

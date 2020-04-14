@@ -14,6 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
 
 /**
  * Class for running consumers processes by cron
@@ -66,6 +67,11 @@ class ConsumersRunner
     private $lockManager;
 
     /**
+     * @var CheckIsAvailableMessagesInQueue
+     */
+    private $checkIsAvailableMessages;
+
+    /**
      * @param PhpExecutableFinder $phpExecutableFinder The executable finder specifically designed
      *        for the PHP executable
      * @param ConsumerConfigInterface $consumerConfig The consumer config provider
@@ -74,6 +80,7 @@ class ConsumersRunner
      * @param LockManagerInterface $lockManager The lock manager
      * @param ConnectionTypeResolver $mqConnectionTypeResolver Consumer connection resolver
      * @param LoggerInterface $logger Logger
+     * @param CheckIsAvailableMessagesInQueue $checkIsAvailableMessages
      */
     public function __construct(
         PhpExecutableFinder $phpExecutableFinder,
@@ -82,7 +89,8 @@ class ConsumersRunner
         ShellInterface $shellBackground,
         LockManagerInterface $lockManager,
         ConnectionTypeResolver $mqConnectionTypeResolver = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        CheckIsAvailableMessagesInQueue $checkIsAvailableMessages = null
     ) {
         $this->phpExecutableFinder = $phpExecutableFinder;
         $this->consumerConfig = $consumerConfig;
@@ -93,6 +101,8 @@ class ConsumersRunner
             ?: ObjectManager::getInstance()->get(ConnectionTypeResolver::class);
         $this->logger = $logger
             ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->checkIsAvailableMessages = $checkIsAvailableMessages
+            ?: ObjectManager::getInstance()->get(CheckIsAvailableMessagesInQueue::class);
     }
 
     /**
@@ -164,6 +174,25 @@ class ConsumersRunner
                 )
             );
             return false;
+        }
+
+        if ($consumerConfig->getOnlySpawnWhenMessageAvailable()) {
+            try {
+                return $this->checkIsAvailableMessages->execute(
+                    $connectionName,
+                    $consumerConfig->getQueue()
+                );
+            } catch (\LogicException $e) {
+                $this->logger->info(
+                    sprintf(
+                        'Consumer "%s" skipped as its related queue "%s" is not available. %s',
+                        $consumerName,
+                        $consumerConfig->getQueue(),
+                        $e->getMessage()
+                    )
+                );
+                return false;
+            }
         }
 
         return true;
