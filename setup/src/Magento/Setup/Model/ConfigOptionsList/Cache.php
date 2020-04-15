@@ -282,6 +282,6 @@ class Cache implements ConfigOptionsListInterface
      */
     private function generateCachePrefix(): string
     {
-        return substr(\md5(dirname(__DIR__, 6)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }
