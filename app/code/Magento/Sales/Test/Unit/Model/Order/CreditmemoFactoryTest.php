@@ -56,7 +56,9 @@ class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
         );
         $orderChildItemTwo->expects($this->any())->method('getQtyToRefund')->willReturn(1);
         $orderChildItemTwo->expects($this->any())->method('getId')->willReturn(3);
-        $orderItem->expects($this->any())->method('getChildrenItems')->willReturn([$orderChildItemOne, $orderChildItemTwo]);
+        $orderItem->expects($this->any())
+            ->method('getChildrenItems')
+            ->willReturn([$orderChildItemOne, $orderChildItemTwo]);
         $testMethod = new \ReflectionMethod(
             \Magento\Sales\Model\Order\CreditmemoFactory::class,
             'canRefundItem'
