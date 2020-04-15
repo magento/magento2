@@ -27,7 +27,7 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>

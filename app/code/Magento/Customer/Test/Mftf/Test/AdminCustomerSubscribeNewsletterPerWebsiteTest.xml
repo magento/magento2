@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
