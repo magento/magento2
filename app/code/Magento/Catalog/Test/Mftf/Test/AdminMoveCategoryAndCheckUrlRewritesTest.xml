@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
                 <field key="is_active">true</field>
             </createData>

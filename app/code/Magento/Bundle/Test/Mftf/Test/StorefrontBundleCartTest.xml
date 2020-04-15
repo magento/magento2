@@ -19,9 +19,10 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>

@@ -9,26 +9,31 @@
  */
 namespace Magento\AdminNotification\Test\Unit\Block;
 
-class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
+use Magento\AdminNotification\Block\ToolbarEntry;
+use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ToolbarEntryTest extends TestCase
 {
     /**
      * Retrieve toolbar entry block instance
      *
      * @param int $unreadNotifications number of unread notifications
-     * @return \Magento\AdminNotification\Block\ToolbarEntry
+     * @return ToolbarEntry
      */
     protected function _getBlockInstance($unreadNotifications)
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         // mock collection of unread notifications
         $notificationList = $this->createPartialMock(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
+            Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
         $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
 
         $block = $objectManagerHelper->getObject(
-            \Magento\AdminNotification\Block\ToolbarEntry::class,
+            ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 
@@ -44,25 +49,23 @@ class ToolbarEntryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLatestUnreadNotifications()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         // 1. Create mocks
-        $notificationList = $this->getMockBuilder(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class
-        )
+        $notificationList = $this->getMockBuilder(Unread::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\AdminNotification\Block\ToolbarEntry $model */
+        /** @var ToolbarEntry $model */
         $model = $helper->getObject(
-            \Magento\AdminNotification\Block\ToolbarEntry::class,
+            ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 
         // 2. Set expectations
         $notificationList->expects($this->atLeastOnce())
             ->method('setPageSize')
-            ->with(\Magento\AdminNotification\Block\ToolbarEntry::NOTIFICATIONS_NUMBER)
+            ->with(ToolbarEntry::NOTIFICATIONS_NUMBER)
             ->will($this->returnSelf());
 
         // 3. Run tested method

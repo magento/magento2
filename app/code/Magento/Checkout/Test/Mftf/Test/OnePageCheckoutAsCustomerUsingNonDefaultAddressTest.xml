@@ -83,7 +83,7 @@
         <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
