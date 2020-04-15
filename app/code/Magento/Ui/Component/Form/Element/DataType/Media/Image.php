@@ -32,9 +32,15 @@ class Image extends Media
     private $fileSize;
 
     /**
+     * @var OpednDialogUrl
+     */
+    private $openDialogConfig;
+
+    /**
      * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param Size $fileSize
+     * @param OpenDialogUrl $openDialogConfig
      * @param UiComponentInterface[] $components
      * @param array $data
      */
@@ -42,11 +48,13 @@ class Image extends Media
         ContextInterface $context,
         StoreManagerInterface $storeManager,
         Size $fileSize,
+        OpenDialogUrl $openDialogConfig,
         array $components = [],
         array $data = []
     ) {
         $this->storeManager = $storeManager;
         $this->fileSize = $fileSize;
+        $this->openDialogConfig = $openDialogConfig;
         parent::__construct($context, $components, $data);
     }
 
@@ -75,7 +83,10 @@ class Image extends Media
                 'config' => [
                     'maxFileSize' => $maxFileSize,
                     'mediaGallery' => [
-                        'openDialogUrl' => $this->getContext()->getUrl('cms/wysiwyg_images/index', ['_secure' => true]),
+                        'openDialogUrl' => $this->getContext()->getUrl(
+                            $this->openDialogConfig->getOpenDialogUrl(),
+                            ['_secure' => true]
+                        ),
                         'openDialogTitle' => $this->getConfiguration()['openDialogTitle'] ?? __('Insert Images...'),
                         'initialOpenSubpath' => $this->getConfiguration()['initialMediaGalleryOpenSubpath'],
                         'storeId' => $this->storeManager->getStore()->getId(),
