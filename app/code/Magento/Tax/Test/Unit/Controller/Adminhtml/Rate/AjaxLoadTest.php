@@ -14,6 +14,9 @@ use Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad;
 use Magento\Tax\Model\Calculation\RateRepository;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AjaxLoadTest extends TestCase
 {
     /**
