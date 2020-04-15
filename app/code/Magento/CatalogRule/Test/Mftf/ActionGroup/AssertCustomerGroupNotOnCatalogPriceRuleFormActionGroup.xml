@@ -17,9 +17,9 @@
         </arguments>
 
         <grabMultiple selector="{{AdminNewCatalogPriceRule.customerGroupsOptions}}" stepKey="customerGroups"/>
-        <assertNotContains stepKey="assertCustomerGroupNotInOptions">
+        <assertStringNotContainsString stepKey="assertCustomerGroupNotInOptions">
             <actualResult type="variable">customerGroups</actualResult>
             <expectedResult type="string">{{customerGroup.code}}</expectedResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
     </actionGroup>
 </actionGroups>
