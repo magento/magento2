@@ -201,6 +201,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->assertNull($this->model->get($cartId));
     }
 
+    /**
+     * Test to returns selected shipping method for a specified quote
+     */
     public function testGetMethod()
     {
         $cartId = 666;
@@ -233,6 +236,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->model->get($cartId);
     }
 
+    /**
+     * Test to returns selected shipping method for a specified quote if method isn't set
+     */
     public function testGetMethodIfMethodIsNotSet()
     {
         $cartId = 666;
@@ -250,6 +256,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->assertNull($this->model->get($cartId));
     }
 
+    /**
+     * Test to get lists applicable shipping methods for a specified quote
+     */
     public function testGetListForVirtualCart()
     {
         $cartId = 834;
@@ -261,6 +270,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->assertEquals([], $this->model->getList($cartId));
     }
 
+    /**
+     * Test to get lists applicable shipping methods for a specified quote
+     */
     public function testGetListForEmptyCart()
     {
         $cartId = 834;
@@ -292,6 +304,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->model->getList($cartId);
     }
 
+    /**
+     * Test to get lists applicable shipping methods for a specified quote
+     */
     public function testGetList()
     {
         $cartId = 834;
@@ -436,6 +451,9 @@ class ShippingMethodManagementTest extends TestCase
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
+    /**
+     * Test to sets the carrier and shipping methods codes for a specified cart
+     */
     public function testSetMethod()
     {
         $cartId = 12;

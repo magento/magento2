@@ -9,21 +9,18 @@ declare(strict_types=1);
 namespace Magento\GiftMessage\Test\Unit\Observer;
 
 use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\MessageInterface;
 use Magento\GiftMessage\Helper\Message;
 use Magento\GiftMessage\Model\Message as MessageModel;
 use Magento\GiftMessage\Model\MessageFactory;
 use Magento\GiftMessage\Observer\SalesEventOrderToQuoteObserver;
-use Magento\Framework\Event\Observer;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- *  SalesEventOrderToQuoteObserverTest
- */
 class SalesEventOrderToQuoteObserverTest extends TestCase
 {
     /**

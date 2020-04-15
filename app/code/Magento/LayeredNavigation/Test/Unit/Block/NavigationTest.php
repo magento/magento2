@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,42 +7,52 @@
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
+use Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\LayeredNavigation\Block\Navigation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NavigationTest extends \PHPUnit\Framework\TestCase
+class NavigationTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $catalogLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filterListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $visibilityFlagMock;
 
     /**
-     * @var \Magento\LayeredNavigation\Block\Navigation
+     * @var Navigation
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->catalogLayerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
-        $this->filterListMock = $this->createMock(\Magento\Catalog\Model\Layer\FilterList::class);
-        $this->visibilityFlagMock = $this->createMock(\Magento\Catalog\Model\Layer\AvailabilityFlagInterface::class);
+        $this->catalogLayerMock = $this->createMock(Layer::class);
+        $this->filterListMock = $this->createMock(FilterList::class);
+        $this->visibilityFlagMock = $this->createMock(AvailabilityFlagInterface::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
+        /** @var MockObject|Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
@@ -50,16 +60,16 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->method($this->anything())
             ->will($this->returnValue($this->catalogLayerMock));
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\LayeredNavigation\Block\Navigation::class,
+            Navigation::class,
             [
                 'layerResolver' => $layerResolver,
                 'filterList' => $this->filterListMock,
                 'visibilityFlag' => $this->visibilityFlagMock
             ]
         );
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
     }
 
     public function testGetStateHtml()
@@ -165,7 +175,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())->method('getChildName')->will($this->returnValue('sample block'));
 
         $blockMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\AbstractBlock::class,
+            AbstractBlock::class,
             [],
             '',
             false

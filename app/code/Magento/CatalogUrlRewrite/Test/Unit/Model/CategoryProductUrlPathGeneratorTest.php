@@ -1,23 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CategoryProductUrlPathGeneratorTest
- */
-class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
+class CategoryProductUrlPathGeneratorTest extends TestCase
 {
     /**
-     * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductScopeRewriteGenerator|MockObject
      */
     private $productScopeRewriteGeneratorMock;
 
@@ -26,7 +24,7 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $generator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
             ->disableOriginalConstructor()

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,40 +6,47 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class CanonicalUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator */
+    /** @var CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryUrlPathGenerator|MockObject */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Category|MockObject */
     protected $category;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewriteFactory|MockObject */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewrite|MockObject */
     protected $urlRewrite;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+        $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
-        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()->getMock();
         $this->categoryUrlPathGenerator = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class
+            CategoryUrlPathGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->canonicalUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator::class,
+            CanonicalUrlRewriteGenerator::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'urlRewriteFactory' => $this->urlRewriteFactory

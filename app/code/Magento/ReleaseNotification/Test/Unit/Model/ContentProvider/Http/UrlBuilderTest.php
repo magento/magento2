@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,15 @@
 namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UrlBuilderTest extends \PHPUnit\Framework\TestCase
+class UrlBuilderTest extends TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
@@ -21,7 +23,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $urlBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
