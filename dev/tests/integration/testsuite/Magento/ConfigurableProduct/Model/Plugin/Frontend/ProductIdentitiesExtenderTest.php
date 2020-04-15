@@ -19,20 +19,7 @@ use PHPUnit\Framework\TestCase;
 class ProductIdentitiesExtenderTest extends TestCase
 {
     /**
-     * Check, product identities extender plugin is registered for storefront.
-     *
-     * @magentoAppArea frontend
-     * @return void
-     */
-    public function testIdentitiesExtenderIsRegistered(): void
-    {
-        $pluginInfo = Bootstrap::getObjectManager()->get(PluginList::class)
-            ->get(\Magento\Catalog\Model\Product::class, []);
-        $this->assertSame(ProductIdentitiesExtender::class, $pluginInfo['product_identities_extender']['instance']);
-    }
-
-    /**
-     * Check plugin will add children ids to configurable product identities on storefront.
+     * Check that no children identities are added to the parent product in frontend area
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
@@ -42,20 +29,16 @@ class ProductIdentitiesExtenderTest extends TestCase
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $configurableProduct = $productRepository->get('configurable');
-        $simpleProduct1 = $productRepository->get('simple_10');
-        $simpleProduct2 = $productRepository->get('simple_20');
         $expectedIdentities = [
             'cat_p_' . $configurableProduct->getId(),
-            'cat_p',
-            'cat_p_' . $simpleProduct1->getId(),
-            'cat_p_' . $simpleProduct2->getId(),
+            'cat_p'
 
         ];
         $this->assertEquals($expectedIdentities, $configurableProduct->getIdentities());
     }
 
     /**
-     * Check plugin won't add children ids to configurable product identities in admin area.
+     * Check that no children identities are added to the parent product in frontend area
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea adminhtml
