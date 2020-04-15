@@ -34,13 +34,13 @@ class Image extends Media
     /**
      * @var OpednDialogUrl
      */
-    private $openDialogConfig;
+    private $openDialogUrl;
 
     /**
      * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param Size $fileSize
-     * @param OpenDialogUrl $openDialogConfig
+     * @param OpenDialogUrl $openDialogUrl
      * @param UiComponentInterface[] $components
      * @param array $data
      */
@@ -48,18 +48,18 @@ class Image extends Media
         ContextInterface $context,
         StoreManagerInterface $storeManager,
         Size $fileSize,
-        OpenDialogUrl $openDialogConfig,
+        OpenDialogUrl $openDialogUrl,
         array $components = [],
         array $data = []
     ) {
         $this->storeManager = $storeManager;
         $this->fileSize = $fileSize;
-        $this->openDialogConfig = $openDialogConfig;
+        $this->openDialogUrl = $openDialogUrl;
         parent::__construct($context, $components, $data);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentName()
     {
@@ -67,7 +67,7 @@ class Image extends Media
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare()
     {
@@ -84,7 +84,7 @@ class Image extends Media
                     'maxFileSize' => $maxFileSize,
                     'mediaGallery' => [
                         'openDialogUrl' => $this->getContext()->getUrl(
-                            $this->openDialogConfig->getOpenDialogUrl(),
+                            $this->openDialogUrl->get(),
                             ['_secure' => true]
                         ),
                         'openDialogTitle' => $this->getConfiguration()['openDialogTitle'] ?? __('Insert Images...'),
