@@ -27,8 +27,14 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create new customer -->
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Simple_US_Customer_NY"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Simple_US_Customer_NY"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
             </actionGroup>
             <!--Add shipping information-->
             <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
