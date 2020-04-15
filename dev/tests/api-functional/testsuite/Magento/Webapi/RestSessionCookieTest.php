@@ -17,7 +17,7 @@ class RestSessionCookieTest extends \Magento\TestFramework\TestCase\WebapiAbstra
     /**
      * Check for non exist cookie PHPSESSID
      */
-    public function testRestNoAcceptHeader()
+    public function testRestSessionNoCookie()
     {
         $this->_markTestAsRestOnly();
         /** @var $curlClient CurlClientWithCookies */
