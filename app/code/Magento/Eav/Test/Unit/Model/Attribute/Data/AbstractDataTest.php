@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,21 +6,30 @@
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\AbstractData;
 use Magento\Eav\Model\Attribute\Data\Text;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class AbstractDataTest extends \PHPUnit\Framework\TestCase
+class AbstractDataTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\AbstractData
+     * @var AbstractData
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $stringMock = $this->createMock(StringUtils::class);
 
         /* testing abstract model through its child */
         $this->model = new Text($timezoneMock, $loggerMock, $localeResolverMock, $stringMock);
@@ -32,19 +41,19 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEntity()
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $entityMock = $this->createMock(AbstractModel::class);
         $this->model->setEntity($entityMock);
         $this->assertEquals($entityMock, $this->model->getEntity());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Entity object is undefined
      *
      * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
      */
     public function testGetEntityWhenEntityNotSet()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Entity object is undefined');
         $this->model->getEntity();
     }
 
@@ -98,7 +107,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult, $filter)
     {
-        $requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParams', 'getParam']);
+        $requestMock = $this->createPartialMock(Http::class, ['getParams', 'getParam']);
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
             ['attributeCode', false, $value],
             [$requestScope, $value],
@@ -106,7 +115,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
         $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
 
         $attributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Attribute::class,
+            Attribute::class,
             ['getInputFilter', 'getAttributeCode']
         );
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));

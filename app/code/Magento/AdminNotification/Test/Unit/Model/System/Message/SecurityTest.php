@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -68,14 +68,14 @@ class SecurityTest extends TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
-        $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
+        $this->cacheMock->method('load')->will($this->returnValue($cached));
+        $this->cacheMock->method('save')->will($this->returnValue(null));
 
         $httpAdapterMock = $this->createMock(Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
-        $this->curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock->method('read')->will($this->returnValue($response));
+        $this->curlFactoryMock->method('create')->will($this->returnValue($httpAdapterMock));
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $this->scopeConfigMock->method('getValue')->will($this->returnValue(null));
 
         $this->assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }

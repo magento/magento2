@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,17 @@
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutFactory;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Abstract test class
  */
-class AbstractTestCase extends \PHPUnit\Framework\TestCase
+class AbstractTestCase extends TestCase
 {
     /**
      * Assertions for controller execute method
@@ -19,14 +26,13 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     protected function assertExecute($controllerName, $blockName)
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $outPut = "data";
-        $resultRawMock = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents'])
-        ;
+        $resultRawMock = $this->createPartialMock(Raw::class, ['setContents']);
         $resultRawFactoryMock =
-            $this->createPartialMock(\Magento\Framework\Controller\Result\RawFactory::class, ['create']);
-        $layoutFactoryMock = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);
-        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock', 'toHtml']);
+            $this->createPartialMock(RawFactory::class, ['create']);
+        $layoutFactoryMock = $this->createPartialMock(LayoutFactory::class, ['create']);
+        $layoutMock = $this->createPartialMock(Layout::class, ['createBlock', 'toHtml']);
         $layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
         $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->will($this->returnSelf());
         $layoutMock->expects($this->once())->method('toHtml')->will($this->returnValue($outPut));
@@ -41,6 +47,6 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
             ]
         );
         $result = $controller->execute();
-        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Raw::class, $result);
+        $this->assertInstanceOf(Raw::class, $result);
     }
 }

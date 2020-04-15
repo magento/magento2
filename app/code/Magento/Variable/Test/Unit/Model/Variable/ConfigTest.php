@@ -13,8 +13,13 @@ use Magento\Variable\Model\ResourceModel\Variable\Collection;
 use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for variable config
+ */
+class ConfigTest extends TestCase
 {
     /**
      * @var Config
@@ -22,12 +27,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     private $assetRepoMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
@@ -42,24 +47,24 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $jsPluginSourceUrl = 'js-plugin-source';
 
     /**
-     * @var Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var Variables|MockObject
      */
     private $storeVariablesMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $customVarsCollectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $customVarsCollectionMock;
 
     /**
      * Set up before tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->assetRepoMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()

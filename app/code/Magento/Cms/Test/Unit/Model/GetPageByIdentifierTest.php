@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,16 @@
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\GetPageByIdentifier;
+use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Cms\Model\GetPageByIdentifier
  */
 
-class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
+class GetPageByIdentifierTest extends TestCase
 {
     /**
      * @var GetPageByIdentifier
@@ -19,23 +23,23 @@ class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
     protected $getPageByIdentifierCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
+     * @var MockObject|Page
      */
     protected $page;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\PageFactory
+     * @var MockObject|PageFactory
      */
     protected $pageFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page
+     * @var MockObject|\Magento\Cms\Model\ResourceModel\Page
      */
     protected $pageResource;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
+        $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor(true)
             ->setMethods(['create'])
             ->getMock();
@@ -44,7 +48,7 @@ class GetPageByIdentifierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor(true)
             ->getMock();
 
-        $this->page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $this->page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'getId'])
             ->getMock();

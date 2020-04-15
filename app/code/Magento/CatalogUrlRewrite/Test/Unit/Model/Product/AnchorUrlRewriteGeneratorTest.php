@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
@@ -16,8 +17,8 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class AnchorUrlRewriteGeneratorTest extends TestCase
 {
@@ -45,7 +46,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
@@ -109,7 +110,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
             ->will($this->returnValue($urlPathWithCategory));
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
             ->will($this->returnValue($canonicalUrlPathWithCategory));
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $category = $this->createMock(Category::class);
         $category->expects($this->any())->method('getId')->will($this->returnValue($categoryIds));
         $category->expects($this->any())->method('getAnchorsAbove')->will($this->returnValue($categoryIds));
         $category->expects($this->any())->method('getParentId')->will(

@@ -18,8 +18,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SendFriend\Model\CaptchaValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Test CaptchaValidatorTest
@@ -34,39 +34,39 @@ class CaptchaValidatorTest extends TestCase
     private $model;
 
     /**
-     * @var CaptchaStringResolver|PHPUnit_Framework_MockObject_MockObject
+     * @var CaptchaStringResolver|MockObject
      */
     private $captchaStringResolverMock;
 
     /**
-     * @var UserContextInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var UserContextInterface|MockObject
      */
     private $currentUserMock;
 
     /**
-     * @var CustomerRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var Data|PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $captchaHelperMock;
 
     /**
-     * @var DefaultModel|PHPUnit_Framework_MockObject_MockObject
+     * @var DefaultModel|MockObject
      */
     private $captchaMock;
 
     /**
-     * @var RequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -120,12 +120,11 @@ class CaptchaValidatorTest extends TestCase
 
     /**
      * Testing the wrong used word for captcha
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage  Incorrect CAPTCHA
      */
     public function testWrongCaptcha()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Incorrect CAPTCHA');
         $word = 'test-word';
         $captchaIsRequired = true;
         $captchaWordIsCorrect = false;
