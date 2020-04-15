@@ -29,6 +29,6 @@
         <waitForPageLoad stepKey="waitForBlockGridLoad"/>
         <click selector="{{AdminBlockGridSection.blockEditPage(_defaultBlock.title)}}" stepKey="navigateToBlockEditPage"/>
         <waitForPageLoad stepKey="waitForBlockEditPageLoad"/>
-        <seeInCurrentUrl url="cms/block/edit/block_id/" stepKey="seeInBlockEditPage"/>
+        <see userInput="{{_defaultBlock.title}}" selector="{{AdminCmsBlockPageSection.cmsBlockTitle}}" stepKey="seeHomePageTitle"/>
     </test>
 </tests>
