@@ -42,7 +42,7 @@ class StoreValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
