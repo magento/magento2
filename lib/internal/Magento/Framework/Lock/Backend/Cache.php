@@ -45,7 +45,12 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     public function lock(string $name, int $timeout = -1): bool
     {
         if (empty($this->lockSign)) {
-            $this->lockSign = \bin2hex(\random_bytes(8));
+            $this->lockSign = implode(
+                '-',
+                [
+                    \getmypid(), \crc32(\gethostname()), \bin2hex(\random_bytes(4))
+                ]
+            );
         }
 
         $data = $this->cache->load($this->getIdentifier($name));
