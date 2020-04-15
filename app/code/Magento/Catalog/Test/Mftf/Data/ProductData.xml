@@ -880,6 +880,14 @@
         <data key="weight">5</data>
         <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
     </entity>
+    <entity name="Magento2" type="image">
+        <data key="title" unique="suffix">Magento2</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="file">magento2.jpg</data>
+        <data key="filename">magento2</data>
+        <data key="file_extension">jpg</data>
+    </entity>
     <entity name="Magento3" type="image">
         <data key="title" unique="suffix">Magento3</data>
         <data key="price">1.00</data>

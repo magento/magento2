@@ -76,7 +76,7 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
 

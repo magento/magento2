@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ProductInWebsitesSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='websites']" timeout="30"/>
+        <element name="sectionHeaderOpened" type="button" selector="[data-index='websites']._show" timeout="30"/>
+        <element name="website" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox']" parameterized="true"/>
+        <element name="websiteChecked" type="checkbox" selector="//label[contains(text(), '{{var1}}')]/parent::div//input[@type='checkbox'][@value='1']" parameterized="true"/>
+    </section>
+</sections>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -70,7 +70,9 @@
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
+			<actualResult type="const">$grabOrderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
@@ -94,14 +96,18 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
         <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
-        <assertNotEmpty actual="$grabMemoId" stepKey="assertMemoIdIsNotEmpty" after="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+			<actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
         <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
         <waitForPageLoad stepKey="waitForCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.subtotal}}" userInput="$560.00" stepKey="seeSubtotal"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentRefund}}" userInput="$5.00" stepKey="seeAdjustmentRefund"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentFee}}" userInput="$10.00" stepKey="seeAdjustmentFee"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="$555.00" stepKey="assertRefundOnCreditMemoTab"/>
+        <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
+            <argument name="subtotal" value="$560.00"/>
+            <argument name="adjustmentRefund" value="$5.00"/>
+            <argument name="adjustmentFee" value="$10.00"/>
+            <argument name="grandTotal" value="$555.00"/>
+        </actionGroup>
 
         <!--Login to storefront as previously created customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
