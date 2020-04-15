@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,16 +23,18 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddTrack;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AddTrackTest covers AddTrack controller.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddTrackTest extends \PHPUnit\Framework\TestCase
+class AddTrackTest extends TestCase
 {
     /**
-     * @var ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentLoader|MockObject
      */
     private $shipmentLoader;
 
@@ -42,54 +44,54 @@ class AddTrackTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     private $request;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     private $response;
 
     /**
-     * @var  ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  ViewInterface|MockObject
      */
     private $view;
 
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
     private $resultPageMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|MockObject
      */
     private $pageTitleMock;
 
     /**
-     * @var ShipmentTrackInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentTrackInterfaceFactory|MockObject
      */
     private $trackFactory;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|MockObject
      */
     private $rawResult;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMockBuilder(
