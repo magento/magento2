@@ -1,24 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Date grid filter functionality
  */
-class DateTest extends \PHPUnit\Framework\TestCase
+class DateTest extends TestCase
 {
     /**
      * @var ContextInterface|MockObject
@@ -48,7 +51,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
@@ -98,7 +101,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition)
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects(static::atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -255,8 +258,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
             if ($showsTime) {
-                $from = new \DateTime($filterData[$name]['from']);
-                $to = new \DateTime($filterData[$name]['to']);
+                $from = new \DateTime($filterData[$name]['from'] ?? 'now');
+                $to = new \DateTime($filterData[$name]['to'] ?? 'now');
                 $uiComponent->method('convertDatetime')
                     ->willReturnMap(
                         [
@@ -265,8 +268,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
                         ]
                     );
             } else {
-                $from = new \DateTime($filterData[$name]['from']);
-                $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
+                $from = new \DateTime($filterData[$name]['from'] ?? 'now');
+                $to = new \DateTime($filterData[$name]['to'] ? $filterData[$name]['to'] . ' 23:59:59' : 'now');
                 $uiComponent->method('convertDate')
                     ->willReturnMap(
                         [
