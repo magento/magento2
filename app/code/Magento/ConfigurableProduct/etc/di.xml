@@ -219,6 +219,9 @@
     <type name="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer\SalableResolver" />
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="product_identities_extender" type="Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender" />
+    </type>
     <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
         <arguments>
             <argument name="itemResolvers" xsi:type="array">
