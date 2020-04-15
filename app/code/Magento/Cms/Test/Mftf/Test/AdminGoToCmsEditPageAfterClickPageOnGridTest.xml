@@ -22,10 +22,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
-        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCmsPagesGrid"/>
         <click selector="{{CmsPagesPageActionsSection.homePage}}" stepKey="navigateToHomePage"/>
         <waitForPageLoad stepKey="waitForCmsHomePageLoad"/>
-        <seeInCurrentUrl url="cms/page/edit/page_id/2" stepKey="seeInHomePage"/>
+        <see userInput="Home page" selector="{{CmsNewPagePageActionsSection.cmsPageTitle}}" stepKey="seeHomePageTitle"/>
     </test>
 </tests>
