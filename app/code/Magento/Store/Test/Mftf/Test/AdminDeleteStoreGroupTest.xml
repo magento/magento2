@@ -48,7 +48,7 @@
         <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
         <!--Delete database backup-->
-        <actionGroup ref="AdminBackupDelete" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="WebSetupWizardBackup"/>
         </actionGroup>
     </test>
