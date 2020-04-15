@@ -50,7 +50,7 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
         $options = [['value' => null, 'label' => __('--Please Select--')]];
         foreach ($this->engines as $key => $label) {
             if ($this->engineResolver->getCurrentSearchEngine() === $key) {
-                $label = $label . ' ' . __('Default');
+                $label = $label . ' (' . __('Default') . ')';
             }
             $options[] = ['value' => $key, 'label' => $label];
         }
