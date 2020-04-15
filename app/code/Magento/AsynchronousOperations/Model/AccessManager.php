@@ -17,11 +17,11 @@ use Magento\Framework\EntityManager\EntityManager;
  */
 class AccessManager
 {
-    public const BULK_LOGGING_ACL_GUESTS = "Magento_Logging::system_magento_logging_bulk_operations_guests";
-    public const BULK_LOGGING_ACL_CUSTOMERS = "Magento_Logging::system_magento_logging_bulk_operations_customers";
-    public const BULK_LOGGING_ACL_INTEGRATIONS = "Magento_Logging::system_magento_logging_bulk_operations_integrations";
-    public const BULK_LOGGING_ACL_ADMIN = "Magento_Logging::system_magento_logging_bulk_operations_admin";
-    public const BULK_LOGGING_ACL = "Magento_Logging::system_magento_logging_bulk_operations";
+    public const BULK_LOGGING_ACL_GUESTS = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations_guests";
+    public const BULK_LOGGING_ACL_CUSTOMERS = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations_customers";
+    public const BULK_LOGGING_ACL_INTEGRATIONS = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations_integrations";
+    public const BULK_LOGGING_ACL_ADMIN = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations_admin";
+    public const BULK_LOGGING_ACL = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
 
     /**
      * @var UserContextInterface
