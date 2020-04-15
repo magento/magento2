@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magefan" translate="label" sortOrder="110">
+            <label>MageFan Extensions</label>
+        </tab>
+        <section id="mfloginascustomer" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Login As Customer</label>
+            <tab>magefan</tab>
+            <resource>Magefan_LoginAsCustomer::config_section</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Login As Customer Information</label>
+                <field id="version" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\LoginAsCustomer\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                </field>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="key" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Key</label>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                </field>
+                <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Disable Page Cache For Admin User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If set to "Yes", when login as customer Page Cache will be disabled.]]></comment>
+                </field>
+                <field id="keep_guest_cart" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Keep Guest Shopping Cart Items</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If set to "Yes", after login, guest shopping cart will be merged into customer shopping cart.]]></comment>
+                </field>
+                <field id="store_view_login" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Store View To Login In</label>
+                    <source_model>Magefan\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
+                    <comment><![CDATA[
+                            Use "Manual Choose" option on multi-website Magento setup with enabled global Share Customer Accounts.
+                            If set to "Manual Choose" then after click on "Login As Customer" admin will need to choose from a select box a store view to login in.
+                        ]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

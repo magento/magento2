@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magefan_LoginAsCustomer/js/login": {
+            "redirectUrl": "<?= $block->getUrl('customer/account/index') ?>"
+        }
+    }
+}
+</script>

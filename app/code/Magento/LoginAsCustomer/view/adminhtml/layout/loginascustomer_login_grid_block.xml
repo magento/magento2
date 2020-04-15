@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="loginascustomer.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="loginascustomer.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">subscriberGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magefan\LoginAsCustomer\Model\ResourceModel\Login\Grid\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">created_at</argument>
+                    <argument name="default_dir" xsi:type="string">desc</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                </arguments>
+
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="loginascustomer.grid.columnSet" as="grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="login_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="index" xsi:type="string">login_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Customer ID</argument>
+                            <argument name="index" xsi:type="string">customer_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-title</argument>
+                            <argument name="column_css_class" xsi:type="string">col-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Customer Email</argument>
+                            <argument name="index" xsi:type="string">email</argument>
+                            <argument name="header_css_class" xsi:type="string">col-title</argument>
+                            <argument name="column_css_class" xsi:type="string">col-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="admin_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Admin ID</argument>
+                            <argument name="index" xsi:type="string">admin_id</argument>
+                            <argument name="header_css_class" xsi:type="string">col-title</argument>
+                            <argument name="column_css_class" xsi:type="string">col-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="username">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Admin Name</argument>
+                            <argument name="index" xsi:type="string">username</argument>
+                            <argument name="header_css_class" xsi:type="string">col-title</argument>
+                            <argument name="column_css_class" xsi:type="string">col-title</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Logged In</argument>
+                            <argument name="index" xsi:type="string">created_at</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="header_css_class" xsi:type="string">col-first-name</argument>
+                            <argument name="column_css_class" xsi:type="string">col-first-name</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
