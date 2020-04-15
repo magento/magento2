@@ -15,27 +15,27 @@ use \Magento\Setup\Controller\ResponseTypeInterface;
 class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
     /**
-     * @var \Magento\Setup\Model\WebLogger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\WebLogger|\PHPUnit\Framework\MockObject\MockObject
      */
     private $log;
 
     /**
-     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupRollback;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryList;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
@@ -46,7 +46,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->directoryList =
             $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
@@ -96,7 +96,7 @@ class BackupActionItemsTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('size', $variables);
-        $this->assertEquals(true, $variables['size']);
+        $this->assertTrue($variables['size']);
     }
 
     public function testCheckActionWithError()

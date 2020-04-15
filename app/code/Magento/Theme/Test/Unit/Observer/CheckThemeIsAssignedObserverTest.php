@@ -9,12 +9,12 @@ namespace Magento\Theme\Test\Unit\Observer;
 class CheckThemeIsAssignedObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeConfig;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventDispatcher;
 
@@ -23,7 +23,7 @@ class CheckThemeIsAssignedObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $themeObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
             ->disableOriginalConstructor()

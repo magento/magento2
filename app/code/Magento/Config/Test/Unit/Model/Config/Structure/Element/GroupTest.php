@@ -15,16 +15,16 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cloneFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_depMapperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_cloneFactoryMock = $this->createMock(\Magento\Config\Model\Config\BackendClone\Factory::class);
@@ -41,7 +41,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_cloneFactoryMock);
@@ -60,10 +60,11 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetCloneModelThrowsExceptionIfNoSourceModelIsSet()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->getCloneModel();
     }
 
@@ -79,8 +80,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'clone_model_name'
-        )->will(
-            $this->returnValue($cloneModel)
+        )->willReturn(
+            $cloneModel
         );
         $this->_model->setData(['clone_model' => 'clone_model_name'], 'scope');
         $this->assertEquals($cloneModel, $this->_model->getCloneModel());
@@ -144,8 +145,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         )->with(
             $fields,
             'test_scope'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_scope'));

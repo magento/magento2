@@ -67,7 +67,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheTags = ['tag1', 'tag2'];
 

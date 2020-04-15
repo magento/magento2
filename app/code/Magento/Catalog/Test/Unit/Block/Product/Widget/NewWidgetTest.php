@@ -14,48 +14,48 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class NewWidgetTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\Widget\NewWidget|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\Widget\NewWidget|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
     /** @var ObjectManagerHelper */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManager;
 
-    /** @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Framework\App\Cache\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Cache\State|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheState;
 
-    /** @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $catalogConfig;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit\Framework\MockObject\MockObject */
     protected $localDate;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $productCollection;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->eventManager = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
@@ -101,7 +101,7 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -185,7 +185,7 @@ class NewWidgetTest extends \PHPUnit\Framework\TestCase
     protected function generalGetProductCollection()
     {
         $this->eventManager->expects($this->exactly(2))->method('dispatch')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
             ->willReturn(false);
         $this->cacheState->expects($this->atLeastOnce())->method('isEnabled')->withAnyParameters()

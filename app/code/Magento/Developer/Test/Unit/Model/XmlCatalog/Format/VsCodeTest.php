@@ -46,11 +46,11 @@ class VsCodeTest extends TestCase
      */
     private $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $currentDirReadMock = $this->createMock(ReadInterface::class);
+        $currentDirReadMock = $this->getMockForAbstractClass(ReadInterface::class);
         $currentDirReadMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnCallback(function ($xsdPath) {

@@ -26,7 +26,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 class TableMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolver;
 
@@ -36,16 +36,16 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
     private $tableMapper;
 
     /**
-     * @var FiltersExtractor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FiltersExtractor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterExtractorMock;
 
     /**
-     * @var FilterStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterStrategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -279,7 +279,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSelectMock()
     {
@@ -289,7 +289,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getRequestMock()
     {
@@ -299,7 +299,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getQueryMock()
     {

@@ -69,11 +69,11 @@ class TierPriceBoxTest extends \PHPUnit\Framework\TestCase
     {
         $this->context = $this->createPartialMock(Context::class, []);
         $this->saleableItem = $this->createPartialMock(Product::class, ['getPriceInfo']);
-        $this->price = $this->createMock(PriceInterface::class);
+        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
         $this->rendererPool = $this->createPartialMock(RendererPool::class, []);
         $this->salableResolver = $this->createPartialMock(SalableResolverInterface::class, ['isSalable']);
-        $this->minimalPriceCalculator = $this->createMock(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->createMock(ConfigurableOptionsProviderInterface::class);
+        $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
+        $this->configurableOptionsProvider = $this->getMockForAbstractClass(ConfigurableOptionsProviderInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             TierPriceBox::class,
@@ -102,7 +102,7 @@ class TierPriceBoxTest extends \PHPUnit\Framework\TestCase
             ->method('isMinimalPriceLessMsrp')
             ->willReturn(true);
 
-        $priceInfoMock = $this->createMock(PriceInfoInterface::class);
+        $priceInfoMock = $this->getMockForAbstractClass(PriceInfoInterface::class);
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->willReturn($msrpPriceMock);

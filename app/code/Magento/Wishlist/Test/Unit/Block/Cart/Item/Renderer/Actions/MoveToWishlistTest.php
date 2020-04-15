@@ -19,7 +19,7 @@ class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
     /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

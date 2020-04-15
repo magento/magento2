@@ -11,12 +11,12 @@ use \Magento\Setup\Controller\Marketplace;
 class MarketplaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PackagesAuth
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\PackagesAuth
      */
     private $packagesAuth;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PackagesData
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\PackagesData
      */
     private $packagesData;
 
@@ -27,7 +27,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->packagesAuth = $this->createMock(\Magento\Setup\Model\PackagesAuth::class);
         $this->packagesData = $this->createMock(\Magento\Setup\Model\PackagesData::class);
@@ -39,7 +39,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(json_encode(['success' => true])));
+            ->willReturn(json_encode(['success' => true]));
         $this->packagesAuth
             ->expects($this->once())
             ->method('saveAuthJson')
@@ -71,11 +71,11 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('getAuthJsonData')
-            ->will($this->returnValue(['username' => 'test', 'password' => 'test']));
+            ->willReturn(['username' => 'test', 'password' => 'test']);
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(json_encode(['success' => true])));
+            ->willReturn(json_encode(['success' => true]));
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -102,7 +102,7 @@ class MarketplaceTest extends \PHPUnit\Framework\TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('removeCredentials')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $jsonModel = $this->controller->removeCredentialsAction();
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $jsonModel);

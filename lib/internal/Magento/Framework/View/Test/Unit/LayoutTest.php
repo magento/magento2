@@ -149,7 +149,7 @@ class LayoutTest extends TestCase
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->structureMock = $this->getMockBuilder(LayoutStructure::class)
             ->disableOriginalConstructor()

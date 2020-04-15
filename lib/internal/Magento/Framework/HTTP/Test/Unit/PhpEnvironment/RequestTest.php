@@ -17,17 +17,17 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieReader;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
@@ -36,7 +36,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     private $serverArray;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->cookieReader = $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
@@ -45,7 +45,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->serverArray = $_SERVER;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
@@ -239,7 +239,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->will($this->returnValue($default));
+            ->willReturn($default);
 
         $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
     }
@@ -254,7 +254,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
     }
@@ -268,7 +268,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($nullKey, $default)
-            ->will($this->returnValue($default));
+            ->willReturn($default);
 
         $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
     }

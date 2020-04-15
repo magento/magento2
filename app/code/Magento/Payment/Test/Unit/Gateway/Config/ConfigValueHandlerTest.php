@@ -17,11 +17,11 @@ class ConfigValueHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
             ->getMockForAbstractClass();

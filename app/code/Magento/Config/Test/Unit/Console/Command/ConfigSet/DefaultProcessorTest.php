@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for DefaultProcessor.
@@ -64,7 +64,7 @@ class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
@@ -146,13 +146,14 @@ class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage The value you set has already been locked. To change the value, use the --lock-env option.
      * @codingStandardsIgnoreEnd
      */
     public function testProcessLockedValue()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The value you set has already been locked. To change the value, use the --lock-env option.');
+
         $path = 'test/test/test';
         $value = 'value';
 

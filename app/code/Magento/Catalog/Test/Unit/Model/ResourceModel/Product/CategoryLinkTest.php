@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CategoryLinkTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,7 +36,7 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()

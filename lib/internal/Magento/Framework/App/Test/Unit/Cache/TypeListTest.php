@@ -63,7 +63,7 @@ class TypeListTest extends TestCase
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_typesArray = [
             self::TYPE_KEY => [
@@ -78,29 +78,29 @@ class TypeListTest extends TestCase
             ['getTypes', 'getType']
         );
         $this->_config->expects($this->any())->method('getTypes')
-            ->will($this->returnValue($this->_typesArray));
+            ->willReturn($this->_typesArray);
         $this->_config->expects($this->any())->method('getType')
             ->with(self::TYPE_KEY)
-            ->will($this->returnValue($this->_typesArray[self::TYPE_KEY]));
+            ->willReturn($this->_typesArray[self::TYPE_KEY]);
 
         $cacheState = $this->createPartialMock(
             StateInterface::class,
             ['isEnabled', 'setEnabled', 'persist']
         );
         $cacheState->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(self::IS_CACHE_ENABLED));
+            ->willReturn(self::IS_CACHE_ENABLED);
         $cacheTypeMock = $this->createMock(self::CACHE_TYPE);
         $cacheTypeMock->expects($this->any())->method('getTag')
-            ->will($this->returnValue('TEST'));
+            ->willReturn('TEST');
         $factory = $this->createPartialMock(InstanceFactory::class, ['get']);
         $factory->expects($this->any())->method('get')
             ->with(self::CACHE_TYPE)
-            ->will($this->returnValue($cacheTypeMock));
+            ->willReturn($cacheTypeMock);
         $this->_cache = $this->createPartialMock(
             CacheInterface::class,
             ['load', 'getFrontend', 'save', 'remove', 'clean']
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(
@@ -136,7 +136,7 @@ class TypeListTest extends TestCase
         $expectation = [self::TYPE_KEY => $this->_getPreparedType()];
         $this->_cache->expects($this->once())->method('load')
             ->with(TypeList::INVALIDATED_TYPES)
-            ->will($this->returnValue('serializedData'));
+            ->willReturn('serializedData');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with('serializedData')
@@ -149,7 +149,7 @@ class TypeListTest extends TestCase
         // there are no invalidated types
         $this->_cache->expects($this->once())->method('load')
             ->with(TypeList::INVALIDATED_TYPES)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
         ];
@@ -166,7 +166,7 @@ class TypeListTest extends TestCase
     {
         $this->_cache->expects($this->once())->method('load')
             ->with(TypeList::INVALIDATED_TYPES)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
         ];
@@ -187,10 +187,10 @@ class TypeListTest extends TestCase
             ->willReturn($this->_typesArray);
         $this->_cache->expects($this->once())->method('load')
             ->with(TypeList::INVALIDATED_TYPES)
-            ->will($this->returnValue('serializedData'));
+            ->willReturn('serializedData');
         $this->_config->expects($this->once())->method('getType')
             ->with(self::TYPE_KEY)
-            ->will($this->returnValue(['instance' => self::CACHE_TYPE]));
+            ->willReturn(['instance' => self::CACHE_TYPE]);
         unset($this->_typesArray[self::TYPE_KEY]);
         $this->serializerMock->expects($this->once())
             ->method('serialize')

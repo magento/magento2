@@ -60,7 +60,7 @@ class AllcartTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultForwardMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistProviderMock = $this->getMockBuilder(\Magento\Wishlist\Controller\Shared\WishlistProvider::class)
             ->disableOriginalConstructor()

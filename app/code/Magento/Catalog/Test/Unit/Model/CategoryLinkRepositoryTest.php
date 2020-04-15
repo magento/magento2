@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\CategoryLinkRepository
@@ -52,15 +52,15 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productResourceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductsIdsBySkus'])
             ->getMock();
-        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->productLinkMock = $this->createMock(CategoryProductLinkInterface::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
         $this->model = new CategoryLinkRepository(
             $this->categoryRepositoryMock,
             $this->productRepositoryMock,

@@ -13,11 +13,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dataStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_dataStorage = $this->createMock(\Magento\Framework\Config\Data::class);
         $this->_model = new \Magento\Sales\Model\Order\Pdf\Config($this->_dataStorage);
@@ -33,8 +33,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             "renderers/page_type",
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getRenderersPerProduct('page_type'));
@@ -51,8 +51,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             'totals',
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getTotals());

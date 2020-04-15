@@ -85,14 +85,14 @@ class GroupActionsTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
         $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
+        $this->groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
         $this->urlBuilderMock = $this->getMockForAbstractClass(
             UrlInterface::class,
             [],

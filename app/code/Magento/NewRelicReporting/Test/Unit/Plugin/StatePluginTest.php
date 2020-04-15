@@ -54,13 +54,13 @@ class StatePluginTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->configMock = $this->getMockBuilder(NewRelicConfig::class)->disableOriginalConstructor()
             ->getMock();
         $this->newRelicWrapperMock = $this->createMock(NewRelicWrapper::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->statePlugin = $objectManager->getObject(

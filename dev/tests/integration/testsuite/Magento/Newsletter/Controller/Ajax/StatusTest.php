@@ -23,7 +23,7 @@ class StatusTest extends AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->json = $this->_objectManager->get(SerializerInterface::class);

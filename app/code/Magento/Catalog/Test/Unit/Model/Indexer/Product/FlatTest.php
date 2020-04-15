@@ -15,26 +15,26 @@ class FlatTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productFlatIndexerRow;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productFlatIndexerRows;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Full|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Action\Full|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productFlatIndexerFull;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productFlatIndexerRow = $this->getMockBuilder(
             \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class

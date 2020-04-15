@@ -10,22 +10,22 @@ use Magento\Setup\Model\DependencyReadinessCheck;
 class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerJsonFinder
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\ComposerJsonFinder
      */
     private $composerJsonFinder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\RequireUpdateDryRunCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Composer\RequireUpdateDryRunCommand
      */
     private $reqUpdDryRunCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Driver\File
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Driver\File
      */
     private $file;
 
@@ -34,7 +34,7 @@ class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $dependencyReadinessCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerJsonFinder =
             $this->createMock(\Magento\Framework\Composer\ComposerJsonFinder::class);

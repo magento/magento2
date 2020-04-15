@@ -13,11 +13,11 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
     protected $attributeSelector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
@@ -35,8 +35,8 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
             'getUrl'
         )->with(
             '*/product_set/save'
-        )->will(
-            $this->returnValue('some_url')
+        )->willReturn(
+            'some_url'
         );
         $this->assertEquals('some_url', $this->attributeSelector->getAttributeSetCreationUrl());
     }
@@ -50,8 +50,8 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
             'getUrl'
         )->with(
             '*/product_attribute/suggestConfigurableAttributes'
-        )->will(
-            $this->returnValue($source)
+        )->willReturn(
+            $source
         );
         $expected = ['source' => $source, 'minLength' => 0, 'className' => 'category-select', 'showAll' => true];
         $this->assertEquals($expected, $this->attributeSelector->getSuggestWidgetOptions());

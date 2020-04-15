@@ -8,11 +8,11 @@ namespace Magento\Framework\Mview\Test\Unit\Config;
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\Mview\Config\Converter();
     }

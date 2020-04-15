@@ -90,7 +90,7 @@ class CartTotalRepositoryTest extends TestCase
      */
     protected $totalsConverterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->totalsFactoryMock = $this->createPartialMock(
@@ -195,7 +195,7 @@ class CartTotalRepositoryTest extends TestCase
             ->method('getTotals')
             ->willReturn($addressTotals);
 
-        $totalsMock = $this->createMock(QuoteTotalsInterface::class);
+        $totalsMock = $this->getMockForAbstractClass(QuoteTotalsInterface::class);
         $this->totalsFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($totalsMock);
@@ -205,7 +205,7 @@ class CartTotalRepositoryTest extends TestCase
             ->with($itemMock)
             ->willReturn($itemArray);
 
-        $totalSegmentsMock = $this->createMock(TotalSegmentInterface::class);
+        $totalSegmentsMock = $this->getMockForAbstractClass(TotalSegmentInterface::class);
         $this->totalsConverterMock->expects($this->once())
             ->method('process')
             ->with($addressTotals)

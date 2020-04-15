@@ -98,7 +98,7 @@ class RedirectTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
@@ -363,7 +363,7 @@ class RedirectTest extends TestCase
      */
     public function testSetRedirectCookie(): void
     {
-        $coockieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $coockieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $publicMetadataMock = $this->createMock(PublicCookieMetadata::class);
         $routeMock = 'route';
 
@@ -407,7 +407,7 @@ class RedirectTest extends TestCase
      */
     public function testClearRedirectCookie(): void
     {
-        $coockieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $coockieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $publicMetadataMock = $this->createMock(PublicCookieMetadata::class);
 
         $this->model->setCookieManager($coockieManagerMock);

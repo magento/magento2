@@ -15,7 +15,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageElement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $elementFactory \Magento\Framework\Data\Form\ElementFactory */

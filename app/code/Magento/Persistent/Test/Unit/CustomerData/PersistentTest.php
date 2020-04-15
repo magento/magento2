@@ -53,11 +53,11 @@ class PersistentTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentSessionHelperMock = $this->createMock(Session::class);
         $this->customerViewHelperMock = $this->createMock(View::class);
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -106,7 +106,7 @@ class PersistentTest extends TestCase
         $persistentSessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
         $this->persistentSessionHelperMock->method('getSession')->willReturn($persistentSessionMock);
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerRepositoryMock->method('getById')->with(self::STUB_CUSTOMER_ID)->willReturn($customerMock);
         $this->customerViewHelperMock->method('getCustomerName')->with($customerMock)
             ->willReturn(self::STUB_CUSTOMER_NAME);

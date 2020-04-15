@@ -31,7 +31,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class, [], [], '', false);
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

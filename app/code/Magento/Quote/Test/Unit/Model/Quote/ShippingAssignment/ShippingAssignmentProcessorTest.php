@@ -31,46 +31,46 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ShippingAssignmentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingAssignmentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentFactoryMock;
 
     /**
-     * @var ShippingProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingProcessorMock;
 
     /**
-     * @var CartItemPersister|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartItemPersister|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cartItemPersisterMock;
 
     /**
-     * @var AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRepositoryMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var ShippingAssignmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingAssignmentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentMock;
 
     /**
-     * @var QuoteAddress|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAddressMock;
 
     /**
-     * @var ShippingInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shippingAssignmentFactoryMock = $this->getMockBuilder(ShippingAssignmentFactory::class)
             ->disableOriginalConstructor()
@@ -171,7 +171,7 @@ class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @param int|string $id
      * @param bool $isDeleted
-     * @return QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @return QuoteItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createQuoteItemMock($id, $isDeleted)
     {

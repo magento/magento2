@@ -14,7 +14,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableM
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class SaveHandlerTest
@@ -46,7 +46,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionRepository = $this->getMockBuilder(OptionRepository::class)
             ->disableOriginalConstructor()
@@ -230,12 +230,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for options save
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $attribute
+     * @param \PHPUnit\Framework\MockObject\MockObject $attribute
      * @param $sku
      * @param $id
      * @return void
      */
-    private function processSaveOptions(\PHPUnit_Framework_MockObject_MockObject $attribute, $sku, $id)
+    private function processSaveOptions(\PHPUnit\Framework\MockObject\MockObject $attribute, $sku, $id)
     {
         $attribute->expects(static::once())
             ->method('setId')

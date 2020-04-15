@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class RelationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Model\AbstractModel | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel | \PHPUnit\Framework\MockObject\MockObject
      */
     private $modelMock;
 
@@ -19,7 +19,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
      */
     private $relation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->modelMock = $this->createPartialMock(\Magento\Framework\Model\AbstractModel::class, [

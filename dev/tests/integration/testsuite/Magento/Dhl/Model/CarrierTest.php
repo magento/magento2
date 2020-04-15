@@ -50,7 +50,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->dhlCarrier = $objectManager->get(Carrier::class);
@@ -62,7 +62,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->config->setValue(
             'shipping/origin/country_id',

@@ -12,26 +12,26 @@ use Magento\Search\Model\AdapterFactory;
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterFactory;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->adapterFactory = new AdapterFactory(
             $this->objectManager,
@@ -43,7 +43,7 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -51,34 +51,36 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue($adapter));
+            ->willReturn($adapter);
 
         $result = $this->adapterFactory->create(['input']);
         $this->assertInstanceOf(\Magento\Framework\Search\AdapterInterface::class, $result);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionThrown()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue('t'));
+            ->willReturn('t');
 
         $this->adapterFactory->create(['input']);
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateLogicException()
     {
+        $this->expectException(\LogicException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('Class'));
+            ->willReturn('Class');
 
         $this->adapterFactory->create(['input']);
     }

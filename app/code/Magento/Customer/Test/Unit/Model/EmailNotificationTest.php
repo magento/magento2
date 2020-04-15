@@ -68,7 +68,7 @@ class EmailNotificationTest extends TestCase
     private $customerRegistryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|MockObjectp
      */
     private $storeManagerMock;
 
@@ -113,9 +113,9 @@ class EmailNotificationTest extends TestCase
     private $senderResolverMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->customerRegistryMock = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
 
@@ -202,10 +202,8 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /**
-         * @var MockObject $origCustomer
-         */
-        $origCustomer = $this->createMock(CustomerInterface::class);
+        /** @var MockObject $origCustomer */
+        $origCustomer = $this->getMockForAbstractClass(CustomerInterface::class);
         $origCustomer->expects($this->any())
             ->method('getStoreId')
             ->willReturn(0);
@@ -260,9 +258,7 @@ class EmailNotificationTest extends TestCase
             ->with('name', self::STUB_CUSTOMER_NAME)
             ->willReturnSelf();
 
-        /**
-         * @var CustomerInterface|MockObject $savedCustomer
-         */
+        /** @var CustomerInterface|MockObject $savedCustomer */
         $savedCustomer = clone $origCustomer;
 
         $origCustomer->expects($this->any())
@@ -384,10 +380,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /**
-         * @var CustomerInterface|MockObject $customer
-         */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
@@ -487,10 +482,10 @@ class EmailNotificationTest extends TestCase
             ->method('resolve')
             ->with(self::STUB_SENDER, $defaultStoreId)
             ->willReturn($senderValues);
-        /**
-         * @var CustomerInterface|MockObject $customer
-         */
-        $customer = $this->createMock(CustomerInterface::class);
+
+        /** @var CustomerInterface | MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+
         $customer->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(self::STUB_CUSTOMER_WEBSITE_ID);
@@ -583,10 +578,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /**
-         * @var CustomerInterface|MockObject $customer
-         */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+
         $customer->expects($this->once())
             ->method('getStoreId')
             ->willReturn(self::STUB_CUSTOMER_STORE_ID);
@@ -673,10 +667,9 @@ class EmailNotificationTest extends TestCase
             ->with(self::STUB_SENDER, self::STUB_CUSTOMER_STORE_ID)
             ->willReturn($senderValues);
 
-        /**
-         * @var CustomerInterface|MockObject $customer
-         */
-        $customer = $this->createMock(CustomerInterface::class);
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+
         $customer->expects($this->any())
             ->method('getStoreId')
             ->willReturn(self::STUB_CUSTOMER_STORE_ID);

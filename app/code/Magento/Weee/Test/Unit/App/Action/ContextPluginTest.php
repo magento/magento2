@@ -92,7 +92,7 @@ class ContextPluginTest extends TestCase
      */
     protected $contextPlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

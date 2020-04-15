@@ -49,7 +49,7 @@ class DeleteByDirectoryPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByDirectoryPath = (new ObjectManager($this))->getObject(
@@ -60,7 +60,7 @@ class DeleteByDirectoryPathTest extends TestCase
             ]
         );
 
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
     }
 
     /**

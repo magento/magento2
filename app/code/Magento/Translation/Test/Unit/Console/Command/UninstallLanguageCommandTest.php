@@ -17,27 +17,27 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyChecker;
 
     /**
-     * @var Remove|\PHPUnit_Framework_MockObject_MockObject
+     * @var Remove|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remove;
 
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInfo;
 
     /**
-     * @var Cache|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cache|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackupRollbackFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupRollbackFactory;
 
@@ -51,7 +51,7 @@ class UninstallLanguageCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $tester;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
         $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);

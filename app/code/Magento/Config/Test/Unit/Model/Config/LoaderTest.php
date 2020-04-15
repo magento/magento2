@@ -16,16 +16,16 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configValueFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configValueFactory = $this->createPartialMock(
             \Magento\Framework\App\Config\ValueFactory::class,
@@ -41,8 +41,8 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             'scope',
             'scopeId',
             'section'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $configDataMock = $this->createMock(\Magento\Framework\App\Config\Value::class);
@@ -50,29 +50,29 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($configDataMock)
+        )->willReturn(
+            $configDataMock
         );
         $configDataMock->expects(
             $this->any()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->_configCollection)
+        )->willReturn(
+            $this->_configCollection
         );
 
         $this->_configCollection->expects(
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [new \Magento\Framework\DataObject(['path' => 'section', 'value' => 10, 'config_id' => 20])]
-            )
+            
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_configValueFactory);
         unset($this->_model);

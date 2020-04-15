@@ -53,7 +53,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
      */
     private $userExpirationMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

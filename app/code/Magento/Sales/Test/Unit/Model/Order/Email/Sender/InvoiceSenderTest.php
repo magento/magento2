@@ -38,7 +38,7 @@ class InvoiceSenderTest extends AbstractSenderTest
      */
     protected $invoiceResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
@@ -62,10 +62,10 @@ class InvoiceSenderTest extends AbstractSenderTest
         );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->invoiceMock->method('getId')
             ->willReturn(self::INVOICE_ID);
@@ -78,7 +78,7 @@ class InvoiceSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->sender = new InvoiceSender(
             $this->templateContainerMock,

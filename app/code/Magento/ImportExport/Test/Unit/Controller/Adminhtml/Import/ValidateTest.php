@@ -8,22 +8,22 @@ namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\Import;
 class ValidateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportProcessorMock;
 
     /**
-     * @var \Magento\ImportExport\Model\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\History|\PHPUnit\Framework\MockObject\MockObject
      */
     private $historyMock;
 
     /**
-     * @var \Magento\ImportExport\Helper\Report|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Report|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportHelperMock;
 
@@ -33,21 +33,21 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     private $validate;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

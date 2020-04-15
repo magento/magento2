@@ -22,42 +22,42 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Email sender model mock.
      *
-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $emailSender;
 
     /**
      * Entity resource model mock.
      *
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityResource;
 
     /**
      * Entity collection model mock.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityCollection;
 
     /**
      * Global configuration storage mock.
      *
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $globalConfig;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\IdentityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Container\IdentityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $identityContainerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -160,7 +160,7 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
             if ($collectionItems) {
 
-                /** @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $collectionItem */
+                /** @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject $collectionItem */
                 $collectionItem = $collectionItems[0];
 
                 $this->emailSender

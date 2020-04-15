@@ -10,21 +10,21 @@ namespace Magento\Framework\DB\Test\Unit\Helper;
 class AbstractHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Helper\AbstractHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Helper\AbstractHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_adapterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
@@ -32,7 +32,7 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
             ->with('prefix')
-            ->will($this->returnValue($this->_adapterMock));
+            ->willReturn($this->_adapterMock);
 
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Framework\DB\Helper\AbstractHelper::class,
@@ -64,12 +64,12 @@ class AbstractHelperTest extends \PHPUnit\Framework\TestCase
         $this->_adapterMock->expects($this->once())
             ->method('quoteIdentifier')
             ->with($field)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_model->expects($this->once())
             ->method('addLikeEscape')
             ->with($value, $options)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->_model->getCILike($field, $value, $options);
         $this->assertInstanceOf('Zend_Db_Expr', $result);

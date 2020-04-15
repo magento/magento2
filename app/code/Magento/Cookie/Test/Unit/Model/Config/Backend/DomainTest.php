@@ -13,18 +13,18 @@ use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
  */
 class DomainTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Domain */
     protected $domain;
 
     /**
-     * @var  CookieDomainValidator | \PHPUnit_Framework_MockObject_MockObject
+     * @var  CookieDomainValidator | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventDispatcherMock = $this->createMock(\Magento\Framework\Event\Manager::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
@@ -32,8 +32,8 @@ class DomainTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getEventDispatcher'
-        )->will(
-            $this->returnValue($eventDispatcherMock)
+        )->willReturn(
+            $eventDispatcherMock
         );
 
         $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
@@ -73,16 +73,16 @@ class DomainTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave($value, $isValid, $callNum, $callGetMessages = 0)
     {
-        $this->resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
-        $this->resourceMock->expects($this->any())->method('commit')->will($this->returnSelf());
-        $this->resourceMock->expects($this->any())->method('rollBack')->will($this->returnSelf());
+        $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->resourceMock->expects($this->any())->method('commit')->willReturnSelf();
+        $this->resourceMock->expects($this->any())->method('rollBack')->willReturnSelf();
 
         $this->validatorMock->expects($this->exactly($callNum))
             ->method('isValid')
-            ->will($this->returnValue($isValid));
+            ->willReturn($isValid);
         $this->validatorMock->expects($this->exactly($callGetMessages))
             ->method('getMessages')
-            ->will($this->returnValue(['message']));
+            ->willReturn(['message']);
         $this->domain->setValue($value);
         try {
             $this->domain->beforeSave();

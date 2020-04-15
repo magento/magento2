@@ -13,27 +13,27 @@ use Magento\Directory\Helper\Data;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_regionCollection;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_store;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -65,15 +65,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_regionCollection)
+        )->willReturn(
+            $this->_regionCollection
         );
 
         $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
 
         $this->_store = $this->createMock(\Magento\Store\Model\Store::class);
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
 
         $currencyFactory = $this->createMock(\Magento\Directory\Model\CurrencyFactory::class);
 
@@ -100,8 +100,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue($countryIterator)
+        )->willReturn(
+            $countryIterator
         );
 
         $regions = [
@@ -123,16 +123,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'addCountryFilter'
         )->with(
             ['Country1', 'Country2']
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
         $this->_regionCollection->expects($this->once())->method('load');
         $this->_regionCollection->expects(
             $this->once()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue($regionIterator)
+        )->willReturn(
+            $regionIterator
         );
 
         $expectedDataToEncode = [
@@ -149,8 +149,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'jsonEncode'
         )->with(
             new \PHPUnit\Framework\Constraint\IsIdentical($expectedDataToEncode)
-        )->will(
-            $this->returnValue('encoded_json')
+        )->willReturn(
+            'encoded_json'
         );
 
         // Test
@@ -171,8 +171,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'general/region/state_required'
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
 
         $result = $this->_object->getCountriesWithStatesRequired();
@@ -192,8 +192,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'general/country/optional_zip_countries'
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
 
         $result = $this->_object->getCountriesWithOptionalZip();
@@ -222,7 +222,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 Data::XML_PATH_DEFAULT_COUNTRY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
-            )->will($this->returnValue($country));
+            )->willReturn($country);
 
         $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
     }
@@ -233,8 +233,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'isLoaded'
-        )->will(
-            $this->returnValue(0)
+        )->willReturn(
+            0
         );
 
         $store = $this->createMock(\Magento\Store\Model\Store::class);

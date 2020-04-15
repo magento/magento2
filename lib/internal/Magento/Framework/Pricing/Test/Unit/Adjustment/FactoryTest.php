@@ -15,7 +15,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -45,22 +45,23 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $adjustmentInterface
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager
      */
     protected function prepareObjectManager($adjustmentInterface)
     {
         $objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->getMockForAbstractClass($adjustmentInterface)));
+            ->willReturn($this->getMockForAbstractClass($adjustmentInterface));
         return $objectManager;
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $invalidAdjustmentInterface = \Magento\Framework\DataObject::class;
         $adjustmentFactory = $this->prepareAdjustmentFactory($invalidAdjustmentInterface);
         $adjustmentFactory->create($invalidAdjustmentInterface);

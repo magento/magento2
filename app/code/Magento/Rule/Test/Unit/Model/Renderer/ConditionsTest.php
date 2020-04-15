@@ -21,11 +21,11 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Conditions::class);
@@ -45,15 +45,15 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getConditions')
-            ->will($this->returnValue($conditions));
+            ->willReturn($conditions);
 
         $conditions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('conditions html'));
+            ->willReturn('conditions html');
 
         $this->assertEquals('conditions html', $this->conditions->render($this->_element));
     }

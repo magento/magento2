@@ -27,31 +27,31 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var CustomerAddressConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressConfigMock;
 
     /**
-     * @var EventManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var EventManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var OrderAddress|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderAddressMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var CustomerAddressBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressBlockRenderer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressBlockRendererMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerAddressConfigMock = $this->getMockBuilder(CustomerAddressConfig::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->eventManagerMock->expects(static::never())
             ->method('dispatch');
 
-        $this->assertEquals(null, $this->orderAddressRenderer->format($this->orderAddressMock, $type));
+        $this->assertNull($this->orderAddressRenderer->format($this->orderAddressMock, $type));
     }
 
     /**

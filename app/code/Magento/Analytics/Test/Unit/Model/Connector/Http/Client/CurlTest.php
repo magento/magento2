@@ -22,29 +22,29 @@ class CurlTest extends \PHPUnit\Framework\TestCase
     private $curl;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit\Framework\MockObject\MockObject
      */
     private $curlAdapterMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseFactoryMock;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converterMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->curlAdapterMock = $this->getMockBuilder(
             \Magento\Framework\HTTP\Adapter\Curl::class
@@ -195,7 +195,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createJsonConverter()
     {

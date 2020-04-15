@@ -11,19 +11,19 @@ use Magento\Customer\Api\Data\ValidationRuleInterface;
 
 class InlineEditUpdaterTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ValidationRules|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var ValidationRules|\PHPUnit\Framework\MockObject\MockObject  */
     protected $validationRules;
 
-    /** @var ValidationRuleInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ValidationRuleInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $validationRule;
 
-    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $column;
 
     /** @var InlineEditUpdater */
     protected $component;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validationRules = $this->getMockBuilder(
             \Magento\Customer\Ui\Component\Listing\Column\ValidationRules::class

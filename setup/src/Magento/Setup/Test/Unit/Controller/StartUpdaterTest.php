@@ -15,36 +15,36 @@ use Magento\Setup\Controller\StartUpdater;
 class StartUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var StartUpdater|\PHPUnit_Framework_MockObject_MockObject
+     * @var StartUpdater|\PHPUnit\Framework\MockObject\MockObject
      */
     private $controller;
 
     /**
-     * @var \Laminas\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Http\PhpEnvironment\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Laminas\Http\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Http\PhpEnvironment\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     private $response;
 
     /**
-     * @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Mvc\MvcEvent|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mvcEvent;
 
     /**
-     * @var Magento\Setup\Model\PayloadValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Magento\Setup\Model\PayloadValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $payloadValidator;
 
     /**
-     * @var Magento\Setup\Model\UpdaterTaskCreator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Magento\Setup\Model\UpdaterTaskCreator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $updaterTaskCreator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->payloadValidator = $this->createMock(\Magento\Setup\Model\PayloadValidator::class);
         $this->updaterTaskCreator = $this->createMock(\Magento\Setup\Model\UpdaterTaskCreator::class);

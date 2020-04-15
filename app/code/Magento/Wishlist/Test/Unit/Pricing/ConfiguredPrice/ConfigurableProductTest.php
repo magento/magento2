@@ -32,7 +32,7 @@ class ConfigurableProductTest extends \PHPUnit\Framework\TestCase
      */
     private $priceInfoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfoInterface::class)
             ->getMockForAbstractClass();

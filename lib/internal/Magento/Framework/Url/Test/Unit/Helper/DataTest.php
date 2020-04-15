@@ -12,7 +12,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -25,14 +25,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $url = 'http://example.com';
         $urlBuilderMock->expects($this->once())
             ->method('getCurrentUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
         $encodedUrl = 'encodedUrl';
         $urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $urlEncoder->expects($this->once())
             ->method('encode')
-            ->will($this->returnValue($encodedUrl));
+            ->willReturn($encodedUrl);
         $context = $this->objectManager->getObject(
             \Magento\Framework\App\Helper\Context::class,
             [
@@ -58,14 +58,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $encodingUrl = $url ? $url : 'http://example.com';
         $urlBuilderMock->expects($this->exactly($callNum))
             ->method('getCurrentUrl')
-            ->will($this->returnValue($encodingUrl));
+            ->willReturn($encodingUrl);
         $encodedUrl = 'encodedUrl';
         $urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $urlEncoder->expects($this->once())
             ->method('encode')
-            ->will($this->returnValue($encodedUrl));
+            ->willReturn($encodedUrl);
         $context = $this->objectManager->getObject(
             \Magento\Framework\App\Helper\Context::class,
             [

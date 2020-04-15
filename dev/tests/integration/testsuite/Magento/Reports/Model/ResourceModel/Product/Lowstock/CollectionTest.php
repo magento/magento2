@@ -16,7 +16,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /**
          * @var  \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection
@@ -29,10 +29,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Assert that filterByProductType method throws LocalizedException if not String or Array is passed to it
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testFilterByProductTypeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->collection->filterByProductType(100);
     }
 

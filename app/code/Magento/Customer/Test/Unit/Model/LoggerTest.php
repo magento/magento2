@@ -18,28 +18,28 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     protected $logger;
 
     /**
-     * @var \Magento\Customer\Model\LogFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\LogFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logFactory;
 
     /**
      * Resource instance.
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
      * DB connection instance.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->createPartialMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,

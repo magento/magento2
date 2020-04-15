@@ -12,16 +12,16 @@ use Magento\Framework\ObjectManagerInterface;
 class ImporterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ImporterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImporterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $importerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -32,7 +32,7 @@ class ImporterFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $className = 'some/class/name';
 
-        /** @var ImporterInterface|\PHPUnit_Framework_MockObject_MockObject $importerMock */
+        /** @var ImporterInterface|\PHPUnit\Framework\MockObject\MockObject $importerMock */
         $importerMock = $this->getMockBuilder(ImporterInterface::class)
             ->getMockForAbstractClass();
 
@@ -45,16 +45,17 @@ class ImporterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Type "some/class/name" is not instance of Magento\Framework\App\DeploymentConfig\ImporterInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWithInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Type "some/class/name" is not instance of Magento\\Framework\\App\\DeploymentConfig\\ImporterInterface');
+
         $className = 'some/class/name';
 
-        /** @var \StdClass|\PHPUnit_Framework_MockObject_MockObject $importerMock */
+        /** @var \StdClass|\PHPUnit\Framework\MockObject\MockObject $importerMock */
         $importerMock = $this->getMockBuilder(\stdClass::class)
             ->disableOriginalConstructor()
             ->getMock();

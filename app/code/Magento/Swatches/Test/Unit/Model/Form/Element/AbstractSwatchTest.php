@@ -8,16 +8,16 @@ namespace Magento\Swatches\Test\Unit\Model\Form\Element;
 
 class AbstractSwatchTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Swatches\Model\Form\Element\AbstractSwatch|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Model\Form\Element\AbstractSwatch|\PHPUnit\Framework\MockObject\MockObject */
     private $swatch;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource|\PHPUnit\Framework\MockObject\MockObject */
     private $source;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->getMockForAbstractClass();

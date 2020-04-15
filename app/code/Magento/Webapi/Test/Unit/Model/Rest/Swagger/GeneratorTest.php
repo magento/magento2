@@ -18,20 +18,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**  @var \Magento\Webapi\Model\Rest\Swagger\Generator */
     protected $generator;
 
-    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit\Framework\MockObject\MockObject */
     protected $serviceMetadataMock;
 
-    /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $swaggerFactoryMock;
 
-    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $typeProcessorMock;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customAttributeTypeLocatorMock;
 
@@ -41,11 +41,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
             \Magento\Webapi\Model\ServiceMetadata::class
@@ -59,20 +59,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
-        $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
+        $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
         $this->cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        $this->cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->typeProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessorMock->expects($this->any())
             ->method('getOperationName')
-            ->will($this->returnValue(self::OPERATION_NAME));
+            ->willReturn(self::OPERATION_NAME);
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
             \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::class
@@ -88,9 +88,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $storeMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue('store_code'));
+            ->willReturn('store_code');
 
-        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
+        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -442,7 +442,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->typeProcessorMock
             ->method('getTypeData')
-            ->will($this->returnCallback($getTypeData));
+            ->willReturnCallback($getTypeData);
 
         $method = new \ReflectionMethod($this->generator, 'generateDefinition');
         $method->setAccessible(true);

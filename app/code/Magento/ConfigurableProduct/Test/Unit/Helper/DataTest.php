@@ -12,26 +12,26 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productMock;
 
     /**
-     * @var UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageUrlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->imageUrlBuilder = $this->getMockBuilder(UrlBuilder::class)
@@ -58,7 +58,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->_productMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $this->_model->getAllowAttributes($this->_productMock);
     }
@@ -130,22 +130,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
             );
             $productAttribute->expects($this->any())
                 ->method('getId')
-                ->will($this->returnValue('attribute_id_' . $i));
+                ->willReturn('attribute_id_' . $i);
             $productAttribute->expects($this->any())
                 ->method('getAttributeCode')
-                ->will($this->returnValue('attribute_code_' . $i));
+                ->willReturn('attribute_code_' . $i);
             $attribute->expects($this->any())
                 ->method('getProductAttribute')
-                ->will($this->returnValue($productAttribute));
+                ->willReturn($productAttribute);
             $attributes[] = $attribute;
         }
         $typeInstanceMock = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
-            ->will($this->returnValue($attributes));
+            ->willReturn($attributes);
         $currentProductMock->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
@@ -154,18 +154,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
             );
             $productMock->expects($this->any())
                 ->method('getData')
-                ->will($this->returnCallback([$this, 'getDataCallback']));
+                ->willReturnCallback([$this, 'getDataCallback']);
             $productMock->expects($this->any())
                 ->method('getId')
-                ->will($this->returnValue('product_id_' . $i));
+                ->willReturn('product_id_' . $i);
             $productMock
                 ->expects($this->any())
                 ->method('isSalable')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
             if ($i == 2) {
                 $productMock->expects($this->any())
                     ->method('getImage')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
             }
             $allowedProducts[] = $productMock;
         }

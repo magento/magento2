@@ -78,14 +78,14 @@ class CheckContactUsFormObserverTest extends TestCase
      */
     private $captchaMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMockForAbstractClass();

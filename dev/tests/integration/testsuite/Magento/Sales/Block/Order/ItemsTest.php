@@ -28,7 +28,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(\Magento\Framework\View\LayoutInterface::class);

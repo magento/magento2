@@ -33,7 +33,7 @@ class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
             ->getMockForAbstractClass();

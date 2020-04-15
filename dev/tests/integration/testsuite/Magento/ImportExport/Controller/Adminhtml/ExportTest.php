@@ -32,7 +32,7 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         ];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->_httpXRequestedWith !== null) {
             $_SERVER['HTTP_X_REQUESTED_WITH'] = $this->_httpXRequestedWith;

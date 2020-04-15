@@ -15,7 +15,7 @@ use Magento\Framework\Phrase;
 class CronRemoveCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CrontabManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CrontabManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $crontabManagerMock;
 
@@ -27,7 +27,7 @@ class CronRemoveCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->crontabManagerMock = $this->getMockBuilder(CrontabManagerInterface::class)
             ->getMockForAbstractClass();

@@ -20,11 +20,11 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackagesData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packagesData;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->packagesData = $this->getMockBuilder(PackagesData::class)
             ->disableOriginalConstructor()

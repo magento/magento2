@@ -48,51 +48,51 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         $weeeHelper=$this->createMock(\Magento\Weee\Helper\Data::class);
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
         $weeeHelper->expects($this->any())
             ->method('isDisplayIncl')
-            ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_INCL));
+            ->willReturn($weeeDisplay == WeeeDisplayConfig::DISPLAY_INCL);
         $weeeHelper->expects($this->any())
             ->method('isDisplayExclDescIncl')
-            ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL));
+            ->willReturn($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL);
         $weeeHelper->expects($this->any())
             ->method('isDisplayExcl')
-            ->will($this->returnValue($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL));
+            ->willReturn($weeeDisplay == WeeeDisplayConfig::DISPLAY_EXCL);
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')
-            ->will($this->returnValue([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]));
+            ->willReturn([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]);
 
         $taxHelper=$this->createMock(\Magento\Tax\Helper\Data::class);
         $taxHelper->expects($this->any())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue($priceDisplay == TaxConfig::DISPLAY_TYPE_EXCLUDING_TAX));
+            ->willReturn($priceDisplay == TaxConfig::DISPLAY_TYPE_EXCLUDING_TAX);
         $taxHelper->expects($this->any())
             ->method('priceIncludesTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $responseObject=$this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getResponseObject']);
         $responseObject->expects($this->any())
             ->method('getResponseObject')
-            ->will($this->returnValue($configObj));
+            ->willReturn($configObj);
 
         $observerObject=$this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
         $observerObject->expects($this->any())
             ->method('getEvent')
-            ->will($this->returnValue($responseObject));
+            ->willReturn($responseObject);
 
         $product = $this->createPartialMock(\Magento\Bundle\Model\Product\Type::class, ['getTypeId', 'getStoreId']);
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
 
         $registry=$this->createMock(\Magento\Framework\Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $objectManager = new ObjectManager($this);
         /** @var \Magento\Weee\Observer\UpdateProductOptionsObserver $weeeObserverObject */

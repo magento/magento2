@@ -24,7 +24,7 @@ class CartsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerRepository = $this->_objectManager->get(
@@ -56,7 +56,7 @@ class CartsTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->_block->toHtml();
         $this->assertContains("<div id=\"customer_cart_grid\"", $html);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<div class=".*admin__data-grid-toolbar"/',
             $html
         );
@@ -82,7 +82,7 @@ class CartsTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->_block->toHtml();
         $this->assertContains("<div id=\"customer_cart_grid\"", $html);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<div class=".*admin__data-grid-toolbar"/',
             $html
         );

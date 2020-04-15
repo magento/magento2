@@ -19,7 +19,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designPackage;
 
@@ -38,7 +38,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
      */
     protected $themeProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
         $this->designPackage = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
@@ -51,7 +51,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->themeCollection));
+        $collectionFactory->expects($this->any())->method('create')->willReturn($this->themeCollection);
 
         $this->themeProviderMock = $this->getMockBuilder(\Magento\Theme\Model\Theme\ThemeProvider::class)
             ->disableOriginalConstructor()
@@ -153,7 +153,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$this->getAssignedTheme(), $this->getUnassignedTheme()]);
 
         $themeAssigned = $this->model->isThemeAssignedToStore($this->getAssignedTheme());
-        $this->assertEquals(true, $themeAssigned);
+        $this->assertTrue($themeAssigned);
     }
 
     /**
@@ -167,7 +167,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->getAssignedTheme()->getId());
 
         $themeUnassigned = $this->model->isThemeAssignedToStore($this->getUnassignedTheme(), $this->getStore());
-        $this->assertEquals(false, $themeUnassigned);
+        $this->assertFalse($themeUnassigned);
     }
 
     /**

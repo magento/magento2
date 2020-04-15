@@ -15,22 +15,22 @@ use Magento\Framework\Config\Reader\Filesystem;
 class FilesystemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_schemaLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validationStateMock;
 
@@ -44,7 +44,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     protected $_file;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
@@ -67,7 +67,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->_file);
@@ -86,25 +86,26 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->_fileResolverMock
-            ->expects($this->once())->method('get')->will($this->returnValue([]));
+            ->expects($this->once())->method('get')->willReturn([]);
 
         $this->assertEmpty($model->read('scope'));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid Document
      */
     public function testReadWithInvalidDom()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid Document');
+
         $this->_schemaLocatorMock->expects(
             $this->once()
         )->method(
             'getSchema'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
-            )
+            
         );
         $this->_validationStateMock->expects($this->any())
             ->method('isValidationRequired')
@@ -117,25 +118,26 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
 
         $model->read('scope');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The XML in file "0" is invalid:
      */
     public function testReadWithInvalidXml()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The XML in file "0" is invalid:');
+
         $this->_schemaLocatorMock->expects(
             $this->any()
         )->method(
             'getPerFileSchema'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
-            )
+            
         );
         $this->_validationStateMock->expects($this->any())
             ->method('isValidationRequired')
@@ -149,17 +151,18 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
         $model->read('scope');
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Instance of the DOM config merger is expected, got StdClass instead.
      */
     public function testReadException()
     {
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Instance of the DOM config merger is expected, got StdClass instead.');
+
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
         $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,

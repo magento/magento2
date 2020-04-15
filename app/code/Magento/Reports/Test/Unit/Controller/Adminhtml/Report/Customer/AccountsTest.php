@@ -20,7 +20,7 @@ class AccountsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

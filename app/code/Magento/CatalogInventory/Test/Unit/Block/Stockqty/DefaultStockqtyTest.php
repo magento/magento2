@@ -16,21 +16,21 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
@@ -50,7 +50,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -59,11 +59,11 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $this->assertEquals($productTags, $this->block->getIdentities());
     }
 
@@ -85,15 +85,15 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
                 \Magento\Catalog\Model\Product::class,
                 ['getId', 'getStore', '__wakeup']
             );
-            $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
+            $product->expects($this->any())->method('getId')->willReturn($productId);
             $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
             $store->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
-            $product->expects($this->any())->method('getStore')->will($this->returnValue($store));
+            $product->expects($this->any())->method('getStore')->willReturn($store);
 
             $this->registryMock->expects($this->any())
                 ->method('registry')
                 ->with('current_product')
-                ->will($this->returnValue($product));
+                ->willReturn($product);
 
             if ($productId) {
                 $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
@@ -102,7 +102,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
                 $this->stockRegistryMock->expects($this->once())
                     ->method('getStockStatus')
                     ->with($this->equalTo($productId), $this->equalTo($websiteId))
-                    ->will($this->returnValue($stockStatus));
+                    ->willReturn($stockStatus);
             }
         }
         $this->assertSame($expectedQty, $this->block->getStockQty());
@@ -132,7 +132,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
             ->disableOriginalConstructor()

@@ -21,11 +21,11 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $filePath;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
         $this->moduleManager = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isOutputEnabled']);

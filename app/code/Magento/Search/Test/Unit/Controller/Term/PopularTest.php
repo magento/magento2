@@ -42,7 +42,7 @@ class PopularTest extends TestCase
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultForwardFactoryMock = $this->getMockBuilder(ResultForwardFactory::class)
             ->disableOriginalConstructor()

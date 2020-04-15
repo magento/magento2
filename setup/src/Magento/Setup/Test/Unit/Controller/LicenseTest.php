@@ -11,7 +11,7 @@ use \Magento\Setup\Controller\License;
 class LicenseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\License
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\License
      */
     private $licenseModel;
 
@@ -20,7 +20,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->licenseModel = $this->createMock(\Magento\Setup\Model\License::class);
         $this->controller = new License($this->licenseModel);

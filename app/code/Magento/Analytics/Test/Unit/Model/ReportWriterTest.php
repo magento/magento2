@@ -19,22 +19,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ReportWriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configInterfaceMock;
 
     /**
-     * @var ReportValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportValidatorMock;
 
     /**
-     * @var ProviderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProviderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $providerFactoryMock;
 
     /**
-     * @var ReportProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportProviderMock;
 
@@ -44,7 +44,7 @@ class ReportWriterTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMock;
 
@@ -71,7 +71,7 @@ class ReportWriterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->reportValidatorMock = $this->getMockBuilder(ReportValidator::class)

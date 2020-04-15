@@ -24,7 +24,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_string;
 
@@ -58,7 +58,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
      */
     protected $_eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -89,7 +89,7 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

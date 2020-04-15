@@ -12,7 +12,7 @@ use Magento\Analytics\Model\Connector\SignUpCommand;
 class ConnectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -22,7 +22,7 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     private $connector;
 
     /**
-     * @var SignUpCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var SignUpCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $signUpCommandMock;
 
@@ -31,11 +31,11 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
      */
     private $commands;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->signUpCommandMock = $this->getMockBuilder(SignUpCommand::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,12 +59,13 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Executing non-existing command
      *
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Command "register" was not found.
      * @return void
      */
     public function testExecuteCommandNotFound(): void
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Command "register" was not found.');
+
         $commandName = 'register';
         $this->connector->execute($commandName);
     }

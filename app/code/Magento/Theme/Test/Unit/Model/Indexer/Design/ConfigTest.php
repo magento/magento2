@@ -16,7 +16,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /** @var Config */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $indexerStructure = $this->getMockBuilder(\Magento\Framework\Indexer\IndexStructureInterface::class)
             ->getMockForAbstractClass();

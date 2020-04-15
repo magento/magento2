@@ -10,7 +10,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -20,11 +20,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     private $selectFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\MysqlFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\MysqlFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mysqlFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->selectFactoryMock = $this->createMock(\Magento\Framework\DB\SelectFactory::class);
@@ -79,11 +79,12 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage MySQL adapter: Missing required configuration option 'host'
      */
     public function testConstructorException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('MySQL adapter: Missing required configuration option \'host\'');
+
         new Mysql(
             [],
             $this->mysqlFactoryMock
@@ -91,11 +92,12 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Configuration array must have a key for 'dbname' that names the database instance
      */
     public function testGetConnectionInactive()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configuration array must have a key for \'dbname\' that names the database instance');
+
         $config = ['host' => 'localhost', 'active' => false];
         $this->mysqlFactoryMock->expects($this->once())
             ->method('create')

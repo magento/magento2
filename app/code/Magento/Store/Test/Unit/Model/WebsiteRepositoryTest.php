@@ -16,21 +16,21 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteCollectionFactoryMock;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $appConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->websiteFactoryMock =
@@ -93,10 +93,11 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \DomainException
      */
     public function testGetDefaultIsSeveral()
     {
+        $this->expectException(\DomainException::class);
+
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -124,11 +125,12 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \DomainException
-     * @expectedExceptionMessage The default website isn't defined. Set the website and try again.
      */
     public function testGetDefaultIsZero()
     {
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('The default website isn\'t defined. Set the website and try again.');
+
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])

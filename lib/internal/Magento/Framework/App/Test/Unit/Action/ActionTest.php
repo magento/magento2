@@ -73,17 +73,17 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public static $actionParams = ['param' => 'value'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->_redirectMock = $this->createMock(RedirectInterface::class);
+        $this->_redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->_requestMock = $this->createMock(HttpRequest::class);
-        $this->_responseMock = $this->createMock(ResponseInterface::class);
+        $this->_responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $this->pageConfigMock = $this->createPartialMock(PageConfig::class, ['getConfig']);
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageConfigMock);
         $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

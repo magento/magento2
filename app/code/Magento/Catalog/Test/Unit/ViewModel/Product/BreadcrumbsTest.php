@@ -54,7 +54,7 @@ class BreadcrumbsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->catalogHelperMock = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])

@@ -14,22 +14,22 @@ use Magento\Config\App\Config\Type\System\Reader;
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConfigSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $source;
 
     /**
-     * @var Fallback|\PHPUnit_Framework_MockObject_MockObject
+     * @var Fallback|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fallback;
 
     /**
-     * @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PreProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $preProcessor;
 
     /**
-     * @var PostProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PostProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $postProcessor;
 
@@ -38,7 +38,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

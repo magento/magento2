@@ -69,9 +69,9 @@ class CopierTest extends TestCase
     /**
      * @ingeritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->copyConstructorMock = $this->createMock(CopyConstructorInterface::class);
+        $this->copyConstructorMock = $this->getMockForAbstractClass(CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
         $this->optionRepositoryMock = $this->createMock(Repository::class);
@@ -105,7 +105,7 @@ class CopierTest extends TestCase
      */
     public function testCopy(): void
     {
-        $stockItem = $this->createMock(StockItemInterface::class);
+        $stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
         $extensionAttributes = $this->getMockBuilder(ProductExtension::class)
             ->setMethods(['getStockItem', 'setData'])
             ->getMock();
@@ -322,7 +322,7 @@ class CopierTest extends TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
         $duplicateMock = $this->createPartialMock(
             Product::class,
@@ -344,7 +344,7 @@ class CopierTest extends TestCase
                 'getStoreIds',
             ]
         );
-        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);

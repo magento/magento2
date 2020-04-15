@@ -34,7 +34,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->normalizer = $this->createMock(Normalizer::class);

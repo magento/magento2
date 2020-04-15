@@ -17,16 +17,16 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrency = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class
         )->getMock();
         $this->priceCurrency->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(function ($argument) {
+            ->willReturnCallback(function ($argument) {
                 return round($argument, 2);
-            }));
+            });
 
         $this->_model = new \Magento\Framework\Math\Calculator($this->priceCurrency);
     }

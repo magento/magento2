@@ -24,56 +24,56 @@ use Magento\Framework\View\LayoutInterface;
 class ValidateTest extends AttributeTest
 {
     /**
-     * @var ResultJsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultJsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonFactoryMock;
 
     /**
-     * @var ResultJson|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultJson|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJson;
 
     /**
-     * @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var AttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCodeValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCodeValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resultJsonFactoryMock = $this->getMockBuilder(ResultJsonFactory::class)

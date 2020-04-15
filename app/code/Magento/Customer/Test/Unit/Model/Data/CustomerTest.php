@@ -21,7 +21,7 @@ class CustomerTest extends TestCase
     /** @var ObjectManager */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

@@ -22,19 +22,19 @@ class ResultTest extends TestCase
     private $model;
 
     /**
-     * @var PriceUpdateResultInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var PriceUpdateResultInterfaceFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $priceUpdateResultFactory;
 
     /**
-     * @var ObjectManagerHelper|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper|PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceUpdateResultFactory = $this->getMockBuilder(PriceUpdateResultInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -66,8 +66,8 @@ class ResultTest extends TestCase
      */
     public function testGetFailedItems()
     {
-        $priceUpdateResult1 = $this->createMock(PriceUpdateResultInterface::class);
-        $priceUpdateResult2 = $this->createMock(PriceUpdateResultInterface::class);
+        $priceUpdateResult1 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
+        $priceUpdateResult2 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
 
         $this->priceUpdateResultFactory->expects($this->at(0))
             ->method('create')

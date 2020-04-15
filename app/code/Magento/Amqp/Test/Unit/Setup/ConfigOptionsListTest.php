@@ -6,12 +6,12 @@
 
 namespace Magento\Amqp\Test\Unit\Setup;
 
-use Magento\Amqp\Setup\ConnectionValidator;
-use Magento\Framework\Config\Data\ConfigData;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Amqp\Setup\ConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Amqp\Setup\ConnectionValidator;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -137,7 +137,7 @@ class ConfigOptionsListTest extends TestCase
     public function testCreateConfig($options, $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         /** @var ConfigData $configData */
         $configData = $result[0];
@@ -183,9 +183,7 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
+                ['queue' => ['amqp' => [
                             'host' => 'host',
                             'port' => 'port',
                             'user' => 'user',
@@ -207,9 +205,7 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
+                ['queue' => ['amqp' => [
                             'host' => 'host',
                             'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
                             'user' => 'user',

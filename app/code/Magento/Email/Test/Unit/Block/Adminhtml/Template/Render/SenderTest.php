@@ -17,14 +17,14 @@ use Magento\Framework\DataObject;
 class SenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Sender
+     * @var \PHPUnit\Framework\MockObject\MockObject|Sender
      */
     protected $block;
 
     /**
      * Setup environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()

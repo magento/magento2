@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Block\Form.
@@ -65,7 +65,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $storeId = '1';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();

@@ -31,7 +31,7 @@ class OperationStatusValidatorTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->operationStatusPool = $this->getMockBuilder(OperationStatusPool::class)
             ->disableOriginalConstructor()

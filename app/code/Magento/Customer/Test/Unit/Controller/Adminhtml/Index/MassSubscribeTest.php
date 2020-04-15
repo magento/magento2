@@ -95,13 +95,13 @@ class MassSubscribeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerMock = $this->createPartialMock(
@@ -129,7 +129,7 @@ class MassSubscribeTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
-        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
@@ -176,7 +176,7 @@ class MassSubscribeTest extends TestCase
         $customersIds = [$customerId, $customerId, $customerId];
 
         $this->customerCollectionMock->method('getAllIds')->willReturn($customersIds);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepositoryMock->method('getById')->with($customerId)->willReturn($customer);

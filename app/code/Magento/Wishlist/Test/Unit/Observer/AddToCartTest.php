@@ -48,7 +48,7 @@ class AddToCartTest extends \PHPUnit\Framework\TestCase
      */
     protected $messageManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutSession = $this->getMockBuilder(
             \Magento\Checkout\Model\Session::class

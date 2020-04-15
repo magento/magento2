@@ -15,7 +15,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     protected $testable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
         /** @var \Psr\Log\LoggerInterface $logger */
@@ -29,8 +29,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getDefaultShipping', 'unsetDefaultShipping'])
             ->getMock();
 
-        $object->expects($this->once())->method('getDefaultShipping')->will($this->returnValue(null));
-        $object->expects($this->once())->method('unsetDefaultShipping')->will($this->returnSelf());
+        $object->expects($this->once())->method('getDefaultShipping')->willReturn(null);
+        $object->expects($this->once())->method('unsetDefaultShipping')->willReturnSelf();
         /** @var \Magento\Framework\DataObject $object */
 
         $this->testable->beforeSave($object);
@@ -61,14 +61,14 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attribute->expects($this->once())->method('getEntity')->will($this->returnValue($entity));
-        $attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue($attributeCode));
+        $attribute->expects($this->once())->method('getEntity')->willReturn($entity);
+        $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
         $entity->expects($this->once())->method('saveAttribute')->with($this->logicalOr($object, $attributeCode));
-        $address->expects($this->once())->method('getPostIndex')->will($this->returnValue($defaultShipping));
-        $address->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-        $object->expects($this->once())->method('getDefaultShipping')->will($this->returnValue($defaultShipping));
-        $object->expects($this->once())->method('setDefaultShipping')->with($addressId)->will($this->returnSelf());
-        $object->expects($this->once())->method('getAddresses')->will($this->returnValue([$address]));
+        $address->expects($this->once())->method('getPostIndex')->willReturn($defaultShipping);
+        $address->expects($this->once())->method('getId')->willReturn($addressId);
+        $object->expects($this->once())->method('getDefaultShipping')->willReturn($defaultShipping);
+        $object->expects($this->once())->method('setDefaultShipping')->with($addressId)->willReturnSelf();
+        $object->expects($this->once())->method('getAddresses')->willReturn([$address]);
         /** @var \Magento\Framework\DataObject $object */
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
 

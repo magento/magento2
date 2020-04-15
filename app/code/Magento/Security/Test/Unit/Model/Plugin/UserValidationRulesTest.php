@@ -33,7 +33,7 @@ class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
      */
     private $rules;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $userExpirationValidator = $this->createMock(\Magento\Security\Model\UserExpiration\Validator::class);

@@ -12,22 +12,22 @@ namespace Magento\Framework\Amqp\Test\Unit\Bulk;
 class ExchangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Amqp\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Amqp\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $amqpConfig;
 
     /**
-     * @var \Magento\Framework\Communication\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Communication\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $communicationConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $publisherConfig;
 
     /**
-     * @var \Magento\Framework\Amqp\Exchange|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Amqp\Exchange|\PHPUnit\Framework\MockObject\MockObject
      */
     private $exchange;
 
@@ -41,7 +41,7 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->amqpConfig = $this->getMockBuilder(\Magento\Framework\Amqp\Config::class)
             ->disableOriginalConstructor()->getMock();

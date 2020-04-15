@@ -17,16 +17,16 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractAction
+     * @var \PHPUnit\Framework\MockObject\MockObject|AbstractAction
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closureMock = function () {
             return 'Expected';
@@ -62,11 +62,11 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getPost')
             ->with('massaction_prepare_key')
-            ->will($this->returnValue('key'));
+            ->willReturn('key');
         $this->requestMock->expects($this->at(1))
             ->method('getPost')
             ->with('key')
-            ->will($this->returnValue($postData));
+            ->willReturn($postData);
         $this->requestMock->expects($this->once())
             ->method('setPostValue')
             ->with('key', $convertedData);
@@ -90,7 +90,7 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('massaction_prepare_key')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->requestMock->expects($this->never())
             ->method('setPostValue');
 

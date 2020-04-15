@@ -16,49 +16,49 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
     protected $observer;
 
     /**
-     * @var \Magento\Reports\Observer\EventSaver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Observer\EventSaver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventSaverMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerVisitorMock;
 
     /**
-     * @var \Magento\Reports\Model\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportEventMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompFactoryMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompModelMock;
 
     /**
-     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\ReportStatus|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reportStatusMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -76,7 +76,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
             ->method('create')
             ->willReturn($this->reportEventMock);
 
-        /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManager */
+        /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject $storeManager */
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()->getMock();
@@ -174,7 +174,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\Tes
 
     /**
      * @param int $productId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObserverMock($productId)
     {

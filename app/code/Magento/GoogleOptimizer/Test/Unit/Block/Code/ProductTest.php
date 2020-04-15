@@ -13,11 +13,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
@@ -27,7 +27,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -36,15 +36,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($product)
+        )->willReturn(
+            $product
         );
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

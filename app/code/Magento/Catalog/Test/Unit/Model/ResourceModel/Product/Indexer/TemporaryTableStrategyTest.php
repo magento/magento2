@@ -16,16 +16,16 @@ class TemporaryTableStrategyTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\Table\Strategy
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\Table\Strategy
      */
     private $tableStrategyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResourceConnection
      */
     private $resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tableStrategyMock = $this->createMock(\Magento\Framework\Indexer\Table\Strategy::class);
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);

@@ -14,7 +14,7 @@ use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \Magento\Braintree\Gateway\Validator\CancelResponseValidator class.
@@ -39,7 +39,7 @@ class CancelResponseValidatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generalValidator = $this->getMockBuilder(GeneralResponseValidator::class)
             ->disableOriginalConstructor()

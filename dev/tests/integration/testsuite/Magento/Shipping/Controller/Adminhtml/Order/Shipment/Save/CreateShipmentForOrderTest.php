@@ -30,7 +30,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->escaper = $this->_objectManager->get(Escaper::class);

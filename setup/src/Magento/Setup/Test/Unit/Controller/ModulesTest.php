@@ -11,17 +11,17 @@ use \Magento\Setup\Controller\Modules;
 class ModulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleStatus
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ModuleStatus
      */
     private $modules;
 
@@ -32,17 +32,17 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         /** @var
-         * $objectManagerProvider \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+         * $objectManagerProvider \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ObjectManagerProvider
          */
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->modules = $this->createMock(\Magento\Setup\Model\ModuleStatus::class);
         $this->status = $this->createMock(\Magento\Framework\Module\Status::class);
-        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
+        $this->objectManager->expects($this->once())->method('create')->willReturn($this->status);
         $this->controller = new Modules($this->modules, $objectManagerProvider);
     }
 

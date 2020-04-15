@@ -76,7 +76,7 @@ class DeletePaymentTokenTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -89,7 +89,7 @@ class DeletePaymentTokenTest extends TestCase
                     'getUserType',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->setMethods(
@@ -100,7 +100,7 @@ class DeletePaymentTokenTest extends TestCase
                     'setIsCustomer',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fieldMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
@@ -172,11 +172,12 @@ class DeletePaymentTokenTest extends TestCase
     /**
      * Test mutation when customer isn't authorized.
      *
-     * @expectedException \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCustomerNotAuthorized()
     {
+        $this->expectException(\Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $isCustomer = false;
 
         $this->contextMock

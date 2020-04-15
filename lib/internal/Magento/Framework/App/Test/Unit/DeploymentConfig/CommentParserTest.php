@@ -14,17 +14,17 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 class CommentParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ConfigFilePool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFilePool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFilePoolMock;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirectoryMock;
 
@@ -36,7 +36,7 @@ class CommentParserTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()

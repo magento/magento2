@@ -43,7 +43,7 @@ class ModuleListTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);

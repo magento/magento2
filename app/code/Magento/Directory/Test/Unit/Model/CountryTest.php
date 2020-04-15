@@ -13,11 +13,11 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     protected $country;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ListsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeListsMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
 

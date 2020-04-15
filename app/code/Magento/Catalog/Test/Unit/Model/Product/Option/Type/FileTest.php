@@ -24,41 +24,41 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaDirectory;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorageDatabase;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemOptionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -99,22 +99,22 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_decode($value, true);
                     }
-                )
+                
             );
 
         $this->serializer->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return json_encode($value);
                     }
-                )
+                
             );
     }
 
@@ -185,21 +185,21 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($quoteValue));
+            ->willReturn($quoteValue);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
             ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->exactly(2))
             ->method('getAbsolutePath')
-            ->will($this->returnValue('/file.path'));
+            ->willReturn('/file.path');
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('checkDbUsage')
@@ -207,7 +207,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('copyFile')
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
 
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);
@@ -241,21 +241,21 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($quoteValue));
+            ->willReturn($quoteValue);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
             ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->never())
             ->method('getAbsolutePath')
-            ->will($this->returnValue('/file.path'));
+            ->willReturn('/file.path');
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('checkDbUsage')
@@ -326,7 +326,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $configurationItemOption->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $fileObject = $this->getFileObject()->setData('configuration_item_option', $configurationItemOption);
         $optionTitle = 'Option Title';
         $optionValue = json_encode(['title' => $optionTitle]);
@@ -337,7 +337,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->escaper->expects($this->once())
             ->method('escapeHtml')
             ->with($optionTitle)
-            ->will($this->returnValue($optionTitle));
+            ->willReturn($optionTitle);
 
         $this->assertEquals('Option Title [2]', $fileObject->getEditableOptionValue($optionValue));
     }
@@ -367,15 +367,15 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->any())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
         $this->assertEquals($optionValue, $fileObject->parseOptionValue($userInput, []));
     }
@@ -394,17 +394,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->any())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testParseOptionValueInvalid()
@@ -421,17 +421,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->any())
             ->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testPrepareOptionValueForRequest()

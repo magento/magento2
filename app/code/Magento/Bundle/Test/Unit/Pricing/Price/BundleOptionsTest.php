@@ -24,7 +24,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\Helper\Data as TaxHelperData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for Magento\Bundle\Pricing\Price\BundleOptions
@@ -77,7 +77,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
      */
     private $selectionPriceListProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceInfoMock = $this->getMockBuilder(BasePriceInfo::class)
             ->disableOriginalConstructor()
@@ -110,7 +110,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
 
         $this->selectionPriceListProviderMock = $this->getMockBuilder(SelectionPriceListProviderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->bundleCalculatorMock = $this->getMockBuilder(BundleAdjustmentCalculator::class)
             ->setConstructorArgs(

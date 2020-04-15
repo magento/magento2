@@ -27,11 +27,11 @@ class HstsTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
@@ -60,8 +60,8 @@ class HstsTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanApply($configValuesMap, $expected)
     {
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->will(
-            $this->returnValueMap($configValuesMap)
+        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturnMap(
+            $configValuesMap
         );
         $this->assertEquals($expected, $this->object->canApply(), 'Incorrect canApply result');
     }

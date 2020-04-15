@@ -17,17 +17,17 @@ use Magento\Framework\Session\SessionManager;
 class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var SessionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
@@ -36,7 +36,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
      */
     protected $formKey;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $methods = ['setData', 'getData'];
@@ -59,12 +59,12 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->mathRandomMock
             ->expects($this->once())
             ->method('getRandomString')
             ->with(16)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->sessionMock->expects($this->once())->method('setData')->with(FormKey::FORM_KEY, 'random_string');
         $this->formKey->getFormKey();
     }
@@ -75,7 +75,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('getData')
             ->with(FormKey::FORM_KEY)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->mathRandomMock
             ->expects($this->never())
             ->method('getRandomString');

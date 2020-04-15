@@ -23,12 +23,12 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     private $orderRepository;
 
     /**
-     * @var Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var Metadata|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadata;
 
     /**
-     * @var SearchResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultFactory;
 
@@ -38,17 +38,17 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
-     * @var OrderTaxManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderTaxManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderTaxManagementMock;
 
     /**
-     * @var PaymentAdditionalInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentAdditionalInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentAdditionalInfoFactory;
 
@@ -57,7 +57,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

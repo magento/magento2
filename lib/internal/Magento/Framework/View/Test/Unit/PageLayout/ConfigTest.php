@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
@@ -64,8 +64,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testHasPageLayout()
     {
-        $this->assertEquals(true, $this->config->hasPageLayout('one'));
-        $this->assertEquals(false, $this->config->hasPageLayout('three'));
+        $this->assertTrue($this->config->hasPageLayout('one'));
+        $this->assertFalse($this->config->hasPageLayout('three'));
     }
 
     public function testGetOptions()

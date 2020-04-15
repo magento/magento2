@@ -23,7 +23,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $rule = $this->objectManager->create(\Magento\CatalogWidget\Model\Rule::class);

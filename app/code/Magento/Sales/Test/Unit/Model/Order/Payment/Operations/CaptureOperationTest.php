@@ -22,27 +22,27 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface as Transactio
 class CaptureOperationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var TransactionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transactionManager;
 
     /**
-     * @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 
     /**
-     * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transactionBuilder;
 
     /**
-     * @var CommandInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateCommand;
 
     /**
-     * @var ProcessInvoiceOperation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessInvoiceOperation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processInvoiceOperation;
 
@@ -51,7 +51,7 @@ class CaptureOperationTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transactionManager = $this->getMockForAbstractClass(TransactionManagerInterface::class);
         $this->eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
@@ -103,7 +103,7 @@ class CaptureOperationTest extends \PHPUnit\Framework\TestCase
         $paymentMethod->method('canCapture')
             ->willReturn(true);
 
-        /** @var Payment|\PHPUnit_Framework_MockObject_MockObject  $orderPayment| */
+        /** @var Payment|\PHPUnit\Framework\MockObject\MockObject  $orderPayment| */
         $orderPayment = $this->getMockBuilder(Payment::class)
             ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
@@ -131,12 +131,12 @@ class CaptureOperationTest extends \PHPUnit\Framework\TestCase
      */
     public function testCaptureWithInvoice()
     {
-        /** @var Invoice|\PHPUnit_Framework_MockObject_MockObject  $invoice */
+        /** @var Invoice|\PHPUnit\Framework\MockObject\MockObject  $invoice */
         $invoice = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Payment|\PHPUnit_Framework_MockObject_MockObject  $orderPayment| */
+        /** @var Payment|\PHPUnit\Framework\MockObject\MockObject  $orderPayment| */
         $orderPayment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

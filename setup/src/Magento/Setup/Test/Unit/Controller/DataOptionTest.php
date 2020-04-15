@@ -11,22 +11,22 @@ use Magento\Setup\Controller\DataOption;
 class DataOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Setup\Model\UninstallCollector
+     * @var \PHPUnit\Framework\MockObject\MockObject|Magento\Setup\Model\UninstallCollector
      */
     private $uninstallCollector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Http\PhpEnvironment\Request
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Laminas\Http\PhpEnvironment\Request
      */
     private $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Laminas\Http\PhpEnvironment\Response
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Laminas\Http\PhpEnvironment\Response
      */
     private $response;
 
     /**
-     * @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Laminas\Mvc\MvcEvent|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mvcEvent;
 
@@ -35,7 +35,7 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
         $this->response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);

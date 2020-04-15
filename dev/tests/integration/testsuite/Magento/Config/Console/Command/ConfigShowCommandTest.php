@@ -67,7 +67,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
@@ -303,7 +303,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
         return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $_ENV = $this->env;
 

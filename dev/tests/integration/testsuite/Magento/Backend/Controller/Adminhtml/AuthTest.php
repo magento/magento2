@@ -24,7 +24,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $_auth;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_session = null;
         $this->_auth = null;

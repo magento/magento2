@@ -30,7 +30,7 @@ class ToolbarEntryTest extends TestCase
             Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
-        $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
+        $notificationList->expects($this->any())->method('getSize')->willReturn($unreadNotifications);
 
         $block = $objectManagerHelper->getObject(
             ToolbarEntry::class,
@@ -66,7 +66,7 @@ class ToolbarEntryTest extends TestCase
         $notificationList->expects($this->atLeastOnce())
             ->method('setPageSize')
             ->with(ToolbarEntry::NOTIFICATIONS_NUMBER)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         // 3. Run tested method
         $result = $model->getLatestUnreadNotifications();

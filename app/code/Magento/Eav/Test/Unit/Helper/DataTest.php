@@ -16,29 +16,29 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eavConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
      * Initialize helper
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -69,7 +69,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
 
         $result = $this->helper->getAttributeMetadata('customer', 'lastname');
         $expected = [
@@ -118,7 +118,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+            ->with('entityTypeCode')->willReturn($lockedFields);
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
@@ -130,7 +130,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+            ->with('entityTypeCode')->willReturn($lockedFields);
 
         $this->helper->getAttributeLockedFields('entityTypeCode');
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
@@ -142,7 +142,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeLockedFieldsNoLockedFields()
     {
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->will($this->returnValue([]));
+            ->with('entityTypeCode')->willReturn([]);
 
         $this->assertEquals([], $this->helper->getAttributeLockedFields('entityTypeCode'));
     }

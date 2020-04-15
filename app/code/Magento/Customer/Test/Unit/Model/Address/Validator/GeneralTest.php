@@ -11,10 +11,10 @@ namespace Magento\Customer\Test\Unit\Model\Address\Validator;
  */
 class GeneralTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject  */
     private $directoryDataMock;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject  */
     private $eavConfigMock;
 
     /** @var \Magento\Customer\Model\Address\Validator\General  */
@@ -23,7 +23,7 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
         $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -70,11 +70,11 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
 
         $this->eavConfigMock->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
 
         $this->directoryDataMock->expects($this->once())
             ->method('getCountriesWithOptionalZip')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $addressMock->method('getFirstName')->willReturn($data['firstname']);
         $addressMock->method('getLastname')->willReturn($data['lastname']);

@@ -12,7 +12,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -23,7 +23,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $url = 'http://example.com/';
 
         $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
-        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
+        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
             \Magento\Framework\View\Element\Template\Context::class,
@@ -55,15 +55,15 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             \Magento\Checkout\Block\Link::class,
             ['moduleManager' => $moduleManager, 'checkoutHelper' => $helper]
         );
-        $helper->expects($this->any())->method('canOnepageCheckout')->will($this->returnValue($canOnepageCheckout));
+        $helper->expects($this->any())->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
         $moduleManager->expects(
             $this->any()
         )->method(
             'isOutputEnabled'
         )->with(
             'Magento_Checkout'
-        )->will(
-            $this->returnValue($isOutputEnabled)
+        )->willReturn(
+            $isOutputEnabled
         );
         $this->assertEquals('', $block->toHtml());
     }

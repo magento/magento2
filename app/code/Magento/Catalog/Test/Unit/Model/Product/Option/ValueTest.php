@@ -35,7 +35,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
      */
     private $CalculateCustomOptionCatalogRule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
@@ -140,7 +140,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($mockedCollection));
+            ->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -157,15 +157,15 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('addFieldToFilter')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('getValuesByOption')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         return $mock;
     }
@@ -183,7 +183,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('getProduct')
-            ->will($this->returnValue($mockedProduct));
+            ->willReturn($mockedProduct);
 
         return $mock;
     }
@@ -262,14 +262,14 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('addCommitCallback')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('beginTransaction');
 
         $mock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('testField'));
+            ->willReturn('testField');
 
         return $mock;
     }

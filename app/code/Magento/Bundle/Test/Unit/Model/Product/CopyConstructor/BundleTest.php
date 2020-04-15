@@ -20,7 +20,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(Bundle::class);
@@ -46,7 +46,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildPositive()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,7 +97,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->method('getBundleProductOptions')
             ->willReturn($bundleOptions);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $duplicate */
+        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $duplicate */
         $duplicate = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

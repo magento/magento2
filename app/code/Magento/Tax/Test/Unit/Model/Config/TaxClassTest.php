@@ -25,7 +25,7 @@ class TaxClassTest extends \PHPUnit\Framework\TestCase
         $attributeMock
             ->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $attributeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeFactory::class)
             ->disableOriginalConstructor()
@@ -34,7 +34,7 @@ class TaxClassTest extends \PHPUnit\Framework\TestCase
         $attributeFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
 
         $resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -44,15 +44,15 @@ class TaxClassTest extends \PHPUnit\Framework\TestCase
         $resourceMock
             ->expects($this->any())
             ->method('beginTransaction')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('tax'));
+            ->willReturn('tax');
         $resourceMock
             ->expects($this->any())
             ->method('addCommitCallback')
-            ->will($this->returnValue($resourceMock));
+            ->willReturn($resourceMock);
 
         $objectManager = new ObjectManager($this);
         $taxClass = $objectManager->getObject(

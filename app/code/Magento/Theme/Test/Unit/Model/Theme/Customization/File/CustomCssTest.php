@@ -10,17 +10,17 @@ use \Magento\Theme\Model\Theme\Customization\File\CustomCss;
 class CustomCssTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\Customization\Path
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\Customization\Path
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\FileFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\Theme\FileFactory
      */
     protected $fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -32,7 +32,7 @@ class CustomCssTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize testable object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customizationPath = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Customization\Path::class)
             ->disableOriginalConstructor()

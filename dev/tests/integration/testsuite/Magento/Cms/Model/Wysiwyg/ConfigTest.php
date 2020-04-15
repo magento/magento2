@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(\Magento\Cms\Model\Wysiwyg\Config::class);

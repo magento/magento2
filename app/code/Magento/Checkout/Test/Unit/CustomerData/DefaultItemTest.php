@@ -25,11 +25,11 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
     private $configurationPool;
 
     /**
-     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
@@ -42,7 +42,7 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $checkoutHelper = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
             ->setMethods(['formatPrice'])->disableOriginalConstructor()->getMock();
         $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
-        $this->itemResolver = $this->createMock(ItemResolverInterface::class);
+        $this->itemResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Checkout\CustomerData\DefaultItem::class,
             [
@@ -85,7 +85,7 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $this->itemResolver->expects($this->any())
             ->method('getFinalProduct')
             ->with($item)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $itemData = $this->model->getItemData($item);
         $this->assertArrayHasKey('options', $itemData);

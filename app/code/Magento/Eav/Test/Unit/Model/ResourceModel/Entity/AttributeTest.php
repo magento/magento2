@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -36,7 +36,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionSystemAttribute()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -73,16 +73,16 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'insert'
-        )->will(
-            $this->returnValueMap([['eav_attribute', $attributeData, 1]])
+        )->willReturnMap(
+            [['eav_attribute', $attributeData, 1]]
         );
 
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -90,7 +90,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         $attributeData,
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
@@ -111,7 +111,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -146,24 +146,24 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'lastInsertId'
-        )->will(
-            $this->returnValueMap([['eav_attribute', 123], ['eav_attribute_option_value', 321]])
+        )->willReturnMap(
+            [['eav_attribute', 123], ['eav_attribute_option_value', 321]]
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'update'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -171,21 +171,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         false,
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'delete'
-        )->will(
-            $this->returnValueMap([['eav_attribute_option_value', ['option_id = ?' => ''], 0]])
+        )->willReturnMap(
+            [['eav_attribute_option_value', ['option_id = ?' => ''], 0]]
         );
         $connectionMock->expects(
             $this->exactly(4)
         )->method(
             'insert'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['eav_attribute', $attributeData, 1],
                     ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
@@ -200,7 +200,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         1
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
@@ -212,7 +212,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNoValue()
     {
-        /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -263,22 +263,22 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'describeTable'
         )->with(
             'eav_attribute'
-        )->will(
-            $this->returnValue($this->_describeEavAttribute())
+        )->willReturn(
+            $this->_describeEavAttribute()
         );
         $connectionMock->expects(
             $this->any()
         )->method(
             'quote'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [123, 123],
                     ['4', '"4"'],
                     ['a_dropdown', '"a_dropdown"'],
                     ['status', '"status"'],
                 ]
-            )
+            
         );
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $connectionMock->expects(
@@ -298,19 +298,19 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'getStores'
         )->with(
             true
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     new \Magento\Framework\DataObject(['id' => 0]),
                     new \Magento\Framework\DataObject(['id' => 1])
                 ]
-            )
+            
         );
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-        $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($connectionMock));
+        $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
+        $resource->expects($this->any())->method('getConnection')->with()->willReturn($connectionMock);
         $eavEntityType = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Type::class);
 
         $relationProcessorMock = $this->createMock(

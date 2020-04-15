@@ -14,7 +14,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolver = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
         $urnResolver->expects($this->any())

@@ -37,7 +37,7 @@ class TemplateHintsStatusCommandTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);

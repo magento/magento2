@@ -30,7 +30,7 @@ class ShareTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);

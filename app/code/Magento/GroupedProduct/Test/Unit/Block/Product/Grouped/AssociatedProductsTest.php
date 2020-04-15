@@ -8,7 +8,7 @@ namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped;
 class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -17,7 +17,7 @@ class AssociatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->block = new \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts($this->contextMock);

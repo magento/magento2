@@ -23,19 +23,19 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     private $queryModifierFactory;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var InQueryModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var InQueryModifier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inQueryModifierMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->inQueryModifierMock = $this->createMock(InQueryModifier::class);
     }
 
@@ -62,10 +62,11 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateUnknownQueryModifierType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $params = ['foo' => 'bar'];
         $this->queryModifierFactory = $this->objectManager->getObject(
             QueryModifierFactory::class,
@@ -80,10 +81,11 @@ class QueryModifierFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateDoesNotImplementInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $params = ['foo' => 'bar'];
         $this->queryModifierFactory = $this->objectManager->getObject(
             QueryModifierFactory::class,

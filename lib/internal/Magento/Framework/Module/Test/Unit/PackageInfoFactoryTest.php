@@ -22,7 +22,7 @@ class PackageInfoFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
         $factory = new PackageInfoFactory($objectManagerMock);
 
         $this->assertSame($packageInfo, $factory->create());

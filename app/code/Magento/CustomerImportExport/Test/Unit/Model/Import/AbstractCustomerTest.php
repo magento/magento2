@@ -16,7 +16,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     /**
      * Abstract customer export model
      *
-     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -47,14 +47,14 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->_model = $this->_getModelMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
 
@@ -64,7 +64,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     /**
      * Create mock for abstract customer model class
      *
-     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getModelMock()
     {
@@ -97,7 +97,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
 
         $modelMock->expects($this->any())
             ->method('_getCustomerCollection')
-            ->will($this->returnValue($customerCollection));
+            ->willReturn($customerCollection);
 
         return $modelMock;
     }

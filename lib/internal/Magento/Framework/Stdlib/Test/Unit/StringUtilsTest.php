@@ -17,7 +17,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_string;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_string = new StringUtils();
     }

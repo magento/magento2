@@ -10,25 +10,25 @@ class UploadJsTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\
     /** @var string */
     protected $name = 'UploadJs';
 
-    /** @var  \Magento\Theme\Model\Uploader\Service|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Theme\Model\Uploader\Service|\PHPUnit\Framework\MockObject\MockObject */
     protected $serviceModel;
 
-    /** @var  \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $themeFactory;
 
-    /** @var  \Magento\Framework\View\Design\Theme\Customization\File\Js|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\View\Design\Theme\Customization\File\Js|\PHPUnit\Framework\MockObject\MockObject */
     protected $customizationJs;
 
-    /** @var  \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonHelper;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $logger;
 
-    /** @var \Magento\Framework\View\Design\Theme\CustomizationInterface|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\View\Design\Theme\CustomizationInterface|\PHPUnit\Framework\MockObject\MockObject  */
     protected $themeCustomization;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serviceModel = $this->createMock(\Magento\Theme\Model\Uploader\Service::class);

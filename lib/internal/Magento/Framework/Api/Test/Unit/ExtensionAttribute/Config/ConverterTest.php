@@ -17,7 +17,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Framework\Api\ExtensionAttribute\Config\Converter();
     }

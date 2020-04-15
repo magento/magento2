@@ -24,8 +24,8 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
             'getDateTimeFormat'
         )->with(
             \IntlDateFormatter::SHORT
-        )->will(
-            $this->returnValue('HH:mm:ss MM-dd-yyyy')
+        )->willReturn(
+            'HH:mm:ss MM-dd-yyyy'
         );
 
         $model = new DateTime($localeMock);
@@ -61,8 +61,8 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
             'getDateFormat'
         )->with(
             \IntlDateFormatter::SHORT
-        )->will(
-            $this->returnValue('MM-dd-yyyy')
+        )->willReturn(
+            'MM-dd-yyyy'
         );
         $model = new DateTime($localeMock);
 

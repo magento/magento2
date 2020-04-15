@@ -45,7 +45,7 @@ class AddOptionToAttributeTest extends TestCase
      */
     private $setup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
 

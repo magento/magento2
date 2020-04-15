@@ -42,7 +42,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()

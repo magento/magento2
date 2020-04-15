@@ -22,7 +22,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Model\PaymentToken;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify class VaultDetailsHandler
@@ -60,14 +60,14 @@ class VaultDetailsHandlerTest extends TestCase
      */
     private $paymentExtensionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $paymentToken = $objectManager->getObject(PaymentToken::class);
         $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->paymentTokenFactory->method('create')
             ->with(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD)
             ->willReturn($paymentToken);
@@ -223,7 +223,7 @@ class VaultDetailsHandlerTest extends TestCase
                 'getNotificationMessage'
             ])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()

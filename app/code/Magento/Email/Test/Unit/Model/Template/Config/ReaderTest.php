@@ -16,17 +16,17 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\ReverseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleDirResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $read;
 
@@ -37,7 +37,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_paths;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileResolver = $this->createMock(\Magento\Email\Model\Template\Config\FileResolver::class);
         $this->_paths = [
@@ -58,8 +58,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Email'
-        )->will(
-            $this->returnValue('stub')
+        )->willReturn(
+            'stub'
         );
         $schemaLocator = new \Magento\Email\Model\Template\Config\SchemaLocator($moduleReader);
 
@@ -85,8 +85,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         )->with(
             'email_templates.xml',
             'scope'
-        )->will(
-            $this->returnValue($fileIterator)
+        )->willReturn(
+            $fileIterator
         );
 
         $this->_model = new \Magento\Email\Model\Template\Config\Reader(
@@ -103,15 +103,15 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             $this->at(0)
         )->method(
             'readAll'
-        )->will(
-            $this->returnValue(file_get_contents($this->_paths[0]))
+        )->willReturn(
+            file_get_contents($this->_paths[0])
         );
         $this->read->expects(
             $this->at(1)
         )->method(
             'readAll'
-        )->will(
-            $this->returnValue(file_get_contents($this->_paths[1]))
+        )->willReturn(
+            file_get_contents($this->_paths[1])
         );
         $this->_moduleDirResolver->expects(
             $this->at(0)
@@ -119,8 +119,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'getModuleName'
         )->with(
             __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml'
-        )->will(
-            $this->returnValue('Fixture_ModuleOne')
+        )->willReturn(
+            'Fixture_ModuleOne'
         );
         $this->_moduleDirResolver->expects(
             $this->at(1)
@@ -128,8 +128,8 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'getModuleName'
         )->with(
             __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml'
-        )->will(
-            $this->returnValue('Fixture_ModuleTwo')
+        )->willReturn(
+            'Fixture_ModuleTwo'
         );
         $constraint = function (\DOMDocument $actual) {
             try {
@@ -149,20 +149,21 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unable to determine a module
      */
     public function testReadUnknownModule()
     {
-        $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->will($this->returnValue(null));
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Unable to determine a module');
+
+        $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->willReturn(null);
         $this->_converter->expects($this->never())->method('convert');
         $this->_model->read('scope');
     }

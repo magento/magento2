@@ -10,12 +10,12 @@ use Magento\Framework\App\ResourceConnection;
 class TableDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productIndexerHelper;
 
@@ -25,11 +25,11 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
     protected $_objectManager;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
@@ -50,8 +50,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_connectionMock->expects(
@@ -66,8 +66,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(
@@ -113,13 +113,13 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
         )->with(
             $flatTable,
             ['column_2', 'column_3']
-        )->will(
-            $this->returnValue($sql)
+        )->willReturn(
+            $sql
         );
 
         $this->_connectionMock->expects($this->once())->method('query')->with($sql);
 
-        $this->_connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
+        $this->_connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
 
         $this->_connectionMock->expects(
             $this->once()
@@ -127,8 +127,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_connectionMock->expects(
@@ -137,16 +137,16 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'describeTable'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue($describedColumns)
+        )->willReturn(
+            $describedColumns
         );
 
         $this->_productIndexerHelper->expects(
             $this->once()
         )->method(
             'getFlatColumns'
-        )->will(
-            $this->returnValue($flatColumns)
+        )->willReturn(
+            $flatColumns
         );
 
         $this->_connectionMock->expects(
@@ -161,8 +161,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(

@@ -17,17 +17,17 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var CurrentCustomer | \PHPUnit_Framework_MockObject_MockObject
+     * @var CurrentCustomer | \PHPUnit\Framework\MockObject\MockObject
      */
     private $currentCustomer;
 
     /**
-     * @var Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data | \PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalData;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalConfig;
 
@@ -41,7 +41,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->paypalConfig = $this->createMock(Config::class);
@@ -49,7 +49,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $this->paypalConfig
             ->expects($this->once())
             ->method('setMethod')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->paypalConfig->expects($this->once())
             ->method('setMethod')
@@ -58,7 +58,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->paypalConfig));
+            ->willReturn($this->paypalConfig);
 
         $customerId = 20;
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);

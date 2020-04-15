@@ -18,25 +18,25 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  ResourceModel\Website\Link | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ResourceModel\Website\Link | \PHPUnit\Framework\MockObject\MockObject */
     private $productWebsiteLink;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
     /** @var SaveHandler */
     private $saveHandler;
 
-    /** @var  ProductInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ProductInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $product;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->productWebsiteLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->product = $this->createMock(ProductInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->product = $this->getMockForAbstractClass(ProductInterface::class);
         $this->saveHandler = new SaveHandler($this->productWebsiteLink, $this->storeManager);
     }
 
@@ -49,7 +49,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributes->expects($this->once())
             ->method('getWebsiteIds')
             ->willReturn($websiteIds);
@@ -68,7 +68,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -83,7 +83,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     public function testWithSingleStoreMode()
     {
         $defaultWebsiteId = 1;
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($defaultWebsiteId);

@@ -18,21 +18,21 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var  \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $generalLayout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->generalLayout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
@@ -40,7 +40,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $isCacheable = false;
         $this->generalLayout->expects($this->once())
             ->method('isCacheable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -48,7 +48,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $layoutFactory->expects($this->once())
             ->method('create')
             ->with($this->equalTo(['cacheable' => $isCacheable]))
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -70,7 +70,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->with($handle);
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->model->addHandle($handle);
     }
@@ -82,7 +82,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->method('load');
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->layout->expects($this->once())
             ->method('generateXml');
@@ -102,7 +102,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($block, $this->model->getBlock($blockName));
     }

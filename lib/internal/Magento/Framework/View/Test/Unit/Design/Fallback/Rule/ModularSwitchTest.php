@@ -15,16 +15,16 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RuleInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RuleInterface
      */
     protected $ruleNonModular;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RuleInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RuleInterface
      */
     protected $ruleModular;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleNonModular = $this->getMockForAbstractClass(
             \Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class
@@ -35,7 +35,7 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
         $this->object = new ModularSwitch($this->ruleNonModular, $this->ruleModular);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->object = null;
         $this->ruleNonModular = null;
@@ -52,8 +52,8 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->ruleModular->expects($this->never())->method('getPatternDirs');
@@ -73,8 +73,8 @@ class ModularSwitchTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->object->getPatternDirs($inputParams));

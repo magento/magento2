@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\Category
@@ -51,7 +51,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
     private $filterItemFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -69,7 +69,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->dataProvider));
+            ->willReturn($this->dataProvider);
 
         $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->dataProvider->expects($this->any())
             ->method('getCategory', 'isValid')
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
         $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
@@ -91,7 +91,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->collection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
@@ -102,7 +102,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->collection));
+            ->willReturn($this->collection);
 
         $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
             ->disableOriginalConstructor()
@@ -120,10 +120,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
@@ -131,7 +131,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -165,8 +165,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
@@ -175,7 +175,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                                 return $idValue;
                         }
                     }
-                )
+                
             );
 
         $result = $this->target->apply($this->request);
@@ -211,29 +211,29 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestVar, $categoryId) {
                         $this->assertTrue(in_array($field, [$requestVar, 'id']));
 
                         return $categoryId;
                     }
-                )
+                
             );
 
         $this->dataProvider->expects($this->once())
             ->method('setCategoryId')
             ->with($categoryId)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->category->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
 
         $this->collection->expects($this->once())
             ->method('addCategoryFilter')
             ->with($this->category)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->target->apply($this->request);
     }
@@ -242,7 +242,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->category->expects($this->any())
             ->method('getIsActive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $category1 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
@@ -250,16 +250,16 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $category1->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue(120));
+            ->willReturn(120);
         $category1->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Category 1'));
+            ->willReturn('Category 1');
         $category1->expects($this->once())
             ->method('getIsActive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $category1->expects($this->any())
             ->method('getProductCount')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $category2 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
@@ -267,23 +267,23 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $category2->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue(5641));
+            ->willReturn(5641);
         $category2->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Category 2'));
+            ->willReturn('Category 2');
         $category2->expects($this->once())
             ->method('getIsActive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $category2->expects($this->any())
             ->method('getProductCount')
-            ->will($this->returnValue(45));
+            ->willReturn(45);
         $categories = [
             $category1,
             $category2,
         ];
         $this->category->expects($this->once())
             ->method('getChildrenCategories')
-            ->will($this->returnValue($categories));
+            ->willReturn($categories);
 
         $builtData = [
             [
@@ -305,7 +305,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 120,
                 10
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->itemDataBuilder->expects($this->at(1))
             ->method('addItemData')
             ->with(
@@ -313,10 +313,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 5641,
                 45
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
-            ->will($this->returnValue($builtData));
+            ->willReturn($builtData);
 
         $this->target->getItems();
     }

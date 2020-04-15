@@ -12,37 +12,37 @@ use Magento\Setup\Model\SystemPackage;
 class SystemPackageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Composer\InfoCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Composer\InfoCommand
      */
     private $infoCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SystemPackage;
+     * @var \PHPUnit\Framework\MockObject\MockObject|SystemPackage;
      */
     private $systemPackage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Composer\Repository\ArrayRepository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Composer\Repository\ArrayRepository
      */
     private $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Composer\Package\Locker
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Composer\Package\Locker
      */
     private $locker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|/Magento\Composer\MagentoComposerApplication
+     * @var \PHPUnit\Framework\MockObject\MockObject|/Magento\Composer\MagentoComposerApplication
      */
     private $magentoComposerApp;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\MagentoComposerApplicationFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\MagentoComposerApplicationFactory
      */
     private $composerAppFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Composer\Composer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Composer\Composer
      */
     private $composer;
 
@@ -109,11 +109,11 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerAppFactory = $this->createMock(
             \Magento\Framework\Composer\MagentoComposerApplicationFactory::class
@@ -208,11 +208,12 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage no components are available because you cloned the Magento 2 GitHub repository
      */
     public function testGetPackageVersionGitCloned()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('no components are available because you cloned the Magento 2 GitHub repository');
+
         $package = $this->createMock(\Composer\Package\Package::class);
         $this->repository
             ->expects($this->once())
@@ -237,11 +238,12 @@ class SystemPackageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
      */
     public function testGetPackageVersionsFailed()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('We cannot retrieve information on magento/product-community-edition.');
+
         $communityPackage = $this->createMock(\Composer\Package\Package::class);
         $enterprisePackage = $this->createMock(\Composer\Package\Package::class);
 

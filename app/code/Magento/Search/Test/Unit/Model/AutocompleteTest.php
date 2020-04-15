@@ -17,16 +17,16 @@ class AutocompleteTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataProviderInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $firstDataProvider;
 
     /**
-     * @var DataProviderInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $secondDataProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

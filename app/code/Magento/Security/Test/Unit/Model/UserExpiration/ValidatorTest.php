@@ -28,7 +28,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**@var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     private $timezoneMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->dateTimeMock =
@@ -57,11 +57,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testWithPastDate()
     {
-        /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
+        /** @var \DateTime|\PHPUnit\Framework\MockObject\MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
             ->method('date')
-            ->will(static::returnValue($dateObject));
+            ->willReturn($dateObject);
 
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
@@ -80,11 +80,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testWithFutureDate()
     {
-        /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
+        /** @var \DateTime|\PHPUnit\Framework\MockObject\MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
             ->method('date')
-            ->will(static::returnValue($dateObject));
+            ->willReturn($dateObject);
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
         $expireDate = new \DateTime();

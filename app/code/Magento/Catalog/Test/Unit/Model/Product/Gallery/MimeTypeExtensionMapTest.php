@@ -14,7 +14,7 @@ class MimeTypeExtensionMapTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap();
     }

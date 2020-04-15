@@ -75,12 +75,12 @@ class ColumnFactoryTest extends TestCase
                 'getIsVisibleInGrid',
             ]
         );
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->column = $this->getMockForAbstractClass(ColumnInterface::class);
         $this->uiComponentFactory->method('create')
             ->willReturn($this->column);
-        $this->timezone = $this->createMock(TimezoneInterface::class);
+        $this->timezone = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         $this->columnFactory = $this->objectManager->getObject(
             ColumnFactory::class,

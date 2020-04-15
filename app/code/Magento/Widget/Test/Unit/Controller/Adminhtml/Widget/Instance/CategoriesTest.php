@@ -53,7 +53,7 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);

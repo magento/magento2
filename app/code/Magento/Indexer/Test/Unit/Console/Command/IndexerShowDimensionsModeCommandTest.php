@@ -17,14 +17,14 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Command being tested
      *
-     * @var IndexerShowDimensionsModeCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerShowDimensionsModeCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
     /**
      * ScopeConfigInterface
      *
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
@@ -34,18 +34,18 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     private $indexers;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexers = ['indexer_1' => 'indexer_1', 'indexer_2' => 'indexer_2'];
         $this->command = $objectManagerHelper->getObject(
             IndexerShowDimensionsModeCommand::class,

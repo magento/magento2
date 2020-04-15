@@ -20,39 +20,39 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $omConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $definitionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $relationsMock;
 
     /**
-     * @var \Magento\Framework\Interception\Config\CacheManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Interception\Config\CacheManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheManagerMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
         $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeListInterface::class);
@@ -77,18 +77,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $this->readerMock->expects($this->any())
             ->method('read')
-            ->will($this->returnValueMap($readerMap));
+            ->willReturnMap($readerMap);
         $this->configScopeMock->expects($this->any())
             ->method('getAllScopes')
-            ->will($this->returnValue(['global', 'backend', 'frontend']));
+            ->willReturn(['global', 'backend', 'frontend']);
         // turn cache off
         $this->cacheManagerMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->omConfigMock->expects($this->any())
             ->method('getOriginalInstanceType')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [
                             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
@@ -123,18 +123,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class
                         ],
                     ]
-                )
+                
             );
-        $this->definitionMock->expects($this->any())->method('getClasses')->will(
-            $this->returnValue(
+        $this->definitionMock->expects($this->any())->method('getClasses')->willReturn(
+            
                 [
                     \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class,
                     \Magento\Framework\Interception\Custom\Module\Model\Backslash\Item\Proxy::class
                 ]
-            )
+            
         );
-        $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
-        $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
+        $this->relationsMock->expects($this->any())->method('has')->willReturn($expectedResult);
+        $this->relationsMock->expects($this->any())->method('getParents')->willReturn($entityParents);
 
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,
@@ -173,7 +173,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->cacheManagerMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
-            ->will($this->returnValue($interceptionData));
+            ->willReturn($interceptionData);
 
         $model = $this->objectManagerHelper->getObject(
             \Magento\Framework\Interception\Config\Config::class,

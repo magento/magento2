@@ -19,8 +19,8 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             'get'
         )->with(
             $this->equalTo(self::INTEGRATION_ID)
-        )->will(
-            $this->returnValue($this->_getSampleIntegrationData())
+        )->willReturn(
+            $this->_getSampleIntegrationData()
         );
         $this->_requestMock->expects(
             $this->any()
@@ -28,16 +28,16 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             'getParam'
         )->with(
             $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
-        )->will(
-            $this->returnValue(self::INTEGRATION_ID)
+        )->willReturn(
+            self::INTEGRATION_ID
         );
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
             $this->any()
         )->method(
             '__call'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['setIntegrationData'],
                     [
@@ -45,7 +45,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                         [Info::DATA_ID => self::INTEGRATION_ID, Info::DATA_NAME => 'testIntegration']
                     ],
                 ]
-            )
+            
         );
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
@@ -62,14 +62,14 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(self::INTEGRATION_ID);
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
             $this->any()
         )->method(
             '__call'
-        )->will(
-            $this->returnValue(['name' => 'nonExistentInt'])
+        )->willReturn(
+            ['name' => 'nonExistentInt']
         );
 
         $invalidIdException = new IntegrationException(__($exceptionMessage));

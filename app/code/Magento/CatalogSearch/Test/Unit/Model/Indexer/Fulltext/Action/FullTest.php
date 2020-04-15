@@ -11,16 +11,16 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Action;
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Search\Request\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $searchRequestConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
     /** @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()

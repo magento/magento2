@@ -20,7 +20,7 @@ class ConfigurableAttributeSetHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurableAttributeSetHandler = $this->objectManagerHelper->getObject(

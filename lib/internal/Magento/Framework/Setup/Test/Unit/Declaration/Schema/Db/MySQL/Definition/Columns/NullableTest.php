@@ -22,7 +22,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     private $nullable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullable = $this->objectManager->getObject(
@@ -35,7 +35,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var BooleanColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
@@ -54,7 +54,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNull()
     {
-        /** @var BooleanColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var BooleanColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
@@ -73,10 +73,10 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNullableAware()
     {
-        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assertEquals(
             '',
             $this->nullable->toDefinition($column)

@@ -18,7 +18,7 @@ class InitialTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
@@ -34,7 +34,7 @@ class InitialTest extends \PHPUnit\Framework\TestCase
         'metadata' => ['metadata'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);

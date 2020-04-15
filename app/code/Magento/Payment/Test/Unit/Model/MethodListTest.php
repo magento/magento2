@@ -22,17 +22,17 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodInstanceFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $specificationFactoryMock;
 
@@ -41,7 +41,7 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
      */
     private $additionalChecks;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -84,10 +84,10 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 1;
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $quoteMock->expects($this->atLeastOnce())
             ->method('getPayment')
-            ->will($this->returnValue($this->createMock(\Magento\Quote\Model\Quote\Payment::class)));
+            ->willReturn($this->createMock(\Magento\Quote\Model\Quote\Payment::class));
 
         $methodInstanceMock = $this->createMock(\Magento\Payment\Model\Method\AbstractMethod::class);
         $methodInstanceMock->expects($this->once())
@@ -98,7 +98,7 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
         $compositeMock->expects($this->atLeastOnce())
             ->method('isApplicable')
             ->with($methodInstanceMock, $quoteMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->specificationFactoryMock->expects($this->atLeastOnce())
             ->method('create')
@@ -112,7 +112,7 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
                 ],
                 $this->additionalChecks
             )
-        )->will($this->returnValue($compositeMock));
+        )->willReturn($compositeMock);
 
         $methodMock = $this->getMockForAbstractClass(\Magento\Payment\Api\Data\PaymentMethodInterface::class);
         $this->paymentMethodList->expects($this->once())
@@ -125,7 +125,7 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
         $methodInstanceMock->expects($this->atLeastOnce())
             ->method('setInfoInstance')
             ->with($this->createMock(\Magento\Quote\Model\Quote\Payment::class))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->assertEquals([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));
     }

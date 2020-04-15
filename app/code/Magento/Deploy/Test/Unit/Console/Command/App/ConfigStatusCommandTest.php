@@ -28,7 +28,7 @@ class ConfigStatusCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->changeDetector = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class ConfigStatusCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->changeDetector->expects($this->once())
             ->method('hasChanges')
-            ->will($this->returnValue($hasChanges));
+            ->willReturn($hasChanges);
 
         $tester = new CommandTester($this->command);
         $tester->execute([]);

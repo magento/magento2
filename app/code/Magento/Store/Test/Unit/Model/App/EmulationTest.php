@@ -14,47 +14,47 @@ namespace Magento\Store\Test\Unit\Model\App;
 class EmulationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface
      */
     private $translateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface
      */
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Design
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Design
      */
     private $designMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\Inline\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\Inline\ConfigInterface
      */
     private $inlineConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\Inline\StateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\Inline\StateInterface
      */
     private $inlineTranslationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\DesignInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\DesignInterface
      */
     private $viewDesignMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     private $storeMock;
 
@@ -73,7 +73,7 @@ class EmulationTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // Mocks

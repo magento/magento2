@@ -17,10 +17,10 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /** @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
-     * |\PHPUnit_Framework_MockObject_MockObject */
+     * |\PHPUnit\Framework\MockObject\MockObject */
     protected $pageLayoutBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageLayoutBuilder = $this->getMockBuilder(
             \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
@@ -46,11 +46,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())
             ->method('toOptionArray')
-            ->will($this->returnValue(['0' => $expectedOptions['1']]));
+            ->willReturn(['0' => $expectedOptions['1']]);
 
         $this->pageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
-            ->will($this->returnValue($mockPageLayoutConfig));
+            ->willReturn($mockPageLayoutConfig);
 
         $layoutOptions = $this->layoutModel->getAllOptions();
         $this->assertEquals($expectedOptions, $layoutOptions);

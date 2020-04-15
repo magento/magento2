@@ -34,56 +34,56 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractModelMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlPersistMock;
 
     /**
-     * @var CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryFactoryMock;
 
     /**
-     * @var ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productFactoryMock;
 
     /**
-     * @var CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryUrlRewriteGeneratorMock;
 
     /**
-     * @var ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productUrlRewriteGeneratorMock;
 
     /**
-     * @var Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productCollectionMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)

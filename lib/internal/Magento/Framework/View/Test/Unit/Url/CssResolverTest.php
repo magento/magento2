@@ -14,7 +14,7 @@ class CssResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new CssResolver();
     }

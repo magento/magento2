@@ -61,7 +61,7 @@ class AbstractProductTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
             AbstractProduct::class,
@@ -166,7 +166,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -182,7 +182,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
@@ -218,7 +218,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -266,7 +266,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -292,7 +292,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
@@ -395,8 +395,8 @@ class AbstractProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $attrSetCollectionValueMock->method('setEntityTypeFilter')->will($this->returnSelf());
-        $attrSetCollectionValueMock->method('load')->will($this->returnSelf());
+        $attrSetCollectionValueMock->method('setEntityTypeFilter')->willReturnSelf();
+        $attrSetCollectionValueMock->method('load')->willReturnSelf();
         $attrSetCollectionValueMock
             ->expects((null === $attrSetCollectionOptionsArray) ? $this->never() : $this->once())
             ->method('toOptionArray')

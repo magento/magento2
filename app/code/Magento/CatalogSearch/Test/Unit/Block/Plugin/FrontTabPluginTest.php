@@ -30,36 +30,36 @@ class FrontTabPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var WeightSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var WeightSource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $weightSourceMock;
 
     /**
-     * @var ProductAttributeFrontTabBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeFrontTabBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formMock;
 
     /**
-     * @var Fieldset|\PHPUnit_Framework_MockObject_MockObject
+     * @var Fieldset|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldsetMock;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $childElementMock;
 
     /**
-     * @var AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     private $childBlockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weightSourceMock = $this->getMockBuilder(WeightSource::class)
             ->disableOriginalConstructor()

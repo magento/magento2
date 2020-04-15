@@ -19,7 +19,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $commandTester;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $modules = [
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
@@ -31,7 +31,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
 
         $themePackageListMock = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
         $componentRegistrarMock = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
-        $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
+        $componentRegistrarMock->expects($this->any())->method('getPaths')->willReturn($modules);
         $dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
         $dirSearchMock->expects($this->once())->method('collectFiles')->willReturn(
             [
@@ -39,17 +39,17 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
                 __DIR__ . '/_files/root/app/code/Magento/B/etc/module.xml'
             ]
         );
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
+        $objectManager->expects($this->any())->method('get')->willReturnMap([
             [\Magento\Framework\View\Design\Theme\ThemePackageList::class, $themePackageListMock],
             [\Magento\Framework\Component\ComponentRegistrar::class, $componentRegistrarMock],
             [\Magento\Framework\Component\DirSearch::class, $dirSearchMock]
-        ]));
+        ]);
 
         $this->command = new DependenciesShowFrameworkCommand($componentRegistrarMock, $objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists(__DIR__ . '/_files/output/framework.csv')) {
             unlink(__DIR__ . '/_files/output/framework.csv');

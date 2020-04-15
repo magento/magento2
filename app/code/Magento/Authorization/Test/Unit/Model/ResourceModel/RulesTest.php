@@ -83,7 +83,7 @@ class RulesTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class RulesTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
@@ -111,7 +111,7 @@ class RulesTest extends TestCase
 
         $this->resourceConnectionMock->method('getTableName')
             ->with('authorization_rule', 'default')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -121,7 +121,7 @@ class RulesTest extends TestCase
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
@@ -131,7 +131,7 @@ class RulesTest extends TestCase
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->aclBuilderMock->method('getConfigCache')
             ->willReturn($this->aclDataCacheMock);
@@ -180,11 +180,12 @@ class RulesTest extends TestCase
     /**
      * Test LocalizedException throw case.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage TestException
      */
     public function testLocalizedExceptionOccurance()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('TestException');
+
         $exceptionPhrase = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
             ->setMethods(['render'])

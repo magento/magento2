@@ -107,7 +107,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
             ->disableOriginalConstructor()
@@ -144,7 +144,7 @@ class DataProviderTest extends TestCase
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
@@ -276,7 +276,7 @@ class DataProviderTest extends TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayNotHasKey('image', $result[$categoryId]);
     }
@@ -361,7 +361,7 @@ class DataProviderTest extends TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayHasKey('image', $result[$categoryId]);
 

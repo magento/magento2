@@ -65,9 +65,9 @@ class ProductRepositorySaveTest extends TestCase
     private $plugin;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
 
@@ -150,11 +150,12 @@ class ProductRepositorySaveTest extends TestCase
     /**
      * Test saving a configurable product with same set of attribute values
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testBeforeSaveWithLinks()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -190,12 +191,12 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product with missing attribute
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Product with id "4" does not contain required attribute "color".
      */
     public function testBeforeSaveWithLinksWithMissingAttribute()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Product with id "4" does not contain required attribute "color".');
+
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
         $attributeCode = 'color';
@@ -246,12 +247,12 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product with duplicate attributes
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Products "5" and "4" have the same set of attribute values.
      */
     public function testBeforeSaveWithLinksWithDuplicateAttributes()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
+
         $links = [4, 5];
         $attributeCode = 'color';
         $attributeId = 23;

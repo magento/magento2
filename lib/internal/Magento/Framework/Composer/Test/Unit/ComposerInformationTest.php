@@ -17,12 +17,12 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     private $composerInformation;
 
     /**
-     * @var Composer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Composer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerMock;
 
     /**
-     * @var Locker|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockerMock;
 
@@ -36,7 +36,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $packageMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerMock = $this->getMockBuilder(Composer::class)->disableOriginalConstructor()->getMock();
         $this->lockerMock = $this->getMockBuilder(Locker::class)->disableOriginalConstructor()->getMock();

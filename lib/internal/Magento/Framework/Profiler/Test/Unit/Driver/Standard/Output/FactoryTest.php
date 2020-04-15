@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultOutputType = 'default';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = new \Magento\Framework\Profiler\Driver\Standard\Output\Factory(
             $this->_defaultOutputPrefix,

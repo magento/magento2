@@ -11,22 +11,22 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribut
 class InventoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Source\Backorders|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Source\Backorders|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $backordersMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockConfigurationMock;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
@@ -40,7 +40,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -61,7 +61,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->inventory = $objectManager->getObject(
             \Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory::class,
@@ -82,7 +82,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->backordersMock->expects($this->once())
             ->method('toOptionArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
         $this->assertEquals('return-value', $this->inventory->getBackordersOption());
     }
 
@@ -106,9 +106,9 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('store')
-            ->will($this->returnValue('125'));
+            ->willReturn('125');
 
-        $this->assertTrue(is_integer($this->inventory->getStoreId()));
+        $this->assertIsInt($this->inventory->getStoreId());
     }
 
     /**
@@ -121,7 +121,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         $this->stockConfigurationMock->expects($this->once())
             ->method('getDefaultConfigValue')
             ->with('field-name')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->inventory->getDefaultConfigValue('field-name'));
     }
@@ -173,6 +173,6 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled()
     {
-        $this->assertEquals(true, $this->inventory->isAvailable('field'));
+        $this->assertTrue($this->inventory->isAvailable('field'));
     }
 }

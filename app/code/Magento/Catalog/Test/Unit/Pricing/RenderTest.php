@@ -17,21 +17,21 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pricingRenderBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
 
@@ -44,13 +44,13 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -75,12 +75,12 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
         $this->layout->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($this->pricingRenderBlock));
+            ->willReturn($this->pricingRenderBlock);
 
         $this->registry->expects($this->once())
             ->method('registry')
             ->with($this->equalTo('product'))
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $arguments = $this->object->getData();
         $arguments['render_block'] = $this->object;
@@ -91,7 +91,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($product),
                 $this->equalTo($arguments)
             )
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertEquals($expectedValue, $this->object->toHtml());
     }
@@ -116,19 +116,19 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($product),
                 $this->equalTo($arguments)
             )
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $block->expects($this->any())
             ->method('getProductItem')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->layout->expects($this->once())
             ->method('getParentName')
-            ->will($this->returnValue('parent_name'));
+            ->willReturn('parent_name');
 
         $this->layout->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($expectedValue, $this->object->toHtml());
     }

@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 class LoadTest extends \PHPUnit\Framework\TestCase
@@ -59,7 +59,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
      */
     private $httpRequestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);

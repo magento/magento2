@@ -13,7 +13,7 @@ use Magento\Setup\Model\CronScriptReadinessCheck;
 class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
      */
     private $read;
 
@@ -22,7 +22,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $cronScriptReadinessCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->read = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);

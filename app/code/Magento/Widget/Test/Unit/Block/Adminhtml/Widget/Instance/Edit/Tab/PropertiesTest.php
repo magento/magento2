@@ -22,7 +22,7 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
      */
     protected $propertiesBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->widget = $this->createMock(\Magento\Widget\Model\Widget\Instance::class);
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);

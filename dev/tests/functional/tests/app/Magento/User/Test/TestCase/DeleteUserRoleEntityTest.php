@@ -131,7 +131,7 @@ class DeleteUserRoleEntityTest extends Injectable
      *
      * return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->dashboard->getAdminPanelHeader()->logOut();
     }

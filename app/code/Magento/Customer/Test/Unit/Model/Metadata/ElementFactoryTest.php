@@ -9,10 +9,10 @@ use Magento\Customer\Model\Metadata\ElementFactory;
 
 class ElementFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $_objectManager;
 
-    /** @var \Magento\Customer\Model\Data\AttributeMetadata | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Data\AttributeMetadata | \PHPUnit\Framework\MockObject\MockObject */
     private $_attributeMetadata;
 
     /** @var string */
@@ -21,7 +21,7 @@ class ElementFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ElementFactory */
     private $_elementFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_attributeMetadata = $this->createMock(\Magento\Customer\Model\Data\AttributeMetadata::class);
@@ -35,12 +35,12 @@ class ElementFactoryTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDataModel'
-        )->will(
-            $this->returnValue(\Magento\Customer\Model\Attribute\Data\Postcode::class)
+        )->willReturn(
+            \Magento\Customer\Model\Attribute\Data\Postcode::class
         );
 
         $dataModel = $this->createMock(\Magento\Customer\Model\Metadata\Form\Text::class);
-        $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($dataModel));
+        $this->_objectManager->expects($this->once())->method('create')->willReturn($dataModel);
 
         $actual = $this->_elementFactory->create($this->_attributeMetadata, '95131', $this->_entityTypeCode);
         $this->assertSame($dataModel, $actual);
@@ -48,13 +48,13 @@ class ElementFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testAttributeEmptyDataModelClass()
     {
-        $this->_attributeMetadata->expects($this->once())->method('getDataModel')->will($this->returnValue(''));
+        $this->_attributeMetadata->expects($this->once())->method('getDataModel')->willReturn('');
         $this->_attributeMetadata->expects(
             $this->once()
         )->method(
             'getFrontendInput'
-        )->will(
-            $this->returnValue('text')
+        )->willReturn(
+            'text'
         );
 
         $dataModel = $this->createMock(\Magento\Customer\Model\Metadata\Form\Text::class);
@@ -71,8 +71,8 @@ class ElementFactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Magento\Customer\Model\Metadata\Form\Text::class,
             $params
-        )->will(
-            $this->returnValue($dataModel)
+        )->willReturn(
+            $dataModel
         );
 
         $actual = $this->_elementFactory->create($this->_attributeMetadata, 'Some Text', $this->_entityTypeCode);

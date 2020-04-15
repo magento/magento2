@@ -14,21 +14,21 @@ class DesignLoaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_areaListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -43,12 +43,12 @@ class DesignLoaderTest extends \PHPUnit\Framework\TestCase
     public function testLoad()
     {
         $area = $this->createMock(\Magento\Framework\App\Area::class);
-        $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('area'));
-        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->will($this->returnValue($area));
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
         $area->expects($this->at(0))->method('load')
-            ->with(\Magento\Framework\App\Area::PART_DESIGN)->will($this->returnValue($area));
+            ->with(\Magento\Framework\App\Area::PART_DESIGN)->willReturn($area);
         $area->expects($this->at(1))->method('load')
-            ->with(\Magento\Framework\App\Area::PART_TRANSLATE)->will($this->returnValue($area));
+            ->with(\Magento\Framework\App\Area::PART_TRANSLATE)->willReturn($area);
         $this->_model->load($this->_requestMock);
     }
 }

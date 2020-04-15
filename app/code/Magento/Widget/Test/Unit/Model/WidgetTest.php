@@ -35,7 +35,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
             ->disableOriginalConstructor()

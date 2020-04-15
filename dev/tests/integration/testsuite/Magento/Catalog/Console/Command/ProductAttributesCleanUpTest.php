@@ -29,7 +29,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeResource;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(\Magento\Catalog\Console\Command\ProductAttributesCleanUp::class);

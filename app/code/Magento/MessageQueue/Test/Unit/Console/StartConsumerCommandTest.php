@@ -16,12 +16,12 @@ use Magento\Framework\Lock\LockManagerInterface;
 class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConsumerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $consumerFactory;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
@@ -31,12 +31,12 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFactoryMock;
 
     /**
-     * @var LockManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockManagerMock;
 
@@ -48,7 +48,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
             ->getMockForAbstractClass();

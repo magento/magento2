@@ -11,21 +11,21 @@ namespace Magento\ProductAlert\Test\Unit\Block\Email;
 class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Email\Stock
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Block\Email\Stock
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filter\Input\MaliciousCode
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\Input\MaliciousCode
      */
     protected $_filter;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_filter = $this->createPartialMock(\Magento\Framework\Filter\Input\MaliciousCode::class, ['filter']);
@@ -51,7 +51,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
     public function testGetFilteredContent($contentToFilter, $contentFiltered)
     {
         $this->_filter->expects($this->once())->method('filter')->with($contentToFilter)
-            ->will($this->returnValue($contentFiltered));
+            ->willReturn($contentFiltered);
         $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 

@@ -11,7 +11,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     {
         /**
          * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|
-         *      \PHPUnit_Framework_MockObject_MockObject $processorMock
+         *      \PHPUnit\Framework\MockObject\MockObject $processorMock
          */
         $processorMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,

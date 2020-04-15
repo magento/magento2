@@ -11,7 +11,7 @@ use \Magento\Setup\Model\PayloadValidator;
 class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Module\FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\FullModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fullModuleList;
 
@@ -20,7 +20,7 @@ class PayloadValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fullModuleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $this->model = new PayloadValidator($this->fullModuleList);

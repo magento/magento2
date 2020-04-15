@@ -34,7 +34,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Type\Price::class

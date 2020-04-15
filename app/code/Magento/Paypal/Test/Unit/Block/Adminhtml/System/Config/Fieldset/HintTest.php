@@ -8,7 +8,7 @@ namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class HintTest
@@ -25,7 +25,7 @@ class HintTest extends \PHPUnit\Framework\TestCase
      */
     private $element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $om = new ObjectManager($this);
 

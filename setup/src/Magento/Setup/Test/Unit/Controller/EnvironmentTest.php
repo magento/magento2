@@ -18,22 +18,22 @@ use Laminas\View\Model\JsonModel;
 class EnvironmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $permissions;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Setup\Model\CronScriptReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\CronScriptReadinessCheck|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cronScriptReadinessCheck;
 
     /**
-     * @var \Magento\Setup\Model\PhpReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\PhpReadinessCheck|\PHPUnit\Framework\MockObject\MockObject
      */
     private $phpReadinessCheck;
 
@@ -42,7 +42,7 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
      */
     private $environment;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->permissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);

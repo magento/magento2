@@ -12,7 +12,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     private $itemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()

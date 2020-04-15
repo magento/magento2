@@ -19,82 +19,82 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryProvider;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItem;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatus;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockStatusInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatusFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStatusRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStatusRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatusRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockCriteriaFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemCriteriaFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatusCriteriaFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockCriteria;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemCriteria;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockStatusCriteria;
 
@@ -105,7 +105,7 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -213,7 +213,7 @@ class StockRegistryProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->stockRegistryProvider = null;
     }

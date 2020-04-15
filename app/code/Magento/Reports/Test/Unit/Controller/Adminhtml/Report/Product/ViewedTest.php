@@ -21,29 +21,29 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
     protected $viewed;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -179,13 +179,13 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
         $this->objectManagerMock
             ->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [\Psr\Log\LoggerInterface::class, $logMock],
                         [\Magento\Backend\Model\Auth\Session::class, $sessionMock]
                     ]
-                )
+                
             );
 
         $this->messageManagerMock

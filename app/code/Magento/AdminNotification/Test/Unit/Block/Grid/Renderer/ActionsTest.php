@@ -29,7 +29,7 @@ class ActionsTest extends TestCase
      */
     private $sut;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 

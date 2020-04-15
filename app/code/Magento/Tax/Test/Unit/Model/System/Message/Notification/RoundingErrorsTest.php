@@ -24,25 +24,25 @@ class RoundingErrorsTest extends \PHPUnit\Framework\TestCase
     private $roundingErrorsNotification;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TaxConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig | \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getName')->willReturn('testWebsiteName');
         $storeMock = $this->getMockForAbstractClass(
             StoreInterface::class,
@@ -55,10 +55,10 @@ class RoundingErrorsTest extends \PHPUnit\Framework\TestCase
         );
         $storeMock->expects($this->any())->method('getName')->willReturn('testStoreName');
         $storeMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeMock]);
 
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
         $this->roundingErrorsNotification = (new ObjectManager($this))->getObject(
             RoundingErrorsNotification::class,

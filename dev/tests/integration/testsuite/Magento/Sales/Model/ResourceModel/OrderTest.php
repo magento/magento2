@@ -45,7 +45,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resourceModel = $this->objectManager->create(\Magento\Sales\Model\ResourceModel\Order::class);
@@ -57,7 +57,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');

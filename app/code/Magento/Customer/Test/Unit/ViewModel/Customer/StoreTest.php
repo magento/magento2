@@ -55,13 +55,13 @@ class StoreTest extends TestCase
      */
     private $dataPersistor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->store = $this->createMock(Store::class);
         $this->configShare = $this->createMock(ConfigShare::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerStore = $this->objectManagerHelper->getObject(
             CustomerStore::class,

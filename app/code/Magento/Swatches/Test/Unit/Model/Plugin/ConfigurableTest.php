@@ -7,16 +7,16 @@ namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
 class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $eavConfig;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     private $swatchHelper;
 
     /** @var \Magento\Swatches\Model\Plugin\Configurable|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $pluginModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->createPartialMock(
             \Magento\Eav\Model\Config::class,

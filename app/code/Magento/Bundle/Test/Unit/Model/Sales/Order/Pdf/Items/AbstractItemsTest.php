@@ -33,7 +33,7 @@ class AbstractItemsTest extends TestCase
      */
     private $orderItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemMock = $this->createPartialMock(
             Item::class,

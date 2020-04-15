@@ -47,7 +47,7 @@ class CompareTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->createPartialMock(
             Item::class,
@@ -207,6 +207,7 @@ class CompareTest extends TestCase
         $this->comparedMock->expects($this->any())
             ->method('getProductId')
             ->willReturn(1);
+
         $this->comparedMock->expects($this->once())
             ->method('getOptionsByCode')
             ->willReturn(

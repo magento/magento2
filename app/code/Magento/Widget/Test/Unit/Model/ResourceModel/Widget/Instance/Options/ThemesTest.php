@@ -29,7 +29,7 @@ class ThemesTest extends \PHPUnit\Framework\TestCase
      */
     private $themeCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeCollectionMock = $this->createMock(ThemeCollection::class);
         $this->themeCollectionFactoryMock = $this->createPartialMock(ThemeCollectionFactory::class, ['create']);

@@ -13,11 +13,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
         $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);
@@ -29,8 +29,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAvailableServices'
-        )->will(
-            $this->returnValue(['service_one', 'service_two'])
+        )->willReturn(
+            ['service_one', 'service_two']
         );
         $this->_importConfig->expects(
             $this->at(1)
@@ -38,8 +38,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getServiceLabel'
         )->with(
             'service_one'
-        )->will(
-            $this->returnValue('Service One')
+        )->willReturn(
+            'Service One'
         );
         $this->_importConfig->expects(
             $this->at(2)
@@ -47,8 +47,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getServiceLabel'
         )->with(
             'service_two'
-        )->will(
-            $this->returnValue('Service Two')
+        )->willReturn(
+            'Service Two'
         );
         $expectedResult = [
             ['value' => 'service_one', 'label' => 'Service One'],

@@ -23,22 +23,22 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbValidator;
 
     /**
-     * @var \Magento\Framework\Encryption\KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Encryption\KeyValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $encryptionKeyValidator;
 
@@ -47,7 +47,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
      */
     private $driverOptionsMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generator = $this->createMock(\Magento\Setup\Model\ConfigGenerator::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

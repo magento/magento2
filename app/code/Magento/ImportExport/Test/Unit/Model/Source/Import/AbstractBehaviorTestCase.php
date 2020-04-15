@@ -18,7 +18,7 @@ abstract class AbstractBehaviorTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

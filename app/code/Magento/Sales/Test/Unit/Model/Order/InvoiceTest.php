@@ -11,7 +11,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class InvoiceTest
@@ -38,7 +38,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     protected $entityType = 'invoice';
 
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
@@ -48,12 +48,12 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     private $order;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Payment
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Payment
      */
     protected $paymentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface
      */
     protected $eventManagerMock;
 
@@ -62,7 +62,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
      */
     protected $helperManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->order = $this->getMockBuilder(Order::class)
@@ -150,7 +150,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->order->expects($this->once())
             ->method('setHistoryEntityName')
             ->with($this->entityType)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->assertEquals($this->order, $this->model->getOrder());
     }

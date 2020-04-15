@@ -51,7 +51,7 @@ class LayoutProcessorTest extends TestCase
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class LayoutProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->layoutProcessor = new LayoutProcessor(
             $this->attributeDataProvider,

@@ -28,7 +28,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
 
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
@@ -40,13 +40,13 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $cookieMetadataFactory->expects($this->any())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnCallback([$this, 'createSensitiveMetadata']));
+            ->willReturnCallback([$this, 'createSensitiveMetadata']);
         $cookieMetadataFactory->expects($this->any())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnCallback([$this, 'createPublicMetadata']));
+            ->willReturnCallback([$this, 'createPublicMetadata']);
         $cookieMetadataFactory->expects($this->any())
             ->method('createCookieMetadata')
-            ->will($this->returnCallback([$this, 'createCookieMetadata']));
+            ->willReturnCallback([$this, 'createCookieMetadata']);
         $this->defaultScopeParams = [
             'cookieMetadataFactory' => $cookieMetadataFactory,
         ];

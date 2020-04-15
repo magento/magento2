@@ -77,7 +77,7 @@ class UpdateItemOptionsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
         $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
@@ -110,7 +110,7 @@ class UpdateItemOptionsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->productRepository,

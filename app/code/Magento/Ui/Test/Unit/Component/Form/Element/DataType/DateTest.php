@@ -40,11 +40,11 @@ class DateTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->method('getProcessor')->willReturn($this->processorMock);
@@ -76,7 +76,7 @@ class DateTest extends TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
@@ -117,7 +117,7 @@ class DateTest extends TestCase
         $this->date->prepare();
 
         $config = $this->date->getConfig();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
 
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);

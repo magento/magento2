@@ -102,7 +102,7 @@ class NewsletterTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
@@ -111,9 +111,9 @@ class NewsletterTest extends TestCase
             SubscriberFactory::class,
             ['create']
         );
-        $this->accountManagementMock = $this->createMock(AccountManagementInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->accountManagementMock = $this->getMockForAbstractClass(AccountManagementInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
@@ -127,7 +127,7 @@ class NewsletterTest extends TestCase
         $this->contextMock->method('getStoreManager')
             ->willReturn($this->storeManager);
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
 
         $objectManager = new ObjectManager($this);
@@ -173,7 +173,7 @@ class NewsletterTest extends TestCase
         $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
             ->willReturn($customerId);
 
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getWebsiteId')->willReturn($websiteId);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
@@ -247,7 +247,7 @@ class NewsletterTest extends TestCase
 
         $this->registryMock->method('registry')->with(RegistryConstants::CURRENT_CUSTOMER_ID)
             ->willReturn($customerId);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getWebsiteId')->willReturn($websiteId);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);

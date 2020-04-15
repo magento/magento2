@@ -30,9 +30,9 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
+        $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
+        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
 
         $relatedViewState = $this->getMockBuilder(
             \Magento\Framework\Mview\View\StateInterface::class
@@ -44,15 +44,15 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'loadByView'
         )->with(
             $this->equalTo($relatedViewId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
-        $relatedViewState->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
 
-        $relatedViewState->expects($this->once())->method('getStatus')->will($this->returnValue($relatedStatus));
+        $relatedViewState->expects($this->once())->method('getStatus')->willReturn($relatedStatus);
 
-        $relatedViewState->expects($this->once())->method('save')->will($this->returnSelf());
+        $relatedViewState->expects($this->once())->method('save')->willReturnSelf();
 
         $relatedViewState->expects(
             $this->once()
@@ -60,8 +60,8 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'setVersionId'
         )->with(
             $this->equalTo($relatedVersion)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $relatedViewState->expects(
@@ -70,8 +70,8 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'setStatus'
         )->with(
             $this->equalTo($stateStatus)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
@@ -84,11 +84,11 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'setViewId'
         )->with(
             $this->equalTo($relatedViewId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
-        $relatedViewChangelog->expects($this->once())->method('getVersion')->will($this->returnValue($relatedVersion));
+        $relatedViewChangelog->expects($this->once())->method('getVersion')->willReturn($relatedVersion);
 
         $model = new \Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState(
             $relatedViewState,
@@ -119,9 +119,9 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
+        $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
+        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
 
         $relatedViewState = $this->getMockBuilder(
             \Magento\Framework\Mview\View\StateInterface::class
@@ -133,15 +133,15 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'loadByView'
         )->with(
             $this->equalTo($relatedViewId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
-        $relatedViewState->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
 
-        $relatedViewState->expects($this->any())->method('getStatus')->will($this->returnValue($relatedStatus));
+        $relatedViewState->expects($this->any())->method('getStatus')->willReturn($relatedStatus);
 
-        $relatedViewState->expects($this->once())->method('save')->will($this->returnSelf());
+        $relatedViewState->expects($this->once())->method('save')->willReturnSelf();
 
         $relatedViewState->expects($this->never())->method('setVersionId');
 
@@ -151,8 +151,8 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'setStatus'
         )->with(
             $this->equalTo('idle')
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
@@ -194,9 +194,9 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
+        $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
+        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
 
         $relatedViewState = $this->getMockBuilder(
             \Magento\Framework\Mview\View\StateInterface::class
@@ -208,13 +208,13 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'loadByView'
         )->with(
             $this->equalTo($relatedViewId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
-        $relatedViewState->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
 
-        $relatedViewState->expects($this->any())->method('getStatus')->will($this->returnValue($relatedStatus));
+        $relatedViewState->expects($this->any())->method('getStatus')->willReturn($relatedStatus);
 
         $relatedViewState->expects($this->never())->method('save');
 
@@ -254,9 +254,9 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Mview\View\StateInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $state->expects($this->exactly(2))->method('getViewId')->will($this->returnValue($stateViewId));
+        $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
-        $state->expects($this->any())->method('getStatus')->will($this->returnValue($stateStatus));
+        $state->expects($this->any())->method('getStatus')->willReturn($stateStatus);
 
         $relatedViewState = $this->getMockBuilder(
             \Magento\Framework\Mview\View\StateInterface::class
@@ -268,11 +268,11 @@ class MviewStateTest extends \PHPUnit\Framework\TestCase
             'loadByView'
         )->with(
             $this->equalTo($relatedViewId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
-        $relatedViewState->expects($this->once())->method('getMode')->will($this->returnValue('disabled'));
+        $relatedViewState->expects($this->once())->method('getMode')->willReturn('disabled');
 
         $relatedViewState->expects($this->never())->method('getStatus');
 

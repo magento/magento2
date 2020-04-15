@@ -11,27 +11,27 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
@@ -48,7 +48,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -114,7 +114,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         ];
         $whereCondition = null;
         $getTableReturnValue = 'table';
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -205,7 +205,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $whereCondition = 'main.store_id = ' . $storeId;
         $getTableReturnValue = 'table';
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -315,8 +315,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'value.position IS NULL',
             'default_value.position',
             'value.position'
-        )->will($this->returnValue($positionCheckSql));
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        )->willReturn($positionCheckSql);
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -334,7 +334,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getData')
             ->with('entity_id')->willReturn($productId);
-        $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
+        $this->product->expects($this->at(1))->method('getStoreId')->willReturn($storeId);
         $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
             ['value.store_id = ?'],
             ['default_value.store_id = ?']
@@ -342,8 +342,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'value.store_id = ' . $storeId,
             'default_value.store_id = ' . 0
         );
-        $this->connection->expects($this->any())->method('getIfNullSql')->will(
-            $this->returnValueMap([
+        $this->connection->expects($this->any())->method('getIfNullSql')->willReturnMap(
+            [
                 [
                     '`value`.`label`',
                     '`default_value`.`label`',
@@ -359,7 +359,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '`default_value`.`disabled`',
                     'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
                 ]
-            ])
+            ]
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -460,7 +460,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => 'table',

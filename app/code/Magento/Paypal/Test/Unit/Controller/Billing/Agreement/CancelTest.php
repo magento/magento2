@@ -13,36 +13,36 @@ class CancelTest extends \PHPUnit\Framework\TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registry;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_messageManager;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\Agreement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Billing\Agreement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_agreement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_session = $this->createMock(\Magento\Customer\Model\Session::class);
 
@@ -50,17 +50,17 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             \Magento\Paypal\Model\Billing\Agreement::class,
             ['load', 'getId', 'getCustomerId', 'getReferenceId', 'canCancel', 'cancel', '__wakeup']
         );
-        $this->_agreement->expects($this->once())->method('load')->with(15)->will($this->returnSelf());
-        $this->_agreement->expects($this->once())->method('getId')->will($this->returnValue(15));
-        $this->_agreement->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_agreement->expects($this->once())->method('load')->with(15)->willReturnSelf();
+        $this->_agreement->expects($this->once())->method('getId')->willReturn(15);
+        $this->_agreement->expects($this->once())->method('getCustomerId')->willReturn(871);
 
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
             'get'
-        )->will(
-            $this->returnValueMap([[\Magento\Customer\Model\Session::class, $this->_session]])
+        )->willReturnMap(
+            [[\Magento\Customer\Model\Session::class, $this->_session]]
         );
         $this->_objectManager->expects(
             $this->once()
@@ -68,12 +68,12 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Paypal\Model\Billing\Agreement::class
-        )->will(
-            $this->returnValue($this->_agreement)
+        )->willReturn(
+            $this->_agreement
         );
 
         $this->_request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->_request->expects($this->once())->method('getParam')->with('agreement')->will($this->returnValue(15));
+        $this->_request->expects($this->once())->method('getParam')->with('agreement')->willReturn(15);
 
         $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
@@ -82,11 +82,11 @@ class CancelTest extends \PHPUnit\Framework\TestCase
         $this->_messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $context = $this->createMock(\Magento\Framework\App\Action\Context::class);
-        $context->expects($this->any())->method('getObjectManager')->will($this->returnValue($this->_objectManager));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
-        $context->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $context->expects($this->any())->method('getRedirect')->will($this->returnValue($redirect));
-        $context->expects($this->any())->method('getMessageManager')->will($this->returnValue($this->_messageManager));
+        $context->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->_request);
+        $context->expects($this->any())->method('getResponse')->willReturn($response);
+        $context->expects($this->any())->method('getRedirect')->willReturn($redirect);
+        $context->expects($this->any())->method('getMessageManager')->willReturn($this->_messageManager);
 
         $this->_registry = $this->createMock(\Magento\Framework\Registry::class);
 
@@ -98,12 +98,12 @@ class CancelTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteActionSuccess()
     {
-        $this->_agreement->expects($this->once())->method('getReferenceId')->will($this->returnValue('r15'));
-        $this->_agreement->expects($this->once())->method('canCancel')->will($this->returnValue(true));
+        $this->_agreement->expects($this->once())->method('getReferenceId')->willReturn('r15');
+        $this->_agreement->expects($this->once())->method('canCancel')->willReturn(true);
         $this->_agreement->expects($this->once())->method('cancel');
 
         $noticeMessage = 'The billing agreement "r15" has been canceled.';
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(871);
         $this->_messageManager->expects($this->once())->method('addNoticeMessage')->with($noticeMessage);
         $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
@@ -125,7 +125,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
         $this->_agreement->expects($this->never())->method('cancel');
 
         $errorMessage = 'Please specify the correct billing agreement ID and try again.';
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(938));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(938);
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
 
         $this->_registry->expects($this->never())->method('register');
@@ -135,10 +135,10 @@ class CancelTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteAgreementStatusDoesNotAllowToCancel()
     {
-        $this->_agreement->expects($this->once())->method('canCancel')->will($this->returnValue(false));
+        $this->_agreement->expects($this->once())->method('canCancel')->willReturn(false);
         $this->_agreement->expects($this->never())->method('cancel');
 
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(871);
         $this->_messageManager->expects($this->never())->method('addNoticeMessage');
         $this->_messageManager->expects($this->never())->method('addErrorMessage');
 

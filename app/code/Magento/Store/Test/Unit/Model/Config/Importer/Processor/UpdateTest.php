@@ -16,7 +16,7 @@ use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Magento\Store\Model\Store;
 use Magento\Framework\Event\ManagerInterface;
 
@@ -91,7 +91,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
@@ -292,11 +292,12 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
      */
     public function testRunWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Some exception');
+
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_STORES => []

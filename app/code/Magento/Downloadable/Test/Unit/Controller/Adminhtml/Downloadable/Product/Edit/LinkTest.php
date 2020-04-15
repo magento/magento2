@@ -22,7 +22,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
@@ -46,7 +46,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $downloadHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -112,13 +112,13 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $fileSize = 58493;
         $fileName = 'link.jpg';
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->request->expects($this->at(1))->method('getParam')->with('type', 0)
-            ->will($this->returnValue($fileType));
+            ->willReturn($fileType);
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response
             ->expects($this->any())
             ->method('setHeader')
@@ -133,37 +133,37 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 ['Content-Length', $fileSize],
                 ['Content-Disposition', 'attachment; filename=' . $fileName]
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\File::class)
-            ->will($this->returnValue($this->fileHelper));
+            ->willReturn($this->fileHelper);
         $this->objectManager->expects($this->at(2))->method('get')->with(\Magento\Downloadable\Model\Link::class)
-            ->will($this->returnValue($this->linkModel));
+            ->willReturn($this->linkModel);
         $this->objectManager->expects($this->at(3))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->will($this->returnValue($this->downloadHelper));
+            ->willReturn($this->downloadHelper);
         $this->fileHelper->expects($this->once())->method('getFilePath')
-            ->will($this->returnValue('filepath/' . $fileType . '.jpg'));
+            ->willReturn('filepath/' . $fileType . '.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue($fileName));
+            ->willReturn($fileName);
         $this->downloadHelper->expects($this->once())->method('getContentType')
             ->willReturn('text/html');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue($fileSize));
+            ->willReturn($fileSize);
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue('inline'));
+            ->willReturn('inline');
         $this->downloadHelper->expects($this->once())->method('output')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->linkModel->expects($this->once())->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->linkModel->expects($this->once())->method('getId')
-        ->will($this->returnValue('1'));
+        ->willReturn('1');
         $this->linkModel->expects($this->any())->method('get' . $fileType . 'Type')
-            ->will($this->returnValue('file'));
+            ->willReturn('file');
         $this->objectManager->expects($this->once())->method('create')
-            ->will($this->returnValue($this->linkModel));
+            ->willReturn($this->linkModel);
 
         $this->link->execute();
     }
@@ -175,41 +175,41 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function testExecuteUrl($fileType)
     {
         $this->request->expects($this->at(0))->method('getParam')
-            ->with('id', 0)->will($this->returnValue(1));
+            ->with('id', 0)->willReturn(1);
         $this->request->expects($this->at(1))->method('getParam')
-            ->with('type', 0)->will($this->returnValue($fileType));
+            ->with('type', 0)->willReturn($fileType);
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->will($this->returnValue($this->downloadHelper));
+            ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->will($this->returnValue('link.jpg'));
+            ->willReturn('link.jpg');
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->will($this->returnSelf('url'));
+            ->willReturnSelf('url');
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->downloadHelper->expects($this->once())->method('output')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->linkModel->expects($this->once())->method('load')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->linkModel->expects($this->once())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->linkModel->expects($this->once())->method('get' . $fileType . 'Type')
-            ->will($this->returnValue('url'));
+            ->willReturn('url');
         $this->linkModel->expects($this->once())->method('get' . $fileType . 'Url')
-            ->will($this->returnValue('http://url.magento.com'));
+            ->willReturn('http://url.magento.com');
         $this->objectManager->expects($this->once())->method('create')
-            ->will($this->returnValue($this->linkModel));
+            ->willReturn($this->linkModel);
 
         $this->link->execute();
     }

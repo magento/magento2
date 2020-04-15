@@ -10,28 +10,28 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     private $redirect;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $messageManager;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     private $session;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
-    /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject */
     private $query;
 
     /** @var \Magento\Search\Controller\Adminhtml\Term\Save */
     private $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -49,7 +49,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $redirectFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->redirect));
+            ->willReturn($this->redirect);
         $this->context->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($redirectFactory);
@@ -99,7 +99,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $queryFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->query));
+            ->willReturn($this->query);
 
         $this->controller = $objectManagerHelper->getObject(
             \Magento\Search\Controller\Adminhtml\Term\Save::class,

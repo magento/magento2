@@ -23,7 +23,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
      */
     private $codes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $escaper = $this->getMockBuilder(Escaper::class)

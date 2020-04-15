@@ -47,13 +47,13 @@ class ConfigurableObjectTest extends TestCase
      */
     private $objectManagerConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
-        $this->interpreter = $this->createMock(InterpreterInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->interpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->classReader = $this->createMock(ClassReader::class);
-        $this->objectManagerConfig = $this->createMock(ConfigInterface::class);
+        $this->objectManagerConfig = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->configurableObject = $objectManager->getObject(
             ConfigurableObject::class,
             [
@@ -99,12 +99,12 @@ class ConfigurableObjectTest extends TestCase
 
         $this->interpreter
             ->method('evaluate')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function (array $arg) {
                         return $arg['value'];
                     }
-                )
+                
             );
 
         $actualResult = $this->configurableObject->evaluate($data);
@@ -144,12 +144,12 @@ class ConfigurableObjectTest extends TestCase
 
         $this->interpreter
             ->method('evaluate')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function (array $arg) {
                         return $arg['value'];
                     }
-                )
+                
             );
 
         $actualResult = $this->configurableObject->evaluate($data);

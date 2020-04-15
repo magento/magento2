@@ -28,7 +28,7 @@ class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $adminSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -74,16 +74,16 @@ class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $this->adminSession->expects($this->once())
             ->method('hasUser')
-            ->will($this->returnValue($userId));
+            ->willReturn($userId);
 
         if ($userId) {
             $this->adminSession->expects($this->once())
                 ->method('getUser')
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $this->adminSession->expects($this->once())
                 ->method('getId')
-                ->will($this->returnValue($userId));
+                ->willReturn($userId);
         }
     }
 }

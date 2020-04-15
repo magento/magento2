@@ -18,11 +18,11 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlConverter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
         $this->converter = new Actions($this->urlConverter, new ConverterUtils());

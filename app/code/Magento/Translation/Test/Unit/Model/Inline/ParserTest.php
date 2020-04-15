@@ -80,7 +80,7 @@ class ParserTest extends TestCase
      */
     private $cacheManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->translateInlineMock =

@@ -17,11 +17,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $mShippingStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->mShippingStateMock =
@@ -37,7 +37,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
     public function testGetSteps()
     {
         $this->mShippingStateMock->expects($this->once())
-            ->method('getSteps')->will($this->returnValue(['expected array']));
+            ->method('getSteps')->willReturn(['expected array']);
 
         $this->assertEquals(['expected array'], $this->model->getSteps());
     }

@@ -58,7 +58,7 @@ class ChooserTest extends \PHPUnit\Framework\TestCase
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
 

@@ -21,11 +21,12 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to serialize value.
      */
     public function testConvertWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to serialize value.');
+
         //verify that exception will be thrown with invalid UTF8 sequence
         \Magento\Framework\Serialize\JsonConverter::convert("\xB1\x31");
     }

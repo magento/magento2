@@ -13,11 +13,11 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
     protected $unit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->setMethods(['getScopeConfig'])
@@ -26,7 +26,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()->getMock();
-        $context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($this->scopeConfig));
+        $context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
 
         $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\Theme\Block\Html\Header::class,

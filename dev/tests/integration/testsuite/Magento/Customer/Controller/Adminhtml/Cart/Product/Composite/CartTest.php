@@ -16,7 +16,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     protected $quoteItemCollectionFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(

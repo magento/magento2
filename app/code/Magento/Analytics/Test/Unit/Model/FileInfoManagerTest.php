@@ -14,17 +14,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var FileInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoFactoryMock;
 
     /**
-     * @var FileInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileInfoMock;
 
@@ -53,7 +53,7 @@ class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
@@ -119,10 +119,11 @@ class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
      * @param string|null $path
      * @param string|null $initializationVector
      * @dataProvider saveWithLocalizedExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveWithLocalizedException($path, $initializationVector)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->fileInfoMock
             ->expects($this->once())
             ->method('getPath')

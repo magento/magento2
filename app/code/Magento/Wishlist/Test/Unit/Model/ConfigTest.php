@@ -29,7 +29,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $_attributeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfig = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class

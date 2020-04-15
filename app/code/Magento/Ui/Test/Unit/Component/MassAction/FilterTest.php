@@ -85,7 +85,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
@@ -93,17 +93,17 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             FilterBuilder::class,
             ['value', 'setConditionType', 'create', 'setField']
         );
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
-        $this->uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $this->uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->abstractDbMock = $this->createPartialMock(
             AbstractDb::class,
             ['getResource', 'addFieldToFilter']
         );
         $this->resourceAbstractDbMock = $this->createMock(ResourceAbstractDb::class);
-        $this->contextMock = $this->createMock(ContextInterface::class);
-        $this->searchResultMock = $this->createMock(SearchResultInterface::class);
-        $uiComponentMockTwo = $this->createMock(UiComponentInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->searchResultMock = $this->getMockForAbstractClass(SearchResultInterface::class);
+        $uiComponentMockTwo = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->filter = $this->objectManager->getObject(
             Filter::class,
             [
@@ -157,10 +157,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Exception
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testApplySelectionOnTargetProviderException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);

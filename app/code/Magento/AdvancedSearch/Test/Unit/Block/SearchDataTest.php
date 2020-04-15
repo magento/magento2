@@ -6,7 +6,7 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class SearchDataTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +33,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataProvider = $this->getMockBuilder(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class)
             ->disableOriginalConstructor()
@@ -50,7 +50,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->queryFactory->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($this->searchQuery));
+            ->willReturn($this->searchQuery);
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,7 +74,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider->expects($this->once())
             ->method('getItems')
             ->with($this->searchQuery)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $actualValue = $this->block->getItems();
         $this->assertEquals($value, $actualValue);
     }
@@ -92,7 +92,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
         $value = 'qwertyasdfzxcv';
         $this->dataProvider->expects($this->once())
             ->method('isResultsCountEnabled')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $this->assertEquals($value, $this->block->isShowResultsCount());
     }
 }

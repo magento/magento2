@@ -40,7 +40,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
             ];
         }
 
-        /** @var UrlValidator|\PHPUnit_Framework_MockObject_MockObject $validator */
+        /** @var UrlValidator|\PHPUnit\Framework\MockObject\MockObject $validator */
         $validator = $this->getMockBuilder(UrlValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -48,7 +48,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willReturnMap($returnMap);
 
-        /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject $requestMock */
+        /** @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())

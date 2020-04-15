@@ -28,49 +28,49 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     private $attributeManagement;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $setRepositoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityTypeFactoryMock;
 
     /**
-     * @var AttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupRepositoryMock;
 
     /**
-     * @var AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeCollectionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->setRepositoryMock =
-            $this->createMock(AttributeSetRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
         $this->attributeCollectionMock =
             $this->createMock(Collection::class);
         $this->eavConfigMock =
@@ -78,9 +78,9 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
         $this->entityTypeFactoryMock =
             $this->createPartialMock(ConfigFactory::class, ['create', '__wakeup']);
         $this->groupRepositoryMock =
-            $this->createMock(AttributeGroupRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeGroupRepositoryInterface::class);
         $this->attributeRepositoryMock =
-            $this->createMock(AttributeRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
         $this->attributeResourceMock =
             $this->createMock(Attribute::class);
         $this->attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -101,11 +101,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The AttributeSet with a "2" ID doesn't exist. Verify the attributeSet and try again.
      */
     public function testAssignNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The AttributeSet with a "2" ID doesn\'t exist. Verify the attributeSet and try again.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -128,11 +129,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute set ID is incorrect. Verify the ID and try again.
      */
     public function testAssignInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The attribute set ID is incorrect. Verify the ID and try again.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -160,11 +162,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The attribute group doesn't belong to the attribute set.
      */
     public function testAssignInputExceptionGroupInSet()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The attribute group doesn\'t belong to the attribute set.');
+
         $entityTypeCode = 1;
         $attributeSetId = 2;
         $attributeGroupId = 3;
@@ -295,10 +298,11 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testUnassignInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $attributeSetId = 1;
         $attributeCode = 'code';
 
@@ -342,11 +346,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The "1234567" attribute set wasn't found. Verify and try again.
      */
     public function testUnassignWithWrongAttributeSet()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The "1234567" attribute set wasn\'t found. Verify and try again.');
+
         $attributeSetId = 1234567;
         $attributeCode = 'code';
 
@@ -359,11 +364,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The system attribute can't be deleted.
      */
     public function testUnassignStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The system attribute can\'t be deleted.');
+
         $attributeSetId = 1;
         $attributeCode = 'code';
 
@@ -447,11 +453,12 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeSetId = 148
      */
     public function testGetAttributesNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with attributeSetId = 148');
+
         $entityType = 'type';
         $attributeSetId = 148;
 

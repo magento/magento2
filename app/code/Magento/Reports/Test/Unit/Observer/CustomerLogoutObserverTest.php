@@ -13,29 +13,29 @@ class CustomerLogoutObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompFactoryMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\ViewedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\ViewedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productIndexFactoryMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\Viewed|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Viewed|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productIndexMock;
 
     /**
-     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productCompModelMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -91,7 +91,7 @@ class CustomerLogoutObserverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $productId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getObserverMock($productId)
     {

@@ -23,39 +23,39 @@ use Magento\Setup\Model\PackagesData;
 class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInformationMock;
 
     /**
-     * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var FullModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fullModuleListMock;
 
     /**
-     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleListMock;
 
     /**
-     * @var PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfoFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packageInfoFactoryMock;
 
     /**
      * Module package info
      *
-     * @var PackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packageInfoMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
     /**
-     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackagesData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $packagesDataMock;
 
@@ -71,7 +71,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleData = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->moduleData = [
             'magento/sample-module-one' => [
@@ -128,7 +128,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);
@@ -162,12 +162,12 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
         $this->packagesDataMock->expects(static::exactly(2))
             ->method('addPackageExtraInfo')
-            ->will(
-                $this->returnCallback(function ($package) {
+            ->willReturnCallback(
+                function ($package) {
                     $package['package_title'] = 'packageTitle';
                     $package['package_type'] = 'packageType';
                     return $package;
-                })
+                }
             );
 
         $this->moduleListMock->expects(static::exactly(2))

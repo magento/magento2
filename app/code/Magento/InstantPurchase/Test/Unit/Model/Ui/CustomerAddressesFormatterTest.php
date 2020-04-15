@@ -16,14 +16,14 @@ use PHPUnit\Framework\TestCase;
 class CustomerAddressesFormatterTest extends TestCase
 {
     /**
-     * @var CustomerAddressesFormatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressesFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerAddressesFormatter;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->customerAddressesFormatter = $objectManager->getObject(CustomerAddressesFormatter::class);

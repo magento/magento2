@@ -17,7 +17,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class DocumentTest
@@ -56,7 +56,7 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
      */
     private $document;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initAttributeValueFactoryMock();
 

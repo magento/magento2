@@ -17,17 +17,17 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
     const TAXVAT_ATTRIBUTE_CODE = 'taxvat';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\CustomerMetadataInterface
      */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
     private $attribute;
 
     /** @var Taxvat */
     private $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -39,8 +39,8 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             'getAttributeMetadata'
         )->with(
             self::TAXVAT_ATTRIBUTE_CODE
-        )->will(
-            $this->returnValue($this->attribute)
+        )->willReturn(
+            $this->attribute
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
@@ -59,7 +59,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->_block->isEnabled());
     }
 
@@ -85,7 +85,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -97,7 +97,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->_block->isRequired());
     }
 
@@ -123,6 +123,6 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 }

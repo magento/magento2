@@ -15,22 +15,22 @@ use Magento\Setup\Model\RequestDataConverter;
 class InstallTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\WebLogger
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\WebLogger
      */
     private $webLogger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer\ProgressFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Installer\ProgressFactory
      */
     private $progressFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequestDataConverter
+     * @var \PHPUnit\Framework\MockObject\MockObject|RequestDataConverter
      */
     private $requestDataConverter;
 
@@ -40,16 +40,16 @@ class InstallTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sampleDataState;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->webLogger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
         $installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);

@@ -47,7 +47,7 @@ class AttributeValueProviderTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,

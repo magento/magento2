@@ -18,14 +18,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     private $response;
 
     /**
-     * @var \Magento\Framework\File\Transfer\Adapter\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Transfer\Adapter\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transferAdapter;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->transferAdapter = $this->getMockBuilder(\Magento\Framework\File\Transfer\Adapter\Http::class)

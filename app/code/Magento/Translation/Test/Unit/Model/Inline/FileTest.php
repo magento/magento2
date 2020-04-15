@@ -13,12 +13,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $translateResourceMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolverMock;
 
@@ -27,7 +27,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $jsonSerializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translateResourceMock = $this->getMockBuilder(\Magento\Framework\Translate\ResourceInterface::class)
             ->disableOriginalConstructor()

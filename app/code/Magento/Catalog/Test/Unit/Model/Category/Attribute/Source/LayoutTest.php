@@ -23,7 +23,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($assertArray, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -44,14 +44,14 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())
             ->method('toOptionArray')
-            ->will($this->returnValue($this->testArray));
+            ->willReturn($this->testArray);
 
         $mockPageLayoutBuilder = $this->getMockBuilder(
             \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
         )->disableOriginalConstructor()->getMock();
         $mockPageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
-            ->will($this->returnValue($mockPageLayoutConfig));
+            ->willReturn($mockPageLayoutConfig);
 
         return $mockPageLayoutBuilder;
     }

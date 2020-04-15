@@ -13,11 +13,11 @@ class BlockFactoryTest extends \PHPUnit\Framework\TestCase
     protected $blockFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -40,7 +40,7 @@ class BlockFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($templateMock));
+            ->willReturn($templateMock);
 
         $this->assertInstanceOf(
             \Magento\Framework\View\Element\BlockInterface::class,
@@ -49,10 +49,11 @@ class BlockFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateBlockWithException()
     {
+        $this->expectException(\LogicException::class);
+
         $this->blockFactory->createBlock('invalid_class_name');
     }
 }

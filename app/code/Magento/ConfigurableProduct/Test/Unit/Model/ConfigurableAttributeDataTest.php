@@ -12,25 +12,25 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableAttributeData;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|
-     * \PHPUnit_Framework_MockObject_MockObject
+     * \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getTypeInstance',

@@ -56,7 +56,7 @@ class SaveAssetKeywordsTest extends TestCase
     /**
      * SetUp
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->saveAssetLinksMock = $this->createMock(SaveAssetLinks::class);
@@ -64,7 +64,7 @@ class SaveAssetKeywordsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->createMock(Select::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->sut = new SaveAssetKeywords(
             $this->resourceConnectionMock,

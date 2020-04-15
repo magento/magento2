@@ -12,7 +12,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->getMockForAbstractClass(
             \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray::class,
@@ -27,7 +27,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
     public function testGetArrayRows()
     {
-        $this->model->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
+        $this->model->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Multiselect::class);
         $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);

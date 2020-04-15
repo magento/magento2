@@ -17,10 +17,10 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var CreateHandler */
     protected $model;
 
-    /** @var SampleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SampleRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $sampleRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -35,14 +35,14 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $entitySku = 'sku';
         $entityStoreId = 0;
 
-        /** @var SampleInterface|\PHPUnit_Framework_MockObject_MockObject $sampleMock */
+        /** @var SampleInterface|\PHPUnit\Framework\MockObject\MockObject $sampleMock */
         $sampleMock = $this->getMockBuilder(SampleInterface::class)
             ->getMock();
         $sampleMock->expects($this->once())
             ->method('setId')
             ->with(null);
 
-        /** @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $productExtensionMock */
+        /** @var ProductExtensionInterface|\PHPUnit\Framework\MockObject\MockObject $productExtensionMock */
         $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getDownloadableProductSamples'])
             ->getMockForAbstractClass();
@@ -50,7 +50,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getDownloadableProductSamples')
             ->willReturn([$sampleMock]);
 
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();
@@ -80,7 +80,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteNonDownloadable()
     {
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();

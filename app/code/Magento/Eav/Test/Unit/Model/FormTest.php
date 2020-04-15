@@ -39,7 +39,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize form
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockBuilder(
             \Magento\Eav\Model\Form::class
@@ -58,18 +58,18 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             '_getFilteredFormAttributeCollection'
-        )->will(
-            $this->returnValue($this->_attributes)
+        )->willReturn(
+            $this->_attributes
         );
 
         $this->_entity = new \Magento\Framework\DataObject(['id' => 1, 'attribute_visible_user' => 'abc']);
-        $this->_model->expects($this->any())->method('getEntity')->will($this->returnValue($this->_entity));
+        $this->_model->expects($this->any())->method('getEntity')->willReturn($this->_entity);
     }
 
     /**
      * Unset form
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -129,14 +129,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             ['isValid', 'getMessages']
         )->getMock();
-        $validator->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
+        $validator->expects($this->once())->method('isValid')->willReturn($isValid);
         if ($messages) {
-            $validator->expects($this->once())->method('getMessages')->will($this->returnValue($messages));
+            $validator->expects($this->once())->method('getMessages')->willReturn($messages);
         } else {
             $validator->expects($this->never())->method('getMessages');
         }
 
-        $this->_model->expects($this->once())->method('_getValidator')->will($this->returnValue($validator));
+        $this->_model->expects($this->once())->method('_getValidator')->willReturn($validator);
 
         $data = ['test' => true];
         $this->assertEquals($expected, $this->_model->validateData($data));

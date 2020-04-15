@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\UpdateExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 
@@ -28,7 +28,7 @@ class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->gridExtensionMock = $this->createMock(Extension::class);
 

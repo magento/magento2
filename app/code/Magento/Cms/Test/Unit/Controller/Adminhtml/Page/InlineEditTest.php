@@ -12,40 +12,40 @@ use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
  */
 class InlineEditTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $message;
 
-    /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageCollection;
 
-    /** @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Model\Page|\PHPUnit\Framework\MockObject\MockObject */
     protected $cmsPage;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataProcessor;
 
-    /** @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $pageRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultJson;
 
     /** @var InlineEdit */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

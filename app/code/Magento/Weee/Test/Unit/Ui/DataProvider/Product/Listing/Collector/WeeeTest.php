@@ -23,28 +23,28 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     /** @var Weee */
     protected $model;
 
-    /** @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Weee\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $weeeHelperMock;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var PriceInfoExtensionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoExtensionInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $extensionAttributes;
 
-    /** @var WeeeAdjustmentAttributeInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WeeeAdjustmentAttributeInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $weeeAdjustmentAttributeFactory;
 
-    /** @var PriceInfoExtensionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoExtensionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $priceInfoExtensionFactory;
 
-    /** @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormattedPriceInfoBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $formattedPriceInfoBuilder;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->disableOriginalConstructor()
@@ -118,7 +118,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

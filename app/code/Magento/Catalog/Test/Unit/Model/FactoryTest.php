@@ -30,14 +30,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExceptionCreate()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->factory->create('null', []);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
 
@@ -54,12 +55,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('create')
             ->with($this->logicalOr($this->equalTo('model'), $this->equalTo('null')), $this->equalTo([]))
-            ->will($this->returnCallback(function ($className) {
+            ->willReturnCallback(function ($className) {
                 $returnValue = null;
                 if ($className == 'model') {
                     $returnValue = $this->model;
                 }
                 return $returnValue;
-            }));
+            });
     }
 }

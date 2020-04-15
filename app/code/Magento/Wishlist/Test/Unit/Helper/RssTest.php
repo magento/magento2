@@ -55,7 +55,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistFactoryMock = $this->getMockBuilder(\Magento\Wishlist\Model\WishlistFactory::class)
             ->disableOriginalConstructor()

@@ -11,17 +11,17 @@ use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
 class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var AbstractIndexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractIndexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexer;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
@@ -30,7 +30,7 @@ class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->indexBuilder = $this->createMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
@@ -81,13 +81,14 @@ class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not rebuild index for empty products array
      *
      * @return void
      */
     public function testExecuteListWithEmptyIds()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Could not rebuild index for empty products array');
+
         $this->indexer->executeList([]);
     }
 
@@ -105,13 +106,14 @@ class AbstractIndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't rebuild the index for an undefined product.
      *
      * @return void
      */
     public function testExecuteRowWithEmptyId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t rebuild the index for an undefined product.');
+
         $this->indexer->executeRow(null);
     }
 

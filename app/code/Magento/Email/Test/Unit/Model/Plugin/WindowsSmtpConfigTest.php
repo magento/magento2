@@ -24,12 +24,12 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
     private $windowsSmtpConfig;
 
     /**
-     * @var OsInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var OsInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $osInfoMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
@@ -43,13 +43,13 @@ class WindowsSmtpConfigTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
         $this->osInfoMock = $this->createMock(OsInfo::class);
-        $this->configMock = $this->createMock(ReinitableConfigInterface::class);
-        $this->transportMock = $this->createMock(TransportInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->transportMock = $this->getMockForAbstractClass(TransportInterface::class);
 
         $this->windowsSmtpConfig = $objectManager->getObject(
             WindowsSmtpConfig::class,

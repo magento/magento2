@@ -10,7 +10,7 @@ use Magento\Setup\Controller\ExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Setup\Controller\ExtensionGrid
@@ -56,7 +56,7 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
     const FORMATTED_TIME = '01:55PM';
     /**#@-*/
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->lastSyncData = [
             "lastSyncDate" => [

@@ -31,7 +31,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);

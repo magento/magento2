@@ -14,26 +14,26 @@ use \Magento\Catalog\Model\Product\Option\SaveHandler;
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SaveHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaveHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entity;
 
     /**
-     * @var Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionMock;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

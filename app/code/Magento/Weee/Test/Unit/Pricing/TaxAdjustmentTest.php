@@ -16,17 +16,17 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
@@ -35,28 +35,28 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $sortOrder = 5;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
         $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arg) {
                         return round($arg * 0.5, 2);
                     }
-                )
+                
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($arg) {
                         return $arg * 0.5;
                     }
-                )
+                
             );
 
         $this->adjustment = new TaxAdjustment(
@@ -106,7 +106,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->weeeHelperMock->expects($this->any())
             ->method('typeOfDisplay')
             ->with($displayTypes)
-            ->will($this->returnValue($weeeDisplayConfig));
+            ->willReturn($weeeDisplayConfig);
 
         $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
@@ -156,7 +156,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue($weeeAttributes));
+            ->willReturn($weeeAttributes);
 
         $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }

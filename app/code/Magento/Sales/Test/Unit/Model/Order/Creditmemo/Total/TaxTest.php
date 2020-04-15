@@ -16,7 +16,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -26,16 +26,16 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
@@ -65,7 +65,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 '__wakeup',
             ]
         );
-        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -91,17 +91,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         $this->creditmemo->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoData['is_last']));
+            ->willReturn($creditmemoData['is_last']);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($price, $type) use (&$roundingDelta) {
                         if (!isset($roundingDelta[$type])) {
                             $roundingDelta[$type] = 0;
@@ -110,7 +110,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                         $roundingDelta[$type] = $price - $roundedPrice;
                         return $roundedPrice;
                     }
-                )
+                
             );
 
         $this->model->collect($this->creditmemo);
@@ -754,11 +754,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $creditmemoItemData array
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCreditmemoItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItem */
         $orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
             [
@@ -770,7 +770,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
+        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject $creditmemoItem */
         $creditmemoItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo\Item::class,
             [
@@ -779,10 +779,10 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                 '__wakeup'
             ]
         );
-        $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $creditmemoItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $creditmemoItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
     }

@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
 class PluginScannerTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\PluginScanner();
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
@@ -18,7 +18,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

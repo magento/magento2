@@ -8,32 +8,32 @@ namespace Magento\ImportExport\Test\Unit\Model\Report;
 class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ImportExport\Helper\Report|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Helper\Report|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportHelperMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\CsvFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $outputCsvFactoryMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\Csv|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $outputCsvMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Source\CsvFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Source\CsvFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceCsvFactoryMock;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Adapter\Csv|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sourceCsvMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
@@ -42,7 +42,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
      */
     protected $csvModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $testDelimiter = 'some_delimiter';

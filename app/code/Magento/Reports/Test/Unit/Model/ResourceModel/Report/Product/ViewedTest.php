@@ -21,67 +21,67 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
     protected $viewed;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var \Magento\Reports\Model\FlagFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\FlagFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flagFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\ResourceModel\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Statement_Interface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $zendDbMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $backendMock;
 
     /**
-     * @var \Magento\Reports\Model\Flag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Reports\Model\Flag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flagMock;
 
@@ -89,7 +89,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->zendDbMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
         $this->zendDbMock->expects($this->any())->method('fetchColumn')->willReturn([]);
@@ -126,12 +126,12 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback(
+        $this->resourceMock->expects($this->any())->method('getTableName')->willReturnCallback(
+            
                 function ($arg) {
                     return $arg;
                 }
-            )
+            
         );
 
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)

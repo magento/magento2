@@ -48,7 +48,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
         $this->_objectManager = Bootstrap::getObjectManager();

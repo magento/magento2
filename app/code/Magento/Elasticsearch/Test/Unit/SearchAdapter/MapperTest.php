@@ -24,17 +24,17 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $queryBuilder;
 
     /**
-     * @var MatchQueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MatchQueryBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $matchQueryBuilder;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
@@ -42,7 +42,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->queryBuilder = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Query\Builder::class)
             ->setMethods([
@@ -91,10 +91,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test buildQuery() method with exception
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildQueryFailure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
