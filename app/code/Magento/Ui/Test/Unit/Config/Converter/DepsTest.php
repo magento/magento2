@@ -1,22 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
-use Magento\Framework\Data\Argument\Interpreter\Composite;
 use Magento\Ui\Config\Converter\Deps;
 use Magento\Ui\Config\ConverterUtils;
+use PHPUnit\Framework\TestCase;
 
-class DepsTest extends \PHPUnit\Framework\TestCase
+class DepsTest extends TestCase
 {
     /**
      * @var Deps
      */
     private $converter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->converter = new Deps(new ConverterUtils());
     }

@@ -1,57 +1,62 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Customer\Model\ResourceModel\Group;
+use Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup as CustomerGroupPlugin;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Customer\Model\Group as CustomerGroupModel;
+use Magento\Customer\Model\ResourceModel\Group as CustomerGroupResourceModel;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Search\EngineResolverInterface;
-use Magento\Search\Model\EngineResolver;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\AdvancedSearch\Model\Indexer\Fulltext\Plugin\CustomerGroup
+ */
 class CustomerGroupTest extends TestCase
 {
     /**
-     * @var MockObject|IndexerInterface
+     * Testable Object
+     *
+     * @var CustomerGroupPlugin
      */
-    protected $indexerMock;
+    private $model;
 
     /**
-     * @var MockObject|Group
+     * @var IndexerInterface|MockObject
      */
-    protected $subjectMock;
+    private $indexerMock;
 
     /**
-     * @var MockObject|ClientOptionsInterface
+     * @var Group|MockObject
      */
-    protected $customerOptionsMock;
+    private $subjectMock;
+
+    /**
+     * @var ClientOptionsInterface|MockObject
+     */
+    private $customerOptionsMock;
 
     /**
      * @var IndexerRegistry|MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
      * @var EngineResolverInterface|MockObject
      */
-    protected $engineResolverMock;
-
-    /**
-     * @var CustomerGroup
-     */
-    protected $model;
+    private $engineResolverMock;
 
     protected function setUp(): void
     {
-        $this->subjectMock = $this->createMock(Group::class);
+        $this->subjectMock = $this->createMock(CustomerGroupResourceModel::class);
         $this->customerOptionsMock = $this->createMock(
             ClientOptionsInterface::class
         );
@@ -69,10 +74,10 @@ class CustomerGroupTest extends TestCase
             ['get']
         );
         $this->engineResolverMock = $this->createPartialMock(
-            EngineResolver::class,
+            EngineResolverInterface::class,
             ['getCurrentSearchEngine']
         );
-        $this->model = new CustomerGroup(
+        $this->model = new CustomerGroupPlugin(
             $this->indexerRegistryMock,
             $this->customerOptionsMock,
             $this->engineResolverMock
@@ -87,23 +92,27 @@ class CustomerGroupTest extends TestCase
      * @return void
      * @dataProvider aroundSaveDataProvider
      */
-    public function testAroundSave($searchEngine, $isObjectNew, $isTaxClassIdChanged, $invalidateCounter)
-    {
+    public function testAroundSave(
+        string $searchEngine,
+        bool $isObjectNew,
+        bool $isTaxClassIdChanged,
+        int $invalidateCounter
+    ): void {
         $this->engineResolverMock->expects($this->once())
             ->method('getCurrentSearchEngine')
             ->will($this->returnValue($searchEngine));
 
         $groupMock = $this->createPartialMock(
-            \Magento\Customer\Model\Group::class,
+            CustomerGroupModel::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
-        $groupMock->method('isObjectNew')->will($this->returnValue($isObjectNew));
-        $groupMock
+        $groupMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
+        $groupMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('tax_class_id')
             ->will($this->returnValue($isTaxClassIdChanged));
 
-        $closureMock = function (\Magento\Customer\Model\Group $object) use ($groupMock) {
+        $closureMock = function (CustomerGroupModel $object) use ($groupMock) {
             $this->assertEquals($object, $groupMock);
             return $this->subjectMock;
         };
@@ -111,7 +120,7 @@ class CustomerGroupTest extends TestCase
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
-            ->with(Fulltext::INDEXER_ID)
+            ->with(FulltextIndexer::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
 
         $this->assertEquals(
@@ -121,9 +130,11 @@ class CustomerGroupTest extends TestCase
     }
 
     /**
+     * Data Provider for testAroundSave
+     *
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public function aroundSaveDataProvider(): array
     {
         return [
             ['mysql', false, false, 0],

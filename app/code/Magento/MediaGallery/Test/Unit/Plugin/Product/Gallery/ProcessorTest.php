@@ -52,7 +52,7 @@ class ProcessorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processorSubjectMock = $this->createMock(ProcessorSubject::class);
         $this->productMock = $this->createMock(Product::class);

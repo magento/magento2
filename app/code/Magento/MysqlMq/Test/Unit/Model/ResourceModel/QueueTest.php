@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,27 @@
 
 namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MysqlMq\Model\QueueManagement;
+use Magento\MysqlMq\Model\ResourceModel\Queue;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit test for Queue resource model.
  */
-class QueueTest extends \PHPUnit\Framework\TestCase
+class QueueTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resources;
 
     /**
-     * @var \Magento\MysqlMq\Model\ResourceModel\Queue
+     * @var Queue
      */
     private $queue;
 
@@ -26,14 +35,14 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resources = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resources = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->queue = $objectManager->getObject(
-            \Magento\MysqlMq\Model\ResourceModel\Queue::class,
+            Queue::class,
             [
                 '_resources' => $this->resources,
             ]
@@ -51,7 +60,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $message = 'messageBody';
         $tableName = 'queue_message';
         $messageId = 2;
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['insert', 'lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -75,7 +84,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $messages = ['messageBody0', 'messageBody1'];
         $tableName = 'queue_message';
         $messageIds = [3, 4];
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['insertMultiple', 'lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -92,7 +101,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
                 ]
             )->willReturn(2);
         $connection->expects($this->once())->method('lastInsertId')->with($tableName)->willReturn($messageIds[0]);
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['qm' => $tableName], ['id'])->willReturnSelf();
@@ -113,14 +122,14 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $queueNames = ['queueName0', 'queueName1'];
         $queueIds = [5, 6];
         $tableNames = ['queue', 'queue_message_status'];
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1]);
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['queue' => $tableNames[0]])->willReturnSelf();
@@ -134,12 +143,12 @@ class QueueTest extends \PHPUnit\Framework\TestCase
                 [
                     $queueIds[0],
                     $messageId,
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_NEW
+                    QueueManagement::MESSAGE_STATUS_NEW
                 ],
                 [
                     $queueIds[1],
                     $messageId,
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_NEW
+                    QueueManagement::MESSAGE_STATUS_NEW
                 ],
             ]
         )->willReturn(4);
@@ -157,21 +166,21 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $queueName = 'queueName0';
         $tableNames = ['queue_message', 'queue_message_status', 'queue'];
         $messages = [['message0_data'], ['message1_data']];
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(3))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'], [$tableNames[2], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1], $tableNames[2]);
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['queue_message' => $tableNames[0]],
             [
-                \Magento\MysqlMq\Model\QueueManagement::MESSAGE_TOPIC => 'topic_name',
-                \Magento\MysqlMq\Model\QueueManagement::MESSAGE_BODY => 'body'
+                QueueManagement::MESSAGE_TOPIC => 'topic_name',
+                QueueManagement::MESSAGE_BODY => 'body'
             ]
         )->willReturnSelf();
         $select->expects($this->exactly(2))->method('join')->withConsecutive(
@@ -179,26 +188,26 @@ class QueueTest extends \PHPUnit\Framework\TestCase
                 ['queue_message_status' => $tableNames[1]],
                 'queue_message.id = queue_message_status.message_id',
                 [
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_QUEUE_RELATION_ID => 'id',
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_QUEUE_ID => 'queue_id',
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_ID => 'message_id',
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS => 'status',
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_UPDATED_AT => 'updated_at',
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_NUMBER_OF_TRIALS => 'number_of_trials'
+                    QueueManagement::MESSAGE_QUEUE_RELATION_ID => 'id',
+                    QueueManagement::MESSAGE_QUEUE_ID => 'queue_id',
+                    QueueManagement::MESSAGE_ID => 'message_id',
+                    QueueManagement::MESSAGE_STATUS => 'status',
+                    QueueManagement::MESSAGE_UPDATED_AT => 'updated_at',
+                    QueueManagement::MESSAGE_NUMBER_OF_TRIALS => 'number_of_trials'
                 ]
             ],
             [
                 ['queue' => $tableNames[2]],
                 'queue.id = queue_message_status.queue_id',
-                [\Magento\MysqlMq\Model\QueueManagement::MESSAGE_QUEUE_NAME => 'name']
+                [QueueManagement::MESSAGE_QUEUE_NAME => 'name']
             ]
         )->willReturnSelf();
         $select->expects($this->exactly(2))->method('where')->withConsecutive(
             [
                 'queue_message_status.status IN (?)',
                 [
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_NEW,
-                    \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED
+                    QueueManagement::MESSAGE_STATUS_NEW,
+                    QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED
                 ]
             ],
             [
@@ -223,20 +232,20 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     {
         $messageIds = [1, 2];
         $tableNames = ['queue_message_status', 'queue_message'];
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1]);
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())
             ->method('from')->with(['queue_message_status' => $tableNames[0]], ['message_id'])->willReturnSelf();
         $select->expects($this->once())->method('where')
-            ->with('status <> ?', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_TO_BE_DELETED)
+            ->with('status <> ?', QueueManagement::MESSAGE_STATUS_TO_BE_DELETED)
             ->willReturnSelf();
         $select->expects($this->once())->method('distinct')->willReturnSelf();
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($messageIds);
@@ -254,7 +263,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     {
         $relationIds = [1, 2];
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
@@ -262,12 +271,12 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->exactly(2))->method('update')->withConsecutive(
             [
                 $tableName,
-                ['status' => \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
+                ['status' => QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
                 ['id = ?' => $relationIds[0]]
             ],
             [
                 $tableName,
-                ['status' => \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
+                ['status' => QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
                 ['id = ?' => $relationIds[1]]
             ]
         )->willReturnOnConsecutiveCalls(1, 0);
@@ -283,7 +292,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     {
         $relationId = 1;
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
@@ -291,7 +300,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('update')->with(
             $tableName,
             [
-                'status' => \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED,
+                'status' => QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED,
                 'number_of_trials' => new \Zend_Db_Expr('number_of_trials+1')
             ],
             ['id = ?' => $relationId]
@@ -307,9 +316,9 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     public function testChangeStatus()
     {
         $relationIds = [1, 2];
-        $status = \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED;
+        $status = QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED;
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\SampleData\Model\Dependency;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\ArrayInputFactory;
@@ -22,44 +23,44 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
 abstract class AbstractSampleDataCommandTest extends TestCase
 {
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
     protected $directoryReadMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     protected $directoryWriteMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dependency|MockObject
      */
     protected $sampleDataDependencyMock;
 
     /**
-     * @var ArrayInputFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayInputFactory|MockObject
      */
     protected $arrayInputFactoryMock;
 
     /**
-     * @var Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var Application|MockObject
      */
     protected $applicationMock;
 
     /**
-     * @var ApplicationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplicationFactory|MockObject
      */
     protected $applicationFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directoryReadMock = $this->createMock(ReadInterface::class);
         $this->directoryWriteMock = $this->createMock(WriteInterface::class);

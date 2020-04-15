@@ -1,22 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use Magento\Ui\Component\Listing;
-use Magento\Ui\Component\Listing\Columns;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Listing;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ListingTest
- */
-class ListingTest extends \PHPUnit\Framework\TestCase
+class ListingTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
@@ -28,12 +27,12 @@ class ListingTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             false
@@ -50,7 +49,7 @@ class ListingTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->never())->method('getProcessor');
         /** @var Listing $listing */
         $listing = $this->objectManager->getObject(
-            \Magento\Ui\Component\Listing::class,
+            Listing::class,
             [
                 'context' => $this->contextMock,
                 'data' => []
@@ -67,7 +66,7 @@ class ListingTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare()
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -77,7 +76,7 @@ class ListingTest extends \PHPUnit\Framework\TestCase
         ];
         /** @var Listing $listing */
         $listing = $this->objectManager->getObject(
-            \Magento\Ui\Component\Listing::class,
+            Listing::class,
             [
                 'context' => $this->contextMock,
                 'data' => [

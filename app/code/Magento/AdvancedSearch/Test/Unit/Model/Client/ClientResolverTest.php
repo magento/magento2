@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Client;
 
+use InvalidArgumentException;
+use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
@@ -15,10 +18,15 @@ use Magento\Framework\Search\EngineResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\AdvancedSearch\Model\Client\ClientResolver
+ */
 class ClientResolverTest extends TestCase
 {
     /**
-     * @var ClientResolver|MockObject
+     * Testable Object
+     *
+     * @var ClientResolver
      */
     private $model;
 
@@ -47,7 +55,7 @@ class ClientResolverTest extends TestCase
         );
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));
@@ -80,9 +88,9 @@ class ClientResolverTest extends TestCase
         $this->assertInstanceOf(ClientInterface::class, $result);
     }
 
-    public function testCreateExceptionThrown()
+    public function testCreateExceptionThrown(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('engineFactoryClass'))
             ->will($this->returnValue('t'));
@@ -90,13 +98,13 @@ class ClientResolverTest extends TestCase
         $this->model->create('engineName');
     }
 
-    public function testCreateLogicException()
+    public function testCreateLogicException(): void
     {
-        $this->expectException('LogicException');
+        $this->expectException(LogicException::class);
         $this->model->create('input');
     }
 
-    public function testGetCurrentEngine()
+    public function testGetCurrentEngine(): void
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));

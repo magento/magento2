@@ -1,48 +1,54 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
+use Magento\Config\Model\Config\Structure\AbstractElement;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AbstractElementTest extends \PHPUnit\Framework\TestCase
+class AbstractElementTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\AbstractElement
+     * @var AbstractElement
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\AbstractElement | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|MockObject
      */
     private $elementVisibilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->moduleManagerMock = $this->createPartialMock(
-            \Magento\Framework\Module\Manager::class,
+            Manager::class,
             ['isOutputEnabled']
         );
 
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Config\Model\Config\Structure\AbstractElement::class,
+            AbstractElement::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'moduleManager' => $this->moduleManagerMock,
@@ -54,7 +60,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             $this->_model,
             'elementVisibility',
             $this->elementVisibilityMock,
-            \Magento\Config\Model\Config\Structure\AbstractElement::class
+            AbstractElement::class
         );
     }
 
@@ -153,11 +159,11 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+                ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }
@@ -185,11 +191,11 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 1],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 1, 'showInWebsite' => 0],
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+                ScopeInterface::SCOPE_WEBSITE
             ]
         ];
     }

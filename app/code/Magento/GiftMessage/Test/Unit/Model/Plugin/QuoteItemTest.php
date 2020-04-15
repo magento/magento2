@@ -1,11 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
-class QuoteItemTest extends \PHPUnit\Framework\TestCase
+use Magento\GiftMessage\Helper\Message;
+use Magento\GiftMessage\Model\Plugin\QuoteItem as QuoteItemPlugin;
+use Magento\Quote\Model\Quote\Item\ToOrderItem;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class QuoteItemTest extends TestCase
 {
     /**
      * @var \Magento\Bundle\Model\Plugin\QuoteItem
@@ -13,7 +20,7 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteItemMock;
 
@@ -23,24 +30,24 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $orderItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
+            Item::class,
             ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup']
         );
         $this->quoteItemMock = $this->createPartialMock(
@@ -51,12 +58,12 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
-        $this->subjectMock = $this->createMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class);
+        $this->subjectMock = $this->createMock(ToOrderItem::class);
         $this->helperMock = $this->createPartialMock(
-            \Magento\GiftMessage\Helper\Message::class,
+            Message::class,
             ['setGiftMessageId', 'isMessagesAllowed']
         );
-        $this->model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->helperMock);
+        $this->model = new QuoteItemPlugin($this->helperMock);
     }
 
     public function testAfterItemToOrderItem()

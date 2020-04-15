@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedSearch\Test\Unit\Model;
 
+use InvalidArgumentException;
 use Magento\AdvancedSearch\Model\SuggestedQueries;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -15,27 +18,32 @@ use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\AdvancedSearch\Model\SuggestedQueries
+ */
 class SuggestedQueriesTest extends TestCase
 {
     /**
-     * @var SuggestedQueries ;
+     * Testable Object
+     *
+     * @var SuggestedQueries;
      */
-    protected $model;
+    private $model;
 
     /**
      * @var EngineResolverInterface|MockObject
      */
-    protected $engineResolverMock;
+    private $engineResolverMock;
 
     /**
      * @var ObjectManagerInterface|MockObject
      */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
      * Set up test environment.
@@ -48,23 +56,22 @@ class SuggestedQueriesTest extends TestCase
             ->setMethods(['getCurrentSearchEngine'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->engineResolverMock
+        $this->engineResolverMock->expects($this->any())
             ->method('getCurrentSearchEngine')
             ->willReturn('my_engine');
 
-        /**
-         * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|MockObject
-         */
+        /** @var SuggestedQueriesInterface|MockObject $suggestedQueriesMock */
         $suggestedQueriesMock = $this->createMock(SuggestedQueriesInterface::class);
-        $suggestedQueriesMock
+        $suggestedQueriesMock->expects($this->any())
             ->method('isResultsCountEnabled')
             ->willReturn(true);
-        $suggestedQueriesMock
+        $suggestedQueriesMock->expects($this->any())
             ->method('getItems')
             ->willReturn([]);
-
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->objectManagerMock
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->with('search_engine')
             ->willReturn($suggestedQueriesMock);
@@ -85,7 +92,7 @@ class SuggestedQueriesTest extends TestCase
      *
      * @return void
      */
-    public function testIsResultsCountEnabled()
+    public function testIsResultsCountEnabled(): void
     {
         $result = $this->model->isResultsCountEnabled();
         $this->assertTrue($result);
@@ -96,16 +103,17 @@ class SuggestedQueriesTest extends TestCase
      *
      * @return void
      */
-    public function testIsResultsCountEnabledException()
+    public function testIsResultsCountEnabledException(): void
     {
-        $this->expectException('InvalidArgumentException');
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(null);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
-        /* @var $model \Magento\AdvancedSearch\Model\SuggestedQueries */
+        /* @var SuggestedQueries $model */
         $model = $objectManagerHelper->getObject(
             SuggestedQueries::class,
             [
@@ -114,6 +122,7 @@ class SuggestedQueriesTest extends TestCase
                 'data' => ['my_engine' => 'search_engine']
             ]
         );
+        $this->expectException(InvalidArgumentException::class);
         $model->isResultsCountEnabled();
     }
 
@@ -122,9 +131,9 @@ class SuggestedQueriesTest extends TestCase
      *
      * @return void
      */
-    public function testGetItems()
+    public function testGetItems(): void
     {
-        /** @var $queryInterfaceMock \Magento\Search\Model\QueryInterface */
+        /** @var QueryInterface|MockObject $queryInterfaceMock */
         $queryInterfaceMock = $this->createMock(QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
