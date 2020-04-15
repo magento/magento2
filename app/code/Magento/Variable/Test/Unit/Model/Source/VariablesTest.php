@@ -3,39 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Variable\Test\Unit\Model\Source;
+
+use Magento\Config\Model\Config\Structure\SearchInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\Source\Variables;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Variable\Model\Source\Variables
  */
-class VariablesTest extends \PHPUnit\Framework\TestCase
+class VariablesTest extends TestCase
 {
     /**
      * Variables model
      *
-     * @var \Magento\Variable\Model\Source\Variables
+     * @var Variables
      */
-    protected $model;
+    private $model;
 
     /**
      * Config variables
      *
      * @var array
      */
-    protected $configVariables;
+    private $configVariables;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchInterface|MockObject
      */
     private $configMock;
 
-    protected function setup()
+    /**
+     * Set Up
+     */
+    protected function setup(): void
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure\SearchInterface::class)
+        $this->configMock = $this->getMockBuilder(SearchInterface::class)
             ->setMethods(['getElementByConfigPath'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->configVariables = [
             'web' => [
                 'web/unsecure/base_url' => '1',
@@ -43,7 +55,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $element1 = $this->getMockBuilder(\Magento\Config\Model\Config\StructureElementInterface::class)
+        $element1 = $this->getMockBuilder(StructureElementInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel'])
             ->getMockForAbstractClass();
@@ -59,13 +71,16 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             ['web/secure/base_url', $element2]
         ]);
 
-        $this->model = $helper->getObject(\Magento\Variable\Model\Source\Variables::class, [
+        $this->model = $helper->getObject(Variables::class, [
             'configStructure' => $this->configMock,
             'configPaths' => $this->configVariables
         ]);
     }
 
-    public function testToOptionArrayWithoutGroup()
+    /**
+     * Testing to option array without group
+     */
+    public function testToOptionArrayWithoutGroup(): void
     {
         $optionArray = $this->model->toOptionArray();
         $this->assertEquals(count($this->configVariables['web']), count($optionArray));
@@ -78,7 +93,10 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testToOptionArrayWithGroup()
+    /**
+     * Testing to option array with group
+     */
+    public function testToOptionArrayWithGroup(): void
     {
         $optionArray = $this->model->toOptionArray(true);
         $this->assertEquals('Web', $optionArray[0]['label']);
@@ -96,7 +114,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     /**
      * Get expected results for options array
      */
-    private function getExpectedOptionsResults()
+    private function getExpectedOptionsResults(): array
     {
         return [
             [
