@@ -323,6 +323,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->with($priceInfoMock)
             ->willReturn(
                 [
+                    'baseOldPrice' => [
+                        'amount' => $amount,
+                    ],
                     'oldPrice' => [
                         'amount' => $amount,
                     ],
@@ -362,6 +365,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'currencyFormat' => '%s',
             'optionPrices' => [
                 $productId => [
+                    'baseOldPrice' => [
+                        'amount' => $amount,
+                    ],
                     'oldPrice' => [
                         'amount' => $amount,
                     ],
@@ -385,6 +391,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ],
             'priceFormat' => [],
             'prices' => [
+                'baseOldPrice' => [
+                    'amount' => $amount,
+                ],
                 'oldPrice' => [
                     'amount' => $amount,
                 ],
