@@ -109,9 +109,9 @@ class Login extends \Magento\Backend\App\Action
 
         $user = $this->authSession->getUser();
         $login->generate($user->getId());
-        $customerStoreId = $this->storeManager->getStore();
+        $store = $this->storeManager->getStore();
 
-        if (null === $customerStoreId) {
+        if (null === $store) {
             $store = $this->storeManager->getDefaultStoreView();
         }
 
