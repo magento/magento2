@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,106 +6,110 @@
 namespace Magento\MediaStorage\Test\Unit\Service;
 
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
+use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
+use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 use Magento\Catalog\Model\View\Asset\Image as AssetImage;
+use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\View;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\Image;
-use Magento\Catalog\Model\Product\Media\ConfigInterface as MediaConfig;
-use Magento\Framework\App\State;
+use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
-use Magento\Framework\Config\View;
-use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Service\ImageResize;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
-use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageResizeTest extends \PHPUnit\Framework\TestCase
+class ImageResizeTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Service\ImageResize
+     * @var ImageResize
      */
     protected $service;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $appStateMock;
 
     /**
-     * @var MediaConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var MediaConfig|MockObject
      */
     protected $imageConfigMock;
 
     /**
-     * @var ProductImage|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImage|MockObject
      */
     protected $productImageMock;
 
     /**
-     * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageFactory|MockObject
      */
     protected $imageFactoryMock;
 
     /**
-     * @var Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var Image|MockObject
      */
     protected $imageMock;
 
     /**
-     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ParamsBuilder|MockObject
      */
     protected $paramsBuilderMock;
 
     /**
-     * @var ViewConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewConfig|MockObject
      */
     protected $viewConfigMock;
 
     /**
-     * @var View|\PHPUnit_Framework_MockObject_MockObject
+     * @var View|MockObject
      */
     protected $viewMock;
 
     /**
-     * @var AssetImage|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetImage|MockObject
      */
     protected $assetImageMock;
 
     /**
-     * @var AssetImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetImageFactory|MockObject
      */
     protected $assetImageFactoryMock;
 
     /**
-     * @var ThemeCustomizationConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeCustomizationConfig|MockObject
      */
     protected $themeCustomizationConfigMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $themeCollectionMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|MockObject
      */
     protected $databaseMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $mediaDirectoryMock;
 
@@ -119,7 +123,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
      */
     private $testfilepath;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     private $storeManager;
 
@@ -127,7 +131,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testfilename = "image.jpg";
         $this->testfilepath = "/image.jpg";
@@ -199,8 +203,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->any())
             ->method('getMediaEntities')
             ->willReturn(
-                ['product_small_image' =>
-                    [
+                ['product_small_image' => [
                         'type' => 'small_image',
                         'width' => 75,
                         'height' => 75
@@ -211,7 +214,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getViewConfig')
             ->willReturn($this->viewMock);
 
-        $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store
             ->expects($this->any())
             ->method('getId')
@@ -221,7 +224,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getStores')
             ->willReturn([$store]);
 
-        $this->service = new \Magento\MediaStorage\Service\ImageResize(
+        $this->service = new ImageResize(
             $this->appStateMock,
             $this->imageConfigMock,
             $this->productImageMock,
@@ -237,7 +240,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->service);
     }

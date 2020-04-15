@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,16 @@
 namespace Magento\Analytics\Test\Unit\ReportXml\Config;
 
 use Magento\Analytics\ReportXml\Config\Mapper;
+use PHPUnit\Framework\TestCase;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+class MapperTest extends TestCase
 {
     /**
      * @var Mapper
      */
     private $mapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new Mapper();
     }

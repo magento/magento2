@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,20 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CacheCleanerTest extends \PHPUnit\Framework\TestCase
+class CacheCleanerTest extends TestCase
 {
     /**
      * @var CacheCleaner
@@ -25,41 +27,41 @@ class CacheCleanerTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheContext|MockObject
      */
     private $cacheContextMock;
 
     /**
-     * @var MetadataPool |\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();

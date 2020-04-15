@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,16 +12,18 @@ use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
-use Magento\Framework\Filesystem\DriverPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class DependencyTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DependencyTest extends \PHPUnit\Framework\TestCase
+class DependencyTest extends TestCase
 {
     /**
      * @dataProvider dataPackagesFromComposerSuggest
@@ -36,17 +38,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         array $suggestionsFromLockFile,
         array $expectedPackages
     ) {
-        /** @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject $composerInformation */
+        /** @var ComposerInformation|MockObject $composerInformation */
         $composerInformation = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()
             ->getMock();
         $composerInformation->method('getSuggestedPackages')
             ->willReturn($suggestionsFromLockFile);
 
-        /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
+        /** @var Filesystem|MockObject $filesystem */
         $filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
 
-        /** @var PackageFactory|\PHPUnit_Framework_MockObject_MockObject $packageFactory */
+        /** @var PackageFactory|MockObject $packageFactory */
         $packageFactory = $this->getMockBuilder(PackageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -56,7 +58,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 return new Package($args['json']);
             });
 
-        /** @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject $componentRegistrar */
+        /** @var ComponentRegistrarInterface|MockObject $componentRegistrar */
         $componentRegistrar = $this->getMockBuilder(ComponentRegistrarInterface::class)
             ->getMockForAbstractClass();
         $componentRegistrar->method('getPaths')
@@ -65,7 +67,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $moduleDirectories
             );
 
-        $directoryReadFactory = $this->getMockBuilder(Filesystem\Directory\ReadFactory::class)
+        $directoryReadFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -178,11 +180,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $composerJsonContent
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     public function stubComposerJsonReader(array $composerJsonContent)
     {
-        $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
+        $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $stub->method('isExist')
             ->with('composer.json')
@@ -197,11 +199,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     public function stubFileNotFoundReader()
     {
-        $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
+        $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $stub->method('isExist')
             ->with('composer.json')

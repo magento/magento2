@@ -51,7 +51,7 @@ class ViewTest extends TestCase
      */
     protected $resultPageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,32 +13,31 @@ use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DataProductHashMapTest
- */
-class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
+class DataProductHashMapTest extends TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|MockObject */
     private $dataCategoryMapMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|MockObject
      */
     private $productCollectionMock;
 
-    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->hashMapPoolMock = $this->createMock(HashMapPool::class);
         $this->dataCategoryMapMock = $this->createMock(DataCategoryHashMap::class);

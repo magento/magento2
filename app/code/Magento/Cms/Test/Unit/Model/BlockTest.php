@@ -13,11 +13,13 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Cms\Model\Block
  */
-class BlockTest extends \PHPUnit\Framework\TestCase
+class BlockTest extends TestCase
 {
     /**
      * Testable Object
@@ -34,17 +36,17 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var BlockResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockResource|MockObject
      */
     private $resourceMock;
 
@@ -53,7 +55,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(BlockResource::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
@@ -114,7 +116,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $result = $this->blockModel->getIdentities();
-        self::assertInternalType('array', $result);
+        $this->assertInternalType('array', $result);
     }
 
     /**
@@ -332,6 +334,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetAvailableStatuses()
     {
         $result = $this->blockModel->getAvailableStatuses();
-        self::assertInternalType('array', $result);
+        $this->assertInternalType('array', $result);
     }
 }

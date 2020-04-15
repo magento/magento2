@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,9 +7,11 @@
 namespace Magento\Backend\Test\Unit\Model\Config\SessionLifetime;
 
 use Magento\Backend\Model\Config\SessionLifetime\BackendModel;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class BackendModelTest extends \PHPUnit\Framework\TestCase
+class BackendModelTest extends TestCase
 {
     /**
      * @dataProvider adminSessionLifetimeDataProvider
@@ -18,10 +20,10 @@ class BackendModelTest extends \PHPUnit\Framework\TestCase
     {
         /** @var BackendModel $model */
         $model = (new ObjectManager($this))->getObject(
-            \Magento\Backend\Model\Config\SessionLifetime\BackendModel::class
+            BackendModel::class
         );
         if ($errorMessage !== null) {
-            $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+            $this->expectException(LocalizedException::class);
             $this->expectExceptionMessage($errorMessage);
         }
         $model->setValue($value);

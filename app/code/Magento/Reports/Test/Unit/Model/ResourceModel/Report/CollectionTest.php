@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,16 +7,17 @@
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report;
 
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\ResourceModel\Report\Collection;
 use Magento\Reports\Model\ResourceModel\Report\Collection\Factory as ReportCollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CollectionTest
- *
  * @covers \Magento\Reports\Model\ResourceModel\Report\Collection
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var Collection
@@ -24,24 +25,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $collection;
 
     /**
-     * @var EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $timezoneMock;
 
     /**
-     * @var ReportCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportCollectionFactory|MockObject
      */
     protected $factoryMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
         $this->timezoneMock = $this->createMock(TimezoneInterface::class);
@@ -117,7 +118,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->setInterval($fromDate, $toDate);
         $reports = $this->collection->getReports();
         foreach ($reports as $report) {
-            $this->assertInstanceOf(\Magento\Framework\DataObject::class, $report);
+            $this->assertInstanceOf(DataObject::class, $report);
             $reportData = $report->getData();
             $this->assertTrue(empty($reportData['children']));
             $this->assertTrue($reportData['is_empty']);
