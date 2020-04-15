@@ -37,6 +37,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     public function __construct(FrontendInterface $cache)
     {
         $this->cache = $cache;
+        $this->lockSign = $this->generateLockSign();
     }
 
     /**
@@ -45,7 +46,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     public function lock(string $name, int $timeout = -1): bool
     {
         if (empty($this->lockSign)) {
-            $this->lockSign = \bin2hex(\random_bytes(8));
+            $this->lockSign = $this->generateLockSign();
         }
 
         $data = $this->cache->load($this->getIdentifier($name));
@@ -105,5 +106,28 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     private function getIdentifier(string $cacheIdentifier): string
     {
         return self::LOCK_PREFIX . $cacheIdentifier;
+    }
+
+    /**
+     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
+     *
+     * @return string
+     */
+    private function generateLockSign()
+    {
+        $sign = implode(
+            '-',
+            [
+                \getmypid(), \crc32(\gethostname())
+            ]
+        );
+
+        try {
+            $sign .= '-' . \bin2hex(\random_bytes(4));
+        } catch (\Exception $e) {
+            $sign .= '-' . \rand(0, 1000);
+        }
+
+        return $sign;
     }
 }
