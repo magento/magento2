@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,16 @@
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\ExcludeList;
+use PHPUnit\Framework\TestCase;
 
-class ExcludeListTest extends \PHPUnit\Framework\TestCase
+class ExcludeListTest extends TestCase
 {
     /**
      * @var ExcludeList
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ExcludeList(
             [
