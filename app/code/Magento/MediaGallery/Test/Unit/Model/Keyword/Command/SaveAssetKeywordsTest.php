@@ -18,9 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * SaveAssetKeywordsTest.
- */
 class SaveAssetKeywordsTest extends TestCase
 {
     /**

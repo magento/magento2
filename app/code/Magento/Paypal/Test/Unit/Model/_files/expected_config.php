@@ -18,6 +18,7 @@ return [
         'blue',
         'my_label',
         'mx',
+        true,
         [
             'merchantId' => 'merchant',
             'environment' => 'sandbox',
@@ -48,6 +49,7 @@ return [
         'blue',
         'my_label',
         'br',
+        true,
         [
             'merchantId' => 'merchant',
             'environment' => 'sandbox',
@@ -78,6 +80,7 @@ return [
         'blue',
         'my_label',
         'br',
+        true,
         [
             'merchantId' => 'merchant',
             'environment' => 'sandbox',
@@ -107,6 +110,7 @@ return [
         'blue',
         'my_label',
         'br',
+        true,
         [
             'merchantId' => 'merchant',
             'environment' => 'sandbox',
@@ -123,5 +127,36 @@ return [
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
-    ]
+    ],
+    'checkout_with_paypal_guest_checkout_disabled' => [
+        'cart',
+        'en_BR',
+        true,
+        null,
+        'horizontal',
+        'small',
+        'pillow',
+        'installment',
+        'blue',
+        'my_label',
+        'br',
+        false,
+        [
+            'merchantId' => 'merchant',
+            'environment' => 'sandbox',
+            'locale' => 'en_BR',
+            'allowedFunding' => ['CREDIT', 'ELV'],
+            'disallowedFunding' => ['CARD'],
+            'styles' => [
+                'layout' => 'horizontal',
+                'size' => 'small',
+                'color' => 'blue',
+                'shape' => 'pillow',
+                'label' => 'installment',
+                'installmentperiod' => 0
+            ],
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
+        ]
+    ],
 ];

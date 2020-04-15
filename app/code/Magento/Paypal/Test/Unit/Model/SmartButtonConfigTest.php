@@ -8,17 +8,20 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SmartButtonConfig;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Paypal\Model\ConfigFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for smart button config
+ */
 class SmartButtonConfigTest extends TestCase
 {
     /**
-     * @var SmartButtonConfig
+     * @var \Magento\Paypal\Model\SmartButtonConfig
      */
     private $model;
 
@@ -32,7 +35,10 @@ class SmartButtonConfigTest extends TestCase
      */
     private $configMock;
 
-    protected function setUp(): void
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
         $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -64,6 +70,7 @@ class SmartButtonConfigTest extends TestCase
      *
      * @param string $page
      * @param string $locale
+     * @param bool $isCustomize
      * @param string $disallowedFundings
      * @param string $layout
      * @param string $size
@@ -72,6 +79,7 @@ class SmartButtonConfigTest extends TestCase
      * @param string $color
      * @param string $installmentPeriodLabel
      * @param string $installmentPeriodLocale
+     * @param string $isPaypalGuestCheckoutEnabled
      * @param array $expected
      * @dataProvider getConfigDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -88,13 +96,19 @@ class SmartButtonConfigTest extends TestCase
         string $color,
         string $installmentPeriodLabel,
         string $installmentPeriodLocale,
+        string $isPaypalGuestCheckoutEnabled,
         array $expected = []
     ) {
-        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn($locale);
+        $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->will(
             $this->returnValueMap(
                 [
                     ['merchant_id', null, 'merchant'],
+                    [
+                        'solution_type',
+                        null,
+                        $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                    ],
                     ['sandbox_flag', null, true],
                     ['disable_funding_options', null, $disallowedFundings],
                     ["{$page}_page_button_customize", null, $isCustomize],
@@ -116,6 +130,8 @@ class SmartButtonConfigTest extends TestCase
     }
 
     /**
+     * Get config data provider
+     *
      * @return array
      */
     public function getConfigDataProvider()
@@ -124,6 +140,8 @@ class SmartButtonConfigTest extends TestCase
     }
 
     /**
+     * Get default styles
+     *
      * @return array
      */
     private function getDefaultStyles()
@@ -132,6 +150,8 @@ class SmartButtonConfigTest extends TestCase
     }
 
     /**
+     * Get allowed fundings
+     *
      * @return array
      */
     private function getAllowedFundings()

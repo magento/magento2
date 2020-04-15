@@ -39,7 +39,7 @@ class WishlistCleanerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemOptionResourceModel = $this->createMock(ItemOptionResourceModel::class);
         $this->itemResourceModel = $this->createMock(ItemResourceModel::class);

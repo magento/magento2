@@ -1,34 +1,42 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\Select;
 
-class AllowspecificTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AllowspecificTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
+     * @var Allowspecific
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            Allowspecific::class,
             [
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class)
             ]
         );
         $this->_object->setData('html_id', 'spec_element');
         $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
+            Form::class,
             ['getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement']
         );
     }
@@ -69,7 +77,7 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     {
         $this->_object->setForm($this->_formMock);
 
-        $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Select::class, ['setDisabled']);
+        $elementMock = $this->createPartialMock(Select::class, ['setDisabled']);
 
         $elementMock->expects($this->once())->method('setDisabled')->with('disabled');
         $countryId = 'tetst_county_specificcountry';

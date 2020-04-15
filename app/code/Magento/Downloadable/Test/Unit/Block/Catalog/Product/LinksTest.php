@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,57 +6,72 @@
 
 namespace Magento\Downloadable\Test\Unit\Block\Catalog\Product;
 
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Downloadable\Block\Catalog\Product\Links;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Pricing\Price\LinkPrice;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Downloadable\Block\Catalog\Product\Links
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinksTest extends \PHPUnit\Framework\TestCase
+class LinksTest extends TestCase
 {
     /**
-     * @var \Magento\Downloadable\Block\Catalog\Product\Links
+     * @var Links
      */
     protected $linksBlock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var Base|MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $jsonEncoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $contextMock = $this->createMock(\Magento\Catalog\Block\Product\Context::class);
+        $objectManager = new ObjectManager($this);
+        $this->layout = $this->createMock(Layout::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
-        $this->jsonEncoder = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
+        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
 
         $this->linksBlock = $objectManager->getObject(
-            \Magento\Downloadable\Block\Catalog\Product\Links::class,
+            Links::class,
             [
                 'context' => $contextMock,
                 'encoder' => $this->jsonEncoder,
@@ -69,9 +84,9 @@ class LinksTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLinkPrice()
     {
-        $linkPriceMock = $this->createMock(\Magento\Downloadable\Pricing\Price\LinkPrice::class);
+        $linkPriceMock = $this->createMock(LinkPrice::class);
         $amountMock = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
-        $linkMock = $this->createMock(\Magento\Downloadable\Model\Link::class);
+        $linkMock = $this->createMock(Link::class);
 
         $priceCode = 'link_price';
         $arguments = [];
@@ -88,7 +103,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->with($linkMock)
             ->will($this->returnValue($amountMock));
 
-        $priceBoxMock = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['renderAmount']);
+        $priceBoxMock = $this->createPartialMock(Render::class, ['renderAmount']);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
@@ -119,7 +134,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $linkAmountMock = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
+        $linkAmountMock = $this->createMock(AmountInterface::class);
         $linkAmountMock->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($linkPrice));
@@ -127,7 +142,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseAmount')
             ->will($this->returnValue($linkPrice));
 
-        $typeInstanceMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getLinks']);
+        $typeInstanceMock = $this->createPartialMock(Simple::class, ['getLinks']);
         $typeInstanceMock->expects($this->once())
             ->method('getLinks')
             ->will($this->returnValue([$this->getLinkMock($linkPrice, $linkId)]));
@@ -135,7 +150,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
+        $finalPriceMock = $this->createMock(FinalPrice::class);
         $finalPriceMock->expects($this->once())
             ->method('getCustomAmount')
             ->with($linkPrice)
@@ -159,11 +174,11 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $linkPrice
      * @param $linkId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getLinkMock($linkPrice, $linkId)
     {
-        $linkMock = $this->createPartialMock(\Magento\Downloadable\Model\Link::class, ['getPrice',
+        $linkMock = $this->createPartialMock(Link::class, ['getPrice',
             'getId',
             '__wakeup']);
         $linkMock->expects($this->any())

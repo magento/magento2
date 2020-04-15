@@ -7,20 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * GetAssetKeywordsTest
- */
 class GetAssetKeywordsTest extends TestCase
 {
     /**

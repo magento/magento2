@@ -7,13 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
+use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory;
+use Magento\Review\Model\Review\Summary;
+use Magento\Review\Model\ReviewSummary;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Review\Model\ReviewSummary class.
  */
-class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
+class ReviewSummaryTest extends TestCase
 {
     /**
      * @var MockObject
@@ -21,7 +27,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
     private $reviewSummaryCollectionFactoryMock;
 
     /**
-     * @var \Magento\Review\Model\ReviewSummary | MockObject
+     * @var ReviewSummary|MockObject
      */
     private $reviewSummary;
 
@@ -30,16 +36,16 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reviewSummaryCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->reviewSummary = $this->objectManagerHelper->getObject(
-            \Magento\Review\Model\ReviewSummary::class,
+            ReviewSummary::class,
             [
                 'sumColFactory' => $this->reviewSummaryCollectionFactoryMock
             ]
@@ -55,7 +61,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
             'rating_summary' => 80
         ];
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getId', 'addData', '__wakeup']
         );
         $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
@@ -64,7 +70,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
 
         $summaryData = $this->createPartialMock(
-            \Magento\Review\Model\Review\Summary::class,
+            Summary::class,
             ['getData', '__wakeup']
         );
         $summaryData->expects($this->atLeastOnce())->method('getData')->will(
@@ -76,7 +82,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
             )
         );
         $summaryCollection = $this->createPartialMock(
-            \Magento\Review\Model\ResourceModel\Review\Summary\Collection::class,
+            Collection::class,
             ['addEntityFilter', 'addStoreFilter', 'getFirstItem', '__wakeup']
         );
         $summaryCollection->expects($this->once())->method('addEntityFilter')

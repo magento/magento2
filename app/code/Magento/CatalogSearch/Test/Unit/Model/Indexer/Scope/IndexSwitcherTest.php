@@ -1,33 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Scope;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
+class IndexSwitcherTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\Search\Request\IndexScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexScopeResolverInterface|MockObject
      */
     private $indexScopeResolver;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $scopeState;
 
@@ -37,24 +39,24 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
     private $indexSwitcher;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['isTableExists', 'dropTable', 'renameTable'])
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connection);
         $this->indexScopeResolver = $this->getMockBuilder(
-            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+            IndexScopeResolverInterface::class
         )
             ->setMethods(['resolve'])
             ->getMockForAbstractClass();
@@ -65,7 +67,7 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->indexSwitcher = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher::class,
+            IndexSwitcher::class,
             [
                 'resource' => $this->resource,
                 'indexScopeResolver' => $this->indexScopeResolver,
@@ -180,12 +182,10 @@ class IndexSwitcherTest extends \PHPUnit\Framework\TestCase
         $this->indexSwitcher->switchIndex($dimensions);
     }
 
-    /**
-     * @expectedException \Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException
-     * @expectedExceptionMessage Temporary table for index catalogsearch_fulltext doesn't exist
-     */
     public function testSwitchWhenTemporaryIndexNotExist()
     {
+        $this->expectException('Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException');
+        $this->expectExceptionMessage('Temporary table for index catalogsearch_fulltext doesn\'t exist');
         $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())

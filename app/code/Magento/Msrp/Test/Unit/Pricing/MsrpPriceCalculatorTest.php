@@ -32,7 +32,7 @@ class MsrpPriceCalculatorTest extends TestCase
     /**
      * Prepare environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->msrpGroupedCalculatorMock = $this->createMock(MsrpGroupedCalculator::class);
