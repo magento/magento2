@@ -75,18 +75,18 @@
         <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
 
         <after>
-            <!-- Logout Customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
-
             <!-- Delete created Product -->
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!-- Logout Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
 
             <!-- Delete Customer -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromAdmin">
                 <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
             </actionGroup>
-            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
     </test>
