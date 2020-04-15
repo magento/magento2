@@ -13,6 +13,7 @@ use Magento\Contact\Test\Unit\Controller\Stub\IndexStub;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -70,11 +71,10 @@ class IndexTest extends TestCase
 
     /**
      * Dispatch test
-     *
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatch(): void
     {
+        $this->expectException(NotFoundException::class);
         $this->configMock->method('isEnabled')->willReturn(false);
         $this->controller->dispatch($this->requestMock);
     }
