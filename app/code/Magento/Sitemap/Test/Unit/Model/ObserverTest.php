@@ -136,6 +136,10 @@ class ObserverTest extends TestCase
             )
             ->willReturn('error-recipient@example.com');
 
+        $this->emailNotificationMock->expects($this->once())
+            ->method('sendErrors')
+            ->with([$exception]);
+
         $this->observer->scheduledGenerateSitemaps();
     }
 }

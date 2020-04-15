@@ -18,6 +18,7 @@
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
         <variation name="UpdateIntegrationEntityTestVariation2">
             <data name="tag" xsi:type="string">stable:no</data>
@@ -41,6 +42,7 @@
             <data name="integration/data/resource_access" xsi:type="string">Custom</data>
             <data name="integration/data/resources" xsi:type="string">Sales</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIncorrectUserPassword" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>
