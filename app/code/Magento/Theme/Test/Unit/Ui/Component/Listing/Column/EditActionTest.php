@@ -8,6 +8,7 @@ namespace Magento\Theme\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Ui\Component\Listing\Column\EditAction;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class EditAction test for Listing Column
@@ -17,13 +18,13 @@ class EditActionTest extends \PHPUnit\Framework\TestCase
     /** @var EditAction */
     protected $component;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
     protected $uiComponentFactory;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|MockObject */
     protected $urlBuilder;
 
     public function setup()

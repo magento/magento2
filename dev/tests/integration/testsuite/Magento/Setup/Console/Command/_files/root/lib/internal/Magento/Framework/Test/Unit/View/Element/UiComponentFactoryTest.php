@@ -6,6 +6,7 @@
 namespace Magento\Framework\Test\Unit\View\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,25 +16,25 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Argument\InterpreterInterface|MockObject */
     protected $interpreterMock;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|MockObject */
     protected $contextFactoryMock;
 
-    /** @var \Magento\Framework\Config\DataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Config\DataInterfaceFactory|MockObject */
     protected $dataInterfaceFactoryMock;
 
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \SafeReflectionClass|MockObject */
     protected $safeReflectionClassMock;
 
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \SafeReflectionClass|MockObject */
     protected $safeReflectionClassMock2;
 
-    /** @var \Magento\Ui\Config\Reader\Definition\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Ui\Config\Reader\Definition\Data|MockObject */
     protected $dataMock;
 
     protected function setUp()

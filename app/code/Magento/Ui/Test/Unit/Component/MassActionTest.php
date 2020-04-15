@@ -8,6 +8,7 @@ namespace Magento\Ui\Test\Unit\Component;
 use Magento\Ui\Component\MassAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class MassAction test for Component
@@ -15,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 

@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Ui\Component\Listing\Column\Actions;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class Actions test for Listing Colummn
@@ -15,13 +16,13 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     /** @var Actions */
     protected $component;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
     protected $uiComponentFactory;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|MockObject */
     protected $urlBuilder;
 
     public function setup()

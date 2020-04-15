@@ -186,7 +186,6 @@ class AdvancedInventory extends AbstractModifier
 
         if ($pathField) {
             $fieldsetPath = $this->arrayManager->slicePath($pathField, 0, -4);
-
             $this->meta = $this->arrayManager->merge(
                 $pathField . '/arguments/data/config',
                 $this->meta,
@@ -271,7 +270,6 @@ class AdvancedInventory extends AbstractModifier
                 'qty' => $qty,
                 'advanced_inventory_button' => $advancedInventoryButton,
             ];
-
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,

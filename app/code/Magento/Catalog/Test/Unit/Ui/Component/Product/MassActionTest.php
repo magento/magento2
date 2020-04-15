@@ -11,6 +11,7 @@ use Magento\Catalog\Ui\Component\Product\MassAction;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * MassAction test for Component Product
@@ -18,7 +19,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $contextMock;
 
@@ -28,7 +29,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
