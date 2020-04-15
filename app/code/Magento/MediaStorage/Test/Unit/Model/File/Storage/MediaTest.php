@@ -1,32 +1,36 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-/**
- * Class MediaTest
- */
-class MediaTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\MediaStorage\Helper\File\Media;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Storage\File;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class MediaTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\File
+     * @var File
      */
     protected $_model;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Media
+     * @var Media
      */
     protected $_loggerMock;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     protected $_storageHelperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $_mediaHelperMock;
 
@@ -35,14 +39,14 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fileUtilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_storageHelperMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
-        $this->_mediaHelperMock = $this->createMock(\Magento\MediaStorage\Helper\File\Media::class);
+        $this->_loggerMock = $this->createMock(LoggerInterface::class);
+        $this->_storageHelperMock = $this->createMock(Database::class);
+        $this->_mediaHelperMock = $this->createMock(Media::class);
         $this->_fileUtilityMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);
 
-        $this->_model = new \Magento\MediaStorage\Model\File\Storage\File(
+        $this->_model = new File(
             $this->_loggerMock,
             $this->_storageHelperMock,
             $this->_mediaHelperMock,
@@ -50,7 +54,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
