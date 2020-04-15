@@ -15,7 +15,7 @@
             <title value="Checking assignment of default billing address after placing an order"/>
             <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-94108"/>
+            <testCaseId value="MC-25738"/>
             <useCaseId value="MAGETWO-62891"/>
             <group value="checkout"/>
             <group value="customer"/>
