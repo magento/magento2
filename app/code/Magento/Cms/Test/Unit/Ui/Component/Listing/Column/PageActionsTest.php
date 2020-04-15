@@ -176,7 +176,6 @@ class PageActionsTest extends TestCase
                           'edit' => [
                               'href' => 'test/url/edit',
                               'label' => __('Edit'),
-                              '__disableTmpl' => true,
                           ],
                           'delete' => [
                               'href' => 'test/url/delete',
@@ -184,15 +183,12 @@ class PageActionsTest extends TestCase
                               'confirm' => [
                                   'title' => __('Delete %1', $title),
                                   'message' => __('Are you sure you want to delete a %1 record?', $title),
-                                  '__disableTmpl' => true,
                               ],
                               'post' => true,
-                              '__disableTmpl' => true,
                           ],
                           'preview' => [
                               'href' => 'test/url/view',
                               'label' => __('View'),
-                              '__disableTmpl' => true,
                               'target' => '_blank'
                           ]
                        ],

@@ -82,17 +82,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             [
                 'value' => 'template_new',
                 'label' => 'Template New (Default)',
-                '__disableTmpl' => true
             ],
             [
                 'value' => 'template_one',
                 'label' => 'Template One',
-                '__disableTmpl' => true
             ],
             [
                 'value' => 'template_two',
                 'label' => 'Template Two',
-                '__disableTmpl' => true
             ],
         ];
         $this->_model->setPath('template/new');

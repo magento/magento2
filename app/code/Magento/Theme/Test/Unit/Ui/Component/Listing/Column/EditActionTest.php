@@ -10,7 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Ui\Component\Listing\Column\EditAction;
 
 /**
- * Class EditActionTest
+ * Class EditAction test for Listing Column
  */
 class EditActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -67,7 +67,6 @@ class EditActionTest extends \PHPUnit\Framework\TestCase
                 'edit' => [
                     'href' => 'http://magento.com/theme/design_config/edit',
                     'label' => new \Magento\Framework\Phrase('Edit'),
-                    '__disableTmpl' => true,
                 ]
             ],
         ];

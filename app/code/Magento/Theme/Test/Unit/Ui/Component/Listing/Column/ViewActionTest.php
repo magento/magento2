@@ -112,7 +112,6 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
                             'view' => [
                                 'href' => 'url',
                                 'label' => __('View'),
-                                '__disableTmpl' => true,
                             ]
                         ],
                         'entity_id' => 1
@@ -139,7 +138,6 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
                             'view' => [
                                 'href' => 'url',
                                 'label' => __('View'),
-                                '__disableTmpl' => true,
                             ]
                         ],
                         'theme_id' => 2

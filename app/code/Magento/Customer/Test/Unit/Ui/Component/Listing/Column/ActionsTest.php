@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Customer\Ui\Component\Listing\Column\Actions;
 
 /**
- * Class ActionsTest
+ * Class Actions test for Listing Colummn
  */
 class ActionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -68,7 +68,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
                                 'href' => 'http://magento.com/customer/index/edit',
                                 'label' => new \Magento\Framework\Phrase('Edit'),
                                 'hidden' => false,
-                                '__disableTmpl' => true,
                             ]
                         ]
                     ],

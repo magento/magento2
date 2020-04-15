@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
 
 /**
- * Class OptionsTest
+ * Class Options test for Listing Column Status
  */
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,7 +54,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             [
                 'value' => '1',
                 'label' => 'Label',
-                '__disableTmpl' => true
             ]
         ];
 

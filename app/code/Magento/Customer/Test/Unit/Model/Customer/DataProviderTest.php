@@ -243,6 +243,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'componentType' => Field::NAME,
                                             'filterBy' => [
                                                 'target' => '${ $.provider }:data.customer.website_id',
+                                                '__disableTmpl' => ['target' => false],
                                                 'field' => 'website_ids',
                                             ],
                                         ],
@@ -1280,6 +1281,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                     'componentType' => Field::NAME,
                                     'filterBy' => [
                                         'target' => '${ $.provider }:data.customer.website_id',
+                                        '__disableTmpl' => ['target' => false],
                                         'field' => 'website_ids',
                                     ],
                                 ],

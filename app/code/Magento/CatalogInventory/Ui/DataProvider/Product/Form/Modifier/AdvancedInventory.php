@@ -197,6 +197,7 @@ class AdvancedInventory extends AbstractModifier
                     'scopeLabel' => '[GLOBAL]',
                     'imports' => [
                         'visible' => '${$.provider}:data.product.stock_data.manage_stock',
+                        '__disableTmpl' => ['visible' => false],
                     ],
                 ]
             );
@@ -240,6 +241,7 @@ class AdvancedInventory extends AbstractModifier
                 ],
                 'imports' => [
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
+                    '__disableTmpl' => ['handleChanges' => false],
                 ],
                 'sortOrder' => 10,
                 'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
