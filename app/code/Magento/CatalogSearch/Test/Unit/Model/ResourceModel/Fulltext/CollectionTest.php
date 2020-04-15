@@ -1,20 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Api\SearchInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for Fulltext Collection
@@ -24,17 +34,17 @@ use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 class CollectionTest extends BaseCollection
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|MockObject
+     * @var TemporaryStorage|MockObject
      */
     private $temporaryStorage;
 
     /**
-     * @var \Magento\Search\Api\SearchInterface|MockObject
+     * @var SearchInterface|MockObject
      */
     private $search;
 
@@ -69,21 +79,21 @@ class CollectionTest extends BaseCollection
     private $searchResultApplierFactory;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
+     * @var Collection
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Api\Filter
+     * @var Filter
      */
     private $filter;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();
         $this->scopeConfig = $this->getScopeConfig();
@@ -91,7 +101,7 @@ class CollectionTest extends BaseCollection
         $this->filterBuilder = $this->getFilterBuilder();
 
         $productLimitationMock = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+            ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
             ->disableOriginalConstructor()
@@ -100,7 +110,7 @@ class CollectionTest extends BaseCollection
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
-        $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
+        $this->temporaryStorage = $this->getMockBuilder(TemporaryStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
         $temporaryStorageFactory = $this->getMockBuilder(TemporaryStorageFactory::class)
@@ -140,7 +150,7 @@ class CollectionTest extends BaseCollection
             ->willReturn($totalRecordsResolver);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
+            Collection::class,
             [
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
@@ -153,7 +163,7 @@ class CollectionTest extends BaseCollection
             ]
         );
 
-        $this->search = $this->getMockBuilder(\Magento\Search\Api\SearchInterface::class)
+        $this->search = $this->getMockBuilder(SearchInterface::class)
             ->setMethods(['search'])
             ->getMockForAbstractClass();
         $this->model->setSearchCriteriaBuilder($this->criteriaBuilder);
@@ -164,7 +174,7 @@ class CollectionTest extends BaseCollection
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
@@ -178,7 +188,7 @@ class CollectionTest extends BaseCollection
     {
         $pageSize = 10;
 
-        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
+        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
             ->getMockForAbstractClass();
         $this->search->expects($this->once())
             ->method('search')
@@ -229,7 +239,7 @@ class CollectionTest extends BaseCollection
      */
     protected function getScopeConfig()
     {
-        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -242,7 +252,7 @@ class CollectionTest extends BaseCollection
      */
     protected function getCriteriaBuilder()
     {
-        $criteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder::class)
+        $criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->setMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -255,7 +265,7 @@ class CollectionTest extends BaseCollection
      */
     protected function getFilterBuilder()
     {
-        $filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $filterBuilder = $this->createMock(FilterBuilder::class);
 
         return $filterBuilder;
     }
@@ -287,7 +297,7 @@ class CollectionTest extends BaseCollection
      */
     protected function createFilter()
     {
-        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+        $filter = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
