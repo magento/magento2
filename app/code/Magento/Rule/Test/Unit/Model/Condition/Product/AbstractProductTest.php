@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class to test Abstract Rule product condition data model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractProductTest extends TestCase
 {
@@ -61,7 +61,7 @@ class AbstractProductTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
             AbstractProduct::class,
