@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerSubscribeToNewsletterTest">
+        <annotations>
+            <features value="Login As Customer"/>
+            <stories value="Subscribe to newsletter"/>
+            <title value="Admin user login as customer and make subscription to newsletter"/>
+            <description
+                value="Verify that Admin can subscribe to newsletter using Login As Customer functionality"/>
+            <severity value="AVERAGE"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Admin Login As Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="lLoginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Subscribe for newsletter -->
+        <amOnPage url="{{StorefrontNewsletterManagePage.url}}" stepKey="goToNewsletterManage"/>
+        <click selector="{{StorefrontNewsletterManageSection.subscriptionCheckbox}}"
+               stepKey="checkSubscribedNewsletter"/>
+        <click selector="{{StorefrontNewsletterManageSection.saveButton}}"
+               stepKey="saveSubscription"/>
+        <waitForPageLoad stepKey="waitForSubscriptionSaved"/>
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInAsCustomer"/>
+
+        <!-- Verify subscription successful -->
+        <amOnPage url="{{AdminNewsletterSubscriberPage.url}}" stepKey="goToNewsletterSubscriberGrid"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.email('1')}}" userInput="$$createCustomer.email$$" stepKey="seeCustomerEmailInSubscriberGrid"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.type('1')}}" userInput="Customer" stepKey="seeCustomerTypeInSubscriberGrid"/>
+    </test>
+</tests>
