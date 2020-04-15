@@ -1,19 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
-use Magento\ConfigurableImportExport\Model\Export\RowCustomizer as ExportRowCustomizer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ConfigurableImportExport\Model\Export\RowCustomizer as ExportRowCustomizer;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RowCustomizerTest extends \PHPUnit\Framework\TestCase
+class RowCustomizerTest extends TestCase
 {
     /**
      * @var ExportRowCustomizer
@@ -26,12 +28,12 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection|MockObject
      */
     private $productCollectionMock;
 
     /**
-     * @var ConfigurableProductType|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductType|MockObject
      */
     private $configurableProductTypeMock;
 
@@ -40,7 +42,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
      */
     private $productId = 11;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
@@ -272,7 +274,7 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create product mock object
      *
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|MockObject
      */
     private function createProductMock()
     {
