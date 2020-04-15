@@ -95,6 +95,26 @@ class Config implements ConfigInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getTopicDescription($routeUrl, $httpMethod)
+    {
+        $services = $this->getServices();
+        $lookupKey = $this->generateLookupKeyByRouteData(
+            $routeUrl,
+            $httpMethod
+        );
+
+        if (array_key_exists($lookupKey, $services) === false) {
+            throw new LocalizedException(
+                __('WebapiAsync config for "%lookupKey" does not exist.', ['lookupKey' => $lookupKey])
+            );
+        }
+
+        return $services[$lookupKey][self::SERVICE_PARAM_KEY_DESCRIPTION];
+    }
+
+    /**
      * Generate topic data for all defined services
      *
      * Topic data is indexed by a lookup key that is derived from route data
@@ -110,6 +130,7 @@ class Config implements ConfigInterface
                 if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                     $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
+                    $topicDescription = $httpMethodData[Converter::KEY_DESCRIPTION];
 
                     $lookupKey = $this->generateLookupKeyByRouteData(
                         $routeUrl,
@@ -123,9 +144,10 @@ class Config implements ConfigInterface
                     );
 
                     $services[$lookupKey] = [
-                        self::SERVICE_PARAM_KEY_INTERFACE => $serviceInterface,
-                        self::SERVICE_PARAM_KEY_METHOD    => $serviceMethod,
-                        self::SERVICE_PARAM_KEY_TOPIC     => $topicName,
+                        self::SERVICE_PARAM_KEY_INTERFACE   => $serviceInterface,
+                        self::SERVICE_PARAM_KEY_METHOD      => $serviceMethod,
+                        self::SERVICE_PARAM_KEY_TOPIC       => $topicName,
+                        self::SERVICE_PARAM_KEY_DESCRIPTION => $topicDescription
                     ];
                 }
             }
