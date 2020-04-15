@@ -28,8 +28,8 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
