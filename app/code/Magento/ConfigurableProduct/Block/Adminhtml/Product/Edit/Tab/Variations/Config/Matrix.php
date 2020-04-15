@@ -14,8 +14,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Product variations matrix block
  * All disableTmpl flag are required here for configurable products
  *
- * All disableTmpl flag are required here for configurable products
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
