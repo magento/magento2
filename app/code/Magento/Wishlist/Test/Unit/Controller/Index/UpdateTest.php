@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,6 +6,7 @@
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -20,8 +21,8 @@ use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\LocaleQuantityProcessor;
 use Magento\Wishlist\Model\Wishlist;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for upate controller wishlist
@@ -86,7 +87,7 @@ class UpdateTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formKeyValidatorMock = $this->createMock(Validator::class);
         $this->wishlistProviderMock = $this->createMock(WishlistProviderInterface::class);
@@ -156,7 +157,7 @@ class UpdateTest extends TestCase
                 ]
             )->getMock();
         $dataMock = $this->createMock(Data::class);
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

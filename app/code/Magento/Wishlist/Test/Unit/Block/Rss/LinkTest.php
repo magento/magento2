@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,44 +6,54 @@
 
 namespace Magento\Wishlist\Test\Unit\Block\Rss;
 
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Wishlist\Block\Rss\Link;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Wishlist;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+class LinkTest extends TestCase
 {
-    /** @var \Magento\Wishlist\Block\Rss\Link */
+    /** @var Link */
     protected $link;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Wishlist\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Data|MockObject */
     protected $wishlistHelper;
 
-    /** @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlBuilderInterface|MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $urlEncoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $wishlist = $this->createPartialMock(\Magento\Wishlist\Model\Wishlist::class, ['getId']);
+        $wishlist = $this->createPartialMock(Wishlist::class, ['getId']);
         $wishlist->expects($this->any())->method('getId')->will($this->returnValue(5));
 
-        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->will($this->returnValue(8));
         $customer->expects($this->any())->method('getEmail')->will($this->returnValue('test@example.com'));
 
         $this->wishlistHelper = $this->createPartialMock(
-            \Magento\Wishlist\Helper\Data::class,
+            Data::class,
             ['getWishlist', 'getCustomer', 'urlEncode']
         );
-        $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
+        $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
 
         $this->wishlistHelper->expects($this->any())->method('getWishlist')->will($this->returnValue($wishlist));
         $this->wishlistHelper->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
@@ -53,12 +63,12 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
 
-        $this->urlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->urlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
-            \Magento\Wishlist\Block\Rss\Link::class,
+            Link::class,
             [
                 'wishlistHelper' => $this->wishlistHelper,
                 'rssUrlBuilder' => $this->urlBuilder,
@@ -86,7 +96,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig
             ->expects($this->atLeastOnce())
             ->method('isSetFlag')
-            ->with('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertEquals(true, $this->link->isRssAllowed());
     }
