@@ -61,22 +61,26 @@ class Save implements SaveInterface
             /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+            $record = [
+                'id' => $mediaAsset->getId(),
+                'path' => $mediaAsset->getPath(),
+                'title' => $mediaAsset->getTitle(),
+                'source' => $mediaAsset->getSource(),
+                'content_type' => $mediaAsset->getContentType(),
+                'width' => $mediaAsset->getWidth(),
+                'height' => $mediaAsset->getHeight(),
+                'size' => $mediaAsset->getSize(),
+            ];
 
-            $connection->insertOnDuplicate(
-                $tableName,
-                [
-                    'id' => $mediaAsset->getId(),
-                    'path' => $mediaAsset->getPath(),
-                    'title' => $mediaAsset->getTitle(),
-                    'source' => $mediaAsset->getSource(),
-                    'content_type' => $mediaAsset->getContentType(),
-                    'width' => $mediaAsset->getWidth(),
-                    'height' => $mediaAsset->getHeight(),
-                    'size' => $mediaAsset->getSize(),
-                    'created_at' => $mediaAsset->getCreatedAt(),
-                    'updated_at' => $mediaAsset->getUpdatedAt(),
-                ]
-            );
+            if ($mediaAsset->getCreatedAt()) {
+                $record['created_at'] = $mediaAsset->getCreatedAt();
+            }
+
+            if ($mediaAsset->getUpdatedAt()) {
+                $record['updated_at'] = $mediaAsset->getUpdatedAt();
+            }
+
+            $connection->insertOnDuplicate($tableName, $record);
             return (int)$connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

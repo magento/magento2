@@ -56,21 +56,26 @@ class SaveAssets implements SaveAssetsInterface
         $failedAssets = [];
         foreach ($assets as $asset) {
             try {
-                $connection->insertOnDuplicate(
-                    $tableName,
-                    [
-                        'id' => $asset->getId(),
-                        'path' => $asset->getPath(),
-                        'title' => $asset->getTitle(),
-                        'source' => $asset->getSource(),
-                        'content_type' => $asset->getContentType(),
-                        'width' => $asset->getWidth(),
-                        'height' => $asset->getHeight(),
-                        'size' => $asset->getSize(),
-                        'created_at' => $asset->getCreatedAt(),
-                        'updated_at' => $asset->getUpdatedAt(),
-                    ]
-                );
+                $record = [
+                    'id' => $asset->getId(),
+                    'path' => $asset->getPath(),
+                    'title' => $asset->getTitle(),
+                    'source' => $asset->getSource(),
+                    'content_type' => $asset->getContentType(),
+                    'width' => $asset->getWidth(),
+                    'height' => $asset->getHeight(),
+                    'size' => $asset->getSize(),
+                ];
+
+                if ($asset->getCreatedAt()) {
+                    $record['created_at'] = $asset->getCreatedAt();
+                }
+
+                if ($asset->getUpdatedAt()) {
+                    $record['updated_at'] = $asset->getUpdatedAt();
+                }
+
+                $connection->insertOnDuplicate($tableName, $record);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
                 $failedAssets[] = $asset;
