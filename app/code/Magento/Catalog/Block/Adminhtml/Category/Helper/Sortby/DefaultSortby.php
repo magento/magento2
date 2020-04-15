@@ -11,8 +11,15 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class DefaultSortby extends \Magento\Framework\Data\Form\Element\Select
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
     /**
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox
      *
@@ -49,13 +56,19 @@ class DefaultSortby extends \Magento\Framework\Data\Form\Element\Select
             $html .= ' disabled="disabled"';
         }
 
-        $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
+        $html .= ' class="checkbox" type="checkbox" />';
         $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use Config Settings') . '</label>';
-        $html .= '<script>require(["prototype"], function(){toggleValueElements($(\'' .
+        $scriptString = 'require(["prototype"], function(){toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
-            '\').parentNode);});</script>';
+            '\').parentNode);});';
+        $html .= /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "toggleValueElements(this, this.parentNode);",
+            '#' . $htmlId
+        );
 
         return $html;
     }

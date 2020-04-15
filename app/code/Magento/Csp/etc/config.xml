@@ -38,6 +38,11 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <http>http</http>
+                            <https>https</https>
+                            <blob>blob</blob>
+                        </schemes>
                     </children>
                     <connections>
                         <policy_id>connect-src</policy_id>
@@ -77,7 +82,7 @@
                     <scripts>
                         <policy_id>script-src</policy_id>
                         <self>1</self>
-                        <inline>1</inline>
+                        <inline>0</inline>
                         <eval>1</eval>
                         <dynamic>0</dynamic>
                     </scripts>
@@ -138,6 +143,11 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <http>http</http>
+                            <https>https</https>
+                            <blob>blob</blob>
+                        </schemes>
                     </children>
                     <connections>
                         <policy_id>connect-src</policy_id>

@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data;
+
 /**
  * Admin product attribute search block
  */
@@ -50,6 +53,7 @@ class Search extends \Magento\Backend\Block\Widget
         $this->_resourceHelper = $resourceHelper;
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $registry;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 

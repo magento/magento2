@@ -12,10 +12,12 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data;
 
 /**
- * Class Edit
+ * Class for Product Edit.
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -74,6 +76,7 @@ class Edit extends \Magento\Backend\Block\Widget
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
         $this->escaper = $escaper;
+        $data['helper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 

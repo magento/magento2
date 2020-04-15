@@ -14,6 +14,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 use Magento\Backend\Block\Widget;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Store\Model\Store;
 
 /**
@@ -95,6 +97,7 @@ class Option extends Widget
         $this->_product = $product;
         $this->_productOptionConfig = $productOptionConfig;
         $this->_coreRegistry = $registry;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 
@@ -482,6 +485,8 @@ class Option extends Widget
         } elseif ($type == 'fixed') {
             return number_format((float)$value, 2, null, '');
         }
+
+        return '';
     }
 
     /**

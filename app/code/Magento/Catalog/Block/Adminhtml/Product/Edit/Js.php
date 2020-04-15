@@ -9,6 +9,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
+use Magento\Framework\App\ObjectManager;
+use Magento\Tax\Helper\Data;
 
 class Js extends \Magento\Backend\Block\Template
 {
@@ -66,6 +68,7 @@ class Js extends \Magento\Backend\Block\Template
         $this->jsonHelper = $jsonHelper;
         $this->calculationService = $calculationService;
         $this->productTaxClassSource = $productTaxClassSource;
+        $data['helper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 

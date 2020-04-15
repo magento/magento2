@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Block;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data;
+
 /**
  * Standard admin block. Adds admin-specific behavior and event.
  * Should be used when you declare a block in admin layout handle.
@@ -69,6 +72,7 @@ class Template extends \Magento\Framework\View\Element\Template
         $this->_backendSession = $context->getBackendSession();
         $this->formKey = $context->getFormKey();
         $this->nameBuilder = $context->getNameBuilder();
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 

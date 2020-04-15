@@ -15,6 +15,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
@@ -23,6 +24,8 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Block for gallery content.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -74,6 +77,7 @@ class Content extends \Magento\Backend\Block\Widget
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
         $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
             ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
