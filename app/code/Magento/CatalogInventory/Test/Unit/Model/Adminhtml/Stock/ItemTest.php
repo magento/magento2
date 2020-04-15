@@ -1,33 +1,41 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
 
-class ItemTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogInventory\Model\Adminhtml\Stock\Item;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Adminhtml\Stock\Item|PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     protected $_model;
 
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $resourceMock = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
+            AbstractResource::class,
             ['_construct', 'getConnection', 'getIdFieldName']
         );
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
 
-        $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
+        $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->setMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
-        $allGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+        $allGroup = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
 
@@ -40,7 +48,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($allGroup));
 
         $this->_model = $objectHelper->getObject(
-            \Magento\CatalogInventory\Model\Adminhtml\Stock\Item::class,
+            Item::class,
             [
                 'resource' => $resourceMock,
                 'groupManagement' => $groupManagement
