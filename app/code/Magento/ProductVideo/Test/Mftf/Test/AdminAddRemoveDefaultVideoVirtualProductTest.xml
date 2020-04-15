@@ -16,6 +16,7 @@
             <description value="Admin should be able to add/remove default product video for a Virtual Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-109"/>
+            <testCaseId value="MC-204"/>
             <group value="catalog"/>
             <group value="productVideo"/>
         </annotations>

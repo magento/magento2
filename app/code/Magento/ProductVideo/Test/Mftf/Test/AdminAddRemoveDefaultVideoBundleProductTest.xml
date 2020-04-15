@@ -16,6 +16,7 @@
             <description value="Admin should be able to add/remove default product video for a Bundle Product"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-110"/>
+            <testCaseId value="MC-205"/>
             <group value="catalog"/>
             <group value="bundle"/>
             <group value="productVideo"/>
