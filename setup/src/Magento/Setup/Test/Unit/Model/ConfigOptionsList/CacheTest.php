@@ -237,6 +237,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(\md5(dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }
