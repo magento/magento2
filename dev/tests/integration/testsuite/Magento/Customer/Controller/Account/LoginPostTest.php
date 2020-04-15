@@ -111,15 +111,16 @@ class LoginPostTest extends AbstractController
     public function testLoginWithUnconfirmedCustomer(): void
     {
         $email = 'unconfirmedcustomer@example.com';
+        $urlBuilder = $this->_objectManager->get(UrlInterface::class);
         $this->prepareRequest($email, 'Qwert12345');
         $this->dispatch('customer/account/loginPost');
-        $urlBuilder = $this->_objectManager->get(UrlInterface::class);
-        $expected = __(
+        $this->assertEquals($email, $this->session->getUsername());
+        $expectedMessage = __(
             'This account is not confirmed. <a href="'
             . $urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]])
             . '">Click here</a> to resend confirmation email.'
         );
-        $this->assertSessionMessages($this->equalTo([(string)$expected]), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->equalTo([(string)$expectedMessage]), MessageInterface::TYPE_ERROR);
         $errorMessage = current($this->getMessages(MessageInterface::TYPE_ERROR));
         $entities = ['&lt;', '&gt;', '&quot;', '&#039;', '&amp;'];
         foreach ($entities as $entity) {

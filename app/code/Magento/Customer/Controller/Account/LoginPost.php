@@ -209,6 +209,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     ));
+                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
