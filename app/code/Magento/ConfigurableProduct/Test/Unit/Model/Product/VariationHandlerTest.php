@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
@@ -14,6 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Eav\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Eav\Model\EntityFactory;
@@ -217,10 +219,10 @@ class VariationHandlerTest extends TestCase
             ->setMethods(['getIsUnique', 'getAttributeCode', 'getFrontend', 'getIsVisible'])
             ->disableOriginalConstructor()
             ->getMock();
-        $frontendAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend::class)
+        $frontendAttributeMock = $this->getMockBuilder(FrontendInterface::class)
             ->setMethods(['getInputType'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $parentProductMock->expects($this->once())
             ->method('getNewVariationsAttributeSetId')

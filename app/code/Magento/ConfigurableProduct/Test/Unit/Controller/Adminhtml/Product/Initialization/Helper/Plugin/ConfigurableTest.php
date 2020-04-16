@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -13,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableP
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\App\Request\Http;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableTest extends TestCase

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
 use Magento\Backend\Block\Template\Context;
@@ -10,7 +12,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Config\Block\System\Config\Form;
 use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -58,7 +59,6 @@ class MatrixTest extends TestCase
             'stockRegistry' => $this->stockRegistryMock,
         ];
         $helper = new ObjectManager($this);
-        $this->_object = $helper->getObject(Form::class, $data);
         $this->_block = $helper->getObject(
             Matrix::class,
             $data

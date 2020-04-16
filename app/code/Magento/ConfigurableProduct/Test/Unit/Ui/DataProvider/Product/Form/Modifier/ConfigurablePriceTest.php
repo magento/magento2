@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
@@ -39,6 +41,15 @@ class ConfigurablePriceTest extends AbstractModifierTest
      */
     public function metaDataProvider()
     {
+        $priceComponentConfig = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
+                    ]
+                ]
+            ]
+        ];
         return [
             [
                 'metaInput' => [
@@ -70,15 +81,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                             ],
                                         ],
                                     ],
-                                    'price' => [
-                                        'arguments' => [
-                                            'data' => [
-                                                'config' => [
-                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
-                                                ],
-                                            ],
-                                        ],
-                                    ],
+                                    'price' => $priceComponentConfig,
                                 ],
                             ],
                         ],
@@ -99,15 +102,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                         'children' => [
                             'container_price' => [
                                 'children' => [
-                                    'price' => [
-                                        'arguments' => [
-                                            'data' => [
-                                                'config' => [
-                                                    'component' => 'Magento_ConfigurableProduct/js/components/price-configurable'
-                                                ]
-                                            ]
-                                        ]
-                                    ]
+                                    'price' => $priceComponentConfig
                                 ]
                             ]
                         ]

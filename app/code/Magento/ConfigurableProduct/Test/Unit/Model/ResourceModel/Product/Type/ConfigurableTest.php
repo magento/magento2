@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -71,11 +73,6 @@ class ConfigurableTest extends TestCase
      */
     private $optionProvider;
 
-    /**
-     * @var ScopeResolverInterface|MockObject
-     */
-    private $scopeResolver;
-
     protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
@@ -90,10 +87,10 @@ class ConfigurableTest extends TestCase
         $this->relation = $this->getMockBuilder(ProductRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
+        $stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
@@ -129,7 +126,7 @@ class ConfigurableTest extends TestCase
             Configurable::class,
             [
                 'catalogProductRelation' => $this->relation,
-                'scopeResolver' => $this->scopeResolver,
+                'scopeResolver' => $scopeResolver,
                 'attributeOptionProvider' => $this->attributeOptionProvider,
                 'optionProvider' => $this->optionProvider,
                 'context' => $context
