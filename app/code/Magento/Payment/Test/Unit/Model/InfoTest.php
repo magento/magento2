@@ -21,6 +21,9 @@ use Magento\Payment\Model\MethodInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InfoTest extends TestCase
 {
     /** @var InfoInterface */
