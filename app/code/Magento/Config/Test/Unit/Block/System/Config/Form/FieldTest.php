@@ -1,22 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
+use Magento\Backend\Model\Url;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\Text;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test how class render field html element in Stores Configuration
  */
-class FieldTest extends \PHPUnit\Framework\TestCase
+class FieldTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field
+     * @var Field
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_elementMock;
 
@@ -26,25 +34,25 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $_testData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_storeManagerMock = $this->createMock(StoreManager::class);
 
         $data = [
             'storeManager' => $this->_storeManagerMock,
-            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'urlBuilder' => $this->createMock(Url::class),
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Form\Field::class, $data);
+        $helper = new ObjectManager($this);
+        $this->_object = $helper->getObject(Field::class, $data);
 
         $this->_testData = [
             'htmlId' => 'test_field_id',
@@ -54,7 +62,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->_elementMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Text::class,
+            Text::class,
             [
                 'getHtmlId',
                 'getName',

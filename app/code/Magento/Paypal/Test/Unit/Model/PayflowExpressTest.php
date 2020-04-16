@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,27 @@
 
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Payflow;
+use Magento\Paypal\Model\PayflowExpress;
+use Magento\Paypal\Model\Pro;
+use Magento\Paypal\Model\ProFactory;
+use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PayflowExpressTest extends \PHPUnit\Framework\TestCase
+class PayflowExpressTest extends TestCase
 {
     /**
-     * @var \Magento\Paypal\Model\PayflowExpress
+     * @var PayflowExpress
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $transactionRepository;
 
@@ -26,17 +35,17 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
      */
     const TRANSPORT_PAYFLOW_TXN_ID = 'Payflow pro transaction key';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $proFactory = $this->getMockBuilder(
-            \Magento\Paypal\Model\ProFactory::class
+            ProFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $api = $this->createMock(\Magento\Paypal\Model\Api\Nvp::class);
+        $api = $this->createMock(Nvp::class);
         $paypalPro = $this->getMockBuilder(
-            \Magento\Paypal\Model\Pro::class
+            Pro::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->transactionRepository = $this->getMockBuilder(\Magento\Sales\Api\TransactionRepositoryInterface::class)
+        $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
@@ -45,7 +54,7 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
         $proFactory->expects($this->once())->method('create')->will($this->returnValue($paypalPro));
 
         $this->_model = $objectManager->getObject(
-            \Magento\Paypal\Model\PayflowExpress::class,
+            PayflowExpress::class,
             ['proFactory' => $proFactory, 'transactionRepository' => $this->transactionRepository]
         );
     }
@@ -94,12 +103,12 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares payment info mock and adds it to the model
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getPreparedPaymentInfo()
     {
         $paymentInfo = $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Payment::class
+            Payment::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $this->_model->setData('info_instance', $paymentInfo);
         return $paymentInfo;
@@ -108,12 +117,12 @@ class PayflowExpressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares capture transaction
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getCaptureTransaction()
     {
         return $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Payment\Transaction::class
+            Transaction::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
     }
 

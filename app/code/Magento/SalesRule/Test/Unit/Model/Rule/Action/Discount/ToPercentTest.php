@@ -1,45 +1,55 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
-class ToPercentTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data;
+use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
+use Magento\SalesRule\Model\Rule\Action\Discount\ToPercent;
+use Magento\SalesRule\Model\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ToPercentTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\ToPercent
+     * @var ToPercent
      */
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataFactory|MockObject
      */
     protected $discountDataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->validator = $this->getMockBuilder(
-            \Magento\SalesRule\Model\Validator::class
+            Validator::class
         )->disableOriginalConstructor()->setMethods(
             ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice', '__wakeup']
         )->getMock();
 
         $this->discountDataFactory = $this->getMockBuilder(
-            \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory::class
+            DataFactory::class
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
 
         $this->model = $helper->getObject(
-            \Magento\SalesRule\Model\Rule\Action\Discount\ToPercent::class,
+            ToPercent::class,
             ['discountDataFactory' => $this->discountDataFactory, 'validator' => $this->validator]
         );
     }
@@ -63,7 +73,7 @@ class ToPercentTest extends \PHPUnit\Framework\TestCase
         $expectedDiscountData
     ) {
         $discountData = $this->getMockBuilder(
-            \Magento\SalesRule\Model\Rule\Action\Discount\Data::class
+            Data::class
         )->disableOriginalConstructor()->setMethods(
             ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
         )->getMock();
@@ -71,13 +81,13 @@ class ToPercentTest extends \PHPUnit\Framework\TestCase
         $this->discountDataFactory->expects($this->once())->method('create')->will($this->returnValue($discountData));
 
         $rule = $this->getMockBuilder(
-            \Magento\SalesRule\Model\Rule::class
+            Rule::class
         )->disableOriginalConstructor()->setMethods(
             ['getDiscountAmount', 'getDiscountQty', '__wakeup']
         )->getMock();
 
         $item = $this->getMockBuilder(
-            \Magento\Quote\Model\Quote\Item\AbstractItem::class
+            AbstractItem::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'getDiscountAmount',

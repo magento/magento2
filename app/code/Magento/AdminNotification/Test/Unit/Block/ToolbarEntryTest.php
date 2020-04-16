@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -30,7 +30,7 @@ class ToolbarEntryTest extends TestCase
             Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
-        $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
+        $notificationList->method('getSize')->will($this->returnValue($unreadNotifications));
 
         $block = $objectManagerHelper->getObject(
             ToolbarEntry::class,
@@ -52,9 +52,7 @@ class ToolbarEntryTest extends TestCase
         $helper = new ObjectManager($this);
 
         // 1. Create mocks
-        $notificationList = $this->getMockBuilder(Unread::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $notificationList = $this->createMock(Unread::class);
 
         /** @var ToolbarEntry $model */
         $model = $helper->getObject(

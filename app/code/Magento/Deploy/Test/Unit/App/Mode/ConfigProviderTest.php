@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,9 @@
 namespace Magento\Deploy\Test\Unit\App\Mode;
 
 use Magento\Deploy\App\Mode\ConfigProvider;
+use PHPUnit\Framework\TestCase;
 
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+class ConfigProviderTest extends TestCase
 {
     public function testGetConfigs()
     {

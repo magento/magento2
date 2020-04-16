@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,15 @@
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
-use \Magento\Weee\Pricing\Adjustment;
-
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Weee\Model\Tax;
+use Magento\Weee\Pricing\Adjustment;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class AdjustmentTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class AdjustmentTest extends TestCase
 {
     /**
      * @var Adjustment
@@ -19,12 +22,12 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data|MockObject
      */
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
@@ -33,10 +36,10 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $sortOrder = 5;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->will(
@@ -75,9 +78,9 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function testIsIncludedInDisplayPrice($expectedResult)
     {
         $displayTypes = [
-            \Magento\Weee\Model\Tax::DISPLAY_INCL,
-            \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
-            \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
+            Tax::DISPLAY_INCL,
+            Tax::DISPLAY_INCL_DESCR,
+            Tax::DISPLAY_EXCL_DESCR_INCL,
         ];
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
@@ -103,7 +106,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
+        $object = $this->getMockForAbstractClass(SaleableInterface::class);
 
         $this->weeeHelper->expects($this->any())
             ->method('getAmountExclTax')
