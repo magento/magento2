@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,16 @@
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\IntegrationConfig;
 use Magento\Integration\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\Config\Integration\Reader;
+use Magento\Integration\Model\IntegrationConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\IntegrationConfig
  */
-class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
+class IntegrationConfigTest extends TestCase
 {
     /**
      * @var IntegrationConfig
@@ -20,26 +23,26 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
     private $integrationConfigModel;
 
     /**
-     * @var TypeIntegration|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeIntegration|MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var  Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeIntegration::class)
+        $this->configCacheTypeMock = $this->getMockBuilder(TypeIntegration::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Integration\Reader::class)
+        $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)

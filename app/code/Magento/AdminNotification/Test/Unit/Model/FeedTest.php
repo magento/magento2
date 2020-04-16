@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -70,8 +70,7 @@ class FeedTest extends TestCase
             ['create']
         );
         $this->curlFactory = $this->createPartialMock(CurlFactory::class, ['create']);
-        $this->curl = $this->getMockBuilder(Curl::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
         $this->inboxModel = $this->createPartialMock(Inbox::class, [
                 '__wakeup',
@@ -96,13 +95,11 @@ class FeedTest extends TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMockBuilder(ProductMetadata::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->productMetadata = $this->createMock(ProductMetadata::class);
 
         $this->urlBuilder = $this->createMock(UrlInterface::class);
 

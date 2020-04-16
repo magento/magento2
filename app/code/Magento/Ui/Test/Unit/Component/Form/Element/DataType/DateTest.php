@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,9 +14,6 @@ use Magento\Ui\Component\Form\Element\DataType\Date;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Date form element
- */
 class DateTest extends TestCase
 {
     /** @var Context|MockObject */
@@ -40,7 +37,7 @@ class DateTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->localeDateMock = $this->createMock(TimezoneInterface::class);

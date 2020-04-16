@@ -22,8 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
-            <waitForPageLoad time="60" stepKey="waitForCategoryPageLoad"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
             <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
             <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
@@ -36,8 +35,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create Category with Five Nesting -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create Nested First Category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>

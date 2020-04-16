@@ -53,7 +53,7 @@ class PersistentTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentSessionHelperMock = $this->createMock(Session::class);
         $this->customerViewHelperMock = $this->createMock(View::class);

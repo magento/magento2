@@ -1,36 +1,45 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
-class CodeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Cms\Model\Block;
+use Magento\Cms\Model\Page;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Helper\Code;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CodeTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_codeModelMock;
 
     /**
-     * @var \Magento\GoogleOptimizer\Helper\Code
+     * @var Code
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_codeModelMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_helper = $objectManagerHelper->getObject(
-            \Magento\GoogleOptimizer\Helper\Code::class,
+            Code::class,
             ['code' => $this->_codeModelMock]
         );
     }
 
     public function testLoadingCodeForCategoryEntity()
     {
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(Category::class);
 
         $categoryId = 1;
         $storeId = 1;
@@ -58,7 +67,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadingCodeForProductEntity()
     {
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
 
         $categoryId = 1;
         $storeId = 1;
@@ -86,7 +95,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadingCodeForPageEntity()
     {
-        $pageMock = $this->createMock(\Magento\Cms\Model\Page::class);
+        $pageMock = $this->createMock(Page::class);
 
         $categoryId = 1;
 
@@ -106,13 +115,11 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model class is not valid
-     */
     public function testExceptionNotValidEntityType()
     {
-        $entity = $this->createMock(\Magento\Cms\Model\Block::class);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The model class is not valid');
+        $entity = $this->createMock(Block::class);
 
         $entityId = 1;
 
@@ -125,13 +132,11 @@ class CodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model is empty
-     */
     public function testExceptionEmptyEntity()
     {
-        $entity = $this->createMock(\Magento\Cms\Model\Block::class);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The model is empty');
+        $entity = $this->createMock(Block::class);
 
         $entityId = 0;
 

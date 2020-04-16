@@ -68,7 +68,7 @@ class EventSaverTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->customerVisitorMock = $this->createMock(Visitor::class);

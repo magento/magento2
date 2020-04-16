@@ -15,9 +15,6 @@ use Magento\Wishlist\ViewModel\AllowedQuantity;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class AllowedQuantityTest
- */
 class AllowedQuantityTest extends TestCase
 {
     /**
@@ -48,7 +45,7 @@ class AllowedQuantityTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistryMock = $this->createMock(StockRegistry::class);
         $this->itemMock = $this->getMockForAbstractClass(

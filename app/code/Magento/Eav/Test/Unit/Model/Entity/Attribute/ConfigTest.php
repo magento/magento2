@@ -1,51 +1,60 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Eav\Model\Entity\Attribute\Config
- */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Config;
+use Magento\Eav\Model\Entity\Attribute\Config\Reader;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Serialize\SerializerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test class for \Magento\Eav\Model\Entity\Attribute\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Config
+     * @var Config
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheId;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     protected $_attribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_entityType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
-        $this->_entityType = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
-        $this->_readerMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Config\Reader::class);
+        $this->_attribute = $this->createMock(Attribute::class);
+        $this->_entityType = $this->createMock(Type::class);
+        $this->_readerMock = $this->createMock(Reader::class);
         $this->_cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
         $this->_cacheId = 'eav_attributes';
         $this->_cacheMock->expects($this->once())
@@ -53,11 +62,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->with($this->_cacheId)
             ->willReturn('');
 
-        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn([]);
 
-        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
+        $this->_model = new Config(
             $this->_readerMock,
             $this->_cacheMock,
             $this->_cacheId,

@@ -1,18 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model\Session;
 
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session\SuccessValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
+class SuccessValidatorTest extends TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -20,7 +24,7 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
+            Session::class
         )->disableOriginalConstructor()->getMock();
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
@@ -28,7 +32,7 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValidWithNotEmptyGetLastSuccessQuoteId()
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
+            Session::class
         )->disableOriginalConstructor()->getMock();
 
         $checkoutSession->expects(
@@ -49,7 +53,7 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValidWithEmptyQuoteAndOrder()
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
+            Session::class
         )->disableOriginalConstructor()->getMock();
         $checkoutSession->expects(
             $this->at(0)
@@ -71,7 +75,7 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValidTrue()
     {
         $checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
+            Session::class
         )->disableOriginalConstructor()->getMock();
         $checkoutSession->expects(
             $this->at(0)
@@ -91,13 +95,13 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @param MockObject $checkoutSession
      * @return object
      */
-    protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
+    protected function createSuccessValidator(MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(
-            \Magento\Checkout\Model\Session\SuccessValidator::class,
+            SuccessValidator::class,
             ['checkoutSession' => $checkoutSession]
         );
     }

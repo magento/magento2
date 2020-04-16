@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,55 +9,69 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Session;
 
-class AdminConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\Model\Session\AdminConfig;
+use Magento\Backend\Model\Url;
+use Magento\Backend\Model\UrlFactory;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\ValidatorInterface;
+use Magento\Framework\ValidatorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AdminConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\ValidatorFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|MockObject
      */
     private $validatorFactory;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Backend\Model\UrlFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlFactory|MockObject
      */
     private $backendUrlFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
+            Http::class,
             ['getBasePath', 'isSecure', 'getHttpHost']
         );
         $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getHttpHost')
             ->will($this->returnValue('init.host'));
-        $this->objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->validatorFactory = $this->getMockBuilder(\Magento\Framework\ValidatorFactory::class)
+        $this->objectManager =  new ObjectManager($this);
+        $this->validatorFactory = $this->getMockBuilder(ValidatorFactory::class)
             ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $backendUrl = $this->createMock(\Magento\Backend\Model\Url::class);
+        $backendUrl = $this->createMock(Url::class);
         $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
-        $this->backendUrlFactory = $this->createPartialMock(\Magento\Backend\Model\UrlFactory::class, ['create']);
+        $this->backendUrlFactory = $this->createPartialMock(UrlFactory::class, ['create']);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($dirMock));
@@ -65,7 +79,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testSetCookiePathNonDefault()
     {
-        $mockFrontNameResolver = $this->getMockBuilder(\Magento\Backend\App\Area\FrontNameResolver::class)
+        $mockFrontNameResolver = $this->getMockBuilder(FrontNameResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -73,7 +87,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getFrontName')
             ->will($this->returnValue('backend'));
 
-        $validatorMock = $this->getMockBuilder(\Magento\Framework\Validator\ValidatorInterface::class)
+        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $validatorMock->expects($this->any())
@@ -86,7 +100,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($validatorMock);
         $adminConfig = $this->objectManager->getObject(
-            \Magento\Backend\Model\Session\AdminConfig::class,
+            AdminConfig::class,
             [
                 'validatorFactory' => $this->validatorFactory,
                 'request' => $this->requestMock,
@@ -109,7 +123,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
         $sessionName = 'admin';
         $this->requestMock->expects($this->exactly(2))->method('isSecure')->willReturn($secureRequest);
 
-        $validatorMock = $this->getMockBuilder(\Magento\Framework\Validator\ValidatorInterface::class)
+        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $validatorMock->expects($this->any())
@@ -123,7 +137,7 @@ class AdminConfigTest extends \PHPUnit\Framework\TestCase
             ->willReturn($validatorMock);
 
         $adminConfig = $this->objectManager->getObject(
-            \Magento\Backend\Model\Session\AdminConfig::class,
+            AdminConfig::class,
             [
                 'validatorFactory' => $this->validatorFactory,
                 'request' => $this->requestMock,

@@ -1,49 +1,57 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
+use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class CanonicalUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator */
+    /** @var CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductUrlPathGenerator|MockObject */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|MockObject */
     protected $product;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectRegistry|MockObject */
     protected $categoryRegistry;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewriteFactory|MockObject */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewrite|MockObject */
     protected $urlRewrite;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+        $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()->getMock();
-        $this->categoryRegistry = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ObjectRegistry::class)
+        $this->categoryRegistry = $this->getMockBuilder(ObjectRegistry::class)
             ->disableOriginalConstructor()->getMock();
         $this->productUrlPathGenerator = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class
+            ProductUrlPathGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->canonicalUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator::class,
+            CanonicalUrlRewriteGenerator::class,
             [
                 'productUrlPathGenerator' => $this->productUrlPathGenerator,
                 'urlRewriteFactory' => $this->urlRewriteFactory

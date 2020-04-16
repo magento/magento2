@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,11 +10,12 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\Config;
 use Magento\Shipping\Model\Config\Source\Allmethods;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Allmethods Class
  */
-class AllmethodsTest extends \PHPUnit\Framework\TestCase
+class AllmethodsTest extends TestCase
 {
     /**
      * @var ScopeConfigInterface|MockObject $scopeConfig
@@ -39,7 +40,7 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->shippingConfig = $this->createMock(Config::class);

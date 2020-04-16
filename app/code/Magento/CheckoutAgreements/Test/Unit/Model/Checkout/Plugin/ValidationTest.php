@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,91 +6,105 @@
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
+use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Checkout\Api\PaymentInformationManagementInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentExtension;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ValidationTest validates the agreement based on the payment method
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidationTest extends \PHPUnit\Framework\TestCase
+class ValidationTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation
+     * @var Validation
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $agreementsValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $extensionAttributesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $checkoutAgreementsListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $agreementsFilterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $quoteRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->agreementsValidatorMock = $this->createMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
-        $this->subjectMock = $this->createMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
-        $this->paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
-        $this->addressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping']);
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->agreementsValidatorMock = $this->createMock(AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->createMock(PaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->createMock(PaymentInterface::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->quoteMock = $this->createPartialMock(Quote::class, ['getIsMultiShipping']);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->extensionAttributesMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\PaymentExtension::class,
+            PaymentExtension::class,
             ['getAgreementIds']
         );
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+            CheckoutAgreementsListInterface::class
         );
         $this->agreementsFilterMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+            ActiveStoreAgreementsFilter::class
         );
 
-        $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
+        $this->model = new Validation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
             $this->checkoutAgreementsListMock,
@@ -108,7 +122,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->quoteMock
             ->expects($this->once())
             ->method('getIsMultiShipping')
@@ -138,11 +152,9 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $cartId = 100;
         $agreements = [1, 2, 3];
         $this->scopeConfigMock
@@ -150,7 +162,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->quoteMock
             ->expects($this->once())
             ->method('getIsMultiShipping')
@@ -202,7 +214,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);
