@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Create;
@@ -401,7 +404,7 @@ class CreateTest extends TestCase
 
     public function testRunWithException()
     {
-        $this->expectException('Magento\Framework\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Some error');
         $data = [
             'websites' => [],

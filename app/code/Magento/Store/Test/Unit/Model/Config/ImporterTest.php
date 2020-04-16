@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
@@ -151,7 +154,7 @@ class ImporterTest extends TestCase
 
     public function testImportWithException()
     {
-        $this->expectException('Magento\Framework\Exception\State\InvalidTransitionException');
+        $this->expectException(InvalidTransitionException::class);
         $this->expectExceptionMessage('Some error');
         $this->processorFactoryMock->expects($this->any())
             ->method('create')

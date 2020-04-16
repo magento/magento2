@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
@@ -101,7 +102,7 @@ class WebsiteRepositoryTest extends TestCase
 
     public function testGetDefaultIsSeveral()
     {
-        $this->expectException('DomainException');
+        $this->expectException(\DomainException::class);
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -130,7 +131,7 @@ class WebsiteRepositoryTest extends TestCase
 
     public function testGetDefaultIsZero()
     {
-        $this->expectException('DomainException');
+        $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('The default website isn\'t defined. Set the website and try again.');
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()

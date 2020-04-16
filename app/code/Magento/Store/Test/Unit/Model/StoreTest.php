@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
@@ -425,7 +427,7 @@ class StoreTest extends TestCase
 
     public function testGetBaseUrlWrongType()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
             Store::class

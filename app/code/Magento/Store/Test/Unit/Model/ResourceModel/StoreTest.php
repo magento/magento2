@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\ResourceModel;
 
@@ -13,7 +14,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Store;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +38,7 @@ class StoreTest extends TestCase
     public function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->select =  $this->createMock(Select::class);
+        $this->select = $this->createMock(Select::class);
         $this->resourceMock = $this->createPartialMock(
             ResourceConnection::class,
             [
@@ -46,9 +46,9 @@ class StoreTest extends TestCase
                 'getTableName'
             ]
         );
-        $this->connectionMock = $this->createPartialMock(
-            Mysql::class,
-            [
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'isTableExists',
                 'select',
                 'fetchAll',
@@ -58,8 +58,8 @@ class StoreTest extends TestCase
                 'where',
                 'quoteIdentifier',
                 'quote'
-            ]
-        );
+            ])
+            ->getMockForAbstractClass();
 
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);

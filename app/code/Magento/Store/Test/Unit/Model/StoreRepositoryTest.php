@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
@@ -76,7 +78,7 @@ class StoreRepositoryTest extends TestCase
 
     public function testGetWithException()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('The store that was requested wasn\'t found. Verify the store and try again.');
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -126,7 +128,7 @@ class StoreRepositoryTest extends TestCase
 
     public function testGetByIdWithException()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('The store that was requested wasn\'t found. Verify the store and try again.');
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Message;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -10,7 +12,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Store\Model\ResourceModel\Group\Collection;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EmptyGroupCategoryTest extends TestCase

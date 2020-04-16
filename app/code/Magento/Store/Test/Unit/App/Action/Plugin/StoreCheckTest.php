@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\Exception\State\InitException;
 use Magento\Store\App\Action\Plugin\StoreCheck;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -54,7 +57,7 @@ class StoreCheckTest extends TestCase
 
     public function testBeforeExecuteWhenStoreNotActive()
     {
-        $this->expectException('Magento\Framework\Exception\State\InitException');
+        $this->expectException(InitException::class);
         $this->expectExceptionMessage('Current store is not active.');
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
         $this->_plugin->beforeExecute($this->subjectMock);
