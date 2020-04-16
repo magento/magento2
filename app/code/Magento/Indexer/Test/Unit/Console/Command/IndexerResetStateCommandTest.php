@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,10 @@
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Console\Command\IndexerResetStateCommand;
+use Magento\Indexer\Model\Indexer\State;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -18,7 +20,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
@@ -33,10 +35,10 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         );
         $this->initIndexerCollectionByItems([$indexerOne]);
 
-        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
+        $stateMock = $this->createMock(State::class);
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
-            ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
+            ->with(StateInterface::STATUS_INVALID)
             ->will($this->returnSelf());
 
         $stateMock->expects($this->exactly(1))

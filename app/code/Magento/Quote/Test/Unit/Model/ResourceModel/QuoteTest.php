@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,25 +10,28 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Sales\Model\Order;
 use Magento\SalesSequence\Model\Manager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Quote\Model\ResourceModel\Quote.
  */
-class QuoteTest extends \PHPUnit\Framework\TestCase
+class QuoteTest extends TestCase
 {
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $quoteMock;
 
     /**
-     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     private $sequenceManagerMock;
 
     /**
-     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceInterface|MockObject
      */
     private $sequenceMock;
 
@@ -40,7 +43,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->quoteMock = $this->createMock(Quote::class);
@@ -83,9 +86,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     public function getReservedOrderIdDataProvider(): array
     {
         return [
-            [\Magento\Sales\Model\Order::ENTITY, 1, '1000000001'],
-            [\Magento\Sales\Model\Order::ENTITY, 2, '2000000001'],
-            [\Magento\Sales\Model\Order::ENTITY, 3, '3000000001'],
+            [Order::ENTITY, 1, '1000000001'],
+            [Order::ENTITY, 2, '2000000001'],
+            [Order::ENTITY, 3, '3000000001'],
         ];
     }
 }

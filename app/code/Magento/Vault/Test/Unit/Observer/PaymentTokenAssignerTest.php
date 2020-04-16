@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,17 +16,17 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
-use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Observer\PaymentTokenAssigner;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PaymentTokenAssignerTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
+class PaymentTokenAssignerTest extends TestCase
 {
     /**
-     * @var PaymentTokenManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenManagementInterface|MockObject
      */
     private $paymentTokenManagement;
 
@@ -35,7 +35,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
      */
     private $observer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
         $this->observer = new PaymentTokenAssigner($this->paymentTokenManagement);
@@ -179,7 +179,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {

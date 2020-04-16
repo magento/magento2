@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,22 +7,21 @@
 namespace Magento\Backend\Test\Unit\Model\View\Layout;
 
 use Magento\Backend\Model\View\Layout\StructureManager;
-use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class StructureManagerTest
- */
-class StructureManagerTest extends \PHPUnit\Framework\TestCase
+class StructureManagerTest extends TestCase
 {
     /**
-     * @var Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var Structure|MockObject
      */
     private $structureMock;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|MockObject
      */
     private $scheduledStructureMock;
 
@@ -31,7 +30,7 @@ class StructureManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $structureManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->structureMock = $this->getMockBuilder(Structure::class)

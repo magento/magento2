@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Authorization\Test\Unit\Model\Acl;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
+
 use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\ResourceModel\Rules\Collection as RulesCollection;
@@ -80,7 +81,7 @@ class AclRetrieverTest extends TestCase
 
     public function testGetAllowedResourcesByUser()
     {
-        $this->roleMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->roleMock->method('getId')->will($this->returnValue(1));
         $expectedResources = ['Magento_Backend::dashboard', 'Magento_Cms::page'];
         $this->assertEquals(
             $expectedResources,
@@ -102,8 +103,8 @@ class AclRetrieverTest extends TestCase
             RoleCollection::class,
             ['setUserFilter', 'getFirstItem']
         );
-        $roleCollectionMock->expects($this->any())->method('setUserFilter')->will($this->returnSelf());
-        $roleCollectionMock->expects($this->any())->method('getFirstItem')->will($this->returnValue($this->roleMock));
+        $roleCollectionMock->method('setUserFilter')->will($this->returnSelf());
+        $roleCollectionMock->method('getFirstItem')->will($this->returnValue($this->roleMock));
 
         /**
          * @var RoleCollectionFactory|MockObject $roleCollectionFactoryMock
@@ -112,7 +113,7 @@ class AclRetrieverTest extends TestCase
             RoleCollectionFactory::class,
             ['create']
         );
-        $roleCollectionFactoryMock->expects($this->any())->method('create')->will(
+        $roleCollectionFactoryMock->method('create')->will(
             $this->returnValue($roleCollectionMock)
         );
 
@@ -123,7 +124,7 @@ class AclRetrieverTest extends TestCase
             Rules::class,
             ['getResourceId', '__wakeup']
         );
-        $rulesMock1->expects($this->any())->method('getResourceId')->will(
+        $rulesMock1->method('getResourceId')->will(
             $this->returnValue('Magento_Backend::dashboard')
         );
         /**
@@ -133,7 +134,7 @@ class AclRetrieverTest extends TestCase
             Rules::class,
             ['getResourceId', '__wakeup']
         );
-        $rulesMock2->expects($this->any())->method('getResourceId')->will($this->returnValue('Magento_Cms::page'));
+        $rulesMock2->method('getResourceId')->will($this->returnValue('Magento_Cms::page'));
 
         /**
          * @var RulesCollection|MockObject $rulesCollectionMock
@@ -142,9 +143,9 @@ class AclRetrieverTest extends TestCase
             RulesCollection::class,
             ['getByRoles', 'load', 'getItems']
         );
-        $rulesCollectionMock->expects($this->any())->method('getByRoles')->will($this->returnSelf());
-        $rulesCollectionMock->expects($this->any())->method('load')->will($this->returnSelf());
-        $rulesCollectionMock->expects($this->any())->method('getItems')->will(
+        $rulesCollectionMock->method('getByRoles')->will($this->returnSelf());
+        $rulesCollectionMock->method('load')->will($this->returnSelf());
+        $rulesCollectionMock->method('getItems')->will(
             $this->returnValue([$rulesMock1, $rulesMock2])
         );
 

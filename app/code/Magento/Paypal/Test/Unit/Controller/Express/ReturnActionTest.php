@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,7 +6,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
-class ReturnActionTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
+use Magento\Paypal\Test\Unit\Controller\ExpressTest;
+
+class ReturnActionTest extends ExpressTest
 {
     protected $name = 'ReturnAction';
 

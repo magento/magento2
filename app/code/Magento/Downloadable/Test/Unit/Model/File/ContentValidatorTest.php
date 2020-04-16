@@ -1,13 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\File;
 
+use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Downloadable\Model\File\ContentValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ContentValidatorTest extends \PHPUnit\Framework\TestCase
+class ContentValidatorTest extends TestCase
 {
     /**
      * @var ContentValidator
@@ -15,15 +18,15 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fileContentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validator = new \Magento\Downloadable\Model\File\ContentValidator();
+        $this->validator = new ContentValidator();
 
-        $this->fileContentMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
+        $this->fileContentMock = $this->createMock(ContentInterface::class);
     }
 
     public function testIsValid()
@@ -36,12 +39,10 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->validator->isValid($this->fileContentMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Provided content must be valid base64 encoded data.
-     */
     public function testIsValidThrowsExceptionIfProvidedContentIsNotBase64Encoded()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Provided content must be valid base64 encoded data.');
         $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue('not_a_base64_encoded_content'));
         $this->fileContentMock->expects($this->any())->method('getName')
@@ -50,13 +51,13 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Provided file name contains forbidden characters.
      * @dataProvider getInvalidNames
      * @param string $fileName
      */
     public function testIsValidThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters($fileName)
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Provided file name contains forbidden characters.');
         $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue(base64_encode('test content')));
         $this->fileContentMock->expects($this->any())->method('getName')

@@ -47,7 +47,7 @@ class DataTest extends TestCase
     /**
      * Prepare environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);

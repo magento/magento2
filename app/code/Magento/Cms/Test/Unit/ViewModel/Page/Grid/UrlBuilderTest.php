@@ -45,7 +45,7 @@ class UrlBuilderTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->frontendUrlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->setMethods(['getUrl', 'setScope'])

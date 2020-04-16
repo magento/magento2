@@ -1,32 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Iterator;
 
-class FieldTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Iterator\Field;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FieldTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Iterator\Field
+     * @var Field
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_fieldMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_groupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
-        $this->_groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator\Field(
+        $this->_groupMock = $this->createMock(Group::class);
+        $this->_model = new Field(
             $this->_groupMock,
             $this->_fieldMock
         );
@@ -41,7 +46,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_fieldMock);
         unset($this->_groupMock);

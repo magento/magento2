@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,16 @@
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\TaxAdjustment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
+class TaxAdjustmentTest extends TestCase
 {
     /**
      * @var TaxAdjustment
@@ -16,17 +23,17 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Weee\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
@@ -35,11 +42,11 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $sortOrder = 5;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
+        $this->weeeHelperMock = $this->createMock(Data::class);
         $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->will(
@@ -101,7 +108,7 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($taxDisplayExclTax);
 
         $displayTypes = [
-            \Magento\Weee\Model\Tax::DISPLAY_EXCL,
+            Tax::DISPLAY_EXCL,
         ];
         $this->weeeHelperMock->expects($this->any())
             ->method('typeOfDisplay')
@@ -146,13 +153,13 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param float $amount
-     * @param \Magento\Framework\DataObject[] $weeeAttributes
+     * @param DataObject[] $weeeAttributes
      * @param float $expectedResult
      * @dataProvider applyAdjustmentDataProvider
      */
     public function testApplyAdjustment($amount, $weeeAttributes, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
+        $object = $this->getMockForAbstractClass(SaleableInterface::class);
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')
@@ -170,12 +177,12 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             [
                 'amount' => 10,
                 'weee_attributes' => [
-                    new \Magento\Framework\DataObject(
+                    new DataObject(
                         [
                             'tax_amount' => 5,
                         ]
                     ),
-                    new \Magento\Framework\DataObject(
+                    new DataObject(
                         [
                             'tax_amount' => 2.5,
                         ]
