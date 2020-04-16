@@ -28,9 +28,8 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <!-- Run cron twice -->
+            <!-- Run cron -->
             <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -54,7 +53,6 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 

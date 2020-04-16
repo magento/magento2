@@ -64,9 +64,8 @@
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
-        <!-- Run cron twice -->
+        <!-- Run cron -->
         <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron2"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Assert on storefront default view -->

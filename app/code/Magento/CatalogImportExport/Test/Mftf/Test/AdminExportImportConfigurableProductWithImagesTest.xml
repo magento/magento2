@@ -165,9 +165,8 @@
             <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
-        <!-- Run cron twice -->
+        <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
-        <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 

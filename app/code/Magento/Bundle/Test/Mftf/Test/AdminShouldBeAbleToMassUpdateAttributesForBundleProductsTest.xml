@@ -56,9 +56,8 @@
         <actionGroup ref="AdminUpdateProductNameAndDescriptionAttributes" stepKey="updateProductAttribute">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
         </actionGroup>
-        <!--Run cron twice-->
+        <!--Run cron -->
         <magentoCLI command="cron:run" stepKey="cronRun"/>
-        <magentoCLI command="cron:run" stepKey="cronRunTwice"/>
         <!-- Search for a product with a new name and Open Product -->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchWithNewProductName">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
