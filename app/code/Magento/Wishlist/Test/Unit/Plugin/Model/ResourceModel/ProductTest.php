@@ -32,7 +32,7 @@ class ProductTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistCleaner = $this->createMock(WishlistCleaner::class);
         $this->model = new Plugin($this->wishlistCleaner);

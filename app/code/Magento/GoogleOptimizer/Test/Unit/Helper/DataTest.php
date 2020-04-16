@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,33 +6,39 @@
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class DataTest
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_googleAnalyticsHelperMock;
 
     /**
-     * @var \Magento\GoogleOptimizer\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\GoogleOptimizer\Helper\Data::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $className = Data::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->_scopeConfigMock = $context->getScopeConfig();
         $this->_googleAnalyticsHelperMock = $arguments['analyticsHelper'];
@@ -51,8 +57,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isSetFlag'
         )->with(
-            \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            Data::XML_PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE,
             $store
         )->will(
             $this->returnValue($isExperimentsEnabled)
@@ -83,8 +89,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isSetFlag'
         )->with(
-            \Magento\GoogleOptimizer\Helper\Data::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            Data::XML_PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE,
             $store
         )->will(
             $this->returnValue($isExperimentsEnabled)

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,11 +8,12 @@ namespace Magento\Sitemap\Test\Unit\Model\Config\Backend;
 
 use Magento\Sitemap\Model\Config\Backend\Priority;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for @see Priority
  */
-class PriorityTest extends \PHPUnit\Framework\TestCase
+class PriorityTest extends TestCase
 {
     /**
      * @var Priority|MockObject
@@ -22,7 +23,7 @@ class PriorityTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priorityMock = $this->getMockBuilder(Priority::class)
             ->disableOriginalConstructor()

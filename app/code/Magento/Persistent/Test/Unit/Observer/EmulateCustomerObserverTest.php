@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,47 +7,58 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Observer\EmulateCustomerObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class EmulateCustomerObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\EmulateCustomerObserver
+     * @var EmulateCustomerObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $addressRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
+            CustomerRepositoryInterface::class,
             [],
             '',
             false
@@ -61,12 +72,12 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             'setIsCustomerEmulated',
             '__wakeUp'
         ];
-        $this->customerSessionMock = $this->createPartialMock(\Magento\Customer\Model\Session::class, $methods);
+        $this->customerSessionMock = $this->createPartialMock(Session::class, $methods);
         $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->addressRepositoryMock = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->model = new \Magento\Persistent\Observer\EmulateCustomerObserver(
+        $this->helperMock = $this->createMock(Data::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->model = new EmulateCustomerObserver(
             $this->sessionHelperMock,
             $this->helperMock,
             $this->customerSessionMock,
@@ -111,9 +122,9 @@ class EmulateCustomerObserverTest extends \PHPUnit\Framework\TestCase
             ['getCustomerId', '__wakeUp']
         );
         $methods = ['getCountryId', 'getRegion', 'getRegionId', 'getPostcode'];
-        $defaultShippingAddressMock = $this->createPartialMock(\Magento\Customer\Model\Address::class, $methods);
-        $defaultBillingAddressMock = $this->createPartialMock(\Magento\Customer\Model\Address::class, $methods);
-        $customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $defaultShippingAddressMock = $this->createPartialMock(Address::class, $methods);
+        $defaultBillingAddressMock = $this->createPartialMock(Address::class, $methods);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock
             ->expects($this->once())
             ->method('getDefaultShipping')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPriceType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TierPriceTypeTest.
- */
-class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
+class TierPriceTypeTest extends TestCase
 {
     /**
      * @var  AdvancedPricing\Validator\TierPriceType
@@ -23,11 +23,11 @@ class TierPriceTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->tierPriceType = $objectManager->getObject(
-            AdvancedPricing\Validator\TierPriceType::class,
+            TierPriceType::class,
             []
         );
     }

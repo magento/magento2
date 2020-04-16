@@ -1,14 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Unit\Helper;
 
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Multishipping\Helper\Data;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Multishipping data helper Test
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
      * Multishipping data helper
@@ -20,33 +29,33 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * Core store config mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
      * Quote mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote
+     * @var MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
      * Checkout session mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Checkout\Model\Session
+     * @var MockObject|Session
      */
     protected $checkoutSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->quoteMock = $this->createMock(Quote::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = $objectManager->getConstructArguments(\Magento\Multishipping\Helper\Data::class);
-        $this->helper = $objectManager->getObject(\Magento\Multishipping\Helper\Data::class, $arguments);
+        $objectManager = new ObjectManager($this);
+        $arguments = $objectManager->getConstructArguments(Data::class);
+        $this->helper = $objectManager->getObject(Data::class, $arguments);
         $this->checkoutSessionMock = $arguments['checkoutSession'];
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfigMock = $context->getScopeConfig();
     }
@@ -59,7 +68,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getValue'
         )->with(
-            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
+            Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
         )->will(
             $this->returnValue($maximumQty)
         );
@@ -93,7 +102,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isSetFlag'
         )->with(
-            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE
+            Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE
         )->will(
             $this->returnValue($isMultiShipping)
         );
@@ -141,7 +150,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getValue'
         )->with(
-            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
+            Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
         )->will(
             $this->returnValue($maximumQty)
         );

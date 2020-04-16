@@ -1,62 +1,70 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\Format;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Updater;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests  for Magento\Quote\Model\Service\Quote\Updater
  *
  */
-class UpdaterTest extends \PHPUnit\Framework\TestCase
+class UpdaterTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Updater |\PHPUnit_Framework_MockObject_MockObject
+     * @var Updater|MockObject
      */
     protected $object;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Stock\Item|MockObject
      */
     protected $stockItemMock;
 
     /**
-     * @var \Magento\Framework\Locale\Format |\PHPUnit_Framework_MockObject_MockObject
+     * @var Format|MockObject
      */
     protected $localeFormat;
 
     /**
-     * @var \Magento\Catalog\Model\Product |\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->productMock = $this->createPartialMock(Product::class, [
                 'getStockItem',
                 '__wakeup',
                 'setIsSuperMode',
                 'unsSkipCheckRequiredOption'
             ]);
 
-        $this->localeFormat = $this->createPartialMock(\Magento\Framework\Locale\Format::class, [
+        $this->localeFormat = $this->createPartialMock(Format::class, [
                 'getNumber', 'getPriceFormat'
             ]);
 
-        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
+        $this->itemMock = $this->createPartialMock(Item::class, [
                 'updateItem',
                 'getProduct',
                 'setQty',
@@ -76,13 +84,13 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 'getIsQtyDecimal',
                 '__wakeup'
             ]);
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
 
         $this->object = (new ObjectManager($this))
             ->getObject(
-                \Magento\Quote\Model\Quote\Item\Updater::class,
+                Updater::class,
                 [
                     'localeFormat' => $this->localeFormat,
                     'serializer' => $this->serializer
@@ -90,12 +98,10 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The qty value is required to update quote item.
-     */
     public function testUpdateNoQty()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The qty value is required to update quote item.');
         $this->object->update($this->itemMock, []);
     }
 
@@ -228,7 +234,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     {
         $customPrice = 9.99;
         $qty = 3;
-        $buyRequestMock = $this->createPartialMock(\Magento\Framework\DataObject::class, [
+        $buyRequestMock = $this->createPartialMock(DataObject::class, [
                 'setCustomPrice',
                 'setValue',
                 'setCode',
@@ -294,7 +300,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     public function testUpdateUnsetCustomPrice()
     {
         $qty = 3;
-        $buyRequestMock = $this->createPartialMock(\Magento\Framework\DataObject::class, [
+        $buyRequestMock = $this->createPartialMock(DataObject::class, [
                 'setCustomPrice',
                 'setValue',
                 'setCode',
@@ -305,13 +311,13 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             ]);
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->will($this->returnValue([]));
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturn('{}');
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $objectManagerHelper->setBackwardCompatibleProperty($this->object, 'serializer', $serializer);
         $buyRequestMock->expects($this->once())->method('unsetData')->with($this->equalTo('custom_price'));
         $buyRequestMock->expects($this->once())

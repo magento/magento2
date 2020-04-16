@@ -1,22 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Helper\Action;
 
-class PagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\Helper\Context;
+use Magento\Review\Helper\Action\Pager;
+use PHPUnit\Framework\TestCase;
+
+class PagerTest extends TestCase
 {
-    /** @var \Magento\Review\Helper\Action\Pager */
+    /** @var Pager */
     protected $_helper = null;
 
     /**
      * Prepare helper object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $sessionMock = $this->getMockBuilder(
-            \Magento\Backend\Model\Session::class
+            Session::class
         )->disableOriginalConstructor()->setMethods(
             ['setData', 'getData']
         )->getMock();
@@ -39,10 +44,10 @@ class PagerTest extends \PHPUnit\Framework\TestCase
         );
 
         $contextMock = $this->createPartialMock(
-            \Magento\Framework\App\Helper\Context::class,
+            Context::class,
             ['getModuleManager', 'getRequest']
         );
-        $this->_helper = new \Magento\Review\Helper\Action\Pager($contextMock, $sessionMock);
+        $this->_helper = new Pager($contextMock, $sessionMock);
         $this->_helper->setStorageId('reviews');
     }
 

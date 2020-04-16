@@ -14,8 +14,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,7 +46,7 @@ class CurrencyConverterApiTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()

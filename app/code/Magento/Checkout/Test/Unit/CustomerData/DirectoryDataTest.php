@@ -10,8 +10,9 @@ namespace Magento\Checkout\Test\Unit\CustomerData;
 
 use Magento\Checkout\CustomerData\DirectoryData;
 use Magento\Directory\Helper\Data as HelperData;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Directory\Model\Country;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DirectoryDataTest extends TestCase
@@ -22,7 +23,7 @@ class DirectoryDataTest extends TestCase
     private $model;
 
     /**
-     * @var HelperData|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|MockObject
      */
     private $directoryHelperMock;
 
@@ -34,7 +35,7 @@ class DirectoryDataTest extends TestCase
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->directoryHelperMock = $this->createMock(HelperData::class);

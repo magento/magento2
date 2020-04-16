@@ -1,20 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model\Config\Source\Cart;
 
-use \Magento\Checkout\Model\Config\Source\Cart\Summary;
+use Magento\Checkout\Model\Config\Source\Cart\Summary;
+use PHPUnit\Framework\TestCase;
 
-class SummaryTest extends \PHPUnit\Framework\TestCase
+class SummaryTest extends TestCase
 {
     /**
      * @var Summary
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new Summary();
     }

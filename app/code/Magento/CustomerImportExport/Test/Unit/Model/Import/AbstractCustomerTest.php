@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,13 +10,19 @@
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\AbstractCustomer;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class AbstractCustomerTest extends AbstractImportTestCase
 {
     /**
      * Abstract customer export model
      *
-     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCustomer|MockObject
      */
     protected $_model;
 
@@ -43,18 +49,18 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
      * @var array
      */
     protected $_availableBehaviors = [
-        \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
-        \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+        Import::BEHAVIOR_ADD_UPDATE,
+        Import::BEHAVIOR_DELETE,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->_model = $this->_getModelMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
 
@@ -64,18 +70,18 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     /**
      * Create mock for abstract customer model class
      *
-     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractCustomer|MockObject
      */
     protected function _getModelMock()
     {
-        $customerCollection = new \Magento\Framework\Data\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $customerCollection = new Collection(
+            $this->createMock(EntityFactory::class)
         );
         foreach ($this->_customers as $customer) {
-            $customerCollection->addItem(new \Magento\Framework\DataObject($customer));
+            $customerCollection->addItem(new DataObject($customer));
         }
 
-        $modelMock = $this->getMockBuilder(\Magento\CustomerImportExport\Model\Import\AbstractCustomer::class)
+        $modelMock = $this->getMockBuilder(AbstractCustomer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -177,7 +183,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     public function testCheckUniqueKey(array $rowData, array $errors, $isValid = false)
     {
         $checkUniqueKey = new \ReflectionMethod(
-            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
+            AbstractCustomer::class,
             '_checkUniqueKey'
         );
         $checkUniqueKey->setAccessible(true);
@@ -197,7 +203,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         $this->assertAttributeEquals(0, '_processedEntitiesCount', $this->_model);
 
         // update action
-        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE]);
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
         $this->_clearValidatedRows();
 
         $this->assertAttributeEquals([], '_validatedRows', $this->_model);
@@ -213,7 +219,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
         $this->_model->expects($this->once())->method('_validateRowForDelete');
 
         // delete action
-        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);
         $this->_clearValidatedRows();
 
         $this->assertAttributeEquals([], '_validatedRows', $this->_model);
@@ -230,7 +236,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     {
         // clear array
         $validatedRows = new \ReflectionProperty(
-            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
+            AbstractCustomer::class,
             '_validatedRows'
         );
         $validatedRows->setAccessible(true);
@@ -239,7 +245,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
 
         // reset counter
         $entitiesCount = new \ReflectionProperty(
-            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
+            AbstractCustomer::class,
             '_processedEntitiesCount'
         );
         $entitiesCount->setAccessible(true);

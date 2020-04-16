@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,110 +6,124 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterfaceFactory;
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Model\BulkStatus;
+use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
+use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BulkStatusTest extends \PHPUnit\Framework\TestCase
+class BulkStatusTest extends TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Model\BulkStatus
+     * @var BulkStatus
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $bulkCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $operationCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $operationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $bulkMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $calculatedStatusSqlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $bulkDetailedFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $bulkShortFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $entityMetadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $entityManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bulkCollectionFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->operationCollectionFactory = $this->createPartialMock(
             \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory::class,
             ['create']
         );
-        $this->operationMock = $this->createMock(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
-        $this->bulkMock = $this->createMock(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class);
-        $this->resourceConnectionMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->operationMock = $this->createMock(OperationInterface::class);
+        $this->bulkMock = $this->createMock(BulkSummaryInterface::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->calculatedStatusSqlMock = $this->createMock(
-            \Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql::class
+            CalculatedStatusSql::class
         );
-        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->bulkDetailedFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterfaceFactory ::class,
+            DetailedBulkOperationsStatusInterfaceFactory ::class,
             ['create']
         );
         $this->bulkShortFactory = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterfaceFactory::class,
+            BulkOperationsStatusInterfaceFactory::class,
             ['create']
         );
-        $this->entityManager = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
+        $this->entityManager = $this->createMock(EntityManager::class);
 
-        $this->entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
-        $this->model = new \Magento\AsynchronousOperations\Model\BulkStatus(
+        $this->model = new BulkStatus(
             $this->bulkCollectionFactory,
             $this->operationCollectionFactory,
             $this->resourceConnectionMock,
@@ -130,7 +144,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     {
         $bulkUuid = 'bulk-1';
         $operationCollection = $this->createMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class
+            Collection::class
         );
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection
@@ -154,7 +168,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         $size = 32;
 
         $operationCollection = $this->createMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class
+            Collection::class
         );
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection
@@ -194,7 +208,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     public function testGetBulksByUser()
     {
         $userId = 1;
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $bulkCollection = $this->createMock(\Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection::class);
         $bulkCollection->expects($this->once())->method('getSelect')->willReturn($selectMock);
         $selectMock->expects($this->once())->method('columns')->willReturnSelf();
@@ -209,15 +223,15 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     {
         $bulkUuid = 'bulk-1';
         $allProcessedOperationCollection = $this->createMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class
+            Collection::class
         );
 
         $completeOperationCollection = $this->createMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class
+            Collection::class
         );
 
         $connectionName = 'connection_name';
-        $entityType = \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class;
+        $entityType = BulkSummaryInterface::class;
         $this->metadataPoolMock
             ->expects($this->once())
             ->method('getMetadata')
@@ -233,7 +247,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             ->with($connectionName)
             ->willReturn($this->connectionMock);
 
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $selectMock->expects($this->once())->method('where')->with('uuid = ?', $bulkUuid)->willReturnSelf();
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -264,7 +278,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
             ->method('addFieldToFilter')
             ->with('status', OperationInterface::STATUS_TYPE_COMPLETE)
             ->willReturnSelf();
-        $completeOperationCollection->expects($this->any())->method('getSize')->willReturn(5);
+        $completeOperationCollection->method('getSize')->willReturn(5);
         $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus($bulkUuid));
     }
 }

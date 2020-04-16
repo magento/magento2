@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Request;
 
-use Magento\Framework\Math\Random;
 use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Quote\Model\Quote;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Paypal\Model\Payflow\Service\Request\SecureToken
  */
-class SecureTokenTest extends \PHPUnit\Framework\TestCase
+class SecureTokenTest extends TestCase
 {
     /**
      * @var SecureToken
@@ -42,11 +43,11 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);
-        $this->transparent = $this->createMock(\Magento\Paypal\Model\Payflow\Transparent::class);
+        $this->url = $this->createMock(UrlInterface::class);
+        $this->mathRandom = $this->createMock(Random::class);
+        $this->transparent = $this->createMock(Transparent::class);
 
         $this->model = new SecureToken(
             $this->url,
@@ -85,7 +86,7 @@ class SecureTokenTest extends \PHPUnit\Framework\TestCase
             ->method('fillCustomerContacts');
         $this->transparent->expects($this->once())
             ->method('getConfig')
-            ->willReturn($this->createMock(\Magento\Paypal\Model\PayflowConfig::class));
+            ->willReturn($this->createMock(PayflowConfig::class));
         $this->transparent->expects($this->once())
             ->method('postRequest')
             ->willReturn($response);

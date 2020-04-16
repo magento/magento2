@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test Rest router route.
  *
@@ -7,12 +7,14 @@
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
 
-use \Magento\Webapi\Controller\Rest\Router\Route;
-
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Webapi\Controller\Rest\Router\Route;
 
-class RouteTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RouteTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -20,11 +22,11 @@ class RouteTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -42,7 +44,7 @@ class RouteTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Route $model */
         $model = $this->objectManager->getObject(
-            \Magento\Webapi\Controller\Rest\Router\Route::class,
+            Route::class,
             ['route' => '/V1/one']
         );
 
@@ -66,7 +68,7 @@ class RouteTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Route $model */
         $model = $this->objectManager->getObject(
-            \Magento\Webapi\Controller\Rest\Router\Route::class,
+            Route::class,
             ['route' => $route]
         );
 

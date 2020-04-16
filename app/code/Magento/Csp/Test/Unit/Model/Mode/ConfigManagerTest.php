@@ -47,7 +47,7 @@ class ConfigManagerTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

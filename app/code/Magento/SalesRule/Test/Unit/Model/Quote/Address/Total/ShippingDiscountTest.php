@@ -7,41 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Quote\Address\Total;
 
-use Magento\SalesRule\Model\Quote\Address\Total\ShippingDiscount;
-use Magento\SalesRule\Model\Validator;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\Item;
+use Magento\SalesRule\Model\Quote\Address\Total\ShippingDiscount;
+use Magento\SalesRule\Model\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\SalesRule\Test\Unit\Model\Quote\Address\Total\ShippingDiscountTest
- */
-class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
+class ShippingDiscountTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Validator
+     * @var MockObject|Validator
      */
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Quote
+     * @var MockObject|Quote
      */
     private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Total
+     * @var MockObject|Total
      */
     private $totalMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Address
+     * @var MockObject|Address
      */
     private $addressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ShippingAssignmentInterface
+     * @var MockObject|ShippingAssignmentInterface
      */
     private $shippingAssignmentMock;
 
@@ -50,9 +50,9 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
      */
     private $discount;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(\Magento\SalesRule\Model\Validator::class)
+        $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -62,9 +62,9 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->quoteMock = $this->createMock(Quote::class);
         $this->totalMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address\Total::class,
+            Total::class,
             [
                 'getDiscountAmount',
                 'getDiscountDescription',
@@ -112,7 +112,7 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectNoShippingAmount()
     {
-        $itemNoDiscount = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $itemNoDiscount = $this->createMock(Item::class);
 
         $this->addressMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
 
@@ -149,7 +149,7 @@ class ShippingDiscountTest extends \PHPUnit\Framework\TestCase
         $baseSubTotal = 200;
         $baseDiscountAmount = -100;
 
-        $itemNoDiscount = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $itemNoDiscount = $this->createMock(Item::class);
 
         $this->addressMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
 
