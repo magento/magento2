@@ -1,3 +1,7 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 define([
     'jquery'
 ], function ($) {
@@ -8,7 +12,6 @@ define([
     /**
      * Loads the PayPal SDK object
      * @param {String} paypalUrl - the url of the PayPal SDK
-     * @param {Object} actions
      */
     return function loadPaypalScript(paypalUrl)
     {

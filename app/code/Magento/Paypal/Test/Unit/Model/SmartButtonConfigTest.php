@@ -110,6 +110,7 @@ class SmartButtonConfigTest extends TestCase
                         $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
                     ],
                     ['sandbox_flag', null, true],
+                    ['paymentAction', null, 'Authorization'],
                     ['disable_funding_options', null, $disallowedFundings],
                     ["{$page}_page_button_customize", null, $isCustomize],
                     ["{$page}_page_button_layout", null, $layout],

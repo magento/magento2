@@ -20,11 +20,6 @@ return [
         'mx',
         true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'es_MX',
-            'allowedFunding' => ['ELV'],
-            'disallowedFunding' => ['CREDIT'],
             'styles' => [
                 'layout' => 'horizontal',
                 'size' => 'small',
@@ -34,7 +29,9 @@ return [
                 'installmentperiod' => 0
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => 'https://www.paypal.com/sdk/js?commit=false&merchant-id=merchant&locale=es_MX&' .
+                'intent=authorize&disable-funding=CREDIT'
         ]
     ],
     'checkout' => [
@@ -51,11 +48,6 @@ return [
         'br',
         true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en_BR',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
             'styles' => [
                 'layout' => 'horizontal',
                 'size' => 'small',
@@ -65,7 +57,8 @@ return [
                 'installmentperiod' => 0
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => 'https://www.paypal.com/sdk/js?commit=false&merchant-id=merchant&locale=en_BR&intent=authorize'
         ]
     ],
     'mini_cart' => [
@@ -82,11 +75,6 @@ return [
         'br',
         true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
             'styles' => [
                 'layout' => 'vertical',
                 'size' => 'responsive',
@@ -95,7 +83,8 @@ return [
                 'label' => 'paypal'
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => 'https://www.paypal.com/sdk/js?commit=false&merchant-id=merchant&locale=en&intent=authorize'
         ]
     ],
     'product' => [
@@ -112,11 +101,6 @@ return [
         'br',
         true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['ELV'],
-            'disallowedFunding' => ['CREDIT'],
             'styles' => [
                 'layout' => 'vertical',
                 'size' => 'responsive',
@@ -125,7 +109,9 @@ return [
                 'label' => 'paypal',
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => 'https://www.paypal.com/sdk/js?commit=false&merchant-id=merchant&locale=en&intent=authorize'
+                . '&disable-funding=CREDIT'
         ]
     ],
     'checkout_with_paypal_guest_checkout_disabled' => [
@@ -142,11 +128,6 @@ return [
         'br',
         false,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en_BR',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => ['CARD'],
             'styles' => [
                 'layout' => 'horizontal',
                 'size' => 'small',
@@ -156,7 +137,9 @@ return [
                 'installmentperiod' => 0
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => 'https://www.paypal.com/sdk/js?commit=false&merchant-id=merchant&locale=en_BR'
+                . '&intent=authorize&disable-funding=CARD'
         ]
     ],
 ];

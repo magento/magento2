@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/* eslint-disable max-nested-callbacks */
 define([
     'underscore',
     'jquery',
@@ -10,6 +11,12 @@ define([
 ], function (_, $, paypalSdk) {
     'use strict';
 
+    /**
+     * Triggers beforePayment action on PayPal buttons
+     *
+     * @param {Object} clientConfig
+     * @returns {Object} jQuery promise
+     */
     function performCreateOrder(clientConfig)
     {
         var params = {
@@ -30,6 +37,13 @@ define([
         }).promise();
     }
 
+    /**
+     * Triggers beforeOnAuthorize action on PayPal buttons
+     * @param {Object} clientConfig
+     * @param {Object} data
+     * @param {Object} actions
+     * @returns {Object} jQuery promise
+     */
     function performOnApprove(clientConfig, data, actions)
     {
         var params = {
@@ -41,15 +55,18 @@ define([
         };
 
         return $.Deferred(function (deferred) {
-            clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions).then(function () {
-                $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
-                    clientConfig.rendererComponent.afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
-                }).fail(function (jqXHR, textStatus, err) {
-                    clientConfig.rendererComponent.catchOnAuthorize(err, deferred.resolve, deferred.reject);
+            clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions)
+                .then(function () {
+                    $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
+                        clientConfig.rendererComponent
+                            .afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
+                    }).fail(function (jqXHR, textStatus, err) {
+                        clientConfig.rendererComponent.catchOnAuthorize(err, deferred.resolve, deferred.reject);
+                    });
                 });
-            });
         }).promise();
     }
+
     return function (clientConfig, element) {
         paypalSdk(clientConfig.sdkUrl).done(function (paypal) {
             paypal.Buttons({

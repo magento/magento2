@@ -93,7 +93,6 @@ class SmartButtonConfig
             ScopeInterface::SCOPE_STORE
         );
 
-
         return [
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
@@ -105,13 +104,15 @@ class SmartButtonConfig
     /**
      * Generate the url to download the Paypal SDK
      *
+     * @param string $page
+     *
      * @return string
      */
-    private function generatePaypalSdkUrl(string $page) : string
+    private function generatePaypalSdkUrl(string $page): string
     {
         $clientId = (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
-        $disallowedFunding = implode(",", $this->getDisallowedFunding());
+        $disallowedFunding = implode(',', $this->getDisallowedFunding());
 
         $commit = $page === 'checkout' ? 'true' : 'false';
 
@@ -124,7 +125,7 @@ class SmartButtonConfig
                 'intent' => $this->getIntent(),
             ];
         if ($disallowedFunding) {
-            $params['disable-funding'] =  $disallowedFunding;
+            $params['disable-funding'] = $disallowedFunding;
         }
 
         return self::BASE_URL . http_build_query($params);
@@ -168,7 +169,7 @@ class SmartButtonConfig
             $result);
 
         //disable unsupported payment methods
-        $result = array_merge($disallowedFundingArray, $this->unsupportedPaymentMethods);
+        $result = array_merge($result, $this->unsupportedPaymentMethods);
 
         return $result;
     }
