@@ -33,7 +33,9 @@ class IsBlacklistedTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(BlacklistPatternsConfigInterface::class)->disableOriginalConstructor()->getMock();
+        $this->config = $this->getMockBuilder(BlacklistPatternsConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->config->expects($this->at(0))->method('get')->willReturn([
             'tmp' => '/pub\/media\/tmp/',
             'captcha' => '/pub\/media\/captcha/'

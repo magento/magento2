@@ -16,7 +16,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetByPath
+ * Provide media asset by path
+ *
  * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface instead
  * @see \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface
  */
@@ -59,7 +60,7 @@ class GetByPath implements GetByPathInterface
     }
 
     /**
-     * Return media asset asset list
+     * Return media asset
      *
      * @param string $path
      *
@@ -80,7 +81,20 @@ class GetByPath implements GetByPathInterface
                 throw new NoSuchEntityException($message);
             }
 
-            return $this->mediaAssetFactory->create(['data' => $data]);
+            return $this->mediaAssetFactory->create(
+                [
+                    'id' => $data['id'],
+                    'path' => $data['path'],
+                    'title' => $data['title'],
+                    'source' => $data['source'],
+                    'contentType' => $data['content_type'],
+                    'width' => $data['width'],
+                    'height' => $data['height'],
+                    'size' => $data['size'],
+                    'createdAt' => $data['created_at'],
+                    'updatedAt' => $data['updated_at'],
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get media asset list: %1', $exception->getMessage());

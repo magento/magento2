@@ -47,7 +47,9 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         $failedPaths = [];
         foreach ($paths as $path) {
             try {
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $name = basename($path);
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $folder = str_replace($name, '', $path);
 
                 $this->storage->createDirectory(

@@ -89,7 +89,20 @@ class GetById implements GetByIdInterface
         }
 
         try {
-            return $this->assetFactory->create(['data' => $mediaAssetData]);
+            return $this->assetFactory->create(
+                [
+                    'id' => $mediaAssetData['id'],
+                    'path' => $mediaAssetData['path'],
+                    'title' => $mediaAssetData['title'],
+                    'source' => $mediaAssetData['source'],
+                    'contentType' => $mediaAssetData['content_type'],
+                    'width' => $mediaAssetData['width'],
+                    'height' => $mediaAssetData['height'],
+                    'size' => $mediaAssetData['size'],
+                    'createdAt' => $mediaAssetData['created_at'],
+                    'updatedAt' => $mediaAssetData['updated_at'],
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __(

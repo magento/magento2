@@ -35,13 +35,13 @@ interface KeywordInterface extends ExtensibleDataInterface
      *
      * @return \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface|null
      */
-    public function getExtensionAttributes(): KeywordExtensionInterface;
+    public function getExtensionAttributes(): ?KeywordExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface $extensionAttributes
+     * @param \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(?KeywordExtensionInterface $extensionAttributes): void;
 }

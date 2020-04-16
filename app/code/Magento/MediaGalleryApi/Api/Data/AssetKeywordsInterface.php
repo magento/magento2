@@ -30,19 +30,18 @@ interface AssetKeywordsInterface extends ExtensibleDataInterface
      */
     public function getKeywords(): array;
 
-
     /**
      * Get extension attributes
      *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface|null
      */
-    public function getExtensionAttributes(): AssetKeywordsExtensionInterface;
+    public function getExtensionAttributes(): ?AssetKeywordsExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface $extensionAttributes
+     * @param \Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(AssetKeywordsExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(?AssetKeywordsExtensionInterface $extensionAttributes): void;
 }

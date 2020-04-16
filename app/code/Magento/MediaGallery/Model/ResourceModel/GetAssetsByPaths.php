@@ -61,7 +61,20 @@ class GetAssetsByPaths implements GetAssetsByPathsInterface
         $assets = [];
         try {
             foreach ($this->getAssetsData($paths) as $assetData) {
-                $assets[] = $this->mediaAssetFactory->create(['data' => $assetData]);
+                $assets[] = $this->mediaAssetFactory->create(
+                    [
+                        'id' => $assetData['id'],
+                        'path' => $assetData['path'],
+                        'title' => $assetData['title'],
+                        'source' => $assetData['source'],
+                        'contentType' => $assetData['content_type'],
+                        'width' => $assetData['width'],
+                        'height' => $assetData['height'],
+                        'size' => $assetData['size'],
+                        'createdAt' => $assetData['created_at'],
+                        'updatedAt' => $assetData['updated_at'],
+                    ]
+                );
             }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

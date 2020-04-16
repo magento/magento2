@@ -103,17 +103,20 @@ class AssetsTest extends TestCase
             'One asset' => [
                 'assetsData' => [
                     'asset1' => [
-                        'path' => 'fruit.jpg'
+                        'path' => 'fruit.jpg',
+                        'contentType' => 'image'
                     ]
                 ]
             ],
             'Two assets' => [
                 'assetsData' => [
                     'asset1' => [
-                        'path' => 'image.jpg'
+                        'path' => 'image.jpg',
+                        'contentType' => 'image'
                     ],
                     'asset2' => [
-                        'path' => 'image2.png'
+                        'path' => 'image2.png',
+                        'contentType' => 'image'
                     ]
                 ]
             ],

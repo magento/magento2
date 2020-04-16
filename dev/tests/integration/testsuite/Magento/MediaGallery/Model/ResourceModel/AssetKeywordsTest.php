@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model;
+namespace Magento\MediaGallery\Model\ResourceModel;
 
 use Behat\Gherkin\Keywords\KeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
@@ -79,10 +79,8 @@ class AssetKeywordsTest extends TestCase
 
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
-                'data' => [
-                    'asset_id' => $loadedAsset->getId(),
-                    'keywords' => $this->getKeywords($keywords)
-                ]
+                'assetId' => $loadedAsset->getId(),
+                'keywords' => $this->getKeywords($keywords)
             ]
         );
 
@@ -136,9 +134,7 @@ class AssetKeywordsTest extends TestCase
         foreach ($keywords as $keyword) {
             $keywordObjects[] = $this->keywordFactory->create(
                 [
-                    'data' => [
-                        'keyword' => $keyword
-                    ]
+                    'keyword' => $keyword
                 ]
             );
         }

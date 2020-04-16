@@ -16,13 +16,11 @@ $mediaAssetFactory = $objectManager->get(AssetInterfaceFactory::class);
 /** @var AssetInterface $mediaAsset */
 $mediaAsset = $mediaAssetFactory->create(
     [
-        'data' => [
-            'id' => 2020,
-            'path' => 'testDirectory/path.jpg'
-        ]
+        'id' => 2020,
+        'path' => 'testDirectory/path.jpg',
+        'contentType' => 'image'
     ]
 );
 /** @var SaveInterface $mediaSave */
 $mediaSave = $objectManager->get(SaveInterface::class);
 $mediaId = $mediaSave->execute($mediaAsset);
-

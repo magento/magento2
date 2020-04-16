@@ -93,25 +93,20 @@ class AssetEndToEndTest extends TestCase
     {
         $keyword1 = $this->keywordFactory->create(
             [
-                'data' => [
-                    'keyword' => 'pear'
-                ]
+                'keyword' => 'pear'
             ]
         );
 
         $keyword2 = $this->keywordFactory->create(
             [
-                'data' => [
-                    'keyword' => 'plum'
-                ]
+                'keyword' => 'plum'
             ]
         );
 
         $asset = $this->assetFactory->create(
             [
-                'data' => [
-                    'path' => 'fruit.jpg'
-                ]
+                'path' => 'fruit.jpg',
+                'contentType' => 'image'
             ]
         );
         $this->saveAssets->execute([$asset]);
@@ -122,12 +117,10 @@ class AssetEndToEndTest extends TestCase
 
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
-                'data' => [
-                    'asset_id' => $loadedAsset->getId(),
-                    'keywords' => [
-                        $keyword1,
-                        $keyword2
-                    ]
+                'assetId' => $loadedAsset->getId(),
+                'keywords' => [
+                    $keyword1,
+                    $keyword2
                 ]
             ]
         );

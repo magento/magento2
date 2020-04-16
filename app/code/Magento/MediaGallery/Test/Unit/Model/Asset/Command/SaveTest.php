@@ -48,12 +48,14 @@ class SaveTest extends TestCase
      * Constant for image data
      */
     private const IMAGE_DATA = [
+        'id' => null,
         'path' => '/test/path',
         'title' => 'Test Title',
         'source' => 'Adobe Stock',
         'content_type' => 'image/jpeg',
         'height' => 4863,
-        'width' => 12129
+        'width' => 12129,
+        'size' => 300,
     ];
 
     /**
@@ -125,11 +127,16 @@ class SaveTest extends TestCase
         $this->resourceConnectionMock->expects(self::once())->method('getConnection');
         $this->resourceConnectionMock->expects(self::once())->method('getTableName');
 
-        $this->objectProcessor
-            ->expects(self::once())
-            ->method('buildOutputDataArray')
-            ->with($this->mediaAssetMock, AssetInterface::class)
-            ->willReturn(self::IMAGE_DATA);
+        $this->mediaAssetMock->expects(self::once())->method('getId')->willReturn(self::IMAGE_DATA['id']);
+        $this->mediaAssetMock->expects(self::once())->method('getPath')->willReturn(self::IMAGE_DATA['path']);
+        $this->mediaAssetMock->expects(self::once())->method('getTitle')->willReturn(self::IMAGE_DATA['title']);
+        $this->mediaAssetMock->expects(self::once())->method('getSource')->willReturn(self::IMAGE_DATA['source']);
+        $this->mediaAssetMock->expects(self::once())->method('getWidth')->willReturn(self::IMAGE_DATA['width']);
+        $this->mediaAssetMock->expects(self::once())->method('getHeight')->willReturn(self::IMAGE_DATA['height']);
+        $this->mediaAssetMock->expects(self::once())->method('getSize')->willReturn(self::IMAGE_DATA['size']);
+        $this->mediaAssetMock->expects(self::once())
+            ->method('getContentType')
+            ->willReturn(self::IMAGE_DATA['content_type']);
 
         $this->adapterMock
             ->expects(self::once())
@@ -154,11 +161,16 @@ class SaveTest extends TestCase
         $this->resourceConnectionMock->expects(self::once())->method('getConnection');
         $this->resourceConnectionMock->expects(self::once())->method('getTableName');
 
-        $this->objectProcessor
-            ->expects(self::once())
-            ->method('buildOutputDataArray')
-            ->with($this->mediaAssetMock, AssetInterface::class)
-            ->willReturn(self::IMAGE_DATA);
+        $this->mediaAssetMock->expects(self::once())->method('getId')->willReturn(self::IMAGE_DATA['id']);
+        $this->mediaAssetMock->expects(self::once())->method('getPath')->willReturn(self::IMAGE_DATA['path']);
+        $this->mediaAssetMock->expects(self::once())->method('getTitle')->willReturn(self::IMAGE_DATA['title']);
+        $this->mediaAssetMock->expects(self::once())->method('getSource')->willReturn(self::IMAGE_DATA['source']);
+        $this->mediaAssetMock->expects(self::once())->method('getWidth')->willReturn(self::IMAGE_DATA['width']);
+        $this->mediaAssetMock->expects(self::once())->method('getHeight')->willReturn(self::IMAGE_DATA['height']);
+        $this->mediaAssetMock->expects(self::once())->method('getSize')->willReturn(self::IMAGE_DATA['size']);
+        $this->mediaAssetMock->expects(self::once())
+            ->method('getContentType')
+            ->willReturn(self::IMAGE_DATA['content_type']);
 
         $this->adapterMock
             ->expects(self::once())

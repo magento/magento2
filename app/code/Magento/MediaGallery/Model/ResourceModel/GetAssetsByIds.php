@@ -60,7 +60,20 @@ class GetAssetsByIds implements GetAssetsByIdsInterface
         $assets = [];
         try {
             foreach ($this->getAssetsData($ids) as $assetData) {
-                $assets[] = $this->assetFactory->create(['data' => $assetData]);
+                $assets[] = $this->assetFactory->create(
+                    [
+                        'id' => $assetData['id'],
+                        'path' => $assetData['path'],
+                        'title' => $assetData['title'],
+                        'source' => $assetData['source'],
+                        'contentType' => $assetData['content_type'],
+                        'width' => $assetData['width'],
+                        'height' => $assetData['height'],
+                        'size' => $assetData['size'],
+                        'createdAt' => $assetData['created_at'],
+                        'updatedAt' => $assetData['updated_at'],
+                    ]
+                );
             }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

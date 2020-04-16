@@ -9,13 +9,13 @@ namespace Magento\MediaGallery\Model\Asset\Command;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Save
+ * Save media asset
+ *
  * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
  * @see \Magento\MediaGalleryApi\Api\SaveAssetsInterface
  */
@@ -48,7 +48,7 @@ class Save implements SaveInterface
     }
 
     /**
-     * Save media assets
+     * Save media asset
      *
      * @param AssetInterface $mediaAsset
      *

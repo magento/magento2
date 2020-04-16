@@ -7,24 +7,50 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsExtensionInterface;
 
 /**
  * Asset Id and Keywords combination data object for bulk operations with keyword services
  */
-class AssetKeywords extends AbstractExtensibleModel implements AssetKeywordsInterface
+class AssetKeywords implements AssetKeywordsInterface
 {
-    private const ASSET_ID = 'asset_id';
-    private const KEYWORDS = 'keywords';
+    /**
+     * @var int
+     */
+    private $assetId;
+
+    /**
+     * @var array
+     */
+    private $keywords;
+
+    /**
+     * @var AssetKeywordsExtensionInterface|null
+     */
+    private $extensionAttributes;
+
+    /**
+     * @param int $assetId
+     * @param array $keywords
+     * @param AssetKeywordsExtensionInterface|null $extensionAttributes
+     */
+    public function __construct(
+        int $assetId,
+        array $keywords,
+        ?AssetKeywordsExtensionInterface $extensionAttributes = null
+    ) {
+        $this->assetId = $assetId;
+        $this->keywords = $keywords;
+        $this->extensionAttributes = $extensionAttributes;
+    }
 
     /**
      * @inheritdoc
      */
     public function getAssetId(): int
     {
-        return (int) $this->getData(self::ASSET_ID);
+        return $this->assetId;
     }
 
     /**
@@ -32,22 +58,22 @@ class AssetKeywords extends AbstractExtensibleModel implements AssetKeywordsInte
      */
     public function getKeywords(): array
     {
-        return $this->getData(self::KEYWORDS);
+        return $this->keywords;
     }
 
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): AssetKeywordsExtensionInterface
+    public function getExtensionAttributes(): ?AssetKeywordsExtensionInterface
     {
-        return $this->_getExtensionAttributes();
+        return $this->extensionAttributes;
     }
 
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(AssetKeywordsExtensionInterface $extensionAttributes): void
+    public function setExtensionAttributes(?AssetKeywordsExtensionInterface $extensionAttributes): void
     {
-        $this->_setExtensionAttributes($extensionAttributes);
+        $this->extensionAttributes = $extensionAttributes;
     }
 }

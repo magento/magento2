@@ -18,4 +18,3 @@ try {
 } catch (\Exception $exception) {
 
 }
-

@@ -10,7 +10,6 @@ namespace Magento\MediaGallery\Model\ResourceModel\Keyword;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -105,7 +104,8 @@ class GetAssetsKeywords implements GetAssetsKeywordsInterface
         foreach ($keywordsData as $keywordData) {
             $keywordsByAsset[$keywordData[self::FIELD_ASSET_ID]][] = $this->keywordFactory->create(
                 [
-                    'data' => $keywordData
+                    'id' => $keywordData['id'],
+                    'keyword' => $keywordData['keyword'],
                 ]
             );
         }
@@ -114,10 +114,8 @@ class GetAssetsKeywords implements GetAssetsKeywordsInterface
         foreach ($keywordsByAsset as $assetId => $keywords) {
             $assetKeywords[$assetId] = $this->assetKeywordsFactory->create(
                 [
-                    'data' => [
-                        'asset_id' => $assetId,
-                        'keywords' => $keywords
-                    ]
+                    'assetId' => $assetId,
+                    'keywords' => $keywords
                 ]
             );
         }

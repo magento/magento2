@@ -76,29 +76,29 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Get created at
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Get updated at
      *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface|null
      */
-    public function getExtensionAttributes(): AssetExtensionInterface;
+    public function getExtensionAttributes(): ?AssetExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface $extensionAttributes
+     * @param \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(?AssetExtensionInterface $extensionAttributes): void;
 }

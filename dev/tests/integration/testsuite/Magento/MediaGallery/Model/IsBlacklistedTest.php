@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for IsPathBlacklistedInterface
  */
-class CreateByPathsTest extends TestCase
+class IsBlacklistedTest extends TestCase
 {
 
     /**

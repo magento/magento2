@@ -20,7 +20,7 @@ class IsBlacklisted implements IsPathBlacklistedInterface
      */
     private $config;
 
-    /*
+    /**
      * @param BlacklistPatternsConfigInterface $config
      */
     public function __construct(BlacklistPatternsConfigInterface $config)
