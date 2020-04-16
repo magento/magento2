@@ -34,20 +34,20 @@ class ActionsTest extends TestCase
         parent::setUp();
 
         /** @var Escaper|MockObject $escaperMock */
-        $escaperMock = $this->getMockBuilder(Escaper::class)->disableOriginalConstructor()->getMock();
+        $escaperMock = $this->createMock(Escaper::class);
         $escaperMock->expects($this->once())->method('escapeUrl')->willReturn('https://magento.com');
 
         /** @var UrlInterface|MockObject $urlBuilder */
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)->getMock();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->willReturn('http://magento.com');
 
         /** @var Context|MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getEscaper')->willReturn($escaperMock);
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
 
         /** @var Data|MockObject $urlHelperMock */
-        $urlHelperMock = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
+        $urlHelperMock = $this->createMock(Data::class);
         $urlHelperMock->expects($this->once())->method('getEncodedUrl')->willReturn('http://magento.com');
 
         $this->sut = new Actions($contextMock, $urlHelperMock);

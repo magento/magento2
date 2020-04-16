@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,38 +6,47 @@
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
-class ButtonTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ButtonTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button
+     * @var Button
      */
     protected $buttonRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->contextMock = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
+        $this->contextMock = $this->createPartialMock(Context::class, ['getEscaper']);
         $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->buttonRenderer = $this->objectManagerHelper->getObject(
-            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button::class,
+            Button::class,
             ['context' => $this->contextMock]
         );
     }
@@ -48,7 +57,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $expectedResult = '<button id="1" type="bigButton">my button</button>';
-        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
+        $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType', 'getId', 'getIndex'])
             ->getMock();
@@ -65,7 +74,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
             ->willReturn('name');
         $this->buttonRenderer->setColumn($column);
 
-        $object = new \Magento\Framework\DataObject(['name' => 'my button']);
+        $object = new DataObject(['name' => 'my button']);
         $actualResult = $this->buttonRenderer->render($object);
         $this->assertEquals($expectedResult, $actualResult);
     }

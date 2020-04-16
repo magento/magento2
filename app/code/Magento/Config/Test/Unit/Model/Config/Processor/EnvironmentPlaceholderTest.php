@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,9 +9,10 @@ use Magento\Config\Model\Config\Processor\EnvironmentPlaceholder;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
+class EnvironmentPlaceholderTest extends TestCase
 {
     /**
      * @var EnvironmentPlaceholder
@@ -38,7 +39,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
      */
     private $env;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
@@ -124,7 +125,7 @@ class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_ENV = $this->env;
     }

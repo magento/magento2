@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,8 +13,10 @@ use Magento\Indexer\Model\Indexer\Collection;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection as StateCollection;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -27,24 +29,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $collection;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $statesFactoryMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     private $entityFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -95,7 +97,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 ->method('load')
                 ->with($indexerId);
             $indexer
-                ->expects($this->exactly($state ? 1: 0))
+                ->expects($this->exactly($state ? 1 : 0))
                 ->method('setState')
                 ->with($state);
             $calls[] = $indexer;
@@ -294,11 +296,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return MockObject|IndexerInterface
      */
     private function getIndexerMock(array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        /** @var MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         if (isset($data['indexer_id'])) {
@@ -310,11 +312,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject|State
+     * @return MockObject|State
      */
     private function getStateMock(array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|State $state */
+        /** @var MockObject|State $state */
         $state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

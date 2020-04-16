@@ -90,7 +90,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $formId = 'backend_forgotpassword';
 

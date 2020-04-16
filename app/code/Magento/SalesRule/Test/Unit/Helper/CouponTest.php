@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,20 +6,27 @@
 
 namespace Magento\SalesRule\Test\Unit\Helper;
 
-class CouponTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Helper\Coupon;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\TestCase;
+
+class CouponTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Helper\Coupon
+     * @var Coupon
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config
+     * @var Config
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context
+     * @var Context
      */
     protected $context;
 
@@ -33,7 +40,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
      */
     protected $separator = '|';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->couponParameters = [
             'separator' => $this->separator,
@@ -41,16 +48,16 @@ class CouponTest extends \PHPUnit\Framework\TestCase
                 'format' => 'abc',
             ],
         ];
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\SalesRule\Helper\Coupon::class;
+        $objectManager = new ObjectManager($this);
+        $className = Coupon::class;
         $arguments = $objectManager->getConstructArguments(
             $className,
             ['couponParameters' => $this->couponParameters]
         );
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->helper = $objectManager->getObject(\Magento\SalesRule\Helper\Coupon::class, $arguments);
+        $this->helper = $objectManager->getObject(Coupon::class, $arguments);
     }
 
     public function testGetFormatsList()
@@ -79,7 +86,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $defaultLength = 100;
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_LENGTH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with($helper::XML_PATH_SALES_RULE_COUPON_LENGTH, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultLength));
 
         $this->assertEquals($defaultLength, $helper->getDefaultLength());
@@ -91,7 +98,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $defaultFormat = 'format';
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_FORMAT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with($helper::XML_PATH_SALES_RULE_COUPON_FORMAT, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultFormat));
 
         $this->assertEquals($defaultFormat, $helper->getDefaultFormat());
@@ -103,7 +110,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $defaultPrefix = 'prefix';
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_PREFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with($helper::XML_PATH_SALES_RULE_COUPON_PREFIX, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultPrefix));
 
         $this->assertEquals($defaultPrefix, $helper->getDefaultPrefix());
@@ -115,7 +122,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $defaultSuffix = 'suffix';
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_SUFFIX, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with($helper::XML_PATH_SALES_RULE_COUPON_SUFFIX, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultSuffix));
 
         $this->assertEquals($defaultSuffix, $helper->getDefaultSuffix());
@@ -127,7 +134,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
         $defaultDashInterval = 4;
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with($helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL, ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue($defaultDashInterval));
 
         $this->assertEquals($defaultDashInterval, $helper->getDefaultDashInterval());
