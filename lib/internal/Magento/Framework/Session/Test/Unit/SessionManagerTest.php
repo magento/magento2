@@ -31,17 +31,17 @@ namespace Magento\Framework\Session\Test\Unit {
         private $sessionManager;
 
         /**
-         * @var \Magento\Framework\Session\Config\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Session\Config\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
          */
         private $mockSessionConfig;
 
         /**
-         * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit\Framework\MockObject\MockObject
          */
         private $mockCookieManager;
 
         /**
-         * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit\Framework\MockObject\MockObject
          */
         private $mockCookieMetadataFactory;
 
