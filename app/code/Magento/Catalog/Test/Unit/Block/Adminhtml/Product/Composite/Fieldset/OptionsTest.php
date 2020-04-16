@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 
 use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options;
@@ -57,11 +59,7 @@ class OptionsTest extends TestCase
             Context::class,
             ['layout' => $layout]
         );
-        $optionFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\ValueFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $optionFactoryMock = $this->createPartialMock('\Magento\Catalog\Model\Product\Option\ValueFactory', ['create']);
         $option = $this->_objectHelper->getObject(
             \Magento\Catalog\Model\Product\Option::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]

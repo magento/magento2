@@ -15,7 +15,7 @@ use Magento\Framework\DB\Query\BatchIteratorInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ImageTest extends TestCase
@@ -56,7 +56,7 @@ class ImageTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function getVisibleImagesSelectMock(): \PHPUnit\Framework\MockObject\MockObject
+    protected function getVisibleImagesSelectMock(): MockObject
     {
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class ImageTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function getUsedImagesSelectMock(): \PHPUnit\Framework\MockObject\MockObject
+    protected function getUsedImagesSelectMock(): MockObject
     {
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -321,7 +321,7 @@ class ImageTest extends TestCase
      * @return \Closure
      */
     protected function getBatchIteratorCallback(
-        \PHPUnit\Framework\MockObject\MockObject $selectMock,
+        MockObject $selectMock,
         int $batchCount
     ): \Closure {
         $iteratorCallback = function () use ($batchCount, $selectMock): array {

@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Test for validation rules implemented by XSD schema for catalog attributes configuration
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Config;
 
 use Magento\Framework\Config\Dom;

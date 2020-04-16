@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product\Image;
@@ -18,6 +20,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Image\Factory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Model\Store;
@@ -105,7 +108,7 @@ class ImageTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->context = $this->createMock(Context::class);
         $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()

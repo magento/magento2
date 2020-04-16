@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
@@ -340,7 +343,7 @@ class CustomOptionPriceTest extends TestCase
         $optionId2 = 2;
         $optionValue = 10;
         $optionType = 'select';
-        $optionValueMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\DefaultType::class)
+        $optionValueMock = $this->getMockBuilder(DefaultType::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options as ProductOptions;
@@ -63,10 +65,7 @@ class OptionsTest extends TestCase
             ['layout' => $layout]
         );
 
-        $optValFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Option\ValueFactory::class,
-            ['create']
-        );
+        $optValFactoryMock = $this->createPartialMock('\Magento\Catalog\Model\Product\Option\ValueFactory', ['create']);
         $option = $this->_objectHelper->getObject(
             \Magento\Catalog\Model\Product\Option::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optValFactoryMock]
@@ -87,10 +86,7 @@ class OptionsTest extends TestCase
             ['context' => $context, 'option' => $option]
         );
 
-        $itemOptFactoryMock = $this->createPartialMock(
-            OptionFactory::class,
-            ['create']
-        );
+        $itemOptFactoryMock = $this->createPartialMock(OptionFactory::class, ['create']);
         $stockItemFactoryMock = $this->createPartialMock(
             StockItemInterfaceFactory::class,
             ['create']

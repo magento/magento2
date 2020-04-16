@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
