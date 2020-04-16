@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,40 +6,44 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProductProcessUrlRewriteSavingObserverTest
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
+class ProductProcessUrlRewriteSavingObserverTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|MockObject
      */
     protected $urlPersist;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     protected $observer;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlRewriteGenerator|MockObject
      */
     protected $productUrlRewriteGenerator;
 
@@ -49,17 +53,17 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
     protected $objectManager;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
+     * @var ProductProcessUrlRewriteSavingObserver
      */
     protected $model;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
+        $this->product = $this->createPartialMock(Product::class, [
                 'getId',
                 'dataHasChangedFor',
                 'isVisibleInSiteVisibility',
@@ -68,12 +72,12 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
                 'getStoreId'
             ]);
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
-        $this->event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
+        $this->event = $this->createPartialMock(Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
-        $this->observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
+        $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
         $this->productUrlRewriteGenerator = $this->createPartialMock(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::class,
+            ProductUrlRewriteGenerator::class,
             ['generate']
         );
         $this->productUrlRewriteGenerator->expects($this->any())
@@ -81,7 +85,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Test
             ->will($this->returnValue([3 => 'rewrite']));
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver::class,
+            ProductProcessUrlRewriteSavingObserver::class,
             [
                 'productUrlRewriteGenerator' => $this->productUrlRewriteGenerator,
                 'urlPersist' => $this->urlPersist

@@ -18,6 +18,7 @@ use Magento\Sitemap\Model\EmailNotification;
 use Magento\Sitemap\Model\Observer;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,26 +37,26 @@ class EmailNotificationTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportBuilder|MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();

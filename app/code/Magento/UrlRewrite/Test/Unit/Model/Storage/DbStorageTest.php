@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -35,7 +35,7 @@ class DbStorageTest extends TestCase
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|MockObject
+     * @var Select|MockObject
      */
     private $select;
 
@@ -49,7 +49,7 @@ class DbStorageTest extends TestCase
      */
     private $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
@@ -487,11 +487,9 @@ class DbStorageTest extends TestCase
         $this->assertEquals($urls, $this->storage->replace($urls));
     }
 
-    /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     */
     public function testReplaceIfThrewExceptionOnDuplicateUrl()
     {
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')
@@ -516,12 +514,11 @@ class DbStorageTest extends TestCase
      * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated
      *
      * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage SQLSTATE[23000]: test: 1062 test
      */
     public function testReplaceIfThrewExceptionOnDuplicateEntry()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('SQLSTATE[23000]: test: 1062 test');
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')
@@ -536,11 +533,9 @@ class DbStorageTest extends TestCase
         $this->storage->replace([$url]);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testReplaceIfThrewCustomException()
     {
+        $this->expectException('RuntimeException');
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,7 +7,9 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-class IndexTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+
+class IndexTest extends IntegrationTest
 {
     public function testIndexAction()
     {

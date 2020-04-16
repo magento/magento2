@@ -8,16 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\Backend\Config;
 
-use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit Test for \Magento\User\Model\Backend\Config\ObserverConfig class
  *
  * Class \Magento\User\Test\Unit\Model\Backend\Config\ObserverConfigTest
  */
-class ObserverConfigTest extends \PHPUnit\Framework\TestCase
+class ObserverConfigTest extends TestCase
 {
     /**
      * Config path for lockout threshold
@@ -43,14 +45,14 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     private $backendConfigMock;
 
     /**
      * Set environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->backendConfigMock = $this->createMock(ConfigInterface::class);
 

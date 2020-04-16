@@ -1,30 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Region;
 
-use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\DataObject;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class CollectionTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var Collection
@@ -36,7 +36,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $allowedCountries;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
@@ -125,7 +125,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $allowedCountries = [1, 2, 3];
         $this->allowedCountries->expects($this->once())->method('getAllowedCountries')->with(
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             null
         )->willReturn($allowedCountries);
         $this->assertEquals($this->collection->addAllowedCountriesFilter(), $this->collection);

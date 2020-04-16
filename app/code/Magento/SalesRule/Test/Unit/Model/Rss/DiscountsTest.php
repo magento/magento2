@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,16 @@
 namespace Magento\SalesRule\Test\Unit\Model\Rss;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
+use Magento\SalesRule\Model\Rss\Discounts;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DiscountsTest
- * @package Magento\SalesRule\Model\Rss
- */
-class DiscountsTest extends \PHPUnit\Framework\TestCase
+class DiscountsTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts
+     * @var Discounts
      */
     protected $discounts;
 
@@ -24,20 +25,20 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $collectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->discounts = $this->objectManagerHelper->getObject(
-            \Magento\SalesRule\Model\Rss\Discounts::class,
+            Discounts::class,
             [
                 'collectionFactory' => $this->collectionFactory
             ]
@@ -46,7 +47,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDiscountCollection()
     {
-        $ruleCollection = $this->createPartialMock(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class, [
+        $ruleCollection = $this->createPartialMock(Collection::class, [
                 'addWebsiteGroupDateFilter',
                 'addFieldToFilter',
                 'setOrder',

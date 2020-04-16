@@ -7,22 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\Data;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples;
-use \Magento\Framework\Escaper;
-use Magento\Downloadable\Model\Product\Type;
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Downloadable\Helper\File as DownloadableFile;
-use Magento\Framework\UrlInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Downloadable\Helper\File as DownloadableFile;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class to cover Sample Modifier
  *
  * Class \Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier\Data\SampleTest
  */
-class SamplesTest extends \PHPUnit\Framework\TestCase
+class SamplesTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -30,32 +33,32 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|MockObject
      */
     private $locatorMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     /**
-     * @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var DownloadableFile|MockObject
      */
     private $downloadableFileMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|MockObject
      */
     private $productMock;
 
@@ -67,7 +70,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
@@ -95,8 +98,8 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
      *
      * @param int|null $id
      * @param string $typeId
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectedGetTitle
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $expectedGetValue
+     * @param InvokedCount $expectedGetTitle
+     * @param InvokedCount $expectedGetValue
      * @return void
      * @dataProvider getSamplesTitleDataProvider
      */

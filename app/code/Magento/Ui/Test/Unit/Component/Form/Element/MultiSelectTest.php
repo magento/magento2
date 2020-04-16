@@ -1,15 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form\Element\MultiSelect;
 
 /**
- * Class MultiSelectTest
- *
  * @method MultiSelect getModel
  */
 class MultiSelectTest extends AbstractElementTest

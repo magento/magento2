@@ -59,7 +59,7 @@ class ResetQuoteAddressesTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteMock = $this->createPartialMock(Quote::class, [
             'getAllAddresses',
