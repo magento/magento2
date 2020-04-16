@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Widget\Instance\Options;
 
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
