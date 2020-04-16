@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,14 +12,15 @@ use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Stdlib\ArrayUtils;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SaveProcessor.
  *
  * @see Importer
  */
-class SaveProcessorTest extends \PHPUnit\Framework\TestCase
+class SaveProcessorTest extends TestCase
 {
     /**
      * @var SaveProcessor
@@ -54,7 +55,7 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
             ->disableOriginalConstructor()

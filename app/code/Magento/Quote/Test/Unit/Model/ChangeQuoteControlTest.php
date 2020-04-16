@@ -7,39 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Quote\Model\ChangeQuoteControl;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\ChangeQuoteControl;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Quote\Model\ChangeQuoteControl
  *
  * Class \Magento\Quote\Test\Unit\Model\ChangeQuoteControlTest
  */
-class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
+class ChangeQuoteControlTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Quote\Model\ChangeQuoteControl
+     * @var ChangeQuoteControl
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->userContextMock = $this->createMock(UserContextInterface::class);

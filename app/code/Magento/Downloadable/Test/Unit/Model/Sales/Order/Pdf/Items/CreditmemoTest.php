@@ -1,34 +1,44 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Pdf\Items;
 
+use Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo;
+use Magento\Framework\DataObject;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Pdf\AbstractPdf;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends \PHPUnit\Framework\TestCase
+class CreditmemoTest extends TestCase
 {
     /**
-     * @var \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo
+     * @var Creditmemo
      */
     private $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $order;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractPdf|MockObject
      */
     private $pdf;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $objectManager = new ObjectManager($this);
+        $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->order->expects($this->any())
@@ -36,22 +46,22 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback([$this, 'formatPrice']));
 
         $this->pdf = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Pdf\AbstractPdf::class,
+            AbstractPdf::class,
             ['drawLineBlocks', 'getPdf']
         );
 
         $filterManager = $this->createPartialMock(
-            \Magento\Framework\Filter\FilterManager::class,
+            FilterManager::class,
             ['stripTags']
         );
         $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
 
         $modelConstructorArgs = $objectManager->getConstructArguments(
-            \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class,
-            ['string' => new \Magento\Framework\Stdlib\StringUtils(), 'filterManager' => $filterManager]
+            Creditmemo::class,
+            ['string' => new StringUtils(), 'filterManager' => $filterManager]
         );
 
-        $this->model = $this->getMockBuilder(\Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo::class)
+        $this->model = $this->getMockBuilder(Creditmemo::class)
             ->setMethods(['getLinks', 'getLinksTitle'])
             ->setConstructorArgs($modelConstructorArgs)
             ->getMock();
@@ -61,7 +71,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $this->model->setPage(new \Zend_Pdf_Page('a4'));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->order = null;
@@ -105,7 +115,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->model->setItem(
-            new \Magento\Framework\DataObject(
+            new DataObject(
                 [
                     'name' => 'Downloadable Documentation',
                     'sku' => 'downloadable-documentation',
@@ -114,7 +124,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
                     'qty' => 1,
                     'tax_amount' => 2.00,
                     'discount_tax_compensation_amount' => 0.00,
-                    'order_item' => new \Magento\Framework\DataObject(
+                    'order_item' => new DataObject(
                         [
                             'product_options' => [
                                 'options' => [['label' => 'Test Custom Option', 'value' => 'test value']],
@@ -131,9 +141,9 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'getLinks'
         )->will(
             $this->returnValue(
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     ['purchased_items' => [
-                        new \Magento\Framework\DataObject(['link_title' => 'Magento User Guide']), ],
+                        new DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
             )

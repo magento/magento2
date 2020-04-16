@@ -1,142 +1,165 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
 
+use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\ProductFactory;
+use Magento\CatalogImportExport\Model\Export\Product;
+use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Logger\Monolog;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
+use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
+class AdvancedPricingTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject
+     * @var Timezone|MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collection;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollection|MockObject
      */
     protected $abstractCollection;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $exportConfig;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject
      */
     protected $categoryColFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionColFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attributeColFactory;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Export\Product\Type\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $typeFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkTypeProvider|MockObject
      */
     protected $linkTypeProvider;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite|\PHPUnit_Framework_MockObject_MockObject
+     * @var Composite|MockObject
      */
     protected $rowCustomizer;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreResolver|MockObject
      */
     protected $storeResolver;
 
     /**
-     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|MockObject
      */
     protected $groupRepository;
 
     /**
-     * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAdapter|MockObject
      */
     protected $writer;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing|MockObject
      */
     protected $advancedPricing;
 
     /**
-     * @var StubProduct|\Magento\CatalogImportExport\Model\Export\Product
+     * @var StubProduct|Product
      */
     protected $object;
 
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
-        $this->config = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
-        $type = $this->createMock(\Magento\Eav\Model\Entity\Type::class);
+        $this->localeDate = $this->createMock(Timezone::class);
+        $this->config = $this->createPartialMock(Config::class, ['getEntityType']);
+        $type = $this->createMock(Type::class);
         $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->logger = $this->createMock(\Magento\Framework\Logger\Monolog::class);
-        $this->collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->storeManager = $this->createMock(StoreManager::class);
+        $this->logger = $this->createMock(Monolog::class);
+        $this->collection = $this->createMock(CollectionFactory::class);
         $this->abstractCollection = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            AbstractCollection::class,
             [],
             '',
             false,
@@ -152,7 +175,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         );
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
         $this->productFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\ProductFactory::class,
+            ProductFactory::class,
             [
                 'create',
                 'getTypeId',
@@ -172,24 +195,24 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 'addNameToResult',
             ]
         );
-        $this->itemFactory = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class);
+        $this->itemFactory = $this->createMock(ItemFactory::class);
         $this->optionColFactory = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
         );
         $this->attributeColFactory = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
         );
-        $this->typeFactory = $this->createMock(\Magento\CatalogImportExport\Model\Export\Product\Type\Factory::class);
-        $this->linkTypeProvider = $this->createMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
+        $this->typeFactory = $this->createMock(Factory::class);
+        $this->linkTypeProvider = $this->createMock(LinkTypeProvider::class);
         $this->rowCustomizer = $this->createMock(
-            \Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite::class
+            Composite::class
         );
         $this->storeResolver = $this->createMock(
-            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class
+            StoreResolver::class
         );
-        $this->groupRepository = $this->createMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->writer = $this->createPartialMock(
-            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class,
+            AbstractAdapter::class,
             [
             'setHeaderCols',
             'writeRow',
@@ -220,7 +243,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             'correctExportData'
         ]);
         $this->advancedPricing = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
+            AdvancedPricing::class
         )
             ->setMethods($mockMethods)
             ->disableOriginalConstructor()
@@ -307,12 +330,12 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
         $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
         $headers = ['headers'];
-        $this->advancedPricing->expects($this->any())->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->expects($this->any())->method('setHeaderCols')->with($headers);
+        $this->advancedPricing->method('_getHeaderColumns')->willReturn($headers);
+        $this->writer->method('setHeaderCols')->with($headers);
         $webSite = 'All Websites [USD]';
         $userGroup = 'General';
-        $this->advancedPricing->expects($this->any())->method('_getWebsiteCode')->willReturn($webSite);
-        $this->advancedPricing->expects($this->any())->method('_getCustomerGroupById')->willReturn($userGroup);
+        $this->advancedPricing->method('_getWebsiteCode')->willReturn($webSite);
+        $this->advancedPricing->method('_getCustomerGroupById')->willReturn($userGroup);
         $data = [
             [
                 'sku' => 'simpletest',
@@ -331,7 +354,6 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             'tier_price' => '23',
         ];
         $this->advancedPricing
-            ->expects($this->any())
             ->method('correctExportData')
             ->willReturn($exportData);
         $this->writer->expects($this->once())->method('writeRow')->with($exportData);
@@ -342,7 +364,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * tearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->object);
     }

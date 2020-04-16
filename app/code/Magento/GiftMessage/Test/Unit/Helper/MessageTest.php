@@ -1,29 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Helper;
 
-class MessageTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutFactory;
+use Magento\GiftMessage\Block\Message\Inline;
+use Magento\GiftMessage\Helper\Message;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MessageTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var Message
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->layoutFactoryMock = $this->createMock(\Magento\Framework\View\LayoutFactory::class);
+        $objectManager = new ObjectManager($this);
+        $this->layoutFactoryMock = $this->createMock(LayoutFactory::class);
 
         $this->helper = $objectManager->getObject(
-            \Magento\GiftMessage\Helper\Message::class,
+            Message::class,
             [
                 'layoutFactory' => $this->layoutFactoryMock,
                 'skipMessageCheck' => ['onepage_checkout']
@@ -37,10 +46,10 @@ class MessageTest extends \PHPUnit\Framework\TestCase
     public function testGetInlineForCheckout()
     {
         $expectedHtml = '<a href="here">here</a>';
-        $layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
-        $entityMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $layoutMock = $this->createMock(Layout::class);
+        $entityMock = $this->createMock(DataObject::class);
         $inlineMock = $this->createPartialMock(
-            \Magento\GiftMessage\Block\Message\Inline::class,
+            Inline::class,
             ['setId', 'setDontDisplayContainer', 'setEntity', 'setCheckoutType', 'toHtml']
         );
 

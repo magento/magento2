@@ -6,6 +6,7 @@
 
 namespace Magento\Ups\Test\Unit\Model;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -24,7 +25,7 @@ use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,7 +33,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     const FREE_METHOD_NAME = 'free_method';
 
@@ -105,7 +106,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
@@ -484,7 +485,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return ElementFactory|MockObject
      */
-    private function getXmlFactory(): MockObject
+    private function getXmlFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
@@ -510,7 +511,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return ClientFactory|MockObject
      */
-    private function getHttpClientFactory(): MockObject
+    private function getHttpClientFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
             ->disableOriginalConstructor()
@@ -526,7 +527,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @return MockObject
      */
-    private function getRateFactory(): MockObject
+    private function getRateFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $this->rate = $this->createPartialMock(Result::class, ['getError']);
         $rateFactory = $this->createPartialMock(ResultFactory::class, ['create']);

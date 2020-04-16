@@ -51,7 +51,7 @@ class RobotsTest extends TestCase
      */
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

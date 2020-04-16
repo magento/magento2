@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,10 +18,11 @@ class AbstractAgreementStub extends AbstractAgreement
     {
         return static::STUB_CODE;
     }
-    
+
     /**
      * @param object $quote
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isAvailable($quote)
     {

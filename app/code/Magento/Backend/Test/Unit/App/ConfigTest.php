@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,20 @@
 namespace Magento\Backend\Test\Unit\App;
 
 use Magento\Backend\App\Config;
+use Magento\Backend\App\Config as BackendConfig;
+use Magento\Framework\App\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test reading by path and reading flag from config
  *
  * @see \Magento\Backend\App\Config
- * @package Magento\Backend\Test\Unit\App
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config|MockObject
      */
     protected $appConfig;
 
@@ -25,10 +28,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appConfig = $this->createPartialMock(\Magento\Framework\App\Config::class, ['get']);
-        $this->model = new \Magento\Backend\App\Config($this->appConfig);
+        $this->model = new BackendConfig($this->appConfig);
     }
 
     public function testGetValue()
@@ -89,10 +92,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Get ConfigData mock
      *
      * @param $mockedMethod
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\Data
+     * @return MockObject|Data
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->createPartialMock(\Magento\Framework\App\Config\Data::class, [$mockedMethod]);
+        return $this->createPartialMock(Data::class, [$mockedMethod]);
     }
 }

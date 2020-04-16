@@ -1,39 +1,50 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
 
-class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Category;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Helper\Data;
+use Magento\GoogleOptimizer\Model\Code;
+use Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SaveGoogleExperimentScriptObserverTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_eventObserverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_categoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_codeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver
+     * @var SaveGoogleExperimentScriptObserver
      */
     protected $_modelObserver;
 
@@ -42,10 +53,10 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_helperMock = $this->createMock(\Magento\GoogleOptimizer\Helper\Data::class);
-        $this->_categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $this->_helperMock = $this->createMock(Data::class);
+        $this->_categoryMock = $this->createMock(Category::class);
         $this->_storeId = 0;
         $this->_categoryMock->expects(
             $this->atLeastOnce()
@@ -54,16 +65,16 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($this->_storeId)
         );
-        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getCategory']);
+        $event = $this->createPartialMock(Event::class, ['getCategory']);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_categoryMock));
-        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
-        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->_codeMock = $this->createMock(Code::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
-            \Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver::class,
+            SaveGoogleExperimentScriptObserver::class,
             ['helper' => $this->_helperMock, 'modelCode' => $this->_codeMock, 'request' => $this->_requestMock]
         );
     }
@@ -100,7 +111,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'addData'
         )->with(
             [
-                'entity_type' => \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_CATEGORY,
+                'entity_type' => Code::ENTITY_TYPE_CATEGORY,
                 'entity_id' => $categoryId,
                 'store_id' => $this->_storeId,
                 'experiment_script' => $experimentScript,
@@ -190,7 +201,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
             'addData'
         )->with(
             [
-                'entity_type' => \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_CATEGORY,
+                'entity_type' => Code::ENTITY_TYPE_CATEGORY,
                 'entity_id' => $categoryId,
                 'store_id' => $this->_storeId,
                 'experiment_script' => $experimentScript,
@@ -201,12 +212,10 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
         $this->_modelObserver->execute($this->_eventObserverMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Code does not exist
-     */
     public function testEditingCodeIfCodeModelIsNotFound()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Code does not exist');
         $experimentScript = 'some string';
         $codeId = 5;
 
