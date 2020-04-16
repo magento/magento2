@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Component\Form\Element\DataType\Media;
 
+use Magento\Framework\DataObject;
+
 /**
  * Basic configuration for OdenDialogUrl
  */
@@ -21,11 +23,11 @@ class OpenDialogUrl
     private $openDialogUrl;
 
     /**
-     * @param string $url
+     * @param DataObject $url
      */
-    public function __construct(string $url = null)
+    public function __construct(DataObject $url = null)
     {
-        $this->openDialogUrl = $url ?? self::DEFAULT_OPEN_DIALOG_URL;
+        $this->openDialogUrl = $url;
     }
 
     /**
@@ -35,6 +37,9 @@ class OpenDialogUrl
      */
     public function get(): string
     {
-        return $this->openDialogUrl;
+        if ($this->openDialogUrl) {
+            return $this->openDialogUrl->getUrl();
+        }
+        return self::DEFAULT_OPEN_DIALOG_URL;
     }
 }
