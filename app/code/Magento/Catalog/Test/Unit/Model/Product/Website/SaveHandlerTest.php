@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Website\SaveHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
