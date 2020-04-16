@@ -339,13 +339,14 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @param bool $isExist
      * @dataProvider providerGetCurrentPath
      */
-    public function testGetCurrentPath($pathId, $expectedPath, $isExist)
+    public function testGetCurrentPath($pathId, $subDir, $expectedPath, $isExist)
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
                     ['node', null, $pathId],
+                    ['current_tree_path', null, $subDir],
                 ]
             );
 
@@ -367,21 +368,33 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                     ['PATH', '.'],
                 ]
             );
-        $this->directoryWriteMock->expects($this->once())
-            ->method('isExist')
-            ->willReturn($isExist);
-        $this->directoryWriteMock->expects($this->any())
-            ->method('create')
-            ->with($this->directoryWriteMock->getRelativePath($expectedPath));
+
+        if ($subDir) {
+            $this->directoryWriteMock->expects($this->once())
+                ->method('isExist')
+                ->willReturn($isExist);
+            $this->directoryWriteMock->expects($this->any())
+                ->method('create')
+                ->with($this->directoryWriteMock->getRelativePath($expectedPath));
+        }
 
         $this->assertEquals($expectedPath, $this->imagesHelper->getCurrentPath());
     }
 
     public function testGetCurrentPathThrowException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The directory PATH is not writable by server.');
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturn('PATH');
 
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage(
+            'Can\'t create SUBDIR as subdirectory of PATH, you might have some permission issue.'
+        );
+
+        $this->directoryWriteMock->expects($this->any())
+            ->method('getRelativePath')
+            ->willReturn('SUBDIR');
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
@@ -402,12 +415,12 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function providerGetCurrentPath()
     {
         return [
-            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', true],
-            ['L215LmpwZw--', 'PATH', true],
-            [null, 'PATH', true],
-            ['L3Rlc3RfcGF0aA--', 'PATH/test_path', false],
-            ['L215LmpwZw--', 'PATH', false],
-            [null, 'PATH', false],
+            ['L3Rlc3RfcGF0aA--', 'L3Rlc3RfcGF0aA--', 'PATH/test_path', true],
+            ['L215LmpwZw--', '', 'PATH', true],
+            [null, '', 'PATH', true],
+            ['L3Rlc3RfcGF0aA--', 'L3Rlc3RfcGF0aA--', 'PATH/test_path', false],
+            ['L215LmpwZw--', '', 'PATH', false],
+            [null, '', 'PATH', false],
         ];
     }
 

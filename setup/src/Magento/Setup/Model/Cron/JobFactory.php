@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Backend\Console\Command\CacheDisableCommand;
@@ -11,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Magento\Setup\Console\Command\UpgradeCommand;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 
@@ -64,7 +65,9 @@ class JobFactory
     public function create($name, array $params = [])
     {
         $cronStatus = $this->serviceLocator->get(\Magento\Setup\Model\Cron\Status::class);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
         $streamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
         $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
@@ -81,7 +84,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_DB_ROLLBACK:
                 return new JobDbRollback(
                     $objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class),
@@ -91,7 +93,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_STATIC_REGENERATE:
                 return new JobStaticRegenerate(
                     $objectManagerProvider,
@@ -100,7 +101,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_COMPONENT_UNINSTALL:
                 $moduleUninstall = new Helper\ModuleUninstall(
                     $this->serviceLocator->get(\Magento\Setup\Model\ModuleUninstaller::class),
@@ -123,7 +123,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_MODULE_ENABLE:
                 return new JobModule(
                     $this->serviceLocator->get(ModuleEnableCommand::class),
@@ -133,7 +132,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_MODULE_DISABLE:
                 return new JobModule(
                     $this->serviceLocator->get(ModuleDisableCommand::class),
@@ -143,7 +141,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_ENABLE_CACHE:
                 return new JobSetCache(
                     $objectManager->get(CacheEnableCommand::class),
@@ -153,7 +150,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_DISABLE_CACHE:
                 return new JobSetCache(
                     $objectManager->get(CacheDisableCommand::class),
@@ -162,7 +158,6 @@ class JobFactory
                     $cronStatus,
                     $name
                 );
-                break;
             case self::JOB_MAINTENANCE_MODE_ENABLE:
                 return new JobSetMaintenanceMode(
                     $this->serviceLocator->get(MaintenanceEnableCommand::class),
@@ -172,7 +167,6 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             case self::JOB_MAINTENANCE_MODE_DISABLE:
                 return new JobSetMaintenanceMode(
                     $this->serviceLocator->get(MaintenanceDisableCommand::class),
@@ -182,10 +176,8 @@ class JobFactory
                     $name,
                     $params
                 );
-                break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
-                break;
         }
     }
 }

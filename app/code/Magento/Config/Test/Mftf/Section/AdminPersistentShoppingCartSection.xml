@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPersistentShoppingCartSection">
+        <element name="DefaultLayoutsTab" type="button" selector=".entry-edit-head-link"/>
+        <element name="CheckIfTabExpand" type="button" selector=".entry-edit-head-link:not(.open)"/>
+        <element name="persistenceLifeTime" type="input" selector="#persistent_options_lifetime"/>
+        <element name="rememberMeEnable" type="input" selector="#persistent_options_remember_enabled"/>
+        <element name="rememberMeDefault" type="input" selector="#persistent_options_remember_default"/>
+        <element name="clearPersistenceOnLogout" type="input" selector="#persistent_options_logout_clear"/>
+        <element name="persistShoppingCart" type="input" selector="#persistent_options_shopping_cart"/>
+    </section>
+</sections>

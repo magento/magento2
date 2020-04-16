@@ -7,7 +7,7 @@ namespace Magento\PageCache\Test\Unit\Model\Cache;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Magento\PageCache\Model\Cache\Server;
-use \Zend\Uri\UriFactory;
+use \Laminas\Uri\UriFactory;
 
 class ServerTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,6 +22,9 @@ class ServerTest extends \PHPUnit\Framework\TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
     protected $urlBuilderMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject| \Magento\Framework\Cache\InvalidateLogger */
+    private $loggerMock;
 
     protected function setUp()
     {
