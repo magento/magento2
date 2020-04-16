@@ -87,7 +87,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -121,6 +121,8 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Get topic name from request
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return string
      * @throws \Magento\Framework\Exception\InputException
@@ -137,6 +139,8 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Get topic description from request
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -152,7 +156,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -167,6 +171,8 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
+     * Check if path is bulk
+     *
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @return bool
      */

@@ -63,7 +63,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         'service' => [
                             'class' => \Magento\Catalog\Api\ProductRepositoryInterface::class,
                             'method' => 'save',
-                        ]
+                        ],
+                        'description' => ''
                     ]
                 ]
             ]

@@ -120,8 +120,13 @@ class MassSchedule
      * @throws BulkException
      * @throws LocalizedException
      */
-    public function publishMass($topicName, array $entitiesArray, $topicDescription = '', $groupId = null, $userId = null)
-    {
+    public function publishMass(
+        $topicName,
+        array $entitiesArray,
+        $topicDescription = '',
+        $groupId = null,
+        $userId = null
+    ) {
         $bulkDescription = __('Topic %1', $topicName);
         if ($topicDescription !== '') {
             $bulkDescription = $topicDescription;

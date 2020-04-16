@@ -71,11 +71,16 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private $registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $fileResolverMock;
 
     /** @var ConfigReader */
     protected $configReader;
+
+    /**
+     * @var string
+     */
+    protected $logFilePath;
 
     protected function setUp()
     {
