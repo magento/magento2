@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\Client\Zend;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -97,7 +100,7 @@ class ZendTest extends TestCase
      */
     public function testPlaceRequestClientFail()
     {
-        $this->expectException('Magento\Payment\Gateway\Http\ClientException');
+        $this->expectException(ClientException::class);
         $this->setClientTransferObjects();
 
         $this->clientMock->expects($this->once())
@@ -118,7 +121,7 @@ class ZendTest extends TestCase
      */
     public function testPlaceRequestConvertResponseFail()
     {
-        $this->expectException('Magento\Payment\Gateway\Http\ConverterException');
+        $this->expectException(ConverterException::class);
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 

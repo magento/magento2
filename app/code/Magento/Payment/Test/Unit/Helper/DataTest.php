@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Helper;
 
@@ -93,7 +94,7 @@ class DataTest extends TestCase
 
     public function testGetMethodInstanceWithException()
     {
-        $this->expectException('UnexpectedValueException');
+        $this->expectException(\UnexpectedValueException::class);
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn(null);

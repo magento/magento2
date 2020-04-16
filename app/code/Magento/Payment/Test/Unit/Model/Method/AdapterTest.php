@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 use Magento\Framework\Event\ManagerInterface;
@@ -18,7 +20,7 @@ use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 

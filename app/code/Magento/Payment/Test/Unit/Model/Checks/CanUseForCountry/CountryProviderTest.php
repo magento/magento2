@@ -1,15 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
 
 use Magento\Directory\Helper\Data;
 use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

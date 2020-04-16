@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
 use Magento\Framework\ObjectManager\TMap;
@@ -15,7 +17,7 @@ class ValueHandlerPoolTest extends TestCase
 {
     public function testConstructorException()
     {
-        $this->expectException('LogicException');
+        $this->expectException(\LogicException::class);
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\SalesOrderBeforeSaveObserver;
@@ -169,7 +171,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
      */
     public function testDoesNothingWhenNoPaymentIsAvailable()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Please provide payment for the order.');
         $this->_prepareEventMockWithMethods(['getOrder']);
 

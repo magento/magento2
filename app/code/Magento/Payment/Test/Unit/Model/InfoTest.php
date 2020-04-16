@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model;
 
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -135,7 +137,7 @@ class InfoTest extends TestCase
 
     public function testGetMethodInstanceWithNoMethod()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('The payment method you requested is not available.');
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
@@ -181,7 +183,7 @@ class InfoTest extends TestCase
 
     public function testSetAdditionalInformationException()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->info->setAdditionalInformation('object', new \StdClass());
     }
 
