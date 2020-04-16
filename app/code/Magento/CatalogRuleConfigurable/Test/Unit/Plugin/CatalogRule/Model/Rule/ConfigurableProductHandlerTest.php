@@ -33,7 +33,7 @@ class ConfigurableProductHandlerTest extends TestCase
      */
     private $configurableProductsProviderMock;
 
-    /** @var \Magento\CatalogRule\Model\Rule|MockObject */
+    /** @var Rule|MockObject */
     private $ruleMock;
 
     /**
