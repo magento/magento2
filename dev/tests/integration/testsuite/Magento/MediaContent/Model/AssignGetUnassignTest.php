@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
-use Magento\MediaContentApi\Api\AssignAssetsInterface;
+use Magento\MediaContentApi\Api\SaveContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
-use Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface;
-use Magento\MediaContentApi\Api\GetContentWithAssetsInterface;
-use Magento\MediaContentApi\Api\UnassignAssetsInterface;
+use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
+use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
+use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -22,34 +23,35 @@ use PHPUnit\Framework\TestCase;
 class AssignGetUnassignTest extends TestCase
 {
     /**
-     * @var AssignAssetsInterface
+     * @var SaveContentAssetLinksInterface
      */
-    private $assign;
+    private $saveContentAssetLinks;
 
     /**
-     * @var GetAssetIdsUsedInContentInterface
+     * @var GetAssetIdsByContentIdentityInterface
      */
-    private $getAssetIds;
+    private $getAssetIdsByContentIdentity;
 
     /**
-     * @var GetContentWithAssetsInterface
+     * @var GetContentByAssetIdsInterface
      */
-    private $getContent;
+    private $getContentByAssetIds;
 
     /**
-     * @var UnassignAssetsInterface
+     * @var DeleteContentAssetLinksInterface
      */
-    private $unassign;
+    private $deleteContentAssetLinks;
 
     /**
      * @inheritdoc
      */
     public function setUp(): void
     {
-        $this->assign = Bootstrap::getObjectManager()->get(AssignAssetsInterface::class);
-        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsUsedInContentInterface::class);
-        $this->getContent = Bootstrap::getObjectManager()->get(GetContentWithAssetsInterface::class);
-        $this->unassign = Bootstrap::getObjectManager()->get(UnassignAssetsInterface::class);
+        $this->saveContentAssetLinks = Bootstrap::getObjectManager()->get(SaveContentAssetLinksInterface::class);
+        $this->getAssetIdsByContentIdentity = Bootstrap::getObjectManager()
+            ->get(GetAssetIdsByContentIdentityInterface::class);
+        $this->getContentByAssetIds = Bootstrap::getObjectManager()->get(GetContentByAssetIdsInterface::class);
+        $this->deleteContentAssetLinks = Bootstrap::getObjectManager()->get(DeleteContentAssetLinksInterface::class);
     }
 
     /**
@@ -65,21 +67,28 @@ class AssignGetUnassignTest extends TestCase
         $contentIdentity = Bootstrap::getObjectManager()->create(
             ContentIdentityInterface::class,
             [
-                'data' => [
-                    'entity_type' => $entityType,
-                    'entity_id' => $entityId,
-                    'field' => $field
-                ]
+                'entityType' => $entityType,
+                'entityId' => $entityId,
+                'field' => $field
             ]
         );
 
-        $this->assign->execute($contentIdentity, $assetIds);
+        $contentAssetLinks = [];
 
-        $retrievedAssetIds = $this->getAssetIds->execute($contentIdentity);
+        foreach ($assetIds as $assetId) {
+            $contentAssetLinks[] = Bootstrap::getObjectManager()->create(
+                ContentAssetLinkInterface::class,
+                [
+                    'assetId' => $assetId,
+                    'contentIdentity' => $contentIdentity
+                ]
+            );
+        }
+
+        $this->saveContentAssetLinks->execute($contentAssetLinks);
+        $retrievedAssetIds = $this->getAssetIdsByContentIdentity->execute($contentIdentity);
         $this->assertEquals($assetIds, $retrievedAssetIds);
-
-        $retrievedContentIdentities = $this->getContent->execute($assetIds);
-
+        $retrievedContentIdentities = $this->getContentByAssetIds->execute($assetIds);
         $this->assertEquals(count($retrievedContentIdentities), 1);
 
         foreach ($retrievedContentIdentities as $identity) {
@@ -88,9 +97,9 @@ class AssignGetUnassignTest extends TestCase
             $this->assertEquals($field, $identity->getField());
         }
 
-        $this->unassign->execute($contentIdentity, $assetIds);
+        $this->deleteContentAssetLinks->execute($contentAssetLinks);
 
-        $this->assertEmpty($this->getContent->execute($assetIds));
-        $this->assertEmpty($this->getAssetIds->execute($contentIdentity));
+        $this->assertEmpty($this->getContentByAssetIds->execute($assetIds));
+        $this->assertEmpty($this->getAssetIdsByContentIdentity->execute($contentIdentity));
     }
 }

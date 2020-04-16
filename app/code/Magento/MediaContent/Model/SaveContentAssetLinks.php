@@ -46,27 +46,25 @@ class SaveContentAssetLinks implements SaveContentAssetLinksInterface
     }
 
     /**
-     * Save a media asset to content relation. Should be executed when media assets is added to the content
+     * Save a media asset to content link.
      *
      * @param ContentAssetLinkInterface[] $contentAssetLinks
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $contentAssetsLinks): void
+    public function execute(array $contentAssetLinks): void
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
             $data = [];
-
-            foreach ($contentAssetsLinks as $contentAssetLink) {
+            foreach ($contentAssetLinks as $contentAssetLink) {
                 $data[] = [
                     self::ASSET_ID => $contentAssetLink->getAssetId(),
                     self::ENTITY_TYPE => $contentAssetLink->getContentId()->getEntityType(),
                     self::ENTITY_ID => $contentAssetLink->getContentId()->getEntityId(),
-                    self::FIELD => $contentAssetLink->getField()
+                    self::FIELD => $contentAssetLink->getContentId()->getField()
                 ];
             }
-
             $connection->insertMultiple($tableName, $data);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Plugin;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\MediaContent\Model\RemoveRelationsForAssetIds;
+use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
 use Psr\Log\LoggerInterface;
@@ -29,21 +29,21 @@ class MediaGalleryAssetDeleteByPath
     private $logger;
 
     /**
-     * @var RemoveRelationsForAssetIds
+     * @var DeleteContentAssetLinksByAssetIdsInterface
      */
-    private $removeRelationsForAssetIds;
+    private $deleteContentAssetLinksByAssetIds;
 
     /**
-     * @param RemoveRelationsForAssetIds $removeRelationsForAssetIds
+     * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinksByAssetIds
      * @param GetByPathInterface $getByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
-        RemoveRelationsForAssetIds $removeRelationsForAssetIds,
+        DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinksByAssetIds,
         GetByPathInterface $getByPath,
         LoggerInterface $logger
     ) {
-        $this->removeRelationsForAssetIds = $removeRelationsForAssetIds;
+        $this->deleteContentAssetLinksByAssetIds = $deleteContentAssetLinksByAssetIds;
         $this->getByPath = $getByPath;
         $this->logger = $logger;
     }
@@ -66,6 +66,6 @@ class MediaGalleryAssetDeleteByPath
 
         $proceed($mediaAssetPath);
 
-        $this->removeRelationsForAssetIds->execute([$asset->getId()]);
+        $this->deleteContentAssetLinksByAssetIds->execute([$asset->getId()]);
     }
 }

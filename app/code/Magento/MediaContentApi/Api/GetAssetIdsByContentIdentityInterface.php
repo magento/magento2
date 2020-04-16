@@ -14,7 +14,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
  * Get media asset ids that are used in the piece of content identified by the specified content identity
  * @api
  */
-interface GetAssetIdsUsedInContentInterface
+interface GetAssetIdsByContentIdentityInterface
 {
     /**
      * Get media asset ids that are used in the piece of content identified by the specified content identity

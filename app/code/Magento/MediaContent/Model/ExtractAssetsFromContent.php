@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
-use Magento\MediaContent\Model\Content\Config;
+use Magento\MediaContentApi\Model\SearchPatternConfigInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
@@ -19,9 +19,9 @@ use Psr\Log\LoggerInterface;
 class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
 {
     /**
-     * @var Config
+     * @var SearchPatternConfigInterface
      */
-    private $config;
+    private $searchPatternConfig;
 
     /**
      * @var GetByPathInterface
@@ -34,16 +34,16 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     private $logger;
 
     /**
-     * @param Config $config
+     * @param SearchPatternConfigInterface $searchPatternConfig
      * @param GetByPathInterface $getMediaAssetByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Config $config,
+        SearchPatternConfigInterface $searchPatternConfig,
         GetByPathInterface $getMediaAssetByPath,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
+        $this->searchPatternConfig = $searchPatternConfig;
         $this->getMediaAssetByPath = $getMediaAssetByPath;
         $this->logger = $logger;
     }
@@ -55,7 +55,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     {
         $paths = [];
 
-        foreach ($this->config->getSearchPatterns() as $pattern) {
+        foreach ($this->searchPatternConfig->get() as $pattern) {
             if (empty($pattern)) {
                 continue;
             }

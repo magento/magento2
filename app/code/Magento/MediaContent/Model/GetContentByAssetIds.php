@@ -9,14 +9,14 @@ namespace Magento\MediaContent\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
-use Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to return media asset id list which is used in the specified media content
+ * Used to return media asset list for the specified asset.
  */
-class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
+class GetContentByAssetIds implements GetContentByAssetIdsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
@@ -35,13 +35,21 @@ class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
     private $logger;
 
     /**
-     * GetAssetsUsedInContent constructor.
-     *
+     * @var ContentIdentityInterfaceFactory
+     */
+    private $factory;
+
+    /**
+     * @param ContentIdentityInterfaceFactory $factory
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      */
-    public function __construct(ResourceConnection $resourceConnection, LoggerInterface $logger)
-    {
+    public function __construct(
+        ContentIdentityInterfaceFactory $factory,
+        ResourceConnection $resourceConnection,
+        LoggerInterface $logger
+    ) {
+        $this->factory = $factory;
         $this->resourceConnection = $resourceConnection;
         $this->logger = $logger;
     }
@@ -49,30 +57,28 @@ class GetAssetIdsUsedInContent implements GetAssetIdsUsedInContentInterface
     /**
      * @inheritdoc
      */
-    public function execute(ContentIdentityInterface $contentIdentity): array
+    public function execute(array $assetIds): array
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
+                ->distinct()
                 ->from(
                     $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME),
-                    self::ASSET_ID
-                )->where(
-                    self::ENTITY_TYPE . ' = ?',
-                    $contentIdentity->getEntityType()
-                )->where(
-                    self::ENTITY_ID . '= ?',
-                    $contentIdentity->getEntityId()
-                )->where(
-                    self::FIELD . '= ?',
-                    $contentIdentity->getField()
-                );
+                    ['entityType' => self::ENTITY_TYPE, 'entityId' => self::ENTITY_ID, self::FIELD]
+                )
+                ->where(self::ASSET_ID . ' IN (?)', $assetIds);
 
-            return array_keys($connection->fetchAssoc($select));
+            $contentIdentities = [];
+            foreach ($connection->fetchAssoc($select) as $contentIdentityData) {
+                $contentIdentities[] = $this->factory->create($contentIdentityData);
+            }
+            return $contentIdentities;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred at getting asset used in content information.');
-            throw new IntegrationException($message);
+            throw new IntegrationException(
+                __('An error occurred at getting media asset to content relation by media asset id.')
+            );
         }
     }
 }

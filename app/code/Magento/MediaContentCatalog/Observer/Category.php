@@ -10,7 +10,7 @@ namespace Magento\MediaContentCatalog\Observer;
 use Magento\Catalog\Model\Category as CatalogCategory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\MediaContentApi\Api\UpdateRelationsInterface;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 
 /**
@@ -19,14 +19,14 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 class Category implements ObserverInterface
 {
     private const CONTENT_TYPE = 'catalog_category';
-    private const TYPE = 'entity_type';
-    private const ENTITY_ID = 'entity_id';
+    private const TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
 
     /**
-     * @var UpdateRelationsInterface
+     * @var UpdateContentAssetLinksInterface
      */
-    private $processor;
+    private $updateContentAssetLinks;
 
     /**
      * @var array
@@ -40,16 +40,16 @@ class Category implements ObserverInterface
 
     /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param UpdateRelationsInterface $processor
+     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        UpdateRelationsInterface $processor,
+        UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->processor = $processor;
+        $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
     }
 
@@ -67,14 +67,12 @@ class Category implements ObserverInterface
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
-                $this->processor->execute(
+                $this->updateContentAssetLinks->execute(
                     $this->contentIdentityFactory->create(
                         [
-                            'data' => [
-                                self::TYPE => self::CONTENT_TYPE,
-                                self::FIELD => $field,
-                                self::ENTITY_ID => (string) $model->getId(),
-                            ]
+                            self::TYPE => self::CONTENT_TYPE,
+                            self::FIELD => $field,
+                            self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
                     (string) $model->getData($field)

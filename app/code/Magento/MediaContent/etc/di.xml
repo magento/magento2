@@ -6,16 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\MediaContentApi\Api\AssignAssetsInterface" type="Magento\MediaContent\Model\AssignAssets"/>
-    <preference for="Magento\MediaContentApi\Api\UnassignAssetsInterface" type="Magento\MediaContent\Model\UnassignAssets"/>
-    <preference for="Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface" type="Magento\MediaContent\Model\GetAssetIdsUsedInContent"/>
-    <preference for="Magento\MediaContentApi\Api\GetContentWithAssetsInterface" type="Magento\MediaContent\Model\GetContentWithAssets"/>
+    <preference for="Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface" type="Magento\MediaContent\Model\DeleteContentAssetLinksByAssetIds"/>
+    <preference for="Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface" type="Magento\MediaContent\Model\GetAssetIdsByContentIdentity"/>
+    <preference for="Magento\MediaContentApi\Api\GetContentByAssetIdsInterface" type="Magento\MediaContent\Model\GetContentByAssetIds"/>
     <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetsFromContent"/>
-    <preference for="Magento\MediaContentApi\Api\UpdateRelationsInterface" type="Magento\MediaContent\Model\UpdateRelations"/>
+    <preference for="Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface" type="Magento\MediaContent\Model\UpdateContentAssetLinks"/>
     <preference for="Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface" type="Magento\MediaContent\Model\DeleteContentAssetLinks"/>
     <preference for="Magento\MediaContentApi\Api\SaveContentAssetLinksInterface" type="Magento\MediaContent\Model\SaveContentAssetLinks"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
     <preference for="Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface" type="Magento\MediaContent\Model\ContentAssetLink"/>
+    <preference for="Magento\MediaContentApi\Model\SearchPatternConfigInterface" type="Magento\MediaContent\Model\Content\SearchPatternConfig"/>
     <preference for="Magento\MediaContent\Model\Content\ConfigInterface" type="Magento\MediaContent\Model\Content\Config"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\MediaGalleryAssetDeleteByPath" />
@@ -39,7 +39,7 @@
             <argument name="cacheId" xsi:type="string">Media_Content_Patterns_CacheId</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaContent\Model\Content\Config">
+    <type name="Magento\MediaContent\Model\Content\SearchPatternConfig">
         <arguments>
             <argument name="data" xsi:type="object">Magento\MediaContent\Model\Content\Config\Data</argument>
         </arguments>

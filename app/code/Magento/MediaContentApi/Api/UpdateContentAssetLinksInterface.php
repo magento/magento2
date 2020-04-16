@@ -12,7 +12,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 /**
  * Update the media assets to content relations. Assign new media assets and unassign media assets no longer used
  */
-interface UpdateRelationsInterface
+interface UpdateContentAssetLinksInterface
 {
     /**
      * Update the media assets to content relations. Assign new media assets and unassign media assets no longer used

@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Model\Content;
 
 use Magento\Framework\Config\DataInterface;
+use Magento\MediaContentApi\Model\SearchPatternConfigInterface;
 
 /**
  * Media content configuration
  */
-class Config implements ConfigInterface
+class SearchPatternConfig implements SearchPatternConfigInterface
 {
     private const XML_PATH_SEARCH_PATTERNS = 'search/patterns';
 
@@ -34,7 +35,7 @@ class Config implements ConfigInterface
      *
      * @return array
      */
-    public function getSearchPatterns(): array
+    public function get(): array
     {
         return $this->data->get(self::XML_PATH_SEARCH_PATTERNS);
     }

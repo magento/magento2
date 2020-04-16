@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface;
 
 /**
  * Data interface representing the identificator of content. I.e. short description field of product entity with id 42
  * @api
  */
-interface ContentIdentityInterface
+interface ContentIdentityInterface extends ExtensibleDataInterface
 {
     /**
      * Type of entity that can have a content with media. I.e. catalog_product or cms_page
@@ -43,12 +44,4 @@ interface ContentIdentityInterface
      * @return \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null
      */
     public function getExtensionAttributes(): ContentIdentityExtensionInterface;
-
-    /**
-     * Set extension attributes
-     *
-     * @param \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface $extensionAttributes
-     * @return void
-     */
-    public function setExtensionAttributes(ContentIdentityExtensionInterface $extensionAttributes): void;
 }

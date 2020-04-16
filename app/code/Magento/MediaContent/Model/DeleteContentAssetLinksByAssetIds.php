@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used for saving relation between the media asset and media content where the media asset is used
+ * Delete the relation between media asset and the piece of content. I.e media asset no longer part of the content
  */
-class RemoveRelationsForAssetIds
+class DeleteContentAssetLinksByAssetIds implements DeleteContentAssetLinksByAssetIdsInterface
 {
     private const MEDIA_CONTENT_ASSET_TABLE_NAME = 'media_content_asset';
     private const ASSET_ID = 'asset_id';
@@ -40,7 +41,7 @@ class RemoveRelationsForAssetIds
     }
 
     /**
-     * Remove media content relations for media asset ids
+     * Delete media content relations by media asset ids
      *
      * @param array $assetIds
      * @throws CouldNotDeleteException

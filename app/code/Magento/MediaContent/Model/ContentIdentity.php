@@ -7,25 +7,44 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface;
 
 /**
  * @inheritdoc
  */
-class ContentIdentity extends AbstractExtensibleModel implements ContentIdentityInterface
+class ContentIdentity implements ContentIdentityInterface
 {
-    private const ENTITY_TYPE = 'entity_type';
-    private const ENTITY_ID = 'entity_id';
-    private const FIELD = 'field';
+    private $entityType;
+    private $entityId;
+    private $field;
+    private $extensionAttributes;
+
+    /**
+     * ContentIdentity constructor.
+     * @param string $entityType
+     * @param string $entityId
+     * @param string $field
+     * @param ContentIdentityExtensionInterface|null $extensionAttributes
+     */
+    public function __construct(
+        string $entityType,
+        string $entityId,
+        string $field,
+        ?ContentIdentityExtensionInterface $extensionAttributes = null
+    ) {
+        $this->entityType = $entityType;
+        $this->entityId= $entityId;
+        $this->field = $field;
+        $this->extensionAttributes = $extensionAttributes;
+    }
 
     /**
      * @inheritdoc
      */
     public function getEntityType(): string
     {
-        return (string) $this->getData(self::ENTITY_TYPE);
+        return $this->entityType;
     }
 
     /**
@@ -33,7 +52,7 @@ class ContentIdentity extends AbstractExtensibleModel implements ContentIdentity
      */
     public function getEntityId(): string
     {
-        return (string) $this->getData(self::ENTITY_ID);
+        return $this->entityId;
     }
 
     /**
@@ -41,7 +60,7 @@ class ContentIdentity extends AbstractExtensibleModel implements ContentIdentity
      */
     public function getField(): string
     {
-        return (string) $this->getData(self::FIELD);
+        return $this->field;
     }
 
     /**
@@ -49,14 +68,6 @@ class ContentIdentity extends AbstractExtensibleModel implements ContentIdentity
      */
     public function getExtensionAttributes(): ContentIdentityExtensionInterface
     {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(ContentIdentityExtensionInterface $extensionAttributes): void
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
+        return $this->extensionAttributes;
     }
 }

@@ -14,7 +14,7 @@ use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Used to unassign relation of the media asset to the media content where the media asset is used
+ * Used to delete links of the media asset to the media content
  */
 class DeleteContentAssetLinks implements DeleteContentAssetLinksInterface
 {
@@ -47,41 +47,45 @@ class DeleteContentAssetLinks implements DeleteContentAssetLinksInterface
     /**
      * Remove relation between the media asset and the content. I.e media asset no longer part of the content
      *
-     * @param ContentAssetLinkInterface[] $contentAssetsLinks
+     * @param ContentAssetLinkInterface[] $contentAssetLinks
      * @throws CouldNotDeleteException
      */
-    public function execute(array $contentAssetsLinks): void
+    public function execute(array $contentAssetLinks): void
     {
-        $failedLinks = [];
-        foreach ($contentAssetsLinks as $contentAssetLink) {
-            try {
-                $connection = $this->resourceConnection->getConnection();
-                $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
-                $connection->delete(
-                    $tableName,
-                    [
-                        self::ASSET_ID . ' = ?' => $contentAssetLink->getAssetId(),
-                        self::ENTITY_TYPE . ' = ?' => $contentAssetLink->getContentId()->getEntityType(),
-                        self::ENTITY_ID . ' = ?' => $contentAssetLink->getContentId()->getEntityId(),
-                        self::FIELD . ' = ?' => $contentAssetLink->getField()
-                    ]
-                );
-            } catch (\Exception $exception) {
-                $this->logger->critical($exception);
-                $failedLinks[] =  self::ASSET_ID . '=' . $contentAssetLink->getAssetId() .
-                    self::ENTITY_TYPE . ' = ' . $contentAssetLink->getContentId()->getEntityType() .
-                    self::ENTITY_ID . ' = ' . $contentAssetLink->getContentId()->getEntityId() .
-                    self::FIELD . ' = ' . $contentAssetLink->getField();
-            }
-        }
-
-        if (!empty($failedLinks)) {
+        try {
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
+            $whereSql = $this->buildWhereSqlPart($contentAssetLinks);
+            $connection->delete($tableName, $whereSql);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             throw new CouldNotDeleteException(
-                __(
-                    'An error occurred at deleting link between the media asset and media content. Links: %links',
-                    implode(' ,', $failedLinks)
-                )
+                __('An error occurred at deleting links between the media asset and media content.')
             );
         }
+    }
+
+    /**
+     * @param ContentAssetLinkInterface[] $contentAssetLinks
+     * @return string
+     */
+    private function buildWhereSqlPart(array $contentAssetLinks): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $condition = [];
+        foreach ($contentAssetLinks as $contentAssetLink) {
+            $assetId = $connection->quoteInto(self::ASSET_ID . ' = ?', $contentAssetLink->getAssetId());
+            $entityId = $connection->quoteInto(
+                self::ENTITY_ID . ' = ?', $contentAssetLink->getContentId()->getEntityId()
+            );
+            $entityType = $connection->quoteInto(
+                self::ENTITY_TYPE . ' = ?', $contentAssetLink->getContentId()->getEntityType()
+            );
+            $field = $connection->quoteInto(
+                self::FIELD . ' = ?', $contentAssetLink->getContentId()->getField()
+            );
+            $condition[] = '(' . $assetId . ' AND ' . $entityId . ' AND ' . $entityType . ' AND ' . $field . ')';
+        }
+        return implode(' OR ', $condition);
     }
 }

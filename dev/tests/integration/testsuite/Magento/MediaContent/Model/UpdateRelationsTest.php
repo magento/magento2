@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Model;
 
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
-use Magento\MediaContentApi\Api\GetAssetIdsUsedInContentInterface;
-use Magento\MediaContentApi\Api\UpdateRelationsInterface;
+use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -20,12 +20,12 @@ use PHPUnit\Framework\TestCase;
 class UpdateRelationsTest extends TestCase
 {
     /**
-     * @var UpdateRelationsInterface
+     * @var UpdateContentAssetLinksInterface
      */
     private $service;
 
     /**
-     * @var GetAssetIdsUsedInContentInterface
+     * @var GetAssetIdsByContentIdentityInterface
      */
     private $getAssetIds;
 
@@ -34,8 +34,8 @@ class UpdateRelationsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->get(UpdateRelationsInterface::class);
-        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsUsedInContentInterface::class);
+        $this->service = Bootstrap::getObjectManager()->get(UpdateContentAssetLinksInterface::class);
+        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsByContentIdentityInterface::class);
     }
 
     /**

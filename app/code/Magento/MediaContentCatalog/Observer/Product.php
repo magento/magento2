@@ -10,7 +10,7 @@ namespace Magento\MediaContentCatalog\Observer;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\MediaContentApi\Api\UpdateRelationsInterface;
+use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 
 /**
@@ -19,12 +19,12 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 class Product implements ObserverInterface
 {
     private const CONTENT_TYPE = 'catalog_product';
-    private const TYPE = 'entity_type';
-    private const ENTITY_ID = 'entity_id';
+    private const TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
 
     /**
-     * @var UpdateRelationsInterface
+     * @var UpdateContentAssetLinksInterface
      */
     private $processor;
 
@@ -40,12 +40,12 @@ class Product implements ObserverInterface
 
     /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param UpdateRelationsInterface $processor
+     * @param UpdateContentAssetLinksInterface $processor
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        UpdateRelationsInterface $processor,
+        UpdateContentAssetLinksInterface $processor,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
@@ -67,14 +67,13 @@ class Product implements ObserverInterface
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
+
                 $this->processor->execute(
                     $this->contentIdentityFactory->create(
                         [
-                            'data' => [
-                                self::TYPE => self::CONTENT_TYPE,
-                                self::FIELD => $field,
-                                self::ENTITY_ID => (string) $model->getId(),
-                            ]
+                            self::TYPE => self::CONTENT_TYPE,
+                            self::FIELD => $field,
+                            self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
                     (string) $model->getData($field)
