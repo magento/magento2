@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,66 +6,80 @@
 
 namespace Magento\Rule\Test\Unit\Model;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Rule\Model\AbstractModel;
+use Magento\Rule\Model\Action\Collection;
+use Magento\Rule\Model\Condition\Combine;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class AbstractModelTest. Unit test for \Magento\Rule\Model\AbstractModel
  *
- * @package Magento\Rule\Test\Unit\Model
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractModelTest extends \PHPUnit\Framework\TestCase
+class AbstractModelTest extends TestCase
 {
 
     /**
-     * @var \Magento\Rule\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractModel|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactory|MockObject
      */
     private $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->formFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\FormFactory::class)
+        $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
@@ -73,21 +87,21 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
 
-        $resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+        $resourceMock = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+        $resourceCollectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $extensionFactory = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
+        $extensionFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $customAttributeFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
+        $customAttributeFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $this->getMockForAbstractClass(
-            \Magento\Rule\Model\AbstractModel::class,
+            AbstractModel::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -106,11 +120,11 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for serializer
      *
-     * @return \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @return Json|MockObject
      */
     private function getSerializerMock()
     {
-        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['serialize', 'unserialize'])
             ->getMock();
@@ -142,7 +156,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     {
         $conditionsArray = ['conditions' => 'serialized'];
         $serializedConditions = json_encode($conditionsArray);
-        $conditions = $this->getMockBuilder(\Magento\Rule\Model\Condition\Combine::class)
+        $conditions = $this->getMockBuilder(Combine::class)
             ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -164,7 +178,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     {
         $actionsArray = ['actions' => 'some_actions'];
         $actionsSerialized = json_encode($actionsArray);
-        $actions = $this->getMockBuilder(\Magento\Rule\Model\Action\Collection::class)
+        $actions = $this->getMockBuilder(Collection::class)
             ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,12 +198,12 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeSave()
     {
-        $conditions = $this->getMockBuilder(\Magento\Rule\Model\Condition\Combine::class)
+        $conditions = $this->getMockBuilder(Combine::class)
             ->setMethods(['asArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $actions = $this->getMockBuilder(\Magento\Rule\Model\Action\Collection::class)
+        $actions = $this->getMockBuilder(Collection::class)
             ->setMethods(['asArray'])
             ->disableOriginalConstructor()
             ->getMock();

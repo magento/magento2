@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,12 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Controller\Adminhtml\Integration;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
 
-class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+class EditTest extends IntegrationTest
 {
     public function testEditAction()
     {
@@ -27,7 +29,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         )->method(
             'getParam'
         )->with(
-            $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
+            $this->equalTo(Integration::PARAM_INTEGRATION_ID)
         )->will(
             $this->returnValue(self::INTEGRATION_ID)
         );

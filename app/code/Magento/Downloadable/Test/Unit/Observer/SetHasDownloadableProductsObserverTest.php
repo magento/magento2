@@ -45,7 +45,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,11 +7,13 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NameResolverTest extends \PHPUnit\Framework\TestCase
+class NameResolverTest extends TestCase
 {
     /**
-     * @var NameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var NameResolver|MockObject
      */
     private $nameResolverMock;
 
@@ -28,7 +30,7 @@ class NameResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
             ->disableOriginalConstructor()

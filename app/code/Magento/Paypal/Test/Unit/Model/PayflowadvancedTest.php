@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,15 +8,16 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowadvanced;
+use PHPUnit\Framework\TestCase;
 
-class PayflowadvancedTest extends \PHPUnit\Framework\TestCase
+class PayflowadvancedTest extends TestCase
 {
     /**
      * @var Payflowadvanced
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = (new ObjectManager($this))->getObject(Payflowadvanced::class);
     }

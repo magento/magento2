@@ -67,7 +67,7 @@ class ResultTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateMock = $this->createMock(Template::class);
         $this->compilerMock = $this->createMock(CompilerInterface::class);

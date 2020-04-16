@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -17,11 +17,12 @@ use Magento\SalesRule\Model\Rule\Action\SimpleActionOptionsProvider;
 use Magento\SalesRule\Model\Rule\Metadata\ValueProvider;
 use Magento\SalesRule\Model\RuleFactory;
 use Magento\Store\Model\System\Store;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Magento\SalesRule\Model\Rule\Metadata\ValueProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValueProviderTest extends TestCase
 {
@@ -60,7 +61,7 @@ class ValueProviderTest extends TestCase
      */
     private $simpleActionOptionsProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $expectedData = include __DIR__ . '/_files/MetaData.php';
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);

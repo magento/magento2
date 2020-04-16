@@ -1,10 +1,13 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\Customer\Api\CustomerRepositoryInterface;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
-    'services' => [\Magento\Customer\Api\CustomerRepositoryInterface::class => [
+    'services' => [CustomerRepositoryInterface::class => [
             'V1' => [
                 'methods' => [
                     'getById' => [
@@ -55,7 +58,7 @@ return [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -73,7 +76,7 @@ return [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -89,7 +92,7 @@ return [
             'PUT' => [
                 'secure' => true,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'save',
                 ],
                 'resources' => [
@@ -107,7 +110,7 @@ return [
             'POST' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'save',
                 ],
                 'resources' => [
@@ -121,7 +124,7 @@ return [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -133,7 +136,7 @@ return [
             'DELETE' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'deleteById',
                 ],
                 'resources' => [

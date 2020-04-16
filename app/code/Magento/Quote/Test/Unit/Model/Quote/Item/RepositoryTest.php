@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Quote\Model\Quote;
@@ -18,11 +19,12 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor;
 use Magento\Quote\Model\Quote\Item\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit\Framework\TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var Repository
@@ -82,7 +84,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
@@ -144,11 +146,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The 11 Cart doesn't contain the 5 item.
      */
     public function testDeleteWithInvalidQuoteItem()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The 11 Cart doesn\'t contain the 5 item.');
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
@@ -162,11 +164,11 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The item couldn't be removed from the quote.
      */
     public function testDeleteWithCouldNotSaveException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The item couldn\'t be removed from the quote.');
         $cartId = 11;
         $itemId = 5;
         $this->quoteRepositoryMock->expects($this->once())
@@ -182,7 +184,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($itemId)
             ->willReturn($this->quoteMock);
         $exceptionMessage = "The item couldn't be removed from the quote.";
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
+        $exception = new CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)

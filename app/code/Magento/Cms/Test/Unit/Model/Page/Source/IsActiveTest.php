@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,15 @@
 namespace Magento\Cms\Test\Unit\Model\Page\Source;
 
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\Page\Source\IsActive;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IsActiveTest extends \PHPUnit\Framework\TestCase
+class IsActiveTest extends TestCase
 {
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
     protected $cmsPageMock;
 
@@ -28,10 +31,10 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->cmsPageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $this->cmsPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAvailableStatuses'])
             ->getMock();
@@ -46,7 +49,7 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
      */
     protected function getSourceClassName()
     {
-        return \Magento\Cms\Model\Page\Source\IsActive::class;
+        return IsActive::class;
     }
 
     /**

@@ -1,32 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-class IteratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Iterator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class IteratorTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Iterator
+     * @var Iterator
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_flyweightMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
-        $this->_flyweightMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $this->_flyweightMock = $this->createMock(Group::class);
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator($this->_flyweightMock);
+        $this->_model = new Iterator($this->_flyweightMock);
         $this->_model->setElements($elementData, 'scope');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_flyweightMock);
@@ -63,7 +69,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLast($elementId, $result)
     {
-        $elementMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
+        $elementMock = $this->createMock(Field::class);
         $elementMock->expects($this->once())->method('getId')->will($this->returnValue($elementId));
         $this->assertEquals($result, $this->_model->isLast($elementMock));
     }

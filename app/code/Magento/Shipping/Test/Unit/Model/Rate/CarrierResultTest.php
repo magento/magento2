@@ -31,7 +31,7 @@ class CarrierResultTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var MockObject|StoreManagerInterface $storeManager */
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
@@ -45,7 +45,6 @@ class CarrierResultTest extends TestCase
      */
     public function testComposing(): void
     {
-
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])

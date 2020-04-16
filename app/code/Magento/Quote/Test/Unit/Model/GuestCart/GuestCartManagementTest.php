@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,49 +7,59 @@
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\GuestCart\GuestCartManagement;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GuestCartManagementTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $cartRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Quote\Model\GuestCart\GuestCartManagement
+     * @var GuestCartManagement
      */
     protected $guestCartManagement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->quoteManagementMock = $this->getMockForAbstractClass(
-            \Magento\Quote\Api\CartManagementInterface::class,
+            CartManagementInterface::class,
             [],
             '',
             false,
@@ -58,18 +68,18 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->quoteIdMaskFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Model\QuoteIdMaskFactory::class,
+            QuoteIdMaskFactory::class,
             ['create']
         );
         $this->quoteIdMaskMock = $this->createPartialMock(
-            \Magento\Quote\Model\QuoteIdMask::class,
+            QuoteIdMask::class,
             ['getQuoteId', 'getMaskedId', 'load', 'save', 'setQuoteId']
         );
 
-        $this->cartRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->quoteMock = $this->getMockForAbstractClass(
-            \Magento\Quote\Api\Data\CartInterface::class,
+            CartInterface::class,
             [],
             '',
             false,
@@ -79,7 +89,7 @@ class GuestCartManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->guestCartManagement = $objectManager->getObject(
-            \Magento\Quote\Model\GuestCart\GuestCartManagement::class,
+            GuestCartManagement::class,
             [
                 'quoteManagement' => $this->quoteManagementMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
