@@ -16,32 +16,31 @@ use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Theme\Model\Design\Backend\File;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FileTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var WriteInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $mediaDirectory;
 
-    /** @var UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $urlBuilder;
 
     /** @var File */
     private $fileBackend;
 
-    /** @var IoFileSystem|PHPUnit_Framework_MockObject_MockObject */
+    /** @var IoFileSystem|\PHPUnit\Framework\MockObject\MockObject */
     private $ioFileSystem;
 
     /**
-     * @var Mime|PHPUnit_Framework_MockObject_MockObject
+     * @var Mime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mime;
 
     /**
-     * @var Database|PHPUnit_Framework_MockObject_MockObject
+     * @var Database|\PHPUnit\Framework\MockObject\MockObject
      */
     private $databaseHelper;
 
@@ -131,9 +130,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $class
      * @param array $methods
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getMockObject(string $class, array $methods = []): PHPUnit_Framework_MockObject_MockObject
+    private function getMockObject(string $class, array $methods = []): \PHPUnit\Framework\MockObject\MockObject
     {
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
@@ -147,9 +146,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
      * Gets mock objects for abstract class.
      *
      * @param string $class
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getMockObjectForAbstractClass(string $class): PHPUnit_Framework_MockObject_MockObject
+    private function getMockObjectForAbstractClass(string $class): \PHPUnit\Framework\MockObject\MockObject
     {
         return  $this->getMockBuilder($class)
             ->getMockForAbstractClass();
