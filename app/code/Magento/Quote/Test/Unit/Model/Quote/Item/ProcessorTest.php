@@ -7,21 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\State;
+use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Processor;
 use Magento\Quote\Model\Quote\ItemFactory;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Magento\Quote\Model\Service\Quote\Processor
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessorTest extends \PHPUnit\Framework\TestCase
+class ProcessorTest extends TestCase
 {
     /**
      * @var Processor
@@ -29,49 +34,49 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var ItemFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|MockObject
      */
     protected $quoteItemFactoryMock;
 
     /**
-     * @var StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var State |\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $stateMock;
 
     /**
-     * @var Product |\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var Object |\PHPUnit_Framework_MockObject_MockObject
+     * @var Object|MockObject
      */
     protected $objectMock;
 
     /**
-     * @var Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     protected $itemMock;
 
     /**
-     * @var Store |\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteItemFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\ItemFactory::class,
+            ItemFactory::class,
             ['create']
         );
 
         $this->itemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             [
                 'getId',
                 'setOptions',
@@ -88,13 +93,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->itemMock));
 
-        $this->storeManagerMock = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStore']);
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStore']);
+        $this->storeMock = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
-        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->stateMock = $this->createMock(State::class);
 
         $this->processor = new Processor(
             $this->quoteItemFactoryMock,
@@ -103,7 +108,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             [
                 'getCustomOptions',
                 '__wakeup',
@@ -113,7 +118,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
                 'getFinalPrice']
         );
         $this->objectMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
+            DataObject::class,
             ['getResetCount', 'getId', 'getCustomPrice']
         );
     }
@@ -204,7 +209,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testInitWithoutModificationAdminhtmlAreaCode()
     {
-        $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+        $areaCode = FrontNameResolver::AREA_CODE;
         $storeId = 1000000000;
         $requestId = 20000000;
         $itemId = $requestId;

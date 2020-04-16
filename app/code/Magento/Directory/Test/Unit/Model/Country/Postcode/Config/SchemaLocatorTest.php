@@ -1,25 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Country\Postcode\Config\SchemaLocator;
+use Magento\Framework\Module\Dir\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $moduleReaderMock;
 
     /**
-     * @var \Magento\Directory\Model\Country\Postcode\Config\SchemaLocator
+     * @var SchemaLocator
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->moduleReaderMock = $this->createMock(Reader::class);
         $this->moduleReaderMock->expects(
             $this->any()
         )->method(
@@ -31,7 +36,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
             $this->returnValue('schema_dir')
         );
 
-        $this->model = new \Magento\Directory\Model\Country\Postcode\Config\SchemaLocator($this->moduleReaderMock);
+        $this->model = new SchemaLocator($this->moduleReaderMock);
     }
 
     public function testGetSchema()

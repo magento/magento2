@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,17 @@
 
 namespace Magento\Weee\Test\Unit\Observer;
 
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Observer\GetPriceConfigurationObserver;
+use PHPUnit\Framework\TestCase;
 
-class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
+class GetPriceConfigurationObserverTest extends TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -19,41 +27,41 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPriceConfiguration($hasWeeeAttributes, $testArray, $expectedArray)
     {
-        $configObj = new \Magento\Framework\DataObject(
+        $configObj = new DataObject(
             [
                 'config' => $testArray,
             ]
         );
 
-        $weeeObject1 = new \Magento\Framework\DataObject(
+        $weeeObject1 = new DataObject(
             [
                 'code' => 'fpt1',
                 'amount' => '15.0000',
             ]
         );
 
-        $weeeObject2 = new \Magento\Framework\DataObject(
+        $weeeObject2 = new DataObject(
             [
                 'code' => 'fpt2',
                 'amount' => '16.0000',
             ]
         );
 
-        $weeeHelper=$this->createMock(\Magento\Weee\Helper\Data::class);
+        $weeeHelper=$this->createMock(Data::class);
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->will($this->returnValue(true));
 
-        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
+        $observerObject=$this->createMock(Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
             ->will($this->returnValue($configObj));
 
-        $productInstance=$this->createMock(\Magento\Catalog\Model\Product\Type\Simple::class);
+        $productInstance=$this->createMock(Simple::class);
 
         $product = $this->createPartialMock(
-            \Magento\Bundle\Model\Product\Type::class,
+            Type::class,
             ['getTypeInstance', 'getTypeId', 'getStoreId']
         );
         $product->expects($this->any())
@@ -66,7 +74,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreId')
             ->will($this->returnValue(null));
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry=$this->createMock(Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
@@ -89,9 +97,9 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         }
 
         $objectManager = new ObjectManager($this);
-        /** @var \Magento\Weee\Observer\GetPriceConfigurationObserver $weeeObserverObject */
+        /** @var GetPriceConfigurationObserver $weeeObserverObject */
         $weeeObserverObject = $objectManager->getObject(
-            \Magento\Weee\Observer\GetPriceConfigurationObserver::class,
+            GetPriceConfigurationObserver::class,
             [
                 'weeeData' => $weeeHelper,
                 'registry' => $registry,

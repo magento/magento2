@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,40 +9,50 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Source\Admin;
 
-class PageTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Filter\Iterator;
+use Magento\Backend\Model\Menu\Filter\IteratorFactory;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Config\Model\Config\Source\Admin\Page;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class PageTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Menu
+     * @var Menu
      */
     protected $_menuModel;
 
     /**
-     * @var \Magento\Backend\Model\Menu
+     * @var Menu
      */
     protected $_menuSubModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Admin\Page
+     * @var Page
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_menuModel = new \Magento\Backend\Model\Menu($logger);
-        $this->_menuSubModel = new \Magento\Backend\Model\Menu($logger);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->_menuModel = new Menu($logger);
+        $this->_menuSubModel = new Menu($logger);
 
         $this->_factoryMock = $this->createPartialMock(
-            \Magento\Backend\Model\Menu\Filter\IteratorFactory::class,
+            IteratorFactory::class,
             ['create']
         );
 
-        $itemOne = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
+        $itemOne = $this->createMock(Item::class);
         $itemOne->expects($this->any())->method('getId')->will($this->returnValue('item1'));
         $itemOne->expects($this->any())->method('getTitle')->will($this->returnValue('Item 1'));
         $itemOne->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
@@ -52,7 +62,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $itemOne->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
         $this->_menuModel->add($itemOne);
 
-        $itemTwo = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
+        $itemTwo = $this->createMock(Item::class);
         $itemTwo->expects($this->any())->method('getId')->will($this->returnValue('item2'));
         $itemTwo->expects($this->any())->method('getTitle')->will($this->returnValue('Item 2'));
         $itemTwo->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
@@ -61,10 +71,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $itemTwo->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
         $this->_menuSubModel->add($itemTwo);
 
-        $menuConfig = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
+        $menuConfig = $this->createMock(Config::class);
         $menuConfig->expects($this->once())->method('getMenu')->will($this->returnValue($this->_menuModel));
 
-        $this->_model = new \Magento\Config\Model\Config\Source\Admin\Page($this->_factoryMock, $menuConfig);
+        $this->_model = new Page($this->_factoryMock, $menuConfig);
     }
 
     public function testToOptionArray()
@@ -76,7 +86,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo(['iterator' => $this->_menuModel->getIterator()])
         )->will(
-            $this->returnValue(new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuModel->getIterator()))
+            $this->returnValue(new Iterator($this->_menuModel->getIterator()))
         );
 
         $this->_factoryMock->expects(
@@ -86,7 +96,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->equalTo(['iterator' => $this->_menuSubModel->getIterator()])
         )->will(
-            $this->returnValue(new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuSubModel->getIterator()))
+            $this->returnValue(new Iterator($this->_menuSubModel->getIterator()))
         );
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');

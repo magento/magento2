@@ -11,11 +11,13 @@ use Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 use Magento\SalesRule\Model\CouponGenerator;
 use Magento\SalesRule\Model\Service\CouponManagementService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\SalesRule\Model\CouponGenerator
  */
-class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
+class CouponGeneratorTest extends TestCase
 {
     /**
      * Testable Object
@@ -25,17 +27,17 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
     private $couponGenerator;
 
     /**
-     * @var CouponManagementService|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponManagementService|MockObject
      */
     private $couponManagementServiceMock;
 
     /**
-     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterfaceFactory|MockObject
      */
     private $generationSpecFactoryMock;
 
     /**
-     * @var CouponGenerationSpecInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CouponGenerationSpecInterface|MockObject
      */
     private $generationSpecMock;
 
@@ -44,7 +46,7 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generationSpecFactoryMock = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();

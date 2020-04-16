@@ -1,39 +1,48 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Cron;
 
-class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
+use Magento\Cron\Model\Schedule;
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Cron\AggregateSalesReportCouponsData;
+use Magento\SalesRule\Model\ResourceModel\Report\Rule;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AggregateSalesReportCouponsDataTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Cron\AggregateSalesReportCouponsData|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregateSalesReportCouponsData|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Locale\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resolver|MockObject
      */
     protected $localeResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject
+     * @var Timezone|MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Report\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var Rule|MockObject
      */
     protected $reportRule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            \Magento\SalesRule\Cron\AggregateSalesReportCouponsData::class,
+            AggregateSalesReportCouponsData::class,
             [
                 'reportRule' => $this->reportRule,
                 'localeResolver' => $this->localeResolver,
@@ -44,9 +53,9 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
 
     protected function initMocks()
     {
-        $this->localeResolver = $this->createMock(\Magento\Framework\Locale\Resolver::class);
-        $this->localeDate = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, ['date']);
-        $this->reportRule = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Report\Rule::class);
+        $this->localeResolver = $this->createMock(Resolver::class);
+        $this->localeDate = $this->createPartialMock(Timezone::class, ['date']);
+        $this->reportRule = $this->createMock(Rule::class);
     }
 
     public function testExecute()
@@ -64,7 +73,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit\Framework\TestCase
         $this->localeResolver->expects($this->once())
             ->method('revert');
 
-        $scheduleMock = $this->createMock(\Magento\Cron\Model\Schedule::class);
+        $scheduleMock = $this->createMock(Schedule::class);
 
         $this->assertEquals($this->model, $this->model->execute($scheduleMock));
     }

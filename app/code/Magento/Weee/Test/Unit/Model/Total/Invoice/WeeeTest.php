@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,37 +6,46 @@
 namespace Magento\Weee\Test\Unit\Model\Total\Invoice;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Invoice\Total\Tax;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\Total\Invoice\Weee;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WeeeTest extends \PHPUnit\Framework\TestCase
+class WeeeTest extends TestCase
 {
     /**
-     * @var \Magento\Weee\Model\Total\Invoice\Weee
+     * @var Weee
      */
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var Invoice|MockObject
      */
     protected $invoice;
 
     /**
-     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $weeeData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->weeeData = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeData = $this->getMockBuilder(Data::class)
             ->setMethods(
                 [
                     'getRowWeeeTaxInclTax',
@@ -52,22 +61,22 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             )->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $serializer = $this->objectManager->getObject(Json::class);
-        /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
+        /** @var Tax $model */
         $this->model = $this->objectManager->getObject(
-            \Magento\Weee\Model\Total\Invoice\Weee::class,
+            Weee::class,
             [
                 'weeeData' => $this->weeeData,
                 'serializer' => $serializer
             ]
         );
 
-        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->order = $this->createPartialMock(Order::class, [
                 '__wakeup'
             ]);
 
-        $this->invoice = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice::class, [
+        $this->invoice = $this->createPartialMock(Invoice::class, [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
@@ -107,7 +116,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($invoiceData['include_in_subtotal']));
 
         //Set up invoice mock
-        /** @var \Magento\Sales\Model\Order\Invoice\Item[] $invoiceItems */
+        /** @var Item[] $invoiceItems */
         $invoiceItems = [];
         foreach ($invoiceData['items'] as $itemKey => $invoiceItemData) {
             $invoiceItems[$itemKey] = $this->getInvoiceItem($invoiceItemData);
@@ -139,7 +148,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field '.$key.' is incorrect');
+            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field ' . $key . ' is incorrect');
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
@@ -152,7 +161,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                     $this->assertEquals(
                         $value,
                         $invoiceItem->getData($key),
-                        'Invoice item field '.$key.' is incorrect'
+                        'Invoice item field ' . $key . ' is incorrect'
                     );
                 }
             }
@@ -671,11 +680,11 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $invoiceItemData array
-     * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return Item|MockObject
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
@@ -710,8 +719,8 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                 ->with($orderItem)
                 ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountInvoiced()));
         }
-        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
-        $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
+        /** @var Item|MockObject $invoiceItem */
+        $invoiceItem = $this->createPartialMock(Item::class, [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'

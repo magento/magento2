@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,41 +6,31 @@
 namespace Magento\Cron\Test\Unit\Model\Config;
 
 use Magento\Cron\Model\Config\SchemaLocator;
-use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var MockObject|ModuleDirReader
      */
-    protected $_moduleReaderMock;
+    private $moduleReaderMock;
 
     /**
      * @var SchemaLocator
      */
-    protected $_locator;
+    private $locator;
 
-    /**
-     * Initialize parameters
-     */
     protected function setUp(): void
     {
-        $this->_moduleReaderMock = $this->getMockBuilder(
-            Reader::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_moduleReaderMock->expects(
-            $this->once()
-        )->method(
-            'getModuleDir'
-        )->with(
-            'etc',
-            'Magento_Cron'
-        )->will(
-            $this->returnValue('schema_dir')
-        );
-        $this->_locator = new SchemaLocator($this->_moduleReaderMock);
+        $this->moduleReaderMock = $this->getMockBuilder(ModuleDirReader::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->moduleReaderMock->expects($this->once())
+            ->method('getModuleDir')
+            ->with('etc', 'Magento_Cron')
+            ->will($this->returnValue('schema_dir'));
+        $this->locator = new SchemaLocator($this->moduleReaderMock);
     }
 
     /**
@@ -48,6 +38,6 @@ class SchemaLocatorTest extends TestCase
      */
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/crontab.xsd', $this->_locator->getSchema());
+        $this->assertEquals('schema_dir/crontab.xsd', $this->locator->getSchema());
     }
 }

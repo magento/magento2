@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,29 +11,31 @@ use Magento\Analytics\Model\Connector;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SignUpTest extends \PHPUnit\Framework\TestCase
+class SignUpTest extends TestCase
 {
     /**
-     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|MockObject
      */
     private $connectorMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $reinitableConfigMock;
 
@@ -42,20 +44,12 @@ class SignUpTest extends \PHPUnit\Framework\TestCase
      */
     private $signUp;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->connectorMock =  $this->getMockBuilder(Connector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectorMock = $this->createMock(Connector::class);
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
+        $this->flagManagerMock = $this->createMock(FlagManager::class);
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
         $this->signUp = new SignUp(
             $this->connectorMock,
@@ -74,7 +68,7 @@ class SignUpTest extends \PHPUnit\Framework\TestCase
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn($attemptsCount);
 
-        $attemptsCount -= 1;
+        $attemptsCount--;
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);

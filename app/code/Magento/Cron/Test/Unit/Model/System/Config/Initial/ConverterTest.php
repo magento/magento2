@@ -14,9 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConverterTest
- *
- * Unit test for \Magento\Cron\Model\System\Config\Initial\Converter
+ * @covers \Magento\Cron\Model\System\Config\Initial\Converter
  */
 class ConverterTest extends TestCase
 {
@@ -40,9 +38,9 @@ class ConverterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->groupsConfigMock = $this->getMockBuilder(
-            GroupsConfigModel::class
-        )->disableOriginalConstructor()->getMock();
+        $this->groupsConfigMock = $this->getMockBuilder(GroupsConfigModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->converterMock = $this->getMockBuilder(Converter::class)->getMock();
         $this->converterPlugin = new ConverterPlugin($this->groupsConfigMock);
     }

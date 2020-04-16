@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,43 +6,39 @@
 namespace Magento\Cron\Test\Unit\Model;
 
 use Magento\Cron\Model\Config;
-use Magento\Cron\Model\Config\Data;
+use Magento\Cron\Model\Config\Data as ConfigDataModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
     /**
-     * @var Data|MockObject
+     * @var ConfigDataModel|MockObject
      */
-    protected $_configData;
+    private $configDataMock;
 
     /**
      * @var Config
      */
-    protected $_config;
+    private $config;
 
-    /**
-     * Prepare data
-     */
     protected function setUp(): void
     {
-        $this->_configData = $this->getMockBuilder(
-            Data::class
+        $this->configDataMock = $this->getMockBuilder(
+            ConfigDataModel::class
         )->disableOriginalConstructor()->getMock();
-        $this->_config = new Config($this->_configData);
+        $this->config = new Config($this->configDataMock);
     }
 
-    /**
-     * Test method call
-     */
-    public function testGetJobs()
+    public function testGetJobsReturnsOriginalConfigData()
     {
         $jobList = [
             'jobname1' => ['instance' => 'TestInstance', 'method' => 'testMethod', 'schedule' => '* * * * *'],
         ];
-        $this->_configData->expects($this->once())->method('getJobs')->will($this->returnValue($jobList));
-        $result = $this->_config->getJobs();
+        $this->configDataMock->expects($this->once())
+            ->method('getJobs')
+            ->will($this->returnValue($jobList));
+        $result = $this->config->getJobs();
         $this->assertEquals($jobList, $result);
     }
 }

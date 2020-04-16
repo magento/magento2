@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
 
-use Magento\Cron\Model\Config\Converter\Db;
+use Magento\Cron\Model\Config\Converter\Db as DbConfigConverter;
+use Magento\Cron\Model\Config\Reader\Db as DbConfigReader;
 use Magento\Framework\App\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,28 +19,28 @@ class DbTest extends TestCase
     /**
      * @var Config|MockObject
      */
-    protected $config;
+    private $configMock;
 
     /**
-     * @var Db|MockObject
+     * @var DbConfigConverter
      */
-    protected $_converter;
+    private $configConverter;
 
     /**
-     * @var \Magento\Cron\Model\Config\Reader\Db
+     * @var DbConfigReader
      */
-    protected $_reader;
+    private $reader;
 
     /**
      * Initialize parameters
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_converter = new Db();
-        $this->_reader = new \Magento\Cron\Model\Config\Reader\Db($this->config, $this->_converter);
+        $this->configConverter = new DbConfigConverter();
+        $this->reader = new DbConfigReader($this->configMock, $this->configConverter);
     }
 
     /**
@@ -50,7 +51,7 @@ class DbTest extends TestCase
         $job1 = ['schedule' => ['cron_expr' => '* * * * *']];
         $job2 = ['schedule' => ['cron_expr' => '1 1 1 1 1']];
         $data = ['crontab' => ['default' => ['jobs' => ['job1' => $job1, 'job2' => $job2]]]];
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('get')
             ->with('system', 'default')
             ->will($this->returnValue($data));
@@ -61,7 +62,7 @@ class DbTest extends TestCase
             ],
         ];
 
-        $result = $this->_reader->get();
+        $result = $this->reader->get();
         $this->assertEquals($expected['default']['job1']['schedule'], $result['default']['job1']['schedule']);
         $this->assertEquals($expected['default']['job2']['schedule'], $result['default']['job2']['schedule']);
     }
