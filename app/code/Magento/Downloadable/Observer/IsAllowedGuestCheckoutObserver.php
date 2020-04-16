@@ -20,19 +20,11 @@ use Magento\Store\Model\ScopeInterface;
  */
 class IsAllowedGuestCheckoutObserver implements ObserverInterface
 {
-    /**
-     *  Xml path to disable checkout
-     */
     private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
 
-    /**
-     *  Xml path to get downloadable Shareable setting
-     */
     private const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
 
     /**
-     * Core store config
-     *
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
