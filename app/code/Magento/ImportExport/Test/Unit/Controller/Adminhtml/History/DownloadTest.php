@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 
 use Magento\Backend\App\Action\Context;
@@ -59,7 +61,7 @@ class DownloadTest extends TestCase
     protected $downloadController;
 
     /**
-     * @var \Magento\ImportExport\Helper\Report|MockObject
+     * @var Report|MockObject
      */
     protected $reportHelper;
 

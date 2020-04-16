@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -38,7 +40,7 @@ class CsvTest extends TestCase
 
     public function testConstructException()
     {
-        $this->expectException('LogicException');
+        $this->expectException(\LogicException::class);
         $this->_directoryMock->expects($this->any())
             ->method('openFile')
             ->willThrowException(new FileSystemException(__('Error message')));
@@ -115,7 +117,7 @@ class CsvTest extends TestCase
 
     public function testRewind()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('wrongColumnsNumber');
         $this->_directoryMock->expects(
             $this->any()

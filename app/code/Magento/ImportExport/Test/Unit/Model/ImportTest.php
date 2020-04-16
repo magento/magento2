@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -317,7 +320,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testImportSourceException()
     {
-        $this->expectException('Magento\Framework\Exception\AlreadyExistsException');
+        $this->expectException(AlreadyExistsException::class);
         $exceptionMock = new AlreadyExistsException(
             __('URL key for specified store already exists.')
         );
@@ -630,7 +633,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetUnknownEntity($entity)
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Entity is unknown');
         $this->_importConfig->method('getEntities')
             ->willReturn(['test' => []]);
@@ -723,7 +726,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testIsReportEntityTypeException($entity, $getEntitiesResult, $getEntityResult, $expectedResult)
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $importMock = $this->getMockBuilder(Import::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -918,7 +921,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testCreateHistoryReportThrowException()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Source file coping failed');
         $sourceFileRelative = null;
         $entity = '';

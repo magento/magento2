@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Helper;
 
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -178,7 +180,7 @@ class ReportTest extends TestCase
      */
     public function testImportFileExistsException($fileName)
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Filename has not permitted symbols in it');
         $this->report->importFileExists($fileName);
     }

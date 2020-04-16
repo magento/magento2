@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -30,7 +32,7 @@ class SourceAbstractTest extends TestCase
      */
     public function testConstructException($argument)
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->getMockForAbstractClass(AbstractSource::class, [$argument]);
     }
 
@@ -49,7 +51,7 @@ class SourceAbstractTest extends TestCase
 
     public function testIteratorInterface()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('wrongColumnsNumber');
         $this->assertSame(-1, $this->_model->key());
         $this->assertFalse($this->_model->valid());
@@ -97,7 +99,7 @@ class SourceAbstractTest extends TestCase
 
     public function testSeekableInterfaceException()
     {
-        $this->expectException('OutOfBoundsException');
+        $this->expectException(\OutOfBoundsException::class);
         $this->_model->seek(0);
     }
 }
