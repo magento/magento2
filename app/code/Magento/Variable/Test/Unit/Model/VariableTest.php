@@ -1,28 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Variable\Model\ResourceModel\Variable as VariableResourceModel;
+use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
-use Magento\Variable\Model\Variable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Variable model test
- */
 class VariableTest extends TestCase
 {
     /**
-     * @var  Variable
+     * @var  \Magento\Variable\Model\Variable
      */
     private $model;
 
@@ -32,7 +26,7 @@ class VariableTest extends TestCase
     private $escaperMock;
 
     /**
-     * @var VariableResourceModel|MockObject
+     * @var \Magento\Variable\Model\ResourceModel\Variable|MockObject
      */
     private $resourceMock;
 
@@ -51,23 +45,20 @@ class VariableTest extends TestCase
      */
     private $objectManager;
 
-    /**
-     * Set Up
-     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(VariableResourceModel::class)
+        $this->resourceMock = $this->getMockBuilder(Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            Variable::class,
+            \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock,
@@ -77,23 +68,17 @@ class VariableTest extends TestCase
         $this->validationFailedPhrase = __('Validation has failed.');
     }
 
-    /**
-     * Test get html value
-     */
-    public function testGetValueHtml(): void
+    public function testGetValueHtml()
     {
-        $type = Variable::TYPE_HTML;
+        $type = \Magento\Variable\Model\Variable::TYPE_HTML;
         $html = '<html/>';
         $this->model->setData('html_value', $html);
         $this->assertSame($html, $this->model->getValue($type));
     }
 
-    /**
-     * Test get empty html value
-     */
-    public function testGetValueEmptyHtml(): void
+    public function testGetValueEmptyHtml()
     {
-        $type = Variable::TYPE_HTML;
+        $type = \Magento\Variable\Model\Variable::TYPE_HTML;
         $html = '';
         $plain = 'unescaped_plain_text';
         $escapedPlain = 'escaped_plain_text';
@@ -106,41 +91,27 @@ class VariableTest extends TestCase
         $this->assertSame($escapedPlain, $this->model->getValue($type));
     }
 
-    /**
-     * Test get text value
-     */
-    public function testGetValueText(): void
+    public function testGetValueText()
     {
-        $type = Variable::TYPE_TEXT;
+        $type = \Magento\Variable\Model\Variable::TYPE_TEXT;
         $plain = 'plain';
         $this->model->setData('plain_value', $plain);
         $this->assertSame($plain, $this->model->getValue($type));
     }
 
     /**
-     * Test validating missing information
-     *
-     * @param $code
-     * @param $name
-     *
      * @dataProvider validateMissingInfoDataProvider
      */
-    public function testValidateMissingInfo($code, $name): void
+    public function testValidateMissingInfo($code, $name)
     {
         $this->model->setCode($code)->setName($name);
         $this->assertEquals($this->validationFailedPhrase, $this->model->validate());
     }
 
     /**
-     * Testing validation
-     *
-     * @param $variableArray
-     * @param $objectId
-     * @param $expectedResult
-     *
      * @dataProvider validateDataProvider
      */
-    public function testValidate($variableArray, $objectId, $expectedResult): void
+    public function testValidate($variableArray, $objectId, $expectedResult)
     {
         $code = 'variable_code';
         $this->model->setCode($code)->setName('some_name');
@@ -152,10 +123,7 @@ class VariableTest extends TestCase
         $this->assertEquals($expectedResult, $this->model->validate($variableArray));
     }
 
-    /**
-     * Test get variables option array without group
-     */
-    public function testGetVariablesOptionArrayNoGroup(): void
+    public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
             ['value' => 'VAL', 'label' => 'LBL'],
@@ -175,10 +143,7 @@ class VariableTest extends TestCase
         $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
     }
 
-    /**
-     * Test get variables option array with group
-     */
-    public function testGetVariablesOptionArrayWithGroup(): void
+    public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
             ['value' => 'VAL', 'label' => 'LBL'],
@@ -204,11 +169,9 @@ class VariableTest extends TestCase
     }
 
     /**
-     * Validation rules data provider
-     *
      * @return array
      */
-    public function validateDataProvider(): array
+    public function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -221,11 +184,9 @@ class VariableTest extends TestCase
     }
 
     /**
-     * Validation missing info data provider
-     *
      * @return array
      */
-    public function validateMissingInfoDataProvider(): array
+    public function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],

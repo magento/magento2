@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
 
 use Magento\Backend\App\Action\Context;
@@ -14,6 +12,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
@@ -25,8 +24,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Variable validate test
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidateTest extends TestCase
@@ -34,12 +31,12 @@ class ValidateTest extends TestCase
     /**
      * @var Variable|MockObject
      */
-    private $variableMock;
+    protected $variableMock;
 
     /**
      * @var LayoutInterface|MockObject
      */
-    private $layoutMock;
+    protected $layoutMock;
 
     /**
      * @var RequestInterface|MockObject
@@ -49,21 +46,18 @@ class ValidateTest extends TestCase
     /**
      * @var Validate|MockObject
      */
-    private $validateMock;
+    protected $validateMock;
 
     /**
      * @var Json|MockObject
      */
-    private $resultJsonMock;
+    protected $resultJsonMock;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    private $messageManagerMock;
+    protected $messageManagerMock;
 
-    /**
-     * Set Up
-     */
     protected function setUp(): void
     {
         $this->validateMock = $this->getMockBuilder(
@@ -146,14 +140,11 @@ class ValidateTest extends TestCase
     }
 
     /**
-     * Test variable validation
-     *
      * @param mixed $result
      * @param string[] $responseArray
-     *
      * @dataProvider executeDataProvider
      */
-    public function testExecute($result, $responseArray): void
+    public function testExecute($result, $responseArray)
     {
         $getParamMap = [
             ['variable_id', null, null],
@@ -169,7 +160,7 @@ class ValidateTest extends TestCase
             ->method('validate')
             ->willReturn($result);
 
-        if ($result instanceof \Magento\Framework\Phrase) {
+        if ($result instanceof Phrase) {
             $this->messageManagerMock->expects($this->once())
                 ->method('addError')
                 ->with($result->getText());
@@ -184,11 +175,9 @@ class ValidateTest extends TestCase
     }
 
     /**
-     * Validation cases data provider
-     *
      * @return array
      */
-    public function executeDataProvider(): array
+    public function executeDataProvider()
     {
         return [
             [ false, ['error' => false]],

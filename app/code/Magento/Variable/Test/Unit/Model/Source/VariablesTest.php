@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Variable\Test\Unit\Model\Source;
 
 use Magento\Config\Model\Config\Structure\SearchInterface;
@@ -22,25 +20,22 @@ class VariablesTest extends TestCase
     /**
      * Variables model
      *
-     * @var Variables
+     * @var \Magento\Variable\Model\Source\Variables
      */
-    private $model;
+    protected $model;
 
     /**
      * Config variables
      *
      * @var array
      */
-    private $configVariables;
+    protected $configVariables;
 
     /**
      * @var SearchInterface|MockObject
      */
     private $configMock;
 
-    /**
-     * Set Up
-     */
     protected function setup(): void
     {
         $this->configMock = $this->getMockBuilder(SearchInterface::class)
@@ -77,10 +72,7 @@ class VariablesTest extends TestCase
         ]);
     }
 
-    /**
-     * Testing to option array without group
-     */
-    public function testToOptionArrayWithoutGroup(): void
+    public function testToOptionArrayWithoutGroup()
     {
         $optionArray = $this->model->toOptionArray();
         $this->assertEquals(count($this->configVariables['web']), count($optionArray));
@@ -93,10 +85,7 @@ class VariablesTest extends TestCase
         }
     }
 
-    /**
-     * Testing to option array with group
-     */
-    public function testToOptionArrayWithGroup(): void
+    public function testToOptionArrayWithGroup()
     {
         $optionArray = $this->model->toOptionArray(true);
         $this->assertEquals('Web', $optionArray[0]['label']);
@@ -114,7 +103,7 @@ class VariablesTest extends TestCase
     /**
      * Get expected results for options array
      */
-    private function getExpectedOptionsResults(): array
+    private function getExpectedOptionsResults()
     {
         return [
             [

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,6 +7,7 @@
 namespace Magento\Variable\Test\Unit\Model\Variable;
 
 use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
@@ -16,9 +17,6 @@ use Magento\Variable\Model\Variable\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test for variable config
- */
 class ConfigTest extends TestCase
 {
     /**
@@ -122,7 +120,7 @@ class ConfigTest extends TestCase
 
         $customKey = 'key';
         $customVal = 'val';
-        $configObject = new \Magento\Framework\DataObject();
+        $configObject = new DataObject();
         $configObject->setPlugins([[$customKey => $customVal]]);
         $variablePluginConfig = $this->model->getWysiwygPluginSettings($configObject)['plugins'];
         $customPluginConfig = $variablePluginConfig[0];

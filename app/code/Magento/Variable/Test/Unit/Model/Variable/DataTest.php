@@ -9,16 +9,13 @@ declare(strict_types=1);
 namespace Magento\Variable\Test\Unit\Model\Variable;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Variable\Model\ResourceModel\Variable\Collection as VariableCollection;
+use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory as VariableCollectionFactory;
+use Magento\Variable\Model\Source\Variables as StoreVariables;
+use Magento\Variable\Model\Variable\Data as VariableDataModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Variable\Model\Variable\Data as VariableDataModel;
-use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory as VariableCollectionFactory;
-use Magento\Variable\Model\ResourceModel\Variable\Collection as VariableCollection;
-use Magento\Variable\Model\Source\Variables as StoreVariables;
 
-/**
- * Test variable data model
- */
 class DataTest extends TestCase
 {
     /**
@@ -64,7 +61,7 @@ class DataTest extends TestCase
     /**
      * Test getDefaultVariables() function
      */
-    public function testGetDefaultVariables(): void
+    public function testGetDefaultVariables()
     {
         $storesVariablesData = [
             [
@@ -98,7 +95,7 @@ class DataTest extends TestCase
     /**
      * Test getCustomVariables() function
      */
-    public function testGetCustomVariables(): void
+    public function testGetCustomVariables()
     {
         $customVariables = [
             [
