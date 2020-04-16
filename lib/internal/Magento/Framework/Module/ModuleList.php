@@ -59,7 +59,7 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Note that this triggers loading definitions of all existing modules in the system.
      * Use this method only when you actually need modules' declared meta-information.
@@ -84,7 +84,8 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @see has()
      */
     public function getOne($name)
@@ -94,7 +95,7 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNames()
     {
@@ -107,7 +108,7 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function has($name)
     {
@@ -139,7 +140,6 @@ class ModuleList implements ModuleListInterface
      */
     private function loadConfigData()
     {
-        $this->config->resetData();
         if (null === $this->configData && null !== $this->config->get(ConfigOptionsListConstants::KEY_MODULES)) {
             $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
         }
