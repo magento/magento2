@@ -15,7 +15,6 @@
     <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
     <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver"/>
-    <!--<preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>-->
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolver"/>
     <preference for="Magento\CatalogSearch\Model\Search\ItemCollectionProviderInterface" type="Magento\CatalogSearch\Model\Search\ItemCollectionProvider"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
