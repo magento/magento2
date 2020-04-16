@@ -9,11 +9,12 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\VaultCaptureDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -112,7 +113,7 @@ class VaultCaptureDataBuilderTest extends TestCase
      */
     public function testBuildWithoutPaymentToken(): void
     {
-        $this->expectException('Magento\Payment\Gateway\Command\CommandException');
+        $this->expectException(CommandException::class);
         $this->expectExceptionMessage('The Payment Token is not available to perform the request.');
         $amount = 30.00;
         $buildSubject = [

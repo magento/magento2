@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Result\Successful;
@@ -14,7 +16,7 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ResponseValidatorTest extends TestCase
@@ -50,7 +52,7 @@ class ResponseValidatorTest extends TestCase
 
     public function testValidateReadResponseException()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $validationSubject = [
             'response' => null
         ];
@@ -60,7 +62,7 @@ class ResponseValidatorTest extends TestCase
 
     public function testValidateReadResponseObjectException()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $validationSubject = [
             'response' => ['object' => null]
         ];

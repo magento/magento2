@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway;
 
 use Braintree\Result\Successful;
@@ -31,7 +33,7 @@ class SubjectReaderTest extends TestCase
      */
     public function testReadCustomerIdWithException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "customerId" field does not exists');
         $this->subjectReader->readCustomerId([]);
     }
@@ -52,7 +54,7 @@ class SubjectReaderTest extends TestCase
      */
     public function testReadPublicHashWithException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "public_hash" field does not exists');
         $this->subjectReader->readPublicHash([]);
     }
@@ -73,7 +75,7 @@ class SubjectReaderTest extends TestCase
      */
     public function testReadPayPalWithException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Transaction has\'t paypal attribute');
         $transaction = Transaction::factory([
             'id' => 'u38rf8kg6vn',
@@ -125,7 +127,7 @@ class SubjectReaderTest extends TestCase
      */
     public function testReadTransactionWithInvalidResponse(array $response, string $expectedMessage): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
         $this->subjectReader->readTransaction($response);
     }

@@ -13,7 +13,7 @@ use Magento\Braintree\Gateway\Validator\CancelResponseValidator;
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

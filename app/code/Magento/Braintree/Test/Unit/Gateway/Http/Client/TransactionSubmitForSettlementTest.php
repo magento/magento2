@@ -1,17 +1,20 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Braintree\Result\Successful;
 use Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -67,7 +70,7 @@ class TransactionSubmitForSettlementTest extends TestCase
      */
     public function testPlaceRequestWithException()
     {
-        $this->expectException('Magento\Payment\Gateway\Http\ClientException');
+        $this->expectException(ClientException::class);
         $this->expectExceptionMessage('Transaction has been declined');
         $exception = new \Exception('Transaction has been declined');
         $this->adapterMock->expects(static::once())

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
@@ -69,7 +71,7 @@ class ShippingMethodUpdaterTest extends TestCase
 
     public function testExecuteException()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "shippingMethod" field does not exists.');
         $quoteMock = $this->getQuoteMock();
 
@@ -142,7 +144,7 @@ class ShippingMethodUpdaterTest extends TestCase
      */
     private function getBillingAddressMock(MockObject $quoteMock)
     {
-         $billingAddressMock = $this->getMockBuilder(Address::class)
+        $billingAddressMock = $this->getMockBuilder(Address::class)
                 ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();

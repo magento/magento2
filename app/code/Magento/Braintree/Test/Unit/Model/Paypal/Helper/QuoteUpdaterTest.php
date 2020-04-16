@@ -17,7 +17,7 @@ use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -203,7 +203,7 @@ class QuoteUpdaterTest extends TestCase
      * @param MockObject $address
      * @param array $addressData
      */
-    private function updateAddressDataStep(\PHPUnit\Framework\MockObject\MockObject $address, array $addressData): void
+    private function updateAddressDataStep(MockObject $address, array $addressData): void
     {
         $address->method('setStreet')
             ->with([$addressData['line1'], $addressData['line2']]);
@@ -223,7 +223,7 @@ class QuoteUpdaterTest extends TestCase
      * @param MockObject $quoteMock
      * @param array $details
      */
-    private function updateQuoteAddressStep(\PHPUnit\Framework\MockObject\MockObject $quoteMock, array $details): void
+    private function updateQuoteAddressStep(MockObject $quoteMock, array $details): void
     {
         $quoteMock->expects(self::exactly(2))
             ->method('getIsVirtual')
@@ -259,7 +259,7 @@ class QuoteUpdaterTest extends TestCase
      * @param MockObject $quote
      * @param array $details
      */
-    private function updateQuoteStep(\PHPUnit\Framework\MockObject\MockObject $quote, array $details): void
+    private function updateQuoteStep(MockObject $quote, array $details): void
     {
         $quote->method('setMayEditShippingAddress')
             ->with(false);
@@ -286,7 +286,7 @@ class QuoteUpdaterTest extends TestCase
      *
      * @return Quote|MockObject
      */
-    private function getQuoteMock(): \PHPUnit\Framework\MockObject\MockObject
+    private function getQuoteMock(): MockObject
     {
         $quote = $this->getMockBuilder(Quote::class)
             ->setMethods(
@@ -320,7 +320,7 @@ class QuoteUpdaterTest extends TestCase
      *
      * @return Payment|MockObject
      */
-    private function getPaymentMock(): \PHPUnit\Framework\MockObject\MockObject
+    private function getPaymentMock(): MockObject
     {
         return $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
