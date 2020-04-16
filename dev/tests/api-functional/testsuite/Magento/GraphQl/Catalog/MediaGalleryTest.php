@@ -39,6 +39,33 @@ QUERY;
     }
 
     /**
+     * Test for get product image placeholder
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductSmallImageUrlPlaceholder()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+        small_image {
+            url
+        }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseImage = $response['products']['items'][0]['small_image'];
+
+        self::assertArrayHasKey('url', $responseImage);
+        self::assertContains('placeholder/small_image.jpg', $responseImage['url']);
+        self::assertTrue($this->checkImageExists($responseImage['url']));
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      */
     public function testMediaGalleryTypesAreCorrect()
