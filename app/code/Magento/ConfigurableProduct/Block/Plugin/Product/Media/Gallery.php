@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Block\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -20,12 +21,20 @@ class Gallery
     private $json;
 
     /**
+     * @var ConfigurableOptionsProviderInterface
+     */
+    private $configurableOptionsProvider;
+
+    /**
      * @param Json $json
+     * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
      */
     public function __construct(
-        Json $json
+        Json $json,
+        ConfigurableOptionsProviderInterface $configurableOptionsProvider
     ) {
         $this->json = $json;
+        $this->configurableOptionsProvider = $configurableOptionsProvider;
     }
 
     /**
@@ -40,9 +49,7 @@ class Gallery
         $result = $this->json->unserialize($result);
         $parentProduct = $subject->getProduct();
         if ($parentProduct->getTypeId() == Configurable::TYPE_CODE) {
-            /** @var Configurable $productType */
-            $productType = $parentProduct->getTypeInstance();
-            $products = $productType->getUsedProducts($parentProduct);
+            $products = $this->configurableOptionsProvider->getProducts($parentProduct);
             /** @var Product $product */
             foreach ($products as $product) {
                 $key = $product->getId();

@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
@@ -83,6 +84,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     private $variationPrices;
 
     /**
+     * @var ConfigurableOptionsProviderInterface|mixed|null
+     */
+    private $configurableOptionsProvider;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -109,7 +115,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         array $data = [],
         Format $localeFormat = null,
         Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ConfigurableOptionsProviderInterface $configurableOptionsProvider = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -121,6 +128,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+        );
+        $this->configurableOptionsProvider = $configurableOptionsProvider ?: ObjectManager::getInstance()->get(
+            ConfigurableOptionsProviderInterface::class
         );
 
         parent::__construct(
@@ -182,7 +192,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->hasAllowProducts()) {
             $products = [];
-            $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
+            $allProducts = $this->configurableOptionsProvider->getProducts($this->getProduct());
             /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
                 if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
