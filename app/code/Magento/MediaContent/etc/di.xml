@@ -18,7 +18,7 @@
     <preference for="Magento\MediaContentApi\Model\SearchPatternConfigInterface" type="Magento\MediaContent\Model\Content\SearchPatternConfig"/>
     <preference for="Magento\MediaContent\Model\Content\ConfigInterface" type="Magento\MediaContent\Model\Content\Config"/>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface">
-        <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Model\MediaGalleryAssetDeleteByPath" />
+        <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByPath" />
     </type>
     <type name="Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface">
         <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
