@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;

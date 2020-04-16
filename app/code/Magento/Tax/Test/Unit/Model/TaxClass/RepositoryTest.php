@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
@@ -10,6 +11,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\Data\TaxClassInterface;
@@ -68,7 +70,7 @@ class RepositoryTest extends TestCase
     protected $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |MockObject
+     * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessor;
 
@@ -130,7 +132,7 @@ class RepositoryTest extends TestCase
      */
     public function testDeleteResourceException()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
+        $this->expectException(CouldNotDeleteException::class);
         $this->expectExceptionMessage('Some Message');
         $taxClass = $this->createMock(ClassModel::class);
         $taxClass->expects($this->once())->method('getClassId')->willReturn(1);
@@ -252,7 +254,7 @@ class RepositoryTest extends TestCase
      */
     public function testSaveWithInputException()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Updating classType is not allowed.');
         $taxClass = $this->createMock(ClassModel::class);
         $originalTax = $this->createMock(ClassModel::class);
@@ -268,7 +270,7 @@ class RepositoryTest extends TestCase
      */
     public function testSaveWithLocalizedException()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Something went wrong');
         $taxClass = $this->createMock(ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('Class Name');
@@ -294,7 +296,7 @@ class RepositoryTest extends TestCase
      */
     public function testSaveWithSameClassException()
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('A class with the same name already exists for ClassType PRODUCT.');
         $taxClass = $this->createMock(ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('Class Name');
@@ -322,7 +324,7 @@ class RepositoryTest extends TestCase
      */
     public function testSaveWithValidateTaxClassDataException($classType)
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('One or more input exceptions have occurred.');
         $taxClass = $this->createMock(ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('');

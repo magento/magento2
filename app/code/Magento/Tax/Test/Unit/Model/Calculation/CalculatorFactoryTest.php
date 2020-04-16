@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
@@ -183,7 +185,7 @@ class CalculatorFactoryTest extends TestCase
 
     public function testCreateInvalid()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown calculation type: NOT_A_TYPE');
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Rule\Edit;
 
 use Magento\Backend\Block\Template\Context;
@@ -16,7 +18,7 @@ use Magento\Tax\Block\Adminhtml\Rule\Edit\Form;
 use Magento\Tax\Model\Rate\Source;
 use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rate;
 
 use Magento\Framework\App\Request\Http;
@@ -11,6 +13,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad;
+use Magento\Tax\Model\Calculation\Rate;
+use Magento\Tax\Model\Calculation\Rate\Converter;
+use Magento\Tax\Model\Calculation\Rate\Title;
 use Magento\Tax\Model\Calculation\RateRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -70,12 +75,12 @@ class AjaxLoadTest extends TestCase
                 ];
         $objectManager = new ObjectManager($this);
         $rateTitles = [$objectManager->getObject(
-            \Magento\Tax\Model\Calculation\Rate\Title::class,
+            Title::class,
             ['data' => ['store_id' => 1, 'value' => 'texas']]
         )
         ];
         $rateMock = $objectManager->getObject(
-            \Magento\Tax\Model\Calculation\Rate::class,
+            Rate::class,
             [
                 'data' => [
                         'tax_country_id' => 'US',
@@ -97,7 +102,7 @@ class AjaxLoadTest extends TestCase
             ->with($taxRateId)
             ->will($this->returnValue($rateMock));
 
-        $taxRateConverter = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rate\Converter::class)
+        $taxRateConverter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
 

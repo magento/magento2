@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\ClassModelFactory;
@@ -56,7 +58,7 @@ class ClassModelRegistryTest extends TestCase
 
     public function testUpdateTaxClassNotExistingEntity()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException(NoSuchEntityException::class);
         $taxClassId = 1;
 
         $this->classModelMock

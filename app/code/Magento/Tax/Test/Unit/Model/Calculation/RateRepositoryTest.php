@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Directory\Model\Country;
@@ -13,6 +15,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterface;
@@ -167,7 +170,7 @@ class RateRepositoryTest extends TestCase
 
     public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
     {
-        $this->expectException('Exception');
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No such entity with id 9999');
         $rateTitles = [
             'Label 1',
@@ -377,7 +380,7 @@ class RateRepositoryTest extends TestCase
 
     public function testValidate()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('One or more input exceptions have occurred.');
         $regionId = 2;
         $rateTitles = ['Label 1', 'Label 2'];
@@ -405,7 +408,7 @@ class RateRepositoryTest extends TestCase
 
     public function testValidateWithNoRate()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');
         $rateTitles = ['Label 1', 'Label 2'];
 
@@ -441,7 +444,7 @@ class RateRepositoryTest extends TestCase
 
     public function testValidateWithWrongRate()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');
         $rateTitles = ['Label 1', 'Label 2'];
 

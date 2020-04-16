@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Observer;
 
 use Magento\Customer\Model\Address;
@@ -13,7 +15,7 @@ use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Observer\AfterAddressSaveObserver;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class AfterAddressSaveObserverTest extends TestCase
 {
     /**
-     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $observerMock;
 
@@ -34,19 +36,19 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * Module manager
      *
-     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $cacheConfigMock;
 
     /**
-     * @var Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     private $taxHelperMock;
 

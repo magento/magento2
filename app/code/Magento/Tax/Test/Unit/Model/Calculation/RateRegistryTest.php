@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
@@ -84,7 +85,7 @@ class RateRegistryTest extends TestCase
 
     public function testRetrieveException()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException(NoSuchEntityException::class);
         $this->rateModelMock->expects($this->once())
             ->method('load')
             ->with(self::TAX_RATE_ID)

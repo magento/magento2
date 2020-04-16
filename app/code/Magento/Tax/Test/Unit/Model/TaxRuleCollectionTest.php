@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -14,7 +16,7 @@ use Magento\Tax\Api\Data\TaxRateSearchResultsInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\Rule;
 use Magento\Tax\Model\TaxRuleCollection;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TaxRuleCollectionTest extends TestCase

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
@@ -76,7 +78,7 @@ class TaxRuleRepositoryTest extends TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |MockObject
+     * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessor;
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rule;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -15,7 +17,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates;
 use Magento\Tax\Model\Rate\Provider as RatesProvider;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
