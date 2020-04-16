@@ -230,8 +230,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param string|null $priceCurrency
      * @param string|null $customerGroupId
      */
-    public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null): void
-    {
+    public function testGetCacheKeyInfo(
+        array $expected,
+        string $priceCurrency = null,
+        string $customerGroupId = null
+    ): void {
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
@@ -385,7 +388,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                     'msrpPrice' => [
-                        'amount' => null    ,
+                        'amount' => null,
                     ]
                 ],
             ],
@@ -419,8 +422,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param \PHPUnit\Framework\MockObject\MockObject $productMock
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getProductTypeMock(\PHPUnit\Framework\MockObject\MockObject $productMock): \PHPUnit\Framework\MockObject\MockObject
-    {
+    private function getProductTypeMock(
+        \PHPUnit\Framework\MockObject\MockObject $productMock
+    ): \PHPUnit\Framework\MockObject\MockObject {
         $currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -501,8 +505,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      * @param int $percentage
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getTierPriceMock(\PHPUnit_Framework_MockObject_MockObject $amountMock, $priceQty, $percentage): \PHPUnit\Framework\MockObject\MockObject
-    {
+    protected function getTierPriceMock(
+        \PHPUnit\Framework\MockObject\MockObject $amountMock,
+        $priceQty,
+        $percentage
+    ): \PHPUnit\Framework\MockObject\MockObject {
         $tierPrice = [
             'price_qty' => $priceQty,
             'price' => $amountMock,
