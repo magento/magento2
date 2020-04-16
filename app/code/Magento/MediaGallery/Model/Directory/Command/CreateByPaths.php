@@ -48,9 +48,11 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         foreach ($paths as $path) {
             try {
                 $name = basename($path);
+                $folder = str_replace($name, '', $path);
+
                 $this->storage->createDirectory(
                     $name,
-                    $this->storage->getCmsWysiwygImages()->getStorageRoot() . $path
+                    $this->storage->getCmsWysiwygImages()->getStorageRoot() . $folder
                 );
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
