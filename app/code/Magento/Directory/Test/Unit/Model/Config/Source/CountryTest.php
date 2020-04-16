@@ -1,29 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Config\Source;
 
-class CountryTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Config\Source\Country;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class CountryTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Config\Source\Country
+     * @var Country
      */
     protected $_model;
 
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @var Collection
      */
     protected $_collectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_collectionMock = $this->createMock(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->_collectionMock = $this->createMock(Collection::class);
         $arguments = ['countryCollection' => $this->_collectionMock];
         $this->_model = $objectManagerHelper->getObject(
-            \Magento\Directory\Model\Config\Source\Country::class,
+            Country::class,
             $arguments
         );
     }
