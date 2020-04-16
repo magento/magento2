@@ -26,25 +26,15 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     private $configData;
 
     /**
-     * Mapping between default publishers name and connections
-     *
-     * @var array
-     */
-    private $publisherNameToConnectionMap;
-
-    /**
      * @param DeploymentConfig $deploymentConfig
      * @param MessageQueueConfigData $configData
-     * @param array $publisherNameToConnectionMap
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        MessageQueueConfigData $configData,
-        $publisherNameToConnectionMap = []
+        MessageQueueConfigData $configData
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->configData = $configData;
-        $this->publisherNameToConnectionMap = $publisherNameToConnectionMap;
     }
 
     /**
@@ -85,15 +75,15 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
             }
             $publisherName = $this->configData->get('topics/' . $topicName . '/publisher', $scope);
             $config = $this->configData->get('publishers/' . $publisherName, $scope);
-            if (!empty($config) && isset($this->publisherNameToConnectionMap[$publisherName])) {
-                $connectionName = $this->publisherNameToConnectionMap[$publisherName];
+            if (!empty($config)) {
                 $config['name'] = $config['connection'];
                 unset($config['connection']);
                 $disabled = isset($config['disabled']) ? $config['disabled'] : false;
                 $config['disabled'] = $disabled;
-                $configData[$topicName]['connections'][$connectionName] = $config;
+                $configData[$topicName]['connection'] = $config;
             }
         }
+
         return $configData;
     }
 }

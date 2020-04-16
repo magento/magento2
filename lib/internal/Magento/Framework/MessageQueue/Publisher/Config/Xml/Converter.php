@@ -40,7 +40,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function convert($source)
     {
@@ -49,37 +49,57 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($source->getElementsByTagName('publisher') as $publisherConfig) {
             $topic = $this->getAttributeValue($publisherConfig, 'topic');
 
-            $connections = [];
-            /** @var \DOMNode $connectionConfig */
-            foreach ($publisherConfig->childNodes as $connectionConfig) {
-                if ($connectionConfig->nodeName != 'connection' || $connectionConfig->nodeType != XML_ELEMENT_NODE) {
-                    continue;
-                }
-                $connectionName = $this->getAttributeValue($connectionConfig, 'name');
-                if (!$connectionName) {
-                    throw new \InvalidArgumentException('Connection name is missing');
-                }
-                $exchangeName = $this->getAttributeValue(
-                    $connectionConfig,
-                    'exchange',
-                    $this->defaultValueProvider->getExchange()
-                );
-                $isDisabled = $this->getAttributeValue($connectionConfig, 'disabled', false);
-                $connections[$connectionName] = [
-                    'name' => $connectionName,
-                    'exchange' => $exchangeName,
-                    'disabled' => $this->booleanUtils->toBoolean($isDisabled),
-                ];
-            }
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);
+            $connection = $this->getConnection($publisherConfig->childNodes);
             $result[$topic] = [
                 'topic' => $topic,
                 'disabled' => $this->booleanUtils->toBoolean($isDisabled),
-                'connections' => $connections,
+                'connection' => $connection,
 
             ];
         }
         return $result;
+    }
+
+    /**
+     * Retrieve connection from nodes
+     *
+     * @param \DOMNodeList $childNodes
+     * @return array
+     */
+    private function getConnection(\DOMNodeList $childNodes): array
+    {
+        $connection = [];
+        /** @var \DOMNode $connectionConfig */
+        foreach ($childNodes as $connectionConfig) {
+            if ($connectionConfig->nodeName !== 'connection' || $connectionConfig->nodeType !== XML_ELEMENT_NODE) {
+                continue;
+            }
+
+            $connectionName = $this->getAttributeValue($connectionConfig, 'name');
+            if (!$connectionName) {
+                throw new \InvalidArgumentException('Connection name is missing');
+            }
+
+            $exchangeName = $this->getAttributeValue(
+                $connectionConfig,
+                'exchange',
+                $this->defaultValueProvider->getExchange()
+            );
+            $isDisabled = $this->booleanUtils->toBoolean(
+                $this->getAttributeValue($connectionConfig, 'disabled', false)
+            );
+            if (!$isDisabled) {
+                $connection = [
+                    'name' => $connectionName,
+                    'exchange' => $exchangeName,
+                    'disabled' => $isDisabled,
+                ];
+                break;
+            }
+        }
+
+        return $connection;
     }
 
     /**

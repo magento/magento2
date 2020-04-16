@@ -17,7 +17,7 @@ class Format implements ValidatorInterface
      */
     public function validate($configData)
     {
-        $requiredPublisherFields = ['topic', 'disabled', 'connections'];
+        $requiredPublisherFields = ['topic', 'disabled', 'connection'];
         $requiredConnectionFields = ['name', 'disabled', 'exchange'];
 
         $errors = [];
@@ -27,16 +27,9 @@ class Format implements ValidatorInterface
                 $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);
             }
 
-            if (!array_key_exists('connections', $publisherData) || !is_array($publisherData['connections'])) {
-                $errors[] = sprintf('Invalid connections format for publisher %s.', $name);
-                continue;
-            }
-
-            foreach ($publisherData['connections'] as $connectionConfig) {
-                $diff = array_diff($requiredConnectionFields, array_keys($connectionConfig));
-                foreach ($diff as $field) {
-                    $errors[] = sprintf('Missing %s field for publisher %s in connection config.', $field, $name);
-                }
+            $diff = array_diff($requiredConnectionFields, array_keys($publisherData['connection']));
+            foreach ($diff as $field) {
+                $errors[] = sprintf('Missing %s field for publisher %s in connection config.', $field, $name);
             }
         }
 

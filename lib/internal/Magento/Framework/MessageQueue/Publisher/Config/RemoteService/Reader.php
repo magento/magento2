@@ -66,12 +66,10 @@ class Reader implements ReaderInterface
     {
         $result = [];
         $connectionName = $this->defaultValueProvider->getConnection();
-        $connections = [
-            $connectionName => [
-                'name' => $connectionName,
-                'exchange' => $this->defaultValueProvider->getExchange(),
-                'disabled' => false,
-            ]
+        $connection = [
+            'name' => $connectionName,
+            'exchange' => $this->defaultValueProvider->getExchange(),
+            'disabled' => false,
         ];
         foreach ($this->getRemoteServices() as $serviceInterface => $remoteImplementation) {
             try {
@@ -84,7 +82,7 @@ class Reader implements ReaderInterface
                 $result[$topic] = [
                     'topic' => $topic,
                     'disabled' => false,
-                    'connections' => $connections,
+                    'connection' => $connection,
 
                 ];
             }

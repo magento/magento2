@@ -58,29 +58,13 @@ class CompositeReader implements ReaderInterface
     {
         $result = [];
         foreach ($this->readers as $reader) {
-            $data = $reader->read($scope);
-            foreach ($data as $key => $value) {
-                $result[$key] = isset($result[$key]) ? array_replace($result[$key], $value) : $value;
-            }
+            $result = array_replace_recursive($result, $reader->read($scope));
         }
 
         $result = $this->addDefaultConnection($result);
 
         $this->validator->validate($result);
 
-        foreach ($result as $key => &$value) {
-            //Find enabled connection
-            $connection = null;
-            foreach ($value['connections'] as $connectionConfig) {
-                if (!$connectionConfig['disabled']) {
-                    $connection = $connectionConfig;
-                    break;
-                }
-            }
-            $value['connection'] = $connection;
-            unset($value['connections']);
-            $result[$key] = $value;
-        }
         return $result;
     }
 
@@ -90,7 +74,7 @@ class CompositeReader implements ReaderInterface
      * @param array $config
      * @return array
      */
-    private function addDefaultConnection(array $config)
+    private function addDefaultConnection(array $config): array
     {
         $defaultConnectionName = $this->defaultValueProvider->getConnection();
         $default = [
@@ -100,23 +84,11 @@ class CompositeReader implements ReaderInterface
         ];
 
         foreach ($config as &$value) {
-            if (!isset($value['connections']) || empty($value['connections'])) {
-                $value['connections'][$defaultConnectionName] = $default;
-                continue;
-            }
-
-            $hasActiveConnection = false;
-            /** Find enabled connection */
-            foreach ($value['connections'] as $connectionConfig) {
-                if (!$connectionConfig['disabled']) {
-                    $hasActiveConnection = true;
-                    break;
-                }
-            }
-            if (!$hasActiveConnection) {
-                $value['connections'][$defaultConnectionName] = $default;
+            if (!isset($value['connection']) || empty($value['connection']) || $value['connection']['disabled']) {
+                $value['connection'] = $default;
             }
         }
+
         return $config;
     }
 }
