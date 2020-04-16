@@ -7,23 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\Model\Ui;
 
-use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
 use Magento\Customer\Model\Address;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Directory\Model\Country;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerAddressesFormatterTest extends TestCase
 {
     /**
-     * @var CustomerAddressesFormatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerAddressesFormatter|MockObject
      */
     private $customerAddressesFormatter;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->customerAddressesFormatter = $objectManager->getObject(CustomerAddressesFormatter::class);

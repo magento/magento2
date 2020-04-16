@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -37,7 +37,7 @@ class ErrorTest extends TestCase
         );
 
         $this->_fileStorage = $this->createMock(Flag::class);
-        $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
+        $this->_fileStorage->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = ['fileStorage' => $this->_fileStorage];
@@ -69,8 +69,8 @@ class ErrorTest extends TestCase
             $arguments
         );
 
-        $this->_syncFlagMock->expects($this->any())->method('save');
-        $this->_syncFlagMock->expects($this->any())->method('getFlagData')->will($this->returnValue($data));
+        $this->_syncFlagMock->method('save');
+        $this->_syncFlagMock->method('getFlagData')->will($this->returnValue($data));
         //check first call
         $this->assertEquals($expectedFirstRun, $model->isDisplayed());
         //check second call(another branch of if operator)

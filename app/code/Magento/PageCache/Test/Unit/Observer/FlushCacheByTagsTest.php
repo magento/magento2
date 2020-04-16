@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -45,7 +45,7 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->fullPageCacheMock = $this->createPartialMock(Type::class, ['clean']);

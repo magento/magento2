@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,46 +12,48 @@ use Magento\Framework\App\Config\Reader\Source\SourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Test command for dump application state
  */
-class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
+class ApplicationDumpCommandTest extends TestCase
 {
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|MockObject
      */
     private $input;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|MockObject
      */
     private $output;
 
     /**
-     * @var Writer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Writer|MockObject
      */
     private $writer;
 
     /**
-     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface|MockObject
      */
     private $source;
 
     /**
-     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface|MockObject
      */
     private $sourceEnv;
 
     /**
-     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hash|MockObject
      */
     private $configHashMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     private $commentMock;
 
@@ -60,7 +62,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()

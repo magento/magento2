@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,9 +9,10 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
+class AvsEmsCodeMapperTest extends TestCase
 {
     /**
      * @var AvsEmsCodeMapper
@@ -21,7 +22,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new AvsEmsCodeMapper();
     }
@@ -60,11 +61,11 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Payflow payment method.
      *
      * @covers \Magento\Paypal\Model\Payflow\AvsEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Payflow AVS mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The "some_payment" does not supported by Payflow AVS mapper.');
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()

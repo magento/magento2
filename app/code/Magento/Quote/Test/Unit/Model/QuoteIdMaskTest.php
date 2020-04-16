@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,22 +7,25 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\QuoteIdMask;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Quote\Model\QuoteIdMask
  */
-class QuoteIdMaskTest extends \PHPUnit\Framework\TestCase
+class QuoteIdMaskTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\QuoteIdMask
+     * @var QuoteIdMask
      */
     protected $quoteIdMask;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->quoteIdMask = $helper->getObject(
-            \Magento\Quote\Model\QuoteIdMask::class,
+            QuoteIdMask::class,
             ['randomDataGenerator' => new Random()]
         );
     }

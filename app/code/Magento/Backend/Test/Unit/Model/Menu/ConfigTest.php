@@ -1,36 +1,46 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Builder;
+use Magento\Backend\Model\Menu\Config\Reader;
+use Magento\Backend\Model\MenuFactory;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $cacheInstanceMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var Menu|MockObject
      */
     private $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|MockObject
      */
     private $menuBuilderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
@@ -39,31 +49,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cacheInstanceMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->cacheInstanceMock = $this->createMock(Config::class);
 
-        $menuFactoryMock = $this->createPartialMock(\Magento\Backend\Model\MenuFactory::class, ['create']);
+        $menuFactoryMock = $this->createPartialMock(MenuFactory::class, ['create']);
 
-        $this->configReaderMock = $this->createMock(\Magento\Backend\Model\Menu\Config\Reader::class);
+        $this->configReaderMock = $this->createMock(Reader::class);
 
-        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
-        $this->menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $this->menuMock = $this->createMock(Menu::class);
 
-        $this->menuBuilderMock = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
+        $this->menuBuilderMock = $this->createMock(Builder::class);
 
         $menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->menuMock));
 
         $this->configReaderMock->expects($this->any())->method('read')->will($this->returnValue([]));
 
-        $appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
+        $appState = $this->createPartialMock(State::class, ['getAreaCode']);
         $appState->expects(
             $this->any()
         )->method(
             'getAreaCode'
         )->will(
-            $this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+            $this->returnValue(FrontNameResolver::AREA_CODE)
         );
 
         $this->model = (new ObjectManager($this))->getObject(

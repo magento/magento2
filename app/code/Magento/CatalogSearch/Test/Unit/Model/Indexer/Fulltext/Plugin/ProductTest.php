@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,26 +8,29 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductResourceModel
+     * @var MockObject|ProductResourceModel
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductModel
+     * @var MockObject|ProductModel
      */
     protected $productMock;
 
@@ -37,7 +40,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $proceed;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
@@ -46,7 +49,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->getMockBuilder(ProductModel::class)
             ->disableOriginalConstructor()
@@ -114,7 +117,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
+            ->with(Fulltext::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
     }
 }

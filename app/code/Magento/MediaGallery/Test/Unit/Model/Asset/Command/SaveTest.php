@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Magento\MediaGallery\Model\Asset\Command\Save;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallery\Model\Asset\Command\Save;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Model\DataExtractorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;

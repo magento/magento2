@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -25,14 +25,14 @@ class StoreUrlTest extends TestCase
         $itemFactoryMock = $this->getItemFactoryMock();
         $resolver = new StoreUrlItemResolver($configReaderMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
-        
+
         $this->assertCount(1, $items);
         foreach ($items as $item) {
             $this->assertSame('daily', $item->getChangeFrequency());
             $this->assertSame('1.0', $item->getPriority());
         }
     }
-    
+
     /**
      * @return SitemapItemInterfaceFactory|MockObject
      */

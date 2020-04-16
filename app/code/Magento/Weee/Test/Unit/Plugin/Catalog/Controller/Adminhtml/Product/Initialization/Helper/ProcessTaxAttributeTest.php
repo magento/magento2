@@ -61,7 +61,7 @@ class ProcessTaxAttributeTest extends TestCase
     /**
      * Prepare environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->createMock(Helper::class);
         $this->resultMock = $this->createMock(Product::class);

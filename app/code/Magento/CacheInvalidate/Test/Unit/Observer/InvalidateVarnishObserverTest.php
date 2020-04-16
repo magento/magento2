@@ -56,7 +56,7 @@ class InvalidateVarnishObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->purgeCacheMock = $this->createMock(PurgeCache::class);

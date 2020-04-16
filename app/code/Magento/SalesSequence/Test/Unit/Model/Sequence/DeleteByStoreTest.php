@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -56,7 +56,7 @@ class DeleteByStoreTest extends TestCase
      */
     private $select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockForAbstractClass(
             AdapterInterface::class,

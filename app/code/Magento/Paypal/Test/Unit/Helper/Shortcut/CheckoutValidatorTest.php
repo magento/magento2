@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,34 +6,42 @@
 
 namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
+use Magento\Checkout\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Paypal\Helper\Shortcut\CheckoutValidator;
+use Magento\Paypal\Helper\Shortcut\Validator;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
+class CheckoutValidatorTest extends TestCase
 {
-    /** @var \Magento\Paypal\Helper\Shortcut\CheckoutValidator */
+    /** @var CheckoutValidator */
     protected $checkoutValidator;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Paypal\Helper\Shortcut\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator|MockObject */
     protected $paypalShortcutHelperMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $paymentHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->sessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
-        $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\Validator::class);
-        $this->paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->paypalShortcutHelperMock = $this->createMock(Validator::class);
+        $this->paymentHelperMock = $this->createMock(Data::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->checkoutValidator = $this->objectManagerHelper->getObject(
-            \Magento\Paypal\Helper\Shortcut\CheckoutValidator::class,
+            CheckoutValidator::class,
             [
                 'checkoutSession' => $this->sessionMock,
                 'shortcutValidator' => $this->paypalShortcutHelperMock,
@@ -46,7 +54,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $code = 'code';
         $isInCatalog = true;
-        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('isContextAvailable')
@@ -66,7 +74,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
         $quote = null;
         $isInCatalog = true;
         $paymentCode = 'code';
-        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($paymentCode)
@@ -83,11 +91,11 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMethodQuoteAvailableWithQuoteMethodNotAvailable($availability)
     {
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods([])
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods([])
             ->getMock();
         $isInCatalog = false;
         $paymentCode = 'code';
-        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $methodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()->setMethods([])->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
@@ -119,7 +127,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsQuoteSummaryValidMinimumAmountFalse()
     {
         $isInCatalog = false;
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods([])
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods([])
             ->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
@@ -131,7 +139,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsQuoteSummaryValidGrandTotalFalse()
     {
         $isInCatalog = false;
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
             ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 
@@ -145,7 +153,7 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsQuoteSummaryValidTrue()
     {
         $isInCatalog = false;
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
             ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 

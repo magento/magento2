@@ -1,27 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Process;
 
-use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Service\DeployPackage;
+use Magento\Framework\App\ResourceConnection;
 
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Psr\Log\LoggerInterface;
 
 /**
  * Deployment Queue class unit tests
  *
  * @see Queue
  */
-class QueueTest extends \PHPUnit\Framework\TestCase
+class QueueTest extends TestCase
 {
     /**
      * @var Queue
@@ -56,7 +57,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appState = $this->createMock(AppState::class);
         $this->localeResolver = $this->getMockForAbstractClass(
