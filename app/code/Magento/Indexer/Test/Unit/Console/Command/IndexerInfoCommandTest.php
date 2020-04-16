@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,7 +18,7 @@ class IndexerInfoCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);

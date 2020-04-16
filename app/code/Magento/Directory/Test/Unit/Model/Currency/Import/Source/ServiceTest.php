@@ -1,26 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import\Source;
 
-class ServiceTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Currency\Import\Config;
+use Magento\Directory\Model\Currency\Import\Source\Service;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ServiceTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Source\Service
+     * @var Service
      */
     protected $_model;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $_importConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
-        $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);
+        $this->_importConfig = $this->createMock(Config::class);
+        $this->_model = new Service($this->_importConfig);
     }
 
     public function testToOptionArray()

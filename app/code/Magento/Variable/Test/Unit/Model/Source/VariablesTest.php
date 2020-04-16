@@ -1,14 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Test\Unit\Model\Source;
 
+use Magento\Config\Model\Config\Structure\SearchInterface;
+use Magento\Config\Model\Config\StructureElementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\Source\Variables;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit test for Magento\Variable\Model\Source\Variables
  */
-class VariablesTest extends \PHPUnit\Framework\TestCase
+class VariablesTest extends TestCase
 {
     /**
      * Variables model
@@ -25,17 +32,17 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     protected $configVariables;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchInterface|MockObject
      */
     private $configMock;
 
-    protected function setup()
+    protected function setup(): void
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure\SearchInterface::class)
+        $this->configMock = $this->getMockBuilder(SearchInterface::class)
             ->setMethods(['getElementByConfigPath'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->configVariables = [
             'web' => [
                 'web/unsecure/base_url' => '1',
@@ -43,7 +50,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $element1 = $this->getMockBuilder(\Magento\Config\Model\Config\StructureElementInterface::class)
+        $element1 = $this->getMockBuilder(StructureElementInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel'])
             ->getMockForAbstractClass();
@@ -59,7 +66,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             ['web/secure/base_url', $element2]
         ]);
 
-        $this->model = $helper->getObject(\Magento\Variable\Model\Source\Variables::class, [
+        $this->model = $helper->getObject(Variables::class, [
             'configStructure' => $this->configMock,
             'configPaths' => $this->configVariables
         ]);

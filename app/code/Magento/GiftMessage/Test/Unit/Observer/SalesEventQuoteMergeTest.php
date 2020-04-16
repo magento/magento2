@@ -8,15 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Observer;
 
-use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\TestCase;
 
-/**
- *  SalesEventQuoteMergeTest
- */
-class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
+class SalesEventQuoteMergeTest extends TestCase
 {
 
     /**

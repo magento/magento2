@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,11 +6,16 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
+use Magento\Directory\Model\Country;
+use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ValidatorTest extends TestCase
 {
     /**
      * @var Validator
@@ -18,27 +23,27 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->countryFactoryMock = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
-        $this->countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
+        $this->countryFactoryMock = $this->createMock(CountryFactory::class);
+        $this->countryMock = $this->createMock(Country::class);
         $this->itemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
+            Address::class,
             ['getCountryId', 'getEmail']
         );
         $this->countryFactoryMock
@@ -46,7 +51,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->countryMock));
         $this->model = $objectManager->getObject(
-            \Magento\Quote\Model\Quote\Address\Validator::class,
+            Validator::class,
             [
                 'countryFactory' => $this->countryFactoryMock,
             ]

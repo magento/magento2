@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,9 +8,9 @@ namespace Magento\AdminAnalytics\Test\Unit\Condition;
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger;
 use Magento\AdminAnalytics\Model\Viewer\Log;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\CacheInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,14 +35,9 @@ class CanViewNotificationTest extends TestCase
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
-        $this->logMock = $this->getMockBuilder(Log::class)
-            ->getMock();
-        $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->logMock = $this->createMock(Log::class);
+        $this->viewerLoggerMock = $this->createMock(Logger::class);
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,

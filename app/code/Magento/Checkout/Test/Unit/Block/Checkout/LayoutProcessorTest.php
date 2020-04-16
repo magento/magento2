@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -51,7 +51,7 @@ class LayoutProcessorTest extends TestCase
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()

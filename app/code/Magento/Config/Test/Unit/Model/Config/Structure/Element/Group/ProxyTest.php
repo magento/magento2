@@ -1,29 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Group;
 
-class ProxyTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Group\Proxy;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProxyTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group\Proxy
+     * @var Proxy
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Group\Proxy($this->_objectManagerMock);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_model = new Proxy($this->_objectManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_objectManagerMock);
@@ -31,7 +37,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
 
     public function testProxyInitializesProxiedObjectOnFirstCall()
     {
-        $groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $groupMock = $this->createMock(Group::class);
 
         $groupMock->expects($this->once())->method('setData');
         $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));
@@ -40,7 +46,7 @@ class ProxyTest extends \PHPUnit\Framework\TestCase
         )->method(
             'create'
         )->with(
-            \Magento\Config\Model\Config\Structure\Element\Group::class
+            Group::class
         )->will(
             $this->returnValue($groupMock)
         );
