@@ -18,9 +18,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
             <group value="SearchEngineElasticsearch"/>
-            <skip>
-                <issueId value="MC-21228"/>
-            </skip>
+<!--            <skip>-->
+<!--                <issueId value="MC-21228"/>-->
+<!--            </skip>-->
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
