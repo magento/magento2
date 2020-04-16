@@ -10,6 +10,12 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 $products = [
     [
@@ -90,14 +96,13 @@ $products = [
 ];
 
 /** @var CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(CategoryLinkManagementInterface::class);
+$categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
 
 $categoriesToAssign = [];
 
 foreach ($products as $data) {
     /** @var $product Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $product
         ->setTypeId($data['type'])
         ->setId($data['id'])
@@ -111,8 +116,8 @@ foreach ($products as $data) {
         ->setMetaDescription($data['meta_keyword'])
         ->setVisibility($data['visibility'])
         ->setStatus($data['status'])
-        ->setStockData(['use_config_manage_stock' => 0])
-        ->save();
+        ->setStockData(['use_config_manage_stock' => 0]);
+    $productRepository->save($product);
 
     $categoriesToAssign[$data['sku']][] = $data['category_id'];
 }

@@ -31,8 +31,8 @@
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
-            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
-                <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct1">
+                <argument name="sku" value="$$createConfigProductAttributeCreateConfigurableProduct.sku$$"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

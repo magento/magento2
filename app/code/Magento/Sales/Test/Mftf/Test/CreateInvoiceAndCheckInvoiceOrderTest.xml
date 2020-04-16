@@ -143,6 +143,7 @@
 
         <!-- Assert invoiced amount on frontend -->
         <click selector="{{StorefrontCustomerOrderSection.viewOrder}}" stepKey="clickViewOrder"/>
+        <dontSeeElement selector="{{StorefrontOrderDetailsSection.orderDateTagElement}}" stepKey="dontSeeDateTag"/>
         <click selector="{{StorefrontOrderInvoicesSection.invoiceTab}}" stepKey="clickInvoiceTabOnStorefront"/>
         <see selector="{{StorefrontOrderInvoicesSection.grandTotalPrice}}" userInput="$110.00" stepKey="seePrice"/>
     </test>

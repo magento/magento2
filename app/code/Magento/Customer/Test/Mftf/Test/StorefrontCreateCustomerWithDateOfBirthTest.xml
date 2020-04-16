@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerWithDateOfBirthTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront"/>
+            <title value="Customer should be able to create an account with date of birth via the storefront"/>
+            <description value="Customer should be able to create an account with date of birth via the storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-32413"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="showDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.required}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="hideDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.no}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontCustomerCreateAccountWithDateOfBirthActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
+        </actionGroup>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+    </test>
+</tests>

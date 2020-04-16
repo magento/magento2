@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCleanStaticAndVarDirsActionGroup">
+        <annotations>
+            <description>Clean pub/static and var dirs.</description>
+        </annotations>
+
+        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {
+            $dirs = [
+                MAGENTO_BP . '/pub/static',
+                MAGENTO_BP . '/var',
+            ];
+
+            function deleteSubDirectories($dir)
+            {
+                $excludePatterns = ['#var\/.htaccess#', '#static\/.htaccess#'];
+                $iterator = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);
+                $directories = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+                foreach($directories as $directory) {
+                    if ($directory->isDir()){
+                        deleteSubDirectories($directory->getPathname());
+                        rmdir($directory);
+                    } else {
+                        foreach ($excludePatterns as $pattern) {
+                            if (preg_match($pattern, $directory->getPathname())) {
+                                continue 2;
+                            }
+                        }
+                        unlink($directory->getPathname());
+                    }
+                }
+            }
+
+            foreach ($dirs as $dir) {
+                if (!is_dir($dir)) {
+                    continue;
+                }
+                deleteSubDirectories($dir);
+            }
+        } " stepKey="cleanStaticAndVarDirs"/>
+    </actionGroup>
+</actionGroups>

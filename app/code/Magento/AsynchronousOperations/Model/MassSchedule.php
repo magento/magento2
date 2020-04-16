@@ -8,19 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject\IdentityGeneratorInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;
-use Magento\Framework\Bulk\BulkManagementInterface;
-use Magento\Framework\Exception\BulkException;
-use Psr\Log\LoggerInterface;
-use Magento\AsynchronousOperations\Model\ResourceModel\Operation\OperationRepository;
+use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Bulk\BulkManagementInterface;
+use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Exception\BulkException;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
@@ -55,7 +54,7 @@ class MassSchedule
     private $logger;
 
     /**
-     * @var OperationRepository
+     * @var OperationRepositoryInterface
      */
     private $operationRepository;
 
@@ -77,7 +76,7 @@ class MassSchedule
      * @param AsyncResponseInterfaceFactory $asyncResponseFactory
      * @param BulkManagementInterface $bulkManagement
      * @param LoggerInterface $logger
-     * @param OperationRepository $operationRepository
+     * @param OperationRepositoryInterface $operationRepository
      * @param UserContextInterface $userContext
      * @param Encryptor|null $encryptor
      */
@@ -87,7 +86,7 @@ class MassSchedule
         AsyncResponseInterfaceFactory $asyncResponseFactory,
         BulkManagementInterface $bulkManagement,
         LoggerInterface $logger,
-        OperationRepository $operationRepository,
+        OperationRepositoryInterface $operationRepository,
         UserContextInterface $userContext = null,
         Encryptor $encryptor = null
     ) {
@@ -139,7 +138,7 @@ class MassSchedule
             $requestItem = $this->itemStatusInterfaceFactory->create();
 
             try {
-                $operation = $this->operationRepository->createByTopic($topicName, $entityParams, $groupId);
+                $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);

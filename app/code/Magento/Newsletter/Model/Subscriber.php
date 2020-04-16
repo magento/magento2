@@ -34,6 +34,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -357,6 +358,20 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return customer subscription status taking pending subscriptions into consideration.
+     *
+     * @return bool
+     */
+    private function isSubscribedOrPending(): bool
+    {
+        return $this->getId() && (
+            (int)$this->getStatus() === self::STATUS_SUBSCRIBED
+                ||
+            (int)$this->getStatus() === self::STATUS_UNCONFIRMED
+        );
+    }
+
+    /**
      * Load subscriber data from resource model by email
      *
      * @param string $subscriberEmail
@@ -549,7 +564,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function updateSubscription($customerId)
     {
         $this->loadByCustomerId($customerId);
-        $this->_updateCustomerSubscription($customerId, $this->isSubscribed());
+        $this->_updateCustomerSubscription($customerId, $this->isSubscribedOrPending());
         return $this;
     }
 

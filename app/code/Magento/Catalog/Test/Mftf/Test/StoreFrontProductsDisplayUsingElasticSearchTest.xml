@@ -127,7 +127,7 @@
             </createData>
 
             <!--Enable ElasticSearch as search engine.-->
-           <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticSearchAsSearchEngine"/>
+           <magentoCLI command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}" stepKey="enableElasticSearchAsSearchEngine"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
             <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
 

@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Translation\Model\Inline\File as TranslationFile;
 
 /**
- * A service for handling Translation config files
+ * A service for handling Translation config files.
  */
 class FileManager
 {
@@ -20,17 +24,17 @@ class FileManager
     const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @var DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File
+     * @var File
      */
     private $driverFile;
 
@@ -40,21 +44,29 @@ class FileManager
     private $translationFile;
 
     /**
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param Repository $assetRepo
+     * @param DirectoryList $directoryList
+     * @param File $driverFile
      * @param TranslationFile $translationFile
+     * @param Json $serializer
      */
     public function __construct(
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Filesystem\Driver\File $driverFile,
-        \Magento\Translation\Model\Inline\File $translationFile = null
+        Repository $assetRepo,
+        DirectoryList $directoryList,
+        File $driverFile,
+        TranslationFile $translationFile,
+        Json $serializer
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
-        $this->translationFile = $translationFile ?: ObjectManager::getInstance()->get(TranslationFile::class);
+        $this->translationFile = $translationFile;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -71,7 +83,7 @@ class FileManager
     }
 
     /**
-     * gets current js-translation.json timestamp
+     * Get current js-translation.json timestamp.
      *
      * @return string|void
      */
@@ -87,18 +99,22 @@ class FileManager
     }
 
     /**
+     * Get translation file full path.
+     *
      * @return string
      */
     protected function getTranslationFileFullPath()
     {
         return $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
-        \DIRECTORY_SEPARATOR .
-        $this->assetRepo->getStaticViewFileContext()->getPath() .
-        \DIRECTORY_SEPARATOR .
-        Js\Config::DICTIONARY_FILE_NAME;
+            \DIRECTORY_SEPARATOR .
+            $this->assetRepo->getStaticViewFileContext()->getPath() .
+            \DIRECTORY_SEPARATOR .
+            Js\Config::DICTIONARY_FILE_NAME;
     }
 
     /**
+     * Get translation file path.
+     *
      * @return string
      */
     public function getTranslationFilePath()
@@ -107,7 +123,9 @@ class FileManager
     }
 
     /**
-     * @param string $content
+     * Update content of translation file.
+     *
+     * @param array $content
      * @return void
      */
     public function updateTranslationFileContent($content)
@@ -117,8 +135,18 @@ class FileManager
             $this->assetRepo->getStaticViewFileContext()->getPath();
         if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
             $this->driverFile->createDirectory($translationDir);
+            $originalFileContent = '';
+        } else {
+            $originalFileContent = $this->driverFile->fileGetContents($this->getTranslationFileFullPath());
         }
-        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+        $originalFileTranslationPhrases = !empty($originalFileContent)
+            ? $this->serializer->unserialize($originalFileContent)
+            : [];
+        $updatedTranslationPhrases = array_merge($originalFileTranslationPhrases, $content);
+        $this->driverFile->filePutContents(
+            $this->getTranslationFileFullPath(),
+            $this->serializer->serialize($updatedTranslationPhrases)
+        );
     }
 
     /**
