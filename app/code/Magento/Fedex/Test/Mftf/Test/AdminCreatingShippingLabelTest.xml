@@ -109,7 +109,7 @@
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
             <argument name="keyword" value="$grabOrderNumber"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <!--Create Invoice-->
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
         <!--Create shipping label-->
