@@ -67,7 +67,15 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['imported_file' => 'file.csv'];
         $row = new DataObject($data);
-        $this->escaperMock->expects($this->once())->method('escapeHtml')->willReturn('file.csv');
+        $this->escaperMock->expects($this->at(0))
+            ->method('escapeHtml')
+            ->with('file.csv')
+            ->willReturn('file.csv');
+        $this->escaperMock->expects($this->once())->method('escapeUrl')->willReturn('url');
+        $this->escaperMock->expects($this->at(2))
+            ->method('escapeHtml')
+            ->with('Download')
+            ->willReturn('Download');
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }
