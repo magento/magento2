@@ -19,16 +19,16 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var BaseSelectProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSelectProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $baseSelectProcessorMock;
 
     /**
-     * @var LinkedProductSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkedProductSelectBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linkedProductSelectBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->baseSelectProcessorMock = $this->getMockBuilder(BaseSelectProcessorInterface::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $productId = 42;
         $storeId = 1;
 
-        /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
+        /** @var Select|\PHPUnit\Framework\MockObject\MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -16,26 +16,26 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Setup\SampleData\State
      */
     private $sampleDataState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\Lists
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Setup\Lists
      */
     private $lists;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\FullModuleList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\FullModuleList
      */
     private $moduleList;
 
-    public function setup()
+    protected function setup(): void
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);

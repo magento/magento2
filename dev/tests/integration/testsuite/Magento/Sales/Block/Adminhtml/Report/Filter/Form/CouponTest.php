@@ -18,7 +18,7 @@ class CouponTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

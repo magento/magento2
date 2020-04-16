@@ -11,17 +11,17 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMock;
 
@@ -30,7 +30,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->repositoryMock = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction\Repository::class);
@@ -138,10 +138,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $transaction
+     * @param \PHPUnit\Framework\MockObject\MockObject $transaction
      * @param string|null $parentTransactionId
      * @param bool $shouldCloseParentTransaction
-     * @param \PHPUnit_Framework_MockObject_MockObject $parentTransaction
+     * @param \PHPUnit\Framework\MockObject\MockObject $parentTransaction
      * @param bool $parentTransactionIsClosed
      */
     protected function expectsLinkWithParentTransaction(
@@ -179,7 +179,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $orderId
      * @param int $paymentId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function expectTransaction($orderId, $paymentId)
     {
@@ -210,7 +210,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $transactionId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function expectDocument($transactionId)
     {
@@ -223,7 +223,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $newTransaction
+     * @param \PHPUnit\Framework\MockObject\MockObject $newTransaction
      * @param string $type
      * @param bool $failSafe
      */
@@ -243,7 +243,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $isPaymentTransactionClosed
-     * @param \PHPUnit_Framework_MockObject_MockObject $newTransaction
+     * @param \PHPUnit\Framework\MockObject\MockObject $newTransaction
      */
     protected function expectsIsPaymentTransactionClosed($isPaymentTransactionClosed, $newTransaction)
     {

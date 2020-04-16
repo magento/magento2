@@ -13,12 +13,12 @@ use \Magento\Framework\Pricing\Render\AbstractAdjustment;
 class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AbstractAdjustment | \PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAdjustment | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
@@ -27,7 +27,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $data;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->data = ['argument_one' => 1];
@@ -57,7 +57,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $this->assertEquals($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
     }
@@ -71,13 +71,13 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->expects($this->at(1))
             ->method('setData')
             ->with($mergedArguments);
         $this->model->expects($this->at(2))
             ->method('apply')
-            ->will($this->returnValue($renderText));
+            ->willReturn($renderText);
         $this->model->expects($this->at(3))
             ->method('setData')
             ->with($this->data);
@@ -91,7 +91,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $amountRender = $this->createMock(\Magento\Framework\Pricing\Render\Amount::class);
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($amountRender, $this->model->getAmountRender());
     }
@@ -106,18 +106,18 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
         $sealableItem->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($priceCode)
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPriceType($priceCode));
     }
@@ -129,11 +129,11 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $amountRender->expects($this->once())
             ->method('getPrice')
             ->with()
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($price, $this->model->getPrice());
     }
@@ -145,11 +145,11 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
             ->with()
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
 
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->render($amountRender);
         $this->assertEquals($sealableItem, $this->model->getSaleableItem());
     }
@@ -164,21 +164,21 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($sealableItem));
+            ->willReturn($sealableItem);
         $sealableItem->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
         $priceInfo->expects($this->once())
             ->method('getAdjustment')
             ->with($adjustmentCode)
-            ->will($this->returnValue($adjustment));
+            ->willReturn($adjustment);
 
         $this->model->expects($this->at(0))
             ->method('getData')
-            ->will($this->returnValue($this->data));
+            ->willReturn($this->data);
         $this->model->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($adjustmentCode));
+            ->willReturn($adjustmentCode);
         $this->model->render($amountRender);
         $this->assertEquals($adjustment, $this->model->getAdjustment());
     }
@@ -194,7 +194,7 @@ class AbstractAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $result = $this->model->formatCurrency($amount, $includeContainer, $precision);
         $this->assertEquals($expected, $result, 'formatCurrent returned unexpected result');

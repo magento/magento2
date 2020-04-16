@@ -27,8 +27,8 @@ class SynchronizeWebsiteAttributesTest extends \PHPUnit\Framework\TestCase
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $synchronizerMock->expects($this->once())
@@ -50,8 +50,8 @@ class SynchronizeWebsiteAttributesTest extends \PHPUnit\Framework\TestCase
 
         $synchronizerMock->expects($this->once())
             ->method('isSynchronizationRequired')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         $synchronizerMock->expects($this->never())

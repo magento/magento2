@@ -67,14 +67,14 @@ class SubscriptionManagerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->customerAccountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->subscriptionManager = $objectManager->getObject(
@@ -108,7 +108,7 @@ class SubscriptionManagerTest extends TestCase
         array $expectedData
     ): void {
         $websiteId = 1;
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var Subscriber|MockObject $subscriber */
@@ -207,7 +207,7 @@ class SubscriptionManagerTest extends TestCase
         $email = 'email@example.com';
         $storeId = 2;
         $websiteId = 1;
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $confirmCode = 'confirm code';
@@ -252,11 +252,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
@@ -506,11 +506,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);

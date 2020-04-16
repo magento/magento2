@@ -22,17 +22,17 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
     /**
-     * @var ClientFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientFactory;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientConfig;
 
@@ -41,7 +41,7 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->clientConfig->expects($this->any())
             ->method('prepareClientOptions')
@@ -93,10 +93,11 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test getConnection() method with errors
-     * @expectedException \RuntimeException
      */
     public function testGetConnectionFailure()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->clientFactory->expects($this->any())
             ->method('create')
             ->willThrowException(new \Exception('Something went wrong'));

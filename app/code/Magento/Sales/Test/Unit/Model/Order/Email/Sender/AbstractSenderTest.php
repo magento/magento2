@@ -17,8 +17,8 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -120,11 +120,11 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $paymentInfoMock = $this->createMock(Info::class);
         $this->orderMock->expects($this->any())
             ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
+            ->willReturn($paymentInfoMock);
 
         $this->addressRenderer = $this->createMock(Renderer::class);
         $this->addressMock = $this->createMock(Address::class);
@@ -133,11 +133,11 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         $this->paymentHelper = $this->createPartialMock(Data::class, ['getInfoBlockHtml']);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
+            ->willReturn('payment');
 
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
     }
 
     /**
@@ -148,14 +148,14 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
-            ->will($this->returnValue($billingAddress));
+            ->willReturn($billingAddress);
         if ($isVirtual) {
             $this->orderMock->expects($this->never())
                 ->method('getShippingAddress');
         } else {
             $this->orderMock->expects($this->once())
                 ->method('getShippingAddress')
-                ->will($this->returnValue($billingAddress));
+                ->willReturn($billingAddress);
         }
     }
 
@@ -180,7 +180,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
     }
 
     /**
@@ -199,6 +199,6 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->senderBuilderFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($senderMock));
+            ->willReturn($senderMock);
     }
 }

@@ -15,7 +15,7 @@ use Magento\Setup\Model\Grid\Module;
 class ModuleGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Module|\PHPUnit_Framework_MockObject_MockObject
+     * @var Module|\PHPUnit\Framework\MockObject\MockObject
      */
     private $gridModuleMock;
 
@@ -26,7 +26,7 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->gridModuleMock = $this->getMockBuilder(Module::class)
             ->disableOriginalConstructor()

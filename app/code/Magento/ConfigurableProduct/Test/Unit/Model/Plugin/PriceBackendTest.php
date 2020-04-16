@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Plugin\PriceBackend;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class PriceBackendTest
@@ -41,7 +41,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
      */
     private $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->priceBackendPlugin = $objectManager->getObject(PriceBackend::class);

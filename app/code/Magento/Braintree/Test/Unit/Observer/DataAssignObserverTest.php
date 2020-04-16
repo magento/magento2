@@ -28,7 +28,7 @@ class DataAssignObserverTest extends \PHPUnit\Framework\TestCase
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentInfoModel = $this->createMock(InfoInterface::class);
+        $paymentInfoModel = $this->getMockForAbstractClass(InfoInterface::class);
         $dataObject = new DataObject(
             [
                 PaymentInterface::KEY_ADDITIONAL_DATA => [

@@ -6,7 +6,7 @@
 namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
 use Magento\Framework\MessageQueue\ConnectionTypeResolver;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Framework\ShellInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
@@ -58,7 +58,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../../_files/consumers_runner_functions_mocks.php';
 

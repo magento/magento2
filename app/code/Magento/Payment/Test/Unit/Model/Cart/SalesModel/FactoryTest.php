@@ -10,10 +10,10 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Factory */
     protected $_model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Factory($this->_objectManagerMock);
@@ -34,8 +34,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $expectedType,
             ['salesModel' => $salesModel]
-        )->will(
-            $this->returnValue('some value')
+        )->willReturn(
+            'some value'
         );
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }
@@ -52,10 +52,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->create('any invalid');
     }
 }

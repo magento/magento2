@@ -16,21 +16,21 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dbSelect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->connection =
@@ -74,7 +74,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $newWebsiteIds = [2,3];
         $websiteIds = [1,2];
         $productId = 1;
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
         $product->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($productId);

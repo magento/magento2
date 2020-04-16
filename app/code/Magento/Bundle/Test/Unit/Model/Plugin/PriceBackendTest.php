@@ -19,16 +19,16 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
     /** @var  PriceBackend */
     private $priceBackendPlugin;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $priceAttributeMock;
 
     /** @var  \Closure */
     private $closure;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->priceBackendPlugin = $objectManager->getObject(\Magento\Bundle\Model\Plugin\PriceBackend::class);
@@ -54,8 +54,8 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
      */
     public function testAroundValidate($typeId, $priceType, $expectedResult)
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue($typeId));
-        $this->productMock->expects($this->any())->method('getPriceType')->will($this->returnValue($priceType));
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn($typeId);
+        $this->productMock->expects($this->any())->method('getPriceType')->willReturn($priceType);
         $result = $this->priceBackendPlugin->aroundValidate(
             $this->priceAttributeMock,
             $this->closure,

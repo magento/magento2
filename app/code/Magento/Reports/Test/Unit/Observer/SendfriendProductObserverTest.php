@@ -46,7 +46,7 @@ class SendfriendProductObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventObserverMock = $this->createMock(Observer::class);
         $this->eventSaverMock = $this->createMock(EventSaver::class);
@@ -80,7 +80,7 @@ class SendfriendProductObserverTest extends TestCase
         $eventMock = $this->createPartialMock(Event::class, ['getProduct']);
         $eventMock->expects($this->once())
             ->method('getProduct')
-            ->willReturn($this->createMock(ProductInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ProductInterface::class));
         $this->reportStatusMock->expects($this->once())
             ->method('isReportEnabled')
             ->with(Event::EVENT_PRODUCT_SEND)

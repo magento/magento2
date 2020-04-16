@@ -48,7 +48,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)

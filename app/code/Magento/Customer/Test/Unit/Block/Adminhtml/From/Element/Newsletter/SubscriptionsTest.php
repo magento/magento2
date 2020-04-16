@@ -48,12 +48,12 @@ class SubscriptionsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->factoryElement = $this->createMock(Factory::class);
         $this->factoryCollection = $this->createMock(CollectionFactory::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
+        $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->element = $objectManager->getObject(

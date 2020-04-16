@@ -17,7 +17,7 @@ use Magento\Setup\Model\Cron\JobFactory;
 class JobFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
@@ -26,7 +26,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $jobFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $serviceManager =
             $this->getMockForAbstractClass(\Laminas\ServiceManager\ServiceLocatorInterface::class, [], '', false);
@@ -70,7 +70,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
 
         $serviceManager->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
 
         $this->jobFactory = new JobFactory($serviceManager);
     }
@@ -101,7 +101,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
         ];
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             \Magento\Setup\Model\Cron\AbstractJob::class,
@@ -131,7 +131,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
         ];
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->assertInstanceOf(
             \Magento\Setup\Model\Cron\JobComponentUninstall::class,
             $this->jobFactory->create('setup:component:uninstall', [])
@@ -139,11 +139,12 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage job is not supported
      */
     public function testCreateUnknownJob()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('job is not supported');
+
         $this->jobFactory->create('unknown', []);
     }
 
@@ -160,7 +161,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             \Magento\Setup\Model\Cron\JobSetCache::class,
@@ -178,7 +179,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
                     ->getMock()
             ]
         ];
-        $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->objectManager->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             \Magento\Setup\Model\Cron\JobSetCache::class,

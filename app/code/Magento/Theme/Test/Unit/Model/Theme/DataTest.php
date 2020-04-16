@@ -16,7 +16,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
         $this->customizationFactory = $this->createPartialMock(

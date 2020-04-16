@@ -14,7 +14,7 @@ class SetupCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new SetupCache();
     }

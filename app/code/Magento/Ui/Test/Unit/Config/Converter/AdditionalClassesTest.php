@@ -15,7 +15,7 @@ class AdditionalClassesTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->converter = new AdditionalClasses(new ConverterUtils());
     }

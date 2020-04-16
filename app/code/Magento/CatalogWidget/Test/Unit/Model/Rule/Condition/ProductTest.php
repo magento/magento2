@@ -44,7 +44,7 @@ class ProductTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
@@ -52,8 +52,8 @@ class ProductTest extends TestCase
         $this->attributeMock = $this->createMock(Attribute::class);
         $eavConfig->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
         $ruleMock = $this->createMock(Rule::class);
-        $storeManager = $this->createMock(StoreManagerInterface::class);
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->productResource = $this->createMock(Product::class);
         $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
@@ -98,7 +98,7 @@ class ProductTest extends TestCase
         $entityMock = $this->createMock(AbstractEntity::class);
         $entityMock->expects($this->once())->method('getLinkField')->willReturn('entitiy_id');
         $this->attributeMock->expects($this->once())->method('getEntity')->willReturn($entityMock);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->productResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
 

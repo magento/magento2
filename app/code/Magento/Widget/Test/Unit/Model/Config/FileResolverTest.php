@@ -31,7 +31,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $componentDirSearch;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->factory = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
@@ -56,7 +56,7 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
         $this->componentDirSearch->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::THEME, 'etc/file')
-            ->will($this->returnValue(['test']));
+            ->willReturn(['test']);
         $this->factory->expects($this->once())->method('create')->with(['test'])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'design'));
     }

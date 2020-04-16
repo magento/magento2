@@ -21,7 +21,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $templateFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateFactoryMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -39,10 +39,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fieldConfig = [
             'path' => 'design/email/header_template',
             'fieldset' => 'other_settings/email',

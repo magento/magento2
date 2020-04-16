@@ -16,24 +16,24 @@ class TopicConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodMapMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $communicationConfigMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->methodMapMock = $this->createMock(\Magento\Framework\Reflection\MethodsMap::class);
         $this->validatorMock = $this->createMock(\Magento\Framework\MessageQueue\Config\Validator::class);

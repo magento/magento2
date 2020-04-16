@@ -12,26 +12,26 @@ use \Magento\Setup\Model\UpdaterTaskCreator;
 class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Updater|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\Updater|\PHPUnit\Framework\MockObject\MockObject
      */
     private $updater;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var Navigation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Navigation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $navigation;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->updater = $this->createMock(\Magento\Setup\Model\Updater::class);
         $this->objectManagerProvider =

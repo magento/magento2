@@ -85,7 +85,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
@@ -105,7 +105,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
@@ -221,9 +221,9 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $website = $websiteFactory->create();
         $website->getResource()->load($website, 'test_website', 'code');
 
-        $this->assertSame(null, $store->getId());
-        $this->assertSame(null, $website->getId());
-        $this->assertSame(null, $group->getId());
+        $this->assertNull($store->getId());
+        $this->assertNull($website->getId());
+        $this->assertNull($group->getId());
     }
 
     /**

@@ -24,35 +24,35 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var PageResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourcePageMock;
 
     /**
-     * @var AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourcesMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +62,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourcesMock = $this->getMockBuilder(AbstractResource::class)
             ->setMethods(['getIdFieldName', 'load', 'checkIdentifier'])
             ->getMockForAbstractClass();
@@ -114,15 +114,16 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->with($identifier, $storeId)
             ->willReturn($fetchOneResult);
 
-        $this->assertInternalType('string', $this->model->checkIdentifier($identifier, $storeId));
+        $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS No Route Page" in configuration.
      */
     public function testBeforeSave404Identifier()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This identifier is reserved for "CMS No Route Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-route');
         $this->model->setIdentifier('no-route2');
@@ -144,11 +145,12 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS Home Page" in configuration.
      */
     public function testBeforeSaveHomeIdentifier()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This identifier is reserved for "CMS Home Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'home');
         $this->model->setIdentifier('home2');
@@ -170,11 +172,12 @@ class PageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for "CMS No Cookies Page" in configuration.
      */
     public function testBeforeSaveNoCookiesIdentifier()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This identifier is reserved for "CMS No Cookies Page" in configuration.');
+
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-cookies');
         $this->model->setIdentifier('no-cookies2');

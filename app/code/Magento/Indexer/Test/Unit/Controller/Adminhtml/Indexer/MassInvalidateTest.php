@@ -91,7 +91,7 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
      * Set up test
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
@@ -205,12 +205,12 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
         );
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
-            ->will($this->returnValue($indexerIds));
+            ->willReturn($indexerIds);
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
                 ->method('addError')->with(__('Please select indexers.'))
-                ->will($this->returnValue(1));
+                ->willReturn(1);
         } else {
             $indexerInterface = $this->getMockForAbstractClass(
                 \Magento\Framework\Indexer\IndexerInterface::class,
@@ -220,15 +220,15 @@ class MassInvalidateTest extends \PHPUnit\Framework\TestCase
             );
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
-                ->will($this->returnValue($indexerInterface));
+                ->willReturn($indexerInterface);
 
             $indexerInterface->expects($this->any())
                 ->method('invalidate')->with(true)
-                ->will($this->returnValue(1));
+                ->willReturn(1);
 
             $this->messageManager->expects($this->any())
                 ->method('addSuccess')
-                ->will($this->returnValue(1));
+                ->willReturn(1);
 
             if ($exception) {
                 $this->indexReg->expects($this->any())

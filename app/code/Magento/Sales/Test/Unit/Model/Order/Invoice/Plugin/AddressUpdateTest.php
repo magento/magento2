@@ -14,16 +14,16 @@ class AddressUpdateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $gripPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->gripPoolMock = $this->createMock(\Magento\Sales\Model\ResourceModel\GridPool::class);
         $this->attributeMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Attribute::class);

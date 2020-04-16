@@ -13,17 +13,17 @@ use Magento\Framework\Controller\ResultFactory;
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
@@ -33,21 +33,21 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCustomerService;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactory;
 
     /**
-     * @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultPage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->checkoutSession = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['getLastOrderId']);
@@ -86,7 +86,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $resultJson = '{"errors": "true", "message": "Customer is already registered"}';
         $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
@@ -104,13 +104,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->will($this->returnValue(100));
+        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->willReturn(100);
         $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->orderCustomerService->expects($this->once())
             ->method('create')
             ->with(100)
-            ->will($this->returnValue($customer));
+            ->willReturn($customer);
 
         $resultJson = '{"errors":"false", "message":"A letter with further instructions will be sent to your email."}';
         $this->resultFactory->expects($this->once())

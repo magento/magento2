@@ -11,7 +11,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Contains methods to test PayPal token Ui component provider
@@ -38,14 +38,14 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenUiComponentProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentFactory = $this->getMockBuilder(TokenUiComponentInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -86,7 +86,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getPayPalIcon')
             ->willReturn($icon);
 
-        $paymentToken = $this->createMock(PaymentTokenInterface::class);
+        $paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
             ->willReturn('{"payerEmail":" ' . $payerEmail . '"}');
@@ -98,7 +98,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
-        $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
+        $tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
         $tokenComponent->expects(static::once())
             ->method('getConfig')
             ->willReturn($expected);

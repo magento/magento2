@@ -14,57 +14,57 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sortOrderBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metaData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteria;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterGroup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
@@ -74,7 +74,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
@@ -82,7 +82,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->searchResultFactory = $this->createPartialMock(
@@ -178,24 +178,26 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetException(): void
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $transactionId = null;
         $this->repository->get($transactionId);
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetNoSuchEntity(): void
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $transactionId = null;
         $transactionIdFromArgument = 12;
         $transaction = $this->mockTransaction($transactionId);
@@ -287,8 +289,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             $transactionId
         )->willReturn(false);
         $transaction->expects($this->once())->method('getId')->willReturn(false);
-        $this->assertEquals(
-            false,
+        $this->assertFalse(
             $this->repository->getByTransactionId($transactionId, $paymentId, $orderId)
         );
     }
@@ -398,7 +399,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|null $transactionId
      * @param bool $withoutTransactionIdMatcher
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockTransaction($transactionId, $withoutTransactionIdMatcher = false)
     {

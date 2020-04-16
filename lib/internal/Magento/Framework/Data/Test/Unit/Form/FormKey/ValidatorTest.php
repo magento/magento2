@@ -13,16 +13,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formKeyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_formKeyMock = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey::class, ['getFormKey']);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -43,10 +43,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'form_key',
             null
-        )->will(
-            $this->returnValue($formKey)
+        )->willReturn(
+            $formKey
         );
-        $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue('formKey'));
+        $this->_formKeyMock->expects($this->once())->method('getFormKey')->willReturn('formKey');
         $this->assertEquals($expected, $this->_model->validate($this->_requestMock));
     }
 

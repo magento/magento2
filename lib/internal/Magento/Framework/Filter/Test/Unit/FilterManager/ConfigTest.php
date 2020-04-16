@@ -12,7 +12,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $_config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_config = new \Magento\Framework\Filter\FilterManager\Config(['test' => 'test']);
     }

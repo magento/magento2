@@ -17,12 +17,12 @@ class CronTest extends \PHPUnit\Framework\TestCase
      */
     protected $cron;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cron = new Cron();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->cron = null;
     }

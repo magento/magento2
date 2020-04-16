@@ -30,7 +30,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
      */
     private $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->getMockForAbstractClass();

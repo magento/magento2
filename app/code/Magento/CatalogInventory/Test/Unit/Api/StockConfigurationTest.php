@@ -20,21 +20,21 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Minsaleqty|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Helper\Minsaleqty|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $minsaleqtyHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\ProductTypes\ConfigInterface::class,
@@ -88,7 +88,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isShowOutOfStock());
     }
 
@@ -102,7 +102,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isAutoReturnEnabled());
     }
 
@@ -116,7 +116,7 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isDisplayProductStockStatus());
     }
 }

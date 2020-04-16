@@ -12,32 +12,32 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class RangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Metrics|\PHPUnit_Framework_MockObject_MockObject
+     * @var Metrics|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metricsBuilder;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bucket;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Aggregation\Range|\PHPUnit\Framework\MockObject\MockObject
      */
     private $range;
 
@@ -47,14 +47,14 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProvider;
 
     /**
      * SetUP method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -153,7 +153,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
         $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
         $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
 
-        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
+        /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit\Framework\MockObject\MockObject $table */
         $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();

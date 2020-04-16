@@ -8,12 +8,12 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 class ConfigurationScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\FileResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\FileResolver | \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileResolverMock;
 
     /**
-     * @var \Magento\Framework\App\AreaList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\AreaList | \PHPUnit\Framework\MockObject\MockObject
      */
     private $areaListMock;
 
@@ -22,7 +22,7 @@ class ConfigurationScannerTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileResolverMock = $this->getMockBuilder(\Magento\Framework\App\Config\FileResolver::class)
             ->disableOriginalConstructor()

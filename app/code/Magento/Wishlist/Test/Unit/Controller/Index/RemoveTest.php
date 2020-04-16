@@ -62,7 +62,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
      */
     protected $formKeyValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -88,7 +88,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->context,
@@ -182,10 +182,11 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithoutItem()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
             ->expects($this->once())
@@ -213,10 +214,11 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithoutWishlist()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
             ->expects($this->once())
@@ -287,7 +289,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item
@@ -370,7 +372,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Wishlist\Helper\Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
         $item

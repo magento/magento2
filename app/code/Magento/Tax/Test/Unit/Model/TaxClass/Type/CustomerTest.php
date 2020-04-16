@@ -17,7 +17,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $searchResultsMock->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(['randomValue']));
+            ->willReturn(['randomValue']);
 
         $filterBuilder = $this->createPartialMock(
             \Magento\Framework\Api\FilterBuilder::class,

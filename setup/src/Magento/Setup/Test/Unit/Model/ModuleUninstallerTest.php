@@ -14,22 +14,22 @@ use Magento\Framework\Setup\Patch\PatchApplier;
 class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\Remove
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\Remove
      */
     private $remove;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\UninstallCollector
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\UninstallCollector
      */
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\Setup
      */
     private $setup;
 
@@ -39,21 +39,21 @@ class ModuleUninstallerTest extends \PHPUnit\Framework\TestCase
     private $uninstaller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ModuleRegistryUninstaller
      */
     private $moduleRegistryUninstaller;
 
     /**
-     * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchApplier|\PHPUnit\Framework\MockObject\MockObject
      */
     private $patchApplierMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->moduleRegistryUninstaller = $this->createMock(\Magento\Setup\Model\ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(

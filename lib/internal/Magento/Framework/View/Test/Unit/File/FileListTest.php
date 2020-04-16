@@ -24,11 +24,11 @@ class FileListTest extends \PHPUnit\Framework\TestCase
     private $_themeFile;
 
     /**
-     * @var \Magento\Framework\View\File\FileList\Collator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Collator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_baseFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule');
         $this->_themeFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule', 'area/theme/path');
@@ -43,14 +43,14 @@ class FileListTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\ThemeInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\ThemeInterface
      */
     protected function _createViewFile($filename, $module, $themeFullPath = null)
     {
         $theme = null;
         if ($themeFullPath !== null) {
             $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-            $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
+            $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new \Magento\Framework\View\File($filename, $module, $theme);
     }
@@ -75,21 +75,23 @@ class FileListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddBaseFileException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule');
         $this->_model->add([$file]);
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
      */
     public function testAddThemeFileException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\'');
+
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule', 'area/theme/path');
         $this->_model->add([$file]);
     }
@@ -110,7 +112,7 @@ class FileListTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());
     }

@@ -9,40 +9,40 @@ use Magento\Theme\Model\Data\Design\ConfigFactory;
 
 class ConfigFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Theme\Api\Data\DesignConfigInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfigFactory;
 
-    /** @var \Magento\Theme\Model\Design\Config\MetadataProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\MetadataProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataProvider;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfigDataFactory;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigExtensionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigExtensionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $configExtensionFactory;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfig;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfigData;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigExtension|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigExtension|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfigExtension;
 
-    /** @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeValidator;
 
     /** @var ConfigFactory */
     protected $factory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Api\Data\WebsiteInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $website;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->designConfigFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigInterfaceFactory::class,

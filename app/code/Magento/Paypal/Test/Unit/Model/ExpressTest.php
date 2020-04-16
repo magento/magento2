@@ -20,7 +20,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ExpressTest
@@ -84,7 +84,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
      */
     private $eventManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->errorCodes[] = self::$authorizationExpiredCode;
         $this->checkoutSession = $this->createPartialMock(
@@ -239,7 +239,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
         $this->model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);

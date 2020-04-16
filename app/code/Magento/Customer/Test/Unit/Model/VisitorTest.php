@@ -52,7 +52,7 @@ class VisitorTest extends TestCase
      */
     private $httpRequestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->getMockBuilder(Session::class)
@@ -103,7 +103,7 @@ class VisitorTest extends TestCase
 
     public function testSaveByRequest()
     {
-        $this->sessionMock->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
+        $this->sessionMock->expects($this->once())->method('setVisitorData')->willReturnSelf();
         $this->assertSame($this->visitor, $this->visitor->saveByRequest(null));
     }
 

@@ -21,37 +21,37 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $input;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $output;
 
     /**
-     * @var Writer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Writer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writer;
 
     /**
-     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $source;
 
     /**
-     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceEnv;
 
     /**
-     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     * @var Hash|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configHashMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
@@ -60,7 +60,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()
@@ -74,10 +74,10 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->source = $this->getMockBuilder(SourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sourceEnv = $this->getMockBuilder(SourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commentMock = $this->getMockBuilder(Comment::class)
             ->disableOriginalConstructor()
             ->getMock();

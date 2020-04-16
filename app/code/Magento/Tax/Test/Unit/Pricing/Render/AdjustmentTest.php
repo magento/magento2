@@ -23,14 +23,14 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Price currency model mock
      *
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Price helper mock
      *
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
@@ -42,7 +42,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Init mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,
@@ -62,13 +62,13 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
+            ->willReturn($storeConfigMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -103,7 +103,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $shouldDisplayBothPrices = true;
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue($shouldDisplayBothPrices));
+            ->willReturn($shouldDisplayBothPrices);
         $this->assertEquals($shouldDisplayBothPrices, $this->model->displayBothPrices());
     }
 
@@ -129,15 +129,15 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmountExclTax();
@@ -169,16 +169,16 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
             ->with($this->anything(), $this->equalTo($includeContainer))
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmount($includeContainer);
@@ -221,10 +221,10 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $amountRender->expects($this->any())
             ->method('getSaleableItem')
-            ->will($this->returnValue($saleable));
+            ->willReturn($saleable);
         $saleable->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($saleableId));
+            ->willReturn($saleableId);
 
         $this->model->setIdSuffix($suffix);
         $this->model->render($amountRender);
@@ -258,7 +258,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceIncludingTax();
 
@@ -274,7 +274,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceExcludingTax();
 
@@ -295,17 +295,17 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setDisplayValue')
             ->with($displayValue);
         $amountRender->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
 
         $this->model->render($amountRender, $arguments);
     }
@@ -327,13 +327,13 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setPriceDisplayLabel');
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $amountRender->expects($this->once())
             ->method('setPriceId');
         $amountRender->expects($this->once())

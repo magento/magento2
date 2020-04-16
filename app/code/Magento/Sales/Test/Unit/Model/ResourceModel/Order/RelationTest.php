@@ -17,51 +17,51 @@ class RelationTest extends \PHPUnit\Framework\TestCase
     protected $relationProcessor;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Handler\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Handler\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressHandlerMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderPaymentResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $statusHistoryResource;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderPaymentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Status\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderStatusHistoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderInvoiceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressHandlerMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Handler\Address::class

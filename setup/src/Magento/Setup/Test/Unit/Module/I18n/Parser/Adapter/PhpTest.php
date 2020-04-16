@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 class PhpTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|
+     * @var \PHPUnit\Framework\MockObject\MockObject|
      * \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
      */
     protected $_phraseCollectorMock;
@@ -18,7 +18,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
      */
     protected $_adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_phraseCollectorMock =
             $this->createMock(\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector::class);
@@ -39,8 +39,8 @@ class PhpTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getPhrases'
-        )->will(
-            $this->returnValue([['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]])
+        )->willReturn(
+            [['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]]
         );
 
         $this->_adapter->parse('file1');

@@ -68,7 +68,7 @@ class RoleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->setMethods(['create', 'getModelInstance'])
@@ -79,7 +79,7 @@ class RoleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
+        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']

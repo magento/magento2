@@ -22,34 +22,34 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     private $info;
 
     /**
-     * @var \Magento\Shipping\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderFactory;
 
     /**
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentRepository;
 
     /**
-     * @var \Magento\Shipping\Model\Order\TrackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\Order\TrackFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackFactory;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $trackCollectionFactory;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = $this->getMockBuilder(\Magento\Shipping\Helper\Data::class)
             ->disableOriginalConstructor()

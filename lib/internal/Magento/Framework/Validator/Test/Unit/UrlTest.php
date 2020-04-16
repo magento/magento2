@@ -14,7 +14,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     private $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new UrlValidator();
     }

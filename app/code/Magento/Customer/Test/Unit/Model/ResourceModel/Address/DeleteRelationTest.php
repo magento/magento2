@@ -16,7 +16,7 @@ class DeleteRelationTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Customer\Model\ResourceModel\Address\DeleteRelation */
     protected $relation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\CustomerFactory::class,
@@ -35,12 +35,12 @@ class DeleteRelationTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        /** @var AbstractModel | \PHPUnit_Framework_MockObject_MockObject $addressModel  */
+        /** @var AbstractModel | \PHPUnit\Framework\MockObject\MockObject $addressModel  */
         $addressModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
             ->getMock();
-        /** @var \Magento\Customer\Model\Customer | \PHPUnit_Framework_MockObject_MockObject $customerModel */
+        /** @var \Magento\Customer\Model\Customer | \PHPUnit\Framework\MockObject\MockObject $customerModel */
         $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])

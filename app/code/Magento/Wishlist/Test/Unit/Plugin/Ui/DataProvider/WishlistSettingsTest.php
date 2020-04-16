@@ -33,7 +33,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->wishlistSettings = new WishlistSettings($this->helperMock);

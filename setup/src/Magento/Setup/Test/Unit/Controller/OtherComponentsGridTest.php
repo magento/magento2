@@ -13,12 +13,12 @@ use Magento\Composer\InfoCommand;
 class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $composerInformation;
 
     /**
-     * @var \Magento\Composer\InfoCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Composer\InfoCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $infoCommand;
 
@@ -29,7 +29,7 @@ class OtherComponentsGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
         $this->infoCommand = $this->createMock(\Magento\Composer\InfoCommand::class);

@@ -65,11 +65,11 @@ class StorageTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storageSubjectMock = $this->createMock(StorageSubject::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->getMediaAssetByPathMock = $this->createMock(GetByPathInterface::class);
+        $this->getMediaAssetByPathMock = $this->getMockForAbstractClass(GetByPathInterface::class);
         $this->deleteMediaAssetByPathMock = $this->getMockBuilder(DeleteByPathInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['execute'])

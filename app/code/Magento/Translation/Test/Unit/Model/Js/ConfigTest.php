@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeMock;
 
@@ -24,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $patterns = ['test_pattern'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()

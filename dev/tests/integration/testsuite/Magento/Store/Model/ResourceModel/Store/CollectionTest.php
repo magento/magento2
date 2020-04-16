@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\ResourceModel\Store\Collection::class
@@ -80,10 +80,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArrayHash()
     {
-        $this->assertTrue(is_array($this->_collection->toOptionArray()));
+        $this->assertIsArray($this->_collection->toOptionArray());
         $this->assertNotEmpty($this->_collection->toOptionArray());
 
-        $this->assertTrue(is_array($this->_collection->toOptionHash()));
+        $this->assertIsArray($this->_collection->toOptionHash());
         $this->assertNotEmpty($this->_collection->toOptionHash());
     }
 

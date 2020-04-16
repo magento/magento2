@@ -26,26 +26,26 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FrontendCacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendCacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbVersionInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbVersionInfoMock;
 
     /**
-     * @var FrontController|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontController|\PHPUnit\Framework\MockObject\MockObject
      */
     private $frontControllerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheMock = $this->getMockBuilder(FrontendCacheInterface::class)
             ->getMockForAbstractClass();

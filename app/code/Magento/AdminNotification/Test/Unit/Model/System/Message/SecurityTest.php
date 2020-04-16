@@ -39,8 +39,8 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createPartialMock(
             CurlFactory::class,
             ['create']
@@ -68,14 +68,14 @@ class SecurityTest extends TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue($cached));
-        $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(null));
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($cached);
+        $this->cacheMock->expects($this->any())->method('save')->willReturn(null);
 
         $httpAdapterMock = $this->createMock(Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->will($this->returnValue($response));
-        $this->curlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock->expects($this->any())->method('read')->willReturn($response);
+        $this->curlFactoryMock->expects($this->any())->method('create')->willReturn($httpAdapterMock);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(null);
 
         $this->assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }

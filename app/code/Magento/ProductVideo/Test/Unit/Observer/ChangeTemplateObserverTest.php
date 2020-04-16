@@ -12,11 +12,11 @@ class ChangeTemplateObserverTest extends \PHPUnit\Framework\TestCase
 {
     public function testChangeTemplate()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer $observer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer $observer */
         $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getBlock']);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject
+         * @var \PHPUnit\Framework\MockObject\MockObject
          * |\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
          */
         $block = $this->createMock(\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo::class);
@@ -26,7 +26,7 @@ class ChangeTemplateObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $observer->expects($this->once())->method('getBlock')->willReturn($block);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductVideo\Observer\ChangeTemplateObserver $unit */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductVideo\Observer\ChangeTemplateObserver $unit */
         $this->objectManager = new ObjectManager($this);
         $unit = $this->objectManager->getObject(\Magento\ProductVideo\Observer\ChangeTemplateObserver::class);
         $unit->execute($observer);

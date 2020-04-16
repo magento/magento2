@@ -33,16 +33,16 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->_storeMock = $this->createMock(Store::class);
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
@@ -52,18 +52,19 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InitException
-     * @expectedExceptionMessage Current store is not active.
      */
     public function testBeforeExecuteWhenStoreNotActive()
     {
-        $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
+        $this->expectException(\Magento\Framework\Exception\State\InitException::class);
+        $this->expectExceptionMessage('Current store is not active.');
+
+        $this->_storeMock->expects($this->any())->method('isActive')->willReturn(false);
         $this->_plugin->beforeExecute($this->subjectMock);
     }
 
     public function testBeforeExecuteWhenStoreIsActive()
     {
-        $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
+        $this->_storeMock->expects($this->any())->method('isActive')->willReturn(true);
         $result = $this->_plugin->beforeExecute($this->subjectMock);
         $this->assertNull($result);
     }

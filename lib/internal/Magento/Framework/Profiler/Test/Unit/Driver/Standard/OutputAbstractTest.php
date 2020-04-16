@@ -10,11 +10,11 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 class OutputAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_output;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_output = $this->getMockForAbstractClass(
             \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class
@@ -26,7 +26,8 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetFilterPattern()
     {
-        $this->assertAttributeEmpty('_filterPattern', $this->_output);
+        $this->assertObjectHasAttribute('_filterPattern', $this->_output);
+        $this->assertEmpty($this->_output->getFilterPattern());
         $filterPattern = '/test/';
         $this->_output->setFilterPattern($filterPattern);
         $this->assertEquals($filterPattern, $this->_output->getFilterPattern());
@@ -39,9 +40,8 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $thresholdKey = \Magento\Framework\Profiler\Driver\Standard\Stat::TIME;
         $this->_output->setThreshold($thresholdKey, 100);
-        $thresholds = class_exists('PHPUnit_Util_Class')
-            ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
-            : \PHPUnit\Framework\Assert::readAttribute($this->_output, '_thresholds');
+        $this->assertObjectHasAttribute('_thresholds', $this->_output);
+        $thresholds = $this->_output->getThresholds();
         $this->assertArrayHasKey($thresholdKey, $thresholds);
         $this->assertEquals(100, $thresholds[$thresholdKey]);
 
@@ -102,7 +102,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod($this->_output, '_renderCaption');
         $method->setAccessible(true);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/Code Profiler \(Memory usage: real - \d+, emalloc - \d+\)/',
             $method->invoke($this->_output)
         );
@@ -124,8 +124,8 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->_output->getThresholds(),
             $this->_output->getFilterPattern()
-        )->will(
-            $this->returnValue($expectedTimerIds)
+        )->willReturn(
+            $expectedTimerIds
         );
 
         $method = new \ReflectionMethod($this->_output, '_getTimerIds');

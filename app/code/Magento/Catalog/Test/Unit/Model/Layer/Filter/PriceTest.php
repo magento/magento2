@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\Price
@@ -55,7 +55,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -79,11 +79,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dataProvider->expects($this->any())
             ->method('getResource')
-            ->will($this->returnValue($this->resource));
+            ->willReturn($this->resource);
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->dataProvider));
+            ->willReturn($this->dataProvider);
 
         $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
@@ -96,7 +96,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
             ->disableOriginalConstructor()
@@ -118,10 +118,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
@@ -129,7 +129,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
@@ -147,7 +147,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $algorithmFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->algorithm));
+            ->willReturn($this->algorithm);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -179,8 +179,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
@@ -189,7 +189,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
                                 return $idValue;
                         }
                     }
-                )
+                
             );
 
         $result = $this->target->apply($this->request);
@@ -228,13 +228,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($field) use ($requestVar, $priceId) {
                         $this->assertTrue(in_array($field, [$requestVar, 'id']));
                         return $priceId;
                     }
-                )
+                
             );
 
         $this->target->apply($this->request);
@@ -246,10 +246,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'attributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->algorithm->expects($this->any())
             ->method('getItemsData')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->target->getItems();
     }
 }

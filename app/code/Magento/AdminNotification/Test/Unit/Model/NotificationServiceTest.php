@@ -35,19 +35,18 @@ class NotificationServiceTest extends TestCase
         );
         $notification = $this->createPartialMock(
             Inbox::class,
-            ['load', 'getId', 'save', 'setData', '__sleep', '__wakeup']
+            ['load', 'getId', 'save', 'setData', '__sleep', '__wakeup', 'setIsRead']
         );
-        $notification->expects($this->once())->method('load')->with($notificationId)->will($this->returnSelf());
-        $notification->expects($this->once())->method('getId')->will($this->returnValue($notificationId));
+        $notification->expects($this->once())->method('load')->with($notificationId)->willReturnSelf();
+        $notification->expects($this->once())->method('getId')->willReturn($notificationId);
 
         // when notification Id is valid, add additional expectations
         if ($notificationId) {
-            $notification->expects($this->once())->method('save')->will($this->returnSelf());
-            $notification->expects($this->once())->method('setData')
-                ->with('is_read', 1)->will($this->returnSelf());
+            $notification->expects($this->once())->method('save')->willReturnSelf();
+            $notification->expects($this->once())->method('setIsRead')->with(1)->willReturnSelf();
         }
 
-        $notificationFactory->expects($this->once())->method('create')->will($this->returnValue($notification));
+        $notificationFactory->expects($this->once())->method('create')->willReturn($notification);
         return new NotificationService($notificationFactory);
     }
 

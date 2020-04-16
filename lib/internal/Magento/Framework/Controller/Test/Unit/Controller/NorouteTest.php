@@ -13,21 +13,21 @@ class NorouteTest extends \PHPUnit\Framework\TestCase
     protected $_controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_viewMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_statusMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -48,10 +48,10 @@ class NorouteTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             '__status__'
-        )->will(
-            $this->returnValue($this->_statusMock)
+        )->willReturn(
+            $this->_statusMock
         );
-        $this->_statusMock->expects($this->any())->method('getLoaded')->will($this->returnValue(false));
+        $this->_statusMock->expects($this->any())->method('getLoaded')->willReturn(false);
         $this->_viewMock->expects($this->once())->method('loadLayout')->with(['default', 'noroute']);
         $this->_viewMock->expects($this->once())->method('renderLayout');
         $this->_controller->execute();
@@ -65,18 +65,18 @@ class NorouteTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             '__status__'
-        )->will(
-            $this->returnValue($this->_statusMock)
+        )->willReturn(
+            $this->_statusMock
         );
-        $this->_statusMock->expects($this->any())->method('getLoaded')->will($this->returnValue(true));
-        $this->_statusMock->expects($this->any())->method('getForwarded')->will($this->returnValue(false));
+        $this->_statusMock->expects($this->any())->method('getLoaded')->willReturn(true);
+        $this->_statusMock->expects($this->any())->method('getForwarded')->willReturn(false);
         $this->_viewMock->expects($this->never())->method('loadLayout');
         $this->_requestMock->expects(
             $this->once()
         )->method(
             'setActionName'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
         $this->_controller->execute();
     }
@@ -89,8 +89,8 @@ class NorouteTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             '__status__'
-        )->will(
-            $this->returnValue('string')
+        )->willReturn(
+            'string'
         );
         $this->_controller->execute();
     }

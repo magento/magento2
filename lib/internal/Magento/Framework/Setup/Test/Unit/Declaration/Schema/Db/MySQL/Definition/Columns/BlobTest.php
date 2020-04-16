@@ -25,21 +25,21 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     private $blob;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -66,10 +66,10 @@ class BlobTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var ElementInterface|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $column->expects($this->any())
             ->method('getName')
             ->willReturn('col');

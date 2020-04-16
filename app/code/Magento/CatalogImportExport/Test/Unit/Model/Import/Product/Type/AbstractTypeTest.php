@@ -18,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityModel;
 
@@ -33,26 +33,26 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var AbstractType|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractType|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $abstractType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityModel = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product::class);
         $attrSetColFactory = $this->createPartialMock(
@@ -191,12 +191,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 'getConnection',
             ]
         );
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->connection->expects($this->any())->method('select')->willReturn($this->select);
         $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $connection->expects($this->any())->method('quoteInto')->willReturn('query');
         $this->select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
@@ -204,7 +204,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->connection
             ->expects($this->any())
             ->method('fetchAll')
-            ->will($this->returnValue($entityAttributes));
+            ->willReturn($entityAttributes);
 
         $this->resource = $this->createPartialMock(
             \Magento\Framework\App\ResourceConnection::class,
@@ -213,11 +213,11 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 'getTableName',
             ]
         );
-        $this->resource->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connection)
+        $this->resource->expects($this->any())->method('getConnection')->willReturn(
+            $this->connection
         );
-        $this->resource->expects($this->any())->method('getTableName')->will(
-            $this->returnValue('tableName')
+        $this->resource->expects($this->any())->method('getTableName')->willReturn(
+            'tableName'
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

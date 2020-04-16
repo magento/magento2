@@ -16,7 +16,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
 class ChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -25,10 +25,10 @@ class ChainTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
-        $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));
+        $this->asset->expects($this->once())->method('getContentType')->willReturn('assetType');
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }
 
@@ -56,11 +56,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The requested asset type was 'assetType', but ended up with 'type'
      */
     public function testAssertValid()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The requested asset type was \'assetType\', but ended up with \'type\'');
+
         $this->object->setContentType('type');
         $this->object->assertValid();
     }

@@ -14,11 +14,12 @@ use \Magento\Framework\View\Design\Fallback\Rule\Composite;
 class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Each item should implement the fallback rule interface
      */
     public function testConstructException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Each item should implement the fallback rule interface');
+
         new Composite([new \stdClass()]);
     }
 
@@ -33,8 +34,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue(['rule_one/path/one', 'rule_one/path/two'])
+        )->willReturn(
+            ['rule_one/path/one', 'rule_one/path/two']
         );
 
         $ruleTwo = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
@@ -44,8 +45,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue(['rule_two/path/one', 'rule_two/path/two'])
+        )->willReturn(
+            ['rule_two/path/one', 'rule_two/path/two']
         );
 
         $object = new Composite([$ruleOne, $ruleTwo]);

@@ -19,29 +19,29 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
     protected $regularPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
         $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -50,7 +50,7 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
 
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
@@ -73,11 +73,11 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
         $convertedPrice = 85;
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($price)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
         //The second call will use cached value
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -107,15 +107,15 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($priceValue));
+            ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($priceValue)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
             ->with($this->equalTo($convertedPrice))
-            ->will($this->returnValue($amountValue));
+            ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->regularPrice->getAmount());
     }
 

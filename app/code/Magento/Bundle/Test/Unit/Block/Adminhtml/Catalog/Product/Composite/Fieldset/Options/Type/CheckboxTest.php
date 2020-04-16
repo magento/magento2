@@ -14,7 +14,7 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = (new ObjectManager($this))
             ->getObject(

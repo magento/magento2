@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = Bootstrap::getObjectManager()
             ->create(\Magento\Newsletter\Model\ResourceModel\Problem\Collection::class);

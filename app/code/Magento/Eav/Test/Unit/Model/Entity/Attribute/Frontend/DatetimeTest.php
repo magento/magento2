@@ -41,10 +41,10 @@ class DatetimeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->booleanFactoryMock = $this->createMock(BooleanFactory::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->attributeMock = $this->createPartialMock(
             AbstractAttribute::class,
             ['getAttributeCode', 'getFrontendLabel', 'getFrontendInput']

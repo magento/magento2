@@ -21,12 +21,12 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxData;
 
@@ -62,7 +62,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
-            ->will($this->returnValue($configObj));
+            ->willReturn($configObj);
 
         $baseAmount = $this->createPartialMock(
             \Magento\Framework\Pricing\Amount\Base::class,
@@ -71,15 +71,15 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $baseAmount->expects($this->any())
             ->method('hasAdjustment')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $baseAmount->expects($this->any())
             ->method('getBaseAmount')
-            ->will($this->returnValue(33.5));
+            ->willReturn(33.5);
 
         $baseAmount->expects($this->any())
             ->method('getAdjustmentAmount')
-            ->will($this->returnValue(1.5));
+            ->willReturn(1.5);
 
         $priceInfo = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
 
@@ -87,29 +87,29 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $basePrice->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $priceInfo->expects($this->any())
             ->method('getPrice')
-            ->will($this->returnValue($basePrice));
+            ->willReturn($basePrice);
 
         $prod1 = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getPriceInfo']);
         $prod2 = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $prod1->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $prod1->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         $optionCollection =
             $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class, ['getItems']);
 
         $optionCollection->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue([$prod1, $prod2]));
+            ->willReturn([$prod1, $prod2]);
 
         $productInstance =
             $this->createPartialMock(
@@ -123,30 +123,30 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
         );
         $product->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
+            ->willReturn($productInstance);
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
-            ->will($this->returnValue($optionCollection));
+            ->willReturn($optionCollection);
 
         $productInstance->expects($this->any())
             ->method('getOptionsIds')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->taxData->expects($this->any())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

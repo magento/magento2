@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Payment\Operations\ProcessInvoiceOperation;
 class SaleOperationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProcessInvoiceOperation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessInvoiceOperation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $processInvoiceOperation;
 
@@ -27,7 +27,7 @@ class SaleOperationTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processInvoiceOperation = $this->getMockBuilder(ProcessInvoiceOperation::class)
             ->disableOriginalConstructor()
@@ -59,10 +59,10 @@ class SaleOperationTest extends \PHPUnit\Framework\TestCase
             ->method('setStatus')
             ->with(Order::STATUS_FRAUD);
 
-        /** @var MethodInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMethod */
+        /** @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject $paymentMethod */
         $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
 
-        /** @var Payment|\PHPUnit_Framework_MockObject_MockObject  $orderPayment| */
+        /** @var Payment|\PHPUnit\Framework\MockObject\MockObject  $orderPayment| */
         $orderPayment = $this->getMockBuilder(Payment::class)
             ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
@@ -95,9 +95,9 @@ class SaleOperationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getPaidInvoice(): \PHPUnit_Framework_MockObject_MockObject
+    private function getPaidInvoice(): \PHPUnit\Framework\MockObject\MockObject
     {
         $invoice = $this->getMockBuilder(Invoice::class)
             ->setMethods(['register', 'getIsPaid', 'pay'])
@@ -114,9 +114,9 @@ class SaleOperationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getUnpaidInvoice(): \PHPUnit_Framework_MockObject_MockObject
+    private function getUnpaidInvoice(): \PHPUnit\Framework\MockObject\MockObject
     {
         $invoice = $this->getMockBuilder(Invoice::class)
             ->setMethods(['register', 'getIsPaid', 'pay'])

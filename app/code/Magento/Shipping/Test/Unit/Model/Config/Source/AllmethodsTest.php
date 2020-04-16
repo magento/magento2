@@ -39,9 +39,9 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->shippingConfig = $this->createMock(Config::class);
         $this->carriersMock = $this->getMockBuilder(AbstractCarrierInterface::class)
             ->setMethods(

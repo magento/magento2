@@ -23,7 +23,7 @@ class JwtPayloadValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new JwtPayloadValidator(new DateTimeFactory());
     }

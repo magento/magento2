@@ -15,17 +15,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseFactory;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionAdapter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\Mapper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mapper;
 
@@ -40,36 +40,36 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bucket;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aggregatioBuilder;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $temporaryStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -92,7 +92,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionAdapter));
+            ->willReturn($this->connectionAdapter);
 
         $this->mapper = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Mapper::class)
             ->setMethods(['buildQuery'])
@@ -181,15 +181,15 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
         $this->connectionAdapter->expects($this->any())
             ->method('fetchAssoc')
-            ->will($this->returnValue($selectResult['documents']));
+            ->willReturn($selectResult['documents']);
         $this->mapper->expects($this->once())
             ->method('buildQuery')
             ->with($this->request)
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->responseFactory->expects($this->once())
             ->method('create')
             ->with($selectResult)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->aggregatioBuilder->expects($this->once())
             ->method('build')
             ->with($this->request, $table, $selectResult['documents'])

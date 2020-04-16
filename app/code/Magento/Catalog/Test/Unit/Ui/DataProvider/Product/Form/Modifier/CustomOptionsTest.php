@@ -19,31 +19,31 @@ use Magento\Catalog\Model\Product\Option as ProductOption;
 class CustomOptionsTest extends AbstractModifierTest
 {
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productOptionsConfigMock;
 
     /**
-     * @var ProductOptionsPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductOptionsPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productOptionsPriceMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productOptionsConfigMock = $this->getMockBuilder(ConfigInterface::class)
@@ -58,7 +58,7 @@ class CustomOptionsTest extends AbstractModifierTest
             ->getMockForAbstractClass();
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
@@ -192,11 +192,11 @@ class CustomOptionsTest extends AbstractModifierTest
      *
      * @param array $data
      * @param array $values
-     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getProductOptionMock(array $data, array $values = [])
     {
-        /** @var ProductOption|\PHPUnit_Framework_MockObject_MockObject $productOptionMock */
+        /** @var ProductOption|\PHPUnit\Framework\MockObject\MockObject $productOptionMock */
         $productOptionMock = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValues'])

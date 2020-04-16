@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
@@ -37,7 +37,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Registry $var */
         $this->coreRegistry = $var = $this->getMockBuilder(\Magento\Framework\Registry::class)
@@ -54,7 +54,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->categoryFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
         $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
@@ -65,7 +65,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getCurrentStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class,
@@ -86,24 +86,24 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $categoryId = 4321;
         $this->store->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $this->layer->expects($this->any())
             ->method('getCurrentCategory')
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
         $this->category->expects($this->once())
             ->method('setStoreId')
             ->with($this->equalTo($storeId))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->category->expects($this->once())
             ->method('load')
             ->with($this->equalTo($categoryId))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->category->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
         $this->category->expects($this->any())
             ->method('getPathIds')
-            ->will($this->returnValue([20, 10]));
+            ->willReturn([20, 10]);
         $this->coreRegistry->expects($this->once())
             ->method('register')
             ->with(
@@ -111,7 +111,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($this->category),
                 $this->equalTo(true)
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->target->setCategoryId($categoryId);
         $this->assertSame($this->category, $this->target->getCategory());
         $this->assertSame(20, $this->target->getResetValue());

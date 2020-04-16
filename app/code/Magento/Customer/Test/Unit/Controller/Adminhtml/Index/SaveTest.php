@@ -192,7 +192,7 @@ class SaveTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -236,7 +236,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerAddressRepositoryMock = $this->getMockBuilder(
             AddressRepositoryInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -251,18 +251,18 @@ class SaveTest extends TestCase
         )->disableOriginalConstructor()->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->redirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -277,7 +277,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
 
@@ -449,7 +449,7 @@ class SaveTest extends TestCase
             );
 
         /** @var CustomerInterface|MockObject $customerMock */
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getId')->willReturn($customerId);
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')
@@ -640,7 +640,7 @@ class SaveTest extends TestCase
             );
 
         /** @var CustomerInterface|MockObject $customerMock */
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getId')->willReturn($customerId);
         $this->customerDataFactoryMock->expects($this->once())
             ->method('create')

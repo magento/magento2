@@ -11,7 +11,7 @@ use Magento\Framework\Reflection\MethodsMap;
 class HandlersTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $methodsMap;
 
@@ -23,7 +23,7 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->methodsMap = $this->getMockBuilder(MethodsMap::class)->disableOriginalConstructor()->getMock();

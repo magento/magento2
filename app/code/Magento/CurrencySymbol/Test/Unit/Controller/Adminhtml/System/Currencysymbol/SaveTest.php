@@ -73,17 +73,17 @@ class SaveTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->helperMock = $this->createMock(Data::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->responseMock = $this->createPartialMock(
             ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
         $this->filterManager = $this->createPartialMock(
             FilterManager::class,

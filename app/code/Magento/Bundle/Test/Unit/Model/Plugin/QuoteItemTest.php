@@ -13,25 +13,25 @@ use Magento\Catalog\Model\Product;
 class QuoteItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|Product
      */
     private $productMock;
 
     /** @var \Magento\Bundle\Model\Plugin\QuoteItem */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractItem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractItem */
     protected $quoteItemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface */
     protected $orderItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ToOrderItem
+     * @var \PHPUnit\Framework\MockObject\MockObject|ToOrderItem
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemMock = $this->getMockForAbstractClass(
             OrderItemInterface::class,

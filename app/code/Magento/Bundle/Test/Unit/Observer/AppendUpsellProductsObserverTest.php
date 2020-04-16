@@ -90,7 +90,7 @@ class AppendUpsellProductsObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);

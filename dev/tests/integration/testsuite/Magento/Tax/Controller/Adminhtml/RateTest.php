@@ -240,11 +240,11 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $jsonBody
         );
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success'] == true);
         $this->assertArrayHasKey('result', $result);
-        $this->assertTrue(is_array($result['result']));
+        $this->assertIsArray($result['result']);
         $this->assertEquals($result['result']['tax_country_id'], $class->getTaxCountryId());
         $this->assertEquals($result['result']['tax_region_id'], $class->getTaxRegionId());
         $this->assertEquals($result['result']['tax_postcode'], $class->getTaxPostcode());
@@ -276,7 +276,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $jsonBody
         );
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success'] == false);
         $this->assertTrue(!array_key_exists('result', $result));

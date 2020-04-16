@@ -14,7 +14,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export::class
@@ -65,11 +65,12 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method '_getEntityAdapter' in case when entity is invalid
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
     public function testGetEntityAdapterWithInvalidEntity()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_model->setData(['entity' => 'test']);
         $this->_model->getEntityAttributeCollection();
     }

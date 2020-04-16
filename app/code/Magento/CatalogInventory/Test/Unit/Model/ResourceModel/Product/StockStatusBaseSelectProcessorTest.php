@@ -15,12 +15,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
@@ -29,7 +29,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $stockStatusBaseSelectProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();

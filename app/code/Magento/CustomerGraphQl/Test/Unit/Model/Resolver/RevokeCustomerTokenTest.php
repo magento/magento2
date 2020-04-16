@@ -63,7 +63,7 @@ class RevokeCustomerTokenTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -76,7 +76,7 @@ class RevokeCustomerTokenTest extends TestCase
                     'getUserType',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->setMethods(
@@ -87,7 +87,7 @@ class RevokeCustomerTokenTest extends TestCase
                     'setIsCustomer',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fieldMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
@@ -146,11 +146,12 @@ class RevokeCustomerTokenTest extends TestCase
     /**
      * Test mutation when customer isn't authorized.
      *
-     * @expectedException \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCustomerNotAuthorized()
     {
+        $this->expectException(\Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $isCustomer = false;
 
         $this->contextMock

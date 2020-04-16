@@ -25,11 +25,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcess()
     {
-        /** @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
+        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
-        /** @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $processorTwoMock */
+        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
@@ -37,11 +37,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($processors);
 
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $searchCriteriarMock */
+        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,16 +58,17 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testProcessWithException()
     {
-        /** @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */
+        $this->expectException(\InvalidArgumentException::class);
+
+        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->setMethods(['process'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        /** @var \stdClass|\PHPUnit_Framework_MockObject_MockObject $processorTwoMock */
+        /** @var \stdClass|\PHPUnit\Framework\MockObject\MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['process'])
             ->getMock();
@@ -76,11 +77,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($processors);
 
-        /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $searchCriteriarMock */
+        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -26,17 +26,18 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, count($optionsList));
+        $this->assertCount(2, $optionsList);
         $this->assertSame('mode', $optionsList[0]->getName());
         $this->assertSame('index', $optionsList[1]->getName());
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Missing argument 'mode'. Accepted values for mode are 'realtime' or 'schedule'
      */
     public function testExecuteInvalidArgument()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Missing argument \'mode\'. Accepted values for mode are \'realtime\' or \'schedule\'');
+
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
@@ -44,11 +45,12 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Accepted values for mode are 'realtime' or 'schedule'
      */
     public function testExecuteInvalidMode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Accepted values for mode are \'realtime\' or \'schedule\'');
+
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

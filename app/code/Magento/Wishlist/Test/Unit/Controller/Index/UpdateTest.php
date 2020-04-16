@@ -86,16 +86,16 @@ class UpdateTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formKeyValidatorMock = $this->createMock(Validator::class);
-        $this->wishlistProviderMock = $this->createMock(WishlistProviderInterface::class);
+        $this->wishlistProviderMock = $this->getMockForAbstractClass(WishlistProviderInterface::class);
         $this->quantityProcessorMock = $this->createMock(LocaleQuantityProcessor::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
         $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPostValue'])
             ->getMockForAbstractClass();

@@ -25,51 +25,51 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 class AdvancedPricingTest extends AbstractModifierTest
 {
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var DirectoryHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var ProductResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productResourceMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var CustomerGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerGroupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerGroupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)

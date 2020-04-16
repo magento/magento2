@@ -8,16 +8,16 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $postHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->postHelper = $this->createMock(\Magento\Framework\Data\Helper\PostHelper::class);
@@ -33,7 +33,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->postHelper->expects($this->once())
             ->method('getPostData')
             ->with('someUrl')
-            ->will($this->returnValue('{parsedAction}'));
+            ->willReturn('{parsedAction}');
         $this->assertEquals('{parsedAction}', $this->block->getPostAction());
     }
 }

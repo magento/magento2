@@ -22,39 +22,39 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Email\Model\Template\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themePackages;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_dataStorage = $this->createPartialMock(\Magento\Email\Model\Template\Config\Data::class, ['get']);
         $this->_dataStorage->expects(
             $this->any()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php')
+        )->willReturn(
+            require __DIR__ . '/Config/_files/email_templates_merged.php'
         );
         $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);
         $this->viewFileSystem = $this->createPartialMock(
@@ -243,8 +243,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'one.html',
             $this->designParams,
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
@@ -267,8 +267,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'module' => $this->designParams['module'],
             ],
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one');
@@ -276,12 +276,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Template file 'one.html' is not found
      * @return void
      */
     public function testGetTemplateFilenameWrongFileName(): void
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Template file \'one.html\' is not found');
+
         $this->viewFileSystem->expects($this->once())->method('getEmailTemplateFileName')
             ->with('one.html', $this->designParams, 'Fixture_ModuleOne')
             ->willReturn(false);
@@ -293,11 +294,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $getterMethod
      * @param $argument
      * @dataProvider getterMethodUnknownTemplateDataProvider
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Email template 'unknown' is not defined
      */
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Email template \'unknown\' is not defined');
+
         if (!$argument) {
             $this->model->{$getterMethod}('unknown');
         } else {
@@ -338,8 +340,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->atLeastOnce()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(['fixture' => $fixtureFields])
+        )->willReturn(
+            ['fixture' => $fixtureFields]
         );
         $model = new Config(
             $dataStorage,

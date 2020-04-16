@@ -17,17 +17,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductResourceModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|ProductResourceModel
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|ProductModel
      */
     protected $productMock;
 
@@ -37,7 +37,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $proceed;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
@@ -46,7 +46,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->getMockBuilder(ProductModel::class)
             ->disableOriginalConstructor()
@@ -115,6 +115,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 }

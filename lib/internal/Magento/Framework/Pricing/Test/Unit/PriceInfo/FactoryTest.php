@@ -13,7 +13,7 @@ use Magento\Framework\Pricing\PriceInfo\Factory;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -28,24 +28,24 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $factory;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pricesMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
      * SetUp test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $this->pricesMock = $this->createMock(\Magento\Framework\Pricing\Price\Collection::class);
@@ -112,14 +112,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->saleableItemMock->expects($this->once())
             ->method('getQty')
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
 
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [
                         $prices,
@@ -139,7 +139,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                         $this->priceInfoMock
                     ],
                 ]
-            ));
+            );
         $this->assertEquals($this->priceInfoMock, $this->factory->create($this->saleableItemMock, []));
     }
 }

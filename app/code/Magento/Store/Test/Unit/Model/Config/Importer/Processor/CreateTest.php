@@ -24,47 +24,47 @@ use Magento\Store\Model\WebsiteFactory;
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DataDifferenceCalculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataDifferenceCalculator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteFactoryMock;
 
     /**
-     * @var GroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupFactoryMock;
 
     /**
-     * @var StoreFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractDbMock;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteMock;
 
     /**
-     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var Group|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
@@ -111,7 +111,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initTestData();
 
@@ -398,11 +398,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some error
      */
     public function testRunWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Some error');
+
         $data = [
             'websites' => [],
             'groups' => [],

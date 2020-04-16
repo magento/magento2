@@ -13,17 +13,17 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -32,7 +32,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_pathInfo = '/storeCode/node_one/';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_subjectMock = $this->createMock(\Magento\Store\App\Request\PathInfoProcessor::class);
@@ -49,8 +49,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('storeCode')
+        )->willReturn(
+            'storeCode'
         );
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
@@ -61,8 +61,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('store')
+        )->willReturn(
+            'store'
         );
         $this->_subjectMock->expects(
             $this->once()
@@ -71,8 +71,8 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->_requestMock,
             $this->_pathInfo
-        )->will(
-            $this->returnValue('Expected')
+        )->willReturn(
+            'Expected'
         );
         $this->assertEquals('Expected', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }

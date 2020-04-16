@@ -13,11 +13,11 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
     protected $_serverAddress;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     protected $_request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_request = $this->getMockBuilder(
             \Magento\Framework\App\Request\Http::class
@@ -43,8 +43,8 @@ class ServerAddressTest extends \PHPUnit\Framework\TestCase
             'getServer'
         )->with(
             'SERVER_ADDR'
-        )->will(
-            $this->returnValue($serverVar)
+        )->willReturn(
+            $serverVar
         );
         $this->assertEquals($expected, $this->_serverAddress->getServerAddress($ipToLong));
     }

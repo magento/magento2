@@ -12,7 +12,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
@@ -26,7 +26,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $testData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
@@ -60,7 +60,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->will($this->returnValue($url));
+            ->with(['_type' => $type])->willReturn($url);
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);

@@ -27,7 +27,7 @@ class ExportCouponsCsvTest extends TestCase
     private $controller;
 
     /**
-     * @var FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
@@ -37,14 +37,14 @@ class ExportCouponsCsvTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
      * Setup environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileFactoryMock = $this->createMock(FileFactory::class);
@@ -67,7 +67,7 @@ class ExportCouponsCsvTest extends TestCase
         $fileName = 'coupon_codes.csv';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $contentMock = $this->createPartialMock(AbstractBlock::class, ['getCsvFile']);
         $this->resultFactoryMock
             ->expects($this->once())

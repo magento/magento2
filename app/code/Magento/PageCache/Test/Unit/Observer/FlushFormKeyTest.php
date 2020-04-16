@@ -17,17 +17,17 @@ class FlushFormKeyTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        /** @var CookieFormKey | \PHPUnit_Framework_MockObject_MockObject $cookieFormKey */
+        /** @var CookieFormKey | \PHPUnit\Framework\MockObject\MockObject $cookieFormKey */
         $cookieFormKey = $this->getMockBuilder(CookieFormKey::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var DataFormKey | \PHPUnit_Framework_MockObject_MockObject $dataFormKey */
+        /** @var DataFormKey | \PHPUnit\Framework\MockObject\MockObject $dataFormKey */
         $dataFormKey = $this->getMockBuilder(DataFormKey::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Observer | \PHPUnit_Framework_MockObject_MockObject $observerObject */
+        /** @var Observer | \PHPUnit\Framework\MockObject\MockObject $observerObject */
         $observerObject = $this->createMock(Observer::class);
         $observer = new FlushFormKey($cookieFormKey, $dataFormKey);
 

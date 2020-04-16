@@ -100,10 +100,10 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->newsletterData = $this->createMock(Data::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->transportBuilder = $this->createPartialMock(
             TransportBuilder::class,
             [
@@ -115,7 +115,7 @@ class SubscriberTest extends TestCase
                 'getTransport'
             ]
         );
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->customerSession = $this->createPartialMock(
             Session::class,
             [
@@ -124,9 +124,9 @@ class SubscriberTest extends TestCase
                 'getCustomerId'
             ]
         );
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
-        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
-        $this->inlineTranslation = $this->createMock(StateInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerAccountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
+        $this->inlineTranslation = $this->getMockForAbstractClass(StateInterface::class);
         $this->resource = $this->createPartialMock(
             \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
             [
@@ -234,11 +234,12 @@ class SubscriberTest extends TestCase
     /**
      * Test to try unsubscribe customer from newsletters with wrong confirmation code
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
     public function testUnsubscribeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This is an invalid subscription confirmation code.');
+
         $this->subscriber->setCode(111);
         $this->subscriber->setCheckCode(222);
 
@@ -306,7 +307,7 @@ class SubscriberTest extends TestCase
             'email' => 'subscriber_email@example.com',
             'name' => 'Subscriber Name',
         ];
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $this->newsletterData->expects($this->once())
             ->method('getConfirmationUrl')
@@ -386,7 +387,7 @@ class SubscriberTest extends TestCase
             ->method('addTo')
             ->with($this->subscriber->getEmail(), $this->subscriber->getName())
             ->willReturnSelf();
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
         $transport->expects($this->once())->method('sendMessage')->willReturnSelf();
         $this->transportBuilder->expects($this->once())->method('getTransport')->willReturn($transport);
         $this->inlineTranslation->expects($this->once())->method('suspend')->willReturnSelf();

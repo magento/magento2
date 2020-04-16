@@ -66,9 +66,9 @@ class StorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->getMediaAssetByPath = $this->createMock(GetByPathInterface::class);
-        $this->deleteMediaAssetByPath = $this->createMock(DeleteByPathInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->getMediaAssetByPath = $this->getMockForAbstractClass(GetByPathInterface::class);
+        $this->deleteMediaAssetByPath = $this->getMockForAbstractClass(DeleteByPathInterface::class);
         $this->deleteMediaAssetByDirectoryPath = $this->createMock(DeleteByDirectoryPath::class);
         $this->filesystem = $this->createMock(Filesystem::class);
 
@@ -95,7 +95,7 @@ class StorageTest extends TestCase
         $storageSubject = $this->getMockBuilder(StorageSubject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryRead = $this->createMock(ReadInterface::class);
+        $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->willReturn($directoryRead);

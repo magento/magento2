@@ -38,71 +38,71 @@ class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productBuilderMock;
 
     /**
-     * @var JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeSetRepositoryMock;
 
     /**
-     * @var AttributeSetInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeSetInterfaceMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|\PHPUnit\Framework\MockObject\MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var AttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupRepositoryMock;
 
     /**
-     * @var AttributeGroupSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupSearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupSearchResultsMock;
 
     /**
-     * @var AttributeGroupInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupInterfaceFactoryMock;
 
     /**
-     * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeGroupInterfaceMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(Context::class)

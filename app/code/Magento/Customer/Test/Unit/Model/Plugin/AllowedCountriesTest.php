@@ -14,24 +14,24 @@ use Magento\Store\Model\StoreManagerInterface;
 class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Config\Share | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Config\Share | \PHPUnit\Framework\MockObject\MockObject
      */
     private $shareConfig;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /** @var  AllowedCountries */
     private $plugin;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->shareConfig = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->plugin = new AllowedCountries($this->shareConfig, $this->storeManager);
     }
@@ -47,7 +47,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
         $originalAllowedCountriesMock = $this->getMockBuilder(\Magento\Directory\Model\AllowedCountries::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->once())
             ->method('getId')
             ->willReturn($expectedFilter);

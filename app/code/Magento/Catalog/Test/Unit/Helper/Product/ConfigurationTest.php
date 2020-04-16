@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product;
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 
@@ -17,7 +17,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $optionFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\OptionFactory::class);
@@ -55,12 +55,12 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         $additionalOptionMock->expects($this->once())->method('getValue');
 
         $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
-        $itemMock->expects($this->any())->method('getOptionByCode')->will($this->returnValueMap(
+        $itemMock->expects($this->any())->method('getOptionByCode')->willReturnMap(
             [
                 ['option_ids', $optionMock],
                 ['additional_options', $additionalOptionMock]
             ]
-        ));
+        );
 
         $this->assertEquals($additionalOptionResult, $this->helper->getCustomOptions($itemMock));
     }

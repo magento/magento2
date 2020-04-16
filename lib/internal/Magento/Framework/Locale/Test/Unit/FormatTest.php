@@ -17,29 +17,29 @@ class FormatTest extends \PHPUnit\Framework\TestCase
     protected $formatModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface
      */
     protected $localeResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ScopeInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ScopeInterface
      */
     protected $scope;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ScopeResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ScopeResolverInterface
      */
     protected $scopeResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Directory\Model\Currency
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Directory\Model\Currency
      */
     protected $currency;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->disableOriginalConstructor()
@@ -57,7 +57,7 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->getMock();
 
-        /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject $currencyFactory */
+        /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit\Framework\MockObject\MockObject $currencyFactory */
         $currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

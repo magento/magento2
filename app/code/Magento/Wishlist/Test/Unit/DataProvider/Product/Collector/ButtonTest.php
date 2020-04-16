@@ -32,7 +32,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     /** @var ButtonInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $buttonInterfaceFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRenderExtensionFactoryMock = $this->getMockBuilder(ProductRenderExtensionFactory::class)
             ->disableOriginalConstructor()

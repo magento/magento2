@@ -25,7 +25,7 @@ use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify reorder class.
@@ -118,12 +118,12 @@ class ReorderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderId = 111;
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
@@ -310,7 +310,7 @@ class ReorderTest extends TestCase
             ->method('get')
             ->with(Quote::class)
             ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
     }
 
     /**
@@ -421,7 +421,7 @@ class ReorderTest extends TestCase
         $this->quoteSessionMock->expects($this->once())
             ->method('setUseOldShippingMethod')
             ->with(true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with(Create::class)

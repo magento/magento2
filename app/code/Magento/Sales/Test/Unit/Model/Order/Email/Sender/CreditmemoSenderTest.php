@@ -38,7 +38,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
      */
     protected $creditmemoResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
@@ -62,10 +62,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
         );
         $this->creditmemoMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
         $this->creditmemoMock->method('getId')
             ->willReturn(self::CREDITMEMO_ID);
         $this->orderMock->method('getId')
@@ -77,7 +77,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->sender = new CreditmemoSender(
             $this->templateContainerMock,

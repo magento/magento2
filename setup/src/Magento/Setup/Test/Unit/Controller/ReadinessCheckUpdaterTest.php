@@ -15,7 +15,7 @@ class ReadinessCheckUpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->controller = new ReadinessCheckUpdater();
     }

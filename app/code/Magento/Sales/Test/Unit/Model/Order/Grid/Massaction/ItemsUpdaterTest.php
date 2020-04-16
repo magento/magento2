@@ -14,11 +14,11 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
     protected $itemUpdater;
 
     /**
-     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorizationMock = $this->createMock(\Magento\Framework\Authorization::class);
         $this->itemUpdater = new \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater(

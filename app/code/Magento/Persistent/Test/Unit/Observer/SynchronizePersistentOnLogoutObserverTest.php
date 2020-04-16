@@ -15,31 +15,31 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit\Framework\TestC
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
         $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
@@ -56,19 +56,19 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit\Framework\TestC
 
     public function testSynchronizePersistentOnLogoutWhenPersistentDataNotEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->sessionFactoryMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
 
     public function testSynchronizePersistentOnLogoutWhenPersistentDataIsEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('getClearOnLogout')->will($this->returnValue(true));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->helperMock->expects($this->once())->method('getClearOnLogout')->willReturn(true);
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('removePersistentCookie');
         $this->sessionHelperMock->expects($this->once())->method('setSession')->with(null);
         $this->model->execute($this->observerMock);

@@ -17,7 +17,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 class PlaceOrderDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderManagement;
 
@@ -29,7 +29,7 @@ class PlaceOrderDefaultTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
 

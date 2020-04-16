@@ -13,7 +13,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $maintenanceMode;
 
@@ -24,7 +24,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->controller = new Maintenance($this->maintenanceMode);

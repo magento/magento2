@@ -12,17 +12,17 @@ use Magento\Framework\View\Element\Template\Context;
 class LinksTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerHelper;
 
-    /** @var Links|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Links|\PHPUnit\Framework\MockObject\MockObject */
     protected $block;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 

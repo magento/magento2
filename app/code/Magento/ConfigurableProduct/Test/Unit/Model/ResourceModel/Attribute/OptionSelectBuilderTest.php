@@ -30,36 +30,36 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 
     /**
-     * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeOptionProviderMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttributeMock;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['select', 'getIfNullSql'])
@@ -119,8 +119,8 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeResourceMock->expects($this->exactly(9))
             ->method('getTable')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
@@ -131,7 +131,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
                         ['eav_attribute_option', 'eav_attribute_option value'],
                         ['eav_attribute_option_value', 'eav_attribute_option_value value']
                     ]
-                )
+                
             );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())
@@ -163,8 +163,8 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeResourceMock->expects($this->exactly(7))
             ->method('getTable')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
@@ -174,7 +174,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
                         ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
                         ['eav_attribute_option', 'eav_attribute_option value']
                     ]
-                )
+                
             );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())

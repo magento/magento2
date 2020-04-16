@@ -12,7 +12,7 @@ use \Magento\Setup\Controller\ResponseTypeInterface;
 class SelectVersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Model\SystemPackage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\SystemPackage|\PHPUnit\Framework\MockObject\MockObject
      */
     private $systemPackage;
 
@@ -23,7 +23,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->systemPackage = $this->createMock(\Magento\Setup\Model\SystemPackage::class);
         $this->controller = new SelectVersion(

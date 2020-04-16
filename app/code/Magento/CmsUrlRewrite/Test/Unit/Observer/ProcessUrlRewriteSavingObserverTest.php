@@ -25,27 +25,27 @@ class ProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlPersistMock;
 
     /**
-     * @var CmsPageUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CmsPageUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cmsPageUrlRewriteGeneratorMock;
 
     /**
-     * @var EventObserver|\PHPUnit_Framework_MockObject_MockObject
+     * @var EventObserver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserverMock;
 
     /**
-     * @var Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageMock;
 
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventMock;
 
@@ -57,7 +57,7 @@ class ProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

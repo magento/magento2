@@ -34,24 +34,24 @@ class MetadataProviderTest extends TestCase
     private $model;
 
     /**
-     * @var Filter | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
      */
     private $filter;
 
     /**
-     * @var TimezoneInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDate;
 
     /**
-     * @var ResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(Filter::class)
                              ->disableOriginalConstructor()
@@ -59,11 +59,11 @@ class MetadataProviderTest extends TestCase
 
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
                                  ->disableOriginalConstructor()
-                                 ->getMock();
+                                 ->getMockForAbstractClass();
 
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
                                      ->disableOriginalConstructor()
-                                     ->getMock();
+                                     ->getMockForAbstractClass();
 
         $this->localeResolver->expects($this->any())
                              ->method('getLocale')
@@ -96,7 +96,7 @@ class MetadataProviderTest extends TestCase
 
         $component = $this->prepareColumns($componentName, $columnName, $columnLabels[0]);
         $result = $this->model->getHeaders($component);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
     }
@@ -125,7 +125,7 @@ class MetadataProviderTest extends TestCase
         $component = $this->prepareColumns($componentName, $columnName, $columnLabel);
 
         $result = $this->model->getFields($component);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($columnName, $result[0]);
     }
@@ -137,7 +137,7 @@ class MetadataProviderTest extends TestCase
      * @param string $columnActionsName
      * @param string $columnActionsLabel
      *
-     * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareColumns(
         $componentName,
@@ -146,20 +146,20 @@ class MetadataProviderTest extends TestCase
         $columnActionsName = 'actions_name',
         $columnActionsLabel = 'actions_label'
     ) {
-        /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
+        /** @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject $component */
         $component = $this->getMockBuilder(UiComponentInterface::class)
                           ->getMockForAbstractClass();
 
-        /** @var Columns|\PHPUnit_Framework_MockObject_MockObject $columns */
+        /** @var Columns|\PHPUnit\Framework\MockObject\MockObject $columns */
         $columns = $this->getMockBuilder(Columns::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 
-        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(Column::class)
                        ->disableOriginalConstructor()
                        ->getMock();
-        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $columnActions */
+        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $columnActions */
         $columnActions = $this->getMockBuilder(Column::class)
                               ->disableOriginalConstructor()
                               ->getMock();
@@ -212,7 +212,7 @@ class MetadataProviderTest extends TestCase
      */
     public function testGetRowData($key, $fields, $options, $expected)
     {
-        /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
+        /** @var DocumentInterface|\PHPUnit\Framework\MockObject\MockObject $document */
         $document = $this->getMockBuilder(DocumentInterface::class)
                          ->getMockForAbstractClass();
 
@@ -229,7 +229,7 @@ class MetadataProviderTest extends TestCase
                   ->willReturn($key);
 
         $result = $this->model->getRowData($document, $fields, $options);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals($expected, $result);
     }
@@ -293,7 +293,7 @@ class MetadataProviderTest extends TestCase
                      ->willReturn($component);
 
         $result = $this->model->getOptions();
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount(2, $result);
         $this->assertEquals($expected, $result);
     }
@@ -304,11 +304,11 @@ class MetadataProviderTest extends TestCase
      *
      * @param array $columnsOptions
      *
-     * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareColumnsWithOptions(string $filter, array $filterOptions, array $columnsOptions)
     {
-        /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
+        /** @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject $component */
         $component = $this->getMockBuilder(UiComponentInterface::class)
                           ->getMockForAbstractClass();
 
@@ -319,16 +319,16 @@ class MetadataProviderTest extends TestCase
                         ->disableOriginalConstructor()
                         ->getMock();
 
-        /** @var Columns|\PHPUnit_Framework_MockObject_MockObject $columns */
+        /** @var Columns|\PHPUnit\Framework\MockObject\MockObject $columns */
         $columns = $this->getMockBuilder(Columns::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 
-        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(Column::class)
                        ->disableOriginalConstructor()
                        ->getMock();
-        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $columnActions */
+        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $columnActions */
         $columnActions = $this->getMockBuilder(Column::class)
                               ->disableOriginalConstructor()
                               ->getMock();
@@ -508,7 +508,7 @@ class MetadataProviderTest extends TestCase
     public function testConvertDate($fieldValue, $expected)
     {
         $componentName = 'component_name';
-        /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
+        /** @var DocumentInterface|\PHPUnit\Framework\MockObject\MockObject $document */
         $document = $this->getMockBuilder(DataObject::class)
                          ->disableOriginalConstructor()
                          ->getMock();

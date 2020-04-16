@@ -107,15 +107,15 @@ class QueryFactoryTest extends TestCase
 
         $this->assemblerMock = $this->getMockBuilder(AssemblerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->queryCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->selectHydratorMock = $this->getMockBuilder(SelectHydrator::class)
             ->disableOriginalConstructor()

@@ -13,27 +13,27 @@ use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
 class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\Product\PriceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $bundleProductPriceFactory;
 
     /**
-     * @var \Magento\Framework\Json\Encoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Encoder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonEncoder;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $catalogProduct;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
@@ -42,7 +42,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     private $bundleBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -285,7 +285,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @param \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject $priceInfo
+     * @param \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject $priceInfo
      * @param string $priceType
      * @return void
      */
@@ -328,12 +328,12 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($priceType);
         $this->jsonEncoder->expects($this->any())
             ->method('encode')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
     }
 
     /**
      * @param $price
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getPriceInfoMock($price)
     {
@@ -361,7 +361,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $prices
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getPriceMock($prices)
     {
@@ -386,7 +386,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      * @param float $value
      * @param mixed $baseAmount
      * @param array $selectionAmounts
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAmountPriceMock($value, $baseAmount, array $selectionAmounts)
     {
@@ -400,15 +400,15 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             $amountPrice->expects($this->any())
                 ->method('getOptionSelectionAmount')
                 ->with($selectionAmount['item'])
-                ->will(
-                    $this->returnValue(
+                ->willReturn(
+                    
                         new \Magento\Framework\DataObject(
                             [
                                 'value' => $selectionAmount['value'],
                                 'base_amount' => $selectionAmount['base_amount'],
                             ]
                         )
-                    )
+                    
                 );
         }
 
@@ -421,7 +421,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      * @param \Magento\Catalog\Model\Product[] $selections
      * @param int|string $type
      * @param bool $isRequired
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      * @internal param bool $isDefault
      */
     private function createOption(
@@ -460,7 +460,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      * @param bool $isCanChangeQty
      * @param bool $isDefault
      * @param bool $isSalable
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createOptionSelection(
         $id,

@@ -19,7 +19,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider as ModelDataProvider;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify data provider translation
@@ -61,7 +61,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appStateMock = $this->createMock(State::class);
         $this->configMock = $this->createMock(Config::class);
@@ -149,10 +149,11 @@ class DataProviderTest extends TestCase
      * @param array $config
      * @return void
      * @dataProvider configDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDataThrowingException(array $config): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $themePath = 'blank';
         $areaCode = 'adminhtml';
         $patterns = $config['patterns'];

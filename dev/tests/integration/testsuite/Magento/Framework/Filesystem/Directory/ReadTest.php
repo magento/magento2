@@ -280,7 +280,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         ];
         $result = $dir->stat($path);
         foreach ($expectedInfo as $key) {
-            $this->assertTrue(array_key_exists($key, $result));
+            $this->assertArrayHasKey($key, $result);
         }
     }
 

@@ -101,7 +101,7 @@ class ActionTest extends TestCase
      */
     private $productCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

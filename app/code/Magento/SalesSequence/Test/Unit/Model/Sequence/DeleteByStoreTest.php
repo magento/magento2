@@ -56,7 +56,7 @@ class DeleteByStoreTest extends TestCase
      */
     private $select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockForAbstractClass(
             AdapterInterface::class,

@@ -11,22 +11,22 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel;
 class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -35,11 +35,11 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $integrationResourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnValue($this->selectMock));
-        $this->selectMock->expects($this->any())->method('where')->will($this->returnValue($this->selectMock));
+        $this->selectMock->expects($this->any())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->any())->method('where')->willReturn($this->selectMock);
 
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);

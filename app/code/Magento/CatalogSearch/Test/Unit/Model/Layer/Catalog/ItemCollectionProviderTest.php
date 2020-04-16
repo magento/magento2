@@ -21,7 +21,7 @@ class ItemCollectionProviderTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create']
         );
-        $collectionFactoryMock->expects($this->any())->method('create')->will($this->returnValue($collectionMock));
+        $collectionFactoryMock->expects($this->any())->method('create')->willReturn($collectionMock);
 
         $objectManager = new ObjectManagerHelper($this);
         $provider = $objectManager->getObject(

@@ -27,19 +27,19 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     protected $resourceJobMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timezoneConverter;
 
     /**
-     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTimeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeFactory;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
@@ -50,7 +50,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceJobMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
 
         $this->timezoneConverter = $this->getMockBuilder(TimezoneInterface::class)
             ->setMethods(['date'])
@@ -157,11 +157,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @param string $cronExpression
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider setCronExprExceptionDataProvider
      */
     public function testSetCronExprException($cronExpression): void
     {
+        $this->expectException(\Magento\Framework\Exception\CronException::class);
+
         // 1. Create mocks
         /** @var Schedule $model */
         $model = $this->helper->getObject(Schedule::class);
@@ -360,11 +361,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @param string $cronExpressionPart
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider matchCronExpressionExceptionDataProvider
      */
     public function testMatchCronExpressionException($cronExpressionPart): void
     {
+        $this->expectException(\Magento\Framework\Exception\CronException::class);
+
         $dateTimePart = 10;
 
         // 1 Create mocks
@@ -454,7 +456,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
@@ -483,7 +485,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(

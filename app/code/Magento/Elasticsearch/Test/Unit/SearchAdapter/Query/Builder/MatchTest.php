@@ -49,7 +49,7 @@ class MatchTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
         $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
@@ -58,7 +58,7 @@ class MatchTest extends TestCase
         $this->fieldMapper->method('getFieldName')
             ->willReturnArgument(0);
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
-        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
+        $valueTransformerMock = $this->getMockForAbstractClass(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')

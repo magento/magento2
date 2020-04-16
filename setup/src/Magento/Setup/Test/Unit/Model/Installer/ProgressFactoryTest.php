@@ -21,7 +21,7 @@ class ProgressFactoryTest extends \PHPUnit\Framework\TestCase
             'Output from C...',
         ];
         $logger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
-        $logger->expects($this->once())->method('get')->will($this->returnValue($contents));
+        $logger->expects($this->once())->method('get')->willReturn($contents);
 
         $progressFactory = new ProgressFactory();
         $progress = $progressFactory->createFromLog($logger);

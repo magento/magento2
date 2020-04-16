@@ -15,14 +15,14 @@ use PHPUnit\Framework\TestCase;
 class ShippingMethodFormatterTest extends TestCase
 {
     /**
-     * @var ShippingMethodFormatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingMethodFormatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodFormatter;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->shippingMethodFormatter = $objectManager->getObject(ShippingMethodFormatter::class);

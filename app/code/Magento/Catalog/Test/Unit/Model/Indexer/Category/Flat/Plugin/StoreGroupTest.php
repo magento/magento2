@@ -16,12 +16,12 @@ use Magento\Store\Model\ResourceModel\Group;
 class StoreGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     * @var \PHPUnit\Framework\MockObject\MockObject|State
      */
     protected $stateMock;
 
@@ -31,21 +31,21 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Group
+     * @var \PHPUnit\Framework\MockObject\MockObject|Group
      */
     protected $subjectMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|GroupModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|GroupModel
      */
     protected $groupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,

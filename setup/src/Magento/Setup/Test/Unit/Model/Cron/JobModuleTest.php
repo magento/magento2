@@ -23,7 +23,7 @@ class JobModuleTest extends \PHPUnit\Framework\TestCase
             [\Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
             [\Magento\Framework\App\Cache::class, $cache],
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $command = $this->createMock(\Magento\Setup\Console\Command\ModuleDisableCommand::class);
         $command->expects($this->once())->method('run');
@@ -57,7 +57,7 @@ class JobModuleTest extends \PHPUnit\Framework\TestCase
             [\Magento\Framework\App\State\CleanupFiles::class, $cleanupFiles],
             [\Magento\Framework\App\Cache::class, $cache],
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $command = $this->createMock(\Magento\Setup\Console\Command\ModuleEnableCommand::class);
         $command->expects($this->once())->method('run');

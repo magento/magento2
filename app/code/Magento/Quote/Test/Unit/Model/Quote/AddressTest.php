@@ -43,81 +43,81 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     private $address;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit\Framework\MockObject\MockObject
      */
     private $quote;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeList;
 
     /**
-     * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var RateRequestFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateRequestFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestFactory;
 
     /**
-     * @var RateFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRateFactory;
 
     /**
-     * @var RateCollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollectionFactory;
 
     /**
-     * @var RateCollectorInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectorInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollector;
 
     /**
-     * @var RateCollectorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectorInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateCollection;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $itemCollectionFactory;
 
     /**
-     * @var RegionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RegionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $regionFactory;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var WebsiteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var Region | \PHPUnit_Framework_MockObject_MockObject
+     * @var Region | \PHPUnit\Framework\MockObject\MockObject
      */
     private $region;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -159,7 +159,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
@@ -168,7 +168,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->attributeList = $this->createMock(
             \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class

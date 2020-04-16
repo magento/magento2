@@ -17,36 +17,36 @@ class RelationTest extends \PHPUnit\Framework\TestCase
     protected $relationProcessor;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceItemResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceCommentResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceItemMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceCommentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->invoiceItemResourceMock = $this->getMockBuilder(
             \Magento\Sales\Model\ResourceModel\Order\Invoice\Item::class

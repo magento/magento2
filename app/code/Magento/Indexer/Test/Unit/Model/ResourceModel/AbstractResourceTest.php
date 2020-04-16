@@ -13,16 +13,16 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_tableStrategyInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceMock = $this->getMockBuilder(
             \Magento\Framework\App\ResourceConnection::class
@@ -52,7 +52,7 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $this->_tableStrategyInterface->expects($this->once())
             ->method('prepareTableName')
             ->with('test')
-            ->will($this->returnValue('test_idx'));
+            ->willReturn('test_idx');
         $this->model->reindexAll();
         $this->assertEquals('test_idx', $this->model->getIdxTable('test'));
     }
@@ -60,8 +60,8 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     public function testClearTemporaryIndexTable()
     {
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $connectionMock->expects($this->once())->method('delete')->will($this->returnSelf());
+        $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $connectionMock->expects($this->once())->method('delete')->willReturnSelf();
         $this->model->clearTemporaryIndexTable();
     }
 
@@ -74,17 +74,17 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
-        $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
 
         $selectMock->expects($this->once())->method('insertFromSelect')->with(
             $resultTable,
             $resultColumns
-        )->will($this->returnSelf());
+        )->willReturnSelf();
 
-        $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
+        $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $this->assertInstanceOf(
             \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
@@ -93,16 +93,17 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testSyncDataException()
     {
+        $this->expectException(\Exception::class);
+
         $describeTable = ['column' => 'column'];
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
+        $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
         $connectionMock->expects($this->any())->method('select')->will($this->throwException(new \Exception()));
-        $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
+        $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $connectionMock->expects($this->once())->method('rollback');
         $this->model->syncData();
     }
@@ -123,40 +124,40 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($tableColumns));
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $connectionMock->expects($this->any())->method('describeTable')->willReturn($tableColumns);
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
 
         if ($readToIndex) {
             $connectionCustomMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
                 ->setMethods(['describeTable', 'query', 'select', 'insertArray'])
                 ->getMockForAbstractClass();
             $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
-            $connectionCustomMock->expects($this->any())->method('query')->will($this->returnValue($selectMock));
-            $connectionCustomMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-            $connectionCustomMock->expects($this->any())->method('describeTable')->will(
-                $this->returnValue($tableColumns)
+            $connectionCustomMock->expects($this->any())->method('query')->willReturn($selectMock);
+            $connectionCustomMock->expects($this->any())->method('select')->willReturn($selectMock);
+            $connectionCustomMock->expects($this->any())->method('describeTable')->willReturn(
+                $tableColumns
             );
             $connectionCustomMock->expects($this->any())->method('insertArray')->with(
                 $destTable,
                 $resultColumns
-            )->will($this->returnValue(1));
-            $connectionMock->expects($this->any())->method('query')->will($this->returnValue($pdoMock));
-            $pdoMock->expects($this->any())->method('fetch')->will($this->returnValue([$tableColumns]));
+            )->willReturn(1);
+            $connectionMock->expects($this->any())->method('query')->willReturn($pdoMock);
+            $pdoMock->expects($this->any())->method('fetch')->willReturn([$tableColumns]);
 
             $this->model->newIndexAdapter();
-            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
-                $this->returnValue($connectionMock)
+            $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn(
+                $connectionMock
             );
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,
                 $resultColumns
-            )->will($this->returnSelf());
+            )->willReturnSelf();
 
-            $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
-                $this->returnValue($connectionMock)
+            $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
+            $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn(
+                $connectionMock
             );
         }
         $this->assertInstanceOf(

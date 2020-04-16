@@ -81,20 +81,20 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getByAttributeCode', 'getByAttribute'])
@@ -105,7 +105,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->categoryList = $this->getMockBuilder(CategoryListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->categoryCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
@@ -184,8 +184,8 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
 
         $this->fieldNameResolver->expects($this->any())
             ->method('getFieldName')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($attribute) use ($categoryId) {
                         static $callCount = [];
                         $attributeCode = $attribute->getAttributeCode();
@@ -201,7 +201,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                             return 'price_' . $categoryId . '_1';
                         }
                     }
-                )
+                
             );
         $priceAttributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
@@ -219,8 +219,8 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($code) use (
                         $categoryAttributeMock,
                         $positionAttributeMock,
@@ -237,13 +237,13 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                             return $priceAttributeMock;
                         }
                     }
-                )
+                
             );
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
             ->with($this->anything())
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($type) use ($complexType) {
                         static $callCount = [];
                         $callCount[$type] = !isset($callCount[$type]) ? 1 : ++$callCount[$type];
@@ -258,7 +258,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                             return $complexType;
                         }
                     }
-                )
+                
             );
 
         $this->assertEquals(

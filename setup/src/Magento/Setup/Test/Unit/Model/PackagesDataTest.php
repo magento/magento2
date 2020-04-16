@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use Composer\Package\RootPackage;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
@@ -52,7 +52,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
      */
     private $typeMapper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerInformation = $this->getComposerInformation();
         $this->timeZoneProvider = $this->getMockBuilder(\Magento\Setup\Model\DateTime\TimeZoneProvider::class)
@@ -110,10 +110,10 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
 
         $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $directoryRead = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($directoryRead);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
         $directoryWrite->expects($this->any())->method('isReadable')->willReturn(true);
         $directoryWrite->expects($this->any())->method('delete')->willReturn(true);
@@ -224,19 +224,20 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('date', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('time', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('packages', $latestData);
-        $this->assertSame(3, count($latestData['packages']));
+        $this->assertCount(3, $latestData['packages']);
         $this->assertSame(3, $latestData['countOfUpdate']);
         $this->assertArrayHasKey('installPackages', $latestData);
-        $this->assertSame(1, count($latestData['installPackages']));
+        $this->assertCount(1, $latestData['installPackages']);
         $this->assertSame(1, $latestData['countOfInstall']);
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Couldn't get available versions for package partner/package-4
      */
     public function testGetPackagesForUpdateWithException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Couldn\'t get available versions for package partner/package-4');
+
         $requiredPackages = [
             'partner/package-4' => '4.0.4',
         ];
@@ -260,7 +261,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('repo1');
         $this->createPackagesData();
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(2, count($packages));
+        $this->assertCount(2, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
         $firstPackage = array_values($packages)[0];
@@ -271,7 +272,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetPackagesForUpdate()
     {
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(3, count($packages));
+        $this->assertCount(3, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('magento/package-2', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
@@ -283,7 +284,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetInstalledPackages()
     {
         $installedPackages = $this->packagesData->getInstalledPackages();
-        $this->assertEquals(3, count($installedPackages));
+        $this->assertCount(3, $installedPackages);
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
         $this->assertArrayHasKey('partner/package-3', $installedPackages);

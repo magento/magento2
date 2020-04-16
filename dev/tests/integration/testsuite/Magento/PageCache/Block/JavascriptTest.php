@@ -21,7 +21,7 @@ class JavascriptTest extends \PHPUnit\Framework\TestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

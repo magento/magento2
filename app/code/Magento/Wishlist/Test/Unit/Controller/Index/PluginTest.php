@@ -48,7 +48,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
@@ -76,7 +76,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->customerSession,
@@ -103,10 +103,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testBeforeDispatch()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         $refererUrl = 'http://referer-url.com';
         $params = [
             'product' => 1,

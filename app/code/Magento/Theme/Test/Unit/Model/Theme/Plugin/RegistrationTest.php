@@ -56,11 +56,11 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeRegistrationMock = $this->createMock(ThemeRegistration::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
-        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->appStateMock = $this->createMock(State::class);
         $this->themeCollectionMock = $this->createMock(ThemeCollection::class);
         $this->themeLoaderMock = $this->createMock(ThemeCollectionResourceModel::class);

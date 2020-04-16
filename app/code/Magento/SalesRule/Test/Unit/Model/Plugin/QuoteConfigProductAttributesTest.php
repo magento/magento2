@@ -9,16 +9,16 @@ namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $plugin;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->ruleResource = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Rule::class);
@@ -39,12 +39,12 @@ class QuoteConfigProductAttributesTest extends \PHPUnit\Framework\TestCase
 
         $this->ruleResource->expects($this->once())
             ->method('getActiveAttributes')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     [
                         ['attribute_code' => $attributeCode, 'enabled' => true],
                     ]
-                )
+                
             );
 
         $this->assertEquals($expected, $this->plugin->afterGetProductAttributes($subject, []));

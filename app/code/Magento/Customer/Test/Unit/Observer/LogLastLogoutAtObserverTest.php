@@ -21,14 +21,14 @@ class LogLastLogoutAtObserverTest extends \PHPUnit\Framework\TestCase
     protected $logLastLogoutAtObserver;
 
     /**
-     * @var Logger | \PHPUnit_Framework_MockObject_MockObject
+     * @var Logger | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(\Magento\Customer\Model\Logger::class);
         $this->logLastLogoutAtObserver = new LogLastLogoutAtObserver($this->loggerMock);

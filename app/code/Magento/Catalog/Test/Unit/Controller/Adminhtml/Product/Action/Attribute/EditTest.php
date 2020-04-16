@@ -14,28 +14,28 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save */
     private $object;
 
-    /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     private $attributeHelper;
 
-    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $resultRedirectFactory;
 
-    /** @var \Magento\Ui\Component\MassAction\Filter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Ui\Component\MassAction\Filter|\PHPUnit\Framework\MockObject\MockObject */
     private $filter;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $collectionFactory;
 
-    /** @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject */
     private $resultPage;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class)
             ->setMethods(['getProductIds', 'setProductIds'])

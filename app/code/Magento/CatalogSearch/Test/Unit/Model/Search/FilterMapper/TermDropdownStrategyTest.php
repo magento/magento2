@@ -25,7 +25,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
@@ -35,16 +35,16 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     private $termDropdownStrategy;
 
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolver;
 
     /**
-     * SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(EavConfig::class);

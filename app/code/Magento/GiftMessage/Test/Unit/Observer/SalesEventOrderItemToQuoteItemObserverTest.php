@@ -91,7 +91,7 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
     /**
      * Prepare environment for test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()

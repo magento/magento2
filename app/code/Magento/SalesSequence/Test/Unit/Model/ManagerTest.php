@@ -11,12 +11,12 @@ namespace Magento\SalesSequence\Test\Unit\Model;
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceSequenceMeta;
 
     /**
-     * @var \Magento\SalesSequence\Model\SequenceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\SequenceFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $sequenceFactory;
 
@@ -26,24 +26,24 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $sequenceManager;
 
     /**
-     * @var \Magento\Store\Model\Store | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store | \PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit\Framework\MockObject\MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\Framework\DB\Sequence\SequenceInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Sequence\SequenceInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $sequence;
 
     /**
      *  Initialization
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequence = $this->getMockForAbstractClass(

@@ -25,17 +25,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $pool;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
@@ -47,7 +47,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pool = new Pool(
             [
@@ -80,7 +80,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo('RegularPrice'),
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
         //Calling the get method again with the same code, cached copy should be used
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
@@ -98,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($this->pool->current()),
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->current());
     }
 }

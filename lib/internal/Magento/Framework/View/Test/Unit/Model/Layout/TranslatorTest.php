@@ -15,7 +15,7 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
@@ -24,7 +24,7 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_xmlDocument;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $string = <<<XML
 <?xml version='1.0'?>

@@ -7,12 +7,12 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\Framework\Profiler::enable();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Profiler::reset();
     }
@@ -39,9 +39,9 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         // Cache frontend setup
         $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $frontendMock->expects($this->any())->method('getBackend')->will($this->returnValue($cacheBackend));
+        $frontendMock->expects($this->any())->method('getBackend')->willReturn($cacheBackend);
 
-        $frontendMock->expects($this->any())->method('getLowLevelFrontend')->will($this->returnValue($cacheFrontend));
+        $frontendMock->expects($this->any())->method('getLowLevelFrontend')->willReturn($cacheFrontend);
 
         // Profiler setup
         $driver = $this->createMock(\Magento\Framework\Profiler\DriverInterface::class);

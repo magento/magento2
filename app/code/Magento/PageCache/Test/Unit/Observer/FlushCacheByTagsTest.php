@@ -45,7 +45,7 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->fullPageCacheMock = $this->createPartialMock(Type::class, ['clean']);

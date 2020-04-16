@@ -22,7 +22,7 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-    protected function setup()
+    protected function setup(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $methodsMapProcessor = $objectManager->getObject(
@@ -32,7 +32,7 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
                 'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

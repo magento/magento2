@@ -15,7 +15,7 @@ class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
      */
     private $entitySpecificHandlesList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->entitySpecificHandlesList = $objectManager->getObject(EntitySpecificHandlesList::class);

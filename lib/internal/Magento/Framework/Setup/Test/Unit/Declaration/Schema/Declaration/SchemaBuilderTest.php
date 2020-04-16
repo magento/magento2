@@ -40,31 +40,31 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ElementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementFactoryMock;
 
     /**
-     * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var BooleanUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     private $booleanUtilsMock;
 
     /**
-     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sharding|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shardingMock;
 
     /**
-     * @var ValidationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationComposite|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationCompositeMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()

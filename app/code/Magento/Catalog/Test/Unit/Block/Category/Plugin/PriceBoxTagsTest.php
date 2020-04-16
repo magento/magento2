@@ -12,32 +12,32 @@ namespace Magento\Catalog\Test\Unit\Block\Category\Plugin;
 class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrencyInterface;
 
     /**
-     * @var \Magento\Directory\Model\Currency | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency | \PHPUnit\Framework\MockObject\MockObject
      */
     private $currency;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $timezoneInterface;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolverInterface;
 
     /**
-     * @var \Magento\Customer\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
     /**
-     * @var \Magento\Tax\Model\Calculation | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Model\Calculation | \PHPUnit\Framework\MockObject\MockObject
      */
     private $taxCalculation;
 
@@ -46,7 +46,7 @@ class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
      */
     private $priceBoxTags;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyInterface = $this->getMockBuilder(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class

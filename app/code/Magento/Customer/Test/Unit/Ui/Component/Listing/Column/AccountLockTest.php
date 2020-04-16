@@ -18,7 +18,7 @@ class AccountLockTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\View\Element\UiComponentFactory */
     protected $uiComponentFactory;
 
-    public function setup()
+    protected function setup(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();

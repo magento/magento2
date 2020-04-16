@@ -16,26 +16,26 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\ObjectManager\Config\Reader\DomFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\Config\Reader\DomFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\Config\Reader\Dom|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\Config\Reader\Dom|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
 
@@ -44,7 +44,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->readerFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->readerMock));
+            ->willReturn($this->readerMock);
 
         $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
 
@@ -57,7 +57,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'serializer',
@@ -77,7 +77,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with($area . '::DiConfig')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->cacheMock->expects($this->once())
             ->method('save')
@@ -85,7 +85,7 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())
             ->method('read')
             ->with($area)
-            ->will($this->returnValue($configData));
+            ->willReturn($configData);
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')

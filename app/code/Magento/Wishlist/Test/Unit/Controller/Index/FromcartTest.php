@@ -85,7 +85,7 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
      */
     protected $formKeyValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->prepareContext();
 
@@ -139,11 +139,12 @@ class FromcartTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found
      */
     public function testExecutePageNotFound()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Page not found');
+
         $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)

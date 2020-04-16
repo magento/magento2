@@ -76,12 +76,12 @@ class RouterTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->actionFactory = $this->createMock(ActionFactory::class);
-        $this->url = $this->createMock(UrlInterface::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->response = $this->createPartialMock(
             ResponseInterface::class,
             ['setRedirect', 'sendResponse']
@@ -90,7 +90,7 @@ class RouterTest extends TestCase
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->request->method('getQuery')->willReturn($this->requestQuery);
-        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
+        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
         $this->store = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()->getMock();

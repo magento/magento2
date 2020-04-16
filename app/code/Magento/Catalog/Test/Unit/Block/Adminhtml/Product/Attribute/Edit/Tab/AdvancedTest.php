@@ -73,13 +73,13 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->yesNo = $this->createMock(Yesno::class);
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->eavData = $this->createMock(EavHelper::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->propertyLocker = $this->createMock(PropertyLocker::class);
@@ -126,7 +126,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
         );
         $entityType = $this->createMock(EntityType::class);
         $formElement = $this->createPartialMock(Text::class, ['setDisabled']);
-        $directoryReadInterface = $this->createMock(ReadInterface::class);
+        $directoryReadInterface = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->registry->expects($this->any())->method('registry')->with('entity_attribute')
             ->willReturn($attributeModel);

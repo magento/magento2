@@ -8,22 +8,22 @@ namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_paypalConfigFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_registry;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_productTypeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_paymentData;
 
     /** @var \Magento\Paypal\Helper\Shortcut\Validator */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paypalConfigFactory = $this->createPartialMock(\Magento\Paypal\Model\ConfigFactory::class, ['create']);
         $this->_productTypeConfig = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
@@ -55,11 +55,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $paypalConfig->expects($this->any())
             ->method('getValue')
             ->with($this->stringContains('visible_on'))
-            ->will($this->returnValue($isVisible));
+            ->willReturn($isVisible);
 
         $this->_paypalConfigFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($paypalConfig));
+            ->willReturn($paypalConfig);
 
         $this->assertEquals($expected, $this->helper->isContextAvailable('payment_code', true));
     }
@@ -91,23 +91,23 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $currentProduct->expects($this->any())->method('getFinalPrice')->will($this->returnValue($productPrice));
-        $currentProduct->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $currentProduct->expects($this->any())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+        $currentProduct->expects($this->any())->method('getFinalPrice')->willReturn($productPrice);
+        $currentProduct->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $currentProduct->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);
 
         $this->_registry->expects($this->any())
             ->method('registry')
             ->with($this->equalTo('current_product'))
-            ->will($this->returnValue($currentProduct));
+            ->willReturn($currentProduct);
 
         $this->_productTypeConfig->expects($this->any())
             ->method('isProductSet')
-            ->will($this->returnValue($isProductSet));
+            ->willReturn($isProductSet);
 
         $typeInstance->expects($this->any())
             ->method('canConfigure')
             ->with($currentProduct)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEquals($expected, $this->helper->isPriceOrSetAvailable($isInCatalog));
     }
@@ -137,12 +137,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $methodInstance->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue($methodIsAvailable));
+            ->willReturn($methodIsAvailable);
 
         $this->_paymentData->expects($this->any())
             ->method('getMethodInstance')
-            ->will(
-                $this->returnValue($methodInstance)
+            ->willReturn(
+                $methodInstance
             );
 
         $this->assertEquals($expected, $this->helper->isMethodAvailable('payment_code'));

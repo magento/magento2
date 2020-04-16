@@ -24,7 +24,7 @@ class LoadDesignPluginTest extends TestCase
         $designLoaderMock = $this->createMock(DesignLoader::class);
 
         /** @var MockObject|ManagerInterface $messageManagerMock */
-        $messageManagerMock = $this->createMock(ManagerInterface::class);
+        $messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $plugin = new LoadDesignPlugin($designLoaderMock, $messageManagerMock);
 

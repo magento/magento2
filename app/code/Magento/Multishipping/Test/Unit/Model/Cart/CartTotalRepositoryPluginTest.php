@@ -68,7 +68,7 @@ class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->quoteTotalsMock = $this->createPartialMock(
@@ -96,7 +96,7 @@ class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteTotalRepositoryMock = $this->createMock(CartTotalRepository::class);
         $this->modelRepository = $objectManager->getObject(CartTotalRepositoryPlugin::class, [
             'quoteRepository' => $this->quoteRepositoryMock

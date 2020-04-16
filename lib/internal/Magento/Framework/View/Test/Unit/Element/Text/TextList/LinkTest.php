@@ -18,7 +18,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $link;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->link = $objectManager->getObject(\Magento\Framework\View\Element\Text\TextList\Link::class);

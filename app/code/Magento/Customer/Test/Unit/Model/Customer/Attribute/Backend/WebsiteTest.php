@@ -16,11 +16,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $testable;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeManager = $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
@@ -35,7 +35,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getId'])
             ->getMock();
 
-        $object->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $object->expects($this->once())->method('getId')->willReturn(1);
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
@@ -53,17 +53,17 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $store = $this->getMockBuilder(\Magento\Framework\DataObject::class)->setMethods(['getWebsiteId'])->getMock();
-        $store->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->storeManager->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
-        $object->expects($this->once())->method('hasData')->with('website_id')->will($this->returnValue(false));
+        $object->expects($this->once())->method('hasData')->with('website_id')->willReturn(false);
         $object->expects($this->once())
             ->method('setData')
             ->with($this->logicalOr('website_id', $websiteId))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(

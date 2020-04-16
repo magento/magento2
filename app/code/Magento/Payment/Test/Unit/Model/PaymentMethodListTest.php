@@ -18,17 +18,17 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Payment\Model\PaymentMethodList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\PaymentMethodList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $methodFactoryMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
@@ -37,7 +37,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->methodFactoryMock = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterfaceFactory::class)
             ->setMethods(['create'])
@@ -187,7 +187,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      * @param string $code
      * @param string $title
      * @param bool $isActive
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function mockPaymentMethodInstance($storeId, $sortOrder, $code, $title, $isActive)
     {

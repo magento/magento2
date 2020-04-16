@@ -20,7 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -65,7 +65,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputValidator = $this->createMock(InputValidator::class);
         $this->consoleLoggerFactory = $this->createMock(ConsoleLoggerFactory::class);
@@ -129,11 +129,12 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mode
      * @return void
-     * @expectedException  \Magento\Framework\Exception\LocalizedException
      * @dataProvider executionInNonProductionModeDataProvider
      */
     public function testExecuteInNonProductionMode($mode)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->appState->expects($this->any())->method('getMode')->willReturn($mode);
         $this->objectManager->expects($this->never())->method('create');
 

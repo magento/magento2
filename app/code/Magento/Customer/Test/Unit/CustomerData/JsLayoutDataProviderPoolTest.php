@@ -33,7 +33,7 @@ class JsLayoutDataProviderPoolTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutTotalsJsLayoutDataProviderMock = $this->createMock(CheckoutTotalsJs::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);

@@ -29,35 +29,35 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var ObjectManagerInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface||\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
-        $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
+        $readerMock->expects($this->any())->method('read')->willReturnMap($readerMap);
 
         $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
         $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
@@ -66,13 +66,13 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         // turn cache off
         $this->cacheMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $omConfigMock =  $this->getMockForAbstractClass(
             \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
         );
 
-        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
+        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->willReturnArgument(0);
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['get'])
@@ -80,7 +80,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnArgument(0);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 
@@ -112,7 +112,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPlugin()
     {
-        $this->configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
+        $this->configScopeMock->expects($this->any())->method('getCurrentScope')->willReturn('backend');
         $this->object->getNext(\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class, 'getName');
         $this->object->getNext(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
@@ -166,8 +166,8 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue($scopeCode)
+        )->willReturn(
+            $scopeCode
         );
         $this->assertEquals($expectedResult, $this->object->getNext($type, $method, $code));
     }
@@ -231,15 +231,16 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
      * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
      */
     public function testInheritPluginsWithNonExistingClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->object->getNext('SomeType', 'someMethod');
     }
@@ -248,7 +249,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     {
         $this->configScopeMock->expects($this->exactly(3))
             ->method('getCurrentScope')
-            ->will($this->returnValue('scope'));
+            ->willReturn('scope');
         $this->serializerMock->expects($this->once())
             ->method('serialize');
         $this->serializerMock->expects($this->never())
@@ -256,7 +257,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects($this->once())
             ->method('save');
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -270,7 +271,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->with("Reference to undeclared plugin with name 'simple_plugin'.");
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->assertNull($this->object->getNext('typeWithoutInstance', 'someMethod'));
     }
@@ -283,7 +284,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     {
         $this->configScopeMock->expects($this->once())
             ->method('getCurrentScope')
-            ->will($this->returnValue('scope'));
+            ->willReturn('scope');
 
         $data = [['key'], ['key'], ['key']];
         $serializedData = 'serialized data';
@@ -298,7 +299,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
             ->with('global|scope|interception')
             ->willReturn($serializedData);
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -309,10 +310,10 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('emptyscope'));
+            ->willReturn('emptyscope');
 
         $this->assertEquals(
             [4 => ['simple_plugin']],

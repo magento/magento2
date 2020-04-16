@@ -60,17 +60,17 @@ class ValueProviderTest extends TestCase
      */
     private $simpleActionOptionsProviderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $expectedData = include __DIR__ . '/_files/MetaData.php';
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->storeMock = $this->createMock(Store::class);
-        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
         $this->dataObjectMock = $this->createMock(DataObject::class);
         $this->simpleActionOptionsProviderMock = $this->createMock(SimpleActionOptionsProvider::class);
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
-        $groupSearchResultsMock = $this->createMock(GroupSearchResultsInterface::class);
-        $groupsMock = $this->createMock(GroupInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $groupSearchResultsMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $groupsMock = $this->getMockForAbstractClass(GroupInterface::class);
 
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)

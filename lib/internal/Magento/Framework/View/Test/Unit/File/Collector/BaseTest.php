@@ -16,21 +16,21 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     private $fileCollector;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeMock;
 
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirSearch;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\Factory::class)
             ->disableOriginalConstructor()
@@ -56,10 +56,10 @@ class BaseTest extends \PHPUnit\Framework\TestCase
                 $file = $this->createMock(\Magento\Framework\Component\ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')
-                    ->will($this->returnValue("{$fileType}/module/{$i}/path"));
+                    ->willReturn("{$fileType}/module/{$i}/path");
                 $file->expects($this->once())
                     ->method('getComponentName')
-                    ->will($this->returnValue('Module_' . $i));
+                    ->willReturn('Module_' . $i);
                 $files[$fileType][] = $file;
             }
         }
@@ -91,7 +91,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     /**
      * Create file mock object
      *
-     * @return \Magento\Framework\View\File|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createFileMock()
     {

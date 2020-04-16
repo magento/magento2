@@ -32,12 +32,12 @@ class IndexTest extends TestCase
     /**
      * Prepare test preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);
         $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);
@@ -72,7 +72,7 @@ class IndexTest extends TestCase
 
         $this->rawResponseMock->expects($this->once())->method('setContents')
             ->with('Magento/2.3 (Community)')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->versionController->execute();
     }

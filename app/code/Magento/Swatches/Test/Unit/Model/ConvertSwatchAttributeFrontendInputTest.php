@@ -23,7 +23,7 @@ class ConvertSwatchAttributeFrontendInputTest extends \PHPUnit\Framework\TestCas
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->convertSwatchAttributeFrontendInput =

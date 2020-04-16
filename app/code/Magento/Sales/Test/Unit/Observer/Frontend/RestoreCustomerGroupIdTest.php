@@ -13,7 +13,7 @@ use Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
 class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAddressHelperMock;
 
@@ -22,7 +22,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
      */
     protected $quote;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerAddressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
         $this->quote = new RestoreCustomerGroupId($this->customerAddressHelperMock);
@@ -61,7 +61,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
 
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($configAddressType));
+            ->willReturn($configAddressType);
 
         $quoteAddress->expects($this->once())->method('hasPrevQuoteCustomerGroupId');
         $id = $quoteAddress->expects($this->any())->method('getPrevQuoteCustomerGroupId');

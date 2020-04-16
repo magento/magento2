@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
@@ -55,7 +55,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rule = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMockClassName('Rule')
@@ -77,8 +77,8 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             \Magento\Quote\Model\Quote\Address::class,
             ['__wakeup']
         );
-        $this->item->expects($this->any())->method('getQuote')->will($this->returnValue($this->quote));
-        $this->item->expects($this->any())->method('getAddress')->will($this->returnValue($this->address));
+        $this->item->expects($this->any())->method('getQuote')->willReturn($this->quote);
+        $this->item->expects($this->any())->method('getAddress')->willReturn($this->address);
 
         $this->validator = $this->createMock(\Magento\SalesRule\Model\Validator::class);
         /** @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|MockObject $dataFactory */
@@ -86,7 +86,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory::class,
             ['create']
         );
-        $dataFactory->expects($this->any())->method('create')->will($this->returnValue($this->data));
+        $dataFactory->expects($this->any())->method('create')->willReturn($this->data);
         $this->priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMock();
         $deltaPriceRound = $this->getMockBuilder(\Magento\SalesRule\Model\DeltaPriceRound::class)
@@ -108,11 +108,11 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     {
         $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
-        $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
+        $this->quote->expects($this->any())->method('getCartFixedRules')->willReturn([]);
         $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->will($this->returnArgument(0));
-        $this->priceCurrency->expects($this->atLeastOnce())->method('round')->will($this->returnArgument(0));
-        $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->willReturnArgument(0);
+        $this->priceCurrency->expects($this->atLeastOnce())->method('round')->willReturnArgument(0);
+        $this->quote->expects($this->any())->method('getStore')->willReturn($store);
 
         /** validators data */
         $this->validator->expects(
@@ -121,8 +121,8 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             'getItemPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -130,8 +130,8 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             'getItemBasePrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -139,8 +139,8 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             'getItemOriginalPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -148,8 +148,8 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             'getItemBaseOriginalPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
 
         $this->quote->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);

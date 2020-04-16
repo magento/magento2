@@ -7,13 +7,13 @@ namespace Magento\Captcha\Test\Unit\Model;
 
 class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /**@var \PHPUnit_Framework_MockObject_MockObject */
+    /**@var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
     /** @var \Magento\Captcha\Model\CaptchaFactory */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Captcha\Model\CaptchaFactory($this->_objectManagerMock);
@@ -31,8 +31,8 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
-        )->will(
-            $this->returnValue($defaultCaptchaMock)
+        )->willReturn(
+            $defaultCaptchaMock
         );
 
         $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
@@ -50,8 +50,8 @@ class CaptchaFactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
-        )->will(
-            $this->returnValue($defaultCaptchaMock)
+        )->willReturn(
+            $defaultCaptchaMock
         );
 
         $this->expectException('InvalidArgumentException');

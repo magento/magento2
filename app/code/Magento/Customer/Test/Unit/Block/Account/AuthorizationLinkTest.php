@@ -30,7 +30,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
@@ -57,7 +57,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->httpContext->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals('Sign Out', $this->_block->getLabel());
     }
@@ -66,7 +66,7 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->httpContext->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEquals('Sign In', $this->_block->getLabel());
     }
@@ -75,9 +75,9 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->httpContext->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->_customerUrl->expects($this->once())->method('getLogoutUrl')->will($this->returnValue('logout url'));
+        $this->_customerUrl->expects($this->once())->method('getLogoutUrl')->willReturn('logout url');
 
         $this->assertEquals('logout url', $this->_block->getHref());
     }
@@ -86,9 +86,9 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->httpContext->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->_customerUrl->expects($this->once())->method('getLoginUrl')->will($this->returnValue('login url'));
+        $this->_customerUrl->expects($this->once())->method('getLoginUrl')->willReturn('login url');
 
         $this->assertEquals('login url', $this->_block->getHref());
     }

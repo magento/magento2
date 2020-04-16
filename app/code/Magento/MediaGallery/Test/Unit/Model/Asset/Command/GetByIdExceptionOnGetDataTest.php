@@ -58,7 +58,7 @@ class GetByIdExceptionOnGetDataTest extends \PHPUnit\Framework\TestCase
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
@@ -68,7 +68,7 @@ class GetByIdExceptionOnGetDataTest extends \PHPUnit\Framework\TestCase
                 'logger' =>  $this->logger,
             ]
         );
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnection->method('getConnection')->willReturn($this->adapter);
 
         $this->selectStub = $this->createMock(Select::class);

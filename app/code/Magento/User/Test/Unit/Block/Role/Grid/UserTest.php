@@ -16,34 +16,34 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\User\Block\Role\Grid\User */
     protected $model;
 
-    /** @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendHelperMock;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $roleFactoryMock;
 
-    /** @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $userRolesFactoryMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestInterfaceMock;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlInterfaceMock;
 
-    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $layoutMock;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $filesystemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->backendHelperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
@@ -123,7 +123,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = ['role1', 'role2', 'role3'];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject */
         $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -149,7 +149,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = ['role1', 'role2', 'role3'];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject */
         $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -173,7 +173,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = [];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject */
         $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])

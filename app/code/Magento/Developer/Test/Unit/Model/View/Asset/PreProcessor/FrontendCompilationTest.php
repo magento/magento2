@@ -37,29 +37,29 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     const NEW_CONTENT = 'test-new-content';
 
     /**
-     * @var LockerProcessInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockerProcessInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockerProcessMock;
 
     /**
-     * @var AssetBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetBuilderMock;
 
     /**
-     * @var AlternativeSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AlternativeSourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $alternativeSourceMock;
 
     /**
-     * @var Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetSourceMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->lockerProcessMock = $this->getMockBuilder(LockerProcessInterface::class)
             ->getMockForAbstractClass();
@@ -190,7 +190,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMock()
     {
@@ -206,7 +206,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
      * @param int $contentExactly
      * @param int $pathExactly
      * @param string $newContentType
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getChainMockExpects($content = '', $contentExactly = 1, $pathExactly = 1, $newContentType = '')
     {
@@ -229,7 +229,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit_Framework_MockObject_MockObject
+     * @return File|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetNew()
     {
@@ -241,20 +241,20 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMock()
     {
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         return $assetMock;
     }
 
     /**
      * @param int $pathExactly
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMockExpects($pathExactly = 1)
     {
@@ -274,7 +274,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return FallbackContext|\PHPUnit_Framework_MockObject_MockObject
+     * @return FallbackContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getContextMock()
     {

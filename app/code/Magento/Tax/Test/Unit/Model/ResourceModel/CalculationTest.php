@@ -26,7 +26,7 @@ class CalculationTest extends \PHPUnit\Framework\TestCase
         $taxData
             ->expects($this->any())
             ->method('getPostCodeSubStringLength')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
 
         $objectManager = new ObjectManager($this);
         $calcMock = $objectManager->getObject(

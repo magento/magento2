@@ -15,33 +15,33 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
     private $dbVersionInfo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleList;
 
     /**
-     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleResource;
 
     /**
-     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_outputConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $this->moduleList->expects($this->any())
             ->method('getOne')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                         ['Module_One', ['name' => 'Module_One', 'setup_version' => '1']],
                         ['Module_Two', ['name' => 'Module_Two', 'setup_version' => '2']],
                         ['Module_No_Schema', []],
-                    ]));
+                    ]);
         $this->moduleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Module_One', 'Module_Two']));
+            ->willReturn(['Module_One', 'Module_Two']);
 
         $this->_outputConfig = $this->getMockForAbstractClass(\Magento\Framework\Module\Output\ConfigInterface::class);
         $this->moduleResource = $this->getMockForAbstractClass(\Magento\Framework\Module\ResourceInterface::class);
@@ -64,7 +64,7 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
         $this->moduleResource->expects($this->once())
             ->method('getDbVersion')
             ->with($moduleName)
-            ->will($this->returnValue($dbVersion));
+            ->willReturn($dbVersion);
         $this->moduleList->expects(self::once())
             ->method('getOne')
             ->with($moduleName)
@@ -89,7 +89,7 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
         $this->moduleResource->expects($this->once())
             ->method('getDataVersion')
             ->with($moduleName)
-            ->will($this->returnValue($dbVersion));
+            ->willReturn($dbVersion);
         $this->moduleList->expects(self::once())
             ->method('getOne')
             ->with($moduleName)
@@ -131,10 +131,10 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->moduleResource->expects($this->any())
             ->method('getDataVersion')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $this->moduleResource->expects($this->any())
             ->method('getDbVersion')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
 
         $expectedErrors = [
             [

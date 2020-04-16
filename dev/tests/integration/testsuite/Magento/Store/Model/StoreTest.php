@@ -28,7 +28,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $modelParams;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
@@ -37,13 +37,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->_getStoreModel();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Store
+     * @return \PHPUnit\Framework\MockObject\MockObject|Store
      */
     protected function _getStoreModel()
     {
@@ -79,7 +79,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -299,7 +299,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->model->load('admin');
         $this->model
             ->expects($this->any())->method('getUrl')
-            ->will($this->returnValue('http://localhost/index.php'));
+            ->willReturn('http://localhost/index.php');
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
         $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
 
@@ -410,10 +410,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveValidation($badStoreData)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $normalStoreData = [
             'code' => 'test',
             'website_id' => 1,
@@ -458,7 +459,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->any())
             ->method('getValue')
             ->with($this->stringContains(Store::XML_PATH_STORE_IN_URL))
-            ->will($this->returnValue($storeInUrl));
+            ->willReturn($storeInUrl);
 
         $params['config'] = $configMock;
         $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);

@@ -35,7 +35,7 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->subscriberFactory = $this->objectManager->get(SubscriberFactory::class);

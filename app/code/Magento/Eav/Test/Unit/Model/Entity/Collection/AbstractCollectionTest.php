@@ -18,61 +18,61 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     const ATTRIBUTE_ID_INT = 15;
 
     /**
-     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreEntityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreResourceMock;
 
     /**
-     * @var \Magento\Eav\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceHelperMock;
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $statementMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreEntityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -85,31 +85,31 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceHelperMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Helper::class);
         $this->validatorFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
         $this->entityFactoryMock = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->statementMock = $this->createPartialMock(\Magento\Framework\DB\Statement\Pdo\Mysql::class, ['fetch']);
-        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->coreEntityFactoryMock->expects(
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getMagentoObject'])
+        )->willReturnCallback(
+            [$this, 'getMagentoObject']
         );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->any())->method('query')->willReturn($this->statementMock);
 
         $this->coreResourceMock->expects(
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($connectionMock)
+        )->willReturn(
+            $connectionMock
         );
         $entityMock = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
-        $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entityMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $entityMock->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
         $entityMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
@@ -137,8 +137,8 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'test_entity_model' // see \Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub
-        )->will(
-            $this->returnValue($entityMock)
+        )->willReturn(
+            $entityMock
         );
 
         $this->model = new AbstractCollectionStub(
@@ -155,7 +155,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -168,7 +168,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->fetchStrategyMock
             ->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue([['id' => 1, 'data_changes' => true], ['id' => 2]]));
+            ->willReturn([['id' => 1, 'data_changes' => true], ['id' => 2]]);
 
         foreach ($this->model->getItems() as $item) {
             $this->assertFalse($item->getDataChanges());
@@ -180,7 +180,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testClear($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());
@@ -194,7 +194,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveAllItems($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());
@@ -208,7 +208,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveItemByKey($values, $count)
     {
-        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->once())->method('fetchAll')->willReturn($values);
 
         $testId = array_pop($values)['id'];
         $this->assertCount($count, $this->model->getItems());
@@ -224,7 +224,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testAttributeIdIsInt($values)
     {
         $this->resourceHelperMock->expects($this->any())->method('getLoadAttributesSelectGroups')->willReturn([]);
-        $this->fetchStrategyMock->expects($this->any())->method('fetchAll')->will($this->returnValue($values));
+        $this->fetchStrategyMock->expects($this->any())->method('fetchAll')->willReturn($values);
         $selectMock = $this->coreResourceMock->getConnection()->select();
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('join')->willReturn($selectMock);

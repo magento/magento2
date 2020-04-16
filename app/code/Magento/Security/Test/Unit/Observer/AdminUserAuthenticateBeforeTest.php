@@ -57,7 +57,7 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -90,12 +90,12 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     *  Please wait and try again later
      */
     public function testWithExpiredUser()
     {
+        $this->expectException(\Magento\Framework\Exception\Plugin\AuthenticationException::class);
+        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later');
+
         $adminUserId = '123';
         $username = 'testuser';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);

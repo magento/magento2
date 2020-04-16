@@ -24,51 +24,51 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     protected $tokenModel;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var KeyLengthFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var KeyLengthFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $keyLengthFactoryMock;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorKeyLengthMock;
 
     /**
-     * @var \Magento\Framework\Url\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $consumerFactoryMock;
 
     /**
-     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $oauthDataMock;
 
     /**
-     * @var \Magento\Framework\Oauth\Helper\Oauth|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Oauth\Helper\Oauth|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $oauthHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->setMethods(['getEventDispatcher'])
@@ -219,11 +219,12 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionMessage Cannot convert to access token due to token is not request type
      */
     public function testConvertToAccessIfIsNotRequestType()
     {
+        $this->expectException(\Magento\Framework\Oauth\Exception::class);
+        $this->expectExceptionMessage('Cannot convert to access token due to token is not request type');
+
         $this->tokenModel->setType('isNotRequestType');
         $this->tokenModel->convertToAccess();
     }

@@ -34,7 +34,7 @@ class GroupedTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = Bootstrap::getObjectManager()->get(Grouped::class);
         $this->creditMemo = Bootstrap::getObjectManager()->get(CreditMemo::class);

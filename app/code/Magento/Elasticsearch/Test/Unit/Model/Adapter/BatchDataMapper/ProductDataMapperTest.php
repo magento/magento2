@@ -28,45 +28,45 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $builderMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateFieldTypeMock;
 
     /**
-     * @var AdditionalFieldsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdditionalFieldsProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $additionalFieldsProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProvider;
 
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builderMock = $this->createTestProxy(Builder::class);
-        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
+        $this->fieldMapperMock = $this->getMockForAbstractClass(FieldMapperInterface::class);
         $this->dataProvider = $this->createMock(DataProvider::class);
         $this->attribute = $this->createMock(Attribute::class);
-        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
+        $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
 
         $objectManager = new ObjectManagerHelper($this);
@@ -97,10 +97,10 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         $this->builderMock->expects($this->any())
             ->method('addFields')
             ->withConsecutive([$additionalFields])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->builderMock->expects($this->any())
             ->method('build')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([$productId], $storeId)
@@ -193,9 +193,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * Return attribute mock
      *
      * @param array attributeData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
+    private function getAttribute(array $attributeData): \PHPUnit\Framework\MockObject\MockObject
     {
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);
@@ -204,7 +204,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         $attributeMock->method('getIsSearchable')->willReturn($attributeData['is_searchable']);
         $options = [];
         foreach ($attributeData['options'] as $option) {
-            $optionMock = $this->createMock(AttributeOptionInterface::class);
+            $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
             $optionMock->method('getValue')->willReturn($option['value']);
             $optionMock->method('getLabel')->willReturn($option['label']);
             $options[] = $optionMock;

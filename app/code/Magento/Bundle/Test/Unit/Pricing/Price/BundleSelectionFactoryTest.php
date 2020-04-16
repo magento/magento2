@@ -18,16 +18,16 @@ class BundleSelectionFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleMock;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $selectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bundleMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->selectionMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -59,7 +59,7 @@ class BundleSelectionFactoryTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             )
-        ->will($this->returnValue($result));
+        ->willReturn($result);
         $this->assertSame(
             $result,
             $this->bundleSelectionFactory

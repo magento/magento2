@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 
-use \Magento\Framework\View\Design\Fallback\RulePool;
-use Magento\Framework\Filesystem;
+use Magento\Framework\View\Design\Fallback\RulePool;
 
 class RulePoolTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,41 +15,41 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnCallback(function ($code) {
+            ->willReturnCallback(function ($code) {
                 $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
                 $dirMock->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->willReturnCallback(function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
-                    }));
+                    });
                 return $dirMock;
-            }));
+            });
 
         $simpleFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class);
         $rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $simpleFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $themeFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ThemeFactory::class);
         $themeFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $moduleFactory = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ModuleFactory::class);
         $moduleFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $moduleSwitchFactory =
             $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory::class);
         $moduleSwitchFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $this->model = new RulePool(
             $filesystemMock,
             $simpleFactory,
@@ -60,14 +59,14 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         );
 
         $parentTheme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
+        $parentTheme->expects($this->any())->method('getThemePath')->willReturn('parent_theme_path');
 
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('current_theme_path'));
-        $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme->expects($this->any())->method('getThemePath')->willReturn('current_theme_path');
+        $theme->expects($this->any())->method('getParentTheme')->willReturn($parentTheme);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -97,12 +96,11 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedException Fallback rule 'unsupported_type' is not supported
-     */
     public function testGetRuleUnsupportedType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fallback rule \'unsupported_type\' is not supported');
+
         $this->model->getRule('unsupported_type');
     }
 }

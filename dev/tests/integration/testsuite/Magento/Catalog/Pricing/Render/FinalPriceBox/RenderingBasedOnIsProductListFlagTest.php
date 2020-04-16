@@ -38,7 +38,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      */
     private $finalPriceBox;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get('simple');

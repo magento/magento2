@@ -20,13 +20,13 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -36,7 +36,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
             ->method('save');
         $cacheMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $attributeTypeResolverMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeTypeResolverInterface::class)
             ->getMockForAbstractClass();
@@ -51,7 +51,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->object,
             'serializer',

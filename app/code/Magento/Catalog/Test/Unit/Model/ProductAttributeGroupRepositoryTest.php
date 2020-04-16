@@ -14,21 +14,21 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeGroupRepositoryInterface::class);
         $this->groupFactoryMock = $this->createPartialMock(
@@ -80,10 +80,11 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetThrowsExceptionIfGroupDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $groupId = 42;
         $groupMock = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Group::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
@@ -121,11 +122,12 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group can't be deleted because it contains system attributes.
      */
     public function testDeleteThrowsExceptionIfGroupHasSystemAttributes()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The attribute group can\'t be deleted because it contains system attributes.');
+
         $groupMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Attribute\Group::class,
             ['hasSystemAttributes']

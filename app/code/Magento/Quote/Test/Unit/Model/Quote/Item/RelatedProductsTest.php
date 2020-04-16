@@ -17,7 +17,7 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     protected $relatedProductTypes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->relatedProductTypes = ['type1', 'type2', 'type3'];
         $this->model = new \Magento\Quote\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);
@@ -45,13 +45,13 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
             'getOptionByCode'
         )->with(
             'product_type'
-        )->will(
-            $this->returnValue($itemOptionMock)
+        )->willReturn(
+            $itemOptionMock
         );
 
-        $itemOptionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
+        $itemOptionMock->expects($this->once())->method('getValue')->willReturn($optionValue);
 
-        $itemOptionMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
+        $itemOptionMock->expects($this->any())->method('getProductId')->willReturn($productId);
 
         $this->assertEquals($expectedResult, $this->model->getRelatedProductIds([$quoteItemMock]));
     }
@@ -87,8 +87,8 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
             'getOptionByCode'
         )->with(
             'product_type'
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
 
         $this->assertEquals([], $this->model->getRelatedProductIds([$quoteItemMock]));

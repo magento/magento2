@@ -52,7 +52,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     protected $layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -136,10 +136,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithoutWishlist()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')

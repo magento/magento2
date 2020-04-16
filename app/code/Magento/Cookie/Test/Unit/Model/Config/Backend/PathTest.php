@@ -13,16 +13,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PathTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | CookiePathValidator */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | CookiePathValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Path */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->getMockBuilder(
             \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
@@ -46,11 +46,12 @@ class PathTest extends \PHPUnit\Framework\TestCase
     /**
      * Method is not publicly accessible, so it must be called through parent
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid cookie path
      */
     public function testBeforeSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Invalid cookie path');
+
         $invalidCookiePath = 'invalid path';
         $this->validatorMock->expects($this->once())
             ->method('isValid')

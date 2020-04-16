@@ -39,7 +39,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
@@ -60,7 +60,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\TestFramework\App\State $appState */
         $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
@@ -132,7 +132,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         $response
             ->expects($this->any())
             ->method('setFilePath')
-            ->will($this->returnCallback($assertionCallback));
+            ->willReturnCallback($assertionCallback);
 
         /** @var \Magento\Framework\App\StaticResource $staticResourceApp */
         $staticResourceApp = $this->objectManager->create(
@@ -215,24 +215,24 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
         $omFactory = $this->createPartialMock(\Magento\Framework\App\ObjectManagerFactory::class, ['create']);
         $omFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->objectManager));
+            ->willReturn($this->objectManager);
 
         $filesUtil = $this->createMock(\Magento\Framework\App\Utility\Files::class);
         $filesUtil->expects($this->any())
             ->method('getStaticLibraryFiles')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $filesUtil->expects($this->any())
             ->method('getPhtmlFiles')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $filesUtil->expects($this->any())
             ->method('getStaticPreProcessingFiles')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     ['frontend', 'FrameworkViewMinifier/default', '', '', 'css/styles.css', $fileToTestPublishing]
                 ]
-            ));
+            );
 
         $this->objectManager->addSharedInstance($filesUtil, \Magento\Framework\App\Utility\Files::class);
 

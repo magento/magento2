@@ -35,7 +35,7 @@ class PhpScannerTest extends \PHPUnit\Framework\TestCase
      */
     private $log;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->log = $this->createMock(Log::class);
         $this->scanner = new PhpScanner($this->log, new TypeProcessor());

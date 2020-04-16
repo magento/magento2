@@ -9,19 +9,19 @@ use Magento\Theme\Model\Design\Config\ValueChecker;
 
 class ValueCheckerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\ScopeFallbackResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeFallbackResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $fallbackResolver;
 
-    /** @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $appConfig;
 
     /** @var ValueChecker */
     protected $valueChecker;
 
-    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $valueProcessor;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fallbackResolver = $this->getMockForAbstractClass(
             \Magento\Framework\App\ScopeFallbackResolverInterface::class,

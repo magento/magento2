@@ -21,7 +21,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Initial setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             Escaper::class

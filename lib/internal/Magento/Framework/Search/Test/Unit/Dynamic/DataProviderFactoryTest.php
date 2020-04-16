@@ -15,13 +15,13 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var DataProviderFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -60,11 +60,12 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not found by config current_provider
      */
     public function testCreateWithoutProviders()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('DataProvider not found by config current_provider');
+
         $dataProvider = 'current_provider';
         $dataProviders = [];
         $data = ['data'];
@@ -83,11 +84,12 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not instance of interface
      */
     public function testCreateWithWrongProvider()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('DataProvider not instance of interface');
+
         $dataProvider = 'current_provider';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

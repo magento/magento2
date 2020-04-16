@@ -18,24 +18,24 @@ use Magento\Braintree\Model\Report\FilterMapper;
 class FilterMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeSearchAdapter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $braintreeSearchAdapterMock;
 
     /**
-     * @var AppliersPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppliersPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appliersPoolMock;
 
     /**
-     * @var ApplierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $applierMock;
 
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $methods = [
             'id',
@@ -67,7 +67,7 @@ class FilterMapperTest extends \PHPUnit\Framework\TestCase
         $this->applierMock = $this->getMockBuilder(ApplierInterface::class)
             ->setMethods(['apply'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -110,6 +110,6 @@ class FilterMapperTest extends \PHPUnit\Framework\TestCase
 
         $mapper = new FilterMapper($this->appliersPoolMock, $this->braintreeSearchAdapterMock);
         $result = $mapper->getFilter('orderId', []);
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }

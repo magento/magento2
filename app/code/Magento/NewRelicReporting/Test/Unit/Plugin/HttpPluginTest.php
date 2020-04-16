@@ -55,7 +55,7 @@ class HttpPluginTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->configMock = $this->getMockBuilder(NewRelicConfig::class)->disableOriginalConstructor()

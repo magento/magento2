@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 class CommandListTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Console\CommandList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Console\CommandList
      */
     private $commandList;
 
@@ -26,7 +26,7 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
      */
     private $testCommand;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testCommand = new Command('Test');
         $commands = [
@@ -40,6 +40,6 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
     {
         $commands = $this->commandList->getCommands();
         $this->assertSame([$this->testCommand], $commands);
-        $this->assertEquals(1, count($commands));
+        $this->assertCount(1, $commands);
     }
 }

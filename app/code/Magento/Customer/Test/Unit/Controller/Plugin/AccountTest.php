@@ -56,7 +56,7 @@ class AccountTest extends TestCase
      */
     private $resultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

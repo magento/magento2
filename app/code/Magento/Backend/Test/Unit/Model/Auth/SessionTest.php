@@ -16,32 +16,32 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\Session\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Session\Storage | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Storage | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storage;
 
     /**
-     * @var \Magento\Framework\Acl\Builder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Builder | \PHPUnit\Framework\MockObject\MockObject
      */
     private $aclBuilder;
 
@@ -53,7 +53,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cookieMetadataFactory = $this->createPartialMock(
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class,
@@ -90,7 +90,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->config = null;
         $this->sessionConfig = null;
@@ -139,11 +139,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $user = $this->createPartialMock(\Magento\User\Model\User::class, ['getId', '__wakeup']);
         $user->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->storage->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
 
         $this->assertTrue($this->session->isLoggedIn());
     }
@@ -166,48 +166,48 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $cookieMetadata->expects($this->once())
             ->method('setDuration')
             ->with($lifetime)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setPath')
             ->with($path)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setDomain')
             ->with($domain)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setSecure')
             ->with($secure)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
             ->with($httpOnly)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->cookieMetadataFactory->expects($this->once())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadata));
+            ->willReturn($cookieMetadata);
 
         $this->cookieManager->expects($this->once())
             ->method('getCookie')
             ->with($name)
-            ->will($this->returnValue($cookie));
+            ->willReturn($cookie);
         $this->cookieManager->expects($this->once())
             ->method('setPublicCookie')
             ->with($name, $cookie, $cookieMetadata);
 
         $this->sessionConfig->expects($this->once())
             ->method('getCookiePath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
         $this->sessionConfig->expects($this->once())
             ->method('getCookieDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
         $this->sessionConfig->expects($this->once())
             ->method('getCookieSecure')
-            ->will($this->returnValue($secure));
+            ->willReturn($secure);
         $this->sessionConfig->expects($this->once())
             ->method('getCookieHttpOnly')
-            ->will($this->returnValue($httpOnly));
+            ->willReturn($httpOnly);
 
         $this->session->prolong();
 

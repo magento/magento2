@@ -17,12 +17,12 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $engineResolverMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -36,7 +36,7 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(\Magento\Search\Model\EngineResolver::class)
             ->setMethods(['getCurrentSearchEngine'])
@@ -48,7 +48,7 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
 
         /**
          * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
-         *     \PHPUnit_Framework_MockObject_MockObject
+         *     \PHPUnit\Framework\MockObject\MockObject
          */
         $suggestedQueriesMock = $this->createMock(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class);
         $suggestedQueriesMock->expects($this->any())
@@ -90,12 +90,13 @@ class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isResultsCountEnabled() method failure.
-     * @expectedException \InvalidArgumentException
      *
      * @return void
      */
     public function testIsResultsCountEnabledException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

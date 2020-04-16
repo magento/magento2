@@ -8,32 +8,32 @@ namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped\AssociatedProdu
 class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -43,11 +43,11 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
@@ -60,8 +60,8 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStoreManager'
-        )->will(
-            $this->returnValue($this->storeManagerMock)
+        )->willReturn(
+            $this->storeManagerMock
         );
 
         $this->priceCurrency = $this->getMockBuilder(
@@ -88,18 +88,18 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
         )->with(
             '1.00',
             false
-        )->will(
-            $this->returnValue('1')
+        )->willReturn(
+            '1'
         );
 
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->typeInstanceMock)
+        )->willReturn(
+            $this->typeInstanceMock
         );
 
         $this->registryMock->expects(
@@ -108,8 +108,8 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->productMock)
+        )->willReturn(
+            $this->productMock
         );
 
         $this->typeInstanceMock->expects(
@@ -118,8 +118,8 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$this->generateAssociatedProduct(1), $this->generateAssociatedProduct(2)])
+        )->willReturn(
+            [$this->generateAssociatedProduct(1), $this->generateAssociatedProduct(2)]
         );
 
         $expectedResult = [
@@ -148,7 +148,7 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
      * Generate associated product mock
      *
      * @param int $productKey
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function generateAssociatedProduct($productKey = 0)
     {
@@ -157,12 +157,12 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
             ['getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice']
         );
 
-        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue('id' . $productKey));
-        $associatedProduct->expects($this->once())->method('getSku')->will($this->returnValue('sku' . $productKey));
-        $associatedProduct->expects($this->once())->method('getName')->will($this->returnValue('name' . $productKey));
-        $associatedProduct->expects($this->once())->method('getQty')->will($this->returnValue($productKey));
-        $associatedProduct->expects($this->once())->method('getPosition')->will($this->returnValue($productKey));
-        $associatedProduct->expects($this->once())->method('getPrice')->will($this->returnValue('1.00'));
+        $associatedProduct->expects($this->once())->method('getId')->willReturn('id' . $productKey);
+        $associatedProduct->expects($this->once())->method('getSku')->willReturn('sku' . $productKey);
+        $associatedProduct->expects($this->once())->method('getName')->willReturn('name' . $productKey);
+        $associatedProduct->expects($this->once())->method('getQty')->willReturn($productKey);
+        $associatedProduct->expects($this->once())->method('getPosition')->willReturn($productKey);
+        $associatedProduct->expects($this->once())->method('getPrice')->willReturn('1.00');
 
         return $associatedProduct;
     }

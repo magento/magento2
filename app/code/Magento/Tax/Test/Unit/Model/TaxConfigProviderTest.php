@@ -10,27 +10,27 @@ use \Magento\Tax\Model\Config;
 class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
@@ -39,7 +39,7 @@ class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
         $this->taxConfigMock = $this->createMock(\Magento\Tax\Model\Config::class);
@@ -79,30 +79,30 @@ class TaxConfigProviderTest extends \PHPUnit\Framework\TestCase
         $config
     ) {
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingBoth')
-            ->will($this->returnValue($cartShippingBoth));
+            ->willReturn($cartShippingBoth);
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingExclTax')
-            ->will($this->returnValue($cartShippingExclTax));
+            ->willReturn($cartShippingExclTax);
 
         $this->taxHelperMock->expects($this->any())->method('displayCartBothPrices')
-            ->will($this->returnValue($cartBothPrices));
+            ->willReturn($cartBothPrices);
         $this->taxHelperMock->expects($this->any())->method('displayCartPriceExclTax')
-            ->will($this->returnValue($cartPriceExclTax));
+            ->willReturn($cartPriceExclTax);
 
         $this->taxConfigMock->expects($this->any())->method('displayCartSubtotalBoth')
-            ->will($this->returnValue($cartSubTotalBoth));
+            ->willReturn($cartSubTotalBoth);
         $this->taxConfigMock->expects($this->any())->method('displayCartSubtotalExclTax')
-            ->will($this->returnValue($cartSubTotalExclTax));
+            ->willReturn($cartSubTotalExclTax);
 
         $this->taxHelperMock->expects(($this->any()))->method('displayShippingPriceExcludingTax')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxHelperMock->expects(($this->any()))->method('displayShippingBothPrices')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxHelperMock->expects(($this->any()))->method('displayFullSummary')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxConfigMock->expects(($this->any()))->method('displayCartTaxWithGrandTotal')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->taxConfigMock->expects(($this->any()))->method('displayCartZeroTax')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $valueMap = [];
         foreach ($config as $key => $value) {

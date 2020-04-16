@@ -12,31 +12,31 @@ use Magento\Setup\Module\Di\Compiler\Config;
 class AreaTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var App\AreaList | \PHPUnit_Framework_MockObject_MockObject
+     * @var App\AreaList | \PHPUnit\Framework\MockObject\MockObject
      */
     private $areaListMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Area | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Area | \PHPUnit\Framework\MockObject\MockObject
      */
     private $areaInstancesNamesList;
 
     /**
-     * @var Config\Reader | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config\Reader | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var Config\WriterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config\WriterInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Compiler\Config\ModificationChain | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Compiler\Config\ModificationChain | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configChain;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->areaListMock = $this->getMockBuilder(\Magento\Framework\App\AreaList::class)
             ->disableOriginalConstructor()

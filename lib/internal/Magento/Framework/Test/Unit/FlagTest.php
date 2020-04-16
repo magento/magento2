@@ -51,11 +51,12 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define flag code.
      */
     public function testLoadSelfException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please define flag code.');
+
         $flag = $this->createFlagInstance();
         $flag->loadSelf();
     }
@@ -70,11 +71,12 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please define flag code.
      */
     public function testBeforeSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please define flag code.');
+
         $flag = $this->createFlagInstance();
         $flag->setData('block', 'blockNmae');
         $flag->beforeSave();
@@ -88,7 +90,7 @@ class FlagTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManagerMock = $this->createPartialMock(\Magento\Framework\Event\Manager::class, ['dispatch']);
-        /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')

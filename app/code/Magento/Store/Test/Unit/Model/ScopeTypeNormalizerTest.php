@@ -18,7 +18,7 @@ class ScopeTypeNormalizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeTypeNormalizer = new ScopeTypeNormalizer();
     }

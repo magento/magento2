@@ -16,19 +16,19 @@ class InfoBackupsListCommandTest extends \PHPUnit\Framework\TestCase
         $table = $this->createMock(\Symfony\Component\Console\Helper\Table::class);
         $table->expects($this->once())->method('setHeaders')->with(['Backup Filename', 'Backup Type']);
         $table->expects($this->once())->method('addRow')->with(['backupFile_media.tgz', 'media']);
-        /** @var \Symfony\Component\Console\Helper\TableFactory|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        /** @var \Symfony\Component\Console\Helper\TableFactory|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
-        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
+        $tableFactoryMock->expects($this->once())->method('create')->willReturn($table);
         /** @var \Magento\Framework\App\Filesystem\DirectoryList
-         * |\PHPUnit_Framework_MockObject_MockObject $directoryList
+         * |\PHPUnit\Framework\MockObject\MockObject $directoryList
          */
         $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
-        /** @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject $file */
+        /** @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject $file */
         $file = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
-        $file->expects($this->once())->method('isExists')->will($this->returnValue(true));
+        $file->expects($this->once())->method('isExists')->willReturn(true);
         $file->expects($this->once())
             ->method('readDirectoryRecursively')
-            ->will($this->returnValue(['backupFile_media.tgz']));
+            ->willReturn(['backupFile_media.tgz']);
         $command = new InfoBackupsListCommand($directoryList, $file, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);

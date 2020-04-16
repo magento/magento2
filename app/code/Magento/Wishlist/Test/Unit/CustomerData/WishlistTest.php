@@ -41,7 +41,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $itemResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistHelperMock = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
             ->disableOriginalConstructor()

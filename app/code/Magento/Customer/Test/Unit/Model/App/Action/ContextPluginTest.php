@@ -44,7 +44,7 @@ class ContextPluginTest extends TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->httpContextMock = $this->createMock(HttpContext::class);
@@ -59,19 +59,19 @@ class ContextPluginTest extends TestCase
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [Context::CONTEXT_GROUP, self::STUB_CUSTOMER_GROUP, $this->httpContextMock],
                         [Context::CONTEXT_AUTH, self::STUB_CUSTOMER_NOT_LOGGED_IN, $this->httpContextMock],
                     ]
-                )
+                
             );
         $this->plugin->beforeExecute($this->subjectMock);
     }

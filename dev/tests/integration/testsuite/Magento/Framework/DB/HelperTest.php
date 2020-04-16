@@ -17,7 +17,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
      */
     protected $_select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\DB\Helper::class,

@@ -64,18 +64,18 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
         $this->sessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
 
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->requestMock = $this->getMockBuilder([RequestInterface::class, HttpRequestInterface::class])
             ->getMock();
         $this->requestMock->method('isPost')->willReturn(true);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->appStateMock = $this->createMock(State::class);
         $this->appStateMock->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
@@ -100,7 +100,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
     {
         $customerGroupId = 1;
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);
         $customerMock->method('getId')->willReturn(self::STUB_CUSTOMER_ID);
 

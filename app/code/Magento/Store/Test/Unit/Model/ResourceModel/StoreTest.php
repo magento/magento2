@@ -32,7 +32,7 @@ class StoreTest extends TestCase
      */
     protected $connectionMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->select =  $this->createMock(Select::class);

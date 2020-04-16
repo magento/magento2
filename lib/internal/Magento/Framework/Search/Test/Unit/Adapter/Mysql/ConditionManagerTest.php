@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConditionManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
@@ -19,11 +19,11 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
     private $conditionManager;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -33,21 +33,21 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('quote')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return sprintf('\'%s\'', $value);
                     }
-                )
+                
             );
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function ($value) {
                         return sprintf('`%s`', $value);
                     }
-                )
+                
             );
 
         $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
@@ -55,7 +55,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->conditionManager = $objectManager->getObject(
             \Magento\Framework\Search\Adapter\Mysql\ConditionManager::class,

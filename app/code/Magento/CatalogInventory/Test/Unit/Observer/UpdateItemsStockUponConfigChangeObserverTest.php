@@ -15,21 +15,21 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceStockItem;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceStockItem = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
 
@@ -45,7 +45,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             \Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver::class,
@@ -64,10 +64,10 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
 
         $this->event->expects($this->once())
             ->method('getWebsite')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $this->event->expects($this->once())
             ->method('getChangedPaths')
-            ->will($this->returnValue([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]));
+            ->willReturn([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]);
 
         $this->observer->execute($this->eventObserver);
     }

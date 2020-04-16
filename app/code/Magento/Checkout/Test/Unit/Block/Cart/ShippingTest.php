@@ -101,10 +101,10 @@ class ShippingTest extends TestCase
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
         $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->configProviderMock = $this->createMock(CompositeConfigProvider::class);
-        $this->layoutProcessorMock = $this->createMock(LayoutProcessorInterface::class);
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(LayoutProcessorInterface::class);
         $this->serializerMock = $this->createMock(JsonHexTag::class);
         $this->jsonHexTagSerializerMock = $this->createMock(JsonHexTag::class);
-        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerInterfaceMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->layout = self::STUB_PREINITIALIZED_COMPONENTS;
 
         $objectManager = new ObjectManager($this);

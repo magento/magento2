@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View\Grid\Renderer
 
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $item;
 
     /** @var  \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item */
@@ -32,17 +32,17 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $product
             ->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $product
             ->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('testProductName'));
+            ->willReturn('testProductName');
 
         $this->item = $this->createPartialMock(\Magento\Wishlist\Model\Item::class, ['getProduct']);
         $this->item
             ->expects($this->atLeastOnce())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $productConfigPool = $this->createPartialMock(
             \Magento\Catalog\Helper\Product\ConfigurationPool::class,
@@ -56,25 +56,25 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
-                ->will($this->returnValue(null));
+                ->willReturn(null);
         } else {
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
-                ->will($this->returnValue($options));
+                ->willReturn($options);
         }
 
         $context = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
         $context
             ->expects($this->once())
             ->method('getEscaper')
-            ->will($this->returnValue($escaper));
+            ->willReturn($escaper);
 
         $productConfigPool
             ->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Helper\Product\Configuration::class)
-            ->will($this->returnValue($helper));
+            ->willReturn($helper);
 
         $this->itemBlock = new \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item(
             $context,

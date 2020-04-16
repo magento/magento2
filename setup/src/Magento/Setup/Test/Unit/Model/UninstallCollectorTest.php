@@ -15,16 +15,16 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $adapterInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Select
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Select
      */
     private $result;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =
@@ -48,11 +48,11 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
         $uninstallB = 'Uninstall Class B';
         $objectManager->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnValueMap([
+            ->willReturnMap(
+                [
                     ['Magento\A\Setup\Uninstall', [], $uninstallA],
                     ['Magento\B\Setup\Uninstall', [], $uninstallB],
-                ])
+                ]
             );
         $setupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
         $setupFactory->expects($this->once())->method('create')->willReturn($setup);

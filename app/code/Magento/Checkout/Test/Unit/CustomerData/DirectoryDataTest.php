@@ -22,7 +22,7 @@ class DirectoryDataTest extends TestCase
     private $model;
 
     /**
-     * @var HelperData|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryHelperMock;
 
@@ -34,7 +34,7 @@ class DirectoryDataTest extends TestCase
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->directoryHelperMock = $this->createMock(HelperData::class);

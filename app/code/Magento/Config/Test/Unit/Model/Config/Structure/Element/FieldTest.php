@@ -23,31 +23,31 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sourceFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_commentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_blockFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_depMapperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -71,7 +71,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_backendFactoryMock);
         unset($this->_sourceFactoryMock);
@@ -110,8 +110,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'getCommentText'
         )->with(
             'currentValue'
-        )->will(
-            $this->returnValue('translatedValue')
+        )->willReturn(
+            'translatedValue'
         );
         $this->_commentFactoryMock->expects(
             $this->once()
@@ -119,8 +119,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'Model_Name'
-        )->will(
-            $this->returnValue($commentModelMock)
+        )->willReturn(
+            $commentModelMock
         );
         $this->assertEquals('translatedValue', $this->_model->getComment('currentValue'));
     }
@@ -135,15 +135,15 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setData(['tooltip_block' => \Magento\Config\Block\Tooltip::class], 'scope');
         $tooltipBlock = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
-        $tooltipBlock->expects($this->once())->method('toHtml')->will($this->returnValue('tooltip block'));
+        $tooltipBlock->expects($this->once())->method('toHtml')->willReturn('tooltip block');
         $this->_blockFactoryMock->expects(
             $this->once()
         )->method(
             'createBlock'
         )->with(
             \Magento\Config\Block\Tooltip::class
-        )->will(
-            $this->returnValue($tooltipBlock)
+        )->willReturn(
+            $tooltipBlock
         );
         $this->assertEquals('tooltip block', $this->_model->getTooltip());
     }
@@ -181,8 +181,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             \Magento\Framework\Model\Name::class
-        )->will(
-            $this->returnValue('backend_model_object')
+        )->willReturn(
+            'backend_model_object'
         );
         $this->_model->setData(['backend_model' => \Magento\Framework\Model\Name::class], 'scope');
         $this->assertEquals('backend_model_object', $this->_model->getBackendModel());
@@ -315,8 +315,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $expected = [['label' => 'test', 'value' => 0], ['label' => 'test2', 'value' => 1]];
         $sourceModelMock->expects(
@@ -325,8 +325,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'toOptionArray'
         )->with(
             false
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->_model->getOptions());
     }
@@ -347,12 +347,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $expected = ['testVar1' => 'testVal1', 'testVar2' => ['subvar1' => 'subval1']];
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
-        $sourceModelMock->expects($this->once())->method('retrieveElements')->will($this->returnValue($expected));
+        $sourceModelMock->expects($this->once())->method('retrieveElements')->willReturn($expected);
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 
@@ -372,16 +372,16 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
         $sourceModelMock->expects(
             $this->once()
         )->method(
             'retrieveElements'
-        )->will(
-            $this->returnValue(['var1' => 'val1', 'var2' => ['subvar1' => 'subval1']])
+        )->willReturn(
+            ['var1' => 'val1', 'var2' => ['subvar1' => 'subval1']]
         );
         $expected = [['label' => 'val1', 'value' => 'var1'], ['subvar1' => 'subval1']];
         $this->assertEquals($expected, $this->_model->getOptions());
@@ -415,8 +415,8 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $fields,
             'test_scope',
             'test_prefix'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_prefix', 'test_scope'));

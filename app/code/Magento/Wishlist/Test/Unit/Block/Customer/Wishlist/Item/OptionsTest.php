@@ -37,7 +37,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     private $itemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productContextMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()

@@ -28,22 +28,22 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalInfo;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalConfig;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $apiTypeFactory;
 
     /**
-     * @var Nvp|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $api;
 
@@ -57,7 +57,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -76,7 +76,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $this->api->expects($this->any())
             ->method('call')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->apiTypeFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
@@ -84,7 +84,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $this->apiTypeFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->api));
+            ->willReturn($this->api);
     }
 
     /**
@@ -126,11 +126,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $api->expects($this->any())
             ->method('callSetExpressCheckout')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $apiTypeFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($api));
+            ->willReturn($api);
 
         $checkoutModel->start(
             'return',
@@ -171,7 +171,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $customer = $customerService->getById($quote->getCustomerId());
 
         $this->assertEquals(1, $quote->getCustomerId());
-        $this->assertEquals(2, count($customer->getAddresses()));
+        $this->assertCount(2, $customer->getAddresses());
 
         $this->assertEquals(1, $quote->getBillingAddress()->getCustomerAddressId());
         $this->assertEquals(2, $quote->getShippingAddress()->getCustomerAddressId());
@@ -256,12 +256,12 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $exportedBillingAddress = $this->getExportedAddressFixture($quote->getBillingAddress()->getData(), $prefix);
         $this->api->expects($this->any())
             ->method('getExportedBillingAddress')
-            ->will($this->returnValue($exportedBillingAddress));
+            ->willReturn($exportedBillingAddress);
 
         $exportedShippingAddress = $this->getExportedAddressFixture($quote->getShippingAddress()->getData(), $prefix);
         $this->api->expects($this->any())
             ->method('getExportedShippingAddress')
-            ->will($this->returnValue($exportedShippingAddress));
+            ->willReturn($exportedShippingAddress);
 
         $this->paypalInfo->expects($this->once())->method('importToPayment')->with($this->api, $quote->getPayment());
 
@@ -498,13 +498,14 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/country/default CA
      *
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage You can't use the payment type you selected to make payments to the billing country.
      *
      * @return void
      */
     public function testPaymentValidationWithAllowedSpecificCountryNegative(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('You can\'t use the payment type you selected to make payments to the billing country.');
+
         $quote = $this->getFixtureQuote();
         $this->prepareCheckoutModel($quote);
         $quote->getPayment()->getMethodInstance()->validate();
@@ -635,17 +636,17 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
 
         $apiTypeFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($api));
+            ->willReturn($api);
 
         $exportedBillingAddress = $this->getExportedAddressFixture($quote->getBillingAddress()->getData());
         $api->expects($this->any())
             ->method('getExportedBillingAddress')
-            ->will($this->returnValue($exportedBillingAddress));
+            ->willReturn($exportedBillingAddress);
 
         $exportedShippingAddress = $this->getExportedAddressFixture($quote->getShippingAddress()->getData());
         $api->expects($this->any())
             ->method('getExportedShippingAddress')
-            ->will($this->returnValue($exportedShippingAddress));
+            ->willReturn($exportedShippingAddress);
 
         $this->addCountryFactory($api);
         $data = [

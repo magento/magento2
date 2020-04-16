@@ -20,7 +20,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
      */
     protected $structure;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->structure = $objectManagerHelper->getObject(

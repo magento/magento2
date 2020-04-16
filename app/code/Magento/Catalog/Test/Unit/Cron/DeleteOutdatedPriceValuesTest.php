@@ -30,32 +30,32 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
     private $deleteOutdatedPriceValues;
 
     /**
-     * @var AttributeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ScopeConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbAdapterMock;
 
     /**
-     * @var BackendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeBackendMock;
 
@@ -64,14 +64,14 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
         $this->attributeMock = $this->createMock(Attribute::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfig::class);
-        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
-        $this->attributeBackendMock = $this->createMock(BackendInterface::class);
+        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->attributeBackendMock = $this->getMockForAbstractClass(BackendInterface::class);
         $this->deleteOutdatedPriceValues = new DeleteOutdatedPriceValues(
             $this->resourceConnectionMock,
             $this->attributeRepositoryMock,

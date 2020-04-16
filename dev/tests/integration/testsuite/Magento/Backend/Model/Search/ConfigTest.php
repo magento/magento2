@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $fileIterator = $fileIteratorFactory->create(
             [__DIR__ . '/_files/test_config.xml']
         );
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileIterator);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Config\Model\Config\Structure\Reader $structureReader */

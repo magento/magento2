@@ -13,36 +13,36 @@ class EditTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_systemConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_sectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_jsonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_systemConfigMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
 
@@ -53,8 +53,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             'getParam'
         )->with(
             'section'
-        )->will(
-            $this->returnValue('test_section')
+        )->willReturn(
+            'test_section'
         );
 
         $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
@@ -68,8 +68,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             'getElement'
         )->with(
             'test_section'
-        )->will(
-            $this->returnValue($this->_sectionMock)
+        )->willReturn(
+            $this->_sectionMock
         );
 
         $this->_jsonMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -98,8 +98,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         )->with(
             null,
             'save_button'
-        )->will(
-            $this->returnValue('test_child_name')
+        )->willReturn(
+            'test_child_name'
         );
 
         $this->_layoutMock->expects(
@@ -108,8 +108,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
             'renderElement'
         )->with(
             'test_child_name'
-        )->will(
-            $this->returnValue('element_html_code')
+        )->willReturn(
+            'element_html_code'
         );
 
         $this->assertEquals($expected, $this->_object->getSaveButtonHtml());
@@ -127,8 +127,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         )->with(
             $expectedUrl,
             $expectedParams
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());
@@ -184,7 +184,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $requestMock->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValueMap($requestData));
+            ->willReturnMap($requestData);
         $this->_jsonMock->expects($this->once())
             ->method('serialize')
             ->with($expected);

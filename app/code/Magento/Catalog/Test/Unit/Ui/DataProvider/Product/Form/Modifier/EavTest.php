@@ -202,7 +202,7 @@ class EavTest extends AbstractModifierTest
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = new ObjectManager($this);
@@ -291,7 +291,7 @@ class EavTest extends AbstractModifierTest
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eavAttributeFactoryMock->expects($this->any())
             ->method('create')

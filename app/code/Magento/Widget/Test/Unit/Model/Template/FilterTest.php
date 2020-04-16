@@ -48,7 +48,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);

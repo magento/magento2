@@ -18,8 +18,8 @@ class ListTest extends \PHPUnit\Framework\TestCase
             'getChildBlock'
         )->with(
             'toolbar'
-        )->will(
-            $this->returnValue($childBlock)
+        )->willReturn(
+            $childBlock
         );
 
         $expectedMode = 'a mode';

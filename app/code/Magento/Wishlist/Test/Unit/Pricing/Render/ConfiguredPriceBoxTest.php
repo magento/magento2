@@ -39,7 +39,7 @@ class ConfiguredPriceBoxTest extends \PHPUnit\Framework\TestCase
      */
     private $item;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateContext = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()

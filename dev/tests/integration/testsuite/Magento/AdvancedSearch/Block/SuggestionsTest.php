@@ -18,7 +18,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\AdvancedSearch\Block\Suggestions */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $suggestedQueries = $this->createMock(SuggestedQueriesInterface::CLASS);
         $suggestedQueries->expects($this->any())->method('getItems')->willReturn([

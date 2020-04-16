@@ -15,40 +15,40 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class DiCompileCommandTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject */
     private $deploymentConfigMock;
 
-    /** @var \Magento\Setup\Module\Di\App\Task\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Setup\Module\Di\App\Task\Manager|\PHPUnit\Framework\MockObject\MockObject */
     private $managerMock;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var DiCompileCommand|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DiCompileCommand|\PHPUnit\Framework\MockObject\MockObject */
     private $command;
 
-    /** @var  \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\Cache|\PHPUnit\Framework\MockObject\MockObject */
     private $cacheMock;
 
-    /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     private $filesystemMock;
 
-    /** @var  \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject */
     private $fileDriverMock;
 
-    /** @var  \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject */
     private $directoryListMock;
 
-    /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject */
     private $componentRegistrarMock;
 
-    /** @var  \Symfony\Component\Console\Output\OutputInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Symfony\Component\Console\Output\OutputInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $outputMock;
 
-    /** @var \Symfony\Component\Console\Formatter\OutputFormatterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Symfony\Component\Console\Formatter\OutputFormatterInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $outputFormatterMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);

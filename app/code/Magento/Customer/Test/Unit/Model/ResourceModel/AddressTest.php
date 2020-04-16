@@ -18,19 +18,19 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Test\Unit\Model\ResourceModel\SubResourceModelAddress */
     protected $addressResource;
 
-    /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerFactory;
 
     /** @var \Magento\Eav\Model\Entity\Type */
     protected $eavConfigType;
 
-    /** @var  Snapshot|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Snapshot|\PHPUnit\Framework\MockObject\MockObject */
     protected $entitySnapshotMock;
 
-    /** @var  RelationComposite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RelationComposite|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityRelationCompositeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entitySnapshotMock = $this->createMock(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
@@ -62,7 +62,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        /** @var $address \Magento\Customer\Model\Address|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $address \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject */
         $address = $this->createPartialMock(
             \Magento\Customer\Model\Address::class,
             [
@@ -117,7 +117,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare resource mock object
      *
-     * @return \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareResource()
     {
@@ -150,8 +150,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($dbAdapter));
-        $resource->expects($this->any())->method('getTableName')->will($this->returnValue('customer_address_entity'));
+        $resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
+        $resource->expects($this->any())->method('getTableName')->willReturn('customer_address_entity');
 
         return $resource;
     }
@@ -159,7 +159,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare Eav config mock object
      *
-     * @return \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareEavConfig()
     {
@@ -224,7 +224,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare validator mock object
      *
-     * @return \Magento\Framework\Validator\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Validator\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareValidatorFactory()
     {
@@ -243,7 +243,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareCustomerFactory()
     {

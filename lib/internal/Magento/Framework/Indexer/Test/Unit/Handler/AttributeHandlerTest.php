@@ -17,7 +17,7 @@ use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SourceProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SourceProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $source;
 
@@ -29,7 +29,7 @@ class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->source = $this->getMockBuilder(SourceProviderInterface::class)
             ->disableOriginalConstructor()

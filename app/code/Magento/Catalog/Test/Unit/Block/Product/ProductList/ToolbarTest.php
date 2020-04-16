@@ -14,51 +14,51 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit\Framework\MockObject\MockObject
      */
     private $memorizer;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productListHelper;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pagerBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->createPartialMock(\Magento\Catalog\Model\Product\ProductList\Toolbar::class, [
                 'getDirection',
@@ -101,7 +101,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($scopeConfig));
+            ->willReturnMap($scopeConfig);
 
         $this->catalogConfig = $this->createPartialMock(
             \Magento\Catalog\Model\Config::class,
@@ -114,13 +114,13 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         );
         $context->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilder));
+            ->willReturn($this->urlBuilder);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfig));
+            ->willReturn($this->scopeConfig);
         $context->expects($this->any())
             ->method('getlayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $this->productListHelper = $this->createMock(\Magento\Catalog\Helper\Product\ProductList::class);
 
         $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
@@ -138,7 +138,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -149,7 +149,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->model->expects($this->once())
             ->method('getCurrentPage')
-            ->will($this->returnValue($page));
+            ->willReturn($page);
         $this->assertEquals($page, $this->block->getCurrentPage());
     }
 
@@ -160,11 +160,11 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
         $this->urlEncoder->expects($this->once())
             ->method('encode')
             ->with($url)
-            ->will($this->returnValue($encodedUrl));
+            ->willReturn($encodedUrl);
         $this->assertEquals($encodedUrl, $this->block->getPagerEncodedUrl());
     }
 
@@ -173,10 +173,10 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $order = 'price';
         $this->memorizer->expects($this->once())
             ->method('getOrder')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue(['name' => [], 'price' => []]));
+            ->willReturn(['name' => [], 'price' => []]);
 
         $this->assertEquals($order, $this->block->getCurrentOrder());
     }
@@ -187,7 +187,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->memorizer->expects($this->once())
             ->method('getDirection')
-            ->will($this->returnValue($direction));
+            ->willReturn($direction);
 
         $this->assertEquals($direction, $this->block->getCurrentDirection());
     }
@@ -198,10 +198,10 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->productListHelper->expects($this->once())
             ->method('getAvailableViewMode')
-            ->will($this->returnValue(['list' => 'List']));
+            ->willReturn(['list' => 'List']);
         $this->memorizer->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue($mode));
+            ->willReturn($mode);
 
         $this->assertEquals($mode, $this->block->getCurrentMode());
     }
@@ -211,7 +211,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $mode = ['list' => 'List'];
         $this->productListHelper->expects($this->once())
             ->method('getAvailableViewMode')
-            ->will($this->returnValue($mode));
+            ->willReturn($mode);
 
         $this->assertEquals($mode, $this->block->getModes());
         $this->assertEquals($mode, $this->block->getModes());
@@ -226,7 +226,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     {
         $this->productListHelper->expects($this->once())
             ->method('getAvailableViewMode')
-            ->will($this->returnValue($mode));
+            ->willReturn($mode);
 
         $block = $this->block->setModes(['mode' => 'mode']);
         $this->assertEquals($expected, $block->getModes());
@@ -250,21 +250,21 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->memorizer->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue($mode));
+            ->willReturn($mode);
 
         $this->memorizer->expects($this->once())
             ->method('getLimit')
-            ->will($this->returnValue($limit));
+            ->willReturn($limit);
         $this->productListHelper->expects($this->once())
             ->method('getAvailableLimit')
-            ->will($this->returnValue([10 => 10, 20 => 20]));
+            ->willReturn([10 => 10, 20 => 20]);
         $this->productListHelper->expects($this->once())
             ->method('getDefaultLimitPerPageValue')
             ->with($this->equalTo('list'))
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->productListHelper->expects($this->any())
             ->method('getAvailableViewMode')
-            ->will($this->returnValue(['list' => 'List']));
+            ->willReturn(['list' => 'List']);
 
         $this->assertEquals($limit, $this->block->getLimit());
     }
@@ -275,41 +275,41 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
 
         $this->layout->expects($this->once())
             ->method('getChildName')
-            ->will($this->returnValue('product_list_toolbar_pager'));
+            ->willReturn('product_list_toolbar_pager');
         $this->layout->expects($this->once())
             ->method('getBlock')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
-            ->will($this->returnValue([10 => 10, 20 => 20]));
+            ->willReturn([10 => 10, 20 => 20]);
         $this->memorizer->expects($this->once())
             ->method('getLimit')
-            ->will($this->returnValue($limit));
+            ->willReturn($limit);
         $this->pagerBlock->expects($this->once())
             ->method('setUseContainer')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setShowPerPage')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setShowAmounts')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setFrameLength')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setJump')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setLimit')
             ->with($limit)
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setCollection')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->block->getPagerHtml());
     }
@@ -318,7 +318,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     {
         $this->catalogConfig->expects($this->atLeastOnce())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue(['name' => [], 'price' => []]));
+            ->willReturn(['name' => [], 'price' => []]);
 
         $this->block->setDefaultOrder('field');
     }
@@ -328,7 +328,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->assertEquals($data, $this->block->getAvailableOrders());
         $this->assertEquals($data, $this->block->getAvailableOrders());
@@ -339,7 +339,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $expected = $data;
         $expected['order'] = 'value';
         $toolbar = $this->block->addOrderToAvailableOrders('order', 'value');
@@ -351,7 +351,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $toolbar = $this->block->removeOrderFromAvailableOrders('order', 'value');
         $this->assertEquals($data, $toolbar->getAvailableOrders());
         $toolbar2 = $this->block->removeOrderFromAvailableOrders('name');

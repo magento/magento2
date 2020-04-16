@@ -81,7 +81,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var  Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMockForAbstractClass();

@@ -7,6 +7,7 @@
 namespace Magento\Store\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Website;
@@ -19,7 +20,7 @@ class WebsiteTest extends TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
@@ -27,11 +28,11 @@ class WebsiteTest extends TestCase
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->select =  $this->createMock(\Magento\Framework\DB\Select::class);

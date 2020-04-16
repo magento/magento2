@@ -62,7 +62,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $emailNotificationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(
             \Magento\Framework\ObjectManagerInterface::class

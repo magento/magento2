@@ -42,15 +42,15 @@ class WeightTest extends TestCase
      */
     protected $localeFormat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weightSwitcher = $this->createPartialMock(
             Radios::class,
             ['setId', 'setName', 'setLabel', 'setForm']
         );
-        $this->weightSwitcher->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher->method('setId')->willReturnSelf();
+        $this->weightSwitcher->method('setName')->willReturnSelf();
+        $this->weightSwitcher->method('setLabel')->willReturnSelf();
 
         $this->factory = $this->createMock(Factory::class);
         $this->factory->expects(
@@ -86,8 +86,8 @@ class WeightTest extends TestCase
             'setForm'
         )->with(
             $this->equalTo($form)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
+            
         );
 
         $this->_model->setForm($form);
