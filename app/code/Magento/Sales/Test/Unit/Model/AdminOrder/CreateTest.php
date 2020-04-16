@@ -227,6 +227,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'customer_tax_class_id' => $taxClassId
             ]
         );
+        $quote->method('getStoreId')->willReturn(1);
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
@@ -244,6 +245,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->groupRepository->method('getById')
             ->willReturn($customerGroup);
+
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with(1);
 
         $this->adminOrderCreate->setAccountData(['group_id' => 1]);
     }
