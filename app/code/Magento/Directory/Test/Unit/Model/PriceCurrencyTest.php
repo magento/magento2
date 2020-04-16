@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,19 @@
 
 namespace Magento\Directory\Test\Unit\Model;
 
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
 use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
+class PriceCurrencyTest extends TestCase
 {
     /**
      * @var PriceCurrency
@@ -16,32 +26,29 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyFactory|MockObject
      */
     protected $currencyFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
+        $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
-            ->getMock();
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->priceCurrency = $objectManager->getObject(
-            \Magento\Directory\Model\PriceCurrency::class,
+            PriceCurrency::class,
             [
                 'storeManager' => $this->storeManager,
                 'currencyFactory' => $this->currencyFactory
@@ -124,7 +131,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     public function testFormat()
     {
         $amount = 5.6;
-        $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
         $includeContainer = false;
         $store = null;
         $formattedAmount = '5.6 grn';
@@ -147,7 +154,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     public function testConvertAndFormat()
     {
         $amount = 5.6;
-        $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
         $includeContainer = false;
         $store = null;
         $convertedAmount = 9.3;
@@ -184,11 +191,11 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getCurrentCurrencyMock()
     {
-        $currency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+        $currency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,11 +204,11 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $baseCurrency
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getStoreMock($baseCurrency)
     {
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -216,11 +223,11 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
      * @param $amount
      * @param $convertedAmount
      * @param $currency
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getBaseCurrencyMock($amount, $convertedAmount, $currency)
     {
-        $baseCurrency = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+        $baseCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
 

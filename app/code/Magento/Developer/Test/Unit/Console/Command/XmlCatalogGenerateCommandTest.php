@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,9 +7,16 @@
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\XmlCatalogGenerateCommand;
+use Magento\Developer\Model\XmlCatalog\Format\PhpStorm;
+use Magento\Developer\Model\XmlCatalog\Format\VsCode;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
+class XmlCatalogGenerateCommandTest extends TestCase
 {
     /**
      * @var XmlCatalogGenerateCommand
@@ -20,20 +27,20 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
     {
         $fixtureXmlFile = __DIR__ . '/_files/test.xml';
 
-        $filesMock = $this->createPartialMock(\Magento\Framework\App\Utility\Files::class, ['getXmlCatalogFiles']);
+        $filesMock = $this->createPartialMock(Files::class, ['getXmlCatalogFiles']);
         $filesMock->expects($this->at(0))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([[$fixtureXmlFile]]));
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([]));
-        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
             ->will($this->returnValue($fixtureXmlFile));
 
-        $phpstormFormatMock = $this->createMock(\Magento\Developer\Model\XmlCatalog\Format\PhpStorm::class);
+        $phpstormFormatMock = $this->createMock(PhpStorm::class);
         $phpstormFormatMock->expects($this->once())
             ->method('generateCatalog')
             ->with(
@@ -42,8 +49,8 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
             )->will($this->returnValue(null));
 
         $formats = ['phpstorm' => $phpstormFormatMock];
-        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $readDirMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $readFactory = $this->createMock(ReadFactory::class);
+        $readDirMock = $this->createMock(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 
@@ -71,20 +78,20 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
     {
         $fixtureXmlFile = __DIR__ . '/_files/test.xml';
 
-        $filesMock = $this->createPartialMock(\Magento\Framework\App\Utility\Files::class, ['getXmlCatalogFiles']);
+        $filesMock = $this->createPartialMock(Files::class, ['getXmlCatalogFiles']);
         $filesMock->expects($this->at(0))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([[$fixtureXmlFile]]));
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([]));
-        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
             ->will($this->returnValue($fixtureXmlFile));
 
-        $vscodeFormatMock = $this->createMock(\Magento\Developer\Model\XmlCatalog\Format\VsCode::class);
+        $vscodeFormatMock = $this->createMock(VsCode::class);
         $vscodeFormatMock->expects($this->once())
             ->method('generateCatalog')
             ->with(
@@ -93,8 +100,8 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit\Framework\TestCase
             )->will($this->returnValue(null));
 
         $formats = ['vscode' => $vscodeFormatMock];
-        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $readDirMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $readFactory = $this->createMock(ReadFactory::class);
+        $readDirMock = $this->createMock(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 

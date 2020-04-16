@@ -1,45 +1,44 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Framework\DB\Select;
-use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
-use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\DB\TemporaryTableService;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DataCategoryUrlRewriteDatabaseMapTest
- */
-class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit\Framework\TestCase
+class DataCategoryUrlRewriteDatabaseMapTest extends TestCase
 {
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|MockObject */
     private $dataCategoryUsedInProductsMapMock;
 
-    /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TemporaryTableService|MockObject */
     private $temporaryTableServiceMock;
 
-    /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceConnection|MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUrlRewriteDatabaseMap|MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->hashMapPoolMock = $this->createMock(HashMapPool::class);
         $this->dataCategoryMapMock = $this->createMock(DataProductHashMap::class);

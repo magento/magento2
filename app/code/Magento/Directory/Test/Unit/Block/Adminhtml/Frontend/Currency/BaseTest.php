@@ -47,7 +47,7 @@ class BaseTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elementMock = $this->createMock(AbstractElement::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);

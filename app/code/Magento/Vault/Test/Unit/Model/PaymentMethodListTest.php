@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,11 +9,12 @@ use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Model\PaymentMethodList;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
+class PaymentMethodListTest extends TestCase
 {
     /**
      * @var PaymentMethodListInterface|MockObject
@@ -30,7 +31,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      */
     private $vaultPaymentList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
         $this->instanceFactory = $this->getMockBuilder(InstanceFactory::class)

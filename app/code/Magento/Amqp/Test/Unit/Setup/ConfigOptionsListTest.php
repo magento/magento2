@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,12 @@
 
 namespace Magento\Amqp\Test\Unit\Setup;
 
-use Magento\Amqp\Setup\ConnectionValidator;
-use Magento\Framework\Config\Data\ConfigData;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Amqp\Setup\ConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Amqp\Setup\ConnectionValidator;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -183,9 +183,7 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
+                ['queue' => ['amqp' => [
                             'host' => 'host',
                             'port' => 'port',
                             'user' => 'user',
@@ -207,9 +205,7 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
+                ['queue' => ['amqp' => [
                             'host' => 'host',
                             'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
                             'user' => 'user',
@@ -227,9 +223,8 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => ConfigOptionsList::DEFAULT_AMQP_PORT,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => ConfigOptionsList::DEFAULT_AMQP_USER,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => ConfigOptionsList::DEFAULT_AMQP_PASSWORD,
-                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST =>
-                        ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => ConfigOptionsList::DEFAULT_AMQP_SSL,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST
                 ],
                 [],
             ],

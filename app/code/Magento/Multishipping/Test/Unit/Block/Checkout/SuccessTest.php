@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,9 +7,16 @@
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Multishipping\Block\Checkout\Success;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SuccessTest extends \PHPUnit\Framework\TestCase
+class SuccessTest extends TestCase
 {
     /**
      * @var Success
@@ -17,23 +24,23 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $contextMock;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->createPartialMock(
-            \Magento\Framework\Session\SessionManagerInterface::class,
+            SessionManagerInterface::class,
             [
                 'getOrderIds',
                 'start',
@@ -56,15 +63,15 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
                 '__wakeup'
             ]
         );
-        $this->contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->contextMock->expects($this->once())->method('getSession')->will($this->returnValue($this->sessionMock));
         $this->contextMock->expects($this->once())
             ->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
         $this->model = $objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Success::class,
+            Success::class,
             [
                 'context' => $this->contextMock
             ]
@@ -95,7 +102,7 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
 
     public function testGetContinueUrl()
     {
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
 

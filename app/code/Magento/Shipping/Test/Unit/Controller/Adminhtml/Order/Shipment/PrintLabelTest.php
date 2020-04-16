@@ -1,103 +1,119 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintLabel;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
 /**
- * Class PrintLabelTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PrintLabelTest extends \PHPUnit\Framework\TestCase
+class PrintLabelTest extends TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentLoader|MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shipment|MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var LabelGenerator|MockObject
      */
     protected $labelGenerator;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionFlag|MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintLabel
+     * @var PrintLabel
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentLoaderMock = $this->createPartialMock(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
+            ShipmentLoader::class,
             ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
         $this->labelGenerator = $this->createPartialMock(
-            \Magento\Shipping\Model\Shipping\LabelGenerator::class,
+            LabelGenerator::class,
             ['createPdfPageFromImageString']
         );
         $this->fileFactoryMock = $this->createPartialMock(
-            \Magento\Framework\App\Response\Http\FileFactory::class,
+            FileFactory::class,
             ['create']
         );
         $this->shipmentMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             ['getIncrementId', 'getShippingLabel', '__wakeup']
         );
-        $this->messageManagerMock = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addError']);
-        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->messageManagerMock = $this->createPartialMock(Manager::class, ['addError']);
+        $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
-        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->helperMock = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
-        $contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
+        $this->sessionMock = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
+        $contextMock = $this->createPartialMock(Context::class, [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -120,7 +136,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->objectManagerMock));
         $this->loadShipment();
 
-        $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\PrintLabel(
+        $this->controller = new PrintLabel(
             $contextMock,
             $this->shipmentLoaderMock,
             $this->labelGenerator,
@@ -199,7 +215,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->actionFlag->expects($this->once())
             ->method('get')
-            ->with('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED)
+            ->with('', AbstractAction::FLAG_IS_URLS_CHECKED)
             ->will($this->returnValue(true));
         $this->sessionMock->expects($this->once())->method('setIsUrlNotice')->with(true);
         $this->helperMock->expects($this->once())->method('getUrl')->will($this->returnValue('redirect-path'));
@@ -260,7 +276,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
         $labelContent = 'Label-content';
         $incrementId = '1000001';
 
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -285,7 +301,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
+            ->with(LoggerInterface::class)
             ->will($this->returnValue($loggerMock));
         $loggerMock->expects($this->once())
             ->method('critical');
@@ -305,7 +321,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
+            ->willThrowException(new LocalizedException(__('message')));
         $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
         $this->redirectSection();
 

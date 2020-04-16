@@ -1,21 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Config\Source;
 
-class ValueTypeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleAdwords\Helper\Data;
+use Magento\GoogleAdwords\Model\Config\Source\ValueType;
+use PHPUnit\Framework\TestCase;
+
+class ValueTypeTest extends TestCase
 {
     /**
-     * @var \Magento\GoogleAdwords\Model\Config\Source\ValueType
+     * @var ValueType
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\GoogleAdwords\Model\Config\Source\ValueType::class, []);
+        $objectManager = new ObjectManager($this);
+        $this->_model = $objectManager->getObject(ValueType::class, []);
     }
 
     public function testToOptionArray()
@@ -23,11 +28,11 @@ class ValueTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 [
-                    'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_DYNAMIC,
+                    'value' => Data::CONVERSION_VALUE_TYPE_DYNAMIC,
                     'label' => 'Dynamic',
                 ],
                 [
-                    'value' => \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_TYPE_CONSTANT,
+                    'value' => Data::CONVERSION_VALUE_TYPE_CONSTANT,
                     'label' => 'Constant'
                 ],
             ],

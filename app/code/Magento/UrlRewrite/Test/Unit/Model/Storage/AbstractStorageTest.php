@@ -1,37 +1,45 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
-class AbstractStorageTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\UrlRewrite\Model\Storage\AbstractStorage;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractStorageTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteFactory|MockObject
      */
     protected $urlRewriteFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\UrlRewrite\Model\Storage\AbstractStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractStorage|MockObject
      */
     protected $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
-            \Magento\UrlRewrite\Model\Storage\AbstractStorage::class,
+            AbstractStorage::class,
             [$this->urlRewriteFactory, $this->dataObjectHelper],
             '',
             true,
@@ -53,7 +61,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with($urlRewrites[0], $rows[0], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->with($urlRewrites[0], $rows[0], UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -62,7 +70,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with($urlRewrites[1], $rows[1], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->with($urlRewrites[1], $rows[1], UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
@@ -97,7 +105,7 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($urlRewrite, $row, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->with($urlRewrite, $row, UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->any())
@@ -114,33 +122,29 @@ class AbstractStorageTest extends \PHPUnit\Framework\TestCase
         $this->storage->replace([]);
     }
 
-    /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage Custom storage message
-     */
     public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage()
     {
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
+        $this->expectExceptionMessage('Custom storage message');
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
             ->will($this->throwException(
-                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(__('Custom storage message'))
+                new UrlAlreadyExistsException(__('Custom storage message'))
             ));
 
         $this->storage->replace([['UrlRewrite1']]);
     }
 
-    /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     * @expectedExceptionMessage URL key for specified store already exists
-     */
     public function testReplaceIfThrewDuplicateEntryExceptionDefaultMessage()
     {
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
+        $this->expectExceptionMessage('URL key for specified store already exists');
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
             ->will($this->throwException(
-                new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException()
+                new UrlAlreadyExistsException()
             ));
 
         $this->storage->replace([['UrlRewrite1']]);

@@ -1,29 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Observer;
 
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Observer\UnsetAllObserver;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UnsetAllObserverTest extends \PHPUnit\Framework\TestCase
+class UnsetAllObserverTest extends TestCase
 {
-    /** @var \Magento\Checkout\Observer\UnsetAllObserver */
+    /** @var UnsetAllObserver */
     protected $object;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $checkoutSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutSession = $this->createMock(Session::class);
         $this->object = $this->objectManager->getObject(
-            \Magento\Checkout\Observer\UnsetAllObserver::class,
+            UnsetAllObserver::class,
             ['checkoutSession' => $this->checkoutSession]
         );
     }
@@ -33,7 +38,7 @@ class UnsetAllObserverTest extends \PHPUnit\Framework\TestCase
         $this->checkoutSession->expects($this->once())->method('clearQuote')->will($this->returnSelf());
         $this->checkoutSession->expects($this->once())->method('clearStorage')->will($this->returnSelf());
 
-        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

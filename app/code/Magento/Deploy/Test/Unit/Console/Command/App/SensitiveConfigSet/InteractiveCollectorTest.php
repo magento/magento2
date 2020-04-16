@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,15 @@
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\QuestionFactory;
-use Symfony\Component\Console\Helper\QuestionHelper;
 
-class InteractiveCollectorTest extends \PHPUnit\Framework\TestCase
+class InteractiveCollectorTest extends TestCase
 {
     /**
      * @var QuestionFactory|MockObject
@@ -43,7 +44,7 @@ class InteractiveCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
