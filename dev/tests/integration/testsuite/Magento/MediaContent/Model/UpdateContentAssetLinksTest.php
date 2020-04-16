@@ -15,27 +15,28 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for ExtractAssetsFromContent
+ * Test for UpdateContentAssetLinks
  */
-class UpdateRelationsTest extends TestCase
+class UpdateContentAssetLinksTest extends TestCase
 {
     /**
      * @var UpdateContentAssetLinksInterface
      */
-    private $service;
+    private $updateContentAssetLinks;
 
     /**
      * @var GetAssetIdsByContentIdentityInterface
      */
-    private $getAssetIds;
+    private $getAssetIdsByContentIdentity;
 
     /**
      * @inheritdoc
      */
     public function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->get(UpdateContentAssetLinksInterface::class);
-        $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsByContentIdentityInterface::class);
+        $this->updateContentAssetLinks = Bootstrap::getObjectManager()->get(UpdateContentAssetLinksInterface::class);
+        $this->getAssetIdsByContentIdentity = Bootstrap::getObjectManager()
+            ->get(GetAssetIdsByContentIdentityInterface::class);
     }
 
     /**
@@ -54,21 +55,19 @@ class UpdateRelationsTest extends TestCase
         $contentIdentity = Bootstrap::getObjectManager()->create(
             ContentIdentityInterface::class,
             [
-                'data' => [
-                    'entity_type' => $entityType,
-                    'entity_id' => $entityId,
-                    'field' => $field
-                ]
+                'entityType' => $entityType,
+                'entityId' => $entityId,
+                'field' => $field
             ]
         );
 
-        $this->service->execute($contentIdentity, $contentWithoutAsset);
-        $this->assertEmpty($this->getAssetIds->execute($contentIdentity));
+        $this->updateContentAssetLinks->execute($contentIdentity, $contentWithoutAsset);
+        $this->assertEmpty($this->getAssetIdsByContentIdentity->execute($contentIdentity));
 
-        $this->service->execute($contentIdentity, $contentWithAsset);
-        $this->assertNotEmpty($this->getAssetIds->execute($contentIdentity));
+        $this->updateContentAssetLinks->execute($contentIdentity, $contentWithAsset);
+        $this->assertNotEmpty($this->getAssetIdsByContentIdentity->execute($contentIdentity));
 
-        $this->service->execute($contentIdentity, $contentWithoutAsset);
-        $this->assertEmpty($this->getAssetIds->execute($contentIdentity));
+        $this->updateContentAssetLinks->execute($contentIdentity, $contentWithoutAsset);
+        $this->assertEmpty($this->getAssetIdsByContentIdentity->execute($contentIdentity));
     }
 }

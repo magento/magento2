@@ -20,14 +20,15 @@ class ExtractAssetsFromContentTest extends TestCase
     /**
      * @var ExtractAssetsFromContentInterface
      */
-    private $service;
+    private $extractAssetsFromContent;
 
     /**
      * @inheritdoc
      */
     public function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->get(ExtractAssetsFromContentInterface::class);
+        $this->extractAssetsFromContent = Bootstrap::getObjectManager()
+            ->get(ExtractAssetsFromContentInterface::class);
     }
 
     /**
@@ -41,7 +42,7 @@ class ExtractAssetsFromContentTest extends TestCase
      */
     public function testExecute(string $content, array $assetIds): void
     {
-        $assets = $this->service->execute($content);
+        $assets = $this->extractAssetsFromContent->execute($content);
 
         $extractedAssetIds = [];
         foreach ($assets as $asset) {

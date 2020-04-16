@@ -37,4 +37,12 @@ interface ContentAssetLinkInterface extends ExtensibleDataInterface
      * @return \Magento\MediaContentApi\Api\Data\ContentAssetLinkExtensionInterface|null
      */
     public function getExtensionAttributes(): ?ContentAssetLinkExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\MediaContentApi\Api\Data\ContentAssetLinkExtensionInterface|null $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(?ContentAssetLinkExtensionInterface $extensionAttributes): void;
 }

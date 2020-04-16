@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for AssignAssets service
  */
-class AssignGetUnassignTest extends TestCase
+class SaveDeleteContentAssetLinksTest extends TestCase
 {
     /**
      * @var SaveContentAssetLinksInterface
@@ -55,7 +55,7 @@ class AssignGetUnassignTest extends TestCase
     }
 
     /**
-     * Assing assets to content, retrieve the data, then unassign assets from content
+     * Save asset to content links, retrieve the data, delete assets to content links
      */
     public function testAssignRetrieveAndUnassign(): void
     {

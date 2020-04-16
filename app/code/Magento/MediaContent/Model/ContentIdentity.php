@@ -66,8 +66,16 @@ class ContentIdentity implements ContentIdentityInterface
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): ContentIdentityExtensionInterface
+    public function getExtensionAttributes(): ?ContentIdentityExtensionInterface
     {
         return $this->extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(?ContentIdentityExtensionInterface $extensionAttributes): void
+    {
+        $this->extensionAttributes = $extensionAttributes;
     }
 }

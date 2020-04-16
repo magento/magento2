@@ -49,6 +49,8 @@ class MediaGalleryAssetDeleteByPath
     }
 
     /**
+     * Around plugin on execute method
+     *
      * @param DeleteByPathInterface $subject
      * @param \Closure $proceed
      * @param string $mediaAssetPath

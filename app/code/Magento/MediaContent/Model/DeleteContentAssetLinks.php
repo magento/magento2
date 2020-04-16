@@ -66,6 +66,8 @@ class DeleteContentAssetLinks implements DeleteContentAssetLinksInterface
     }
 
     /**
+     * Build sql where condition
+     *
      * @param ContentAssetLinkInterface[] $contentAssetLinks
      * @return string
      */
@@ -76,13 +78,16 @@ class DeleteContentAssetLinks implements DeleteContentAssetLinksInterface
         foreach ($contentAssetLinks as $contentAssetLink) {
             $assetId = $connection->quoteInto(self::ASSET_ID . ' = ?', $contentAssetLink->getAssetId());
             $entityId = $connection->quoteInto(
-                self::ENTITY_ID . ' = ?', $contentAssetLink->getContentId()->getEntityId()
+                self::ENTITY_ID . ' = ?',
+                $contentAssetLink->getContentId()->getEntityId()
             );
             $entityType = $connection->quoteInto(
-                self::ENTITY_TYPE . ' = ?', $contentAssetLink->getContentId()->getEntityType()
+                self::ENTITY_TYPE . ' = ?',
+                $contentAssetLink->getContentId()->getEntityType()
             );
             $field = $connection->quoteInto(
-                self::FIELD . ' = ?', $contentAssetLink->getContentId()->getField()
+                self::FIELD . ' = ?',
+                $contentAssetLink->getContentId()->getField()
             );
             $condition[] = '(' . $assetId . ' AND ' . $entityId . ' AND ' . $entityType . ' AND ' . $field . ')';
         }

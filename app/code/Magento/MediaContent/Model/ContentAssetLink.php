@@ -16,9 +16,6 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
  */
 class ContentAssetLink implements ContentAssetLinkInterface
 {
-    private const ASSET_ID = 'asset_id';
-    private const CONTENT_IDENTITY = 'content_identity';
-
     /**
      * @var ContentAssetLinkExtensionInterface|null
      */
@@ -35,14 +32,16 @@ class ContentAssetLink implements ContentAssetLinkInterface
     private $assetId;
 
     /**
+     * ContentAssetLink constructor.
+     * @param int $assetId
+     * @param ContentIdentityInterface $contentIdentity
      * @param ContentAssetLinkExtensionInterface|null $extensionAttributes
      */
     public function __construct(
         int $assetId,
         ContentIdentityInterface $contentIdentity,
         ?ContentAssetLinkExtensionInterface $extensionAttributes = null
-    )
-    {
+    ) {
         $this->assetId = $assetId;
         $this->contentIdentity = $contentIdentity;
         $this->extensionAttributes = $extensionAttributes;
@@ -70,5 +69,13 @@ class ContentAssetLink implements ContentAssetLinkInterface
     public function getExtensionAttributes(): ?ContentAssetLinkExtensionInterface
     {
         return $this->extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(?ContentAssetLinkExtensionInterface $extensionAttributes): void
+    {
+        $this->extensionAttributes = $extensionAttributes;
     }
 }

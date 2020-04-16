@@ -43,5 +43,13 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      *
      * @return \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null
      */
-    public function getExtensionAttributes(): ContentIdentityExtensionInterface;
+    public function getExtensionAttributes(): ?ContentIdentityExtensionInterface;
+
+    /**
+     * Set extension attributes
+     *
+     * @param \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(?ContentIdentityExtensionInterface $extensionAttributes): void;
 }
