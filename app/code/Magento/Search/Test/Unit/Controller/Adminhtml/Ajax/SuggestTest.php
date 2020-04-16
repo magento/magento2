@@ -46,7 +46,7 @@ class SuggestTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultJsonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->autocomplete = $this->getMockBuilder(\Magento\Search\Model\AutocompleteInterface::class)
             ->disableOriginalConstructor()

@@ -21,6 +21,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->dataStorageMock = $this->createMock(Data::class);
         $this->objectManager = new ObjectManager($this);
     }
 
