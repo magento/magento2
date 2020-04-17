@@ -22,6 +22,13 @@ $bulks = [
         'uuid' => 'bulk-uuid-searchable-6',
         'user_id' => 1,
         'description' => 'Bulk Description',
+        'operation_count' => 5,
+        'start_time' => '2009-10-10 00:00:00',
+    ],
+    'not_started' => [
+        'uuid' => 'bulk-uuid-searchable-7',
+        'user_id' => 1,
+        'description' => 'Bulk Description',
         'operation_count' => 3,
         'start_time' => '2009-10-10 00:00:00',
     ],
