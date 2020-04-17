@@ -29,7 +29,7 @@
                 <requiredEntity createDataKey="simpleSubCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -40,8 +40,7 @@
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront2"/>
         <waitForPageLoad stepKey="waitForCategoryStorefront"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="dontSeeCreatedProduct"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoadAddProducts"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$simpleSubCategory.name$$)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
         <waitForPageLoad stepKey="AdminCategoryEditPageLoad"/>

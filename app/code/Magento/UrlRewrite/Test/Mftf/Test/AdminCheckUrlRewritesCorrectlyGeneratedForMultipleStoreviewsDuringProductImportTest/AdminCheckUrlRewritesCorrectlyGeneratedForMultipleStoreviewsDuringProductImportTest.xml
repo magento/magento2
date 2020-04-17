@@ -21,7 +21,7 @@
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>

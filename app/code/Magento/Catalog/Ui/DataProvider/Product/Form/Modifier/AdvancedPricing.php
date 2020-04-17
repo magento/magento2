@@ -26,7 +26,7 @@ use Magento\Ui\Component\Modal;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- * Class AdvancedPricing
+ * Class for Product Modifier Advanced Pricing
  *
  * @api
  *
@@ -559,6 +559,7 @@ class AdvancedPricing extends AbstractModifier
                                         ],
                                         'imports' => [
                                             'priceValue' => '${ $.provider }:data.product.price',
+                                            '__disableTmpl' => ['priceValue' => false],
                                         ],
                                     ],
                                 ],
@@ -664,6 +665,7 @@ class AdvancedPricing extends AbstractModifier
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }',
+                                '__disableTmpl' => ['targetName' => false],
                                 'actionName' => 'actionDone'
                             ]
                         ]
