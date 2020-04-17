@@ -6,19 +6,24 @@
 declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Controller\Login;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\Action;
+
 /**
- * LoginAsCustomer proceed action
+ * Login as customer proxy page
+ * Allows running JavaScript to load customer data to the browser local storage
  */
-class Proceed extends \Magento\Framework\App\Action\Action
+class Proceed extends Action implements HttpGetActionInterface
 {
     /**
-     * Login as customer action
+     * Proxy page
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute():ResultInterface
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

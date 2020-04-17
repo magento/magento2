@@ -7,24 +7,30 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Backend\App\Action;
+
 /**
- * LoginAsCustomer log grid action
+ * Login As Customer log grid ajax action
  */
-class Grid extends \Magento\Backend\App\Action
+class Grid extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
     /**
-     * Login as customer log grid
+     * Login as customer log ajax grid
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute():ResultInterface
     {
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }
