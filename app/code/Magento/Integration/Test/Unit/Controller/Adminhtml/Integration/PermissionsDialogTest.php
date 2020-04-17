@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -8,8 +8,10 @@
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Framework\View\Layout\Element as LayoutElement;
+use Magento\Integration\Controller\Adminhtml\Integration;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
 
-class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+class PermissionsDialogTest extends IntegrationTest
 {
     public function testPermissionsDialog()
     {
@@ -17,7 +19,7 @@ class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Ad
 
         $this->_requestMock->expects($this->any())
             ->method('getParam')
-            ->with($this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID))
+            ->with($this->equalTo(Integration::PARAM_INTEGRATION_ID))
             ->will($this->returnValue(self::INTEGRATION_ID));
 
         $this->_integrationSvcMock->expects($this->any())

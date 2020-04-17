@@ -27,7 +27,7 @@ class ValidationCompositeTest extends TestCase
      */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var PageRepositoryInterface subject */
         $this->subject = $this->createMock(PageRepositoryInterface::class);
@@ -35,11 +35,11 @@ class ValidationCompositeTest extends TestCase
 
     /**
      * @param $validators
-     * @expectedException \InvalidArgumentException
      * @dataProvider constructorArgumentProvider
      */
     public function testConstructorValidation($validators)
     {
+        $this->expectException('InvalidArgumentException');
         new ValidationComposite($this->subject, $validators);
     }
 
@@ -72,12 +72,10 @@ class ValidationCompositeTest extends TestCase
         self::assertSame('foo', $result);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Oh no. That isn't right.
-     */
     public function testSaveInvokesValidatorsWithErrors()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Oh no. That isn\'t right.');
         $validator1 = $this->createMock(ValidatorInterface::class);
         $validator2 = $this->createMock(ValidatorInterface::class);
         $page = $this->createMock(PageInterface::class);

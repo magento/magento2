@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,14 @@
 
 namespace Magento\Authorization\Test\Unit\Model;
 
-use \Magento\Authorization\Model\CompositeUserContext;
-
+use Magento\Authorization\Model\CompositeUserContext;
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CompositeUserContextTest extends TestCase
 {
     /**
      * @var CompositeUserContext
@@ -28,7 +30,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->compositeHelperMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\Helper\Composite::class)
@@ -36,11 +38,10 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['filterAndSortDeclaredComponents'])
             ->getMock();
         $this->compositeHelperMock
-            ->expects($this->any())
             ->method('filterAndSortDeclaredComponents')
             ->will($this->returnArgument(0));
         $this->userContext = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock]
         );
     }
@@ -55,7 +56,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $model = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $this->verifyUserContextIsAdded($model, $userContextMock);
@@ -65,10 +66,10 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
+        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
-        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($expectedUserId));
-        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($expectedUserType));
+        $userContextMock->method('getUserId')->will($this->returnValue($expectedUserId));
+        $userContextMock->method('getUserType')->will($this->returnValue($expectedUserType));
         $contexts = [
             [
                 'sortOrder' => 10,
@@ -76,7 +77,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->userContext = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserId = $this->userContext->getUserId();
@@ -87,10 +88,10 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
+        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
-        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($expectedUserId));
-        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($expectedUserType));
+        $userContextMock->method('getUserId')->will($this->returnValue($expectedUserId));
+        $userContextMock->method('getUserType')->will($this->returnValue($expectedUserType));
         $contexts = [
             [
                 'sortOrder' => 10,
@@ -98,7 +99,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->userContext = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserType = $this->userContext->getUserType();
@@ -109,7 +110,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
+        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
         $userContextMock->expects($this->exactly(3))->method('getUserType')
             ->will($this->returnValue($expectedUserType));
@@ -122,7 +123,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->userContext = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $this->userContext->getUserId();
@@ -134,9 +135,9 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     public function testEmptyUserContext()
     {
         $expectedUserId = null;
-        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
+        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId'])->getMock();
-        $userContextMock->expects($this->any())->method('getUserId')
+        $userContextMock->method('getUserId')
             ->will($this->returnValue($expectedUserId));
         $contexts = [
             [
@@ -145,7 +146,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->userContext = $this->objectManager->getObject(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             ['compositeHelper' => $this->compositeHelperMock, 'userContexts' => $contexts]
         );
         $actualUserId = $this->userContext->getUserId();
@@ -155,15 +156,15 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|null $userId
      * @param string|null $userType
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function createUserContextMock($userId = null, $userType = null)
     {
-        $useContextMock = $this->getMockBuilder(\Magento\Authorization\Model\CompositeUserContext::class)
+        $useContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
         if ($userId !== null && $userType !== null) {
-            $useContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
-            $useContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
+            $useContextMock->method('getUserId')->will($this->returnValue($userId));
+            $useContextMock->method('getUserType')->will($this->returnValue($userType));
         }
         return $useContextMock;
     }
@@ -175,7 +176,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     protected function verifyUserContextIsAdded($model, $userContextMock)
     {
         $userContext = new \ReflectionProperty(
-            \Magento\Authorization\Model\CompositeUserContext::class,
+            CompositeUserContext::class,
             'userContexts'
         );
         $userContext->setAccessible(true);

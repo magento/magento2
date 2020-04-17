@@ -1,51 +1,66 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Helper\File\Storage;
 
-use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Storage;
+use Magento\MediaStorage\Model\File\Storage\DatabaseFactory;
+use Magento\MediaStorage\Model\File\Storage\File;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DatabaseTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DatabaseTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var DatabaseFactory|MockObject  */
     protected $dbStorageFactoryMock;
 
-    /** @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var Filesystem|MockObject  */
     protected $filesystemMock;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var File|MockObject  */
     protected $fileStorageMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var ScopeConfigInterface|MockObject  */
     protected $configMock;
 
     /** @var Database */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dbStorageFactoryMock = $this->getMockBuilder(
-            \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class
+            DatabaseFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\MediaStorage\Helper\File\Storage\Database::class;
+        $this->objectManager = new ObjectManager($this);
+        $className = Database::class;
         $arguments = $this->objectManager->getConstructArguments(
             $className,
             ['dbStorageFactory' => $this->dbStorageFactoryMock]
         );
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
-        $mediaDirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $mediaDirMock = $this->getMockForAbstractClass(ReadInterface::class);
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('media-dir'));
@@ -68,7 +83,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
 
         $this->assertEquals($expected, $this->helper->checkDbUsage());
@@ -81,7 +96,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function checkDbUsageDataProvider()
     {
         return [
-            'media database' => [\Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, true],
+            'media database' => [Storage::STORAGE_MEDIA_DATABASE, true],
             'non-media database' => [10, false],
         ];
     }
@@ -111,7 +126,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->dbStorageFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $resourceModelMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMockForAbstractClass();
@@ -132,7 +147,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -153,7 +168,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function updateFileDataProvider()
     {
         return [
-            'media database' => [\Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 1],
+            'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1],
             'non-media database' => [10, 0],
         ];
     }
@@ -167,7 +182,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -191,7 +206,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -216,7 +231,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -238,7 +253,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function fileExistsDataProvider()
     {
         return [
-            'media database' => [\Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 1, true],
+            'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, true],
             'non-media database' => [10, 0, null],
         ];
     }
@@ -253,7 +268,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -279,7 +294,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     public function getUniqueFilenameDataProvider()
     {
         return [
-            'media database' => [\Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 1, 'filename_2.ext'],
+            'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, 'filename_2.ext'],
             'non-media database' => [10, 0, 'filename.ext'],
         ];
     }
@@ -296,7 +311,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -328,12 +343,12 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         return [
             'media database, no id' => [
                 false,
-                \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE,
+                Storage::STORAGE_MEDIA_DATABASE,
                 1,
             ],
             'media database, with id' => [
                 true,
-                \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE,
+                Storage::STORAGE_MEDIA_DATABASE,
                 1,
                 1,
                 1,
@@ -356,7 +371,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -364,7 +379,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $resourceModelMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['deleteFolder', '__wakeup'])
             ->getMockForAbstractClass();
@@ -387,7 +402,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -414,7 +429,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA, 'default')
+            ->with(Storage::XML_PATH_STORAGE_MEDIA, 'default')
             ->will($this->returnValue($storage));
         $dbModelMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
@@ -422,7 +437,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $dirWriteMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $dirWriteMock = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemMock->expects($this->exactly($callDirWrite))
@@ -455,7 +470,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
                 ['file' => 'filename.ext', 'path' => 'media-dir/directory/'],
                 '/filename_2.ext',
                 'directory/filename_2.ext',
-                \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE,
+                Storage::STORAGE_MEDIA_DATABASE,
                 1,
                 1,
             ],
@@ -463,7 +478,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
                 ['file' => 'file.ext', 'path' => 'media-dir/directory/'],
                 '/file.ext',
                 'directory/file.ext',
-                \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE,
+                Storage::STORAGE_MEDIA_DATABASE,
                 1,
             ],
             'non-media database' => [
@@ -478,11 +493,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaBaseDir()
     {
-        $mediaDirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $mediaDirMock = $this->getMockForAbstractClass(ReadInterface::class);
         $mediaDirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('media-dir'));
-        $filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $filesystemMock->expects($this->once())
@@ -491,7 +506,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($mediaDirMock));
 
         $this->helper = $this->objectManager->getObject(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class,
+            Database::class,
             [
                 'filesystem' => $filesystemMock,
                 'fileStorage' => $this->fileStorageMock,

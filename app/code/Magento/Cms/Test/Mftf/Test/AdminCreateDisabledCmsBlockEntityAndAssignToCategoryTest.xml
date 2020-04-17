@@ -35,7 +35,7 @@
         <actionGroup ref="AdminSetCMSBlockDisabledActionGroup" stepKey="disableBlock"/>
         <actionGroup ref="SaveCMSBlockActionGroup" stepKey="saveCMSBlock"/>
 
-        <actionGroup ref="AdminOpenCategoriesPageActionGroup" stepKey="openCategoriesPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoriesPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAll"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$newDefaultCategory$$"/>

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,40 +6,47 @@
 namespace Magento\Paypal\Test\Unit\Model\Hostedpro;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Paypal\Model\Hostedpro;
+use Magento\Paypal\Model\Hostedpro\Request;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Model\Config;
+use PHPUnit\Framework\TestCase;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+class RequestTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $helper;
 
     /**
-     * @var \Magento\Paypal\Model\Hostedpro\Request
+     * @var Request
      */
     protected $_model;
 
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var Data
      */
     protected $taxData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new ObjectManager($this);
 
-        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
+        $this->localeResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxData = $this->helper->getObject(\Magento\Tax\Helper\Data::class);
+        $this->taxData = $this->helper->getObject(Data::class);
 
         $this->_model = $this->helper->getObject(
-            \Magento\Paypal\Model\Hostedpro\Request::class,
+            Request::class,
             [
                 'localeResolver' => $this->localeResolverMock,
                 'taxData' => $this->taxData
@@ -144,7 +151,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'showCardInfo' => 'true',
             'showHostedThankyouPage' => 'false'
         ];
-        $paymentMethodMock = $this->getMockBuilder(\Magento\Paypal\Model\Hostedpro::class)
+        $paymentMethodMock = $this->getMockBuilder(Hostedpro::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -171,7 +178,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'buyer_email' => 'buyer@email.com',
         ];
 
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -310,19 +317,19 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetAmountWithIncludedTax()
     {
-        /** @var \Magento\Tax\Model\Config  $config */
-        $config = $this->helper->getObject(\Magento\Tax\Model\Config::class);
+        /** @var Config  $config */
+        $config = $this->helper->getObject(Config::class);
         $config->setPriceIncludesTax(true);
 
         $this->taxData = $this->helper->getObject(
-            \Magento\Tax\Helper\Data::class,
+            Data::class,
             [
                 'taxConfig' => $config
             ]
         );
 
         $this->_model = $this->helper->getObject(
-            \Magento\Paypal\Model\Hostedpro\Request::class,
+            Request::class,
             [
                 'localeResolver' => $this->localeResolverMock,
                 'taxData' => $this->taxData
@@ -338,11 +345,11 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'subtotal' => $amount
         ];
 
-        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+        $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 

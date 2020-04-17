@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Config\Integration;
 
-use \Magento\Integration\Model\Config\Integration\Converter;
+use Magento\Integration\Model\Config\Integration\Converter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for conversion of integration API XML config into array representation.
  */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var Converter
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new Converter();
     }

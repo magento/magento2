@@ -6,10 +6,12 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\DeploymentConfig;
-use \Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
+class DeploymentConfigTest extends TestCase
 {
     /**
      * @var array
@@ -63,7 +65,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
     protected $_deploymentConfigMerged;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $reader;
 
@@ -124,7 +126,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
+        $this->reader->expects($this->once())->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->reader);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());

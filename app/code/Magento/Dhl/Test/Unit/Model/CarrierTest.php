@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,6 +10,7 @@ use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\HTTP\ZendClient;
@@ -24,22 +25,21 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
-use Magento\Sales\Model\Order;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
-use Magento\Shipping\Model\Shipment\Request;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -99,7 +99,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -209,11 +209,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Prepare shipping label content exception test
      *
      * @dataProvider prepareShippingLabelContentExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to retrieve shipping label
      */
     public function testPrepareShippingLabelContentException(\SimpleXMLElement $xml)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Unable to retrieve shipping label');
         $this->_invokePrepareShippingLabelContent($xml);
     }
 
@@ -242,7 +242,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Invoke prepare shipping label content
      *
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      * @throws \ReflectionException
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
@@ -372,12 +372,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests that an exception is thrown when an invalid service prefix is provided.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid service prefix
      */
     public function testBuildMessageReferenceInvalidPrefix()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Invalid service prefix');
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
 
@@ -495,7 +494,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return ElementFactory|MockObject
      */
-    private function getXmlFactory(): MockObject
+    private function getXmlFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
@@ -521,7 +520,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return ResultFactory|MockObject
      */
-    private function getRateFactory(): MockObject
+    private function getRateFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $rateFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -542,7 +541,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return MethodFactory|MockObject
      */
-    private function getRateMethodFactory(): MockObject
+    private function getRateMethodFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
@@ -571,7 +570,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return MockObject
      */
-    private function getConfigReader(): MockObject
+    private function getConfigReader(): \PHPUnit\Framework\MockObject\MockObject
     {
         $configReader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
@@ -587,7 +586,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return MockObject
      */
-    private function getReadFactory(): MockObject
+    private function getReadFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $modulesDirectory = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
@@ -607,7 +606,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return MockObject
      */
-    private function getStoreManager(): MockObject
+    private function getStoreManager(): \PHPUnit\Framework\MockObject\MockObject
     {
         $storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
@@ -650,7 +649,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return MockObject
      */
-    private function getHttpClientFactory(): MockObject
+    private function getHttpClientFactory(): \PHPUnit\Framework\MockObject\MockObject
     {
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
             ->disableOriginalConstructor()

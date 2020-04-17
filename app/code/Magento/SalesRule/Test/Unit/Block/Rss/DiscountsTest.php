@@ -1,17 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Block\Rss;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\SalesRule\Model\Rss\Discounts;
+use Magento\SalesRule\Model\Rule;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DiscountsTest
- * @package Magento\SalesRule\Block\Rss
- */
-class DiscountsTest extends \PHPUnit\Framework\TestCase
+class DiscountsTest extends TestCase
 {
     /**
      * @var \Magento\SalesRule\Block\Rss\Discounts
@@ -24,64 +31,63 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $storeModel;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|MockObject
      */
     protected $discounts;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $rssBuilderInterface;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $timezoneInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->requestInterface = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->rssBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->urlBuilderInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->timezoneInterface = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->discounts = $this->createMock(\Magento\SalesRule\Model\Rss\Discounts::class);
-        $this->rssModel = $this->createPartialMock(\Magento\SalesRule\Model\Rss\Discounts::class, [
+        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
+        $this->requestInterface = $this->createMock(RequestInterface::class);
+        $this->rssBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->createMock(UrlInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $this->rssModel = $this->createPartialMock(Discounts::class, [
                 '__wakeup',
                 'getDiscountCollection'
             ]);
-        $this->storeModel = $this->createPartialMock(\Magento\Store\Model\Store::class, [
+        $this->storeModel = $this->createPartialMock(Store::class, [
                 '__wakeUp',
                 'getId',
                 'getWebsiteId',
@@ -98,7 +104,6 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
             \Magento\SalesRule\Block\Rss\Discounts::class,
             [
                 'storeManager' => $this->storeManagerInterface,
-                'rssModel' => $this->discounts,
                 'rssUrlBuilder' => $this->rssBuilderInterface,
                 'urlBuilder' => $this->urlBuilderInterface,
                 'request' => $this->requestInterface,
@@ -138,7 +143,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $rssUrl = 'http://rss.magento.com/discount';
         $url = 'http://rss.magento.com';
 
-        $ruleModel =  $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
+        $ruleModel =  $this->createPartialMock(Rule::class, [
                 '__wakeup',
                 'getCouponCode',
                 'getToDate',

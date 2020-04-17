@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,29 +11,28 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\SalesInventory\Model\Order\ReturnValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReturnValidatorTest
- */
-class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
+class ReturnValidatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface
+     * @var MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var MockObject|CreditmemoInterface
      */
     private $creditMemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoItemInterface
+     * @var MockObject|CreditmemoItemInterface
      */
     private $creditMemoItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface
+     * @var MockObject|OrderItemInterface
      */
     private $orderItemMock;
 
@@ -42,7 +41,7 @@ class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $returnValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,16 +7,18 @@ namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\IteratorFactory;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
+class IteratorFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \IteratorIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \IteratorIterator|MockObject
      */
     private $iteratorIteratorMock;
 
@@ -28,15 +30,11 @@ class IteratorFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->iteratorIteratorMock = $this->getMockBuilder(\IteratorIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->iteratorIteratorMock = $this->createMock(\IteratorIterator::class);
 
         $this->iteratorFactory = new IteratorFactory(
             $this->objectManagerMock

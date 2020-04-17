@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheDisableCommandTest extends AbstractCacheSetCommandTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->command = new CacheDisableCommand($this->cacheManagerMock);

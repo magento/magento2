@@ -1,29 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type\Grouped;
 
-class PriceTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\GroupedProduct\Model\Product\Type\Grouped\Price;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PriceTest extends TestCase
 {
     /**
-     * @var \Magento\GroupedProduct\Model\Product\Type\Grouped\Price
+     * @var Price
      */
     protected $finalPriceModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productMock = $this->createMock(Product::class);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->finalPriceModel = $helper->getObject(
-            \Magento\GroupedProduct\Model\Product\Type\Grouped\Price::class,
+            Price::class,
             []
         );
     }
@@ -102,7 +110,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         //test method
         $this->productMock->expects($this->once())->method('hasCustomOptions')->will($this->returnValue(true));
 
-        $productTypeMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
+        $productTypeMock = $this->createMock(Grouped::class);
 
         $this->productMock->expects(
             $this->once()
@@ -147,7 +155,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function getFinalPriceDataProvider()
     {
-        $optionMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, ['getValue', '__wakeup']);
+        $optionMock = $this->createPartialMock(Option::class, ['getValue', '__wakeup']);
         /* quantity of options */
         $optionMock->expects($this->any())->method('getValue')->will($this->returnValue(5));
 
@@ -179,7 +187,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected function generateAssociatedProducts()
     {
         $childProductMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getId', 'getFinalPrice', '__wakeup']
         );
         /* price for option taking into account quantity discounts */

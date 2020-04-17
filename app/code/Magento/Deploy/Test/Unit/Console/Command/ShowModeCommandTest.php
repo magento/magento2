@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,17 @@
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\ShowModeCommand;
+use Magento\Deploy\Model\Mode;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\State;
 
-/**
- * @package Magento\Deploy\Test\Unit\Console\Command
- */
-class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
+class ShowModeCommandTest extends TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\Mode|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mode|MockObject
      */
     private $modeMock;
 
@@ -25,18 +26,18 @@ class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->modeMock = $this->createMock(\Magento\Deploy\Model\Mode::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->modeMock = $this->createMock(Mode::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->command = $objectManager->getObject(
-            \Magento\Deploy\Console\Command\ShowModeCommand::class,
+            ShowModeCommand::class,
             ['objectManager' => $this->objectManagerMock]
         );
 

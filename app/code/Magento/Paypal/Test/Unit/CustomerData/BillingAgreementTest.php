@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,28 +6,30 @@
 namespace Magento\Paypal\Test\Unit\CustomerData;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\CustomerData\BillingAgreement;
 use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Escaper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BillingAgreementTest extends \PHPUnit\Framework\TestCase
+class BillingAgreementTest extends TestCase
 {
 
     /**
-     * @var CurrentCustomer | \PHPUnit_Framework_MockObject_MockObject
+     * @var CurrentCustomer|MockObject
      */
     private $currentCustomer;
 
     /**
-     * @var Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $paypalData;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $paypalConfig;
 
@@ -41,7 +43,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->paypalConfig = $this->createMock(Config::class);

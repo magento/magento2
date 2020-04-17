@@ -1,29 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-class CompositeConfigProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Model\CompositeConfigProvider;
+use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CompositeConfigProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $configProviderMock;
 
     /**
-     * @var \Magento\Checkout\Model\CompositeConfigProvider
+     * @var CompositeConfigProvider
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->configProviderMock = $this->createMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
+        $this->configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $this->model = $objectManager->getObject(
-            \Magento\Checkout\Model\CompositeConfigProvider::class,
+            CompositeConfigProvider::class,
             ['configProviders' => [$this->configProviderMock]]
         );
     }

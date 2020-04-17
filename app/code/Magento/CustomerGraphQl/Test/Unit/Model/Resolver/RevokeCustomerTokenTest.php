@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\CustomerGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Resolver\RevokeCustomerToken;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -145,12 +147,11 @@ class RevokeCustomerTokenTest extends TestCase
 
     /**
      * Test mutation when customer isn't authorized.
-     *
-     * @expectedException \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCustomerNotAuthorized()
     {
+        $this->expectException('Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException');
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
         $isCustomer = false;
 
         $this->contextMock
