@@ -16,6 +16,9 @@ class RtlTextHandler
      */
     private $stringUtils;
 
+    /**
+     * @param StringUtils $stringUtils
+     */
     public function __construct(StringUtils $stringUtils)
     {
         $this->stringUtils = $stringUtils;
@@ -38,15 +41,17 @@ class RtlTextHandler
      * @param string $string
      * @return string
      */
-    public function reverseArabicText(string $string): string
+    public function reverseRtlText(string $string): string
     {
         $splitText = explode(' ', $string);
-        for ($i = 0; $i < count($splitText); $i++) {
+        $splitTextAmount = count($splitText);
+
+        for ($i = 0; $i < $splitTextAmount; $i++) {
             if ($this->isRtlText($splitText[$i])) {
-                for ($j = $i + 1; $j < count($splitText); $j++) {
-                    $tmp = ($this->isRtlText($splitText[$j]))
+                for ($j = $i + 1; $j < $splitTextAmount; $j++) {
+                    $tmp = $this->isRtlText($splitText[$j])
                         ? $this->stringUtils->strrev($splitText[$j]) : $splitText[$j];
-                    $splitText[$j] = ($this->isRtlText($splitText[$i]))
+                    $splitText[$j] = $this->isRtlText($splitText[$i])
                         ? $this->stringUtils->strrev($splitText[$i]) : $splitText[$i];
                     $splitText[$i] = $tmp;
                 }

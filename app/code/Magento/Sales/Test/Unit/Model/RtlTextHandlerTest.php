@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
@@ -26,24 +31,24 @@ class RtlTextHandlerTest extends TestCase
 
     /**
      * @param string $str
-     * @param bool $expected
+     * @param bool $isRtl
      * @dataProvider provideRtlTexts
      */
-    public function testIsRtlText(string $str, bool $expected): void
+    public function testIsRtlText(string $str, bool $isRtl): void
     {
-        $this->assertEquals($expected, $this->rtlTextHandler->isRtlText($str));
+        $this->assertEquals($isRtl, $this->rtlTextHandler->isRtlText($str));
     }
 
     /**
      * @param string $str
-     * @param bool $expected
+     * @param bool $isRtl
      * @dataProvider provideRtlTexts
      */
-    public function testReverseArabicText(string $str, bool $expected): void
+    public function testReverseRtlText(string $str, bool $isRtl): void
     {
-        $expectedStr = $expected ? $this->stringUtils->strrev($str) : $str;
+        $expectedStr = $isRtl ? $this->stringUtils->strrev($str) : $str;
 
-        $this->assertEquals($expectedStr, $this->rtlTextHandler->reverseArabicText($str));
+        $this->assertEquals($expectedStr, $this->rtlTextHandler->reverseRtlText($str));
     }
 
     public function provideRtlTexts(): array
