@@ -18,6 +18,7 @@ class ColumnResolverTest extends TestCase
 {
     const CUSTOM_FIELD = 'custom_field';
 
+    // phpstan:ignore
     private $values = [
         ColumnResolver::COLUMN_COUNTRY => 'country value',
         ColumnResolver::COLUMN_REGION => 'region value',
@@ -86,6 +87,7 @@ class ColumnResolverTest extends TestCase
                 ColumnResolver::COLUMN_ZIP,
                 $this->values[ColumnResolver::COLUMN_ZIP],
             ],
+            // phpstan:ignore
             ColumnResolver::COLUMN_WEIGHT => [
                 ColumnResolver::COLUMN_WEIGHT,
                 $this->values[ColumnResolver::COLUMN_WEIGHT],
