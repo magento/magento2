@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Section;
 
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -19,7 +20,7 @@ use Laminas\Http\Response;
 /**
  * Endpoint `customer/section/load` responsible for reloading sections of Customer's Local Storage
  */
-class Load implements HttpGetActionInterface
+class Load implements ActionInterface, HttpGetActionInterface
 {
     /**
      * @var JsonFactory
@@ -35,6 +36,7 @@ class Load implements HttpGetActionInterface
      * @var Escaper
      */
     private $escaper;
+
     /**
      * @var RequestInterface
      */
