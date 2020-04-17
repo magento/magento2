@@ -51,7 +51,7 @@ Catalog Search is currently configured to use the MySQL engine, which has been d
 Migrate to an Elasticsearch engine to ensure there are no service interruptions.
 MESSAGE;
 
-            $this->notifier->addNotice(__('Deprecation Notice'), __($message));
+            $this->notifier->addNotice(__('Disable Notice'), __($message));
         }
         return $this;
     }
