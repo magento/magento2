@@ -3,49 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Report;
 
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use DateTime;
 use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TransactionMapTest
- *
  * Test for class \Magento\Braintree\Model\Report\\Row\TransactionMap
  */
-class TransactionMapTest extends \PHPUnit\Framework\TestCase
+class TransactionMapTest extends TestCase
 {
     /**
-     * @var Transaction|\PHPUnit_Framework_MockObject_MockObject
+     * @var Transaction|MockObject
      */
     private $transactionStub;
 
     /**
-     * @var AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueFactory|MockObject
      */
     private $attributeValueFactoryMock;
 
     /**
-     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererInterface|MockObject
      */
     private $defaultRenderer;
 
     /**
-     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererInterface|MockObject
      */
     private $rendererMock;
 
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->setMethods(['create'])
@@ -151,7 +151,7 @@ class TransactionMapTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Phrase::setRenderer($this->defaultRenderer);
     }
