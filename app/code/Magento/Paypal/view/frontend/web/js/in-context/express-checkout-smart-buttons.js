@@ -17,8 +17,7 @@ define([
      * @param {Object} clientConfig
      * @returns {Object} jQuery promise
      */
-    function performCreateOrder(clientConfig)
-    {
+    function performCreateOrder(clientConfig) {
         var params = {
             'quote_id': clientConfig.quoteId,
             'customer_id': clientConfig.customerId || '',

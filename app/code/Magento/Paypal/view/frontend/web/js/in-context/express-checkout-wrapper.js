@@ -39,7 +39,7 @@ define([
          */
         onClick: function () {
             //display loading widget
-            $("body").trigger('processStart');
+            $('body').trigger('processStart');
         },
 
         /**
@@ -106,7 +106,7 @@ define([
          * @return {*}
          */
         afterOnAuthorize: function (res, resolve, reject, actions) {
-            $("body").trigger('processStop');
+            $('body').trigger('processStop');
             if (res.success) {
                 resolve();
                 return actions.redirect(res.redirectUrl);
@@ -123,7 +123,7 @@ define([
          * @param {Function} reject
          */
         catchOnAuthorize: function (err, resolve, reject) {
-            $("body").trigger('processStop');
+            $('body').trigger('processStop');
             this.addAlert(this.paymentActionError);
             reject(err);
         },
@@ -135,7 +135,7 @@ define([
          * @param {Object} actions
          */
         onCancel: function (data, actions) {
-            $("body").trigger('processStop');
+            $('body').trigger('processStop');
             actions.redirect(this.clientConfig.onCancelUrl);
         },
 
