@@ -30,7 +30,7 @@ class ThreeDSecureDetailsHandlerTest extends TestCase
     private $paymentMock;
 
     /**
-     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
