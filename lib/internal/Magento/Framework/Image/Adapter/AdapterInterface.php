@@ -116,7 +116,6 @@ interface AdapterInterface
      *
      * @param int $angle
      * @return void
-     * @deprecated unused
      */
     public function rotate($angle);
 }

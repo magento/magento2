@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCustomerAddressNoZipNoStateTest" extends="AdminUpdateCustomerInfoFromDefaultToNonDefaultTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer Information in Admin"/>
+            <title value="Update Customer Address, without zip/state required, default billing/shipping checked in Admin"/>
+            <description value="Update Customer Address, without zip/state required, default billing/shipping checked in Admin"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13621"/>
+            <group value="Customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <after>
+            <remove keyForRemoval="goToCustomersGridPage"/>
+            <remove keyForRemoval="waitForCustomersGrid"/>
+            <remove keyForRemoval="resetFilter"/>
+        </after>
+
+        <!-- Remove steps that are not used for this test -->
+        <remove keyForRemoval="editCustomerInformation"/>
+        <remove keyForRemoval="goToCustomersGridPage"/>
+        <remove keyForRemoval="waitForCustomersGrid"/>
+        <remove keyForRemoval="resetFilter"/>
+        <remove keyForRemoval="filterByEamil"/>
+        <remove keyForRemoval="checkCustomerInGrid"/>
+        <remove keyForRemoval="checkCustomerAccountInformation"/>
+
+        <!--Update Customer Addresses With No Zip and No State -->
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressNoZipNoStateActionGroup">
+            <argument name="customerAddress" value="addressNoZipNoState"/>
+        </actionGroup>
+
+        <!-- Assert Customer Default Billing Address -->
+        <actionGroup stepKey="checkDefaultBilling" ref="AdminAssertCustomerDefaultBillingAddress">
+            <argument name="firstName" value="$$customer.firstname$$"/>
+            <argument name="lastName" value="$$customer.lastname$$"/>
+            <argument name="street1" value="{{addressNoZipNoState.street[0]}}"/>
+            <argument name="country" value="{{addressNoZipNoState.country_id}}"/>
+            <argument name="telephone" value="{{addressNoZipNoState.telephone}}"/>
+        </actionGroup>
+        <!-- Assert Customer Default Shipping Address -->
+        <actionGroup stepKey="checkDefaultShipping" ref="AdminAssertCustomerDefaultShippingAddress">
+            <argument name="firstName" value="$$customer.firstname$$"/>
+            <argument name="lastName" value="$$customer.lastname$$"/>
+            <argument name="street1" value="{{addressNoZipNoState.street[0]}}"/>
+            <argument name="country" value="{{addressNoZipNoState.country_id}}"/>
+            <argument name="telephone" value="{{addressNoZipNoState.telephone}}"/>
+        </actionGroup>
+        <!-- Assert Customer Login Storefront -->
+        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="checkDefaultShipping">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+    </test>
+</tests>
