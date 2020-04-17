@@ -1052,8 +1052,6 @@ class ProductTest extends TestCase
 
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
-     *
-     * @return array
      */
     protected function configureSaveTest()
     {
