@@ -39,7 +39,7 @@ class BuilderTest extends TestCase
             ->willReturn($table);
         $objectManagerHelper = new ObjectManager($this);
         /**
-         * @var $builder \Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder
+         * @var Builder $builder
          */
         $builder = $objectManagerHelper->getObject(
             Builder::class,

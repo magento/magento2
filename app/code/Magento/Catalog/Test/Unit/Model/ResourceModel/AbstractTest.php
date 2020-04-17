@@ -84,7 +84,7 @@ class AbstractTest extends TestCase
 
         $attributes[$code] = $attribute;
 
-        /** @var $model \Magento\Catalog\Model\ResourceModel\AbstractResource */
+        /** @var AbstractResource $model */
         $arguments = $objectManager->getConstructArguments(
             AbstractResource::class
         );
