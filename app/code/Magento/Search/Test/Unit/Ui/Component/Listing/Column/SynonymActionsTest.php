@@ -44,7 +44,7 @@ class SynonymActionsTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
