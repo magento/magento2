@@ -76,7 +76,7 @@
                 <requiredEntity createDataKey="simple2"/>
                 <field key="qty">2</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Create new customer order-->
@@ -109,7 +109,9 @@
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
+            <actualResult type="const">$grabOrderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="OpenOrderById" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
@@ -134,7 +136,9 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
         <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
-        <assertNotEmpty actual="$grabMemoId" stepKey="assertMemoIdIsNotEmpty" after="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+            <actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
         <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
         <waitForPageLoad stepKey="waitForCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
@@ -144,7 +148,7 @@
         <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="$10.00" stepKey="assertRefundOnCreditMemoTab"/>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="product" stepKey="delete"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
