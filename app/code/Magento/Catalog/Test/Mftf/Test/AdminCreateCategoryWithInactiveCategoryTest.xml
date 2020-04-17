@@ -25,8 +25,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create In active Category -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
