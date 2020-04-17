@@ -3,47 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation\Rate;
+use Magento\Tax\Model\Calculation\RateFactory;
+use Magento\Tax\Model\Calculation\RateRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for RateRegistry
  *
  */
-class RateRegistryTest extends \PHPUnit\Framework\TestCase
+class RateRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Model\Calculation\RateRegistry
+     * @var RateRegistry
      */
     private $rateRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\RateFactory
+     * @var MockObject|RateFactory
      */
     private $rateModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\Rate
+     * @var MockObject|Rate
      */
     private $rateModelMock;
 
     const TAX_RATE_ID = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->rateModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RateFactory::class)
+        $this->rateModelFactoryMock = $this->getMockBuilder(RateFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rateRegistry = $objectManager->getObject(
-            \Magento\Tax\Model\Calculation\RateRegistry::class,
+            RateRegistry::class,
             ['taxModelRateFactory' => $this->rateModelFactoryMock]
         );
-        $this->rateModelMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rate::class)
+        $this->rateModelMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -77,11 +83,9 @@ class RateRegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($actual, $actualCached);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testRetrieveException()
     {
+        $this->expectException(NoSuchEntityException::class);
         $this->rateModelMock->expects($this->once())
             ->method('load')
             ->with(self::TAX_RATE_ID)

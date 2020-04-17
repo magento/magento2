@@ -15,6 +15,9 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * MassAction test for Component Product
+ */
 class MassActionTest extends TestCase
 {
     /**

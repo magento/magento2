@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\AvsEmsCodeMapper;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
+class AvsEmsCodeMapperTest extends TestCase
 {
     /**
      * @var AvsEmsCodeMapper
@@ -20,7 +23,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new AvsEmsCodeMapper();
     }
@@ -59,11 +62,11 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Braintree payment method.
      *
      * @covers \Magento\Braintree\Model\AvsEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Braintree AVS mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "some_payment" does not supported by Braintree AVS mapper.');
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()

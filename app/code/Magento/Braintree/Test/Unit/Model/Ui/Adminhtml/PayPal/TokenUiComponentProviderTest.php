@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml\PayPal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
@@ -11,12 +13,13 @@ use Magento\Framework\UrlInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Contains methods to test PayPal token Ui component provider
  */
-class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
+class TokenUiComponentProviderTest extends TestCase
 {
     /**
      * @var TokenUiComponentInterfaceFactory|MockObject
@@ -38,7 +41,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenUiComponentProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentFactory = $this->getMockBuilder(TokenUiComponentInterfaceFactory::class)
             ->disableOriginalConstructor()

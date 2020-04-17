@@ -1,43 +1,47 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorization\Test\Unit\Model;
 
 use Magento\Authorization\Model\CompositeUserContext;
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\Authorization\Model\CompositeUserContext
+ */
 class CompositeUserContextTest extends TestCase
 {
     /**
      * @var CompositeUserContext
      */
-    protected $userContext;
+    private $userContext;
 
     /**
-     * @var CompositeHelper
+     * @var CompositeHelper|MockObject
      */
-    protected $compositeHelperMock;
+    private $compositeHelperMock;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->compositeHelperMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\Helper\Composite::class)
+        $this->compositeHelperMock = $this->getMockBuilder(CompositeHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['filterAndSortDeclaredComponents'])
             ->getMock();
         $this->compositeHelperMock
+            ->expects($this->any())
             ->method('filterAndSortDeclaredComponents')
             ->will($this->returnArgument(0));
         $this->userContext = $this->objectManager->getObject(
@@ -68,8 +72,8 @@ class CompositeUserContextTest extends TestCase
         $expectedUserType = 'Customer';
         $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
-        $userContextMock->method('getUserId')->will($this->returnValue($expectedUserId));
-        $userContextMock->method('getUserType')->will($this->returnValue($expectedUserType));
+        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($expectedUserId));
+        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($expectedUserType));
         $contexts = [
             [
                 'sortOrder' => 10,
@@ -90,8 +94,8 @@ class CompositeUserContextTest extends TestCase
         $expectedUserType = 'Customer';
         $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
-        $userContextMock->method('getUserId')->will($this->returnValue($expectedUserId));
-        $userContextMock->method('getUserType')->will($this->returnValue($expectedUserType));
+        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($expectedUserId));
+        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($expectedUserType));
         $contexts = [
             [
                 'sortOrder' => 10,
@@ -137,7 +141,7 @@ class CompositeUserContextTest extends TestCase
         $expectedUserId = null;
         $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId'])->getMock();
-        $userContextMock->method('getUserId')
+        $userContextMock->expects($this->any())->method('getUserId')
             ->will($this->returnValue($expectedUserId));
         $contexts = [
             [
@@ -163,8 +167,8 @@ class CompositeUserContextTest extends TestCase
         $useContextMock = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
         if ($userId !== null && $userType !== null) {
-            $useContextMock->method('getUserId')->will($this->returnValue($userId));
-            $useContextMock->method('getUserType')->will($this->returnValue($userType));
+            $useContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
+            $useContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
         }
         return $useContextMock;
     }
