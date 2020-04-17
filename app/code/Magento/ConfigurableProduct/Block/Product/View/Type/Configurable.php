@@ -83,6 +83,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     private $variationPrices;
 
     /**
+     * @var \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts|mixed|null
+     */
+    private $enabledOptionsProducts;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -109,7 +114,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         array $data = [],
         Format $localeFormat = null,
         Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts $enabledOptionsProducts = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -121,6 +127,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->customerSession = $customerSession ?: ObjectManager::getInstance()->get(Session::class);
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
+        );
+        $this->enabledOptionsProducts = $enabledOptionsProducts ?: ObjectManager::getInstance()->get(
+            \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts::class
         );
 
         parent::__construct(
@@ -181,14 +190,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getAllowProducts()
     {
         if (!$this->hasAllowProducts()) {
-            $products = [];
-            $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
-            /** @var $product \Magento\Catalog\Model\Product */
-            foreach ($allProducts as $product) {
-                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
-                    $products[] = $product;
-                }
-            }
+            $products = $this->enabledOptionsProducts->execute($this->getProduct());
             $this->setAllowProducts($products);
         }
         return $this->getData('allow_products');
