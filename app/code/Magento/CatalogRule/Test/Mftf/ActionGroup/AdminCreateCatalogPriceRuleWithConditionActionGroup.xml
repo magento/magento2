@@ -23,6 +23,9 @@
         <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
         <generateDate date="now" format="Y-m-d" stepKey="today" after="assertDate"/>
         <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
-        <assertEquals expected="$today" actual="$grabTextFromSelectedAttribute" stepKey="assertTodayDate" after="grabTextFromSelectedAttribute"/>
+        <assertEquals stepKey="assertTodayDate" after="grabTextFromSelectedAttribute">
+			<actualResult type="const">$grabTextFromSelectedAttribute</actualResult>
+			<expectedResult type="const">$today</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>
