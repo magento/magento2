@@ -94,7 +94,6 @@
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
         </variation>
         <variation name="FilterProductListTestVariation4" summary="Use sorting category filter when layered navigation is applied" ticketId="MAGETWO-42701">
-<!--            <data name="tag" xsi:type="string">test_type:mysql_search</data>-->
             <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
             <data name="runReindex" xsi:type="boolean">true</data>
             <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>
@@ -104,7 +103,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Price</item>
                         <item name="linkPattern" xsi:type="string">`^.+10\.00 - .+19\.99 2$`m</item>
-                        <item name="products" xsi:type="string">product_0, product_2</item>
+                        <item name="products" xsi:type="string">product_2, product_0</item>
                     </item>
                 </item>
             </data>
