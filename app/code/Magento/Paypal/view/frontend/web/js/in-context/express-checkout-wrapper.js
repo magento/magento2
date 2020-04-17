@@ -37,7 +37,10 @@ define([
         /**
          * Execute logic on Paypal button click
          */
-        onClick: function () {},
+        onClick: function () {
+            //display loading widget
+            $("body").trigger('processStart');
+        },
 
         /**
          * Before payment execute
@@ -103,9 +106,9 @@ define([
          * @return {*}
          */
         afterOnAuthorize: function (res, resolve, reject, actions) {
+            $("body").trigger('processStop');
             if (res.success) {
                 resolve();
-
                 return actions.redirect(res.redirectUrl);
             }
 
@@ -120,6 +123,7 @@ define([
          * @param {Function} reject
          */
         catchOnAuthorize: function (err, resolve, reject) {
+            $("body").trigger('processStop');
             this.addAlert(this.paymentActionError);
             reject(err);
         },
@@ -131,6 +135,7 @@ define([
          * @param {Object} actions
          */
         onCancel: function (data, actions) {
+            $("body").trigger('processStop');
             actions.redirect(this.clientConfig.onCancelUrl);
         },
 
