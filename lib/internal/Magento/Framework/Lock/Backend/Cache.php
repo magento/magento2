@@ -55,11 +55,11 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
              return false;
         }
 
-        $saveResult = $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout * 100);
+        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout * 100);
 
         $data = $this->cache->load($this->getIdentifier($name));
 
-        if ($data === $this->lockSign && $saveResult) {
+        if ($data === $this->lockSign) {
             return true;
         }
 
@@ -125,7 +125,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
         try {
             $sign .= '-' . \bin2hex(\random_bytes(4));
         } catch (\Exception $e) {
-            $sign .= '-' . \rand(0, 1000);
+            $sign .= '-' . \mt_rand(0, 1000);
         }
 
         return $sign;

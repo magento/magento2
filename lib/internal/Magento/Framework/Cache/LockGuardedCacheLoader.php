@@ -91,7 +91,7 @@ class LockGuardedCacheLoader
         callable $dataSaver
     ) {
         $cachedData = $dataLoader(); //optimistic read
-        $deadline = microtime(true) + $this->loadTimeout;
+        $deadline = microtime(true) + $this->loadTimeout / 100;
 
         while ($cachedData === false) {
             if ($deadline <= microtime(true)) {
@@ -129,13 +129,8 @@ class LockGuardedCacheLoader
         while ($this->locker->isLocked($lockName)) {
             usleep($this->getLookupTimeout() * 1000);
         }
-        try {
-            if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
-                $dataCleaner();
-            }
-        } finally {
-            $this->locker->unlock($lockName);
-        }
+
+        $dataCleaner();
     }
 
     /**
@@ -147,8 +142,6 @@ class LockGuardedCacheLoader
      */
     private function getLookupTimeout()
     {
-        $lookupTimeout = rand($this->minimalDelayTimeout, $this->delayTimeout);
-
-        return $lookupTimeout;
+        return rand($this->minimalDelayTimeout, $this->delayTimeout);
     }
 }

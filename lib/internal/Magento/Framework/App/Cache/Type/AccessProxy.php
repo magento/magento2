@@ -80,7 +80,7 @@ class AccessProxy extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
         if (!$this->_isEnabled()) {
-            return true;
+            return false;
         }
         return parent::save($data, $identifier, $tags, $lifeTime);
     }
