@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
@@ -87,9 +86,6 @@ class ConfigurableTest extends TestCase
         $this->relation = $this->getMockBuilder(ProductRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
