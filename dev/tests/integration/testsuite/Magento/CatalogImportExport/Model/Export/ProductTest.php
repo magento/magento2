@@ -84,8 +84,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testExport()
+    public function testExport(): void
     {
         $this->model->setWriter(
             $this->objectManager->create(
@@ -109,8 +111,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
      * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testExportSpecialChars()
+    public function testExportSpecialChars(): void
     {
         $this->model->setWriter(
             $this->objectManager->create(
@@ -125,8 +129,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testExportWithProductLinks()
+    public function testExportWithProductLinks(): void
     {
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -143,8 +149,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     *
+     * @return void
      */
-    public function testExportStockItemAttributesAreFilled()
+    public function testExportStockItemAttributesAreFilled(): void
     {
         $this->markTestSkipped('Test needs to be skipped.');
         $fileWrite = $this->createMock(\Magento\Framework\Filesystem\File\Write::class);
@@ -176,8 +184,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify header columns (that stock item attributes column headers are present)
      *
      * @param array $headerColumns
+     * @return void
      */
-    public function verifyHeaderColumns(array $headerColumns)
+    public function verifyHeaderColumns(array $headerColumns): void
     {
         foreach (self::$stockItemAttributes as $stockItemAttribute) {
             $this->assertContains(
@@ -192,8 +201,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify row data (stock item attribute values)
      *
      * @param array $rowData
+     * @return void
      */
-    public function verifyRow(array $rowData)
+    public function verifyRow(array $rowData): void
     {
         foreach (self::$stockItemAttributes as $stockItemAttribute) {
             $this->assertNotSame(
@@ -208,8 +218,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verifies if exception processing works properly
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     *
+     * @return void
      */
-    public function testExceptionInGetExportData()
+    public function testExceptionInGetExportData(): void
     {
         $this->markTestSkipped('Test needs to be skipped.');
         $exception = new \Exception('Error');
@@ -258,8 +270,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify if fields wrapping works correct when "Fields Enclosure" option enabled
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     *
+     * @return void
      */
-    public function testExportWithFieldsEnclosure()
+    public function testExportWithFieldsEnclosure(): void
     {
         $this->model->setParameters(
             [
@@ -284,8 +298,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify that "category ids" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_categories.php
+     *
+     * @return void
      */
-    public function testCategoryIdsFilter()
+    public function testCategoryIdsFilter(): void
     {
         $this->model->setWriter(
             $this->objectManager->create(
@@ -313,8 +329,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Verify that export processed successfully with wrong category path
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_broken_categories_path.php
+     *
+     * @return void
      */
-    public function testExportWithWrongCategoryPath()
+    public function testExportWithWrongCategoryPath(): void
     {
         $this->model->setWriter(
             $this->objectManager->create(
@@ -329,8 +347,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Test 'hide from product page' export for non-default store.
      *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_images.php
+     *
+     * @return void
      */
-    public function testExportWithMedia()
+    public function testExportWithMedia(): void
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -359,6 +379,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     *
      * @return void
      */
     public function testExportWithCustomOptions(): void
@@ -403,12 +424,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\File\Csv $csv */
         $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
         $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_custom_options_and_second_store.csv'));
+        $keys = array_shift($data);
+        $products = [];
+        foreach ($data as $productData) {
+            $products[] = array_combine($keys, $productData);
+        }
+        $products = array_filter($products, function (array $product) {
+            return $product['sku'] === 'simple';
+        });
         $customOptionData = [];
-        foreach ($data[0] as $columnNumber => $columnName) {
-            if ($columnName === 'custom_options') {
-                $customOptionData['admin_store'] = $this->parseExportedCustomOption($data[1][$columnNumber]);
-                $customOptionData[$storeCode] = $this->parseExportedCustomOption($data[2][$columnNumber]);
-            }
+
+        foreach ($products as $product) {
+            $storeCode = $product['store_view_code'] ?: 'admin_store';
+            $customOptionData[$storeCode] = $this->parseExportedCustomOption($product['custom_options']);
         }
 
         self::assertSame($expectedData, $customOptionData);
@@ -418,8 +446,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Check that no duplicate entities when multiple custom options used
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     *
+     * @return void
      */
-    public function testExportWithMultipleOptions()
+    public function testExportWithMultipleOptions(): void
     {
         $expectedCount = 1;
         $resultsFilename = 'export_results.csv';
@@ -442,6 +472,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Parse exported custom options
+     *
      * @param string $exportedCustomOption
      * @return array
      */
@@ -476,8 +508,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
+     *
+     * @return void
      */
-    public function testExportProductWithTwoWebsites()
+    public function testExportProductWithTwoWebsites(): void
     {
         $globalStoreCode = 'admin';
         $secondStoreCode = 'fixture_second_store';
@@ -539,17 +573,19 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify that "stock status" filter correctly applies to export result
      *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
+     * @dataProvider filterByQuantityAndStockStatusDataProvider
+     *
      * @param string $value
      * @param array $productsIncluded
      * @param array $productsNotIncluded
-     * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
-     * @dataProvider filterByQuantityAndStockStatusDataProvider
+     * @return void
      */
     public function testFilterByQuantityAndStockStatus(
         string $value,
         array $productsIncluded,
         array $productsNotIncluded
-    ) {
+    ): void {
         $exportData = $this->doExport(['quantity_and_stock_status' => $value]);
         foreach ($productsIncluded as $productName) {
             $this->assertContains($productName, $exportData);
@@ -569,35 +605,37 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 [
                     'Simple Product OOS',
                     'Simple Product Not Visible',
-                    'Simple Product Visible and InStock'
+                    'Simple Product Visible and InStock',
                 ],
                 [
-                ]
+                ],
             ],
             [
                 '1',
                 [
                     'Simple Product Not Visible',
-                    'Simple Product Visible and InStock'
+                    'Simple Product Visible and InStock',
                 ],
                 [
-                    'Simple Product OOS'
-                ]
+                    'Simple Product OOS',
+                ],
             ],
             [
                 '0',
                 [
-                    'Simple Product OOS'
+                    'Simple Product OOS',
                 ],
                 [
                     'Simple Product Not Visible',
-                    'Simple Product Visible and InStock'
-                ]
-            ]
+                    'Simple Product Visible and InStock',
+                ],
+            ],
         ];
     }
 
     /**
+     * Perform export
+     *
      * @param array $filters
      * @return string
      */
