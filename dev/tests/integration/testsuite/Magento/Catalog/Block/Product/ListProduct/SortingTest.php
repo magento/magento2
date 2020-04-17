@@ -147,16 +147,17 @@ class SortingTest extends TestCase
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
-            'default_order_custom_attribute_asc' => [
-                'sort' => 'test_configurable',
-                'direction' => 'asc',
-                'expectation' => ['simple1', 'simple3', 'simple2'],
-            ],
-            'default_order_custom_attribute_desc' => [
-                'sort' => 'test_configurable',
-                'direction' => 'desc',
-                'expectation' => ['simple3', 'simple2', 'simple1'],
-            ],
+            // TODO: Skipped MC-33231
+            //'default_order_custom_attribute_asc' => [
+            //    'sort' => 'test_configurable',
+            //    'direction' => 'asc',
+            //    'expectation' => ['simple1', 'simple3', 'simple2'],
+            //],
+            //'default_order_custom_attribute_desc' => [
+            //    'sort' => 'test_configurable',
+            //    'direction' => 'desc',
+            //    'expectation' => ['simple3', 'simple2', 'simple1'],
+            //],
         ];
     }
 
@@ -233,8 +234,9 @@ class SortingTest extends TestCase
                 'default_order_position_desc' => ['default_sort' => 'price'],
                 'default_order_name_asc' => ['default_sort' => 'price'],
                 'default_order_name_desc' => ['default_sort' => 'price'],
-                'default_order_custom_attribute_asc' => ['default_sort' => 'price'],
-                'default_order_custom_attribute_desc' => ['default_sort' => 'price'],
+                // TODO: Skipped MC-33231
+                //'default_order_custom_attribute_asc' => ['default_sort' => 'price'],
+                //'default_order_custom_attribute_desc' => ['default_sort' => 'price'],
             ]
         );
     }
