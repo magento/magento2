@@ -20,4 +20,3 @@ app/code/Magento/OfflineShipping/Test/Unit/Model/ResourceModel/Carrier/Tablerate
 app/code/Magento/Staging/Test/Unit/Model/Entity/Action/UpdateVersionTest.php
 app/code/Magento/Staging/Test/Unit/Model/Operation/DeleteTest.php
 app/code/Magento/Staging/Test/Unit/Model/Operation/Update/DefaultTemporaryUpdateProcessorTest.php
-app/code/Magento/Developer/Test/Unit/Console/Command/DevTestsRunCommandTest.php
