@@ -9,12 +9,26 @@
  */
 namespace Magento\Cookie\Block\Html;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template;
+use Magento\Cookie\Helper\Cookie;
+
 /**
  * @api
  * @since 100.0.2
  */
 class Notices extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @param Template\Context $context
+     * @param array $data
+     */
+    public function __construct(Template\Context $context, array $data = [])
+    {
+        $data['cookieHelper'] = ObjectManager::getInstance()->get(Cookie::class);
+        parent::__construct($context, $data);
+    }
+
     /**
      * Get Link to cookie restriction privacy policy page
      *

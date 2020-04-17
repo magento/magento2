@@ -4,13 +4,18 @@
  * See COPYING.txt for license details.
  */
 /* @var $block \Magento\Tax\Block\Adminhtml\Rate\Form */
+/* @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <div data-role="spinner" class="grid-loading-mask">
     <div class="grid-loader"></div>
 </div>
 
-<div class="form-inline" id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" style="display:none">
+<div class="form-inline" id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>"
     <?= $block->getFormHtml() ?>
     <?= $block->getChildHtml('form_after') ?>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display:none",
+    '#'. $block->escapeHtmlAttr($block->getNameInLayout())
+) ?>

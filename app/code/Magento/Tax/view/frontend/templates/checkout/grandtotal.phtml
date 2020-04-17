@@ -4,41 +4,43 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-
 /**
  * @var $block \Magento\Tax\Block\Checkout\Grandtotal
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
 $style = $block->escapeHtmlAttr($block->getStyle());
 $colspan = (int) $block->getColspan();
+$jsonHelper = $block->getData('jsonHelper');
 ?>
-<?php if ($block->includeTax() && $block->getTotalExclTax() >= 0) : ?>
+<?php if ($block->includeTax() && $block->getTotalExclTax() >= 0): ?>
     <tr class="grand totals excl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <strong><?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?></strong>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Excl. Tax')) ?>">
-            <strong><?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotalExclTax()) ?></strong>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Excl. Tax')) ?>">
+            <strong><?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotalExclTax()) ?></strong>
         </td>
     </tr>
     <?= /* @noEscape */ $block->renderTotals('taxes', $colspan) ?>
     <tr class="grand totals incl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <strong><?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?></strong>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Incl. Tax')) ?>">
-            <strong><?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()) ?></strong>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Grand Total Incl. Tax')) ?>">
+            <strong><?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotal()->getValue()) ?></strong>
         </td>
     </tr>
-<?php else : ?>
+<?php else: ?>
     <tr class="grand totals">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <strong><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></strong>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-            <strong><?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()) ?></strong>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+            <strong><?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotal()->getValue()) ?></strong>
         </td>
     </tr>
 <?php endif; ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping th.mark') ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping td.amount') ?>

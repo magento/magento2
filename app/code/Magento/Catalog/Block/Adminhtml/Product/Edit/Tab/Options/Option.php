@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 
 /**
@@ -75,6 +76,11 @@ class Option extends Widget
     protected $_optionType;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Config\Model\Config\Source\Yesno $configYesNo
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Type $optionType
@@ -82,6 +88,7 @@ class Option extends Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -90,7 +97,8 @@ class Option extends Widget
         Product $product,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_optionType = $optionType;
         $this->_configYesNo = $configYesNo;
@@ -99,6 +107,7 @@ class Option extends Widget
         $this->_coreRegistry = $registry;
         $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -463,8 +472,12 @@ class Option extends Widget
             . ' name="' . $localName . '"' . 'id="' . $localId . '"'
             . ' value=""'
             . $checkedHtml
-            . ' onchange="toggleSeveralValueElements(this, [' . $containers . ']);" '
             . ' />'
+            . $this->secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                "toggleSeveralValueElements(this, [' . $containers . ']);",
+                '#' . $localId
+            )
             . '<label for="' . $localId . '" class="use-default">'
             . '<span class="use-default-label">' . __('Use Default') . '</span></label></div>';
 

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
+use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
 
@@ -108,6 +110,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_taxRateRepository = $taxRateRepository;
         $this->_taxRateCollection = $taxRateCollection;
         $this->_taxRateConverter = $taxRateConverter;
+        $data['directoryHelper'] = ObjectManager::getInstance()->get(DirectoryData::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 

@@ -9,47 +9,52 @@
 /**
  * @var $block \Magento\Tax\Block\Checkout\Shipping
  * @see \Magento\Tax\Block\Checkout\Shipping
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<?php if ($block->displayShipping()) : ?>
+<?php if ($block->displayShipping()): ?>
     <?php
         $style = $block->escapeHtmlAttr($block->getStyle());
         $colspan = (int) $block->getColspan();
+        $jsonHelper = $block->getData('jsonHelper');
     ?>
-    <?php if ($block->displayBoth()) : ?>
+    <?php if ($block->displayBoth()): ?>
     <tr class="totals shipping excl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <?= $block->escapeHtml($block->getExcludeTaxLabel()) ?>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getExcludeTaxLabel()) ?>">
-            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getShippingExcludeTax()) ?>
+
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getExcludeTaxLabel()) ?>">
+            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
     <tr class="totals shipping incl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getIncludeTaxLabel()) ?>">
-            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getShippingIncludeTax()) ?>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getIncludeTaxLabel()) ?>">
+            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
-    <?php elseif ($block->displayIncludeTax()) : ?>
+    <?php elseif ($block->displayIncludeTax()): ?>
     <tr class="totals shipping incl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getShippingIncludeTax()) ?>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
-    <?php else : ?>
+    <?php else: ?>
     <tr class="totals shipping excl">
-        <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         </th>
-        <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-            <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getShippingExcludeTax()) ?>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
     <?php endif; ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping th.mark') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping td.amount') ?>
 <?php endif; ?>

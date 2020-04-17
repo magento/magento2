@@ -9,11 +9,13 @@ namespace Magento\CatalogSearch\Block\Advanced;
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\CatalogSearch\Helper\Data;
 
 /**
  * Advanced search form
@@ -51,6 +53,7 @@ class Form extends Template
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_currencyFactory = $currencyFactory;
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
         parent::__construct($context, $data);
     }
 
@@ -185,7 +188,7 @@ class Form extends Template
      * Retrieve attribute input type
      *
      * @param AbstractAttribute $attribute
-     * @return  string
+     * @return string
      */
     public function getAttributeInputType($attribute)
     {

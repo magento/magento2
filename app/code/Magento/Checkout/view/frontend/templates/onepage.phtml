@@ -12,10 +12,10 @@
     <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"checkoutLoader": {}}'>
         <div class="loader">
             <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
-                 alt="<?= $block->escapeHtmlAttr(__('Loading...')) ?>"
-                 style="position: absolute;">
+                 alt="<?= $block->escapeHtmlAttr(__('Loading...')) ?>">
         </div>
     </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("position: absolute;", "#checkout-loader") ?>
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {
