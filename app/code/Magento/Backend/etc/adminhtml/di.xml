@@ -69,7 +69,7 @@
             <argument name="canUseSessionIdInParam" xsi:type="boolean">false</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
+    <type name="Magento\Framework\App\ActionInterface">
         <plugin name="storeCheck" disabled="true" />
     </type>
     <type name="Magento\Framework\Message\Manager">

@@ -44,12 +44,19 @@ class Context
     protected $storeCookieManager;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param RequestInterface $request
      * @param SessionManagerInterface $session
      * @param HttpContext $httpContext
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
+        RequestInterface $request,
         SessionManagerInterface $session,
         HttpContext $httpContext,
         StoreManagerInterface $storeManager,
@@ -59,6 +66,7 @@ class Context
         $this->httpContext  = $httpContext;
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
+        $this->request = $request;
     }
 
     /**
@@ -69,10 +77,8 @@ class Context
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        AbstractAction $subject,
-        RequestInterface $request
-    ) {
+    public function beforeExecute()
+    {
         if ($this->isAlreadySet()) {
             //If required store related value were already set for
             //HTTP processors then just continuing as we were.
@@ -80,26 +86,26 @@ class Context
         }
 
         /** @var string|array|null $storeCode */
-        $storeCode = $request->getParam(
+        $storeCode = $this->request->getParam(
             StoreManagerInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                $this->processInvalidStoreRequested($request);
+                $this->processInvalidStoreRequested($this->request);
             }
             $storeCode = $storeCode['_data']['code'];
         }
         if ($storeCode === '') {
             //Empty code - is an invalid code and it was given explicitly
             //(the value would be null if the code wasn't found).
-            $this->processInvalidStoreRequested($request);
+            $this->processInvalidStoreRequested($this->request);
         }
         try {
             $currentStore = $this->storeManager->getStore($storeCode);
-            $this->updateContext($request, $currentStore);
+            $this->updateContext($this->request, $currentStore);
         } catch (NoSuchEntityException $exception) {
-            $this->processInvalidStoreRequested($request, $exception);
+            $this->processInvalidStoreRequested($this->request, $exception);
         }
     }
 

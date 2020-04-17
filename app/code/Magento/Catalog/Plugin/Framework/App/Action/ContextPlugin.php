@@ -53,7 +53,7 @@ class ContextPlugin
      *
      * @return void
      */
-    public function beforeDispatch()
+    public function beforeExecute()
     {
         if ($this->toolbarMemorizer->isMemorizingAllowed()) {
             $params = [
