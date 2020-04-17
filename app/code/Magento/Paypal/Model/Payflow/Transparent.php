@@ -61,7 +61,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      *
      * @var bool
      */
-    protected $_canFetchTransactionInfo = false;
+    protected $_canFetchTransactionInfo = true;
 
     /**
      * @var ResponseValidator
@@ -355,11 +355,11 @@ class Transparent extends Payflowpro implements TransparentInterface
      *
      * @param InfoInterface $payment
      * @return bool
-     * @throws InvalidTransitionException
      * @throws LocalizedException
      */
     public function acceptPayment(InfoInterface $payment)
     {
+        $this->validatePaymentTransaction($payment);
         if ($this->getConfigPaymentAction() === MethodInterface::ACTION_AUTHORIZE_CAPTURE) {
             $invoices = iterator_to_array($payment->getOrder()->getInvoiceCollection());
             $invoice = count($invoices) ? reset($invoices) : null;
@@ -385,6 +385,20 @@ class Transparent extends Payflowpro implements TransparentInterface
     public function denyPayment(InfoInterface $payment)
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
+    {
+        $result = parent::fetchTransactionInfo($payment, $transactionId);
+        $this->_canFetchTransactionInfo = false;
+        if ($payment->getIsTransactionApproved()) {
+            $this->acceptPayment($payment);
+        }
+
+        return $result;
     }
 
     /**
@@ -443,5 +457,25 @@ class Transparent extends Payflowpro implements TransparentInterface
     private function getZeroAmountAuthorizationId(InfoInterface $payment): string
     {
         return (string)$payment->getAdditionalInformation(self::PNREF);
+    }
+
+    /**
+     * Validates payment transaction status on PayPal.
+     *
+     * @param InfoInterface $payment
+     * @throws LocalizedException
+     */
+    private function validatePaymentTransaction(InfoInterface $payment): void
+    {
+        if ($payment->canFetchTransactionInfo()) {
+            $transactionId = $payment->getLastTransId();
+            parent::fetchTransactionInfo($payment, $transactionId);
+            $this->_canFetchTransactionInfo = false;
+            if ($payment->getIsTransactionDenied()) {
+                throw new LocalizedException(
+                    __('Payment can\'t be accepted since transaction was rejected by merchant.')
+                );
+            }
+        }
     }
 }
