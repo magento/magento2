@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,8 +12,10 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
+class SwatchAttributeCodesTest extends TestCase
 {
     const ATTRIBUTE_TABLE = 'eav_attribute';
     const ATTRIBUTE_OPTION_TABLE = 'eav_attribute_option';
@@ -26,12 +28,12 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
     private $swatchAttributeCodesModel;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
@@ -43,7 +45,7 @@ class SwatchAttributeCodesTest extends \PHPUnit\Framework\TestCase
         11 => 'image_swatch',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cache = $this->createPartialMock(CacheInterface::class, [
                 'getFrontend',

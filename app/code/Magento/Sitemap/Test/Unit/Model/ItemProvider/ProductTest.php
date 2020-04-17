@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,8 +14,10 @@ use Magento\Sitemap\Model\ResourceModel\Catalog\Product as ProductResource;
 use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     public function testGetItemsEmpty()
     {
@@ -98,7 +100,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getProductFactoryMock($returnValue)
     {
@@ -115,7 +117,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getItemFactoryMock()
     {
@@ -136,7 +138,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getConfigReaderMock()
     {
@@ -153,7 +155,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getProductCollectionMock($returnValue)
     {

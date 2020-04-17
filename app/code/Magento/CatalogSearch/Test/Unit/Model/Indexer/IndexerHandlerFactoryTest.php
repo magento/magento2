@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,19 +9,21 @@ use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
+class IndexerHandlerFactoryTest extends TestCase
 {
     /** @var IndexerHandlerFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -63,12 +65,10 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($indexerMock, $this->model->create($data));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such indexer handler: current_handler
-     */
     public function testCreateWithoutHandlers()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('There is no such indexer handler: current_handler');
         $currentHandler = 'current_handler';
         $handlers = [];
         $data = ['data'];
@@ -86,12 +86,10 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model->create($data);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage current_handler indexer handler doesn't implement
-     */
     public function testCreateWithWrongHandler()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('current_handler indexer handler doesn\'t implement');
         $currentHandler = 'current_handler';
         $currentHandlerClass = \stdClass::class;
         $handlers = [
@@ -120,12 +118,10 @@ class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model->create($data);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Indexer handler is not available: current_handler
-     */
     public function testCreateWithoutAvailableHandler()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Indexer handler is not available: current_handler');
         $currentHandler = 'current_handler';
         $currentHandlerClass = IndexerInterface::class;
         $handlers = [

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,13 +7,15 @@ namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
 use Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\ItemIdProcessor;
 use Magento\Quote\Model\Quote\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
+class ItemIdProcessorTest extends TestCase
 {
     /** @var ItemIdProcessor */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ItemIdProcessor();
     }
@@ -27,9 +29,9 @@ class ItemIdProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcess($itemId, array $jsLayout, array $result)
     {
         /**
-         * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
+         * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())

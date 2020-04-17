@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
-class SortingTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Mapper\Sorting;
+use PHPUnit\Framework\TestCase;
+
+class SortingTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Mapper\Sorting
+     * @var Sorting
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Config\Model\Config\Structure\Mapper\Sorting();
+        $this->_model = new Sorting();
     }
 
     public function testMap()

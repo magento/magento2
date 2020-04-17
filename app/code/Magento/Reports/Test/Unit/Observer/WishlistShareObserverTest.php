@@ -46,7 +46,7 @@ class WishlistShareObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventObserverMock = $this->createMock(Observer::class);
         $this->eventSaverMock = $this->createMock(EventSaver::class);

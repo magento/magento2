@@ -1,13 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Helper\Stock;
 use Magento\CatalogInventory\Observer\AddInventoryDataObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
+class AddInventoryDataObserverTest extends TestCase
 {
     /**
      * @var AddInventoryDataObserver
@@ -15,30 +22,30 @@ class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var Stock|MockObject
      */
     protected $stockHelper;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     protected $eventObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->stockHelper = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
+        $this->stockHelper = $this->createMock(Stock::class);
 
-        $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $this->event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
 
-        $this->eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
@@ -47,8 +54,8 @@ class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getEvent')
             ->will($this->returnValue($this->event));
 
-        $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\CatalogInventory\Observer\AddInventoryDataObserver::class,
+        $this->observer = (new ObjectManager($this))->getObject(
+            AddInventoryDataObserver::class,
             [
                 'stockHelper' => $this->stockHelper,
             ]
@@ -57,7 +64,7 @@ class AddInventoryDataObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testAddInventoryData()
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

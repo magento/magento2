@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,17 @@
 namespace Magento\Deploy\Test\Unit\Service;
 
 use Magento\Deploy\Service\MinifyTemplates;
-
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\View\Template\Html\MinifierInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Framework\View\Template\Html\MinifierInterface;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Minify Templates service class unit tests
  */
-class MinifyTemplatesTest extends \PHPUnit\Framework\TestCase
+class MinifyTemplatesTest extends TestCase
 {
     /**
      * @var MinifyTemplates
@@ -35,7 +36,7 @@ class MinifyTemplatesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesUtils = $this->createPartialMock(Files::class, ['getPhtmlFiles']);
 
