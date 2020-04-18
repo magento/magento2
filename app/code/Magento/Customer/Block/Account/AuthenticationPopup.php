@@ -6,7 +6,6 @@
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Model\Form;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -15,11 +14,6 @@ use Magento\Store\Model\ScopeInterface;
  */
 class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
     /**
      * @var array
      */
@@ -32,18 +26,15 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        ScopeConfigInterface $scopeConfig,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
-        $this->scopeConfig = $scopeConfig;
         parent::__construct($context, $data);
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -130,7 +121,9 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * {@inheritdoc}
+     * Returns block's HTML but only if guest checkout is disabled
+     * 
+     * @return string
      */
     public function toHtml()
     {
@@ -141,8 +134,14 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
         return parent::toHtml();
     }
 
-    protected function _isGuestCheckoutEnabled() {
-        return $this->scopeConfig->isSetFlag(
+    /**
+     * Tells if guest checkout is enabled
+     * 
+     * @return bool
+     */
+    protected function _isGuestCheckoutEnabled()
+    {
+        return $this->_scopeConfig->isSetFlag(
             \Magento\Checkout\Helper\Data::XML_PATH_GUEST_CHECKOUT,
             ScopeInterface::SCOPE_STORE
         );
