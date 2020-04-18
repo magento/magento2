@@ -96,7 +96,7 @@ define([
                             confirm: function () {
                                 self._removeItem($(event.currentTarget));
                             },
-    
+
                             /** @inheritdoc */
                             always: function (e) {
                                 e.stopImmediatePropagation();

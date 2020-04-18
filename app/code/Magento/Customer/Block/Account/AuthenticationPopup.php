@@ -42,6 +42,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns JavaScript layout for UI components
+     *
      * @return string
      */
     public function getJsLayout()
@@ -122,7 +124,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 
     /**
      * Returns block's HTML but only if guest checkout is disabled
-     * 
+     *
      * @return string
      */
     public function toHtml()
@@ -136,7 +138,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 
     /**
      * Tells if guest checkout is enabled
-     * 
+     *
      * @return bool
      */
     protected function _isGuestCheckoutEnabled()
