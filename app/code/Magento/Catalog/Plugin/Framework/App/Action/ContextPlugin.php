@@ -15,6 +15,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * Before dispatch plugin for all frontend controllers to update http context.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ContextPlugin
 {

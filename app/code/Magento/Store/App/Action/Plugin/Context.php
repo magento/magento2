@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class ContextPlugin
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Context
 {
