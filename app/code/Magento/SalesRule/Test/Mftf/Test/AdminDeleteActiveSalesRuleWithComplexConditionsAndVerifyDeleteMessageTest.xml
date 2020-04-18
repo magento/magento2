@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create active cart price rule-->
             <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
                 <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
