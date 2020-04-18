@@ -235,7 +235,10 @@ class View extends DataObject implements ViewInterface
             }
 
             // Update view state
-            $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
+            $this->getState()
+                ->setMode(View\StateInterface::MODE_DISABLED)
+                ->setStatus(View\StateInterface::STATUS_IDLE)
+                ->save();
         }
 
         return $this;
