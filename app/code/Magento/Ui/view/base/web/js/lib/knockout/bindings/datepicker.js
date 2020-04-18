@@ -91,7 +91,7 @@ define([
                             options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
                         )
                     ).toDate();
-    
+
                     if (oldVal == null ||
                         newVal.valueOf() !== oldVal.valueOf()
                     ) {
