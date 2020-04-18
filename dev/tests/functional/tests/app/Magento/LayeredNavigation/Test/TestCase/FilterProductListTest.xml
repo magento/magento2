@@ -97,7 +97,7 @@
             <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
             <data name="runReindex" xsi:type="boolean">true</data>
             <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>
-            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::product_10_dollar, catalogProductSimple::product_20_dollar, configurableProduct::filterable_two_options_with_zero_price</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">configurableProduct::filterable_two_options_with_zero_price, catalogProductSimple::product_20_dollar, catalogProductSimple::product_10_dollar</data>
             <data name="layeredNavigation" xsi:type="array">
                 <item name="filters_0" xsi:type="array">
                     <item name="0" xsi:type="array">
