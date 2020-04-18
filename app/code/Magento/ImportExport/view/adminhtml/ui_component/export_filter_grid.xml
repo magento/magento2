@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">export_filter_grid.export_filter_grid_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>export_filter_columns</spinner>
+        <deps>
+            <dep>export_filter_grid.export_filter_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="export_filter_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">attribute_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_ImportExport::export</aclResource>
+        <dataProvider class="Magento\ImportExport\Ui\DataProvider\ExportFilterDataProvider"
+                      name="export_filter_grid_data_source">
+            <settings>
+                <primaryFieldName>id</primaryFieldName>
+                <requestFieldName>attribute_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="export_filter_columns">
+        <column name="skip_attr">
+            <settings>
+                <label translate="true">Exclude</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="frontend_label">
+            <settings>
+                <label translate="true">Attribute Label</label>
+                <filter>text</filter>
+            </settings>
+        </column>
+        <column name="attribute_code">
+            <settings>
+                <label translate="true">Attribute Code</label>
+                <sorting>asc</sorting>
+                <filter>text</filter>
+            </settings>
+        </column>
+        <column name="filter">
+            <settings>
+                <label translate="true">Filter</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>
