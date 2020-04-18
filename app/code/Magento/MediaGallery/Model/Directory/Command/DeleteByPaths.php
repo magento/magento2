@@ -10,6 +10,7 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
+use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,15 +29,23 @@ class DeleteByPaths implements DeleteDirectoriesByPathsInterface
     private $storage;
 
     /**
+     * @var IsPathBlacklistedInterface
+     */
+    private $isPathBlacklisted;
+
+    /**
      * @param LoggerInterface $logger
      * @param Storage $storage
+     * @param IsPathBlacklistedInterface $isPathBlacklisted
      */
     public function __construct(
         LoggerInterface $logger,
-        Storage $storage
+        Storage $storage,
+        IsPathBlacklistedInterface $isPathBlacklisted
     ) {
         $this->logger = $logger;
         $this->storage = $storage;
+        $this->isPathBlacklisted = $isPathBlacklisted;
     }
 
     /**
@@ -46,6 +55,10 @@ class DeleteByPaths implements DeleteDirectoriesByPathsInterface
     {
         $failedPaths = [];
         foreach ($paths as $path) {
+            if ($this->isPathBlacklisted->execute($path)) {
+                $failedPaths[] = $path;
+                continue;
+            }
             try {
                 $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
             } catch (\Exception $exception) {
