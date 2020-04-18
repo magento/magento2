@@ -17,8 +17,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
      */
     const TIME_FRAME = 60;
 
-    const XML_PATH_KEEP_GUEST_CART = 'mfloginascustomer/general/keep_guest_cart';
-
     /**
      * Prefix of model events names
      *
@@ -189,19 +187,10 @@ class Login extends \Magento\Framework\Model\AbstractModel
             /* Logout if logged in */
             $this->_customerSession->logout();
         } else {
-
             $quote = $this->cart->getQuote();
-
-            $keepItems = $this->scopeConfig->getValue(
-                self::XML_PATH_KEEP_GUEST_CART,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-
-            if (!$keepItems) {
-                /* Remove items from guest cart */
-                foreach ($quote->getAllVisibleItems() as $item) {
-                    $this->cart->removeItem($item->getId());
-                }
+            /* Remove items from guest cart */
+            foreach ($quote->getAllVisibleItems() as $item) {
+                $this->cart->removeItem($item->getId());
             }
             $this->cart->save();
         }
