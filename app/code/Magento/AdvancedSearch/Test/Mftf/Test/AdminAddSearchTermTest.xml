@@ -18,11 +18,18 @@
             <group value="AdvancedSearch"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminSaveNewSearchTermActionGroup" stepKey="createNewSearchTerm"/>
+        <actionGroup ref="AdminOpenNewSerchTermPageActionGroup" stepKey="navigateToSearchTermPage"/>
+        <actionGroup ref="AdminFillSearchTermActionGroup" stepKey="fillNewSearchTermData">
+            <argument name="searchQuery" value="{{SearchTerms.searchQuery}}"/>
+            <argument name="store" value="{{SearchTerms.store}}"/>
+            <argument name="redirectUrl" value="{{SearchTerms.redirectUrl}}"/>
+            <argument name="suggestedTerms" value="{{SearchTerms.suggestedTerms}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveSearchTermActionGroup" stepKey="saveSearchTerm"/>
     </test>
 </tests>
