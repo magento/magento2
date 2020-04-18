@@ -3,44 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Newsletter\Block\Adminhtml\Template\Preview;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Newsletter\Model\Template;
+use Magento\Newsletter\Model\TemplateFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit\Framework\TestCase
+class PreviewTest extends TestCase
 {
-    /** @var \Magento\Newsletter\Block\Adminhtml\Template\Preview */
+    /** @var Preview */
     protected $preview;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Newsletter\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Newsletter\Model\Template|MockObject */
     protected $template;
 
-    /** @var \Magento\Newsletter\Model\SubscriberFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SubscriberFactory|MockObject */
     protected $subscriberFactory;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var State|MockObject */
     protected $appState;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->appState = $this->createMock(State::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->template = $this->createPartialMock(
-            \Magento\Newsletter\Model\Template::class,
+            Template::class,
             [
                 'setTemplateType',
                 'setTemplateText',
@@ -52,19 +67,19 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 'load'
             ]
         );
-        $templateFactory = $this->createPartialMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create']);
+        $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
         $this->subscriberFactory = $this->createPartialMock(
-            \Magento\Newsletter\Model\SubscriberFactory::class,
+            SubscriberFactory::class,
             ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $escaper = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Escaper::class
+            Escaper::class
         );
         $this->preview = $this->objectManagerHelper->getObject(
-            \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
+            Preview::class,
             [
                 'appState' => $this->appState,
                 'storeManager' => $this->storeManager,
@@ -90,7 +105,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
         $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+                Template::DEFAULT_DESIGN_AREA,
                 [$this->template, 'getProcessedTemplate'],
                 [['subscriber' => null]]
             )
@@ -119,14 +134,14 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
         $this->template->expects($this->atLeastOnce())->method('revertDesign');
 
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(1);
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
 
         $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+                Template::DEFAULT_DESIGN_AREA,
                 [
                     $this->template,
                     'getProcessedTemplate'
@@ -151,7 +166,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
                 ['subscriber', null, 3]
             ]
         );
-        $subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriber = $this->createMock(Subscriber::class);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
         $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
 
@@ -160,7 +175,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
         $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
-                \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
+                Template::DEFAULT_DESIGN_AREA,
                 [
                     $this->template,
                     'getProcessedTemplate'

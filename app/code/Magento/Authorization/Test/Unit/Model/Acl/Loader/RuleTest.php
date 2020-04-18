@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\Authorization\Model\Acl\Loader\Rule
+ * @covers \Magento\Authorization\Model\Acl\Loader\Rule
  */
 class RuleTest extends TestCase
 {

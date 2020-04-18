@@ -3,36 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Search\Model\EngineResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Search\Model\EngineResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class EngineResolverTest extends \PHPUnit\Framework\TestCase
+class EngineResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Search\Model\EngineResolver
+     * @var EngineResolver
      */
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|MockObject
      */
     private $path;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|MockObject
      */
     private $scopeType;
 
     /**
-     * @var null|string|\PHPUnit_Framework_MockObject_MockObject
+     * @var null|string|MockObject
      */
     private $scopeCode;
 
@@ -42,7 +46,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $engines = [];
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -51,9 +55,9 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)

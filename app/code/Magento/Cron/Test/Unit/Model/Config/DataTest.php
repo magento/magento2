@@ -3,9 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Cron\Model\Config\Data;
+use Magento\Cron\Model\Config\Reader\Db;
+use Magento\Cron\Model\Config\Reader\Xml;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
      * Testing return jobs from different sources (DB, XML)
@@ -13,11 +22,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetJobs()
     {
         $reader = $this->getMockBuilder(
-            \Magento\Cron\Model\Config\Reader\Xml::class
+            Xml::class
         )->disableOriginalConstructor()->getMock();
-        $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $cache = $this->createMock(CacheInterface::class);
         $dbReader = $this->getMockBuilder(
-            \Magento\Cron\Model\Config\Reader\Db::class
+            Db::class
         )->disableOriginalConstructor()->getMock();
 
         $jobs = [
@@ -37,11 +46,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
 
-        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($jobs);
 
-        $configData = new \Magento\Cron\Model\Config\Data($reader, $cache, $dbReader, 'test_cache_id', $serializerMock);
+        $configData = new Data($reader, $cache, $dbReader, 'test_cache_id', $serializerMock);
 
         $expected = [
             'job1' => ['schedule' => '* * * * *', 'instance' => 'JobModel1', 'method' => 'method1'],
