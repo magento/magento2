@@ -171,8 +171,7 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="25" stepKey="selectProductTierPricePercentageValue2"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton4"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad1"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage1"/>
         <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField4"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField4">
@@ -198,8 +197,7 @@
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig1"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage1"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache1"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage2"/>
         <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_2"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField5"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField5">
@@ -212,8 +210,7 @@
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig2"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage2"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache2"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage3"/>
-        <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad3"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage3"/>
         <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_3"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField6"/>
         <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField6">
@@ -250,8 +247,7 @@
         <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForAdminProductFormSectionProductPriceInput"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="200" stepKey="fillProductPrice200"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage4"/>
-        <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad4"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage4"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField7"/>
         <assertEquals message="Shopping cart should contain subtotal $4,000" stepKey="assertSubtotalField7">
             <expectedResult type="string">$4,000.00</expectedResult>
