@@ -45,7 +45,7 @@ class CollectionByPagesIteratorTest extends TestCase
         $pageSize = 2;
         $pageCount = 3;
 
-        /** @var $callbackMock MockObject */
+        /** @var MockObject $callbackMock */
         $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass(
@@ -57,7 +57,7 @@ class CollectionByPagesIteratorTest extends TestCase
         $entityFactory = $this->createMock(EntityFactory::class);
         $logger = $this->createMock(LoggerInterface::class);
 
-        /** @var $collectionMock AbstractDb|MockObject */
+        /** @var AbstractDb|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])

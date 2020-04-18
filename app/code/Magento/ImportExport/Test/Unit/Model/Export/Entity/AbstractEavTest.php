@@ -112,7 +112,7 @@ class AbstractEavTest extends TestCase
             $this->returnValue($testAttributeOptions)
         );
 
-        /** @var $item \Magento\Framework\Model\AbstractModel|MockObject */
+        /** @var AbstractModel|MockObject $item */
         $item = $this->getMockForAbstractClass(
             AbstractModel::class,
             [],

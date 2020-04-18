@@ -23,7 +23,7 @@ class EntityAbstractTest extends TestCase
      */
     public function testGetFileNameAndSetFileName()
     {
-        /** @var $model \Magento\ImportExport\Model\Export\AbstractEntity */
+        /** @var AbstractEntity $model */
         $model = $this->getMockForAbstractClass(
             AbstractEntity::class,
             [],

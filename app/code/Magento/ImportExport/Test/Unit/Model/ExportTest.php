@@ -73,7 +73,7 @@ class ExportTest extends TestCase
         $filesystem = $this->createMock(Filesystem::class);
         $entityFactory = $this->createMock(Factory::class);
         $exportAdapterFac = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Factory::class);
-        /** @var $mockModelExport \Magento\ImportExport\Model\Export */
+        /** @var \Magento\ImportExport\Model\Export $mockModelExport */
         $mockModelExport = $this->getMockBuilder(Export::class)
             ->setMethods(['getEntityAdapter', '_getEntityAdapter', '_getWriter'])
             ->setConstructorArgs([$logger, $filesystem, $this->_exportConfigMock, $entityFactory, $exportAdapterFac])
