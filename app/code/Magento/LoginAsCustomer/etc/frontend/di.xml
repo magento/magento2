@@ -9,4 +9,12 @@
     <type name="Magento\PageCache\Model\Config">
         <plugin name="las-cache-is-enabled" type="Magento\LoginAsCustomer\Model\PageCache\ConfigPlugin"/>
     </type>
+
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="logged_as_customer" xsi:type="string">Magento\LoginAsCustomer\CustomerData\LoginAsCustomer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php if ($block->getConfig()->isEnabled()) : ?>
+    <div  data-bind="scope: 'loginAsCustomer'" >
+        <div class="lac-notification clearfix" data-bind="visible: isVisible" style="display: none">
+            <div class="top-container">
+                <div class="lac-notification-icon wrapper">
+                    <img class="logo-img" src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_LoginAsCustomer::images/magento-icon.svg')) ?>" alt="Magento" />
+                </div>
+                <div class="lac-notification-text wrapper">
+                    <span data-bind="html: notificationText"></span>
+                </div>
+                <div class="lac-notification-links wrapper">
+                   <?= $block->getChildHtml('login-as-customer-notice-links') ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "loginAsCustomer": {
+                        "component": "Magento_LoginAsCustomer/js/view/loginAsCustomer"
+                    }
+                }
+            }
+        }
+    }
+    </script>
+<?php endif; ?>
