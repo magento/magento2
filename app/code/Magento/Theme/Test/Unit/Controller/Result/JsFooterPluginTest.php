@@ -129,9 +129,6 @@ class JsFooterPluginTest extends TestCase
     public function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
-            'empty_array' => [
-                'content' => []
-            ],
             'null' => [
                 'content' => null
             ]
@@ -151,13 +148,8 @@ class JsFooterPluginTest extends TestCase
             ->method('getContent')
             ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->never())
-            ->method('isSetFlag')
-            ->with(
-                self::STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-                ScopeInterface::SCOPE_STORE
-            )
-            ->willReturn(false);
+        $this->httpMock->expects($this->never())
+            ->method('setContent');
 
         $this->plugin->beforeSendResponse($this->httpMock);
     }
