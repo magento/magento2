@@ -11,6 +11,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader;
 use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,24 +21,24 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var DefaultValueProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DefaultValueProvider|MockObject
      */
-    protected $defaultValueProvider;
+    private $defaultValueProvider;
 
     /**
-     * @var ObjectManagerConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerConfig|MockObject
      */
-    protected $objectManagerConfig;
+    private $objectManagerConfig;
 
     /**
-     * @var ReflectionGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReflectionGenerator|MockObject
      */
-    protected $reflectionGenerator;
+    private $reflectionGenerator;
 
     /**
-     * @var ServiceMethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceMethodsMap|MockObject
      */
-    protected $serviceMethodsMap;
+    private $serviceMethodsMap;
 
     /**
      * Initialize parameters
@@ -87,12 +88,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             'topicOne' => [
                 'topic' => 'topicOne',
                 'disabled' => false,
-                'connections' => ['amqp' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false]]
+                'connection' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false],
             ],
             'topicTwo' => [
                 'topic' => 'topicTwo',
                 'disabled' => false,
-                'connections' => ['amqp' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false]]
+                'connection' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false],
             ],
         ];
 

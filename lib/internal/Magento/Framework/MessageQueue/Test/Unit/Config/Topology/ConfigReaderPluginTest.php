@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\Config\Topology\ConfigReaderPlugin as Topolog
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Topology\Config\CompositeReader as TopologyConfigCompositeReader;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,19 +24,18 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var TopologyConfigCompositeReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var TopologyConfigCompositeReader|MockObject
      */
     private $subjectMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->subjectMock = $this->getMockBuilder(TopologyConfigCompositeReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBinds', 'getConnectionByTopic'])
@@ -135,10 +135,16 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->configMock->expects(static::atLeastOnce())
+        $this->configMock->expects($this->atLeastOnce())
             ->method('getBinds')
             ->willReturn($binding);
-        $this->configMock->expects(static::exactly(2))
+        $this->configMock->expects($this->exactly(2))
+            ->method('getExchangeByTopic')
+            ->willReturnMap([
+                ['catalog.product.removed', 'magento-db'],
+                ['inventory.counter.updated', 'magento']
+            ]);
+        $this->configMock->expects($this->exactly(2))
             ->method('getConnectionByTopic')
             ->willReturnMap([
                 ['catalog.product.removed', 'db'],

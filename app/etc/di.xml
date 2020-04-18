@@ -1719,6 +1719,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\Publisher\Config\Env\Reader">
+        <arguments>
+            <argument name="publisherNameToConnectionMap" xsi:type="array">
+                <item name="amqp-magento" xsi:type="string">amqp</item>
+                <item name="db-magento-db" xsi:type="string">db</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable">
         <arguments>
             <argument name="triggers" xsi:type="array">

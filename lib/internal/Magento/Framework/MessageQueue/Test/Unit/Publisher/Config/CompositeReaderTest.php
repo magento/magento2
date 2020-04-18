@@ -5,9 +5,11 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 use Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CompositeReaderTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,29 +19,29 @@ class CompositeReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|ValidatorInterface
      */
     private $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|ReaderInterface
      */
     private $readerOneMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|ReaderInterface
      */
     private $readerTwoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|ReaderInterface
      */
     private $readerThreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject|DefaultValueProvider
      */
-    protected $defaultConfigProviderMock;
+    private $defaultConfigProviderMock;
 
     /**
      * Initialize parameters
@@ -50,8 +52,7 @@ class CompositeReaderTest extends \PHPUnit\Framework\TestCase
         $this->readerOneMock = $this->createMock(ReaderInterface::class);
         $this->readerTwoMock = $this->createMock(ReaderInterface::class);
         $this->readerThreeMock = $this->createMock(ReaderInterface::class);
-        $this->defaultConfigProviderMock =
-            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
+        $this->defaultConfigProviderMock = $this->createMock(DefaultValueProvider::class);
 
         $this->reader = new CompositeReader(
             $this->validatorMock,

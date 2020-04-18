@@ -60,4 +60,3 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
         return $result;
     }
 }
-

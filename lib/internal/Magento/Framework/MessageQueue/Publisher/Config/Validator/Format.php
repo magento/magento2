@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 class Format implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function validate($configData)
     {
@@ -25,6 +25,11 @@ class Format implements ValidatorInterface
             $diff = array_diff($requiredPublisherFields, array_keys($publisherData));
             foreach ($diff as $field) {
                 $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);
+            }
+
+            if (!array_key_exists('connection', $publisherData) || !is_array($publisherData['connection'])) {
+                $errors[] = sprintf('Invalid connection format for publisher %s.', $name);
+                continue;
             }
 
             $diff = array_diff($requiredConnectionFields, array_keys($publisherData['connection']));

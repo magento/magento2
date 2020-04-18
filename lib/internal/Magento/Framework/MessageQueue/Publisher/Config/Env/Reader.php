@@ -26,15 +26,25 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     private $configData;
 
     /**
+     * Mapping between default publishers name and connections
+     *
+     * @var array
+     */
+    private $publisherNameToConnectionMap;
+
+    /**
      * @param DeploymentConfig $deploymentConfig
      * @param MessageQueueConfigData $configData
+     * @param array $publisherNameToConnectionMap
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        MessageQueueConfigData $configData
+        MessageQueueConfigData $configData,
+        $publisherNameToConnectionMap = []
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->configData = $configData;
+        $this->publisherNameToConnectionMap = $publisherNameToConnectionMap;
     }
 
     /**
