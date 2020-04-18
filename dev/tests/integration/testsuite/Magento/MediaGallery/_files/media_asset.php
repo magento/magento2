@@ -18,7 +18,12 @@ $mediaAsset = $mediaAssetFactory->create(
     [
         'id' => 2020,
         'path' => 'testDirectory/path.jpg',
-        'contentType' => 'image'
+        'contentType' => 'image',
+        'title' => 'Img',
+        'source' => 'Local',
+        'width' => 420,
+        'height' => 240,
+        'size' => 12877
     ]
 );
 /** @var SaveInterface $mediaSave */

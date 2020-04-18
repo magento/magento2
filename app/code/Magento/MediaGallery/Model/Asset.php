@@ -13,6 +13,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * Media Gallery Asset
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList
  */
 class Asset implements AssetInterface
 {

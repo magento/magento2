@@ -104,7 +104,12 @@ class AssetsTest extends TestCase
                 'assetsData' => [
                     'asset1' => [
                         'path' => 'fruit.jpg',
-                        'contentType' => 'image'
+                        'title' => 'Img',
+                        'source' => 'Local',
+                        'contentType' => 'image/jpeg',
+                        'width' => 420,
+                        'height' => 240,
+                        'size' => 12877
                     ]
                 ]
             ],
@@ -112,11 +117,21 @@ class AssetsTest extends TestCase
                 'assetsData' => [
                     'asset1' => [
                         'path' => 'image.jpg',
-                        'contentType' => 'image'
+                        'title' => 'Img',
+                        'source' => 'Local',
+                        'contentType' => 'image/jpeg',
+                        'width' => 420,
+                        'height' => 240,
+                        'size' => 12877
                     ],
                     'asset2' => [
-                        'path' => 'image2.png',
-                        'contentType' => 'image'
+                        'path' => 'image2.jpg',
+                        'title' => 'Img',
+                        'source' => 'Local',
+                        'contentType' => 'image/jpeg',
+                        'width' => 420,
+                        'height' => 240,
+                        'size' => 12877
                     ]
                 ]
             ],
@@ -133,11 +148,7 @@ class AssetsTest extends TestCase
     {
         $assets = [];
         foreach ($assetsData as $assetData) {
-            $assets[] = $this->assetFactory->create(
-                [
-                    'data' => $assetData
-                ]
-            );
+            $assets[] = $this->assetFactory->create($assetData);
         }
         return $assets;
     }

@@ -106,7 +106,12 @@ class AssetEndToEndTest extends TestCase
         $asset = $this->assetFactory->create(
             [
                 'path' => 'fruit.jpg',
-                'contentType' => 'image'
+                'title' => 'Img',
+                'source' => 'Local',
+                'contentType' => 'image/jpeg',
+                'width' => 420,
+                'height' => 240,
+                'size' => 12877
             ]
         );
         $this->saveAssets->execute([$asset]);
