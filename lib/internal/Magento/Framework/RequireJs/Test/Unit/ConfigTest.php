@@ -12,22 +12,22 @@ use Magento\Framework\View\Asset\RepositoryMap;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\RequireJs\Config\File\Collector\Aggregated|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\RequireJs\Config\File\Collector\Aggregated|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSource;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $design;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileReader;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
@@ -37,17 +37,17 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit\Framework\MockObject\MockObject
      */
     private $minificationMock;
 
     /**
-     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $minifyAdapterMock;
 
     /**
-     * @var RepositoryMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var RepositoryMap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMapMock;
 
