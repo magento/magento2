@@ -42,7 +42,9 @@ class JsFooterPlugin
         $content = (string)$subject->getContent();
         $bodyEndTag = '</body';
         $isEndBodyTagFound = strpos($content, $bodyEndTag) !== false;
-        $shouldMoveJsToBottom = $this->scopeConfig->isSetFlag(self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM, ScopeInterface::SCOPE_STORE);
+        $shouldMoveJsToBottom = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM, ScopeInterface::SCOPE_STORE
+        );
 
         if ($isEndBodyTagFound && $shouldMoveJsToBottom) {
             if ($scripts = $this->extractScriptTags($content)) {
@@ -54,6 +56,8 @@ class JsFooterPlugin
 
     /**
      * Extracts and returns script tags found in given content.
+     * 
+     * @param string $content
      */
     public function extractScriptTags(&$content)
     {
