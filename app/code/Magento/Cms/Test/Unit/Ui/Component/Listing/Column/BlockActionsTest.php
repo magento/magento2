@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -97,7 +97,6 @@ class BlockActionsTest extends TestCase
                     'edit' => [
                         'href' => 'test/url/edit',
                         'label' => __('Edit'),
-                        '__disableTmpl' => true,
                     ],
                     'delete' => [
                         'href' => 'test/url/delete',
@@ -107,7 +106,6 @@ class BlockActionsTest extends TestCase
                             'message' => __('Are you sure you want to delete a %1 record?', $title),
                         ],
                         'post' => true,
-                        '__disableTmpl' => true,
                     ],
                 ],
             ],

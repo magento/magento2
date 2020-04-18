@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\Exception\State\InitException;
 use Magento\Store\App\Action\Plugin\StoreCheck;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreCheckTest extends \PHPUnit\Framework\TestCase
+class StoreCheckTest extends TestCase
 {
     /**
      * @var StoreCheck
@@ -33,7 +37,7 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->_storeMock = $this->createMock(Store::class);
@@ -51,12 +55,10 @@ class StoreCheckTest extends \PHPUnit\Framework\TestCase
         $this->_plugin = new StoreCheck($this->_storeManagerMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\State\InitException
-     * @expectedExceptionMessage Current store is not active.
-     */
     public function testBeforeExecuteWhenStoreNotActive()
     {
+        $this->expectException(InitException::class);
+        $this->expectExceptionMessage('Current store is not active.');
         $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
         $this->_plugin->beforeExecute($this->subjectMock);
     }
