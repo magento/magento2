@@ -11,6 +11,7 @@
     <test name="AdminNameEmptyForGuestTest">
         <annotations>
             <features value="Newsletter"/>
+            <stories value="Newsletter Subscribers grid"/>
             <group value="Newsletter"/>
             <title value="Empty name for Guest Customer"/>
             <description value="'Customer First Name' and 'Customer Last Name' should be empty for Guest Customer in Newsletter Subscribers Grid"/>
@@ -18,15 +19,14 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
         <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerFooterSection.formSubscribe}}"
                    stepKey="giveEmail"/>

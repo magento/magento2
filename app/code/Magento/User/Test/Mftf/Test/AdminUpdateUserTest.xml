@@ -18,10 +18,12 @@
             <description value="Change full access role for admin user to custom one with restricted permission (Sales)"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <!-- skip due to MQE-1964 -->
+            <group value="skip"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
 
             <!--Create New User-->
             <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
@@ -39,8 +41,8 @@
         </before>
         <after>
             <!--Delete new User-->
-            <actionGroup ref="logout" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
                 <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
             </actionGroup>
@@ -49,7 +51,7 @@
             <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
                 <argument name="roleName" value="{{roleSales.rolename}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
 
@@ -68,9 +70,10 @@
         <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="seeUserInGrid">
             <argument name="user" value="AdminUserWithUpdatedUserRoleToSales"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logOutFromAdminPanel"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsSaleRoleUser">
-            <argument name="adminUser" value="AdminUserWithUpdatedUserRoleToSales"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsSaleRoleUser">
+            <argument name="username" value="{{AdminUserWithUpdatedUserRoleToSales.username}}"/>
+            <argument name="password" value="{{AdminUserWithUpdatedUserRoleToSales.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="seeSuccessloginMessage"/>
         <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="navigateToAdminUsersPage"/>

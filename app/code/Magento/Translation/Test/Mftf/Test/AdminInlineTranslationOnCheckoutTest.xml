@@ -17,9 +17,12 @@
             <testCaseId value="MC-11505"/>
             <group value="translation"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-31663"/>
+            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!--Product and a customer is created -->
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
@@ -43,7 +46,7 @@
             <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Set production mode -->
 <!--            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->

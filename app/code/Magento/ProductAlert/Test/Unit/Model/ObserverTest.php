@@ -11,6 +11,9 @@ use Magento\ProductAlert\Model\ProductSalability;
 
 /**
  * Class ObserverTest
+ *
+ * Is used to test Product Alert Observer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -168,7 +171,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultStore', 'getId'])
+            ->setMethods(['getDefaultStore', 'getId', 'setWebsiteId'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMock();
@@ -285,12 +288,13 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->any())->method('getDefaultStore')->willReturnSelf();
         $this->websiteMock->expects($this->once())->method('getDefaultStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())->method('getId')->willReturn(2);
+        $this->storeMock->expects($this->any())->method('setWebsiteId')->willReturnSelf();
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
         $this->priceColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
         $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
-
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $items = [
             new \Magento\Framework\DataObject([
                 'customer_id' => $id

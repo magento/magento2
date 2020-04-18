@@ -253,17 +253,28 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     public function addContainerDataProvider()
     {
         return [
+            ['aside'],
             ['dd'],
             ['div'],
             ['dl'],
             ['fieldset'],
+            ['main'],
+            ['nav'],
             ['header'],
+            ['footer'],
             ['ol'],
             ['p'],
             ['section'],
             ['table'],
             ['tfoot'],
-            ['ul']
+            ['ul'],
+            ['article'],
+            ['h1'],
+            ['h2'],
+            ['h3'],
+            ['h4'],
+            ['h5'],
+            ['h6'],
         ];
     }
 
@@ -274,7 +285,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $msg = 'Html tag "span" is forbidden for usage in containers. ' .
             'Consider to use one of the allowed: aside, dd, div, dl, fieldset, main, nav, ' .
-            'header, footer, ol, p, section, table, tfoot, ul.';
+            'header, footer, ol, p, section, table, tfoot, ul, article, h1, h2, h3, h4, h5, h6.';
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage($msg);
         $this->_layout->addContainer('container', 'Container', ['htmlTag' => 'span']);
