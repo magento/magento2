@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontStoreViewSwitchPersistenceTest">
+        <annotations>
+            <features value="Store Switcher"/>
+            <title value="Effect of Store Switch should be persistent"/>
+            <stories value="As a Customer I would like to use chosen Store while using the Storefront"/>
+            <testCaseId value="magento/magento2#27296"/>
+            <group value="StoreSwitcher"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <openNewTab stepKey="openStorefrontTab"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewToCustom"/>
+        <actionGroup ref="StorefrontAssertStoreViewChosenActionGroup" stepKey="assertStoreViewCorrect"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openDifferentPage"/>
+        <actionGroup ref="StorefrontAssertStoreViewChosenActionGroup" stepKey="assertStoreViewCorrectAgain"/>
+        <closeTab stepKey="closeStorefrontTab"/>
+    </test>
+</tests>

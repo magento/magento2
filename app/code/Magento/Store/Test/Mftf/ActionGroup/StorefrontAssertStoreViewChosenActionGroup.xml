@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertStoreViewChosenActionGroup">
+        <annotations>
+            <description>Verifies if Store View is the one expected</description>
+        </annotations>
+
+        <arguments>
+            <argument name="storeView" defaultValue="customStore"/>
+        </arguments>
+
+        <see stepKey="verifyCurrentStoreViewName" selector="{{StorefrontHeaderSection.storeViewName}}" userInput="{{storeView.name}}"/>
+    </actionGroup>
+</actionGroups>
