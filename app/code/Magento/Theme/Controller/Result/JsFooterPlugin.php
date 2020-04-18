@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Response\Http;
 
 /**
- * Plugin for putting all js to footer.
+ * Plugin for putting all JavaScript tags to the end of body.
  */
 class JsFooterPlugin
 {
@@ -32,7 +32,7 @@ class JsFooterPlugin
     }
 
     /**
-     * Put all javascript to footer before sending the response.
+     * Moves all JavaScript tags to the end of body if this feature is enabled.
      *
      * @param Http $subject
      * @return void
@@ -40,37 +40,44 @@ class JsFooterPlugin
     public function beforeSendResponse(Http $subject)
     {
         $content = (string)$subject->getContent();
+        $bodyEndTag = '</body';
+        $isEndBodyTagFound = strpos($content, $bodyEndTag) !== false;
+        $shouldMoveJsToBottom = $this->scopeConfig->isSetFlag(self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM, ScopeInterface::SCOPE_STORE);
 
-        $bodyClose = '</body';
-
-        if (strpos($content, $bodyClose) !== false && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-            ScopeInterface::SCOPE_STORE
-        )) {
-            $scripts = '';
-            $scriptOpen = '<script';
-            $scriptClose = '</script>';
-            $scriptOpenPos = strpos($content, $scriptOpen);
-
-            while ($scriptOpenPos !== false) {
-                $scriptClosePos = strpos($content, $scriptClose, $scriptOpenPos);
-                $script = substr($content, $scriptOpenPos, $scriptClosePos - $scriptOpenPos + strlen($scriptClose));
-
-                if (strpos($script, 'text/x-magento-template') !== false) {
-                    $scriptOpenPos = strpos($content, $scriptOpen, $scriptClosePos);
-                    continue;
-                }
-
-                $scripts .= "\n" . $script;
-                $content = str_replace($script, '', $content);
-                // Script cut out, continue search from its position.
-                $scriptOpenPos = strpos($content, $scriptOpen, $scriptOpenPos);
-            }
-
-            if ($scripts) {
-                $content = str_replace($bodyClose, $scripts . "\n" . $bodyClose, $content);
+        if ($isEndBodyTagFound && $shouldMoveJsToBottom) {
+            if ($scripts = $this->extractScriptTags($content)) {
+                $content = str_replace($bodyEndTag, "$scripts\n$bodyEndTag", $content);
                 $subject->setContent($content);
             }
         }
+    }
+
+    /**
+     * Extracts and returns script tags found in given content.
+     */
+    public function extractScriptTags(&$content)
+    {
+        $scripts = '';
+        $scriptOpen = '<script';
+        $scriptClose = '</script>';
+        $scriptOpenPos = strpos($content, $scriptOpen);
+
+        while ($scriptOpenPos !== false) {
+            $scriptClosePos = strpos($content, $scriptClose, $scriptOpenPos);
+            $script = substr($content, $scriptOpenPos, $scriptClosePos - $scriptOpenPos + strlen($scriptClose));
+            $isXMagentoTemplate = strpos($script, 'text/x-magento-template') !== false;
+
+            if ($isXMagentoTemplate) {
+                $scriptOpenPos = strpos($content, $scriptOpen, $scriptClosePos);
+                continue;
+            }
+
+            $scripts .= "\n" . $script;
+            $content = str_replace($script, '', $content);
+            // Script cut out, continue search from its position.
+            $scriptOpenPos = strpos($content, $scriptOpen, $scriptOpenPos);
+        }
+
+        return $scripts;
     }
 }
