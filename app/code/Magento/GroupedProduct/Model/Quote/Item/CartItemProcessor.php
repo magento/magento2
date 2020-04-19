@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\GroupedProduct\Model\Quote\Item;
 
@@ -8,7 +12,9 @@ use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 
 /**
- * Class CartItemProcessor
+ * A class that converts the Grouped Product super group, as received over RESTful API, into the format needed within the buy request
+ *
+ * Class \Magento\GroupedProduct\Model\Quote\Item\CartItemProcessor
  */
 class CartItemProcessor implements CartItemProcessorInterface
 {
@@ -28,6 +34,9 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
+     *
+     * Converts the super_group request data into the same format as native frontend add-to-cart
+     *
      * @param CartItemInterface $cartItem
      *
      * @return \Magento\Framework\DataObject|null
@@ -59,6 +68,8 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
+     * Option processor
+     *
      * @param CartItemInterface $cartItem
      *
      * @return CartItemInterface
