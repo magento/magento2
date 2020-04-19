@@ -64,7 +64,6 @@ define([
                 $element = $(element),
                 observable,
                 options = {},
-                oldVal,
                 newVal;
 
             _.extend(options, defaults);
@@ -77,13 +76,8 @@ define([
             }
 
             require(['moment', 'mage/utils/misc', 'mage/calendar'], function (moment, utils) {
-                oldVal = $element.datepicker('getDate');
-
                 if (_.isEmpty(observable())) {
-                    if (oldVal) {
-                        $element.datepicker('setDate', null);
-                        $element.blur();
-                    }
+                    newVal = null;
                 } else {
                     newVal = moment(
                         observable(),
@@ -91,14 +85,10 @@ define([
                             options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
                         )
                     ).toDate();
-
-                    if (oldVal == null ||
-                        newVal.valueOf() !== oldVal.valueOf()
-                    ) {
-                        $element.datepicker('setDate', newVal);
-                        $element.blur();
-                    }
                 }
+
+                $element.datepicker('setDate', newVal);
+                $element.blur();
             });
         }
     };
