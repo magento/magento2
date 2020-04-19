@@ -9,6 +9,7 @@ define(['squire'], function (Squire) {
 
     var injector = new Squire(),
         loginAction = jasmine.createSpy(),
+        resolver,
         mocks = {
             'Magento_Customer/js/action/login': loginAction,
             'Magento_Customer/js/customer-data': {
@@ -34,7 +35,12 @@ define(['squire'], function (Squire) {
         };
 
         injector.mock(mocks);
-        injector.require(['Magento_Customer/js/view/authentication-popup'], function (Constr) {
+        injector.require([
+            'Magento_Customer/js/view/authentication-popup',
+            'rjsResolver'
+        ], function (Constr, rjsResolver) {
+            resolver = rjsResolver;
+
             obj = new Constr({
                 provider: 'provName',
                 name: '',
@@ -73,15 +79,19 @@ define(['squire'], function (Squire) {
 
     describe('Magento_Customer/js/view/authentication-popup', function () {
         describe('"login" method', function () {
-            it('Check for return value.', function () {
+            it('Check for return value.', function (done) {
                 var event = {
                     currentTarget: '<form><input type="text" name="username" value="customer"/></form>',
                     stopPropagation: jasmine.createSpy()
                 };
 
                 expect(obj.login(null, event)).toBeFalsy();
-                expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({
-                    username: 'customer'
+
+                resolver(function () {
+                    expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({
+                        username: 'customer'
+                    });
+                    done();
                 });
             });
         });

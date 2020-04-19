@@ -73,6 +73,7 @@ define([
          */
         login: function (formUiElement, event) {
             var loginData = {},
+                isLoading = this.isLoading,
                 formElement = $(event.currentTarget),
                 formDataArray = formElement.serializeArray();
 
@@ -85,7 +86,7 @@ define([
                 if (formElement.validation() &&
                     formElement.validation('isValid')
                 ) {
-                    this.isLoading(true);
+                    isLoading(true);
                     loginAction(loginData);
                 }
             });
