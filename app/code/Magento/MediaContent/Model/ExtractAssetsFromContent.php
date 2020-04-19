@@ -53,7 +53,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
      */
     public function execute(string $content): array
     {
-        $paths = [];
+        $matchesArrays = [];
 
         foreach ($this->searchPatternConfig->get() as $pattern) {
             if (empty($pattern)) {
@@ -63,11 +63,11 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
             preg_match_all($pattern, $content, $matches, PREG_PATTERN_ORDER);
 
             if (!empty($matches[1])) {
-                $paths = array_merge($paths, array_unique($matches[1]));
+                $matchesArrays[] = $matches[1];
             }
         }
 
-        return $this->getAssetsByPaths(array_unique($paths));
+        return $this->getAssetsByPaths(array_unique(array_merge([], ...$matchesArrays)));
     }
 
     /**
@@ -104,7 +104,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     private function getPathStartingWithSlash(string $path): string
     {
         $normalizedPath = ltrim($path, '/');
-        if (strpos($normalizedPath, '/')) {
+        if (strpos($normalizedPath, '/') === false) {
             return $normalizedPath;
         }
         return '/' . $normalizedPath;
