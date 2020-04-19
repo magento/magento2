@@ -12,7 +12,8 @@ use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 
 /**
- * A class that converts the Grouped Product super group, as received over RESTful API, into the format needed within the buy request
+ * A class that converts the Grouped Product super group, as received over RESTful API,
+ * into the format needed within the buy request
  *
  * Class \Magento\GroupedProduct\Model\Quote\Item\CartItemProcessor
  */
