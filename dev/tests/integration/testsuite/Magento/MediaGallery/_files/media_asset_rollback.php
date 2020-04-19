@@ -5,10 +5,16 @@
  */
 declare(strict_types=1);
 
-use Magento\AdobeStockAssetApi\Model\Asset\Command\DeleteByIdInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var DeleteByIdInterface $deleteMediaAsset */
-$deleteMediaAsset = $objectManager->get(DeleteByIdInterface::class);
-$deleteMediaAsset->execute(55);
+
+/** @var DeleteByPathInterface $mediaSave */
+$mediaAssetDelete = $objectManager->get(DeleteByPathInterface::class);
+
+try {
+    $mediaAssetDelete->execute('testDirectory/path.jpg');
+} catch (\Exception $exception) {
+
+}

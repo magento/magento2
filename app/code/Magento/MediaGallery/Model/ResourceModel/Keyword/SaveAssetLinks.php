@@ -5,18 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\Keyword\Command;
+namespace Magento\MediaGallery\Model\ResourceModel\Keyword;
 
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetLinksInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveAssetLinks
+ * Save links between asset and keyword to media_gallery_asset_keyword table
  */
 class SaveAssetLinks
 {
@@ -35,8 +34,6 @@ class SaveAssetLinks
     private $logger;
 
     /**
-     * SaveAssetLinks constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      */
@@ -76,8 +73,10 @@ class SaveAssetLinks
             }
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            $message = __('An error occurred during save asset keyword links: %1', $exception->getMessage());
-            throw new CouldNotSaveException($message, $exception);
+            throw new CouldNotSaveException(
+                __('Could not save asset keyword links'),
+                $exception
+            );
         }
     }
 }

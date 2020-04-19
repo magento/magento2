@@ -199,6 +199,7 @@
         "magento/module-media-content-cms": "*",
         "magento/module-media-gallery": "*",
         "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery-catalog": "*",
         "magento/module-media-storage": "*",
         "magento/module-message-queue": "*",
         "magento/module-msrp": "*",
