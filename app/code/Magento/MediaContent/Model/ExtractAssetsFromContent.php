@@ -63,7 +63,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
             preg_match_all($pattern, $content, $matches, PREG_PATTERN_ORDER);
 
             if (!empty($matches[1])) {
-                $paths += array_unique($matches[1]);
+                $paths = array_merge($paths, array_unique($matches[1]));
             }
         }
 
@@ -81,6 +81,8 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
         $assets = [];
 
         foreach ($paths as $path) {
+            $path = htmlspecialchars_decode($path);
+            $path = trim($path, '"\'');
             try {
                 /** @var AssetInterface $asset */
                 $asset = $this->getMediaAssetByPath->execute($this->getPathStartingWithSlash($path));
@@ -101,6 +103,10 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
      */
     private function getPathStartingWithSlash(string $path): string
     {
-        return '/' . ltrim($path, '/');
+        $normalizedPath = ltrim($path, '/');
+        if (strpos($normalizedPath, '/')) {
+            return $normalizedPath;
+        }
+        return '/' . $normalizedPath;
     }
 }

@@ -9,6 +9,7 @@
     <search>
         <patterns>
             <pattern name="media_gallery">/{{media url="?(.*?)"?}}/</pattern>
+            <pattern name="wysiwyg">/src=".*\/media\/(.*?)"/</pattern>
         </patterns>
     </search>
 </config>

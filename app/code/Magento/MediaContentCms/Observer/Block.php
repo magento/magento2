@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCms\Observer;
 
-use Magento\Cms\Block\Block as CmsBlock;
+use Magento\Cms\Model\Block as CmsBlock;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
