@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateCookieLifetimeTest">
+        <annotations>
+            <features value="Cookie"/>
+            <stories value="Validate cookie lifetime field in Magento admin"/>
+            <title value="Admin should not able to enter text in cookie lifetime filed"/>
+            <description value="Admin can only be able type numbers in cookie lifetime filed in Magento admin"/>
+            <group value="Cookie"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage"/>
+        <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+            <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeField">
+            <argument name="cookieLifetime" value="cookie"/>
+        </actionGroup>
+        <actionGroup ref="AdminValidateNumberValidationActionGroup" stepKey="validateCookieLifetimeSettings"/>
+    </test>
+</tests>
