@@ -45,6 +45,8 @@ interface GroupedItemQtyInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getQty();
 
     /**
+     * Set extension attributes
+     *
      * @param \Magento\GroupedProduct\Api\Data\GroupedItemQtyExtensionInterface $extensionAttributes
      *
      * @return $this
@@ -54,6 +56,8 @@ interface GroupedItemQtyInterface extends \Magento\Framework\Api\ExtensibleDataI
     );
 
     /**
+     * Get extension attributes
+     *
      * @return \Magento\GroupedProduct\Api\Data\GroupedItemQtyExtensionInterface|null
      */
     public function getExtensionAttributes();

@@ -34,7 +34,6 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     *
      * Converts the super_group request data into the same format as native frontend add-to-cart
      *
      * @param CartItemInterface $cartItem
