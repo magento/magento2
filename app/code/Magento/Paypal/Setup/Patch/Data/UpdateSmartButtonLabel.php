@@ -17,16 +17,6 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class UpdateSmartButtonLabel implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var array
-     */
-    private $labelSettingsToUpdate = [
-        'paypal/style/checkout_page_button_label',
-        'paypal/style/cart_page_button_label',
-        'paypal/style/mini_cart_page_button_label',
-        'paypal/style/product_page_button_label',
-    ];
-
-    /**
      * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
@@ -47,26 +37,26 @@ class UpdateSmartButtonLabel implements DataPatchInterface, PatchVersionInterfac
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
-        $connection = $this->moduleDataSetup->getConnection();
-
-        $select = $connection->select()
-            ->from($this->moduleDataSetup->getTable('core_config_data'), ['path','scope', 'scope_id', 'value'])
-            ->where('path IN (?)', $this->labelSettingsToUpdate)
-            ->where('value = ?', 'credit');
-
-        foreach ($connection->fetchAll($select) as $pair) {
-            $value = $pair['path'] === 'paypal/style/product_page_button_label' ? 'buynow' : 'paypal';
-            $this->moduleDataSetup->getConnection()
-                ->insertOnDuplicate(
-                    $this->moduleDataSetup->getTable('core_config_data'),
-                    [
-                        'scope' => $pair['scope'],
-                        'scope_id' => $pair['scope_id'],
-                        'path' => $pair['path'],
-                        'value' => $value
-                    ]
-                );
-        }
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getTable('core_config_data'),
+            ['value' => 'paypal'],
+            [
+                'path IN (?)' => [
+                    'paypal/style/checkout_page_button_label',
+                    'paypal/style/cart_page_button_label',
+                    'paypal/style/mini_cart_page_button_label'
+                ],
+                'value = ? ' => 'credit'
+            ]
+        );
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getTable('core_config_data'),
+            ['value' => 'buynow'],
+            [
+                'path IN (?)' => ['paypal/style/product_page_button_label'],
+                'value = ? ' => 'credit'
+            ]
+        );
         return $this->moduleDataSetup->getConnection()->endSetup();
     }
 

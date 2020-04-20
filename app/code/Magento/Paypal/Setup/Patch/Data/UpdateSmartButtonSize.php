@@ -47,24 +47,14 @@ class UpdateSmartButtonSize implements DataPatchInterface, PatchVersionInterface
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
-        $connection = $this->moduleDataSetup->getConnection();
-
-        $select = $connection->select()
-            ->from($this->moduleDataSetup->getTable('core_config_data'), ['path','scope', 'scope_id', 'value'])
-            ->where('path IN (?)', $this->sizeSettingsToUpdate)
-            ->where('value = \'large\' OR value=\'medium\'');
-        foreach ($connection->fetchAll($select) as $pair) {
-            $this->moduleDataSetup->getConnection()
-                ->insertOnDuplicate(
-                    $this->moduleDataSetup->getTable('core_config_data'),
-                    [
-                        'scope' => $pair['scope'],
-                        'scope_id' => $pair['scope_id'],
-                        'path' => $pair['path'],
-                        'value' => 'responsive'
-                    ]
-                );
-        }
+        $this->moduleDataSetup->getConnection()->update(
+            $this->moduleDataSetup->getTable('core_config_data'),
+            ['value' => 'responsive'],
+            [
+                'path IN (?)' => $this->sizeSettingsToUpdate,
+                'value NOT IN (?) ' => ['responsive']
+            ]
+        );
         return $this->moduleDataSetup->getConnection()->endSetup();
     }
 
