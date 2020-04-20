@@ -17,7 +17,7 @@ use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Process bulk operation status.
+ * Process bulk operations status.
  */
 class BulkStatus implements BulkStatusInterface
 {
@@ -60,8 +60,8 @@ class BulkStatus implements BulkStatusInterface
         CalculatedStatusSql $calculatedStatusSql,
         MetadataPool $metadataPool
     ) {
-        $this->operationCollectionFactory = $operationCollection;
         $this->bulkCollectionFactory = $bulkCollection;
+        $this->operationCollectionFactory = $operationCollection;
         $this->resourceConnection = $resourceConnection;
         $this->calculatedStatusSql = $calculatedStatusSql;
         $this->metadataPool = $metadataPool;

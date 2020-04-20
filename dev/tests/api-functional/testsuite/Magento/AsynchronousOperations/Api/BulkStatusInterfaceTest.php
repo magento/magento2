@@ -56,14 +56,34 @@ class BulkStatusInterfaceTest extends WebapiAbstract
     public function getBulkOperationCountDataProvider()
     {
         return [
-            'Started operations with open status' => [
+            'Completed operations' => [
+                'bulk-uuid-searchable-6',
+                1,
+                OperationInterface::STATUS_TYPE_COMPLETE,
+            ],
+            'Failed operations, can try to perform again' => [
+                'bulk-uuid-searchable-6',
+                1,
+                OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
+            ],
+            'Failed operations. Must change something to retry' => [
+                'bulk-uuid-searchable-6',
+                1,
+                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
+            ],
+            'Opened operations' => [
                 'bulk-uuid-searchable-6',
                 2,
                 OperationInterface::STATUS_TYPE_OPEN,
             ],
-            'Not started scheduled operations' => [
+            'Rejected operations' => [
+                'bulk-uuid-searchable-6',
+                1,
+                OperationInterface::STATUS_TYPE_REJECTED,
+            ],
+            'Not started scheduled operations by open status' => [
                 'bulk-uuid-searchable-7',
-                3,
+                0,
                 OperationInterface::STATUS_TYPE_OPEN,
             ],
         ];
