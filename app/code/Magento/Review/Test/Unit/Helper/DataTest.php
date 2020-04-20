@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Review\Helper\Data as HelperData;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Review\Helper\Data as HelperData;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class \Magento\Review\Test\Unit\Helper\DataTest
@@ -32,22 +33,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Escaper
+     * @var MockObject|Escaper
      */
     private $escaper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @var MockObject|FilterManager
      */
     private $filter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 
