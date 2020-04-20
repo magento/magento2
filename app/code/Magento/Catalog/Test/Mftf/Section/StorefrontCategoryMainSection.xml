@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategoryMainSection">
-        <element name="perPage" type="select" selector="#limiter"/>
+        <element name="perPage" type="select" selector="(//*[@id='limiter'])[last()]"/>
         <element name="sortedBy" type="select" selector="#sorter"/>
         <element name="modeGridIsActive" type="text" selector=".modes .modes-mode.active.mode-grid"/>
         <element name="modeListButton" type="button" selector="#mode-list"/>
