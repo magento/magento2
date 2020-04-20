@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PhpStan\Reflection\Magento;
+namespace Magento\PhpStan\Reflection\Php;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Session\SessionManager;

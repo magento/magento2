@@ -17,6 +17,9 @@ class ClassWithIncorrectUsageOfDataObject
      */
     private $container;
 
+    /**
+     * ClassWithIncorrectUsageOfDataObject constructor.
+     */
     public function __construct()
     {
         $this->container = new DataObject();

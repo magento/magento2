@@ -30,7 +30,7 @@ parameters:
 
 services:
     -
-        class: Magento\PhpStan\Reflection\Magento\DataObjectClassReflectionExtension
+        class: Magento\PhpStan\Reflection\Php\DataObjectClassReflectionExtension
         tags: {phpstan.broker.methodsClassReflectionExtension: {priority: 100}}
 
     errorFormatter.filtered:

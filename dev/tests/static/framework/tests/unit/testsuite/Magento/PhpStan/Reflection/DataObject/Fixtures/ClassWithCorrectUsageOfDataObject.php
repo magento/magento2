@@ -17,6 +17,9 @@ class ClassWithCorrectUsageOfDataObject
      */
     private $container;
 
+    /**
+     * ClassWithCorrectUsageOfDataObject constructor.
+     */
     public function __construct()
     {
         $this->container = new DataObject();

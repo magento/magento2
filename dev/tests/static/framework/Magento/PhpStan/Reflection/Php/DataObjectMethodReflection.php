@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PhpStan\Reflection\Magento;
+namespace Magento\PhpStan\Reflection\Php;
 
 use PHPStan\Reflection\ClassMemberReflection;
 use PHPStan\Reflection\ClassReflection;
@@ -25,6 +25,9 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectMethodReflection implements MethodReflection
 {
     /**

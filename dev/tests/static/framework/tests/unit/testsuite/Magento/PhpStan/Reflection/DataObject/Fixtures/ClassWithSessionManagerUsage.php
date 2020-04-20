@@ -10,6 +10,9 @@ namespace Magento\PhpStan\Reflection\DataObject\Fixtures;
 
 use Magento\Framework\Session\SessionManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class ClassWithSessionManagerUsage
 {
     /**
@@ -17,6 +20,9 @@ class ClassWithSessionManagerUsage
      */
     private $container;
 
+    /**
+     * @param SessionManager $sessionManager
+     */
     public function __construct(SessionManager $sessionManager)
     {
         $this->container = $sessionManager;
