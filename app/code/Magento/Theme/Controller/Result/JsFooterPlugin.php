@@ -48,7 +48,7 @@ class JsFooterPlugin
         );
 
         if ($isEndBodyTagFound && $shouldMoveJsToBottom) {
-            $scripts = $this->extractScriptTags($content)
+            $scripts = $this->extractScriptTags($content);
             if ($scripts) {
                 $content = str_replace($bodyEndTag, "$scripts\n$bodyEndTag", $content);
                 $subject->setContent($content);
