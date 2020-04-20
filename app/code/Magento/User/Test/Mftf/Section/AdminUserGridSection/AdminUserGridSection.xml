@@ -14,5 +14,6 @@
         <element name="usernameInFirstRow" type="text" selector=".col-username"/>
         <element name="searchResultFirstRow" type="text" selector=".data-grid&gt;tbody&gt;tr"/>
         <element name="successMessage" type="text" selector=".message-success"/>
+        <element name="emptyRecords" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
     </section>
 </sections>
