@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
+
 class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -57,6 +60,11 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Theme\Block\Html\Pager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pagerBlock;
+
+    /**
+     * @var ToolbarConfig|MockObject
+     */
+    private $toolbarConfig;
 
     protected function setUp()
     {
@@ -124,6 +132,12 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->productListHelper = $this->createMock(\Magento\Catalog\Helper\Product\ProductList::class);
 
         $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
+
+        $this->toolbarConfig = $this->getMockBuilder(ToolbarConfig::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getOrderField'])
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
             \Magento\Catalog\Block\Product\ProductList\Toolbar::class,
@@ -133,7 +147,8 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'toolbarModel' => $this->model,
                 'toolbarMemorizer' => $this->memorizer,
                 'urlEncoder' => $this->urlEncoder,
-                'productListHelper' => $this->productListHelper
+                'productListHelper' => $this->productListHelper,
+                'toolbarConfig' => $this->toolbarConfig,
             ]
         );
     }
@@ -179,6 +194,20 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(['name' => [], 'price' => []]));
 
         $this->assertEquals($order, $this->block->getCurrentOrder());
+    }
+
+    public function testGetCurrentOrderDefault()
+    {
+        $defaultOrder = 'position';
+
+        $this->toolbarConfig->expects($this->any())
+            ->method('getOrderField')
+            ->willReturn($defaultOrder);
+        $this->catalogConfig->expects($this->once())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue(['position' => [], 'price' => []]));
+
+        $this->assertEquals($defaultOrder, $this->block->getCurrentOrder());
     }
 
     public function testGetCurrentDirection()
@@ -352,7 +381,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
             ->will($this->returnValue($data));
-        $toolbar = $this->block->removeOrderFromAvailableOrders('order', 'value');
+        $toolbar = $this->block->removeOrderFromAvailableOrders('order');
         $this->assertEquals($data, $toolbar->getAvailableOrders());
         $toolbar2 = $this->block->removeOrderFromAvailableOrders('name');
         $this->assertEquals(['price' => []], $toolbar2->getAvailableOrders());
