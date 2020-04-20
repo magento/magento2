@@ -217,7 +217,7 @@ class AddressMetadataTest extends WebapiAbstract
         $postcode = $this->getAttributeMetadataDataProvider()[Address::POSTCODE][2];
         $validationResult = $this->checkMultipleAttributesValidationRules($postcode, $attributeMetadata);
         list($postcode, $attributeMetadata) = $validationResult;
-        $this->assertContains($postcode, $attributeMetadata);
+        $this->assertContainsEquals($postcode, $attributeMetadata);
     }
 
     /**

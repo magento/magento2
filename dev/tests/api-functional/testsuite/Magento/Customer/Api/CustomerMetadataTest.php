@@ -187,12 +187,12 @@ class CustomerMetadataTest extends WebapiAbstract
         $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
-        $this->assertContains($firstName, $attributeMetadata);
+        $this->assertContainsEquals($firstName, $attributeMetadata);
 
         $websiteId = $this->getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($websiteId, $attributeMetadata);
         list($websiteId, $attributeMetadata) = $validationResult;
-        $this->assertContains($websiteId, $attributeMetadata);
+        $this->assertContainsEquals($websiteId, $attributeMetadata);
     }
 
     /**
