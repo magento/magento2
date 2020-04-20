@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\MediaContent\Plugin;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,9 +21,9 @@ use Psr\Log\LoggerInterface;
 class MediaGalleryAssetDeleteByPath
 {
     /**
-     * @var GetByPathInterface
+     * @var GetAssetsByPathsInterface
      */
-    private $getByPath;
+    private $getByPaths;
 
     /**
      * @var LoggerInterface
@@ -35,39 +37,47 @@ class MediaGalleryAssetDeleteByPath
 
     /**
      * @param DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinksByAssetIds
-     * @param GetByPathInterface $getByPath
+     * @param GetAssetsByPathsInterface $getByPath
      * @param LoggerInterface $logger
      */
     public function __construct(
         DeleteContentAssetLinksByAssetIdsInterface $deleteContentAssetLinksByAssetIds,
-        GetByPathInterface $getByPath,
+        GetAssetsByPathsInterface $getByPath,
         LoggerInterface $logger
     ) {
         $this->deleteContentAssetLinksByAssetIds = $deleteContentAssetLinksByAssetIds;
-        $this->getByPath = $getByPath;
+        $this->getByPaths = $getByPath;
         $this->logger = $logger;
     }
 
     /**
      * Around plugin on execute method
      *
-     * @param DeleteByPathInterface $subject
+     * @param DeleteAssetsByPathsInterface $subject
      * @param \Closure $proceed
-     * @param string $mediaAssetPath
+     * @param array $paths
      * @throws CouldNotDeleteException
+     * @throws LocalizedException
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        DeleteByPathInterface $subject,
+        DeleteAssetsByPathsInterface $subject,
         \Closure $proceed,
-        string $mediaAssetPath
+        array $paths
     ) : void {
-        $asset = $this->getByPath->execute($mediaAssetPath);
+        $assets = $this->getByPaths->execute($paths);
 
-        $proceed($mediaAssetPath);
+        $proceed($paths);
 
-        $this->deleteContentAssetLinksByAssetIds->execute([$asset->getId()]);
+        $assetIds = array_map(
+            function (AssetInterface $asset) {
+                return $asset->getId();
+            },
+            $assets
+        );
+
+        $this->deleteContentAssetLinksByAssetIds->execute($assetIds);
     }
 }

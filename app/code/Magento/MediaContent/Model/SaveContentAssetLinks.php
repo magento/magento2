@@ -10,7 +10,6 @@ namespace Magento\MediaContent\Model;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaContentApi\Api\SaveContentAssetLinksInterface;
-use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 use Psr\Log\LoggerInterface;
 

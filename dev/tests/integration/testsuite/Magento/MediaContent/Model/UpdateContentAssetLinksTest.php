@@ -47,7 +47,7 @@ class UpdateContentAssetLinksTest extends TestCase
     public function testExecute(): void
     {
         $entityType = 'catalog_product';
-        $entityId = '42';
+        $entityId = 2020;
         $field = 'description';
         $contentWithoutAsset = '';
         $contentWithAsset = 'content {{media url="testDirectory/path.jpg"}} content';

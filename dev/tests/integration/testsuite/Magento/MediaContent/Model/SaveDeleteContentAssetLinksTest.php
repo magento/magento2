@@ -60,7 +60,7 @@ class SaveDeleteContentAssetLinksTest extends TestCase
     public function testAssignRetrieveAndUnassign(): void
     {
         $entityType = 'catalog_product';
-        $entityId = '42';
+        $entityId = 42;
         $field = 'description';
         $assetIds = [56, 78];
 

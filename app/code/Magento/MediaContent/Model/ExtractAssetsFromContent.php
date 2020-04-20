@@ -104,7 +104,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
     private function getPathStartingWithSlash(string $path): string
     {
         $normalizedPath = ltrim($path, '/');
-        if (strpos($normalizedPath, '/') === false) {
+        if (strpos($normalizedPath, '/') !== false) {
             return $normalizedPath;
         }
         return '/' . $normalizedPath;

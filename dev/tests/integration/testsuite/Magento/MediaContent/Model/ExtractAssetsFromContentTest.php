@@ -74,13 +74,19 @@ class ExtractAssetsFromContentTest extends TestCase
             'Relevant paths in content' => [
                 'content {{media url="testDirectory/path.jpg"}} content',
                 [
-                    55
+                    2020
+                ]
+            ],
+            'Relevant wysiwyg paths in content' => [
+                'content <img src="https://domain.com/media/testDirectory/path.jpg"}} content',
+                [
+                    2020
                 ]
             ],
             'Relevant path content' => [
                 '/media/testDirectory/path.jpg',
                 [
-                    55
+                    2020
                 ]
             ],
             'Irrelevant paths in content' => [

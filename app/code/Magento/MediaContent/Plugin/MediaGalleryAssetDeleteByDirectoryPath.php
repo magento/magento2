@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -54,22 +54,27 @@ class MediaGalleryAssetDeleteByDirectoryPath
     /**
      * Around plugin on execute method
      *
-     * @param DeleteByDirectoryPathInterface $subject
+     * @param DeleteDirectoriesByPathsInterface $subject
      * @param \Closure $proceed
-     * @param string $directoryPath
+     * @param array $paths
      * @throws CouldNotDeleteException
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
-        DeleteByDirectoryPathInterface $subject,
+        DeleteDirectoriesByPathsInterface $subject,
         \Closure $proceed,
-        string $directoryPath
+        array $paths
     ) : void {
-        $assetIds = $this->getAssetIdsByDirectoryPath($directoryPath);
+        $assetIdsArrays =[];
+        foreach ($paths as $path) {
+            $assetIdsArrays[] = $this->getAssetIdsByDirectoryPath($path);
+        }
 
-        $proceed($directoryPath);
+        $assetIds = array_unique(array_merge([], ...$assetIdsArrays));
+
+        $proceed($paths);
 
         $this->deleteContentAssetLinksByAssetIds->execute($assetIds);
     }
