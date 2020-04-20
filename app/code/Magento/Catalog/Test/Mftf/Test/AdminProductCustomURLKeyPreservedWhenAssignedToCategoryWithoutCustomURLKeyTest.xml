@@ -76,14 +76,14 @@
             <argument name="productSku" value="$createSimpleProductSecond.sku$"/>
         </actionGroup>
 
-        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
         <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
         <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
 
         <!-- Make assertions on frontend -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($createCategory.name$)}}" stepKey="onCategoryPage"/>
         <seeInCurrentUrl url="{$categoryNameLower}.html" stepKey="checkCategryUrlKey"/>
 
