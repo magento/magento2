@@ -133,7 +133,7 @@
             <argument name="product" value="$$createSimpleProduct2$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
         <!-- Disabled via admin panel -->
         <openNewTab stepKey="openNewTab2"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page -->

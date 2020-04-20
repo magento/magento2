@@ -6,6 +6,8 @@
 
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * Test class for Template.
  */
@@ -17,12 +19,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|MockObject
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|MockObject
      */
     protected $_emailConfig;
 
@@ -82,17 +84,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             [
                 'value' => 'template_new',
                 'label' => 'Template New (Default)',
-                '__disableTmpl' => true
             ],
             [
                 'value' => 'template_one',
                 'label' => 'Template One',
-                '__disableTmpl' => true
             ],
             [
                 'value' => 'template_two',
                 'label' => 'Template Two',
-                '__disableTmpl' => true
             ],
         ];
         $this->_model->setPath('template/new');

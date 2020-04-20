@@ -12,4 +12,8 @@
         <data key="filename">sitemap.xml</data>
         <data key="path">/</data>
     </entity>
+    <entity name="UniqueSitemapName">
+        <data key="filename" unique="prefix">sitemap.xml</data>
+        <data key="path">/</data>
+    </entity>
 </entities>
