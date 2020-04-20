@@ -29,10 +29,14 @@ parameters:
 		- '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
 
 services:
-	errorFormatter.filtered:
-		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
-		arguments:
-			showTipsOfTheDay: false
-			checkThisOnly: false
-			inferPrivatePropertyTypeFromConstructor: true
-			checkMissingTypehints: %checkMissingTypehints%
+    -
+        class: Magento\PhpStan\Reflection\Magento\DataObjectClassReflectionExtension
+        tags: {phpstan.broker.methodsClassReflectionExtension: {priority: 100}}
+
+    errorFormatter.filtered:
+        class: Magento\PhpStan\Formatters\FilteredErrorFormatter
+        arguments:
+            showTipsOfTheDay: false
+            checkThisOnly: false
+            inferPrivatePropertyTypeFromConstructor: true
+            checkMissingTypehints: %checkMissingTypehints%

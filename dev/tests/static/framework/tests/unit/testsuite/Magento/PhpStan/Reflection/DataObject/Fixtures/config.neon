@@ -1,0 +1,4 @@
+services:
+    -
+        class: Magento\PhpStan\Reflection\Magento\DataObjectClassReflectionExtension
+        tags: {phpstan.broker.methodsClassReflectionExtension: {priority: 100}}
