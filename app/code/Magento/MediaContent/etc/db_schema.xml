@@ -17,7 +17,7 @@
             <column name="field"/>
             <column name="asset_id"/>
         </constraint>
-        <index referenceId="MEDIA_CONTENT_ASSET_ID" indexType="btree">
+        <index referenceId="MEDIA_CONTENT_ASSET_ASSET_ID" indexType="btree">
             <column name="asset_id"/>
         </index>
     </table>

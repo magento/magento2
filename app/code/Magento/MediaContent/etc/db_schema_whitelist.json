@@ -7,7 +7,7 @@
             "asset_id": true
         },
         "index": {
-            "MEDIA_CONTENT_ASSET_ID": true
+            "MEDIA_CONTENT_ASSET_ASSET_ID": true
         },
         "constraint": {
             "PRIMARY": true
