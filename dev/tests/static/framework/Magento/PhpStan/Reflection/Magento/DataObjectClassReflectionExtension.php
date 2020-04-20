@@ -21,6 +21,7 @@ use PHPStan\Reflection\MethodsClassReflectionExtension;
 class DataObjectClassReflectionExtension implements MethodsClassReflectionExtension
 {
     private const MAGIC_METHODS_PREFIXES = ['get', 'set', 'uns', 'has'];
+
     /**
      * @var Container
      */
