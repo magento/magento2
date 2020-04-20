@@ -108,6 +108,7 @@
 
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
+        <magentoCron stepKey="runCronIndex" groups="index"/>
         <!--Go to frontend and check image and price-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 
