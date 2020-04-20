@@ -13,7 +13,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Laminas\Http\Header\HeaderInterface as HttpHeaderInterface;
 use Magento\PageCache\Model\Cache\Type as CacheType;
 
 /**

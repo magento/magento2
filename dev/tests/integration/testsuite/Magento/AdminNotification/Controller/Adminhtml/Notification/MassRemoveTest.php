@@ -5,12 +5,15 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class MassRemoveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()
     {
         $this->resource = 'Magento_AdminNotification::adminnotification_remove';
         $this->uri = 'backend/admin/notification/massremove';
+        $this->httpMethod = HttpRequest::METHOD_POST;
         parent::setUp();
     }
 }
