@@ -125,7 +125,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
         try {
             $sign .= '-' . \bin2hex(\random_bytes(4));
         } catch (\Exception $e) {
-            $sign .= '-' . \mt_rand(0, 1000);
+            $sign .= '-' . \uniqid('-uniqid-');
         }
 
         return $sign;
