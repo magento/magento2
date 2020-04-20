@@ -22,6 +22,7 @@ use Magento\Framework\Pricing\PriceInfoInterface;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
@@ -177,6 +178,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      *
      * @param array $priceList
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function filterTierPrices(array $priceList)
     {
