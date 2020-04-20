@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Config\App\Config\Source;
 
+use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
@@ -80,14 +82,16 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param TypePool $typePool
      * @param array $sources
      * @param array $rules Rules for filtration the configuration data.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        TypePool $typePool,
+        ExcludeList $excludeList,
         array $sources = [],
+        ?TypePool $typePool = null,
         array $rules = []
     ) {
-        $this->typePool = $typePool;
         $this->sources = $sources;
+        $this->typePool = $typePool ?? ObjectManager::getInstance()->get(TypePool::class);
         $this->rules = $rules;
     }
 
