@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdminAnalytics\Test\Unit\Condition;
 
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification;
@@ -28,7 +30,7 @@ class CanViewNotificationTest extends TestCase
     /** @var  Log|MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock MockObject|CacheInterface */
+    /** @var MockObject|CacheInterface $cacheStorageMock */
     private $cacheStorageMock;
 
     protected function setUp(): void
