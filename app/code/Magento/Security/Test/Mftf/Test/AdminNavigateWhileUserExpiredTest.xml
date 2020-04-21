@@ -40,9 +40,9 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!-- Login as that user -->
-        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
-            <argument name="adminUser" value="{$grabUsername}"/>
-            <argument name="adminPassword" value="{$grabPassword}"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
         <wait time="120" stepKey="waitForUserToExpire"/>

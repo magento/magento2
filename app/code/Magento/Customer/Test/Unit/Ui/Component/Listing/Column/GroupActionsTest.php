@@ -202,7 +202,6 @@ class GroupActionsTest extends TestCase
                             'edit' => [
                                 'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
-                                '__disableTmpl' => true,
                             ]
                         ]
                     ],
@@ -213,7 +212,6 @@ class GroupActionsTest extends TestCase
                             'edit' => [
                                 'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
-                                '__disableTmpl' => true,
                             ]
                         ]
                     ]
@@ -289,13 +287,11 @@ class GroupActionsTest extends TestCase
                             'edit' => [
                                 'href' => static::STUB_GROUP_EDIT_URL,
                                 'label' => __('Edit'),
-                                '__disableTmpl' => true,
                             ],
                             'delete' => [
                                 'href' => static::STUB_GROUP_DELETE_URL,
                                 'label' => __('Delete'),
                                 'post' => true,
-                                '__disableTmpl' => true,
                                 'confirm' => [
                                     'title' => __('Delete %1', 'General'),
                                     'message' => __(
