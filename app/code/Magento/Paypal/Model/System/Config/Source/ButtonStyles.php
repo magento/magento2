@@ -54,18 +54,6 @@ class ButtonStyles
     }
 
     /**
-     * Button size source getter
-     *
-     * @return array
-     */
-    public function getSize(): array
-    {
-        return [
-            'responsive' => __('Responsive')
-        ];
-    }
-
-    /**
      * Button label source getter
      *
      * @return array
