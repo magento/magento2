@@ -15,21 +15,21 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
     public function exportImportDataProvider(): array
     {
         return [
-            'configurable-product' => [
-                [
-                    'Magento/ConfigurableProduct/_files/product_configurable.php'
-                ],
-                [
-                    'configurable',
-                ],
-                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
-            ],
             'configurable-product-12345' => [
                 [
                     'Magento/ConfigurableProduct/_files/product_configurable_12345.php'
                 ],
                 [
                     '12345',
+                ],
+                ['_cache_instance_products', '_cache_instance_configurable_attributes'],
+            ],
+            'configurable-product' => [
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable.php'
+                ],
+                [
+                    'configurable',
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
             ],

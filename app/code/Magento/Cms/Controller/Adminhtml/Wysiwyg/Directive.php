@@ -10,6 +10,12 @@ use Magento\Backend\App\Action;
 use Magento\Cms\Model\Template\Filter;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\Url\DecoderInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process template text for wysiwyg editor.
@@ -25,34 +31,50 @@ class Directive extends Action implements HttpGetActionInterface
     const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface
+     * @var DecoderInterface
      */
     protected $urlDecoder;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
+     * @var AdapterFactory
+     */
+    private $imageAdapterFactory;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param DecoderInterface $urlDecoder
+     * @param RawFactory $resultRawFactory
+     * @param File $file
+     * @param AdapterFactory $imageAdapterFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        DecoderInterface $urlDecoder,
+        RawFactory $resultRawFactory,
+        File $file,
+        AdapterFactory $imageAdapterFactory
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
         $this->resultRawFactory = $resultRawFactory;
+        $this->file = $file;
+        $this->imageAdapterFactory = $imageAdapterFactory;
     }
 
     /**
      * Template directives callback
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
@@ -62,22 +84,25 @@ class Directive extends Action implements HttpGetActionInterface
             /** @var Filter $filter */
             $filter = $this->_objectManager->create(Filter::class);
             $imagePath = $filter->filter($directive);
-            /** @var \Magento\Framework\Image\Adapter\AdapterInterface $image */
-            $image = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-            /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-            $resultRaw = $this->resultRawFactory->create();
+            $image = $this->imageAdapterFactory->create();
             $image->open($imagePath);
-            $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            $resultRaw->setContents($image->getImage());
         } catch (\Exception $e) {
             /** @var Config $config */
             $config = $this->_objectManager->get(Config::class);
+            $image = $this->imageAdapterFactory->create();
             $imagePath = $config->getSkinImagePlaceholderPath();
             $image->open($imagePath);
-            $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            $resultRaw->setContents($image->getImage());
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
+        $mimeType = $image->getMimeType();
+        unset($image);
+        // To avoid issues with PNG images with alpha blending we return raw file
+        // after validation as an image source instead of generating the new PNG image
+        // with image adapter
+        $content = $this->file->fileGetContents($imagePath);
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setHeader('Content-Type', $mimeType);
+        $resultRaw->setContents($content);
         return $resultRaw;
     }
 }

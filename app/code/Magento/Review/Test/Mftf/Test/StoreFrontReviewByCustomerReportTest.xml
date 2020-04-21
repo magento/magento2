@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontReviewByCustomerReportTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review By Customers"/>
+            <title value="StoreFront Reports Review By Customers"/>
+            <description value="Review By Customer Grid Filters"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-32336"/>
+        </annotations>
+        <before>
+            <!--Login-->
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <!--Create product and Category-->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="createProduct1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData stepKey="createProduct2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearNickNameReviewFilters"/>
+            <!-- Delete customer -->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <!--delete Category and Products -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Logout-->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!-- Go to the product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Click on reviews and add  reviews with current user -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
+        <!-- Go to Pending reviews page and clear filters -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
+        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <!-- Moderate first product reviews: change review status from pending to approved, save -->
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
+        <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
+        <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
+        <!-- Navigate to Reports > Reviews >By Customers -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByCustomersPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByCustomers.dataUiId}}"/>
+        </actionGroup>
+        <!--Sort Review Column -->
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabCustomerReviewQuantity"/>
+        <actionGroup ref="AdminFilterCustomerReviewActionGroup" stepKey="navigateToCustomerReportsReview">
+            <argument name="reviewCount" value="$grabCustomerReviewQuantity"/>
+        </actionGroup>
+    </test>
+</tests>

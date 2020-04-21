@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInlineTranslationOnCheckoutTest">
+        <annotations>
+            <stories value="Inline Translation"/>
+            <title value="[Inline Translation] Inline translate on Checkout"/>
+            <description value="As merchant I want to be able to rename text labels on Checkout steps"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11505"/>
+            <useCaseId value="MC-31016"/>
+            <group value="translation"/>
+            <group value="checkout"/>
+            <group value="developer_mode_only"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <!--Product and a customer is created -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Revert translate and changes -->
+            <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineStorefront"/>
+
+            <createData entity="RevertProceedToCheckoutTranslate" stepKey="revertProceedToCheckoutTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertViewAndEditCartTranslate" stepKey="revertViewAndEditCartTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertQtyTranslate" stepKey="revertQtyTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertShippingAddressTitleTranslate" stepKey="revertShippingAddressTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertButtonShipHereTranslate" stepKey="revertButtonShipHereTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertButtonNewAddressTranslate" stepKey="revertButtonNewAddressTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertShippingMethodTitleTranslate" stepKey="revertShippingMethodTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertButtonNextTranslate" stepKey="revertButtonNextTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertOrderSummaryTitleTranslate" stepKey="revertOrderSummaryTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertItemsInCartTextTranslate" stepKey="revertItemsInCartTextTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertProgressBarReviewAndPaymentsTranslate" stepKey="revertProgressBarReviewAndPaymentsTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertPaymentTitleTranslate" stepKey="revertPaymentTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertCheckboxSameBillingAddressTranslate" stepKey="revertCheckboxSameBillingAddressTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertPlaceOrderButtonTranslate" stepKey="revertButtonPlaceOrderTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertApplyDiscountCodeTranslate" stepKey="revertApplyDiscountCodeTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertCartSubtotalTextTranslate" stepKey="revertCartSubtotalTextTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertShippingTextTranslate" stepKey="revertShippingTextTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertOrderTotalTextTranslate" stepKey="revertOrderTotalTextTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertShipToTitleTranslate" stepKey="revertShipToTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="RevertShipViaTitleTranslate" stepKey="revertShipViaTitleTranslate">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+
+            <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Logout customer from storefront and delete -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="signOutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Preconditions: Add product to cart on storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+
+        <!-- 1. Enable Translate Inline For Storefront-->
+        <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
+
+        <!-- 2. Refresh magento cache -->
+        <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateEnabled"/>
+
+        <!-- 3. Go to storefront and click on cart button on the top -->
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+
+        <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProceedToCheckout">
+            <argument name="elementSelector" value="{{StorefrontMinicartSection.goToCheckout}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateProceedToCheckout">
+            <argument name="elementSelector" value="{{StorefrontMinicartSection.goToCheckout}}"/>
+            <argument name="translateText" value="Proceed to Checkout Translated"/>
+        </actionGroup>
+
+        <!-- Check button "View and Edit Cart". There must be red borders and "book" icons on labels that can be translated. -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertViewAndEditCart">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.viewAndEditCart}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateViewAndEditCart">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.viewAndEditCart}}"/>
+            <argument name="translateText" value="Edit Cart Translated"/>
+        </actionGroup>
+
+        <!-- 4. Click on "book" icon near the all red bordered labels one by one. And change translation for these labels. -->
+        <!-- Check "Item in Cart" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertVisibleItemsCountText">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.visibleItemsCountText}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateVisibleItemsCountText">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.visibleItemsCountText}}"/>
+            <argument name="translateText" value="Item in Cart Translated"/>
+        </actionGroup>
+
+        <!-- Check "Cart Subtotal" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertCartSubtotal">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.textCartSubtotal}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateCartSubtotal">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.textCartSubtotal}}"/>
+            <argument name="translateText" value="Cart Subtotal Translated"/>
+        </actionGroup>
+
+        <!-- Check label "Qty" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertQty">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.labelQty}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateQty">
+            <argument name="elementSelector" value="{{InlineTranslationModeMiniCartSection.labelQty}}"/>
+            <argument name="translateText" value="Qty Translated"/>
+        </actionGroup>
+
+        <!-- 5. Go to checkout page -->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoad"/>
+
+        <!-- 6. Go through checkout process and try to translate all labels that have red border with 'book' icon.  Like you did it in step #4. -->
+        <!-- Check Progress Bar Shipping -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProgressBarShipping">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateProgressBarShipping">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
+            <argument name="translateText" value="Shipping Translated"/>
+        </actionGroup>
+
+        <!-- Check step title "Shipping Address" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertShippingAddressTitle">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateShippingAddressTitle">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}"/>
+            <argument name="translateText" value="Shipping address Translated"/>
+        </actionGroup>
+
+        <!-- Check button "Ship Here" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonShipHere">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateButtonShipHere">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}"/>
+            <argument name="translateText" value="Ship Here Translated"/>
+        </actionGroup>
+
+        <!-- Check button "+ New Address" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonNewAddress">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateButtonNewAddress">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}"/>
+            <argument name="translateText" value="New Address Translated"/>
+        </actionGroup>
+
+        <!-- Check title "Shipping Method" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShippingMethod">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShippingMethod}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateTitleShippingMethod">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShippingMethod}}"/>
+            <argument name="translateText" value="Shipping Methods Translated"/>
+        </actionGroup>
+
+        <!-- Check button "Next" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonNext">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNext}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateButtonNext">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNext}}"/>
+            <argument name="translateText" value="Next Translated"/>
+        </actionGroup>
+
+        <!-- Check title "Order Summary" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleOrderSummary">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleOrderSummary}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateTitleOrderSummary">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleOrderSummary}}"/>
+            <argument name="translateText" value="Order Summary Translated"/>
+        </actionGroup>
+
+        <!-- Check text "Item in Cart"-->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertItemsInCartText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.itemsInCartText}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateItemsInCartText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.itemsInCartText}}"/>
+            <argument name="translateText" value="Item in Cart Translated"/>
+        </actionGroup>
+
+        <!-- Go to next step -->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethodBeforeTranslate"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="gotoPaymentStepBeforeTranslate"/>
+
+        <!-- Check Progress Bar Review & Payments -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProgressBarReviewAndPayments">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateProgressBarReviewAndPayments">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
+            <argument name="translateText" value="Review &amp; Payments Translated"/>
+        </actionGroup>
+
+        <!-- Check title "Payment Method" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitlePayment">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titlePayment}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateTitlePayment">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titlePayment}}"/>
+            <argument name="translateText" value="Payment Method Translated"/>
+        </actionGroup>
+
+        <!-- Check text for checkbox "My billing and shipping address are the same" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertCheckboxSameBillingAddress">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateCheckboxSameBillingAddress">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}"/>
+            <argument name="translateText" value="My billing and shipping address are the same Translated"/>
+        </actionGroup>
+
+        <!-- Check button "Place Order" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonPlaceOrder">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonPlaceOrder}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateButtonPlaceOrder">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonPlaceOrder}}"/>
+            <argument name="translateText" value="Place Order Translated"/>
+        </actionGroup>
+
+        <!-- Check button "Apply Discount Code" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertApplyDiscountCode">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textApplyDiscountCode}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateApplyDiscountCode">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textApplyDiscountCode}}"/>
+            <argument name="translateText" value="Apply Discount Code Translated"/>
+        </actionGroup>
+
+        <!-- Check text on sidebar "Cart Subtotal" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertCartSubtotalText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}"/>
+        </actionGroup>
+
+        <!-- Check translate text on sidebar "Cart Subtotal" as it was translated earlier in step translateCartSubtotal-->
+        <see userInput="Cart Subtotal Translated" selector="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}" stepKey="seeTranslateCartSubtotalOnCheckoutText"/>
+
+        <!-- Check text on sidebar text "Shipping" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertShippingText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textShippingTotal}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateShippingText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textShippingTotal}}"/>
+            <argument name="translateText" value="Shipping Translated"/>
+        </actionGroup>
+
+        <!-- Check text on sidebar text "Order Total" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertOrderTotalText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textOrderTotal}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateOrderTotalText">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textOrderTotal}}"/>
+            <argument name="translateText" value="Order Total Translated"/>
+        </actionGroup>
+
+        <!-- Check text on sidebar title "Ship To" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShipTo">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShipTo}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateTitleShipTo">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShipTo}}"/>
+            <argument name="translateText" value="Ship To: Translated"/>
+        </actionGroup>
+
+        <!-- Check text on sidebar title "Shipping Method:" -->
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShipVia">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShopVia}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminTranslateElementActionGroup" stepKey="translateTitleShipVia">
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShopVia}}"/>
+            <argument name="translateText" value="Shipping Method: Translated"/>
+        </actionGroup>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethodBeforeTranslate"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderBeforeTranslate"/>
+
+        <!-- 7. Set *Enabled for Storefront* option to *No* and save configuration -->
+        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
+        <!-- 8. Clear magento cache -->
+        <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateDisabled"/>
+
+        <actionGroup ref="AdminCleanStaticAndVarDirsActionGroup" stepKey="cleanStaticAndVarDirs"/>
+
+        <!-- 9. Clear browser locale storage for magento site -->
+        <executeJS function="localStorage.clear();" stepKey="clearStorage"/>
+        <resetCookie userInput="mage-translation-storage" stepKey="resetTranslationStorage"/>
+        <resetCookie userInput="mage-translation-file-version" stepKey="resetTranslationFileVersion"/>
+
+        <!-- Reload page after full clear -->
+        <reloadPage stepKey="reloadPageAfterFullClean"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterFullClean"/>
+
+        <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCartTranslated"/>
+
+        <!-- Check translate "Proceed to Checkout" -->
+        <see userInput="Proceed to Checkout Translated" selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeTranslateProceedToCheckout"/>
+
+        <!-- Check translate button "View and Edit Cart". -->
+        <see userInput="Edit Cart Translated" selector="{{InlineTranslationModeMiniCartSection.viewAndEditCart}}" stepKey="seeTranslateViewAndEditCart"/>
+
+        <!-- Check translate "Item in Cart" -->
+        <see userInput="Item in Cart Translated" selector="{{InlineTranslationModeMiniCartSection.visibleItemsCountText}}" stepKey="seeTranslateVisibleItemsCountText"/>
+
+        <!-- Check translate "Cart Subtotal" -->
+        <see userInput="Cart Subtotal Translated" selector="{{InlineTranslationModeMiniCartSection.textCartSubtotal}}" stepKey="seeTranslateCartSubtotal"/>
+
+        <!-- Check translate label "Qty" -->
+        <see userInput="Qty Translated" selector="{{InlineTranslationModeMiniCartSection.labelQty}}" stepKey="seeTranslateQty"/>
+
+        <!-- Go to checkout page -->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="toCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoading"/>
+
+        <!-- Check translate Progress Bar Shipping -->
+        <see userInput="Shipping Translated" selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="seeTranslateProgressBarShipping"/>
+
+        <!-- Check translate step title "Shipping Address" -->
+        <see userInput="Shipping address Translated" selector="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}" stepKey="seeTranslateShippingAddressTitle"/>
+
+        <!-- Check translate button "Ship Here" -->
+        <see userInput="Ship Here Translated" selector="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}" stepKey="seeTranslateButtonShipHere"/>
+
+        <!-- Check translate button "+ New Address"-->
+        <see userInput="New Address Translated" selector="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}" stepKey="seeTranslateButtonNewAddress"/>
+
+        <!-- Check translate title "Shipping Method" -->
+        <see userInput="Shipping Methods Translated" selector="{{InlineTranslationModeCheckoutSection.titleShippingMethod}}" stepKey="seeTranslateTitleShippingMethod"/>
+
+        <!-- Check translate button "Next" -->
+        <see userInput="Next Translated" selector="{{InlineTranslationModeCheckoutSection.buttonNext}}" stepKey="seeTranslateButtonNext"/>
+
+        <!-- Check translate  title "Order Summary"-->
+        <see userInput="Order Summary Translated" selector="{{InlineTranslationModeCheckoutSection.titleOrderSummary}}" stepKey="seeTranslateTitleOrderSummary"/>
+
+        <!-- Check translate text "Item in Cart"-->
+        <see userInput="Item in Cart Translated" selector="{{InlineTranslationModeCheckoutSection.itemsInCartText}}" stepKey="seeTranslateItemsInCartText"/>
+
+        <!-- Go to next step -->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="gotoPaymentStep"/>
+
+        <!-- Check translate Progress Bar Review & Payments-->
+        <see userInput="Review &amp; Payments Translated" selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="seeTranslateProgressBarReviewAndPayments"/>
+
+        <!-- Check translate title "Payment Method"-->
+        <see userInput="Payment Method Translated" selector="{{InlineTranslationModeCheckoutSection.titlePayment}}" stepKey="seeTranslateTitlePayment"/>
+
+        <!-- Check translate text for checkbox "My billing and shipping address are the same" -->
+        <see userInput="My billing and shipping address are the same Translated" selector="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}" stepKey="seeTranslateCheckboxSameBillingAddress"/>
+
+        <!-- Check translate  button "Place Order"-->
+        <see userInput="Place Order Translated" selector="{{InlineTranslationModeCheckoutSection.buttonPlaceOrder}}" stepKey="seeTranslateButtonPlaceOrder"/>
+
+        <!-- Check translate button "Apply Discount Code" -->
+        <see userInput="Apply Discount Code Translated" selector="{{InlineTranslationModeCheckoutSection.textApplyDiscountCode}}" stepKey="seeTranslateApplyDiscountCode"/>
+
+        <!-- Check translate text on sidebar "Cart Subtotal" -->
+        <see userInput="Cart Subtotal Translated" selector="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}" stepKey="seeTranslateCartSubtotalText"/>
+
+        <!-- Check translate text on sidebar text "Shipping"-->
+        <see userInput="Shipping Translated" selector="{{InlineTranslationModeCheckoutSection.textShippingTotal}}" stepKey="seeTranslateShippingText"/>
+
+        <!-- Check translate text on sidebar text "Order Total"  -->
+        <see userInput="Order Total Translated" selector="{{InlineTranslationModeCheckoutSection.textOrderTotal}}" stepKey="seeTranslateOrderTotalText"/>
+
+        <!-- Check translate text on sidebar title "Ship To" -->
+        <see userInput="Ship To: Translated" selector="{{InlineTranslationModeCheckoutSection.titleShipTo}}" stepKey="seeTranslateTitleShipTo"/>
+
+        <!-- Check translate text on sidebar title "Shipping Method:" -->
+        <see userInput="Shipping Method: Translated" selector="{{InlineTranslationModeCheckoutSection.titleShopVia}}" stepKey="seeTranslateTitleShipVia"/>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+    </test>
+</tests>

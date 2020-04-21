@@ -37,6 +37,7 @@ use Magento\Framework\AuthorizationInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 101.0.0
  */
 class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
@@ -163,6 +164,10 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @var AuthorizationInterface
      */
     private $auth;
+    /**
+     * @var Image
+     */
+    private $categoryImage;
 
     /**
      * @param string $name
@@ -180,7 +185,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
      * @param ArrayUtils|null $arrayUtils
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param Image|null $categoryImage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -198,7 +203,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         array $data = [],
         PoolInterface $pool = null,
         ?AuthorizationInterface $auth = null,
-        ?ArrayUtils $arrayUtils = null
+        ?ArrayUtils $arrayUtils = null,
+        ?Image $categoryImage = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -210,6 +216,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $this->categoryFactory = $categoryFactory;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->arrayUtils = $arrayUtils ?? ObjectManager::getInstance()->get(ArrayUtils::class);
+        $this->categoryImage = $categoryImage ?? ObjectManager::getInstance()->get(Image::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
@@ -568,12 +575,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $categoryData[$attributeCode][0]['name'] = basename($fileName);
-
-                    if ($fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
-                        $categoryData[$attributeCode][0]['url'] = $fileName;
-                    } else {
-                        $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
-                    }
+                    $categoryData[$attributeCode][0]['url'] = $this->categoryImage->getUrl($category, $attributeCode);
 
                     $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
                     $categoryData[$attributeCode][0]['type'] = $mime;

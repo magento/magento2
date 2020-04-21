@@ -16,6 +16,7 @@ use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManager;
@@ -227,6 +228,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
+        $this->assertSessionMessages(
+            $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -611,6 +616,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function testRegisterCustomerWithEmailConfirmation(): void
     {
@@ -724,6 +733,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoConfigFixture current_store customer/captcha/enable 0
      *
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testResetPasswordWhenEmailChanged(): void
     {

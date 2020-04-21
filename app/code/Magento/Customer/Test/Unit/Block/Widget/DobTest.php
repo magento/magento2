@@ -29,6 +29,7 @@ use Zend_Cache_Core;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class DobTest extends TestCase
 {
@@ -534,18 +535,30 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithoutRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
-            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'));
+            ->with($validation)
+            ->will(
+                $this->returnValue($validation)
+            );
 
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
 
         $this->assertEquals(
-            $this->_block->getHtmlExtraParams(),
-            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"'
+            "data-validate=\"$validation\"",
+            $this->_block->getHtmlExtraParams()
         );
     }
 
@@ -554,22 +567,31 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'required' => true,
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
+            ->with($validation)
             ->will(
-                $this->returnValue(
-                    '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
-                )
+                $this->returnValue($validation)
             );
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
-            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"',
+            "data-validate=\"$validation\"",
             $this->_block->getHtmlExtraParams()
         );
     }
