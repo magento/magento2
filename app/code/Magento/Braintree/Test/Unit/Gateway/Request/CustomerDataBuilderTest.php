@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\CustomerDataBuilder;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\CustomerDataBuilder.
  */
-class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
+class CustomerDataBuilderTest extends TestCase
 {
     /**
      * @var PaymentDataObjectInterface|MockObject
@@ -37,7 +40,7 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->orderMock = $this->createMock(OrderAdapterInterface::class);
@@ -48,11 +51,9 @@ class CustomerDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder = new CustomerDataBuilder($this->subjectReaderMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $buildSubject = [
             'payment' => null,
         ];

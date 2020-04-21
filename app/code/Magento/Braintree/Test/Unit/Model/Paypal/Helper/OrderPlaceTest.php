@@ -18,15 +18,14 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class OrderPlaceTest
- *
  * @see \Magento\Braintree\Model\Paypal\Helper\OrderPlace
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderPlaceTest extends \PHPUnit\Framework\TestCase
+class OrderPlaceTest extends TestCase
 {
     const TEST_EMAIL = 'test@test.loc';
 
@@ -68,7 +67,7 @@ class OrderPlaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cartManagement = $this->getMockBuilder(CartManagementInterface::class)
             ->getMockForAbstractClass();
