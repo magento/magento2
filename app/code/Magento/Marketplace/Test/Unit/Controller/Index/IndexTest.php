@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Controller\Index;
 
@@ -31,11 +32,13 @@ class IndexTest extends TestCase
      */
     public function testExecute()
     {
-        $pageMock = $this->getPageMock(['setActiveMenu', 'addBreadcrumb', 'getConfig']);
-        $pageMock->expects($this->once())
-            ->method('setActiveMenu');
-        $pageMock->expects($this->once())
-            ->method('addBreadcrumb');
+        $pageMock = $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getConfig'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->getMock();
+        $pageMock->expects($this->once())->method('setActiveMenu');
+        $pageMock->expects($this->once())->method('addBreadcrumb');
 
         $resultPageFactoryMock = $this->getResultPageFactoryMock(['create']);
 
@@ -76,7 +79,7 @@ class IndexTest extends TestCase
      */
     public function getResultPageFactoryMock($methods = null)
     {
-        return $this->createPartialMock(PageFactory::class, $methods, []);
+        return $this->createPartialMock(PageFactory::class, $methods);
     }
 
     /**
@@ -84,7 +87,7 @@ class IndexTest extends TestCase
      */
     public function getConfigMock($methods = null)
     {
-        return $this->createPartialMock(Config::class, $methods, []);
+        return $this->createPartialMock(Config::class, $methods);
     }
 
     /**
@@ -92,14 +95,18 @@ class IndexTest extends TestCase
      */
     public function getTitleMock($methods = null)
     {
-        return $this->createPartialMock(Title::class, $methods, []);
+        return $this->createPartialMock(Title::class, $methods);
     }
 
     /**
+     * @param array $addMethods Methods that are missing in original class
      * @return MockObject|Title
      */
-    public function getPageMock($methods = null)
+    public function getPageMock(array $addMethods = [])
     {
-        return $this->createPartialMock(Page::class, $methods, []);
+        return $this->getMockBuilder(Page::class)
+            ->disableOriginalConstructor()
+            ->addMethods($addMethods)
+            ->getMock();
     }
 }
