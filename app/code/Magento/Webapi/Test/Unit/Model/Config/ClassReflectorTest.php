@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model\Config;
 
 use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Config\ClassReflector;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,17 +30,14 @@ class ClassReflectorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_typeProcessor = $this->createPartialMock(
-            TypeProcessor::class,
-            ['process']
-        );
-        $this->_typeProcessor->expects(
-            $this->any()
-        )->method(
-            'process'
-        )->will(
-            $this->returnValueMap([['string', 'str'], ['int', 'int']])
-        );
+        $this->_typeProcessor = $this->getMockBuilder(TypeProcessor::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['process'])
+            ->getMock();
+        $this->_typeProcessor->method('process')
+            ->will(
+                $this->returnValueMap([['string', 'str'], ['int', 'int']])
+            );
         $this->_classReflector = new ClassReflector($this->_typeProcessor);
     }
 
@@ -55,7 +55,7 @@ class ClassReflectorTest extends TestCase
         $classReflection = new ClassReflection(
             TestServiceForClassReflector::class
         );
-        /** @var $methodReflection \Laminas\Code\Reflection\MethodReflection */
+        /** @var MethodReflection $methodReflection */
         $methodReflection = $classReflection->getMethods()[0];
         $methodData = $this->_classReflector->extractMethodData($methodReflection);
         $expectedResponse = $this->_getSampleReflectionData();

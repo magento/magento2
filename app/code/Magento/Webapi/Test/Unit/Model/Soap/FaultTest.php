@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model\Soap;
 
 use Magento\Framework\App\RequestInterface;
@@ -133,7 +135,7 @@ XML;
     {
         $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
         $actualXml = $this->_soapFault->toXml();
-        $this->assertContains('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
+        $this->assertStringContainsString('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }
 
     /**
