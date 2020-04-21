@@ -57,7 +57,7 @@
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProduct1FromTableRow"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
 
         <!--Verify Category Title-->

@@ -122,7 +122,7 @@
         <click selector="{{AdminCategoryProductsGridSection.productSelectAll}}" stepKey="selectSelectAll"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Open Category Store Front Page-->
         <comment userInput="Open Category Store Front Page" stepKey="commentOpenCategoryOnStorefront"/>
