@@ -12,7 +12,6 @@ class ColumnResolver
     const COLUMN_REGION = 'Region/State';
     const COLUMN_ZIP = 'Zip/Postal Code';
     const COLUMN_WEIGHT = 'Weight (and above)';
-    const COLUMN_WEIGHT_DESTINATION = 'Weight (and above)';
     const COLUMN_PRICE = 'Shipping Price';
 
     /**
@@ -23,7 +22,6 @@ class ColumnResolver
         self::COLUMN_REGION => 1,
         self::COLUMN_ZIP => 2,
         self::COLUMN_WEIGHT => 3,
-        self::COLUMN_WEIGHT_DESTINATION => 3,
         self::COLUMN_PRICE => 4,
     ];
 
