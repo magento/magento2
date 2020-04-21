@@ -999,7 +999,7 @@ class LinkRepositoryTest extends WebapiAbstract
         } catch (\SoapFault $e) {
             $this->assertEquals($expectedMessage, $e->getMessage());
         } catch (\Exception $e) {
-            $this->assertContains($expectedMessage, $e->getMessage());
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
         }
     }
 
@@ -1059,7 +1059,7 @@ class LinkRepositoryTest extends WebapiAbstract
         foreach ($expectations['fields'] as $index => $value) {
             $this->assertEquals($value, $link[$index]);
         }
-        $this->assertContains('jellyfish_1_3.jpg', $link['sample_file']);
+        $this->assertStringContainsString('jellyfish_1_3.jpg', $link['sample_file']);
     }
 
     public function getListForAbsentProductProvider()
