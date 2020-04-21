@@ -15,6 +15,8 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 interface GetAllOperationsInterface
 {
     /**
+     * Get all operations for bulk
+     *
      * @param string $groupId
      * @return OperationInterface[]
      */
