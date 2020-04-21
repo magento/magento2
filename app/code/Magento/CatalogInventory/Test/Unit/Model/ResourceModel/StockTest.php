@@ -143,7 +143,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(
                 [$this->identicalTo('website_id = ?'), $this->identicalTo($websiteId)],
                 [$this->identicalTo('product_id IN(?)'), $this->identicalTo($productIds)],
-                [$this->identicalTo('item_id IN(?)'), $this->identicalTo($itemIds)],
+                [$this->identicalTo('item_id IN (?)'), $this->identicalTo($itemIds)],
                 [$this->identicalTo('entity_id IN (?)'), $this->identicalTo($productIds)]
             )
             ->willReturnSelf();
