@@ -113,7 +113,7 @@
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
-        <magentoCron stepKey="runCronIndex" groups="index"/>
+        <magentoCron stepKey="runCron"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 

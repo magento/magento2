@@ -80,7 +80,7 @@
                 <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
             </createData>
 
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCron stepKey="runCron"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
