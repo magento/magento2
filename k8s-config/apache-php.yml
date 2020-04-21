@@ -75,6 +75,8 @@ spec:
           - mountPath: /var/www/html/magento/var
             name: magento-shared-var
             subPath: var 
+      nodeSelector: 
+        private-app-pool: web-app
       volumes:
       - name: magento-shared
         emptyDir: {}
