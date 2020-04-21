@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * Test class for import product options module
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -506,7 +508,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Get new object mock for \Magento\Catalog\Model\Product\Option
      *
-     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product\Option|MockObject
      */
     public function getNewOptionMock()
     {
