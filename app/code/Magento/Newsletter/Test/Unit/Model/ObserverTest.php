@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Newsletter\Model\Observer;
 use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ObserverTest extends TestCase
@@ -21,14 +22,14 @@ class ObserverTest extends TestCase
     private $model;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 

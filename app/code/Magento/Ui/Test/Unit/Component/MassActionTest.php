@@ -105,7 +105,6 @@ class MassActionTest extends TestCase
                     'type' => 'first_action',
                     'label' => 'First Action',
                     'url' => '/module/controller/firstAction',
-                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -125,7 +124,6 @@ class MassActionTest extends TestCase
                             'url' => '/module/controller/secondSubAction2'
                         ],
                     ],
-                    '__disableTmpl' => true
                 ],
             ],
         ];

@@ -255,6 +255,7 @@ class LayoutProcessorTest extends TestCase
                 ],
                 'filterBy' => [
                     'target' => '${ $.provider }:${ $.parentScope }.country_id',
+                    '__disableTmpl' => ['target' => false],
                     'field' => 'country_id',
                 ],
             ],

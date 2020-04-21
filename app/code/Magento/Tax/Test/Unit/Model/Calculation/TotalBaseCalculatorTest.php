@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
+use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\Calculation\TotalBaseCalculator;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $totalBaseCalculator;
 
     public function testCalculateWithTaxInPrice()
@@ -54,8 +59,8 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initTotalBaseCalculator()
     {
-        $taxClassService = $this->createMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
-        $this->totalBaseCalculator = $this->getMockBuilder(\Magento\Tax\Model\Calculation\TotalBaseCalculator::class)
+        $taxClassService = $this->createMock(TaxClassManagementInterface::class);
+        $this->totalBaseCalculator = $this->getMockBuilder(TotalBaseCalculator::class)
             ->setMethods(['deltaRound'])
             ->setConstructorArgs(
                 [

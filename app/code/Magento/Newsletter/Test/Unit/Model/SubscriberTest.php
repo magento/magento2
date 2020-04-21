@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -12,6 +14,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -22,8 +25,8 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Subscriber model functionality
@@ -100,7 +103,7 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->newsletterData = $this->createMock(Data::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
@@ -233,12 +236,11 @@ class SubscriberTest extends TestCase
 
     /**
      * Test to try unsubscribe customer from newsletters with wrong confirmation code
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This is an invalid subscription confirmation code.
      */
     public function testUnsubscribeException()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('This is an invalid subscription confirmation code.');
         $this->subscriber->setCode(111);
         $this->subscriber->setCheckCode(222);
 
