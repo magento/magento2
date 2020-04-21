@@ -8,9 +8,10 @@ namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class OptionsTest
+ * Class Options test for Listing Column Status
  */
 class OptionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,7 +21,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
@@ -54,7 +55,6 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             [
                 'value' => '1',
                 'label' => 'Label',
-                '__disableTmpl' => true
             ]
         ];
 

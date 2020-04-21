@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\SampleData\Test\Unit\Model;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -14,30 +16,36 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
+use Magento\Framework\Filesystem\DriverPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Provides tests for Dependency model of SampleData module
+ *
+ * @covers \Magento\SampleData\Model\Dependency
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DependencyTest extends TestCase
 {
     /**
-     * @dataProvider dataPackagesFromComposerSuggest
      * @param string[] $moduleDirectories
      * @param callable $composerJsonGenerator
      * @param string[] $suggestionsFromLockFile
      * @param string[] $expectedPackages
+     * @return void
+     * @throws FileSystemException
+     *
+     * @dataProvider dataPackagesFromComposerSuggest
      */
     public function testPackagesFromComposerSuggest(
         array $moduleDirectories,
         callable $composerJsonGenerator,
         array $suggestionsFromLockFile,
         array $expectedPackages
-    ) {
+    ): void {
         /** @var ComposerInformation|MockObject $composerInformation */
         $composerInformation = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()
@@ -46,7 +54,9 @@ class DependencyTest extends TestCase
             ->willReturn($suggestionsFromLockFile);
 
         /** @var Filesystem|MockObject $filesystem */
-        $filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
+        $filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var PackageFactory|MockObject $packageFactory */
         $packageFactory = $this->getMockBuilder(PackageFactory::class)
@@ -59,13 +69,12 @@ class DependencyTest extends TestCase
             });
 
         /** @var ComponentRegistrarInterface|MockObject $componentRegistrar */
-        $componentRegistrar = $this->getMockBuilder(ComponentRegistrarInterface::class)
-            ->getMockForAbstractClass();
+        $componentRegistrar = $this->getMockBuilder(
+            ComponentRegistrarInterface::class
+        )->getMockForAbstractClass();
         $componentRegistrar->method('getPaths')
             ->with(ComponentRegistrar::MODULE)
-            ->willReturn(
-                $moduleDirectories
-            );
+            ->willReturn($moduleDirectories);
 
         $directoryReadFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
@@ -85,9 +94,11 @@ class DependencyTest extends TestCase
     }
 
     /**
+     * Data provider for testPackagesFromComposerSuggest
+     *
      * @return array
      */
-    public static function dataPackagesFromComposerSuggest()
+    public static function dataPackagesFromComposerSuggest(): array
     {
         return [
             [
@@ -180,9 +191,9 @@ class DependencyTest extends TestCase
 
     /**
      * @param array $composerJsonContent
-     * @return MockObject
+     * @return ReadInterface|MockObject
      */
-    public function stubComposerJsonReader(array $composerJsonContent)
+    public function stubComposerJsonReader(array $composerJsonContent): MockObject
     {
         $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
@@ -199,9 +210,9 @@ class DependencyTest extends TestCase
     }
 
     /**
-     * @return MockObject
+     * @return ReadInterface|MockObject
      */
-    public function stubFileNotFoundReader()
+    public function stubFileNotFoundReader(): MockObject
     {
         $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();

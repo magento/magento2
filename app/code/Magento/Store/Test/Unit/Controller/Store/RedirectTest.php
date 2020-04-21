@@ -110,7 +110,7 @@ class RedirectTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)

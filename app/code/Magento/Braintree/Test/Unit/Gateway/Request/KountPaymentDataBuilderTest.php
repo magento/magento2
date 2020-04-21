@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Observer\DataAssignObserver;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\KountPaymentDataBuilder.
  */
-class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
+class KountPaymentDataBuilderTest extends TestCase
 {
     const DEVICE_DATA = '{"test": "test"}';
 
@@ -42,11 +45,11 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $paymentDOMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -62,11 +65,9 @@ class KountPaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder = new KountPaymentDataBuilder($this->configMock, $this->subjectReaderMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $buildSubject = [];
 
         $this->configMock->expects(self::never())
