@@ -98,7 +98,7 @@ abstract class AbstractTestCase extends TestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()

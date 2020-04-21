@@ -14,6 +14,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Widget\Model\ResourceModel\Layout\Link\Collection;
 use Magento\Widget\Test\Unit\Model\ResourceModel\Layout\AbstractTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 class CollectionTest extends AbstractTestCase
@@ -63,7 +64,7 @@ class CollectionTest extends AbstractTestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
+        /** @var MockObject $connection */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
