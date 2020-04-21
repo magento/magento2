@@ -136,9 +136,9 @@ class CustomerPluginTest extends TestCase
         }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->getMockForAbstractClass(
-            CustomerExtensionInterface::class
-        );
+        $customerExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
@@ -156,9 +156,9 @@ class CustomerPluginTest extends TestCase
             $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
             $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
-        $resultExtension = $this->getMockForAbstractClass(
-            CustomerExtensionInterface::class
-        );
+        $resultExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
         $result = $this->createMock(CustomerInterface::class);
@@ -295,9 +295,9 @@ class CustomerPluginTest extends TestCase
             ->willReturnSelf();
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->getMockForAbstractClass(
-            CustomerExtensionInterface::class
-        );
+        $customerExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $customerExtension->expects($this->once())->method('setIsSubscribed')->with($subscribed);
         $this->extensionFactory->expects($this->once())->method('create')->willReturn($customerExtension);
         $customer->expects($this->once())->method('setExtensionAttributes')->with($customerExtension);
