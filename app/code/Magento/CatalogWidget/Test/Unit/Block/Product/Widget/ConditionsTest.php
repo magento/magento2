@@ -66,11 +66,6 @@ class ConditionsTest extends TestCase
     private $blockMock;
 
     /**
-     * @var Conditions
-     */
-    private $widgetConditions;
-
-    /**
      * return void
      */
     protected function setUp(): void
@@ -224,7 +219,7 @@ class ConditionsTest extends TestCase
         $templateEnginePoolMock->expects($this->once())->method('get')->willReturn($templateEngineMock);
         $templateEngineMock->expects($this->once())->method('render')->willReturn('html');
 
-        $this->widgetConditions = $this->objectManagerHelper->getObject(
+        $widgetConditions = $this->objectManagerHelper->getObject(
             Conditions::class,
             [
                 'context' => $this->contextMock,
@@ -239,6 +234,6 @@ class ConditionsTest extends TestCase
             ]
         );
 
-        $this->assertEquals($this->widgetConditions->render($abstractElementMock), 'html');
+        $this->assertEquals($widgetConditions->render($abstractElementMock), 'html');
     }
 }
