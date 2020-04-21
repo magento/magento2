@@ -13,7 +13,7 @@ namespace Magento\Captcha\Model\ResourceModel;
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Type Remote Address
+     * Remote Address log type
      */
     const TYPE_REMOTE_ADDRESS = 1;
 
@@ -79,7 +79,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Zend\Db\Sql\Expression('count+1'), 'updated_at']
+                ['count' => new \Laminas\Db\Sql\Expression('count+1'), 'updated_at']
             );
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
@@ -92,7 +92,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Zend\Db\Sql\Expression('count+1'), 'updated_at']
+                ['count' => new \Laminas\Db\Sql\Expression('count+1'), 'updated_at']
             );
         }
         return $this;

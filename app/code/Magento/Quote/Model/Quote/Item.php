@@ -609,7 +609,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Add option to item
      *
-     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject $option
+     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject|array $option
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

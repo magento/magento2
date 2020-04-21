@@ -64,4 +64,12 @@
         <data key="quantity">30</data>
         <var key="sku" entityType="product" entityKey="sku" />
     </entity>
+    <entity name="tierProductPriceDiscount" type="catalogTierPrice">
+        <data key="price">36.00</data>
+        <data key="price_type">discount</data>
+        <data key="website_id">0</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="quantity">3</data>
+        <var key="sku" entityType="product" entityKey="sku" />
+    </entity>
 </entities>
