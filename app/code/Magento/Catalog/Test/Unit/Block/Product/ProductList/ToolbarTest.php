@@ -17,47 +17,47 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | MockObject
      */
     private $memorizer;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url | MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface | MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Config | MockObject
      */
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\ProductList|MockObject
      */
     protected $productListHelper;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Html\Pager|MockObject
      */
     protected $pagerBlock;
 

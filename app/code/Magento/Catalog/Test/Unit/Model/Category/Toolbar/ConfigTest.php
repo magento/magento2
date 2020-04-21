@@ -72,7 +72,6 @@ class ConfigTest extends TestCase
 
         $this->expectedSortBy = 'price';
 
-
         $this->currentCategory->expects($this->any())
             ->method('get')
             ->willReturn($this->category);
