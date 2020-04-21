@@ -18,7 +18,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Helper\Guest as GuestHelper;
 
 /**
- * Class Form
+ * Class Form - display Sales and Returns form for guest users
  */
 class Form extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
