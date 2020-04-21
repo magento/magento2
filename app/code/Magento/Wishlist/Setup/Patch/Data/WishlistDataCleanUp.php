@@ -6,7 +6,7 @@
 declare(strict_types=1);
 namespace Magento\Wishlist\Setup\Patch\Data;
 
-use InvalidArgumentException;
+use Exception;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -100,7 +100,7 @@ class WishlistDataCleanUp implements DataPatchInterface
                         ['value' => $rowValue],
                         ['option_id = ?' => $optionRow['option_id']]
                     );
-                } catch (InvalidArgumentException $e) {
+                } catch (Exception $e) {
                     $rowErrorFlag = true;
                     continue;
                 }
