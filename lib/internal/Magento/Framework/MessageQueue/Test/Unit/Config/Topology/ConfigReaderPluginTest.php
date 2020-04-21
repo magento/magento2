@@ -36,10 +36,7 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->subjectMock = $this->getMockBuilder(TopologyConfigCompositeReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBinds', 'getConnectionByTopic'])
-            ->getMock();
+        $this->subjectMock = $this->createMock(TopologyConfigCompositeReader::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -86,17 +83,13 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'name' => 'magento-db',
                 'type' => 'topic',
                 'connection' => 'db',
-                'bindings' => [
-                    'defaultBinding' => $dbDefaultBinding
-                ]
+                'bindings' => ['defaultBinding' => $dbDefaultBinding]
             ],
             'magento--amqp' => [
                 'name' => 'magento',
                 'type' => 'topic',
                 'connection' => 'amqp',
-                'bindings' => [
-                    'defaultBinding' => $amqpDefaultBinding
-                ]
+                'bindings' => ['defaultBinding' => $amqpDefaultBinding]
             ]
         ];
         $expectedResult = [
@@ -134,7 +127,6 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-
         $this->configMock->expects($this->atLeastOnce())
             ->method('getBinds')
             ->willReturn($binding);
@@ -150,7 +142,6 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 ['catalog.product.removed', 'db'],
                 ['inventory.counter.updated', 'amqp']
             ]);
-
         $this->assertEquals($expectedResult, $this->plugin->afterRead($this->subjectMock, $result));
     }
 }
