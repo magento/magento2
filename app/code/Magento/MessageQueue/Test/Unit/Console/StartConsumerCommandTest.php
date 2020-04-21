@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MessageQueue\Test\Unit\Console;
 
@@ -210,6 +211,6 @@ class StartConsumerCommandTest extends TestCase
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
         $this->command->getDefinition()->getOption(StartConsumerCommand::PID_FILE_PATH);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_SINGLE_THREAD);
-        $this->assertContains('To start consumer which will process', $this->command->getHelp());
+        $this->assertStringContainsString('To start consumer which will process', $this->command->getHelp());
     }
 }
