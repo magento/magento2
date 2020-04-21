@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block;
 
 use Magento\Customer\Model\Context;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Shopping cart block
@@ -14,6 +15,11 @@ use Magento\Customer\Model\Context;
  */
 class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 {
+    /**
+     * Config settings path to determine is clear cart action enabled
+     */
+    public const XML_CONFIG_CLEAR_CART_ENABLED = 'checkout/cart/clear_cart_enabled';
+
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Url
      */
@@ -68,7 +74,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * prepare cart items URLs
+     * Prepare cart items URLs
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -110,6 +116,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Checks is quote has error
+     *
      * @codeCoverageIgnore
      * @return bool
      */
@@ -119,6 +127,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Returns quote items summary qty
+     *
      * @codeCoverageIgnore
      * @return int
      */
@@ -128,6 +138,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Checks is wishlist is active
+     *
      * @codeCoverageIgnore
      * @return bool
      */
@@ -137,7 +149,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         if ($isActive === null) {
             $isActive = $this->_scopeConfig->getValue(
                 'wishlist/general/active',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             ) && $this->httpContext->getValue(
                 Context::CONTEXT_AUTH
             );
@@ -147,6 +159,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Returns checkout url
+     *
      * @codeCoverageIgnore
      * @return string
      */
@@ -156,6 +170,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Returns continue shopping url
+     *
      * @return string
      */
     public function getContinueShoppingUrl()
@@ -172,6 +188,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Checks is quote is virtual
+     *
      * @return bool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -227,6 +245,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * Returns quote items count
+     *
      * @codeCoverageIgnore
      * @return int
      */
@@ -244,5 +264,23 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getPagerHtml()
     {
         return $this->getChildHtml('pager');
+    }
+
+    /**
+     * Checks is clear cart action enabled
+     *
+     * @codeCoverageIgnore
+     * @return boolean
+     */
+    public function isClearCartEnabled()
+    {
+        $isEnabled = $this->_getData('clear_cart_enabled');
+        if ($isEnabled === null) {
+            $isEnabled = $this->_scopeConfig->getValue(
+                self::XML_CONFIG_CLEAR_CART_ENABLED,
+                ScopeInterface::SCOPE_STORE
+            );
+        }
+        return $isEnabled;
     }
 }

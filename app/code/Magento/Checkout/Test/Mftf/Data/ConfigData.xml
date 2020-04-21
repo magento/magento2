@@ -100,4 +100,15 @@
         <data key="label">Display number of items in cart</data>
         <data key="value">0</data>
     </entity>
+
+    <entity name="EnableClearCartButtonOnTheCartPage">
+        <data key="path">checkout/cart/clear_cart_enabled</data>
+        <data key="label">Display clear cart button on the cart page</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableClearCartButtonOnTheCartPage">
+        <data key="path">checkout/cart/clear_cart_enabled</data>
+        <data key="label">Do not display clear cart button on the cart page</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

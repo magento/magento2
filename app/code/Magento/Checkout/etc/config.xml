@@ -19,6 +19,7 @@
                 <redirect_to_cart>0</redirect_to_cart>
                 <number_items_to_display_pager>20</number_items_to_display_pager>
                 <crosssell_enabled>1</crosssell_enabled>
+                <clear_cart_enabled>0</clear_cart_enabled>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>
