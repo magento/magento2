@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\View\Result\Layout;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Response\Http;
 
 /**
  * Plugin for putting all JavaScript tags to the end of body.
@@ -34,26 +36,32 @@ class JsFooterPlugin
     /**
      * Moves all JavaScript tags to the end of body if this feature is enabled.
      *
-     * @param Http $subject
-     * @return void
+     * @param Layout $subject
+     * @param Layout $result
+     * @param HttpResponseInterface|ResponseInterface $httpResponse
+     * @return Layout (That should be void, actually)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSendResponse(Http $subject)
+    public function afterRenderResult(Layout $subject, Layout $result, ResponseInterface $httpResponse)
     {
-        $content = (string)$subject->getContent();
-        $bodyEndTag = '</body';
-        $isEndBodyTagFound = strpos($content, $bodyEndTag) !== false;
-        $shouldMoveJsToBottom = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-            ScopeInterface::SCOPE_STORE
-        );
+        if (!$this->isDeferEnabled()) {
+            return;
+        }
 
-        if ($isEndBodyTagFound && $shouldMoveJsToBottom) {
+        $content = (string)$httpResponse->getContent();
+        $bodyEndTag = '</body';
+        $bodyEndTagFound = strrpos($content, $bodyEndTag) !== false;
+
+        if ($bodyEndTagFound) {
             $scripts = $this->extractScriptTags($content);
             if ($scripts) {
-                $content = str_replace($bodyEndTag, "$scripts\n$bodyEndTag", $content);
-                $subject->setContent($content);
+                $newBodyEndTagPosition = strrpos($content, $bodyEndTag);
+                $content = substr_replace($content, $scripts . "\n", $newBodyEndTagPosition, 0);
+                $httpResponse->setContent($content);
             }
         }
+
+        return $result;
     }
 
     /**
@@ -85,5 +93,16 @@ class JsFooterPlugin
         }
 
         return $scripts;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDeferEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }
