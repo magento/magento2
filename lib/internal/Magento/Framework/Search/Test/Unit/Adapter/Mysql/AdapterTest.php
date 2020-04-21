@@ -10,6 +10,8 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
+ * Mysql search adapter test
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
@@ -71,6 +73,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped("MC-18948: Mysql Adapter and Search Engine is deprecated");
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)

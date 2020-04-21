@@ -19,6 +19,9 @@
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

@@ -18,6 +18,9 @@
             <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
