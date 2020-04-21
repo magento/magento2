@@ -45,7 +45,7 @@ class JsFooterPlugin
     public function afterRenderResult(Layout $subject, Layout $result, ResponseInterface $httpResponse)
     {
         if (!$this->isDeferEnabled()) {
-            return;
+            return $result;
         }
 
         $content = (string)$httpResponse->getContent();
