@@ -9,6 +9,9 @@ use Magento\Framework\Code\Reader\ArgumentsReader;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
 class InterfaceValidator
 {
     public const METHOD_BEFORE = 'before';
