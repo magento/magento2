@@ -76,8 +76,7 @@
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{BaseConfigurableProduct.name}} to your shopping cart." stepKey="seeSuccessMessage"/>
 
         <!--Check item in cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(BaseConfigurableProduct.name)}}" stepKey="seeProductInCart"/>
         <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, visualSwatchAttribute.default_label)}}" userInput="{{visualSwatchOption2.default_label}}" stepKey="seeSelectedSwatch"/>
         <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute(BaseConfigurableProduct.name, ProductOptionFile.title)}}" userInput="{{MagentoLogo.file}}" stepKey="seeCorrectOptionFile"/>

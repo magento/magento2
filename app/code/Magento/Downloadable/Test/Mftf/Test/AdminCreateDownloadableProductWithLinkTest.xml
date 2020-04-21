@@ -97,8 +97,7 @@
         </actionGroup>
 
         <!-- Assert product price in cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
         <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$51.99" stepKey="assertProductPriceInCart"/>
     </test>
 </tests>
