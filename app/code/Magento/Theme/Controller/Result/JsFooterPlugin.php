@@ -96,6 +96,8 @@ class JsFooterPlugin
     }
 
     /**
+     * Returns information whether moving JS to footer is enabled
+     *
      * @return bool
      */
     private function isDeferEnabled(): bool
