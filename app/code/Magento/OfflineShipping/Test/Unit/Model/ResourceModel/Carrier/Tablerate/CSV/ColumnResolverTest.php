@@ -20,7 +20,6 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
         ColumnResolver::COLUMN_REGION => 'region value',
         ColumnResolver::COLUMN_ZIP => 'zip_value',
         ColumnResolver::COLUMN_WEIGHT => 'weight_value',
-        ColumnResolver::COLUMN_WEIGHT_DESTINATION => 'weight_destination_value',
         ColumnResolver::COLUMN_PRICE => 'price_value',
         self::CUSTOM_FIELD => 'custom_value',
     ];
@@ -86,10 +85,6 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
             ColumnResolver::COLUMN_WEIGHT => [
                 ColumnResolver::COLUMN_WEIGHT,
                 $this->values[ColumnResolver::COLUMN_WEIGHT],
-            ],
-            ColumnResolver::COLUMN_WEIGHT_DESTINATION => [
-                ColumnResolver::COLUMN_WEIGHT_DESTINATION,
-                $this->values[ColumnResolver::COLUMN_WEIGHT_DESTINATION],
             ],
             ColumnResolver::COLUMN_PRICE => [
                 ColumnResolver::COLUMN_PRICE,
