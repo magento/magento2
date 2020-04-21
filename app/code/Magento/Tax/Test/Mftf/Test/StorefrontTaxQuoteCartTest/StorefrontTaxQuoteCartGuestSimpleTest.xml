@@ -82,8 +82,7 @@
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
 
         <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
