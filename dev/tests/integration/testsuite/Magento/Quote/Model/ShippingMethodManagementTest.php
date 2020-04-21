@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -14,8 +13,12 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Api\Data\EstimateAddressInterface;
+use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Api\Data\TaxClassInterface;
@@ -24,6 +27,7 @@ use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config as TaxConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for shipping methods management
@@ -31,7 +35,7 @@ use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
+class ShippingMethodManagementTest extends TestCase
 {
     /** @var ObjectManagerInterface $objectManager */
     private $objectManager;
@@ -56,14 +60,14 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testRateAppliedToShipping(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
-        /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
-        $quoteRepository = $objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $objectManager->create(CartRepositoryInterface::class);
         $customerQuote = $quoteRepository->getForCustomer(1);
         $this->assertEquals(0, $customerQuote->getBaseGrandTotal());
     }
@@ -80,17 +84,17 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testTableRateFreeShipping()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $objectManager->get(\Magento\Quote\Model\Quote::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Quote $quote */
+        $quote = $objectManager->get(Quote::class);
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -103,10 +107,10 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
                 'region_id' => null
             ]
         ];
-        /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $address */
-        $address = $objectManager->create(\Magento\Quote\Api\Data\EstimateAddressInterface::class, $data);
-        /** @var  \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingEstimation */
-        $shippingEstimation = $objectManager->get(\Magento\Quote\Api\GuestShippingMethodManagementInterface::class);
+        /** @var EstimateAddressInterface $address */
+        $address = $objectManager->create(EstimateAddressInterface::class, $data);
+        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
         $result = $shippingEstimation->estimateByAddress($cartId, $address);
         $this->assertNotEmpty($result);
         $expectedResult = [
@@ -134,25 +138,25 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testTableRateWithCartRuleForFreeShipping()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         $quote = $this->getQuote('tableRate');
         $cartId = $quote->getId();
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
-        $addressFactory = $this->objectManager->get(\Magento\Quote\Api\Data\AddressInterfaceFactory::class);
+        $addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
         /** @var \Magento\Quote\Api\Data\AddressInterface $address */
         $address = $addressFactory->create();
         $address->setCountryId('US');
-        /** @var  \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingEstimation */
-        $shippingEstimation = $objectManager->get(\Magento\Quote\Api\GuestShippingMethodManagementInterface::class);
+        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
         $result = $shippingEstimation->estimateByExtendedAddress($cartId, $address);
         $this->assertCount(1, $result);
         $rate = reset($result);
@@ -234,17 +238,17 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     private function executeTestFlow($flatRateAmount, $tableRateAmount)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $objectManager->get(\Magento\Quote\Model\Quote::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Quote $quote */
+        $quote = $objectManager->get(Quote::class);
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -257,17 +261,17 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
                 'region_id' => null
             ]
         ];
-        /** @var \Magento\Quote\Api\Data\EstimateAddressInterface $address */
-        $address = $objectManager->create(\Magento\Quote\Api\Data\EstimateAddressInterface::class, $data);
-        /** @var  \Magento\Quote\Api\GuestShippingMethodManagementInterface $shippingEstimation */
-        $shippingEstimation = $objectManager->get(\Magento\Quote\Api\GuestShippingMethodManagementInterface::class);
+        /** @var EstimateAddressInterface $address */
+        $address = $objectManager->create(EstimateAddressInterface::class, $data);
+        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
         $result = $shippingEstimation->estimateByAddress($cartId, $address);
         $this->assertNotEmpty($result);
         $expectedResult = [
             'tablerate' => [
-                    'method_code' => 'bestway',
-                    'amount' => $tableRateAmount
-                ],
+                'method_code' => 'bestway',
+                'amount' => $tableRateAmount
+            ],
             'flatrate' => [
                 'method_code' => 'flatrate',
                 'amount' => $flatRateAmount
@@ -295,8 +299,6 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testEstimateByAddressWithInclExclTaxAndVATGroup()
     {
-        $this->markTestSkipped('MC-33463');
-
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
@@ -392,6 +394,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         $configData = [
             [
                 'path' => Vat::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
+                'value' => $customerGroupId,
+                'scope' => ScopeInterface::SCOPE_STORE,
+            ],
+            [
+                'path' => Vat::XML_PATH_CUSTOMER_VIV_ERROR_GROUP,
                 'value' => $customerGroupId,
                 'scope' => ScopeInterface::SCOPE_STORE,
             ],
