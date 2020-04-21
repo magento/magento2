@@ -222,7 +222,7 @@ class SmartButtonConfig
         // Installment label is only available for specific locales
         if ($styles['label'] === 'installment') {
             if (array_key_exists($locale, $installmentPeriodLocale)) {
-                $styles['installmentperiod'] = (int)$this->config->getValue(
+                $styles['period'] = (int)$this->config->getValue(
                     $page .'_page_button_' . $installmentPeriodLocale[$locale] . '_installment_period'
                 );
             } else {

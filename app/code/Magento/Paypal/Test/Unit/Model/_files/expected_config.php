@@ -26,7 +26,7 @@ return [
                 'color' => 'blue',
                 'shape' => 'pillow',
                 'label' => 'installment',
-                'installmentperiod' => 0
+                'period' => 0
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
@@ -54,7 +54,7 @@ return [
                 'color' => 'blue',
                 'shape' => 'pillow',
                 'label' => 'installment',
-                'installmentperiod' => 0
+                'period' => 0
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
@@ -134,7 +134,7 @@ return [
                 'color' => 'blue',
                 'shape' => 'pillow',
                 'label' => 'installment',
-                'installmentperiod' => 0
+                'period' => 0
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,

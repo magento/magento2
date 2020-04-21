@@ -1515,6 +1515,7 @@ class Config extends AbstractConfig
             case 'client_id':
             case 'sandbox_client_id':
             case 'supported_locales':
+            case 'smart_buttons_supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);
