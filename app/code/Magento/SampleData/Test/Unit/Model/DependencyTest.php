@@ -16,9 +16,9 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
-use Magento\Framework\Filesystem\DriverPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
