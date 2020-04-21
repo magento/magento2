@@ -11,14 +11,10 @@
     <entity name="LoginAsCustomerConfigDataEnabled">
         <data key="path">mfloginascustomer/general/enabled</data>
     </entity>
-    <entity name="disablePageCache">
+    <entity name="LoginAsCustomerDisablePageCache">
         <data key="path">mfloginascustomer/general/disable_page_cache</data>
     </entity>
-    <!-- Should be removed after https://github.com/magento/magento2-login-as-customer/issues/34 -->
-    <entity name="extensionsKeepGuestCart">
-        <data key="path">mfloginascustomer/general/keep_guest_cart</data>
-    </entity>
-    <entity name="storeViewLogin">
+    <entity name="LoginAsCustomerStoreViewLogin">
         <data key="path">mfloginascustomer/general/store_view_login</data>
     </entity>
 </entities>
