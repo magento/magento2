@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Index;
 
 use Magento\AsynchronousOperations\Controller\Adminhtml\Index\Index;
@@ -73,10 +75,10 @@ class IndexTest extends TestCase
         $titleMock = $this->createMock(Title::class);
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($pageMock);
 
-        $blockMock = $this->createPartialMock(
-            BlockInterface::class,
-            ['setActive', 'getMenuModel', 'toHtml']
-        );
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['setActive', 'getMenuModel'])
+            ->onlyMethods(['toHtml'])
+            ->getMock();
 
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);

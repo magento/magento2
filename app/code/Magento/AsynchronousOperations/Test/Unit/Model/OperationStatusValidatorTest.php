@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
 use Magento\AsynchronousOperations\Model\Operation;
@@ -56,7 +58,7 @@ class OperationStatusValidatorTest extends TestCase
      * @dataProvider dataProviderForTestSetStatus
      */
     public function testSetStatus(
-        string $status,
+        int $status,
         array $statusPool,
         string $expectedResult
     ) {
@@ -98,7 +100,7 @@ class OperationStatusValidatorTest extends TestCase
                     'open' => 4,
                     'rejected' => 5
                 ],
-                'expectedResult' => 1
+                'expectedResult' => '1'
             ],
             [
                 'status' => 2,
@@ -109,7 +111,7 @@ class OperationStatusValidatorTest extends TestCase
                     'open' => 4,
                     'rejected' => 5
                 ],
-                'expectedResult' => 2
+                'expectedResult' => '2'
             ],
             [
                 'status' => 3,
@@ -120,7 +122,7 @@ class OperationStatusValidatorTest extends TestCase
                     'open' => 4,
                     'rejected' => 5
                 ],
-                'expectedResult' => 3
+                'expectedResult' => '3'
             ],
             [
                 'status' => 4,
@@ -131,7 +133,7 @@ class OperationStatusValidatorTest extends TestCase
                     'open' => 4,
                     'rejected' => 5
                 ],
-                'expectedResult' => 4
+                'expectedResult' => '4'
             ],
             [
                 'status' => 5,
@@ -142,7 +144,7 @@ class OperationStatusValidatorTest extends TestCase
                     'open' => 4,
                     'rejected' => 5
                 ],
-                'expectedResult' => 5
+                'expectedResult' => '5'
             ]
         ];
     }
