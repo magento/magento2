@@ -132,9 +132,9 @@ class FilterTest extends TestCase
             );
 
         $this->filter->widgetDirective([
-                1 => $construction,
-                2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
-            ]);
+            1 => $construction,
+            2 => 'type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"'
+        ]);
     }
 
     public function testWidgetDirectiveWithoutRequiredVariable()

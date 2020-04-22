@@ -105,8 +105,8 @@ class QueueTest extends TestCase
             ->getMock();
         $this->subscribersCollectionMock =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->queueResourseModelMock = $this->getMockBuilder(QueueResourseModel::class)
             ->disableOriginalConstructor()
             ->getMock();

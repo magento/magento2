@@ -212,10 +212,11 @@ class SubscriptionManagerTest extends TestCase
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $confirmCode = 'confirm code';
         /** @var Subscriber|MockObject $subscriber */
-        $subscriber = $this->createPartialMock(
-            Subscriber::class,
-            ['loadBySubscriberEmail', 'getId', 'setCheckCode', 'unsubscribe']
-        );
+        $subscriber = $this->getMockBuilder(Subscriber::class)
+            ->addMethods(['setCheckCode'])
+            ->onlyMethods(['loadBySubscriberEmail', 'getId', 'unsubscribe'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $subscriber->expects($this->once())
             ->method('loadBySubscriberEmail')
             ->with($email, $websiteId)

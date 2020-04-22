@@ -55,19 +55,11 @@ class PreviewTest extends TestCase
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->appStateMock = $this->createMock(State::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->templateMock = $this->createPartialMock(
-            Template::class,
-            [
-                'setTemplateType',
-                'setTemplateText',
-                'setTemplateStyles',
-                'isPlain',
-                'emulateDesign',
-                'revertDesign',
-                'getProcessedTemplate',
-                'load'
-            ]
-        );
+        $this->templateMock = $this->getMockBuilder(Template::class)
+            ->addMethods(['setTemplateType', 'setTemplateText', 'setTemplateStyles'])
+            ->onlyMethods(['isPlain', 'emulateDesign', 'revertDesign', 'getProcessedTemplate', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->templateMock);
         $this->subscriberFactoryMock = $this->createPartialMock(

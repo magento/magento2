@@ -182,7 +182,7 @@ class ProblemTest extends TestCase
     {
         $this->subscriberMock->expects($this->never())
             ->method('__call')
-            ->with($this->equalTo('setSubscriberStatus'));
+            ->with('setSubscriberStatus');
 
         $result = $this->problemModel->unsubscribe();
 
@@ -197,11 +197,11 @@ class ProblemTest extends TestCase
         $this->setSubscriber();
         $this->subscriberMock->expects($this->at(1))
             ->method('__call')
-            ->with($this->equalTo('setSubscriberStatus'), $this->equalTo([Subscriber::STATUS_UNSUBSCRIBED]))
+            ->with('setSubscriberStatus', [Subscriber::STATUS_UNSUBSCRIBED])
             ->willReturnSelf();
         $this->subscriberMock->expects($this->at(2))
             ->method('__call')
-            ->with($this->equalTo('setIsStatusChanged'))
+            ->with('setIsStatusChanged')
             ->willReturnSelf();
         $this->subscriberMock->expects($this->once())
             ->method('save');

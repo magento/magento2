@@ -18,8 +18,8 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Controller\Manage;
 use Magento\Newsletter\Controller\Manage\Save;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Newsletter\Controller\Manage\Save
@@ -87,7 +87,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,7 +115,7 @@ class SaveTest extends TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
@@ -130,10 +130,10 @@ class SaveTest extends TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->any())
             ->method('getCustomerId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
@@ -149,19 +149,17 @@ class SaveTest extends TestCase
     {
         $this->formKeyValidatorMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->any())
             ->method('getCustomerId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'customerId', 'value' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'customerId', 'value' => 'value']
                     )
                 )
             );

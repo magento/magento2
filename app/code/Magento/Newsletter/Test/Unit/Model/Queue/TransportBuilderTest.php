@@ -88,7 +88,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->templateFactoryMock = $this->createMock(FactoryInterface::class);
@@ -160,13 +160,13 @@ class TransportBuilderTest extends TestCase
 
         $template = $this->createMock(Template::class);
         $template->expects($this->once())->method('setVars')
-            ->with($this->equalTo($vars))->will($this->returnSelf());
+            ->with($vars)->willReturnSelf();
         $template->expects($this->once())->method('setOptions')
-            ->with($this->equalTo($options))->will($this->returnSelf());
+            ->with($options)->willReturnSelf();
         $template->expects($this->once())->method('getSubject')
             ->willReturn('Email Subject');
         $template->expects($this->once())->method('setData')
-            ->with($this->equalTo($data))->will($this->returnSelf());
+            ->with($data)->willReturnSelf();
         $template->expects($this->once())->method('getProcessedTemplate')
             ->with($vars)->willReturn($bodyText);
         $template->expects($this->once())->method('setTemplateFilter')
@@ -174,7 +174,7 @@ class TransportBuilderTest extends TestCase
 
         $this->templateFactoryMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('identifier'))
+            ->with('identifier')
             ->willReturn($template);
 
         $this->builder->setTemplateIdentifier(

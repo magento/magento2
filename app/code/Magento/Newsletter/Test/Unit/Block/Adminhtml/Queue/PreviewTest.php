@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit\Framework\TestCase
+class PreviewTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -74,22 +74,22 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $context = $this->createMock(Context::class);
         $eventManager = $this->createMock(ManagerInterface::class);
         $context->expects($this->once())->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $context->expects($this->once())->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfig));
+            ->willReturn($scopeConfig);
         $this->requestMock = $this->createMock(Http::class);
         $context->expects($this->once())->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->storeManagerMock = $this->createPartialMock(
             StoreManager::class,
             ['getStores', 'getDefaultStoreView']
         );
         $context->expects($this->once())->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+            ->willReturn($this->storeManagerMock);
         $appState = $this->createMock(State::class);
         $context->expects($this->once())->method('getAppState')
-            ->will($this->returnValue($appState));
+            ->willReturn($appState);
 
         $backendSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -103,19 +103,19 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->templateMock = $this->createMock(Template::class);
         $templateFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->templateMock));
+            ->willReturn($this->templateMock);
 
         $subscriberFactory = $this->createPartialMock(SubscriberFactory::class, ['create']);
         $this->subscriberMock = $this->createMock(Subscriber::class);
         $subscriberFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->subscriberMock));
+            ->willReturn($this->subscriberMock);
 
         $queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
         $this->queueMock = $this->createPartialMock(Queue::class, ['load']);
         $queueFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->queueMock));
+            ->willReturn($this->queueMock);
 
         $this->objectManager = new ObjectManager($this);
 
@@ -141,35 +141,32 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $store = $this->createPartialMock(Store::class, ['getId']);
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $result = $this->preview->toHtml();
         $this->assertEquals('', $result);
     }
 
     public function testToHtmlWithId()
     {
-        $this->requestMock->expects($this->any())->method('getParam')->will(
-            $this->returnValueMap(
-                [
-                    ['id', null, 1],
-                    ['store_id', null, 0]
-                ]
-            )
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                ['id', null, 1],
+                ['store_id', null, 0]
+            ]
         );
         $this->queueMock->expects($this->once())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
         $this->templateMock->expects($this->any())
             ->method('isPlain')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         /** @var Store $store */
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $store = $this->createPartialMock(Store::class, ['getId']);
         $this->storeManagerMock->expects($this->once())
             ->method('getStores')
-            ->will($this->returnValue([0 => $store]));
+            ->willReturn([0 => $store]);
         $result = $this->preview->toHtml();
         $this->assertEquals('<pre></pre>', $result);
     }

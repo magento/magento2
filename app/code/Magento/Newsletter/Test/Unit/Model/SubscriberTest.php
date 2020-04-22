@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Newsletter\Helper\Data;
 use Magento\Newsletter\Model\Queue;
+use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResourceModel;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -76,7 +77,7 @@ class SubscriberTest extends TestCase
     private $inlineTranslation;
 
     /**
-     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber|MockObject
+     * @var SubscriberResourceModel|MockObject
      */
     private $resource;
 
@@ -130,18 +131,15 @@ class SubscriberTest extends TestCase
         $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
         $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
         $this->inlineTranslation = $this->createMock(StateInterface::class);
-        $this->resource = $this->createPartialMock(
-            \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
-            [
-                'loadByEmail',
-                'getIdFieldName',
-                'save',
-                'loadByCustomer',
-                'received',
-                'loadBySubscriberEmail',
-                'loadByCustomerId',
-            ]
-        );
+        $this->resource = $this->getMockBuilder(SubscriberResourceModel::class)
+            ->addMethods(
+            ['loadByCustomer']
+        )
+            ->onlyMethods(
+                ['loadByEmail', 'getIdFieldName', 'save', 'received', 'loadBySubscriberEmail', 'loadByCustomerId']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
 
         $this->customerFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
