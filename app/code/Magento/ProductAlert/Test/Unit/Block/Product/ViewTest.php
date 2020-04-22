@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Block\Product;
 
 use Magento\Framework\Data\Helper\PostHelper;
@@ -39,7 +41,7 @@ class ViewTest extends TestCase
         $this->postHelper->expects($this->once())
             ->method('getPostData')
             ->with('someUrl')
-            ->will($this->returnValue('{parsedAction}'));
+            ->willReturn('{parsedAction}');
         $this->assertEquals('{parsedAction}', $this->block->getPostAction());
     }
 }
