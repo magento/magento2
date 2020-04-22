@@ -27,16 +27,20 @@ class XmlTest extends TestCase
     {
         $fileResolver = $this->getMockBuilder(
             FileResolver::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $converter = $this->getMockBuilder(
             \Magento\Cron\Model\Config\Converter\Xml::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schema = $this->getMockBuilder(
             SchemaLocator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $validator = $this->getMockBuilder(
             ValidationStateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_xmlReader = new Xml($fileResolver, $converter, $schema, $validator);
     }
 

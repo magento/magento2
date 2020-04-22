@@ -27,11 +27,12 @@ class SchemaLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleReaderMock = $this->getMockBuilder(ModuleDirReader::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->moduleReaderMock->expects($this->once())
             ->method('getModuleDir')
             ->with('etc', 'Magento_Cron')
-            ->will($this->returnValue('schema_dir'));
+            ->willReturn('schema_dir');
         $this->locator = new SchemaLocator($this->moduleReaderMock);
     }
 

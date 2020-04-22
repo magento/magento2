@@ -41,7 +41,8 @@ class ConverterTest extends TestCase
         $this->groupsConfigMock = $this->getMockBuilder(GroupsConfigModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->converterMock = $this->getMockBuilder(Converter::class)->getMock();
+        $this->converterMock = $this->getMockBuilder(Converter::class)
+            ->getMock();
         $this->converterPlugin = new ConverterPlugin($this->groupsConfigMock);
     }
 

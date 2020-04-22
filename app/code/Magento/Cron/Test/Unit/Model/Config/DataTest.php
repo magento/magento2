@@ -23,11 +23,13 @@ class DataTest extends TestCase
     {
         $reader = $this->getMockBuilder(
             Xml::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $cache = $this->createMock(CacheInterface::class);
         $dbReader = $this->getMockBuilder(
             Db::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $jobs = [
             'job1' => ['schedule' => '1 1 1 1 1', 'instance' => 'JobModel1_1', 'method' => 'method1_1'],
@@ -44,7 +46,7 @@ class DataTest extends TestCase
             ->with('test_cache_id')
             ->willReturn(json_encode($jobs));
 
-        $dbReader->expects($this->once())->method('get')->will($this->returnValue($dbReaderData));
+        $dbReader->expects($this->once())->method('get')->willReturn($dbReaderData);
 
         $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('unserialize')
