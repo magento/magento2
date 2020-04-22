@@ -50,7 +50,7 @@
         </actionGroup>
 
         <!-- Proceed to Checkout -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutPage" />
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutPage"/>
 
         <!-- Fill Shipment form -->
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
