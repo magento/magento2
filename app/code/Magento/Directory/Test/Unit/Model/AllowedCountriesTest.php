@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model;
 
@@ -34,7 +35,7 @@ class AllowedCountriesTest extends TestCase
     /**
      * Test setUp
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Block;
 
 use Magento\Directory\Block\Currency;
@@ -35,7 +37,7 @@ class CurrencyTest extends TestCase
     protected function setUp(): void
     {
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
-        $this->urlBuilderMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
+        $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         /**
          * @var Context|MockObject $contextMock
@@ -43,7 +45,7 @@ class CurrencyTest extends TestCase
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
+        $contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -81,8 +83,8 @@ class CurrencyTest extends TestCase
 
         $this->postDataHelperMock->expects($this->once())
             ->method('getPostData')
-            ->with($this->equalTo($switchUrl), $this->equalTo(['currency' => $expectedCurrencyCode]))
-            ->will($this->returnValue($expectedResult));
+            ->with($switchUrl, ['currency' => $expectedCurrencyCode])
+            ->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $this->object->getSwitchCurrencyPostData($expectedCurrencyCode));
     }

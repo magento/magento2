@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 
 use Magento\Directory\Model\Country\Postcode\Config\SchemaLocator;
@@ -32,8 +34,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Directory'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
 
         $this->model = new SchemaLocator($this->moduleReaderMock);

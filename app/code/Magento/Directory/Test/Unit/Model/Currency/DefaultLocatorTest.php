@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Currency;
 
 use Magento\Backend\Helper\Data;
@@ -60,7 +62,7 @@ class DefaultLocatorTest extends TestCase
 
     public function testGetDefaultCurrencyReturnDefaultStoreDefaultCurrencyIfNoStoreIsSpecified()
     {
-        $this->_configMock->expects($this->once())->method('getValue')->will($this->returnValue('storeCurrency'));
+        $this->_configMock->expects($this->once())->method('getValue')->willReturn('storeCurrency');
         $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
 
@@ -72,19 +74,19 @@ class DefaultLocatorTest extends TestCase
             'getParam'
         )->with(
             'store'
-        )->will(
-            $this->returnValue('someStore')
+        )->willReturn(
+            'someStore'
         );
         $storeMock = $this->createMock(Store::class);
-        $storeMock->expects($this->once())->method('getBaseCurrencyCode')->will($this->returnValue('storeCurrency'));
+        $storeMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn('storeCurrency');
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
             'getStore'
         )->with(
             'someStore'
-        )->will(
-            $this->returnValue($storeMock)
+        )->willReturn(
+            $storeMock
         );
         $this->assertEquals('storeCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
@@ -95,16 +97,16 @@ class DefaultLocatorTest extends TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['store', null, ''], ['website', null, 'someWebsite']])
+        )->willReturnMap(
+            [['store', null, ''], ['website', null, 'someWebsite']]
         );
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects(
             $this->once()
         )->method(
             'getBaseCurrencyCode'
-        )->will(
-            $this->returnValue('websiteCurrency')
+        )->willReturn(
+            'websiteCurrency'
         );
         $this->_storeManagerMock->expects(
             $this->once()
@@ -112,8 +114,8 @@ class DefaultLocatorTest extends TestCase
             'getWebsite'
         )->with(
             'someWebsite'
-        )->will(
-            $this->returnValue($websiteMock)
+        )->willReturn(
+            $websiteMock
         );
         $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }
@@ -124,22 +126,20 @@ class DefaultLocatorTest extends TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap(
-                [['store', null, ''], ['website', null, ''], ['group', null, 'someGroup']]
-            )
+        )->willReturnMap(
+            [['store', null, ''], ['website', null, ''], ['group', null, 'someGroup']]
         );
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects(
             $this->once()
         )->method(
             'getBaseCurrencyCode'
-        )->will(
-            $this->returnValue('websiteCurrency')
+        )->willReturn(
+            'websiteCurrency'
         );
 
         $groupMock = $this->createMock(Group::class);
-        $groupMock->expects($this->once())->method('getWebsite')->will($this->returnValue($websiteMock));
+        $groupMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
 
         $this->_storeManagerMock->expects(
             $this->once()
@@ -147,8 +147,8 @@ class DefaultLocatorTest extends TestCase
             'getGroup'
         )->with(
             'someGroup'
-        )->will(
-            $this->returnValue($groupMock)
+        )->willReturn(
+            $groupMock
         );
         $this->assertEquals('websiteCurrency', $this->_model->getDefaultCurrency($this->_requestMock));
     }

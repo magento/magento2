@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Region;
 
 use Magento\Directory\Model\AllowedCountries;
@@ -17,7 +19,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -57,9 +59,9 @@ class CollectionTest extends TestCase
         $this->allowedCountries = $this->createMock(AllowedCountries::class);
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         $this->collection = new Collection(
             $entityFactoryMock,

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Country;
 
@@ -48,7 +49,7 @@ class CollectionTest extends TestCase
     {
         $connection = $this->createMock(Mysql::class);
         $select = $this->createMock(Select::class);
-        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection->expects($this->once())->method('select')->willReturn($select);
 
         $resource = $this->getMockForAbstractClass(
             AbstractDb::class,
@@ -59,12 +60,12 @@ class CollectionTest extends TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
         $eventManager = $this->createMock(ManagerInterface::class);
         $localeListsMock = $this->createMock(ListsInterface::class);
-        $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
+        $localeListsMock->expects($this->any())->method('getCountryTranslation')->willReturnArgument(0);
 
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class

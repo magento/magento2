@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
@@ -76,16 +78,19 @@ class CurrencyInformationAcquirerTest extends TestCase
     public function testGetCurrencyInfo()
     {
         /** @var ExchangeRate $exchangeRate */
-        $exchangeRate = $this->createPartialMock(ExchangeRate::class, ['load']);
+        $exchangeRate = $this->getMockBuilder(ExchangeRate::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['load'])
+            ->getMock();
 
         $exchangeRate->expects($this->any())->method('load')->willReturnSelf();
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
 
         /** @var CurrencyInformation $currencyInformation */
-        $currencyInformation = $this->createPartialMock(
-            CurrencyInformation::class,
-            ['load']
-        );
+        $currencyInformation = $this->getMockBuilder(CurrencyInformation::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['load'])
+            ->getMock();
 
         $currencyInformation->expects($this->any())->method('load')->willReturnSelf();
         $this->currencyInformationFactory->expects($this->any())->method('create')->willReturn($currencyInformation);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Currency\Import\Source;
 
 use Magento\Directory\Model\Currency\Import\Config;
@@ -34,8 +36,8 @@ class ServiceTest extends TestCase
             $this->once()
         )->method(
             'getAvailableServices'
-        )->will(
-            $this->returnValue(['service_one', 'service_two'])
+        )->willReturn(
+            ['service_one', 'service_two']
         );
         $this->_importConfig->expects(
             $this->at(1)
@@ -43,8 +45,8 @@ class ServiceTest extends TestCase
             'getServiceLabel'
         )->with(
             'service_one'
-        )->will(
-            $this->returnValue('Service One')
+        )->willReturn(
+            'Service One'
         );
         $this->_importConfig->expects(
             $this->at(2)
@@ -52,8 +54,8 @@ class ServiceTest extends TestCase
             'getServiceLabel'
         )->with(
             'service_two'
-        )->will(
-            $this->returnValue('Service Two')
+        )->willReturn(
+            'Service Two'
         );
         $expectedResult = [
             ['value' => 'service_one', 'label' => 'Service One'],
