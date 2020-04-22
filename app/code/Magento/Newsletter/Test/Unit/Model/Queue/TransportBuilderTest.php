@@ -30,6 +30,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Newsletter\Model\Queue\TransportBuilder
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilderTest extends TestCase

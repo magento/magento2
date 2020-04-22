@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreviewTest extends TestCase
 {
