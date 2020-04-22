@@ -1,13 +1,15 @@
-<?php
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ups\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Ups\Helper\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ups\Helper\Config;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Config helper Test
