@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Controller\Adminhtml\User;
 
@@ -132,7 +133,7 @@ class DeleteTest extends TestCase
     public function testExecute($currentUserPassword, $userId, $currentUserId, $resultMethod)
     {
         $currentUserMock = $this->userMock;
-        $this->authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($currentUserMock));
+        $this->authSessionMock->expects($this->any())->method('getUser')->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 
@@ -151,7 +152,7 @@ class DeleteTest extends TestCase
 
         $userMock = clone $currentUserMock;
 
-        $this->userFactoryMock->expects($this->any())->method('create')->will($this->returnValue($userMock));
+        $this->userFactoryMock->expects($this->any())->method('create')->willReturn($userMock);
         $this->responseMock->expects($this->any())->method('setRedirect')->willReturnSelf();
         $this->userMock->expects($this->any())->method('delete')->willReturnSelf();
         $this->messageManagerMock->expects($this->once())->method($resultMethod);
@@ -170,7 +171,7 @@ class DeleteTest extends TestCase
         $currentUserMock = $this->userMock;
         $this->authSessionMock->expects($this->any())
             ->method('getUser')
-            ->will($this->returnValue($currentUserMock));
+            ->willReturn($currentUserMock);
 
         $currentUserMock->expects($this->any())->method('getId')->willReturn($currentUserId);
 
