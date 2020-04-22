@@ -204,7 +204,8 @@ class ConditionsTest extends TestCase
         $fieldsetMock = $this->createMock(Fieldset::class);
         $combineMock = $this->createMock(Combine::class);
         $resolverMock = $this->createMock(Resolver::class);
-        $filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->onlyMethods(['getDirectoryRead'])->disableOriginalConstructor()->getMock();
         $validatorMock = $this->createMock(Validator::class);
         $templateEnginePoolMock = $this->createMock(TemplateEnginePool::class);
         $templateEngineMock = $this->createMock(TemplateEngineInterface::class);
