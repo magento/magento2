@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
@@ -58,7 +59,7 @@ class NavigationTest extends TestCase
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($this->catalogLayerMock));
+            ->willReturn($this->catalogLayerMock);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -75,14 +76,14 @@ class NavigationTest extends TestCase
     public function testGetStateHtml()
     {
         $stateHtml = 'I feel good';
-        $this->filterListMock->expects($this->any())->method('getFilters')->will($this->returnValue([]));
+        $this->filterListMock->expects($this->any())->method('getFilters')->willReturn([]);
         $this->layoutMock->expects($this->at(0))->method('getChildName')
             ->with(null, 'state')
-            ->will($this->returnValue('state block'));
+            ->willReturn('state block');
 
         $this->layoutMock->expects($this->once())->method('renderElement')
             ->with('state block', true)
-            ->will($this->returnValue($stateHtml));
+            ->willReturn($stateHtml);
 
         $this->model->setLayout($this->layoutMock);
         $this->assertEquals($stateHtml, $this->model->getStateHtml());
@@ -100,7 +101,7 @@ class NavigationTest extends TestCase
 
         $this->filterListMock->expects($this->exactly(2))->method('getFilters')
             ->with($this->catalogLayerMock)
-            ->will($this->returnValue($filters));
+            ->willReturn($filters);
         $this->assertEquals($filters, $this->model->getFilters());
 
         // canShowBlock()
@@ -109,7 +110,7 @@ class NavigationTest extends TestCase
             ->expects($this->once())
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
-            ->will($this->returnValue($enabled));
+            ->willReturn($enabled);
 
         $category = $this->createMock(Category::class);
         $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
@@ -132,14 +133,14 @@ class NavigationTest extends TestCase
 
         $this->filterListMock->expects($this->atLeastOnce())->method('getFilters')
             ->with($this->catalogLayerMock)
-            ->will($this->returnValue($filters));
+            ->willReturn($filters);
         $this->assertEquals($filters, $this->model->getFilters());
 
         $this->visibilityFlagMock
             ->expects($this->any())
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $category = $this->createMock(Category::class);
         $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
@@ -170,9 +171,9 @@ class NavigationTest extends TestCase
 
     public function testGetClearUrl()
     {
-        $this->filterListMock->expects($this->any())->method('getFilters')->will($this->returnValue([]));
+        $this->filterListMock->expects($this->any())->method('getFilters')->willReturn([]);
         $this->model->setLayout($this->layoutMock);
-        $this->layoutMock->expects($this->once())->method('getChildName')->will($this->returnValue('sample block'));
+        $this->layoutMock->expects($this->once())->method('getChildName')->willReturn('sample block');
 
         $blockMock = $this->getMockForAbstractClass(
             AbstractBlock::class,
@@ -183,7 +184,7 @@ class NavigationTest extends TestCase
         $clearUrl = 'very clear URL';
         $blockMock->setClearUrl($clearUrl);
 
-        $this->layoutMock->expects($this->once())->method('getBlock')->will($this->returnValue($blockMock));
+        $this->layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
         $this->assertEquals($clearUrl, $this->model->getClearUrl());
     }
 }
