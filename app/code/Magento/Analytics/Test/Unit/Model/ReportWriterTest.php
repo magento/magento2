@@ -77,11 +77,13 @@ class ReportWriterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->reportValidatorMock = $this->createMock(ReportValidator::class);
         $this->providerFactoryMock = $this->createMock(ProviderFactory::class);
         $this->reportProviderMock = $this->createMock(ReportProvider::class);
-        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->reportWriter = $this->objectManagerHelper->getObject(
