@@ -93,7 +93,7 @@ class CmsPageUrlRewriteGeneratorTest extends TestCase
 
         $urls = $this->urlRewriteGenerator->generate($cmsPage);
         $this->assertEquals($initializesStores[0], $urls[0]->getStoreId());
-        $this->assertFalse(isset($urls[1]));
+        $this->assertArrayNotHasKey(1, $urls);
     }
 
     public function testGenerateForSpecificStores()
