@@ -55,11 +55,11 @@ class SendFriendTest extends TestCase
     public function testGetSentCountWithCheckCookie()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->will(
-            $this->returnValue(Data::CHECK_COOKIE)
+        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->willReturn(
+            Data::CHECK_COOKIE
         );
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
@@ -69,8 +69,8 @@ class SendFriendTest extends TestCase
     public function testSentCountByCookies()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);

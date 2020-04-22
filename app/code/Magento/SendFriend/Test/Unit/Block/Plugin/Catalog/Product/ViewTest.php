@@ -52,7 +52,7 @@ class ViewTest extends TestCase
     public function testAfterCanEmailToFriend($result, $callSendfriend)
     {
         $this->sendfriendModel->expects($this->$callSendfriend())->method('canEmailToFriend')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->view->afterCanEmailToFriend($this->productView, $result));
     }

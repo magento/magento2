@@ -104,15 +104,15 @@ class CaptchaValidatorTest extends TestCase
     {
         $word = 'test-word';
         $this->captchaHelperMock->expects($this->once())->method('getCaptcha')->with(static::FORM_ID)
-            ->will($this->returnValue($this->captchaMock));
+            ->willReturn($this->captchaMock);
         $this->captchaMock->expects($this->once())->method('isRequired')
-            ->will($this->returnValue($captchaIsRequired));
+            ->willReturn($captchaIsRequired);
 
         if ($captchaIsRequired) {
             $this->captchaStringResolverMock->expects($this->once())->method('resolve')
-                ->with($this->requestMock, static::FORM_ID)->will($this->returnValue($word));
+                ->with($this->requestMock, static::FORM_ID)->willReturn($word);
             $this->captchaMock->expects($this->once())->method('isCorrect')->with($word)
-                ->will($this->returnValue($captchaWordIsValid));
+                ->willReturn($captchaWordIsValid);
         }
 
         $this->model->validateSending($this->requestMock);
@@ -129,13 +129,13 @@ class CaptchaValidatorTest extends TestCase
         $captchaIsRequired = true;
         $captchaWordIsCorrect = false;
         $this->captchaHelperMock->expects($this->once())->method('getCaptcha')->with(static::FORM_ID)
-            ->will($this->returnValue($this->captchaMock));
+            ->willReturn($this->captchaMock);
         $this->captchaMock->expects($this->once())->method('isRequired')
-            ->will($this->returnValue($captchaIsRequired));
+            ->willReturn($captchaIsRequired);
         $this->captchaStringResolverMock->expects($this->any())->method('resolve')
-            ->with($this->requestMock, static::FORM_ID)->will($this->returnValue($word));
+            ->with($this->requestMock, static::FORM_ID)->willReturn($word);
         $this->captchaMock->expects($this->any())->method('isCorrect')->with($word)
-            ->will($this->returnValue($captchaWordIsCorrect));
+            ->willReturn($captchaWordIsCorrect);
 
         $this->model->validateSending($this->requestMock);
     }
