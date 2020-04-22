@@ -42,7 +42,7 @@ class StoreValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
@@ -137,8 +137,8 @@ class StoreValidatorTest extends TestCase
         return [
             [
                 [
-                'default'   =>  self::DEFAULT_STORE_VIEW_CODE,
-                'store'     =>  self::STORE_CODE
+                    'default'   =>  self::DEFAULT_STORE_VIEW_CODE,
+                    'store'     =>  self::STORE_CODE
                 ]
             ]
         ];
