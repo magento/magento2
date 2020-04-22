@@ -129,10 +129,12 @@ class ValidateTest extends TestCase
                 $contextMock,
                 $coreRegistryMock,
                 $this->getMockBuilder(ForwardFactory::class)
-                    ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
+                    ->disableOriginalConstructor()
+                    ->setMethods(['create'])->getMock(),
                 $resultJsonFactoryMock,
                 $this->getMockBuilder(PageFactory::class)
-                    ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
+                    ->disableOriginalConstructor()
+                    ->setMethods(['create'])->getMock(),
                 $layoutFactoryMock,
             ]
         )->setMethods(['_initVariable'])->getMock();
