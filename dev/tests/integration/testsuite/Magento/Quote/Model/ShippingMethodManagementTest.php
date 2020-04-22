@@ -303,17 +303,15 @@ class ShippingMethodManagementTest extends TestCase
      */
     public function testEstimateByAddressWithInclExclTaxAndVATGroup()
     {
-        $this->mockCustomerVat();
+        /** @var GroupInterface $customerGroup */
+        $customerGroup = $this->findCustomerGroupByCode('custom_group');
+        $this->mockCustomerVat((int)$customerGroup->getId());
 
+        $customerGroup->setTaxClassId($this->getTaxClass('CustomerTaxClass')->getClassId());
+        $this->groupRepository->save($customerGroup);
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
-
-        /** @var GroupInterface $customerGroup */
-        $customerGroup = $this->findCustomerGroupByCode('custom_group');
-        $customerGroup->setTaxClassId($this->getTaxClass('CustomerTaxClass')->getClassId());
-        $this->groupRepository->save($customerGroup);
-
         $customer->setGroupId($customerGroup->getId());
         $customer->setTaxvat('12');
         $customerRepository->save($customer);
@@ -332,8 +330,10 @@ class ShippingMethodManagementTest extends TestCase
 
     /**
      * Create a test double fot customer vat class
+     *
+     * @param int $customerGroupId
      */
-    private function mockCustomerVat(): void
+    private function mockCustomerVat(int $customerGroupId): void
     {
         $gatewayResponse = new DataObject([
             'is_valid' => false,
@@ -356,14 +356,12 @@ class ShippingMethodManagementTest extends TestCase
         $customerVat->method('isCountryInEU')->willReturn(true);
         $customerVat->method('getMerchantCountryCode')->willReturn('GB');
         $customerVat->method('getMerchantVatNumber')->willReturn('11111');
-        $customerVat->method('getCustomerGroupIdBasedOnVatNumber')->willReturn('4');
+        $customerVat->method('getCustomerGroupIdBasedOnVatNumber')->willReturn($customerGroupId);
         $this->objectManager->removeSharedInstance(Vat::class);
         $this->objectManager->addSharedInstance($customerVat, Vat::class);
 
         // Remove instances where the customer vat object is cached
         $this->objectManager->removeSharedInstance(CollectTotalsObserver::class);
-        $this->objectManager->removeSharedInstance(AfterAddressSaveObserver::class);
-        $this->objectManager->removeSharedInstance(VatValidator::class);
     }
 
     /**
