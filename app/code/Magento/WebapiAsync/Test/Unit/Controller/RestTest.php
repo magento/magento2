@@ -97,12 +97,12 @@ class RestTest extends TestCase
     private $storeMock;
 
     /**
-     * @var  \Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor|MockObject
+     * @var  AsynchronousSchemaRequestProcessor|MockObject
      */
     private $asyncSchemaRequestProcessor;
 
     /**
-     * @var  \Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor|MockObject
+     * @var  AsynchronousRequestProcessor|MockObject
      */
     private $asyncRequestProcessor;
 
@@ -146,7 +146,7 @@ class RestTest extends TestCase
             ->disableOriginalConstructor()->getMock();
 
         $errorProcessorMock = $this->createMock(ErrorProcessor::class);
-        $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
+        $errorProcessorMock->expects($this->any())->method('maskException')->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
 
@@ -155,7 +155,7 @@ class RestTest extends TestCase
 
         $areaListMock = $this->createMock(AreaList::class);
         $areaMock = $this->createMock(AreaInterface::class);
-        $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+        $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
@@ -182,21 +182,21 @@ class RestTest extends TestCase
                 ]
             );
 
-        $this->routeMock->expects($this->any())->method('getServiceClass')->will($this->returnValue(self::SERVICE_ID));
+        $this->routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
         $this->routeMock->expects($this->any())->method('getServiceMethod')
-            ->will($this->returnValue(self::SERVICE_METHOD));
+            ->willReturn(self::SERVICE_METHOD);
 
-        $routerMock->expects($this->any())->method('match')->will($this->returnValue($this->routeMock));
+        $routerMock->expects($this->any())->method('match')->willReturn($this->routeMock);
 
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->serviceMock));
-        $this->responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue([]));
-        $this->serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
+        $objectManagerMock->expects($this->any())->method('get')->willReturn($this->serviceMock);
+        $this->responseMock->expects($this->any())->method('prepareResponse')->willReturn([]);
+        $this->serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->willReturn(null);
 
         $dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
-            ->will($this->returnValue('null'));
+            ->willReturn('null');
 
-        $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
+        $paramsOverriderMock->expects($this->any())->method('overrideParams')->willReturn([]);
 
         parent::setUp();
     }
@@ -212,7 +212,7 @@ class RestTest extends TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
 
         $schema = 'Some REST schema content';
         $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
@@ -231,21 +231,21 @@ class RestTest extends TestCase
             ->willReturn(AsynchronousSchemaRequestProcessor::PROCESSOR_PATH);
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap([
+            ->willReturnMap(
+                [
                     [
                         \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES,
                         null,
                         'all',
                     ],
-                ])
+                ]
             );
         $this->requestMock->expects($this->any())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
         $this->requestMock->expects($this->any())
             ->method('getRequestedServices')
-            ->will($this->returnValue('all'));
+            ->willReturn('all');
 
         $schema = 'Some REST schema content';
         $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
