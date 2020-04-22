@@ -115,15 +115,15 @@ class StoreValidatorTest extends TestCase
             ->with('Store')
             ->willReturn($config['default']);
         $this->storeManagerMock
-             ->expects($this->once())
-             ->method('getStores')
-             ->with(false, true)
-             ->willReturn($config['default']);
+            ->expects($this->once())
+            ->method('getStores')
+            ->with(false, true)
+            ->willReturn($config['default']);
         $this->storeManagerMock
-             ->expects($this->never())
-             ->method('setCurrentStore')
-             ->with(null)
-             ->willReturnSelf();
+            ->expects($this->never())
+            ->method('setCurrentStore')
+            ->with(null)
+            ->willReturnSelf();
         $this->storeValidator->validate($this->requestMock);
     }
 
