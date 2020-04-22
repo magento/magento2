@@ -29,6 +29,12 @@
         <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeField">
             <argument name="cookieLifetime" value="cookie"/>
         </actionGroup>
-        <actionGroup ref="AdminValidateNumberValidationActionGroup" stepKey="validateCookieLifetimeSettings"/>
+        <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButton">
+            <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminValidationErrorActionGroup" stepKey="assertNumberValidation">
+            <argument name="inputId" value="web_cookie_cookie_lifetime"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
+        </actionGroup>
     </test>
 </tests>

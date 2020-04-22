@@ -11,6 +11,5 @@
     <section name="AdminDefaultCookieSettingsSection">
         <element name="DefaultCookieSettingsTab" type="button" selector="#web_cookie-head"/>
         <element name="DefaultCookieLifetime" type="input" selector="#web_cookie_cookie_lifetime"/>
-        <element name="ErrorMessageSectionCookieLifetime" type="text" selector="label#web_cookie_cookie_lifetime-error"/>
     </section>
 </sections>
