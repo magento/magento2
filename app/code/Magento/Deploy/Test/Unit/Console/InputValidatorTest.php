@@ -58,7 +58,8 @@ class InputValidatorTest extends TestCase
         $regexFactoryMock->expects($this->any())->method('create')
             ->willReturn($regexObject);
 
-        $localeObjectMock = $this->getMockBuilder(Locale::class)->setMethods(['isValid'])
+        $localeObjectMock = $this->getMockBuilder(Locale::class)
+            ->setMethods(['isValid'])
             ->disableOriginalConstructor()
             ->getMock();
 
