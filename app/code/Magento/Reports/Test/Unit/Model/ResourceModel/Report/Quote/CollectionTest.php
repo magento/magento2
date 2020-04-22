@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Quote;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
@@ -13,7 +15,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\ResourceModel\Quote;
-use Magento\Reports\Model\ResourceModel\Quote\Collection as Collection;
+use Magento\Reports\Model\ResourceModel\Quote\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,8 +42,8 @@ class CollectionTest extends TestCase
 
     public function testGetSelectCountSql()
     {
-        /** @var $collection MockObject */
-        $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Collection::class)
+        /** @var MockObject $collection */
+        $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,7 +59,7 @@ class CollectionTest extends TestCase
 
     public function testPrepareActiveCartItems()
     {
-        /** @var $collection MockObject */
+        /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class)
@@ -79,7 +81,7 @@ class CollectionTest extends TestCase
 
     public function testLoadWithFilter()
     {
-        /** @var $collection MockObject */
+        /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $constructArgs['eventManager'] = $this->createMock(ManagerInterface::class);

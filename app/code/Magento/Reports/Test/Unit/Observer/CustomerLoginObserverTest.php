@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
@@ -73,25 +75,31 @@ class CustomerLoginObserverTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerVisitorMock = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->productIndexFactoryMock = $this->getMockBuilder(
             ViewedFactory::class
         )->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productIndexMock = $this->getMockBuilder(Viewed::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->productIndexFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->productIndexMock);
 
         $reportEventFactory = $this->getMockBuilder(EventFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
         $this->reportEventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $reportEventFactory->expects($this->any())
             ->method('create')

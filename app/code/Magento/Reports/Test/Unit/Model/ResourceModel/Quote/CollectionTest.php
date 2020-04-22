@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Customer\Model\ResourceModel\Customer;
@@ -94,7 +96,8 @@ class CollectionTest extends TestCase
 
         $this->fetchStrategyMock = $this->getMockBuilder(
             Query::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()

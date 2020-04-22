@@ -77,7 +77,10 @@ class SendfriendProductObserverTest extends TestCase
      */
     public function testExecuteWhenReportIsEnabled()
     {
-        $eventMock = $this->createPartialMock(Event::class, ['getProduct']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->createMock(ProductInterface::class));
