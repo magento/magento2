@@ -35,11 +35,11 @@ class PartnersTest extends TestCase
         $partnersModelMock = $this->getPartnersModelMock(['getPartners']);
         $partnersModelMock->expects($this->once())
             ->method('getPartners')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->partnersBlockMock->expects($this->once())
             ->method('getPartnersModel')
-            ->will($this->returnValue($partnersModelMock));
+            ->willReturn($partnersModelMock);
 
         $this->partnersBlockMock->getPartners();
     }

@@ -44,11 +44,11 @@ class IndexTest extends TestCase
 
         $resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($pageMock));
+            ->willReturn($pageMock);
 
         $this->indexControllerMock->expects($this->once())
             ->method('getResultPageFactory')
-            ->will($this->returnValue($resultPageFactoryMock));
+            ->willReturn($resultPageFactoryMock);
 
         $titleMock = $this->getTitleMock(['prepend']);
         $titleMock->expects($this->once())
@@ -56,10 +56,10 @@ class IndexTest extends TestCase
         $configMock =  $this->getConfigMock(['getTitle']);
         $configMock->expects($this->once())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $pageMock->expects($this->once())
             ->method('getConfig')
-            ->will($this->returnValue($configMock));
+            ->willReturn($configMock);
 
         $this->indexControllerMock->execute();
     }

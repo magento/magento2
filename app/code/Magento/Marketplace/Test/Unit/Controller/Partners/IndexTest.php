@@ -42,38 +42,38 @@ class IndexTest extends TestCase
         $requestMock = $this->getRequestMock(['isAjax']);
         $requestMock->expects($this->once())
             ->method('isAjax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->partnersControllerMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($requestMock));
+            ->willReturn($requestMock);
 
         $layoutMock = $this->getLayoutMock();
         $blockMock = $this->getBlockInterfaceMock();
         $blockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $layoutMock->expects($this->once())
             ->method('createBlock')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $layoutMockFactory = $this->getLayoutFactoryMock(['create']);
         $layoutMockFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
 
         $this->partnersControllerMock->expects($this->once())
             ->method('getLayoutFactory')
-            ->will($this->returnValue($layoutMockFactory));
+            ->willReturn($layoutMockFactory);
 
         $responseMock = $this->getResponseMock(['appendBody']);
         $responseMock->expects($this->once())
             ->method('appendBody')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->partnersControllerMock->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($responseMock));
+            ->willReturn($responseMock);
 
         $this->partnersControllerMock->execute();
     }
