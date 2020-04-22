@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Setup;
 
-use Magento\Elasticsearch\Setup\ConnectionValidator;
+use Magento\Elasticsearch\Setup\Validator;
 use Magento\Elasticsearch\Setup\InstallConfig;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -22,7 +22,7 @@ class InstallConfigTest extends TestCase
     private $installConfig;
 
     /**
-     * @var ConnectionValidator|MockObject
+     * @var Validator|MockObject
      */
     private $validatorMock;
 
@@ -33,14 +33,14 @@ class InstallConfigTest extends TestCase
 
     protected function setup()
     {
-        $this->validatorMock = $this->getMockBuilder(ConnectionValidator::class)
+        $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->installConfig = $objectManager->getObject(
-            InstallConfig::class,
+            InstallConfigInterface::class,
             [
                 'configWriter' => $this->configWriterMock,
                 'validator' => $this->validatorMock,

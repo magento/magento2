@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\Setup;
 
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\Elasticsearch\Setup\ConnectionValidator;
+use Magento\Elasticsearch\Setup\Validator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class ConnectionValidatorTest extends TestCase
 {
     /**
-     * @var ConnectionValidator
+     * @var Validator
      */
     private $connectionValidator;
 
@@ -42,7 +42,7 @@ class ConnectionValidatorTest extends TestCase
 
         $objectManager = new ObjectManager($this);
         $this->connectionValidator = $objectManager->getObject(
-            ConnectionValidator::class,
+            Validator::class,
             [
                 'clientResolver' => $this->clientResolverMock
             ]
