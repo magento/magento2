@@ -30,7 +30,9 @@ class ViewTest extends TestCase
     protected function setUp(): void
     {
         $this->sendfriendModel = $this->getMockBuilder(SendFriend::class)
-            ->onlyMethods(['__wakeup', 'canEmailToFriend'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['__wakeup', 'canEmailToFriend'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productView = $this->createMock(\Magento\Catalog\Block\Product\View::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
