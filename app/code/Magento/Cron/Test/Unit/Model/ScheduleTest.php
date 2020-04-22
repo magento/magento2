@@ -56,7 +56,7 @@ class ScheduleTest extends TestCase
 
         $this->resourceJobMock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
 
         $this->timezoneConverterMock = $this->getMockBuilder(TimezoneInterface::class)
             ->setMethods(['date'])
@@ -461,7 +461,7 @@ class ScheduleTest extends TestCase
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** @var Schedule $model */
         $model = $this->objectManagerHelper->getObject(
@@ -490,7 +490,7 @@ class ScheduleTest extends TestCase
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobUniqueStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         /** @var Schedule $model */
         $model = $this->objectManagerHelper->getObject(
