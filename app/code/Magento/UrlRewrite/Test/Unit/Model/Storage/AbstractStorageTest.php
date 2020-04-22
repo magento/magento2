@@ -36,9 +36,11 @@ class AbstractStorageTest extends TestCase
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
             AbstractStorage::class,

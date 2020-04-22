@@ -54,7 +54,8 @@ class DbStorageTest extends TestCase
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->select = $this->getMockBuilder(Select::class)
