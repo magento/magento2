@@ -28,7 +28,8 @@ class ConfigTest extends TestCase
     {
         $this->configDataMock = $this->getMockBuilder(
             ConfigDataModel::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->config = new Config($this->configDataMock);
     }
 
@@ -39,7 +40,7 @@ class ConfigTest extends TestCase
         ];
         $this->configDataMock->expects($this->once())
             ->method('getJobs')
-            ->will($this->returnValue($jobList));
+            ->willReturn($jobList);
         $result = $this->config->getJobs();
         $this->assertEquals($jobList, $result);
     }
