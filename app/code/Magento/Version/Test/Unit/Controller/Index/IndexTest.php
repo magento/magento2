@@ -70,8 +70,7 @@ class IndexTest extends TestCase
         $this->productMetadataMock->expects($this->any())->method('getName')->willReturn('Magento');
 
         $this->rawResponseMock->expects($this->once())->method('setContents')
-            ->with('Magento/2.3 (Community)')
-            ->will($this->returnSelf());
+            ->with('Magento/2.3 (Community)')->willReturnSelf();
 
         $this->versionController->execute();
     }
