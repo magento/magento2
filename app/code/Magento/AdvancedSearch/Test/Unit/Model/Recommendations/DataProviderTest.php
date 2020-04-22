@@ -87,7 +87,7 @@ class DataProviderTest extends TestCase
 
         $this->layerResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->searchLayerMock));
+            ->willReturn($this->searchLayerMock);
 
         $this->recommendationsFactoryMock = $this->getMockBuilder(RecommendationsFactory::class)
             ->disableOriginalConstructor()
@@ -122,7 +122,7 @@ class DataProviderTest extends TestCase
     {
         $isEnabledSearchRecommendations = false;
 
-        /** @var $queryInterfaceMock QueryInterface */
+        /** @var QueryInterface $queryInterfaceMock */
         $queryInterfaceMock = $this->createMock(QueryInterface::class);
 
         $this->scopeConfigMock->expects($this->any())
@@ -146,7 +146,7 @@ class DataProviderTest extends TestCase
         $isEnabledSearchRecommendations = true;
         $queryText = 'test';
 
-        /** @var $queryInterfaceMock QueryInterface */
+        /** @var QueryInterface $queryInterfaceMock */
         $queryInterfaceMock = $this->createMock(QueryInterface::class);
         $queryInterfaceMock->expects($this->any())->method('getQueryText')->willReturn($queryText);
 
@@ -187,6 +187,6 @@ class DataProviderTest extends TestCase
         $this->queryResultFactoryMock->expects($this->any())->method('create')->willReturn($queryResultMock);
 
         $result = $this->model->getItems($queryInterfaceMock);
-        $this->assertEquals(2, count($result));
+        $this->assertCount(2, $result);
     }
 }

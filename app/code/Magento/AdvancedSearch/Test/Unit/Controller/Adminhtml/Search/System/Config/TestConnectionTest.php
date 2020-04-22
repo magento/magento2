@@ -85,8 +85,8 @@ class TestConnectionTest extends TestCase
                 )
             )
             ->getMock();
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $context->expects($this->once())->method('getResponse')->willReturn($responseMock);
 
         $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
@@ -120,15 +120,15 @@ class TestConnectionTest extends TestCase
     public function testExecuteEmptyEngine(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => '']));
+            ->willReturn(['engine' => '']);
 
         $this->resultJsonFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJsonMock));
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => false, 'errorMessage' => 'Missing search engine parameter.'];
 
         $this->resultJsonMock->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+            ->with($result);
 
         $this->controller->execute();
     }
@@ -136,22 +136,22 @@ class TestConnectionTest extends TestCase
     public function testExecute(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => 'engineName']));
+            ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
-            ->with($this->equalTo('engineName'))
-            ->will($this->returnValue($this->clientMock));
+            ->with('engineName')
+            ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->resultJsonFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJsonMock));
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => true, 'errorMessage' => ''];
 
         $this->resultJsonMock->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+            ->with($result);
 
         $this->controller->execute();
     }
@@ -159,22 +159,22 @@ class TestConnectionTest extends TestCase
     public function testExecutePingFailed(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
-            ->will($this->returnValue(['engine' => 'engineName']));
+            ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
-            ->with($this->equalTo('engineName'))
-            ->will($this->returnValue($this->clientMock));
+            ->with('engineName')
+            ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->resultJsonFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->resultJsonMock));
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => false, 'errorMessage' => ''];
 
         $this->resultJsonMock->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+            ->with($result);
 
         $this->controller->execute();
     }

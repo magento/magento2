@@ -106,11 +106,11 @@ class CustomerGroupTest extends TestCase
             CustomerGroupModel::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup']
         );
-        $groupMock->expects($this->any())->method('isObjectNew')->will($this->returnValue($isObjectNew));
+        $groupMock->expects($this->any())->method('isObjectNew')->willReturn($isObjectNew);
         $groupMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('tax_class_id')
-            ->will($this->returnValue($isTaxClassIdChanged));
+            ->willReturn($isTaxClassIdChanged);
 
         $closureMock = function (CustomerGroupModel $object) use ($groupMock) {
             $this->assertEquals($object, $groupMock);

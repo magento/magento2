@@ -64,11 +64,12 @@ class SearchDataTest extends TestCase
             ->getMockForAbstractClass();
         $this->queryFactoryMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($this->searchQueryMock));
+            ->willReturn($this->searchQueryMock);
         $this->contextMock = $this->getMockBuilder(TemplateContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->block = $this->getMockBuilder(SearchData::class)->setConstructorArgs(
+        $this->block = $this->getMockBuilder(SearchData::class)
+            ->setConstructorArgs(
             [
                 $this->contextMock,
                 $this->dataProvider,
@@ -88,7 +89,7 @@ class SearchDataTest extends TestCase
         $this->dataProvider->expects($this->once())
             ->method('getItems')
             ->with($this->searchQueryMock)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $actualValue = $this->block->getItems();
         $this->assertEquals($value, $actualValue);
     }
@@ -106,7 +107,7 @@ class SearchDataTest extends TestCase
         $value = 'qwertyasdfzxcv';
         $this->dataProvider->expects($this->once())
             ->method('isResultsCountEnabled')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $this->assertEquals($value, $this->block->isShowResultsCount());
     }
 }
