@@ -98,7 +98,8 @@ class SaveTest extends TestCase
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
             PostDataProcessor::class
-        )->setMethods(['filter'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['filter'])->disableOriginalConstructor()
+            ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
