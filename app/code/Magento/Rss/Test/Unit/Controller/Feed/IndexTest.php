@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rss\Test\Unit\Controller\Feed;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -57,11 +59,12 @@ class IndexTest extends TestCase
         $this->rssFactory = $this->createPartialMock(RssFactory::class, ['create']);
 
         $request = $this->createMock(RequestInterface::class);
-        $request->expects($this->once())->method('getParam')->with('type')->will($this->returnValue('rss_feed'));
+        $request->expects($this->once())->method('getParam')->with('type')->willReturn('rss_feed');
 
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -79,44 +82,44 @@ class IndexTest extends TestCase
 
     public function testExecute()
     {
-        $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue(true));
+        $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
         $dataProvider = $this->createMock(DataProviderInterface::class);
-        $dataProvider->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $dataProvider->expects($this->once())->method('isAuthRequired')->will($this->returnValue(false));
+        $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
+        $dataProvider->expects($this->once())->method('isAuthRequired')->willReturn(false);
 
         $rssModel = $this->createPartialMock(Rss::class, ['setDataProvider', 'createRssXml']);
-        $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());
-        $rssModel->expects($this->once())->method('createRssXml')->will($this->returnValue(''));
+        $rssModel->expects($this->once())->method('setDataProvider')->willReturnSelf();
+        $rssModel->expects($this->once())->method('createRssXml')->willReturn('');
 
-        $this->response->expects($this->once())->method('setHeader')->will($this->returnSelf());
-        $this->response->expects($this->once())->method('setBody')->will($this->returnSelf());
+        $this->response->expects($this->once())->method('setHeader')->willReturnSelf();
+        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
-        $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
+        $this->rssFactory->expects($this->once())->method('create')->willReturn($rssModel);
 
-        $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
+        $this->rssManager->expects($this->once())->method('getProvider')->willReturn($dataProvider);
         $this->controller->execute();
     }
 
     public function testExecuteWithException()
     {
-        $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue(true));
+        $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
         $dataProvider = $this->createMock(DataProviderInterface::class);
-        $dataProvider->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $rssModel = $this->createPartialMock(Rss::class, ['setDataProvider', 'createRssXml']);
-        $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());
+        $rssModel->expects($this->once())->method('setDataProvider')->willReturnSelf();
 
         $exceptionMock = new RuntimeException(
             new Phrase('Any message')
         );
 
-        $rssModel->expects($this->once())->method('createRssXml')->will(
-            $this->throwException($exceptionMock)
+        $rssModel->expects($this->once())->method('createRssXml')->willThrowException(
+            $exceptionMock
         );
 
-        $this->response->expects($this->once())->method('setHeader')->will($this->returnSelf());
-        $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
-        $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
+        $this->response->expects($this->once())->method('setHeader')->willReturnSelf();
+        $this->rssFactory->expects($this->once())->method('create')->willReturn($rssModel);
+        $this->rssManager->expects($this->once())->method('getProvider')->willReturn($dataProvider);
 
         $this->expectException(RuntimeException::class);
         $this->controller->execute();

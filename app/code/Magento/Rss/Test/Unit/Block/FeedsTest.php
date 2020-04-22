@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rss\Test\Unit\Block;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
@@ -61,10 +63,10 @@ class FeedsTest extends TestCase
             ],
         ];
         $feed2 = ['link' => 'feed 2 link', 'label' => 'Feed 2 Label'];
-        $provider1->expects($this->once())->method('getFeeds')->will($this->returnValue($feed1));
-        $provider2->expects($this->once())->method('getFeeds')->will($this->returnValue($feed2));
+        $provider1->expects($this->once())->method('getFeeds')->willReturn($feed1);
+        $provider2->expects($this->once())->method('getFeeds')->willReturn($feed2);
         $this->rssManagerInterface->expects($this->once())->method('getProviders')
-            ->will($this->returnValue([$provider1, $provider2]));
+            ->willReturn([$provider1, $provider2]);
 
         $this->assertEquals([$feed2, $feed1], $this->block->getFeeds());
     }
