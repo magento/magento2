@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Variable\Test\Unit\Controller\Adminhtml\System\Variable;
 
 use Magento\Backend\App\Action\Context;
@@ -101,11 +103,11 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
-            ->method('getRequest')->will($this->returnValue($this->requestMock));
+            ->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
-            ->method('getResponse')->will($this->returnValue($responseMock));
+            ->method('getResponse')->willReturn($responseMock);
         $contextMock->expects($this->any())
-            ->method('getMessageManager')->will($this->returnValue($this->messageManagerMock));
+            ->method('getMessageManager')->willReturn($this->messageManagerMock);
 
         $this->resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
@@ -127,10 +129,12 @@ class ValidateTest extends TestCase
                 $contextMock,
                 $coreRegistryMock,
                 $this->getMockBuilder(ForwardFactory::class)
-                    ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
+                    ->disableOriginalConstructor()
+                    ->setMethods(['create'])->getMock(),
                 $resultJsonFactoryMock,
                 $this->getMockBuilder(PageFactory::class)
-                    ->disableOriginalConstructor()->setMethods(['create'])->getMock(),
+                    ->disableOriginalConstructor()
+                    ->setMethods(['create'])->getMock(),
                 $layoutFactoryMock,
             ]
         )->setMethods(['_initVariable'])->getMock();
@@ -154,7 +158,7 @@ class ValidateTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getParam')->willReturnMap($getParamMap);
         $this->requestMock->expects($this->any())
-            ->method('getPost')->with('variable')->will($this->returnValue([]));
+            ->method('getPost')->with('variable')->willReturn([]);
 
         $this->variableMock->expects($this->any())
             ->method('validate')

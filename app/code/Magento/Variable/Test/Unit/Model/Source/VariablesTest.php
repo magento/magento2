@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Variable\Test\Unit\Model\Source;
 
 use Magento\Config\Model\Config\Structure\SearchInterface;
@@ -75,7 +77,7 @@ class VariablesTest extends TestCase
     public function testToOptionArrayWithoutGroup()
     {
         $optionArray = $this->model->toOptionArray();
-        $this->assertEquals(count($this->configVariables['web']), count($optionArray));
+        $this->assertCount(count($this->configVariables['web']), $optionArray);
         $expectedResults = $this->getExpectedOptionsResults();
         $index = 0;
         foreach ($optionArray as $variable) {
@@ -90,7 +92,7 @@ class VariablesTest extends TestCase
         $optionArray = $this->model->toOptionArray(true);
         $this->assertEquals('Web', $optionArray[0]['label']);
         $optionArrayValues = $optionArray[0]['value'];
-        $this->assertEquals(count($this->configVariables['web']), count($optionArrayValues));
+        $this->assertCount(count($this->configVariables['web']), $optionArrayValues);
         $expectedResults = $this->getExpectedOptionsResults();
         $index = 0;
         foreach ($optionArray[0]['value'] as $variable) {
