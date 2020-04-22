@@ -39,25 +39,11 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
      */
     public function getList($storeId)
     {
-        $methodsCodes = array_keys($this->helper->getPaymentMethods());
-
-        $methodsInstances = array_map(
-            function ($code) {
-                return $this->helper->getMethodInstance($code);
-            },
-            $methodsCodes
-        );
+        $methodsInstances = $this->helper->getStoreMethods($storeId);
 
         $methodsInstances = array_filter($methodsInstances, function (MethodInterface $method) {
             return !($method instanceof \Magento\Payment\Model\Method\Substitution);
         });
-
-        @uasort(
-            $methodsInstances,
-            function (MethodInterface $a, MethodInterface $b) use ($storeId) {
-                return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
-            }
-        );
 
         $methodList = array_map(
             function (MethodInterface $methodInstance) use ($storeId) {
