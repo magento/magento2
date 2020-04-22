@@ -71,7 +71,7 @@ class WishlistDataCleanUp implements DataPatchInterface
     public function apply()
     {
         try {
-            $this->cleanSalesOrderItemsTable();
+            $this->cleanSalesOrderItemTable();
         } catch (Exception $e) {
             $this->logger->error(
                 'Sales module WishlistDataCleanUp patch experienced an error and could not be completed.'
@@ -89,7 +89,7 @@ class WishlistDataCleanUp implements DataPatchInterface
      *
      * @throws LocalizedException
      */
-    private function cleanSalesOrderItemsTable()
+    private function cleanSalesOrderItemTable()
     {
         $salesSetup = $this->salesSetupFactory->create();
         $tableName = $salesSetup->getTable('sales_order_item');
