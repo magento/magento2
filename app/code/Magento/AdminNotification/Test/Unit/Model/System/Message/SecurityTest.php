@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
 use Magento\AdminNotification\Model\System\Message\Security;
@@ -68,14 +70,14 @@ class SecurityTest extends TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->cacheMock->method('load')->will($this->returnValue($cached));
-        $this->cacheMock->method('save')->will($this->returnValue(null));
+        $this->cacheMock->method('load')->willReturn($cached);
+        $this->cacheMock->method('save')->willReturn(null);
 
         $httpAdapterMock = $this->createMock(Curl::class);
-        $httpAdapterMock->method('read')->will($this->returnValue($response));
-        $this->curlFactoryMock->method('create')->will($this->returnValue($httpAdapterMock));
+        $httpAdapterMock->method('read')->willReturn($response);
+        $this->curlFactoryMock->method('create')->willReturn($httpAdapterMock);
 
-        $this->scopeConfigMock->method('getValue')->will($this->returnValue(null));
+        $this->scopeConfigMock->method('getValue')->willReturn(null);
 
         $this->assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }
