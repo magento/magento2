@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductVideo\Test\Unit\Block\Adminhtml\Product\Edit;
 
 use Magento\Backend\Block\Template\Context;
@@ -25,7 +27,7 @@ class NewVideoTest extends TestCase
     protected $contextMock;
 
     /**
-     * @var MockObject|\Magento\Framework\UrlInterface
+     * @var MockObject|UrlInterface
      */
     protected $urlBuilder;
 
