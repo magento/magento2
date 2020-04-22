@@ -30,7 +30,7 @@ metadata:
   labels:
     app: magento
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: magento
