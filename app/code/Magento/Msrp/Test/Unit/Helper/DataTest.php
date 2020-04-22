@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Msrp\Test\Unit\Helper;
 
@@ -68,16 +69,14 @@ class DataTest extends TestCase
      */
     public function testIsMinimalPriceLessMsrp()
     {
-        $msrp = 120;
+        $msrp = 120.0;
         $convertedFinalPrice = 200;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will(
-                $this->returnCallback(
-                    function ($arg) {
-                        return round(2 * $arg, 2);
-                    }
-                )
+            ->willReturnCallback(
+                function ($arg) {
+                    return round(2 * $arg, 2);
+                }
             );
 
         $finalPriceMock = $this->getMockBuilder(FinalPrice::class)
@@ -85,7 +84,7 @@ class DataTest extends TestCase
             ->getMock();
         $finalPriceMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($convertedFinalPrice));
+            ->willReturn($convertedFinalPrice);
 
         $priceInfoMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
@@ -93,7 +92,7 @@ class DataTest extends TestCase
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
             ->with(FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($finalPriceMock));
+            ->willReturn($finalPriceMock);
 
         $this->msrpPriceCalculator
             ->expects($this->any())

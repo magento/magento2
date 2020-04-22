@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Msrp\Test\Unit\Model\Product\Attribute\Source\Type;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -37,7 +39,7 @@ class PriceTest extends TestCase
         $flatColumns = $this->_model->getFlatColumns();
 
         $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');
