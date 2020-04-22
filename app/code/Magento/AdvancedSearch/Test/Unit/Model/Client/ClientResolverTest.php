@@ -58,7 +58,7 @@ class ClientResolverTest extends TestCase
     public function testCreate(): void
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('engineName'));
+            ->willReturn('engineName');
 
         $factoryMock = $this->createMock(ClientFactoryInterface::class);
 
@@ -78,11 +78,11 @@ class ClientResolverTest extends TestCase
 
         $clientOptionsMock->expects($this->once())->method('prepareClientOptions')
             ->with([])
-            ->will($this->returnValue(['parameters']));
+            ->willReturn(['parameters']);
 
         $factoryMock->expects($this->once())->method('create')
-            ->with($this->equalTo(['parameters']))
-            ->will($this->returnValue($clientMock));
+            ->with(['parameters'])
+            ->willReturn($clientMock);
 
         $result = $this->model->create();
         $this->assertInstanceOf(ClientInterface::class, $result);
@@ -92,8 +92,8 @@ class ClientResolverTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->objectManager->expects($this->once())->method('create')
-            ->with($this->equalTo('engineFactoryClass'))
-            ->will($this->returnValue('t'));
+            ->with('engineFactoryClass')
+            ->willReturn('t');
 
         $this->model->create('engineName');
     }
@@ -107,7 +107,7 @@ class ClientResolverTest extends TestCase
     public function testGetCurrentEngine(): void
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('engineName'));
+            ->willReturn('engineName');
 
         $this->assertEquals('engineName', $this->model->getCurrentEngine());
     }
