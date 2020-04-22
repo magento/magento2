@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
@@ -60,10 +61,11 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->observer = $this->createPartialMock(
-            Observer::class,
-            ['getEvent', 'getCategory']
-        );
+        $this->observer = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getCategory'])
+            ->onlyMethods(['getEvent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->categoryResource = $this->createMock(Category::class);
         $this->category = $this->createPartialMock(
             \Magento\Catalog\Model\Category::class,
@@ -237,7 +239,8 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->category->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
 
         $childCategoryResource = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->setMethods(
                 [

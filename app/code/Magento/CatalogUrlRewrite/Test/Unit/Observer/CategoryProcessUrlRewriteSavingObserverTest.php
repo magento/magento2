@@ -79,16 +79,11 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
             Observer::class,
             ['getEvent', 'getData']
         );
-        $this->category = $this->createPartialMock(
-            Category::class,
-            [
-                'hasData',
-                'getParentId',
-                'getStoreId',
-                'dataHasChangedFor',
-                'getChangedProductIds',
-            ]
-        );
+        $this->category = $this->getMockBuilder(Category::class)
+            ->addMethods(['getChangedProductIds'])
+            ->onlyMethods(['hasData', 'getParentId', 'getStoreId', 'dataHasChangedFor'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->observer->expects($this->any())
             ->method('getEvent')
             ->willReturnSelf();

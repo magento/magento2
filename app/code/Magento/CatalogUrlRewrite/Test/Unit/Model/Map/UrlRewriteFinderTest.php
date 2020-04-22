@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
@@ -83,9 +85,9 @@ class UrlRewriteFinderTest extends TestCase
 
         $this->assertEquals($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_CATEGORY));
         $this->assertEquals($expected, $this->model->findAllByData(1, 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT));
-        $this->assertEquals($expected, $this->model->findAllByData('a', 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
-        $this->assertEquals($expected, $this->model->findAllByData('a', 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
-        $this->assertEquals($expected, $this->model->findAllByData(1, 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT), 1);
+        $this->assertEquals($expected, $this->model->findAllByData('a', 1, UrlRewriteFinder::ENTITY_TYPE_PRODUCT, 1));
+        $this->assertEquals($expected, $this->model->findAllByData('a', 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT, 1));
+        $this->assertEquals($expected, $this->model->findAllByData(1, 'a', UrlRewriteFinder::ENTITY_TYPE_PRODUCT, 1));
         $this->assertEquals($expected, $this->model->findAllByData(1, 1, 'cms', 1));
         $this->assertEquals($expected, $this->model->findAllByData(1, 1, 'cms'));
     }

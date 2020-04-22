@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Category;
@@ -186,7 +188,7 @@ class UrlRewriteHandlerTest extends TestCase
         $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
         $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $iterator = new \ArrayIterator([]);
-        $productCollection->expects($this->any())->method('getIterator')->will($this->returnValue($iterator));
+        $productCollection->expects($this->any())->method('getIterator')->willReturn($iterator);
 
         $this->collectionFactoryMock->expects($this->any())->method('create')->willReturn($productCollection);
 

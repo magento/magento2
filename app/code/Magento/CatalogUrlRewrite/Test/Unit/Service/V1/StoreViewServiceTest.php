@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Service\V1;
 
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
@@ -94,25 +96,24 @@ class StoreViewServiceTest extends TestCase
             ->setMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
             ->getMockForAbstractClass();
         $this->config->expects($this->once())->method('getAttribute')->with($entityType, 'url_key')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attribute->expects($this->exactly(2))->method('getEntity')->willReturn($entity);
-        $entity->expects($this->once())->method('getEntityTable')->will($this->returnValue('entity_table'));
+        $entity->expects($this->once())->method('getEntityTable')->willReturn('entity_table');
         $entity->expects($this->once())->method('getLinkField')->willReturn('link_field');
-        $attribute->expects($this->once())->method('getBackendTable')->will($this->returnValue('backend_table'));
-        $attribute->expects($this->once())->method('getId')->will($this->returnValue('attribute-id'));
-        $this->select->expects($this->once())->method('from')->with(['e' => 'entity_table'], [])
-            ->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $attribute->expects($this->once())->method('getBackendTable')->willReturn('backend_table');
+        $attribute->expects($this->once())->method('getId')->willReturn('attribute-id');
+        $this->select->expects($this->once())->method('from')->with(['e' => 'entity_table'], [])->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->once())->method('join')->with(
             ['e_attr' => 'backend_table'],
             "e.link_field = e_attr.link_field",
             'store_id'
-        )->will($this->returnSelf());
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->connection->expects($this->once())->method('fetchCol')->will($this->returnValue($fetchedStoreIds));
+        )->willReturnSelf();
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        $this->connection->expects($this->once())->method('fetchCol')->willReturn($fetchedStoreIds);
 
         $this->assertEquals(
             $result,
@@ -125,7 +126,7 @@ class StoreViewServiceTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Cannot retrieve attribute for entity type "invalid_type"');
         $invalidEntityType = 'invalid_type';
-        $this->config->expects($this->once())->method('getAttribute')->will($this->returnValue(false));
+        $this->config->expects($this->once())->method('getAttribute')->willReturn(false);
 
         $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(1, 1, $invalidEntityType);
     }

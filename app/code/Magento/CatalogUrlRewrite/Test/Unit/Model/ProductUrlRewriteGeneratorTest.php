@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
@@ -68,31 +69,40 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $this->categoriesCollection = $this->getMockBuilder(
             Collection::class
         )
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
-            ->will($this->returnValue($this->categoriesCollection));
+            ->willReturn($this->categoriesCollection);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             CurrentUrlRewritesRegenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->canonicalUrlRewriteGenerator = $this->getMockBuilder(
             CanonicalUrlRewriteGenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->categoriesUrlRewriteGenerator = $this->getMockBuilder(
             CategoriesUrlRewriteGenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->anchorUrlRewriteGenerator = $this->getMockBuilder(
             AnchorUrlRewriteGenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->objectRegistryFactory = $this->getMockBuilder(
             ObjectRegistryFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productScopeRewriteGenerator = $this->getMockBuilder(
             ProductScopeRewriteGenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->productUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             ProductUrlRewriteGenerator::class,
             [

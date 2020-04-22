@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -35,20 +38,24 @@ class CategoryUrlPathGeneratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $categoryMethods = [
-            '__wakeup',
-            'getUrlPath',
-            'getParentId',
-            'getLevel',
-            'dataHasChangedFor',
-            'getUrlKey',
-            'getStoreId',
-            'getId',
-            'formatUrlKey',
-            'getName',
-            'isObjectNew'
-        ];
-        $this->category = $this->createPartialMock(Category::class, $categoryMethods);
+        $this->category = $this->getMockBuilder(Category::class)
+            ->addMethods(['getUrlPath'])
+            ->onlyMethods(
+                [
+                    '__wakeup',
+                    'getParentId',
+                    'getLevel',
+                    'dataHasChangedFor',
+                    'getUrlKey',
+                    'getStoreId',
+                    'getId',
+                    'formatUrlKey',
+                    'getName',
+                    'isObjectNew'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
@@ -82,13 +89,13 @@ class CategoryUrlPathGeneratorTest extends TestCase
         $dataChangedForParentId,
         $result
     ) {
-        $this->category->expects($this->any())->method('getParentId')->will($this->returnValue($parentId));
-        $this->category->expects($this->any())->method('isObjectNew')->will($this->returnValue(false));
-        $this->category->expects($this->any())->method('getLevel')->will($this->returnValue($level));
-        $this->category->expects($this->any())->method('getUrlPath')->will($this->returnValue($urlPath));
-        $this->category->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
+        $this->category->expects($this->any())->method('getParentId')->willReturn($parentId);
+        $this->category->expects($this->any())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->any())->method('getLevel')->willReturn($level);
+        $this->category->expects($this->any())->method('getUrlPath')->willReturn($urlPath);
+        $this->category->expects($this->any())->method('getUrlKey')->willReturn($urlKey);
         $this->category->expects($this->any())->method('dataHasChangedFor')
-            ->will($this->returnValueMap([['url_key', $dataChangedForUrlKey], ['parent_id', $dataChangedForParentId]]));
+            ->willReturnMap([['url_key', $dataChangedForUrlKey], ['parent_id', $dataChangedForParentId]]);
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
     }
@@ -141,24 +148,27 @@ class CategoryUrlPathGeneratorTest extends TestCase
         $urlPath = null;
         $parentLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         $this->category->expects($this->any())->method('getParentId')
-            ->will($this->returnValue(13));
+            ->willReturn(13);
         $this->category->expects($this->any())->method('getLevel')
-            ->will($this->returnValue($level));
-        $this->category->expects($this->any())->method('getUrlPath')->will($this->returnValue($urlPath));
-        $this->category->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
-        $this->category->expects($this->any())->method('isObjectNew')->will($this->returnValue($isCategoryNew));
+            ->willReturn($level);
+        $this->category->expects($this->any())->method('getUrlPath')->willReturn($urlPath);
+        $this->category->expects($this->any())->method('getUrlKey')->willReturn($urlKey);
+        $this->category->expects($this->any())->method('isObjectNew')->willReturn($isCategoryNew);
 
-        $methods = ['__wakeup', 'getUrlPath', 'getParentId', 'getLevel', 'dataHasChangedFor', 'load'];
-        $parentCategory = $this->createPartialMock(Category::class, $methods);
+        $parentCategory = $this->getMockBuilder(Category::class)
+            ->addMethods(['getUrlPath'])
+            ->onlyMethods(['__wakeup', 'getParentId', 'getLevel', 'dataHasChangedFor', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $parentCategory->expects($this->any())->method('getParentId')
-            ->will($this->returnValue($parentCategoryParentId));
-        $parentCategory->expects($this->any())->method('getLevel')->will($this->returnValue($parentLevel));
-        $parentCategory->expects($this->any())->method('getUrlPath')->will($this->returnValue($parentUrlPath));
+            ->willReturn($parentCategoryParentId);
+        $parentCategory->expects($this->any())->method('getLevel')->willReturn($parentLevel);
+        $parentCategory->expects($this->any())->method('getUrlPath')->willReturn($parentUrlPath);
         $parentCategory->expects($this->any())->method('dataHasChangedFor')
-            ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
+            ->willReturnMap([['url_key', false], ['path_ids', false]]);
 
         $this->categoryRepository->expects($this->any())->method('get')->with(13)
-            ->will($this->returnValue($parentCategory));
+            ->willReturn($parentCategory);
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
     }
@@ -184,16 +194,16 @@ class CategoryUrlPathGeneratorTest extends TestCase
      */
     public function testGetUrlPathWithSuffixAndStore($urlPath, $storeId, $categoryStoreId, $suffix, $result)
     {
-        $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue($categoryStoreId));
-        $this->category->expects($this->once())->method('getParentId')->will($this->returnValue(123));
-        $this->category->expects($this->once())->method('getUrlPath')->will($this->returnValue($urlPath));
+        $this->category->expects($this->any())->method('getStoreId')->willReturn($categoryStoreId);
+        $this->category->expects($this->once())->method('getParentId')->willReturn(123);
+        $this->category->expects($this->once())->method('getUrlPath')->willReturn($urlPath);
         $this->category->expects($this->exactly(2))->method('dataHasChangedFor')
-            ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
+            ->willReturnMap([['url_key', false], ['path_ids', false]]);
 
         $passedStoreId = $storeId ? $storeId : $categoryStoreId;
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $passedStoreId)
-            ->will($this->returnValue($suffix));
+            ->willReturn($suffix);
 
         $this->assertEquals(
             $result,
@@ -209,18 +219,18 @@ class CategoryUrlPathGeneratorTest extends TestCase
         $suffix = '.html';
         $result = 'url-path.html';
 
-        $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
-        $this->category->expects($this->once())->method('getParentId')->will($this->returnValue(2));
-        $this->category->expects($this->once())->method('getUrlPath')->will($this->returnValue($urlPath));
+        $this->category->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())->method('getParentId')->willReturn(2);
+        $this->category->expects($this->once())->method('getUrlPath')->willReturn($urlPath);
         $this->category->expects($this->exactly(2))->method('dataHasChangedFor')
-            ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
+            ->willReturnMap([['url_key', false], ['path_ids', false]]);
 
         $store = $this->createMock(Store::class);
-        $store->expects($this->once())->method('getId')->will($this->returnValue($currentStoreId));
-        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->once())->method('getId')->willReturn($currentStoreId);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $this->scopeConfig->expects($this->once())->method('getValue')
             ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $currentStoreId)
-            ->will($this->returnValue($suffix));
+            ->willReturn($suffix);
 
         $this->assertEquals(
             $result,
@@ -230,7 +240,7 @@ class CategoryUrlPathGeneratorTest extends TestCase
 
     public function testGetCanonicalUrlPath()
     {
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->category->expects($this->once())->method('getId')->willReturn(1);
         $this->assertEquals(
             'catalog/category/view/id/1',
             $this->categoryUrlPathGenerator->getCanonicalUrlPath($this->category)
@@ -256,9 +266,9 @@ class CategoryUrlPathGeneratorTest extends TestCase
      */
     public function testGetUrlKey($urlKey, $name, $result)
     {
-        $this->category->expects($this->once())->method('getUrlKey')->will($this->returnValue($urlKey));
-        $this->category->expects($this->any())->method('getName')->will($this->returnValue($name));
-        $this->category->expects($this->once())->method('formatUrlKey')->will($this->returnArgument(0));
+        $this->category->expects($this->once())->method('getUrlKey')->willReturn($urlKey);
+        $this->category->expects($this->any())->method('getName')->willReturn($name);
+        $this->category->expects($this->once())->method('formatUrlKey')->willReturnArgument(0);
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlKey($this->category));
     }

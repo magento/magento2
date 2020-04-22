@@ -16,7 +16,7 @@ use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

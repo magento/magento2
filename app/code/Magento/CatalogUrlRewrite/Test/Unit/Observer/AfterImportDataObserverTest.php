@@ -198,7 +198,10 @@ class AfterImportDataObserverTest extends TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->event = $this->createPartialMock(Event::class, ['getAdapter', 'getBunch']);
+        $this->event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getAdapter', 'getBunch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
         $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
@@ -345,7 +348,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->importProduct
             ->expects($this->exactly(1))
             ->method('getStoreIdByCode')
-            ->will($this->returnValueMap($map));
+            ->willReturnMap($map);
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
@@ -459,40 +462,35 @@ class AfterImportDataObserverTest extends TestCase
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($requestPath));
+            ->willReturn($requestPath);
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getUrlPath')
-            ->will($this->returnValue('urlPath'));
+            ->willReturn('urlPath');
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getCanonicalUrlPath')
-            ->will($this->returnValue($targetPath));
+            ->willReturn($targetPath);
         $this->urlRewrite
             ->expects($this->once())
             ->method('setStoreId')
-            ->with($storeId)
-            ->will($this->returnSelf());
+            ->with($storeId)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->once())
             ->method('setEntityId')
-            ->with($productId)
-            ->will($this->returnSelf());
+            ->with($productId)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->once())
             ->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->will($this->returnSelf());
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->once())
             ->method('setRequestPath')
-            ->with($requestPath)
-            ->will($this->returnSelf());
+            ->with($requestPath)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->once())
             ->method('setTargetPath')
-            ->with($targetPath)
-            ->will($this->returnSelf());
+            ->with($targetPath)->willReturnSelf();
         $this->urlRewriteFactory
             ->expects($this->once())
             ->method('create')
@@ -528,7 +526,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getUrlPath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->urlRewriteFactory
             ->expects($this->never())
             ->method('create');
@@ -568,16 +566,16 @@ class AfterImportDataObserverTest extends TestCase
         $this->productUrlPathGenerator
             ->expects($this->any())
             ->method('getUrlPathWithSuffix')
-            ->will($this->returnValue($urlPathWithCategory));
+            ->willReturn($urlPathWithCategory);
         $this->productUrlPathGenerator
             ->expects($this->any())
             ->method('getCanonicalUrlPath')
-            ->will($this->returnValue($canonicalUrlPathWithCategory));
+            ->willReturn($canonicalUrlPathWithCategory);
         $category = $this->createMock(Category::class);
         $category
             ->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($this->categoryId));
+            ->willReturn($this->categoryId);
         $category
             ->expects($this->any())
             ->method('getAnchorsAbove')
@@ -611,33 +609,27 @@ class AfterImportDataObserverTest extends TestCase
         $this->urlRewrite
             ->expects($this->any())
             ->method('setStoreId')
-            ->with($storeId)
-            ->will($this->returnSelf());
+            ->with($storeId)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->any())
             ->method('setEntityId')
-            ->with($productId)
-            ->will($this->returnSelf());
+            ->with($productId)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->any())
             ->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->will($this->returnSelf());
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->any())
             ->method('setRequestPath')
-            ->with($urlPathWithCategory)
-            ->will($this->returnSelf());
+            ->with($urlPathWithCategory)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->any())
             ->method('setTargetPath')
-            ->with($canonicalUrlPathWithCategory)
-            ->will($this->returnSelf());
+            ->with($canonicalUrlPathWithCategory)->willReturnSelf();
         $this->urlRewrite
             ->expects($this->any())
             ->method('setMetadata')
-            ->with(['category_id' => $this->categoryId])
-            ->will($this->returnSelf());
+            ->with(['category_id' => $this->categoryId])->willReturnSelf();
         $this->urlRewriteFactory
             ->expects($this->any())
             ->method('create')
@@ -699,25 +691,17 @@ class AfterImportDataObserverTest extends TestCase
         $metadata,
         $description
     ) {
-        $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)
-            ->will($this->returnSelf());
+        $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setIsAutogenerated')->with(0)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setRedirectType')->with($redirectType)
-            ->will($this->returnSelf());
-        $this->urlRewrite->expects($this->any())->method('setMetadata')->with($metadata)
-            ->will($this->returnSelf());
-        $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
-        $this->urlRewrite->expects($this->once())->method('setDescription')->with($description)
-            ->will($this->returnSelf());
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setIsAutogenerated')->with(0)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRedirectType')->with($redirectType)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setMetadata')->with($metadata)->willReturnSelf();
+        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+        $this->urlRewrite->expects($this->once())->method('setDescription')->with($description)->willReturnSelf();
     }
 
     /**
@@ -732,11 +716,12 @@ class AfterImportDataObserverTest extends TestCase
              * @var MockObject
              */
             $url = $this->getMockBuilder(UrlRewrite::class)
-                ->disableOriginalConstructor()->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
             foreach ($urlRewrite as $key => $value) {
                 $url->expects($this->any())
                     ->method('get' . str_replace('_', '', ucwords($key, '_')))
-                    ->will($this->returnValue($value));
+                    ->willReturn($value);
             }
             $rewrites[] = $url;
         }

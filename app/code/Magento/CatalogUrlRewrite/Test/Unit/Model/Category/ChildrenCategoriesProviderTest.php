@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
@@ -37,16 +38,19 @@ class ChildrenCategoriesProviderTest extends TestCase
             ->getMock();
         $categoryCollection = $this->getMockBuilder(
             AbstractCollection::class
-        )->disableOriginalConstructor()->setMethods(['addAttributeToSelect', 'addIdFilter'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['addAttributeToSelect', 'addIdFilter'])->getMock();
         $this->category->expects($this->any())->method('getPath')->willReturn('category-path');
         $this->category->expects($this->any())->method('getResourceCollection')->willReturn($categoryCollection);
         $categoryCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $categoryCollection->expects($this->any())->method('addIdFilter')->with(['id'])->willReturnSelf();
         $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
         $this->connection = $this->createMock(AdapterInterface::class);
         $categoryResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->category->expects($this->any())->method('getResource')->willReturn($categoryResource);
         $categoryResource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->any())->method('select')->willReturn($this->select);
