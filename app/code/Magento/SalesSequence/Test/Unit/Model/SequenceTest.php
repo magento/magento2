@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesSequence\Test\Unit\Model;
 
@@ -44,14 +45,14 @@ class SequenceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->meta = $this->createPartialMock(
-            Meta::class,
-            ['getSequenceTable', 'getActiveProfile']
-        );
-        $this->profile = $this->createPartialMock(
-            Profile::class,
-            ['getSuffix', 'getPrefix', 'getStep', 'getStartValue']
-        );
+        $this->meta = $this->getMockBuilder(Meta::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getActiveProfile', 'getSequenceTable'])
+            ->getMock();
+        $this->profile = $this->getMockBuilder(Profile::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getSuffix', 'getPrefix', 'getStep', 'getStartValue'])
+            ->getMock();
         $this->resource = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
         $this->connectionMock = $this->getMockForAbstractClass(
             AdapterInterface::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesSequence\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -75,20 +77,23 @@ class BuilderTest extends TestCase
             true,
             ['query']
         );
-        $this->resourceSequenceMeta = $this->createPartialMock(
-            Meta::class,
-            ['loadByEntityTypeAndStore', 'save', 'createSequence']
-        );
-        $this->meta = $this->createPartialMock(
-            \Magento\SalesSequence\Model\Meta::class,
-            ['getId', 'setData', 'save', 'getSequenceTable']
-        );
+        $this->resourceSequenceMeta = $this->getMockBuilder(Meta::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['loadByEntityTypeAndStore', 'save'])
+            ->addMethods(['createSequence'])
+            ->getMock();
+        $this->meta = $this->getMockBuilder(\Magento\SalesSequence\Model\Meta::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'setData', 'save'])
+            ->addMethods(['getSequenceTable'])
+            ->getMock();
         $this->sequence = $this->createMock(Sequence::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->profile = $this->createPartialMock(
-            Profile::class,
-            ['getId', 'setData', 'getStartValue']
-        );
+        $this->profile = $this->getMockBuilder(Profile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'setData'])
+            ->addMethods(['getStartValue'])
+            ->getMock();
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
         $this->profileFactory = $this->createPartialMock(

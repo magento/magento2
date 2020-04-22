@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 
 use Magento\Framework\App\ResourceConnection;
@@ -71,10 +73,10 @@ class DeleteByStoreTest extends TestCase
             ResourceMeta::class,
             ['load', 'delete']
         );
-        $this->meta = $this->createPartialMock(
-            Meta::class,
-            ['getSequenceTable']
-        );
+        $this->meta = $this->getMockBuilder(Meta::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getSequenceTable'])
+            ->getMock();
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->select = $this->createMock(Select::class);
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
