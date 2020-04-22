@@ -52,11 +52,11 @@ class ConfigTest extends TestCase
         )->method(
             'isSetFlag'
         )->with(
-            $this->equalTo('dev/translate_inline/active'),
+            'dev/translate_inline/active',
             ScopeInterface::SCOPE_STORE,
-            $this->equalTo($store)
-        )->will(
-            $this->returnValue($result)
+            $store
+        )->willReturn(
+            $result
         );
         $objectManager = new ObjectManager($this);
         $config = $objectManager->getObject(
@@ -77,8 +77,8 @@ class ConfigTest extends TestCase
             'isDevAllowed'
         )->with(
             $store
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
 
         $this->assertEquals($result, $this->model->isDevAllowed($store));
