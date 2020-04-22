@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Model;
 
@@ -18,7 +19,7 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\CarrierFactory;
 use Magento\Shipping\Model\Shipping;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -102,31 +103,31 @@ class ShippingTest extends TestCase
             )->getMock();
         $product = $this->createMock(Product::class);
 
-        $item->method('getQty')->will($this->returnValue(1));
-        $item->method('getWeight')->will($this->returnValue(10));
-        $item->method('getIsQtyDecimal')->will($this->returnValue(true));
-        $item->method('getProductType')->will($this->returnValue(ProductType::TYPE_SIMPLE));
-        $item->method('getProduct')->will($this->returnValue($product));
+        $item->method('getQty')->willReturn(1);
+        $item->method('getWeight')->willReturn(10);
+        $item->method('getIsQtyDecimal')->willReturn(true);
+        $item->method('getProductType')->willReturn(ProductType::TYPE_SIMPLE);
+        $item->method('getProduct')->willReturn($product);
 
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
-        $store->method('getWebsiteId')->will($this->returnValue(10));
-        $item->method('getStore')->will($this->returnValue($store));
+        $store->method('getWebsiteId')->willReturn(10);
+        $item->method('getStore')->willReturn($store);
 
-        $product->method('getId')->will($this->returnValue($this->productId));
+        $product->method('getId')->willReturn($this->productId);
         $request->setData('all_items', [$item]);
 
-        $this->stockItemData->method('getIsDecimalDivided')->will($this->returnValue(true));
+        $this->stockItemData->method('getIsDecimalDivided')->willReturn(true);
 
         /** Testable service calls to CatalogInventory module */
         $this->stockRegistry->expects($this->atLeastOnce())->method('getStockItem')
             ->with($this->productId, 10)
-            ->will($this->returnValue($this->stockItemData));
+            ->willReturn($this->stockItemData);
 
         $this->stockItemData->expects($this->atLeastOnce())
             ->method('getEnableQtyIncrements')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
-            ->will($this->returnValue(0.5));
+            ->willReturn(0.5);
         $this->carrier->method('getConfigData')
             ->willReturnCallback(
                 function ($key) {

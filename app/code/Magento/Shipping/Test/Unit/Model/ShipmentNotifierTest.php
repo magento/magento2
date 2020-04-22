@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Model;
 
@@ -77,10 +78,11 @@ class ShipmentNotifierTest extends TestCase
      */
     public function testNotifySuccess()
     {
-        $historyCollection = $this->createPartialMock(
-            Collection::class,
-            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
-        );
+        $historyCollection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['setIsCustomerNotified'])
+            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp']
@@ -93,17 +95,17 @@ class ShipmentNotifierTest extends TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->shipment)
-            ->will($this->returnValue($historyItem));
+            ->willReturn($historyItem);
         $this->shipment->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($historyCollection));
+            ->willReturn($historyCollection);
 
         $this->shipmentSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->shipment));
+            ->with($this->shipment);
 
         $this->assertTrue($this->notifier->notify($this->shipment));
     }
@@ -115,7 +117,7 @@ class ShipmentNotifierTest extends TestCase
     {
         $this->shipment->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse($this->notifier->notify($this->shipment));
     }
 
@@ -127,11 +129,11 @@ class ShipmentNotifierTest extends TestCase
         $exception = new MailException(__('Email has not been sent'));
         $this->shipmentSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->shipment))
-            ->will($this->throwException($exception));
+            ->with($this->shipment)
+            ->willThrowException($exception);
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($this->equalTo($exception));
+            ->with($exception);
         $this->assertFalse($this->notifier->notify($this->shipment));
     }
 }

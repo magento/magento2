@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -70,14 +72,14 @@ class AllmethodsTest extends TestCase
         $expectedArray['getAllCarriers'] = [$this->carriersMock];
 
         $this->shippingConfig->expects($this->once())
-                             ->method('getAllCarriers')
-                             ->willReturn($expectedArray['getAllCarriers']);
+            ->method('getAllCarriers')
+            ->willReturn($expectedArray['getAllCarriers']);
         $this->carriersMock->expects($this->once())
-                             ->method('isActive')
-                             ->willReturn(true);
+            ->method('isActive')
+            ->willReturn(true);
         $this->carriersMock->expects($this->once())
-                             ->method('getAllowedMethods')
-                             ->willReturn($expectedArray['allowedMethods']);
+            ->method('getAllowedMethods')
+            ->willReturn($expectedArray['allowedMethods']);
         $this->assertEquals([$expectedArray['expected_result']], $this->allmethods->toOptionArray());
     }
 

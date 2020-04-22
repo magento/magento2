@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -54,8 +56,8 @@ class CarrierTest extends TestCase
         )->with(
             'carriers',
             ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($carriers)
+        )->willReturn(
+            $carriers
         );
         $this->assertEquals($result, $this->helper->getOnlineCarrierCodes());
     }
@@ -89,8 +91,8 @@ class CarrierTest extends TestCase
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
             ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
@@ -104,8 +106,8 @@ class CarrierTest extends TestCase
         )->with(
             'general/country/eu_countries',
             ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue("GB")
+        )->willReturn(
+            "GB"
         );
 
         $this->assertEquals(true, $this->helper->isCountryInEU("GB"));

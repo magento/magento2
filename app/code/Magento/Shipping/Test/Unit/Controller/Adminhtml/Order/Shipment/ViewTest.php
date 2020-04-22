@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action\Context;
@@ -99,10 +101,11 @@ class ViewTest extends TestCase
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shipmentMock = $this->createPartialMock(
             Shipment::class,
             ['getIncrementId', '__wakeup']
@@ -164,7 +167,11 @@ class ViewTest extends TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $layoutMock = $this->createPartialMock(Layout::class, ['getBlock', '__wakeup']);
+        $layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultPageMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);

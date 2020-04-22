@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -18,15 +20,15 @@ class TrackTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $carrier = $this->createPartialMock(
-            Freeshipping::class,
-            ['setStore', 'getTrackingInfo']
-        );
+        $carrier = $this->getMockBuilder(Freeshipping::class)
+            ->addMethods(['setStore', 'getTrackingInfo'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $carrier->expects($this->once())->method('setStore')->with('');
-        $carrier->expects($this->once())->method('getTrackingInfo')->will($this->returnValue('trackingInfo'));
+        $carrier->expects($this->once())->method('getTrackingInfo')->willReturn('trackingInfo');
 
         $carrierFactory = $this->createPartialMock(CarrierFactory::class, ['create']);
-        $carrierFactory->expects($this->once())->method('create')->will($this->returnValue($carrier));
+        $carrierFactory->expects($this->once())->method('create')->willReturn($carrier);
 
         $shipment = $this->createMock(Freeshipping::class);
 

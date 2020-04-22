@@ -50,7 +50,9 @@ class PackageResultTest extends TestCase
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $errorMock = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
+        $errorMock = $this->getMockBuilder(Error::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $errorMock->method('getErrorMessage')->willReturn('error message');
         $this->errorFactory->method('create')->willReturn($errorMock);
 
@@ -114,7 +116,9 @@ class PackageResultTest extends TestCase
                 }
             );
         /** @var Result|MockObject $result2 */
-        $result2 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
+        $result2 = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $result2->method('getAllRates')->willReturn([$rate2]);
         $result2->expects($this->once())
             ->method('updateRatePrice')

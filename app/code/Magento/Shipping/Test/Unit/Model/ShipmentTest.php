@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Shipping\Test\Unit\Model;
 
@@ -76,12 +78,11 @@ class ShipmentTest extends TestCase
         $this->shipment->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
-            ->with($entityName)
-            ->will($this->returnSelf());
+            ->with($entityName)->willReturnSelf();
 
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $this->assertEquals($order, $this->shipment->getOrder());
     }

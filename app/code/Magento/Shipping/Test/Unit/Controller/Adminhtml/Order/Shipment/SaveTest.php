@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
@@ -143,16 +144,17 @@ class SaveTest extends TestCase
             ->getMock();
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
-                'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
-                'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
-                'getResultRedirectFactory', 'getFormKeyValidator'
-            ]);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+            'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
+            'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
+            'getResultRedirectFactory', 'getFormKeyValidator'
+        ]);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create', 'get']
@@ -161,10 +163,10 @@ class SaveTest extends TestCase
             Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
         );
-        $this->session = $this->createPartialMock(
-            Session::class,
-            ['setIsUrlNotice', 'getCommentText']
-        );
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice', 'getCommentText'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
 
@@ -191,31 +193,31 @@ class SaveTest extends TestCase
 
         $this->context->expects($this->once())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
+            ->willReturn($this->messageManager);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
+            ->willReturn($this->objectManager);
         $this->context->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->context->expects($this->once())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->actionFlag);
         $this->context->expects($this->once())
             ->method('getHelper')
-            ->will($this->returnValue($this->helper));
+            ->willReturn($this->helper);
         $this->context->expects($this->once())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($resultRedirectFactory));
+            ->willReturn($resultRedirectFactory);
         $this->context->expects($this->once())
             ->method('getFormKeyValidator')
-            ->will($this->returnValue($this->formKeyValidator));
+            ->willReturn($this->formKeyValidator);
 
         $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
             ->disableOriginalConstructor()
@@ -276,15 +278,13 @@ class SaveTest extends TestCase
 
             $this->request->expects($this->any())
                 ->method('getParam')
-                ->will(
-                    $this->returnValueMap(
-                        [
-                            ['order_id', null, $orderId],
-                            ['shipment_id', null, $shipmentId],
-                            ['shipment', null, $shipmentData],
-                            ['tracking', null, $tracking],
-                        ]
-                    )
+                ->willReturnMap(
+                    [
+                        ['order_id', null, $orderId],
+                        ['shipment_id', null, $shipmentId],
+                        ['shipment', null, $shipmentData],
+                        ['tracking', null, $tracking],
+                    ]
                 );
 
             $this->shipmentLoader->expects($this->any())
@@ -301,32 +301,29 @@ class SaveTest extends TestCase
                 ->with($tracking);
             $this->shipmentLoader->expects($this->once())
                 ->method('load')
-                ->will($this->returnValue($shipment));
+                ->willReturn($shipment);
             $shipment->expects($this->once())
-                ->method('register')
-                ->will($this->returnSelf());
+                ->method('register')->willReturnSelf();
             $shipment->expects($this->any())
                 ->method('getOrder')
-                ->will($this->returnValue($order));
+                ->willReturn($order);
             $order->expects($this->once())
                 ->method('setCustomerNoteNotify')
                 ->with(false);
             $this->labelGenerator->expects($this->any())
                 ->method('create')
                 ->with($shipment, $this->request)
-                ->will($this->returnValue(true));
+                ->willReturn(true);
             $saveTransaction = $this->getMockBuilder(Transaction::class)
                 ->disableOriginalConstructor()
                 ->setMethods([])
                 ->getMock();
             $saveTransaction->expects($this->at(0))
                 ->method('addObject')
-                ->with($shipment)
-                ->will($this->returnSelf());
+                ->with($shipment)->willReturnSelf();
             $saveTransaction->expects($this->at(1))
                 ->method('addObject')
-                ->with($order)
-                ->will($this->returnSelf());
+                ->with($order)->willReturnSelf();
             $saveTransaction->expects($this->at(2))
                 ->method('save');
 
@@ -337,15 +334,15 @@ class SaveTest extends TestCase
             $this->objectManager->expects($this->once())
                 ->method('create')
                 ->with(Transaction::class)
-                ->will($this->returnValue($saveTransaction));
+                ->willReturn($saveTransaction);
             $this->objectManager->expects($this->once())
                 ->method('get')
                 ->with(Session::class)
-                ->will($this->returnValue($this->session));
+                ->willReturn($this->session);
             $arguments = ['order_id' => $orderId];
             $shipment->expects($this->once())
                 ->method('getOrderId')
-                ->will($this->returnValue($orderId));
+                ->willReturn($orderId);
             $this->prepareRedirect($arguments);
 
             $this->shipmentValidatorMock->expects($this->once())
@@ -383,7 +380,7 @@ class SaveTest extends TestCase
         $this->actionFlag->expects($this->any())
             ->method('get')
             ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);

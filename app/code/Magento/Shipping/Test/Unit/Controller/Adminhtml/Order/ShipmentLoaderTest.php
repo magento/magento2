@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order;
 
 use Magento\Framework\Message\Manager;
@@ -153,16 +155,16 @@ class ShipmentLoaderTest extends TestCase
             ->getMock();
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $orderMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($this->loader->getOrderId()));
+            ->willReturn($this->loader->getOrderId());
         $orderMock->expects($this->any())
             ->method('getForcedShipmentWithInvoice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $orderMock->expects($this->once())
             ->method('canShip')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -173,11 +175,10 @@ class ShipmentLoaderTest extends TestCase
             ->getMockForAbstractClass();
         $this->trackFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($trackMock));
+            ->willReturn($trackMock);
         $shipmentModelMock->expects($this->any())
             ->method('addTrack')
-            ->with($this->equalTo($trackMock))
-            ->will($this->returnSelf());
+            ->with($trackMock)->willReturnSelf();
         $this->registryMock->expects($this->once())
             ->method('register')
             ->with('current_shipment', $shipmentModelMock);
@@ -186,7 +187,7 @@ class ShipmentLoaderTest extends TestCase
             ->getMockForAbstractClass();
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
         $this->documentFactoryMock->expects($this->once())->method('create')->willReturn($shipmentModelMock);
 
         $this->assertEquals($shipmentModelMock, $this->loader->load());

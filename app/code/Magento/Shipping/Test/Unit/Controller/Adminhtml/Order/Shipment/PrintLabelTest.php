@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\AbstractAction;
@@ -90,10 +92,11 @@ class PrintLabelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->labelGenerator = $this->createPartialMock(
             LabelGenerator::class,
             ['createPdfPageFromImageString']
@@ -109,31 +112,34 @@ class PrintLabelTest extends TestCase
         $this->messageManagerMock = $this->createPartialMock(Manager::class, ['addError']);
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
         $contextMock = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getMessageManager',
-                'getSession',
-                'getActionFlag',
-                'getObjectManager',
-                'getHelper'
-            ]);
+            'getRequest',
+            'getResponse',
+            'getMessageManager',
+            'getSession',
+            'getActionFlag',
+            'getObjectManager',
+            'getHelper'
+        ]);
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->helperMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->loadShipment();
 
         $this->controller = new PrintLabel(
@@ -159,19 +165,19 @@ class PrintLabelTest extends TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -198,10 +204,10 @@ class PrintLabelTest extends TestCase
 
         $this->shipmentMock->expects($this->once())
             ->method('getIncrementId')
-            ->will($this->returnValue($incrementId));
+            ->willReturn($incrementId);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultContent));
+            ->willReturn($resultContent);
 
         return $resultContent;
     }
@@ -216,9 +222,9 @@ class PrintLabelTest extends TestCase
         $this->actionFlag->expects($this->once())
             ->method('get')
             ->with('', AbstractAction::FLAG_IS_URLS_CHECKED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->sessionMock->expects($this->once())->method('setIsUrlNotice')->with(true);
-        $this->helperMock->expects($this->once())->method('getUrl')->will($this->returnValue('redirect-path'));
+        $this->helperMock->expects($this->once())->method('getUrl')->willReturn('redirect-path');
         $this->responseMock->expects($this->once())->method('setRedirect');
     }
 
@@ -231,10 +237,10 @@ class PrintLabelTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())
             ->method('getShippingLabel')
-            ->will($this->returnValue($labelContent));
+            ->willReturn($labelContent);
 
         $this->assertEquals($this->fileCreate(), $this->controller->execute());
     }
@@ -246,24 +252,26 @@ class PrintLabelTest extends TestCase
     {
         $labelContent = 'Label-content';
         $pdfPageMock = $this->createPartialMock(\Zend_Pdf_Page::class, ['render', 'getPageDictionary']);
-        $pageDictionaryMock = $this->createPartialMock(\Zend_Pdf_Element_Dictionary::class, ['touch', 'getObject']);
+        $pageDictionaryMock = $this->getMockBuilder(\Zend_Pdf_Element_Dictionary::class)->addMethods(['getObject'])
+            ->onlyMethods(['touch'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())
             ->method('getShippingLabel')
-            ->will($this->returnValue($labelContent));
+            ->willReturn($labelContent);
         $this->labelGenerator->expects($this->once())
             ->method('createPdfPageFromImageString')
             ->with($labelContent)
-            ->will($this->returnValue($pdfPageMock));
+            ->willReturn($pdfPageMock);
         $pdfPageMock->expects($this->any())
             ->method('getPageDictionary')
-            ->will($this->returnValue($pageDictionaryMock));
+            ->willReturn($pageDictionaryMock);
         $pageDictionaryMock->expects($this->any())
-            ->method('getObject')
-            ->will($this->returnSelf());
+            ->method('getObject')->willReturnSelf();
 
         $this->assertEquals($this->fileCreate(), $this->controller->execute());
     }
@@ -280,35 +288,34 @@ class PrintLabelTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())
             ->method('getShippingLabel')
-            ->will($this->returnValue($labelContent));
+            ->willReturn($labelContent);
         $this->shipmentMock->expects($this->once())
             ->method('getIncrementId')
-            ->will($this->returnValue($incrementId));
+            ->willReturn($incrementId);
         $this->labelGenerator->expects($this->once())
             ->method('createPdfPageFromImageString')
             ->with($labelContent)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->messageManagerMock->expects($this->at(0))
             ->method('addError')
             ->with(sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId))
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->messageManagerMock->expects($this->at(1))
             ->method('addError')
-            ->with('An error occurred while creating shipping label.')
-            ->will($this->returnSelf());
+            ->with('An error occurred while creating shipping label.')->willReturnSelf();
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(LoggerInterface::class)
-            ->will($this->returnValue($loggerMock));
+            ->willReturn($loggerMock);
         $loggerMock->expects($this->once())
             ->method('critical');
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->redirectSection();
 
         $this->assertNull($this->controller->execute());
@@ -322,7 +329,7 @@ class PrintLabelTest extends TestCase
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
             ->willThrowException(new LocalizedException(__('message')));
-        $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
+        $this->messageManagerMock->expects($this->once())->method('addError')->willReturnSelf();
         $this->redirectSection();
 
         $this->assertNull($this->controller->execute());

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -72,7 +74,7 @@ class InfoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->trackFactory = $this->getMockBuilder(TrackFactory::class)
-           ->disableOriginalConstructor()
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->trackCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -279,7 +281,7 @@ class InfoTest extends TestCase
             'key' => 'track_id',
             'id' => 1,
             'hash' => $protectCodeHash,
-            ];
+        ];
         $this->helper->expects($this->atLeastOnce())
             ->method('decodeTrackingHash')
             ->with($hash)

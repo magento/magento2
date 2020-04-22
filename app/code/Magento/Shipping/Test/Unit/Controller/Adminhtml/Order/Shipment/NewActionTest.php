@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
@@ -24,12 +25,10 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\ShipmentProviderInterface;
-use Magento\Shipping\Model\Shipping\LabelGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -130,23 +129,24 @@ class NewActionTest extends TestCase
             ->getMock();
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
-                'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
-                'getSession', 'getActionFlag', 'getHelper', 'getView'
-            ]);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+            'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
+            'getSession', 'getActionFlag', 'getHelper', 'getView'
+        ]);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManager = $this->createPartialMock(
             Manager::class,
             ['addSuccess', 'addError']
         );
-        $this->session = $this->createPartialMock(
-            Session::class,
-            ['setIsUrlNotice', 'getCommentText']
-        );
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice', 'getCommentText'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shipmentProviderMock = $this->getMockBuilder(ShipmentProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShipmentData'])
@@ -165,26 +165,26 @@ class NewActionTest extends TestCase
             ->getMock();
         $this->context->expects($this->once())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
+            ->willReturn($this->messageManager);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
+            ->willReturn($this->objectManager);
         $this->context->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->context->expects($this->once())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->actionFlag);
         $this->context->expects($this->once())
             ->method('getHelper')
-            ->will($this->returnValue($this->helper));
-        $this->context->expects($this->once())->method('getView')->will($this->returnValue($this->view));
+            ->willReturn($this->helper);
+        $this->context->expects($this->once())->method('getView')->willReturn($this->view);
         $this->newAction = $objectManagerHelper->getObject(
             NewAction::class,
             [
@@ -206,14 +206,12 @@ class NewActionTest extends TestCase
         );
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['order_id', null, $orderId],
-                        ['shipment_id', null, $shipmentId],
-                        ['tracking', null, $tracking],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['tracking', null, $tracking],
+                ]
             );
         $this->shipmentLoader->expects($this->any())
             ->method('setShipmentId')
@@ -229,21 +227,19 @@ class NewActionTest extends TestCase
             ->with($tracking);
         $this->shipmentLoader->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->session->expects($this->once())
             ->method('getCommentText')
             ->with(true)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
             ->with(Session::class)
-            ->will($this->returnValue($this->session));
+            ->willReturn($this->session);
         $this->view->expects($this->once())
-            ->method('loadLayout')
-            ->will($this->returnSelf());
+            ->method('loadLayout')->willReturnSelf();
         $this->view->expects($this->once())
-            ->method('renderLayout')
-            ->will($this->returnSelf());
+            ->method('renderLayout')->willReturnSelf();
         $this->view->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -254,12 +250,13 @@ class NewActionTest extends TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
         $layout = $this->createMock(LayoutInterface::class);
-        $menuBlock = $this->createPartialMock(
-            BlockInterface::class,
-            ['toHtml', 'setActive', 'getMenuModel']
-        );
+        $menuBlock = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['setActive', 'getMenuModel'])
+            ->onlyMethods(['toHtml'])
+            ->getMock();
         $menuModel = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $itemId = 'Magento_Sales::sales_order';
         $parents = [
             new DataObject(['title' => 'title1']),
@@ -269,20 +266,20 @@ class NewActionTest extends TestCase
         $menuModel->expects($this->once())
             ->method('getParentItems')
             ->with($itemId)
-            ->will($this->returnValue($parents));
+            ->willReturn($parents);
         $menuBlock->expects($this->once())
             ->method('setActive')
             ->with($itemId);
         $menuBlock->expects($this->once())
             ->method('getMenuModel')
-            ->will($this->returnValue($menuModel));
+            ->willReturn($menuModel);
         $this->view->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $layout->expects($this->once())
             ->method('getBlock')
             ->with('menu')
-            ->will($this->returnValue($menuBlock));
+            ->willReturn($menuBlock);
         $this->shipmentProviderMock->expects($this->once())
             ->method('getShipmentData')
             ->willReturn($shipmentData);

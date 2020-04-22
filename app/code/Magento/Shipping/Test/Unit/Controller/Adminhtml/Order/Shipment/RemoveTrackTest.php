@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action\Context;
@@ -99,10 +101,11 @@ class RemoveTrackTest extends TestCase
             ['loadLayout', 'getLayout', 'getPage']
         );
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,22 +116,23 @@ class RemoveTrackTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->createPartialMock(
-            Context::class,
-            ['getRequest', 'getObjectManager', 'getTitle', 'getView', 'getResponse']
-        );
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle'])
+            ->onlyMethods(['getRequest', 'getObjectManager', 'getView', 'getResponse'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Track::class)
-            ->will($this->returnValue($this->shipmentTrackMock));
+            ->willReturn($this->shipmentTrackMock);
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
 
         $this->controller = new RemoveTrack(
             $contextMock,
@@ -161,31 +165,30 @@ class RemoveTrackTest extends TestCase
 
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')
-            ->with($trackId)
-            ->will($this->returnSelf());
+            ->with($trackId)->willReturnSelf();
         $this->shipmentTrackMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('track_id')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -204,11 +207,11 @@ class RemoveTrackTest extends TestCase
         $jsonHelper->expects($this->once())
             ->method('jsonEncode')
             ->with($errors)
-            ->will($this->returnValue('{json}'));
+            ->willReturn('{json}');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(Data::class)
-            ->will($this->returnValue($jsonHelper));
+            ->willReturn($jsonHelper);
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with('{json}');
@@ -224,10 +227,9 @@ class RemoveTrackTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentTrackMock->expects($this->once())
-            ->method('delete')
-            ->will($this->returnSelf());
+            ->method('delete')->willReturnSelf();
 
         $layoutMock = $this->createPartialMock(Layout::class, ['getBlock']);
         $trackingBlockMock = $this->createPartialMock(
@@ -237,13 +239,13 @@ class RemoveTrackTest extends TestCase
 
         $trackingBlockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('shipment_tracking')
-            ->will($this->returnValue($trackingBlockMock));
-        $this->viewMock->expects($this->once())->method('loadLayout')->will($this->returnSelf());
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
+            ->willReturn($trackingBlockMock);
+        $this->viewMock->expects($this->once())->method('loadLayout')->willReturnSelf();
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
         $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with($response);
@@ -261,11 +263,10 @@ class RemoveTrackTest extends TestCase
 
         $this->shipmentTrackMock->expects($this->once())
             ->method('load')
-            ->with($trackId)
-            ->will($this->returnSelf());
+            ->with($trackId)->willReturnSelf();
         $this->shipmentTrackMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($trackId));
+            ->willReturn($trackId);
         $this->representJson($errors);
 
         $this->assertNull($this->controller->execute());
@@ -284,7 +285,7 @@ class RemoveTrackTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->representJson($errors);
 
         $this->assertNull($this->controller->execute());
@@ -300,10 +301,10 @@ class RemoveTrackTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentTrackMock->expects($this->once())
             ->method('delete')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->representJson($errors);
 
         $this->assertNull($this->controller->execute());

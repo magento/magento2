@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action\Context;
@@ -79,18 +81,21 @@ class AddCommentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup']
-        );
-        $this->shipmentCommentSenderMock = $this->createPartialMock(
-            ShipmentCommentSender::class,
-            ['send', '__wakeup']
-        );
-        $this->requestMock = $this->createPartialMock(
-            Http::class,
-            ['getParam', 'getPost', 'setParam', '__wakeup']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shipmentCommentSenderMock = $this->getMockBuilder(ShipmentCommentSender::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['send'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder(Http::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getParam', 'getPost', 'setParam'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
             ['setBody', 'representJson', '__wakeup']
@@ -111,20 +116,21 @@ class AddCommentTest extends TestCase
         $this->viewInterfaceMock = $this->createMock(ViewInterface::class);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $contextMock = $this->createPartialMock(
-            Context::class,
-            ['getRequest', 'getResponse', 'getTitle', 'getView', 'getObjectManager', '__wakeup']
-        );
-        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-            $this->returnValue($this->resultPageMock)
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle', '__wakeup'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getView', 'getObjectManager'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->viewInterfaceMock->expects($this->any())->method('getPage')->willReturn(
+            $this->resultPageMock
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $this->controller = new AddComment(
             $contextMock,
@@ -143,8 +149,8 @@ class AddCommentTest extends TestCase
     {
         $dataMock = $this->createPartialMock(Data::class, ['jsonEncode']);
 
-        $this->objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($dataMock));
-        $dataMock->expects($this->once())->method('jsonEncode')->will($this->returnValue('{json-data}'));
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($dataMock);
+        $dataMock->expects($this->once())->method('jsonEncode')->willReturn('{json-data}');
         $this->responseMock->expects($this->once())->method('representJson')->with('{json-data}');
     }
 
@@ -160,28 +166,27 @@ class AddCommentTest extends TestCase
         $shipment = [];
         $tracking = [];
 
-        $resultLayoutMock = $this->createPartialMock(
-            Layout::class,
-            ['getBlock', 'getDefaultLayoutHandle', 'addDefaultHandle', 'getLayout']
-        );
+        $resultLayoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['getBlock'])
+            ->onlyMethods(['getDefaultLayoutHandle', 'addDefaultHandle', 'getLayout'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('comment')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', null, $shipmentId],
-                        ['order_id', null, $orderId],
-                        ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipment],
-                        ['tracking', null, $tracking],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', null, $shipmentId],
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking],
+                ]
             );
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
@@ -189,7 +194,7 @@ class AddCommentTest extends TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save');
@@ -201,7 +206,7 @@ class AddCommentTest extends TestCase
         $resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $resultLayoutMock->expects($this->once())->method('addDefaultHandle');
         $this->resultLayoutFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($resultLayoutMock));
+            ->willReturn($resultLayoutMock);
         $this->responseMock->expects($this->once())->method('setBody')->with($result);
 
         $this->assertNull($this->controller->execute());
@@ -220,19 +225,17 @@ class AddCommentTest extends TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', null, $shipmentId],
-                        ['order_id', null, $orderId],
-                        ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipment],
-                        ['tracking', null, $tracking],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', null, $shipmentId],
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking],
+                ]
             );
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
-        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->will($this->returnValue($data));
+        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->willReturn($data);
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -254,9 +257,9 @@ class AddCommentTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
-        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->will($this->returnValue([]));
+        $this->requestMock->expects($this->once())->method('getPost')->with('comment')->willReturn([]);
         $this->exceptionResponse();
 
         $this->assertNull($this->controller->execute());
@@ -277,19 +280,17 @@ class AddCommentTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('comment')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', null, $shipmentId],
-                        ['order_id', null, $orderId],
-                        ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipment],
-                        ['tracking', null, $tracking],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', null, $shipmentId],
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking],
+                ]
             );
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
@@ -297,10 +298,10 @@ class AddCommentTest extends TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('setTracking')->with($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentCommentSenderMock->expects($this->once())->method('send');
-        $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
+        $this->shipmentMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $this->exceptionResponse();
 
         $this->assertNull($this->controller->execute());

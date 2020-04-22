@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\AbstractAction;
@@ -78,14 +80,18 @@ class PrintPackageTest extends TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->sessionMock = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->shipmentMock = $this->createPartialMock(Shipment::class, ['__wakeup']);
         $this->fileFactoryMock = $this->createPartialMock(
@@ -98,30 +104,30 @@ class PrintPackageTest extends TestCase
             ['getRequest', 'getObjectManager', 'getResponse', 'getSession', 'getActionFlag']
         );
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -156,21 +162,21 @@ class PrintPackageTest extends TestCase
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Packaging::class)
-            ->will($this->returnValue($packagingMock));
+            ->willReturn($packagingMock);
         $packagingMock->expects($this->once())
             ->method('getPdf')
             ->with($this->shipmentMock)
-            ->will($this->returnValue($pdfMock));
+            ->willReturn($pdfMock);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(DateTime::class)
-            ->will($this->returnValue($dateTimeMock));
-        $dateTimeMock->expects($this->once())->method('date')->with('Y-m-d_H-i-s')->will($this->returnValue($date));
-        $pdfMock->expects($this->once())->method('render')->will($this->returnValue($content));
+            ->willReturn($dateTimeMock);
+        $dateTimeMock->expects($this->once())->method('date')->with('Y-m-d_H-i-s')->willReturn($date);
+        $pdfMock->expects($this->once())->method('render')->willReturn($content);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
             ->with(
@@ -178,7 +184,7 @@ class PrintPackageTest extends TestCase
                 $content,
                 DirectoryList::VAR_DIR,
                 'application/pdf'
-            )->will($this->returnValue('result-pdf-content'));
+            )->willReturn('result-pdf-content');
 
         $this->assertEquals('result-pdf-content', $this->controller->execute());
     }
@@ -190,14 +196,14 @@ class PrintPackageTest extends TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->actionFlag->expects($this->once())
             ->method('get')
             ->with('', AbstractAction::FLAG_IS_URLS_CHECKED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->sessionMock->expects($this->once())
             ->method('setIsUrlNotice')
             ->with(true);
