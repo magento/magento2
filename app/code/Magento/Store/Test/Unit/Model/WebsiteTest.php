@@ -32,7 +32,7 @@ class WebsiteTest extends TestCase
      */
     protected $websiteFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
@@ -54,7 +54,7 @@ class WebsiteTest extends TestCase
             Collection::class,
             ['getSize']
         );
-        $websiteCollection->expects($this->any())->method('getSize')->will($this->returnValue(2));
+        $websiteCollection->expects($this->any())->method('getSize')->willReturn(2);
 
         $this->websiteFactory->expects($this->any())
             ->method('create')

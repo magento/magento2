@@ -77,19 +77,24 @@ class SwitchActionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
         $this->storeCookieManagerMock =
-            $this->getMockBuilder(StoreCookieManagerInterface::class)->getMock();
+            $this->getMockBuilder(StoreCookieManagerInterface::class)
+                ->getMock();
         $this->storeRepositoryMock =
-            $this->getMockBuilder(StoreRepositoryInterface::class)->getMock();
+            $this->getMockBuilder(StoreRepositoryInterface::class)
+                ->getMock();
         $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->redirectMock =
-            $this->getMockBuilder(RedirectInterface::class)->getMock();
+            $this->getMockBuilder(RedirectInterface::class)
+                ->getMock();
         $this->storeSwitcher = $this->getMockBuilder(StoreSwitcher::class)
             ->disableOriginalConstructor()
             ->setMethods(['switch'])
@@ -118,7 +123,8 @@ class SwitchActionTest extends TestCase
         $storeToSwitchToCode = 'sv2';
         $defaultStoreViewCode = 'default';
         $expectedRedirectUrl = "magento.com/{$storeToSwitchToCode}";
-        $defaultStoreViewMock = $this->getMockBuilder(StoreInterface::class)->getMock();
+        $defaultStoreViewMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMock();
         $storeToSwitchToMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isUseStoreInUrl'])

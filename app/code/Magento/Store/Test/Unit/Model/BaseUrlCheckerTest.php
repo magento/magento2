@@ -81,7 +81,7 @@ class BaseUrlCheckerTest extends TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with('web/url/redirect_to_base', ScopeInterface::SCOPE_STORE)
-            ->willReturn(!!1);
+            ->willReturn((bool)1);
         $this->assertTrue($this->baseUrlChecker->isEnabled());
     }
 
@@ -98,7 +98,7 @@ class BaseUrlCheckerTest extends TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with('web/secure/use_in_frontend', ScopeInterface::SCOPE_STORE)
-            ->willReturn(!!1);
+            ->willReturn((bool)1);
 
         $this->assertTrue($this->baseUrlChecker->isFrontendSecure());
     }

@@ -85,14 +85,20 @@ class InformationTest extends TestCase
                 return implode("\n", $storeInfo->getData());
             });
 
-        $region = $this->createPartialMock(DataObject::class, ['load', 'getName']);
+        $region = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['load', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $region->expects($this->once())->method('load')->willReturnSelf();
         $region->expects($this->once())->method('getName')->willReturn('Rohan');
 
         $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
-        $country = $this->createPartialMock(DataObject::class, ['loadByCode', 'getName']);
+        $country = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['loadByCode', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
         $country->expects($this->once())->method('getName')->willReturn('Edoras');
 

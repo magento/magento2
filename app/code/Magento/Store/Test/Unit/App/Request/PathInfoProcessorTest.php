@@ -63,7 +63,8 @@ class PathInfoProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->validatorConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
@@ -72,7 +73,8 @@ class PathInfoProcessorTest extends TestCase
         $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
 
         $this->pathInfoMock = $this->getMockBuilder(PathInfo ::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storePathInfoValidator = new StorePathInfoValidator(
             $this->validatorConfigMock,
@@ -104,8 +106,8 @@ class PathInfoProcessorTest extends TestCase
             'isDirectAccessFrontendName'
         )->with(
             'storeCode'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertEquals('/node_one/', $this->model->process($this->requestMock, $this->pathInfo));
     }

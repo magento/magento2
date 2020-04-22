@@ -42,7 +42,7 @@ class RuntimeConfigSourceTest extends TestCase
      */
     private $resourceConnection;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
@@ -63,7 +63,9 @@ class RuntimeConfigSourceTest extends TestCase
             ->willReturn(true);
         $this->resourceConnection->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
-        $selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connection->expects($this->any())->method('fetchAll')->willReturn([]);

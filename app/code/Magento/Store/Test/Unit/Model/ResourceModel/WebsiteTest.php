@@ -35,7 +35,7 @@ class WebsiteTest extends TestCase
      */
     protected $connectionMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->select =  $this->createMock(Select::class);
@@ -46,25 +46,17 @@ class WebsiteTest extends TestCase
                 'getTableName'
             ]
         );
-        $this->connectionMock = $this->createPartialMock(
-            Mysql::class,
-            [
-                'isTableExists',
-                'select',
-                'fetchAll',
-                'fetchOne',
-                'from',
-                'getCheckSql',
-                'joinLeft',
-                'where'
-            ]
-        );
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['from', 'joinLeft', 'where'])
+            ->onlyMethods(['isTableExists', 'select', 'fetchAll', 'fetchOne', 'getCheckSql'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->model = $objectManagerHelper->getObject(
             Website::class,
             [
-            'context' => $contextMock
+                'context' => $contextMock
             ]
         );
     }

@@ -121,7 +121,7 @@ class PathConfigTest extends TestCase
 
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($getValueReturnMap));
+            ->willReturnMap($getValueReturnMap);
 
         if ($secure) {
             $this->urlSecurityInfoMock->expects($this->once())->method('isSecure')->with($path)->willReturn($secure);

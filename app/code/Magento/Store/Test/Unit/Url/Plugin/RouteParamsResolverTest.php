@@ -80,7 +80,7 @@ class RouteParamsResolverTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
         /** @var MockObject $routeParamsResolverMock */
@@ -112,7 +112,7 @@ class RouteParamsResolverTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 
@@ -145,7 +145,7 @@ class RouteParamsResolverTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(true);
 
         /** @var MockObject $routeParamsResolverMock */
@@ -177,7 +177,7 @@ class RouteParamsResolverTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $storeCode
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->storeManagerMock->expects($this->any())->method('hasSingleStore')->willReturn(false);
 

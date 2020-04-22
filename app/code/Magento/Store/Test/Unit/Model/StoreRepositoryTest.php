@@ -48,7 +48,7 @@ class StoreRepositoryTest extends TestCase
      */
     private $appConfigMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storeFactory = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])

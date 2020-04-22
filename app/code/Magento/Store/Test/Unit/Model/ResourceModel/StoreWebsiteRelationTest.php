@@ -28,7 +28,7 @@ class StoreWebsiteRelationTest extends TestCase
     /** @var  Select|MockObject */
     private $select;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()

@@ -43,11 +43,12 @@ class SwitcherTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
         $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
-        $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
+        $this->context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->corePostDataHelper = $this->createMock(PostHelper::class);
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
@@ -101,9 +102,9 @@ class SwitcherTest extends TestCase
     {
         $storeMock = $this->createMock(Store::class);
 
-        $storeMock->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
+        $storeMock->expects($this->once())->method('isUseStoreInUrl')->willReturn($isUseStoreInUrl);
 
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
         // check value is cached
         $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
