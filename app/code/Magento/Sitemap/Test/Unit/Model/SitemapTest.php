@@ -161,7 +161,8 @@ class SitemapTest extends TestCase
         $this->configReaderMock = $this->getMockForAbstractClass(SitemapConfigReaderInterface::class);
         $this->itemProviderMock = $this->getMockForAbstractClass(ItemProviderInterface::class);
         $this->request = $this->createMock(Http::class);
-        $this->store = $this->createPartialMock(Store::class, ['isFrontUrlSecure', 'getBaseUrl']);
+        $this->store = $this->getMockBuilder(Store::class)
+            ->onlyMethods(['isFrontUrlSecure', 'getBaseUrl'])->disableOriginalConstructor()->getMock();
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')

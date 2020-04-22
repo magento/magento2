@@ -81,10 +81,8 @@ class ObserverTest extends TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->sitemapCollectionMock = $this->createPartialMock(
-            Collection::class,
-            ['getIterator']
-        );
+        $this->sitemapCollectionMock = $this->getMockBuilder(Collection::class)
+            ->onlyMethods(['getIterator'])->disableOriginalConstructor()->getMock();
         $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['generateXml'])

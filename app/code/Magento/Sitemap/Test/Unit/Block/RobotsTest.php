@@ -246,7 +246,8 @@ class RobotsTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
 
         $this->storeManager->expects($this->once())
             ->method('getDefaultStoreView')
