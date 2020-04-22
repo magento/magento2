@@ -75,10 +75,14 @@ class CacheOutdatedTest extends TestCase
      */
     public function getIdentityDataProvider()
     {
-        $cacheTypeMock1 = $this->createPartialMock(\stdClass::class, ['getCacheType']);
+        $cacheTypeMock1 = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $cacheTypeMock1->method('getCacheType')->willReturn('Simple');
 
-        $cacheTypeMock2 = $this->createPartialMock(\stdClass::class, ['getCacheType']);
+        $cacheTypeMock2 = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $cacheTypeMock2->method('getCacheType')->willReturn('Advanced');
 
         return [
@@ -109,7 +113,9 @@ class CacheOutdatedTest extends TestCase
      */
     public function isDisplayedDataProvider()
     {
-        $cacheTypesMock = $this->createPartialMock(\stdClass::class, ['getCacheType']);
+        $cacheTypesMock = $this->getMockBuilder(\stdClass::class)->addMethods(['getCacheType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $cacheTypesMock->method('getCacheType')->willReturn('someVal');
         $cacheTypes = [$cacheTypesMock, $cacheTypesMock];
         return [

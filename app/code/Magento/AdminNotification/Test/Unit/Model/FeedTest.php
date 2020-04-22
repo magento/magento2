@@ -74,9 +74,9 @@ class FeedTest extends TestCase
         $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
         $this->inboxModel = $this->createPartialMock(Inbox::class, [
-                '__wakeup',
-                'parse'
-            ]);
+            '__wakeup',
+            'parse'
+        ]);
         $this->backendConfig = $this->createPartialMock(
             ConfigInterface::class,
             [
