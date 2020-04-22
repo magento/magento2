@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -26,7 +28,7 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
