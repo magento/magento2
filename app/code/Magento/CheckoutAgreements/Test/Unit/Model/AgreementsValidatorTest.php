@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Model\AgreementsProviderInterface;
@@ -75,7 +77,7 @@ class AgreementsValidatorTest extends TestCase
         );
         $provider->expects($this->once())
             ->method('getRequiredAgreementIds')
-            ->will($this->returnValue([1, 3, '4']));
+            ->willReturn([1, 3, '4']);
 
         $this->object = $this->objectManagerHelper->getObject(
             AgreementsValidator::class,
