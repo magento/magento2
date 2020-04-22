@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -123,7 +125,8 @@ class CronEventTest extends TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($statusOk);
 
         $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
@@ -132,7 +135,7 @@ class CronEventTest extends TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType('bool', $this->model->sendRequest());
+        $this->assertIsBool($this->model->sendRequest());
     }
 
     /**
@@ -181,7 +184,8 @@ class CronEventTest extends TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($statusBad);
 
         $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
@@ -190,7 +194,7 @@ class CronEventTest extends TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType('bool', $this->model->sendRequest());
+        $this->assertIsBool($this->model->sendRequest());
     }
 
     /**

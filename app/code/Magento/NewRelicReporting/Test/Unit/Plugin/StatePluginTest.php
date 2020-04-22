@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\NewRelicReporting\Model\Config as NewRelicConfig;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Plugin\StatePlugin;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -54,10 +54,11 @@ class StatePluginTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->configMock = $this->getMockBuilder(NewRelicConfig::class)->disableOriginalConstructor()
+        $this->configMock = $this->getMockBuilder(NewRelicConfig::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->newRelicWrapperMock = $this->createMock(NewRelicWrapper::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);

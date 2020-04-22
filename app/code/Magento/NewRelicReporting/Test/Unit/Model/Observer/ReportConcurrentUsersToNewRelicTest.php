@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -120,13 +122,16 @@ class ReportConcurrentUsersToNewRelicTest extends TestCase
         $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
         $websiteMock = $this->getMockBuilder(
             Website::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
@@ -160,17 +165,21 @@ class ReportConcurrentUsersToNewRelicTest extends TestCase
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($testCustomerId);
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)->getMock();
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->getMock();
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->willReturn($customerMock);
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
         $websiteMock = $this->getMockBuilder(
             Website::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
