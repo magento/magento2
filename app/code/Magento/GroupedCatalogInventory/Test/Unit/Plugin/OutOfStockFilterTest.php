@@ -126,7 +126,7 @@ class OutOfStockFilterTest extends TestCase
         array $expectedResult
     ): void {
         $this->stockRegistryMock->method('getProductStockStatus')
-            ->will($this->returnValueMap($productStockStatusMap));
+            ->willReturnMap($productStockStatusMap);
 
         $result = $this->unit->afterPrepareForCartAdvanced(
             $this->subjectMock,
