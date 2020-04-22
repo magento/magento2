@@ -26,7 +26,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit tests for \Magento\Customer\Model\Customer\DataProvider class.
@@ -243,6 +243,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                             'componentType' => Field::NAME,
                                             'filterBy' => [
                                                 'target' => '${ $.provider }:data.customer.website_id',
+                                                '__disableTmpl' => ['target' => false],
                                                 'field' => 'website_ids',
                                             ],
                                         ],
@@ -1280,6 +1281,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                                     'componentType' => Field::NAME,
                                     'filterBy' => [
                                         'target' => '${ $.provider }:data.customer.website_id',
+                                        '__disableTmpl' => ['target' => false],
                                         'field' => 'website_ids',
                                     ],
                                 ],
