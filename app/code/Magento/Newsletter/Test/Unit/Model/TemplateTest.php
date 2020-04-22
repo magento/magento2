@@ -9,6 +9,7 @@ namespace Magento\Newsletter\Test\Unit\Model;
 
 use Magento\Email\Model\Template\Config;
 use Magento\Email\Model\TemplateFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\TemplateTypesInterface;
