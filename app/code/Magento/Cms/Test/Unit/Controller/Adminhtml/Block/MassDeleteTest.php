@@ -27,7 +27,7 @@ class MassDeleteTest extends AbstractMassActionTest
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|MockObject
+     * @var Collection|MockObject
      */
     protected $blockCollectionMock;
 

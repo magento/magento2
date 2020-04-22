@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Controller\Adminhtml\Page\MassDelete;
 use Magento\Cms\Model\ResourceModel\Page\Collection;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
@@ -87,11 +88,11 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Page Collection Mock
      *
-     * @return \Magento\Cms\Api\Data\PageInterface|MockObject
+     * @return PageInterface|MockObject
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterface::class)
+        $pageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
             ->addMethods(['delete'])
             ->getMockForAbstractClass();

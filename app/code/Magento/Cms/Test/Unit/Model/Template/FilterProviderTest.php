@@ -34,7 +34,7 @@ class FilterProviderTest extends TestCase
     {
         $this->_filterMock = $this->createMock(Filter::class);
         $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_filterMock));
+        $this->_objectManagerMock->expects($this->any())->method('get')->willReturn($this->_filterMock);
         $this->_model = new FilterProvider($this->_objectManagerMock);
     }
 
@@ -59,7 +59,7 @@ class FilterProviderTest extends TestCase
      */
     public function testGetPageFilterInnerCache()
     {
-        $this->_objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($this->_filterMock));
+        $this->_objectManagerMock->expects($this->once())->method('get')->willReturn($this->_filterMock);
         $this->_model->getPageFilter();
         $this->_model->getPageFilter();
     }
@@ -72,7 +72,7 @@ class FilterProviderTest extends TestCase
         $this->expectException('Exception');
         $someClassMock = $this->createMock('SomeClass');
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($someClassMock));
+        $objectManagerMock->expects($this->once())->method('get')->willReturn($someClassMock);
         $model = new FilterProvider($objectManagerMock, 'SomeClass', 'SomeClass');
         $model->getPageFilter();
     }

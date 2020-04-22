@@ -164,7 +164,7 @@ class StorageTest extends TestCase
             ->onlyMethods(['delete', 'create', 'getRelativePath', 'isExist', 'isFile', 'getDriver'])
             ->getMock();
         $this->directoryMock->method('getDriver')
-            ->will($this->returnValue($this->driverMock));
+            ->willReturn($this->driverMock);
 
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->filesystemMock->expects(
@@ -173,8 +173,8 @@ class StorageTest extends TestCase
             'getDirectoryWrite'
         )->with(
             DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->directoryMock)
+        )->willReturn(
+            $this->directoryMock
         );
 
         $this->fileMock   = $this->objectManagerHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
@@ -183,12 +183,10 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getPathInfo'
-        )->will(
-            $this->returnCallback(
-                function ($path) {
-                    return pathinfo($path);
-                }
-            )
+        )->willReturnCallback(
+            function ($path) {
+                return pathinfo($path);
+            }
         );
 
         $this->adapterFactoryMock = $this->createMock(AdapterFactory::class);
@@ -200,8 +198,8 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getStorageRoot'
-        )->will(
-            $this->returnValue(self::STORAGE_ROOT_DIR)
+        )->willReturn(
+            self::STORAGE_ROOT_DIR
         );
 
         $this->resizeParameters = ['width' => 100, 'height' => 50];
@@ -299,7 +297,7 @@ class StorageTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Directory /storage/some/another/dir is not under storage root path.');
-        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -310,7 +308,7 @@ class StorageTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We can\'t delete root directory /storage/root/dir right now.');
-        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 
