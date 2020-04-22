@@ -65,7 +65,7 @@ class StoreTest extends TestCase
      */
     private $storeSource;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()

@@ -41,7 +41,7 @@ class SecurityInfoTest extends TestCase
                 Store::XML_PATH_SECURE_IN_FRONTEND,
                 ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),
@@ -61,7 +61,7 @@ class SecurityInfoTest extends TestCase
                 Store::XML_PATH_SECURE_IN_FRONTEND,
                 ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue(
             $this->_model->aroundIsSecure(
                 $this->createMock(\Magento\Framework\Url\SecurityInfo::class),

@@ -45,8 +45,8 @@ class StoreCheckTest extends TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
@@ -59,13 +59,13 @@ class StoreCheckTest extends TestCase
     {
         $this->expectException(InitException::class);
         $this->expectExceptionMessage('Current store is not active.');
-        $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(false));
+        $this->_storeMock->expects($this->any())->method('isActive')->willReturn(false);
         $this->_plugin->beforeExecute($this->subjectMock);
     }
 
     public function testBeforeExecuteWhenStoreIsActive()
     {
-        $this->_storeMock->expects($this->any())->method('isActive')->will($this->returnValue(true));
+        $this->_storeMock->expects($this->any())->method('isActive')->willReturn(true);
         $result = $this->_plugin->beforeExecute($this->subjectMock);
         $this->assertNull($result);
     }

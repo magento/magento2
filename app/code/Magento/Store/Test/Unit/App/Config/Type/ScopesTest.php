@@ -27,7 +27,8 @@ class ScopesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)->getMock();
+        $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
+            ->getMock();
         $this->unit = (new ObjectManager($this))->getObject(
             Scopes::class,
             [

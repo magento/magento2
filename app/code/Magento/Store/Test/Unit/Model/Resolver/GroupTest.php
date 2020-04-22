@@ -49,7 +49,7 @@ class GroupTest extends TestCase
             ->expects($this->once())
             ->method('getGroup')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->model->getScope());
     }
@@ -62,7 +62,7 @@ class GroupTest extends TestCase
             ->expects($this->once())
             ->method('getGroup')
             ->with(0)
-            ->will($this->returnValue($scopeMock));
+            ->willReturn($scopeMock);
 
         $this->assertEquals($scopeMock, $this->model->getScope());
     }

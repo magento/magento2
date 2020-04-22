@@ -32,8 +32,8 @@ class PlaceholderTest extends TestCase
             $this->any()
         )->method(
             'getDistroBaseUrl'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->_model = new \Magento\Store\Model\Config\Placeholder(
             $this->_requestMock,

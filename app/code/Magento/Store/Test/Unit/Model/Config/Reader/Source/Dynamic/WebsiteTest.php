@@ -53,7 +53,7 @@ class WebsiteTest extends TestCase
      */
     private $websiteSource;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()

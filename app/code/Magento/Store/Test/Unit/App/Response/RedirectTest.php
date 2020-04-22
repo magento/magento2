@@ -60,7 +60,8 @@ class RedirectTest extends TestCase
     protected function setUp(): void
     {
         $this->_requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->_urlCoderMock = $this->createMock(UrlCoder::class);
         $this->_sessionMock = $this->createMock(SessionManagerInterface::class);
@@ -85,10 +86,10 @@ class RedirectTest extends TestCase
     public function testSuccessUrl($baseUrl, $successUrl)
     {
         $testStoreMock = $this->createMock(Store::class);
-        $testStoreMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue($baseUrl));
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $testStoreMock->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
         $this->_storeManagerMock->expects($this->any())->method('getStore')
-            ->will($this->returnValue($testStoreMock));
+            ->willReturn($testStoreMock);
         $this->assertEquals($baseUrl, $this->_model->success($successUrl));
     }
 
