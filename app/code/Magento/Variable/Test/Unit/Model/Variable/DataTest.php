@@ -46,7 +46,8 @@ class DataTest extends TestCase
         $this->storesVariablesMock = $this->createMock(StoreVariables::class);
         $this->variableCollectionFactoryMock = $this->getMockBuilder(
             VariableCollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
