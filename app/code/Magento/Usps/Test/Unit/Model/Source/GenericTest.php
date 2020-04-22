@@ -31,7 +31,8 @@ class GenericTest extends TestCase
             Carrier::class
         )->setMethods(
             ['getCode']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_generic = $helper->getObject(
             Generic::class,
