@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Widget\Model\Widget\Instance
  *
@@ -7,65 +7,83 @@
  */
 namespace Magento\Widget\Test\Unit\Model\Widget;
 
+use Magento\Cms\Block\Adminhtml\Page\Widget\Chooser;
+use Magento\Cms\Block\Widget\Page\Link;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\FileSystem as ViewFilesystem;
+use Magento\Widget\Model\Config\Data;
+use Magento\Widget\Model\Config\Reader;
+use Magento\Widget\Model\NamespaceResolver;
+use Magento\Widget\Model\Widget;
+use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstanceTest extends \PHPUnit\Framework\TestCase
+class InstanceTest extends TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_widgetModelMock;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var ViewFilesystem|MockObject
      */
     protected $_viewFileSystemMock;
 
-    /** @var  \Magento\Widget\Model\NamespaceResolver|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  NamespaceResolver|MockObject */
     protected $_namespaceResolver;
 
     /**
-     * @var \Magento\Widget\Model\Widget\Instance
+     * @var Instance
      */
     protected $_model;
 
-    /** @var  \Magento\Widget\Model\Config\Reader */
+    /** @var  Reader */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_cacheTypesListMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_directoryMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializer;
 
     protected function setUp(): void
     {
         $this->_widgetModelMock = $this->getMockBuilder(
-            \Magento\Widget\Model\Widget::class
-        )->disableOriginalConstructor()->getMock();
+            Widget::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_viewFileSystemMock = $this->getMockBuilder(
-            \Magento\Framework\View\FileSystem::class
-        )->disableOriginalConstructor()->getMock();
+            ViewFilesystem::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_namespaceResolver = $this->getMockBuilder(
-            \Magento\Widget\Model\NamespaceResolver::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_cacheTypesListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
+            NamespaceResolver::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_cacheTypesListMock = $this->createMock(TypeListInterface::class);
         $this->_readerMock = $this->getMockBuilder(
-            \Magento\Widget\Model\Config\Reader::class
-        )->disableOriginalConstructor()->getMock();
+            Reader::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
+        $this->_directoryMock = $this->createMock(Read::class);
         $filesystemMock->expects(
             $this->any()
         )->method(
@@ -75,10 +93,10 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         );
         $this->_directoryMock->expects($this->any())->method('isReadable')->willReturnArgument(0);
         $this->_directoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->serializer = $this->createMock(Json::class);
         $args = $objectManagerHelper->getConstructArguments(
-            \Magento\Widget\Model\Widget\Instance::class,
+            Instance::class,
             [
                 'filesystem' => $filesystemMock,
                 'viewFileSystem' => $this->_viewFileSystemMock,
@@ -90,8 +108,8 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        /** @var \Magento\Widget\Model\Widget\Instance _model */
-        $this->_model = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
+        /** @var Instance _model */
+        $this->_model = $this->getMockBuilder(Instance::class)
             ->setMethods(['_construct'])
             ->setConstructorArgs($args)
             ->getMock();
@@ -100,7 +118,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function testGetWidgetConfigAsArray()
     {
         $widget = [
-            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
+            '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -110,7 +128,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
                     '@' => ['type' => 'complex'],
                     'type' => 'label',
                     'helper_block' => [
-                        'type' => \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
+                        'type' => Chooser::class,
                         'data' => ['button' => ['open' => 'Select Page...']],
                     ],
                     'visible' => 'true',
@@ -176,7 +194,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function testGetWidgetTemplatesValueOnly()
     {
         $widget = [
-            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
+            '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -210,7 +228,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function testGetWidgetTemplatesNoTemplate()
     {
         $widget = [
-            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
+            '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -248,7 +266,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function testGetWidgetSupportedContainersNoContainer()
     {
         $widget = [
-            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
+            '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -306,7 +324,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function testGetWidgetSupportedTemplatesByContainersNoSupportedContainersSpecified()
     {
         $widget = [
-            '@' => ['type' => \Magento\Cms\Block\Widget\Page\Link::class, 'module' => 'Magento_Cms'],
+            '@' => ['type' => Link::class, 'module' => 'Magento_Cms'],
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
