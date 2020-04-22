@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model;
 
@@ -89,10 +90,11 @@ class SampleRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(
-            Product::class,
-            ['__wakeup', 'getTypeId', 'setDownloadableData', 'save', 'getId', 'getStoreId', 'getData']
-        );
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setDownloadableData'])
+            ->onlyMethods(['__wakeup', 'getTypeId', 'save', 'getId', 'getStoreId', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->repositoryMock = $this->createMock(ProductRepository::class);
         $this->productTypeMock = $this->createMock(Type::class);
         $this->contentValidatorMock = $this->createMock(ContentValidator::class);
@@ -132,7 +134,8 @@ class SampleRepositoryTest extends TestCase
         $metadataPoolProperty = $linkRepository->getProperty('metadataPool');
         $this->metadataPoolMock = $this->getMockBuilder(
             MetadataPool::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $metadataPoolProperty->setAccessible(true);
         $metadataPoolProperty->setValue(
             $this->service,
@@ -141,14 +144,16 @@ class SampleRepositoryTest extends TestCase
         $saveHandlerProperty = $linkRepository->getProperty('sampleTypeHandler');
         $this->sampleHandlerMock = $this->getMockBuilder(
             Sample::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $saveHandlerProperty->setAccessible(true);
         $saveHandlerProperty->setValue(
             $this->service,
             $this->sampleHandlerMock
         );
 
-        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->entityMetadataMock);
+        $this->metadataPoolMock
+            ->method('getMetadata')->willReturn($this->entityMetadataMock);
     }
 
     /**
@@ -160,26 +165,26 @@ class SampleRepositoryTest extends TestCase
         $sampleMock = $this->createMock(SampleInterface::class);
 
         if (isset($sampleData['id'])) {
-            $sampleMock->expects($this->any())->method('getId')->willReturn($sampleData['id']);
+            $sampleMock->method('getId')->willReturn($sampleData['id']);
         }
-        $sampleMock->expects($this->any())->method('getTitle')->will($this->returnValue($sampleData['title']));
-        $sampleMock->expects($this->any())->method('getSortOrder')->will(
-            $this->returnValue($sampleData['sort_order'])
+        $sampleMock->method('getTitle')->willReturn($sampleData['title']);
+        $sampleMock->method('getSortOrder')->willReturn(
+            $sampleData['sort_order']
         );
 
         if (isset($sampleData['sample_type'])) {
-            $sampleMock->expects($this->any())->method('getSampleType')->will(
-                $this->returnValue($sampleData['sample_type'])
+            $sampleMock->method('getSampleType')->willReturn(
+                $sampleData['sample_type']
             );
         }
         if (isset($sampleData['sample_url'])) {
-            $sampleMock->expects($this->any())->method('getSampleUrl')->will(
-                $this->returnValue($sampleData['sample_url'])
+            $sampleMock->method('getSampleUrl')->willReturn(
+                $sampleData['sample_url']
             );
         }
         if (isset($sampleData['sample_file'])) {
-            $sampleMock->expects($this->any())->method('getSampleFile')->will(
-                $this->returnValue($sampleData['sample_file'])
+            $sampleMock->method('getSampleFile')->willReturn(
+                $sampleData['sample_file']
             );
         }
 
@@ -195,12 +200,12 @@ class SampleRepositoryTest extends TestCase
             'sample_type' => 'url',
             'sample_url' => 'http://example.com/',
         ];
-        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('downloadable'));
+        $this->repositoryMock->method('get')->with($productSku, true)
+            ->willReturn($this->productMock);
+        $this->productMock->method('getTypeId')->willReturn('downloadable');
         $sampleMock = $this->getSampleMock($sampleData);
-        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
-            ->will($this->returnValue(true));
+        $this->contentValidatorMock->method('isValid')->with($sampleMock)
+            ->willReturn(true);
 
         $this->sampleHandlerMock->expects($this->once())->method('save')->with(
             $this->productMock,
@@ -232,12 +237,12 @@ class SampleRepositoryTest extends TestCase
             'sample_url' => 'http://example.com/',
         ];
 
-        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('downloadable'));
+        $this->repositoryMock->method('get')->with($productSku, true)
+            ->willReturn($this->productMock);
+        $this->productMock->method('getTypeId')->willReturn('downloadable');
         $sampleMock = $this->getSampleMock($sampleData);
-        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
-            ->will($this->returnValue(true));
+        $this->contentValidatorMock->method('isValid')->with($sampleMock)
+            ->willReturn(true);
 
         $this->sampleHandlerMock->expects($this->never())->method('save');
 
@@ -256,22 +261,23 @@ class SampleRepositoryTest extends TestCase
             'sample_type' => 'url',
             'sample_url' => 'http://example.com/',
         ];
-        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
-        $existingSampleMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\Sample::class,
-            ['__wakeup', 'getId', 'load', 'getProductId']
-        );
+        $this->repositoryMock->method('get')->with($productSku, true)
+            ->willReturn($this->productMock);
+        $this->productMock->method('getData')->willReturn($productId);
+        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['__wakeup', 'getId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sampleFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($existingSampleMock));
+            ->willReturn($existingSampleMock);
         $sampleMock = $this->getSampleMock($sampleData);
-        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
-            ->will($this->returnValue(true));
+        $this->contentValidatorMock->method('isValid')->with($sampleMock)
+            ->willReturn(true);
 
-        $existingSampleMock->expects($this->any())->method('getId')->will($this->returnValue($sampleId));
-        $existingSampleMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
+        $existingSampleMock->method('getId')->willReturn($sampleId);
+        $existingSampleMock->method('getProductId')->willReturn($productId);
+        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
 
         $this->sampleHandlerMock->expects($this->once())->method('save')->with(
             $this->productMock,
@@ -306,22 +312,23 @@ class SampleRepositoryTest extends TestCase
             'sample_type' => 'file',
             'sample_file' => $sampleFile,
         ];
-        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
-        $existingSampleMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\Sample::class,
-            ['__wakeup', 'getId', 'load', 'getProductId']
-        );
+        $this->repositoryMock->method('get')->with($productSku, true)
+            ->willReturn($this->productMock);
+        $this->productMock->method('getData')->willReturn($productId);
+        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['__wakeup', 'getId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sampleFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($existingSampleMock));
+            ->willReturn($existingSampleMock);
         $sampleMock = $this->getSampleMock($sampleData);
-        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
-            ->will($this->returnValue(true));
+        $this->contentValidatorMock->method('isValid')->with($sampleMock)
+            ->willReturn(true);
 
-        $existingSampleMock->expects($this->any())->method('getId')->will($this->returnValue($sampleId));
-        $existingSampleMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
+        $existingSampleMock->method('getId')->willReturn($sampleId);
+        $existingSampleMock->method('getProductId')->willReturn($productId);
+        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
 
         $this->jsonEncoderMock->expects($this->once())
             ->method('encode')
@@ -367,21 +374,22 @@ class SampleRepositoryTest extends TestCase
             'sample_type' => 'url',
             'sample_url' => 'https://google.com',
         ];
-        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
-        $existingSampleMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\Sample::class,
-            ['__wakeup', 'getId', 'load', 'save', 'getProductId']
-        );
-        $existingSampleMock->expects($this->any())->method('getId')->will($this->returnValue($sampleId));
-        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
-        $existingSampleMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
+        $this->repositoryMock->method('get')->with($productSku, true)
+            ->willReturn($this->productMock);
+        $this->productMock->method('getData')->willReturn($productId);
+        $existingSampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['__wakeup', 'getId', 'load', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingSampleMock->method('getId')->willReturn($sampleId);
+        $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
+        $existingSampleMock->method('getProductId')->willReturn($productId);
         $this->sampleFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($existingSampleMock));
+            ->willReturn($existingSampleMock);
         $sampleMock = $this->getSampleMock($sampleData);
-        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
-            ->will($this->returnValue(true));
+        $this->contentValidatorMock->method('isValid')->with($sampleMock)
+            ->willReturn(true);
 
         $this->sampleHandlerMock->expects($this->never())->method('save');
 
@@ -392,9 +400,9 @@ class SampleRepositoryTest extends TestCase
     {
         $sampleId = 1;
         $sampleMock = $this->createMock(\Magento\Downloadable\Model\Sample::class);
-        $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($sampleMock));
-        $sampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
-        $sampleMock->expects($this->any())->method('getId')->will($this->returnValue($sampleId));
+        $this->sampleFactoryMock->expects($this->once())->method('create')->willReturn($sampleMock);
+        $sampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
+        $sampleMock->method('getId')->willReturn($sampleId);
         $sampleMock->expects($this->once())->method('delete');
 
         $this->assertTrue($this->service->delete($sampleId));
@@ -408,8 +416,8 @@ class SampleRepositoryTest extends TestCase
         );
         $sampleId = 1;
         $sampleMock = $this->createMock(\Magento\Downloadable\Model\Sample::class);
-        $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($sampleMock));
-        $sampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
+        $this->sampleFactoryMock->expects($this->once())->method('create')->willReturn($sampleMock);
+        $sampleMock->expects($this->once())->method('load')->with($sampleId)->willReturnSelf();
         $sampleMock->expects($this->once())->method('getId');
         $sampleMock->expects($this->never())->method('delete');
 
@@ -430,32 +438,32 @@ class SampleRepositoryTest extends TestCase
             'sample_file' => '/r/o/rock.melody.ogg',
         ];
 
-        $sampleMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\Sample::class,
-            [
+        $sampleMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
+            ->addMethods(['getStoreTitle'])
+            ->onlyMethods([
                 'getId',
-                'getStoreTitle',
                 'getTitle',
                 'getSampleType',
                 'getSampleFile',
                 'getSampleUrl',
                 'getSortOrder',
                 'getData',
-                '__wakeup',
-            ]
-        );
+                '__wakeup'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $sampleInterfaceMock = $this->createMock(SampleInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with($productSku)
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productTypeMock->expects($this->once())
             ->method('getSamples')
             ->with($this->productMock)
-            ->will($this->returnValue([$sampleMock]));
+            ->willReturn([$sampleMock]);
 
         $this->setSampleAssertions($sampleMock, $sampleData);
 
@@ -470,18 +478,18 @@ class SampleRepositoryTest extends TestCase
      */
     protected function setSampleAssertions($resource, $inputData)
     {
-        $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));
-        $resource->expects($this->any())->method('getStoreTitle')
+        $resource->method('getId')->will($this->returnValue($inputData['id']));
+        $resource->method('getStoreTitle')
             ->will($this->returnValue($inputData['store_title']));
-        $resource->expects($this->any())->method('getTitle')
+        $resource->method('getTitle')
             ->will($this->returnValue($inputData['title']));
-        $resource->expects($this->any())->method('getSortOrder')
+        $resource->method('getSortOrder')
             ->will($this->returnValue($inputData['sort_order']));
-        $resource->expects($this->any())->method('getSampleType')
+        $resource->method('getSampleType')
             ->will($this->returnValue($inputData['sample_type']));
-        $resource->expects($this->any())->method('getSampleFile')
+        $resource->method('getSampleFile')
             ->will($this->returnValue($inputData['sample_file']));
-        $resource->expects($this->any())->method('getSampleUrl')
+        $resource->method('getSampleUrl')
             ->will($this->returnValue($inputData['sample_url']));
     }
 }

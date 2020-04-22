@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 use Magento\Backend\Model\Url;
@@ -73,21 +75,24 @@ class LinksTest extends TestCase
         $attributeFactory = $this->createMock(AttributeFactory::class);
         $urlFactory = $this->createMock(UrlFactory::class);
         $this->fileHelper = $this->createPartialMock(File::class, [
-                'getFilePath',
-                'ensureFileInFilesystem',
-                'getFileSize'
-            ]);
+            'getFilePath',
+            'ensureFileInFilesystem',
+            'getFileSize'
+        ]);
         $this->productModel = $this->createPartialMock(Product::class, [
-                '__wakeup',
-                'getTypeId',
-                'getTypeInstance',
-                'getStoreId'
-            ]);
-        $this->downloadableProductModel = $this->createPartialMock(Type::class, [
-                '__wakeup',
-                'getLinks'
-            ]);
-        $this->downloadableLinkModel = $this->createPartialMock(Link::class, [
+            '__wakeup',
+            'getTypeId',
+            'getTypeInstance',
+            'getStoreId'
+        ]);
+        $this->downloadableProductModel = $this->getMockBuilder(Type::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getLinks'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->downloadableLinkModel = $this->getMockBuilder(Link::class)
+            ->addMethods(['getStoreTitle'])
+            ->onlyMethods([
                 '__wakeup',
                 'getId',
                 'getTitle',
@@ -98,14 +103,16 @@ class LinksTest extends TestCase
                 'getSampleFile',
                 'getSampleType',
                 'getSortOrder',
-                'getLinkFile',
-                'getStoreTitle'
-            ]);
+                'getLinkFile'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->coreRegistry = $this->createPartialMock(Registry::class, [
-                '__wakeup',
-                'registry'
-            ]);
+        $this->coreRegistry = $this->getMockBuilder(Registry::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['registry'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 

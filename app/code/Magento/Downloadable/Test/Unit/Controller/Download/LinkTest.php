@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
 use Magento\Catalog\Model\Product;
@@ -101,43 +103,35 @@ class LinkTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader'
-            ]
-        );
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->session = $this->createPartialMock(Session::class, [
-                'getCustomerId',
-                'authenticate',
-                'setBeforeAuthUrl'
-            ]);
+            'getCustomerId',
+            'authenticate',
+            'setBeforeAuthUrl'
+        ]);
         $this->helperData = $this->createPartialMock(Data::class, [
-                'getIsShareable'
-            ]);
+            'getIsShareable'
+        ]);
         $this->downloadHelper = $this->createPartialMock(Download::class, [
-                'setResource',
-                'getFilename',
-                'getContentType',
-                'getFileSize',
-                'getContentDisposition',
-                'output'
-            ]);
-        $this->product = $this->createPartialMock(Product::class, [
-                '_wakeup',
-                'load',
-                'getId',
-                'getProductUrl',
-                'getName'
-            ]);
-        $this->linkPurchasedItem = $this->createPartialMock(Item::class, [
-                'load',
-                'getId',
+            'setResource',
+            'getFilename',
+            'getContentType',
+            'getFileSize',
+            'getContentDisposition',
+            'output'
+        ]);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['load', 'getId', 'getProductUrl', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->linkPurchasedItem = $this->getMockBuilder(Item::class)
+            ->addMethods([
                 'getProductId',
                 'getPurchasedId',
                 'getNumberOfDownloadsBought',
@@ -147,20 +141,23 @@ class LinkTest extends TestCase
                 'getLinkUrl',
                 'getLinkFile',
                 'setNumberOfDownloadsUsed',
-                'setStatus',
-                'save',
-            ]);
-        $this->linkPurchased = $this->createPartialMock(Purchased::class, [
-                'load',
-                'getCustomerId'
-            ]);
+                'setStatus'
+            ])
+            ->onlyMethods(['load', 'getId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->linkPurchased = $this->getMockBuilder(Purchased::class)
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->redirect = $this->createMock(RedirectInterface::class);
         $this->urlInterface = $this->createMock(UrlInterface::class);
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
-                'create',
-                'get'
-            ]);
+            'create',
+            'get'
+        ]);
         $this->link = $this->objectManagerHelper->getObject(
             Link::class,
             [

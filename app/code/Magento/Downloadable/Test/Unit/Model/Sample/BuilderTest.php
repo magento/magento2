@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
@@ -58,15 +59,18 @@ class BuilderTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $this->downloadFileMock = $this->getMockBuilder(
             File::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectCopyServiceMock = $this->getMockBuilder(
             Copy::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->dataObjectHelperMock = $this->getMockBuilder(
             DataObjectHelper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockComponentFactory = $this->getMockBuilder(SampleFactory::class)
             ->disableOriginalConstructor()

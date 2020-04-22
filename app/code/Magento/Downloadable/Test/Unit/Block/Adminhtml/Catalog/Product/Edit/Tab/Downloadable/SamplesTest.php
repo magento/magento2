@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 use Magento\Backend\Model\Url;
@@ -71,33 +73,35 @@ class SamplesTest extends TestCase
         $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
         $urlFactory = $this->createMock(UrlFactory::class);
         $this->fileHelper = $this->createPartialMock(File::class, [
-                'getFilePath',
-                'ensureFileInFilesystem',
-                'getFileSize'
-            ]);
+            'getFilePath',
+            'ensureFileInFilesystem',
+            'getFileSize'
+        ]);
         $this->productModel = $this->createPartialMock(Product::class, [
-                '__wakeup',
-                'getTypeId',
-                'getTypeInstance',
-                'getStoreId'
-            ]);
-        $this->downloadableProductModel = $this->createPartialMock(Type::class, [
-                '__wakeup',
-                'getSamples'
-            ]);
+            '__wakeup',
+            'getTypeId',
+            'getTypeInstance',
+            'getStoreId'
+        ]);
+        $this->downloadableProductModel = $this->getMockBuilder(Type::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getSamples'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->downloadableSampleModel = $this->createPartialMock(Sample::class, [
-                '__wakeup',
-                'getId',
-                'getTitle',
-                'getSampleFile',
-                'getSampleType',
-                'getSortOrder',
-                'getSampleUrl'
-            ]);
-        $this->coreRegistry = $this->createPartialMock(Registry::class, [
-                '__wakeup',
-                'registry'
-            ]);
+            '__wakeup',
+            'getId',
+            'getTitle',
+            'getSampleFile',
+            'getSampleType',
+            'getSortOrder',
+            'getSampleUrl'
+        ]);
+        $this->coreRegistry = $this->getMockBuilder(Registry::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['registry'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
         $this->block = $objectManagerHelper->getObject(
             Samples::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
@@ -357,7 +359,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
         if ($isSaved) {
             $linkItem->expects($this->once())
                 ->method('setStatus')
-                ->with($this->equalTo($expectedStatus))
+                ->with($expectedStatus)
                 ->willReturnSelf();
             $linkItem->expects($this->once())
                 ->method('save')

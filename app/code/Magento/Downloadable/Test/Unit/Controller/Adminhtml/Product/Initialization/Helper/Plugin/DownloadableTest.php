@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
@@ -58,10 +60,11 @@ class DownloadableTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Http::class);
-        $this->productMock = $this->createPartialMock(
-            Product::class,
-            ['setDownloadableData', 'getExtensionAttributes', '__wakeup', 'getTypeInstance']
-        );
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setDownloadableData'])
+            ->onlyMethods(['getExtensionAttributes', '__wakeup', 'getTypeInstance'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->createMock(
             Helper::class
         );
@@ -142,7 +145,7 @@ class DownloadableTest extends TestCase
                         ['is_delete' => 1, 'link_type' => 'url'],
                         ['is_delete' => 1, 'link_type' => 'file'],
                         []
-                     ],
+                    ],
                     'sample' => [
                         ['is_delete' => 1, 'sample_type' => 'url'],
                         ['is_delete' => 1, 'sample_type' => 'file'],

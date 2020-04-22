@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Pdf\Items;
 
 use Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo;
@@ -43,18 +45,18 @@ class CreditmemoTest extends TestCase
             ->getMock();
         $this->order->expects($this->any())
             ->method('formatPriceTxt')
-            ->will($this->returnCallback([$this, 'formatPrice']));
+            ->willReturnCallback([$this, 'formatPrice']);
 
         $this->pdf = $this->createPartialMock(
             AbstractPdf::class,
             ['drawLineBlocks', 'getPdf']
         );
 
-        $filterManager = $this->createPartialMock(
-            FilterManager::class,
-            ['stripTags']
-        );
-        $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
+        $filterManager = $this->getMockBuilder(FilterManager::class)
+            ->addMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterManager->expects($this->any())->method('stripTags')->willReturnArgument(0);
 
         $modelConstructorArgs = $objectManager->getConstructArguments(
             Creditmemo::class,
@@ -156,8 +158,8 @@ class CreditmemoTest extends TestCase
             $this->anything(),
             $expectedPdfData,
             $expectedPageSettings
-        )->will(
-            $this->returnValue($expectedPdfPage)
+        )->willReturn(
+            $expectedPdfPage
         );
 
         $this->assertNotSame($expectedPdfPage, $this->model->getPage());

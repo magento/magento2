@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
 use Magento\Catalog\Model\Product;
@@ -66,7 +68,7 @@ class SampleTest extends TestCase
             ->getMock();
         $sampleResourceFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->sampleResource));
+            ->willReturn($this->sampleResource);
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,7 +144,7 @@ class SampleTest extends TestCase
     {
         $this->sampleResource->expects($this->once())
             ->method('deleteItems')
-            ->with($this->equalTo($expectedItems));
+            ->with($expectedItems);
         $this->target->save($product, $data);
     }
 
@@ -209,20 +211,17 @@ class SampleTest extends TestCase
             ->getMock();
         $sample->expects($this->once())
             ->method('setData')
-            ->with($modelData)
-            ->will($this->returnSelf());
+            ->with($modelData)->willReturnSelf();
         $sample->expects($this->once())
             ->method('setSampleType')
-            ->with($modelData['type'])
-            ->will($this->returnSelf());
+            ->with($modelData['type'])->willReturnSelf();
         $sample->expects($this->once())
             ->method('setProductId')
             ->with($product->getData('id'))
             ->willReturnSelf();
         $sample->expects($this->once())
             ->method('setStoreId')
-            ->with($product->getStoreId())
-            ->will($this->returnSelf());
+            ->with($product->getStoreId())->willReturnSelf();
 
         return $sample;
     }
@@ -246,20 +245,20 @@ class SampleTest extends TestCase
             ->willReturn($id);
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue($websiteIds));
+            ->willReturn($websiteIds);
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue($storeWebsiteId));
+            ->willReturn($storeWebsiteId);
         $product->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $product->expects($this->any())
             ->method('getData')
             ->with('id')

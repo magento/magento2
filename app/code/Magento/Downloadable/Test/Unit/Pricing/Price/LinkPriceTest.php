@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Pricing\Price;
 
@@ -52,10 +53,10 @@ class LinkPriceTest extends TestCase
         $this->saleableItemMock = $this->createMock(Product::class);
         $this->amountMock = $this->createMock(Base::class);
         $this->calculatorMock = $this->createMock(Calculator::class);
-        $this->linkMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\Link::class,
-            ['getPrice', 'getProduct', '__wakeup']
-        );
+        $this->linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)->addMethods(['getProduct'])
+            ->onlyMethods(['getPrice', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
@@ -74,18 +75,18 @@ class LinkPriceTest extends TestCase
 
         $this->linkMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($amount));
+            ->willReturn($amount);
         $this->linkMock->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($this->saleableItemMock));
+            ->willReturn($this->saleableItemMock);
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
             ->with($amount)
-            ->will($this->returnValue($convertedAmount));
+            ->willReturn($convertedAmount);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($convertedAmount, $this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue($convertedAmount));
+            ->with($convertedAmount, $this->saleableItemMock)
+            ->willReturn($convertedAmount);
 
         $result = $this->linkPrice->getLinkAmount($this->linkMock);
         $this->assertEquals($convertedAmount, $result);

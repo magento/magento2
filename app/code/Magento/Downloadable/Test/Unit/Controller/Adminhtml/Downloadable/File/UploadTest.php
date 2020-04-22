@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\File;
 
@@ -98,25 +99,19 @@ class UploadTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->createMock(RequestInterface::class);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader'
-            ]
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->fileHelper = $this->createPartialMock(File::class, [
-                'uploadFromTmp'
-            ]);
+            'uploadFromTmp'
+        ]);
         $this->context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactory));
+            ->willReturn($this->resultFactory);
 
         $this->link = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()

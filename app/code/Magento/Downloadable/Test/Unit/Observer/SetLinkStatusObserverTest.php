@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
@@ -157,7 +159,7 @@ class SetLinkStatusObserverTest extends TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -211,7 +213,7 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -266,15 +268,15 @@ class SetLinkStatusObserverTest extends TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(\Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS),
-                $this->equalTo(ScopeInterface::SCOPE_STORE),
-                $this->equalTo(1)
+                \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
+                ScopeInterface::SCOPE_STORE,
+                1
             )
             ->willReturn(Item::STATUS_PENDING);
 
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -328,7 +330,7 @@ class SetLinkStatusObserverTest extends TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())
             ->method('getOrder')
@@ -390,7 +392,7 @@ class SetLinkStatusObserverTest extends TestCase
             ->getMock();
         $linkItemCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($this->equalTo('order_item_id'), $this->equalTo(['in' => $expectedOrderItemIds]))
+            ->with('order_item_id', ['in' => $expectedOrderItemIds])
             ->willReturn($items);
 
         return $linkItemCollection;
@@ -415,7 +417,7 @@ class SetLinkStatusObserverTest extends TestCase
         if ($isSaved) {
             $linkItem->expects($this->once())
                 ->method('setStatus')
-                ->with($this->equalTo($expectedStatus))
+                ->with($expectedStatus)
                 ->willReturnSelf();
             $linkItem->expects($this->once())
                 ->method('save')

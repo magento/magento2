@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Product\Edit;
 
@@ -11,6 +12,7 @@ use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Helper\File;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +40,7 @@ class SampleTest extends TestCase
     protected $sampleModel;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -57,44 +59,39 @@ class SampleTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader'
-            ]
-        );
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->fileHelper = $this->createPartialMock(File::class, [
-                'getFilePath'
-            ]);
+            'getFilePath'
+        ]);
         $this->downloadHelper = $this->createPartialMock(Download::class, [
-                'setResource',
-                'getFilename',
-                'getContentType',
-                'output',
-                'getFileSize',
-                'getContentDisposition'
-            ]);
-        $this->sampleModel = $this->createPartialMock(
-            Sample::class,
-            [
+            'setResource',
+            'getFilename',
+            'getContentType',
+            'output',
+            'getFileSize',
+            'getContentDisposition'
+        ]);
+        $this->sampleModel = $this->getMockBuilder(Sample::class)
+            ->addMethods([
                 'load',
                 'getId',
                 'getSampleType',
                 'getSampleUrl',
                 'getBasePath',
                 'getBaseSamplePath',
-                'getSampleFile',
-            ]
-        );
-        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
-                'create',
-                'get'
-            ]);
+                'getSampleFile'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager = $this->createPartialMock(ObjectManager::class, [
+            'create',
+            'get'
+        ]);
         $this->sample = $this->objectManagerHelper->getObject(
             Sample::class,
             [
