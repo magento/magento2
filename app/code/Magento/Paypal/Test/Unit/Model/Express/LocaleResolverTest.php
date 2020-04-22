@@ -18,7 +18,7 @@ use Magento\Paypal\Model\Express\LocaleResolver as ExpressLocaleResolver;
 class LocaleResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ResolverInterface
      */
     private $resolver;
 

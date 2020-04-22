@@ -107,8 +107,10 @@ define([
          */
         afterOnAuthorize: function (res, resolve, reject, actions) {
             $('body').trigger('processStop');
+
             if (res.success) {
                 resolve();
+
                 return actions.redirect(res.redirectUrl);
             }
 

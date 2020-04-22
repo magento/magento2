@@ -43,8 +43,7 @@ define([
      * @param {Object} actions
      * @returns {Object} jQuery promise
      */
-    function performOnApprove(clientConfig, data, actions)
-    {
+    function performOnApprove(clientConfig, data, actions) {
         var params = {
             paymentToken: data.orderID,
             payerId: data.payerID,
@@ -79,22 +78,49 @@ define([
                 onInit: function (data, actions) {
                     clientConfig.rendererComponent.validate(actions);
                 },
+
+                /**
+                 * Triggers beforePayment action on PayPal buttons
+                 * @returns {Object} jQuery promise
+                 */
                 createOrder: function () {
                     return performCreateOrder(clientConfig);
                 },
+
+                /**
+                 * Triggers beforeOnAuthorize action on PayPal buttons
+                 * @param {Object} data
+                 * @param {Object} actions
+                 */
                 onApprove: function (data, actions) {
                     performOnApprove(clientConfig, data, actions);
                 },
+
+                /**
+                 * Execute logic on Paypal button click
+                 */
                 onClick: function () {
                     clientConfig.rendererComponent.validate();
                     clientConfig.rendererComponent.onClick();
                 },
+
+                /**
+                 * Process cancel action
+                 * @param {Object} data
+                 * @param {Object} actions
+                 */
                 onCancel: function (data, actions) {
                     clientConfig.rendererComponent.onCancel(data, actions);
                 },
+
+                /**
+                 * Process errors
+                 *
+                 * @param {Error} err
+                 */
                 onError: function (err) {
                     clientConfig.rendererComponent.onError(err);
-                },
+                }
             }).render(element);
         });
     };

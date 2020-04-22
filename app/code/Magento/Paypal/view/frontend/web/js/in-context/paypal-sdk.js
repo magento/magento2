@@ -26,7 +26,7 @@ define([
             }
         });
 
-        if (dfd.state() !== "resolved") {
+        if (dfd.state() !== 'resolved') {
             require(['paypalSdk'], function (paypalObject) {
                 dfd.resolve(paypalObject);
             });
