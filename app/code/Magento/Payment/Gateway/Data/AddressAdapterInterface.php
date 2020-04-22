@@ -41,6 +41,20 @@ interface AddressAdapterInterface
     public function getStreetLine2();
 
     /**
+     * Get street line 3
+     *
+     * @return string
+     */
+    public function getStreetLine3();
+
+    /**
+     * Get street line 4
+     *
+     * @return string
+     */
+    public function getStreetLine4();
+
+    /**
      * Get telephone number
      *
      * @return string

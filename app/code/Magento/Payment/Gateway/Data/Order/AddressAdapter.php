@@ -69,6 +69,28 @@ class AddressAdapter implements AddressAdapterInterface
     }
 
     /**
+     * Get street line 3
+     *
+     * @return string
+     */
+    public function getStreetLine3()
+    {
+        $street = $this->address->getStreet();
+        return $street[2] ?? '';
+    }
+
+    /**
+     * Get street line 4
+     *
+     * @return string
+     */
+    public function getStreetLine4()
+    {
+        $street = $this->address->getStreet();
+        return $street[3] ?? '';
+    }
+
+    /**
      * Get telephone number
      *
      * @return string
