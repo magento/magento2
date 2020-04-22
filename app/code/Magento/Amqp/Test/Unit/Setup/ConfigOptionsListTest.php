@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Amqp\Test\Unit\Setup;
 
@@ -137,7 +138,7 @@ class ConfigOptionsListTest extends TestCase
     public function testCreateConfig($options, $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         /** @var ConfigData $configData */
         $configData = $result[0];
