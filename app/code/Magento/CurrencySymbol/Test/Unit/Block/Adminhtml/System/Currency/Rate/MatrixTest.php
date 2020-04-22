@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
 
 use Magento\Backend\Model\Session;
 use Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix;
+use Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -41,10 +44,10 @@ class MatrixTest extends TestCase
         $newRates = ['USD' => ['EUR' => 0.7767, 'UAH' => 20, 'GBP' => 12, 'USD' => 1]];
         $expectedNewRates = ['USD' => ['EUR' => '0.7767', 'UAH' => '20.0000', 'GBP' => '12.0000', 'USD' => '1.0000']];
 
-        $backendSessionMock = $this->createPartialMock(
-            Session::class,
-            ['getRates', 'unsetData']
-        );
+        $backendSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getRates', 'unsetData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $backendSessionMock->expects($this->once())->method('getRates')->willReturn($newRates);
 
         $currencyFactoryMock = $this->createPartialMock(CurrencyFactory::class, ['create']);
@@ -60,7 +63,7 @@ class MatrixTest extends TestCase
             ->with($baseCurrencies, $allowCurrencies)
             ->willReturn($currencyRates);
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|MockObject */
+        /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(
             LayoutInterface::class,
             [],
@@ -71,7 +74,7 @@ class MatrixTest extends TestCase
             []
         );
 
-        /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services */
+        /** @var Services $block */
         $block = $this->objectManagerHelper->getObject(
             Matrix::class,
             [

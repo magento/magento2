@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
 
 use Magento\Backend\Model\Session;
@@ -43,12 +45,12 @@ class ServicesTest extends TestCase
             ['create']
         );
         $sourceServiceMock = $this->createMock(Service::class);
-        $backendSessionMock = $this->createPartialMock(
-            Session::class,
-            ['getCurrencyRateService']
-        );
+        $backendSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCurrencyRateService'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|MockObject */
+        /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(
             LayoutInterface::class,
             [],
@@ -59,10 +61,11 @@ class ServicesTest extends TestCase
             ['createBlock']
         );
 
-        $blockMock = $this->createPartialMock(
-            Select::class,
-            ['setOptions', 'setId', 'setName', 'setValue', 'setTitle']
-        );
+        $blockMock = $this->getMockBuilder(Select::class)
+            ->addMethods(['setName', 'setValue'])
+            ->onlyMethods(['setOptions', 'setId', 'setTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 
@@ -76,7 +79,7 @@ class ServicesTest extends TestCase
         $blockMock->expects($this->once())->method('setValue')->with($service)->willReturnSelf();
         $blockMock->expects($this->once())->method('setTitle')->with('Import Service')->willReturnSelf();
 
-        /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services */
+        /** @var Services $block */
         $block = $this->objectManagerHelper->getObject(
             Services::class,
             [
