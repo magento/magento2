@@ -63,7 +63,8 @@ class ReportValidatorTest extends TestCase
         $this->connectionFactoryMock = $this->createMock(ConnectionFactory::class);
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
         $this->queryMock = $this->createMock(Query::class);
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
         $this->selectMock = $this->createMock(Select::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

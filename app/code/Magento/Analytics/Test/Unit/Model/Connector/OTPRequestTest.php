@@ -55,7 +55,7 @@ class OTPRequestTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 

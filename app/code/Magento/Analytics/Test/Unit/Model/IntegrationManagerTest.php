@@ -43,7 +43,7 @@ class IntegrationManagerTest extends TestCase
      */
     private $integrationManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);

@@ -102,41 +102,41 @@ class ColumnsResolverTest extends TestCase
     {
         return [
             'COUNT( DISTINCT `cpe`.`name`) AS name' => [
-                    'expectedColumns' => [
-                        'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
+                'expectedColumns' => [
+                    'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
+                ],
+                'expectedGroup' => [
+                    'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
+                ],
+                'entityConfig' => [
+                    'name' => 'catalog_product_entity',
+                    'alias' => 'cpe',
+                    'attribute' => [
+                        [
+                            'name' => 'name',
+                            'function' => 'COUNT',
+                            'distinct' => true,
+                            'group' => true
+                        ]
                     ],
-                    'expectedGroup' => [
-                        'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
-                    ],
-                    'entityConfig' => [
-                            'name' => 'catalog_product_entity',
-                            'alias' => 'cpe',
-                            'attribute' => [
-                                [
-                                    'name' => 'name',
-                                    'function' => 'COUNT',
-                                    'distinct' => true,
-                                    'group' => true
-                                ]
-                            ],
-                        ],
-                    ],
+                ],
+            ],
             'AVG(`cpe`.`name`) AS avg_name' => [
                 'expectedColumns' => [
                     'avg_name' => new ColumnValueExpression('AVG(`cpe`.`name`)')
                 ],
                 'expectedGroup' => [],
                 'entityConfig' => [
-                        'name' => 'catalog_product_entity',
-                        'alias' => 'cpe',
-                        'attribute' => [
-                            [
-                                'name' => 'name',
-                                'alias' => 'avg_name',
-                                'function' => 'AVG',
-                            ]
-                        ],
+                    'name' => 'catalog_product_entity',
+                    'alias' => 'cpe',
+                    'attribute' => [
+                        [
+                            'name' => 'name',
+                            'alias' => 'avg_name',
+                            'function' => 'AVG',
+                        ]
                     ],
+                ],
             ]
         ];
     }

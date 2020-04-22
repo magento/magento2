@@ -24,7 +24,7 @@ class ExportDataHandlerNotificationTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }

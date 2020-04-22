@@ -25,7 +25,7 @@ class ModuleIteratorTest extends TestCase
      */
     private $moduleIterator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
         $objectManagerHelper = new ObjectManagerHelper($this);

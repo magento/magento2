@@ -31,10 +31,10 @@ class MapperTest extends TestCase
             ]
         ];
         $expectedResult = [
-          'Product' => [
-              'source' => 'product',
-              'name' => 'Product',
-          ]
+            'Product' => [
+                'source' => 'product',
+                'name' => 'Product',
+            ]
         ];
         $this->assertEquals($this->mapper->execute($configData), $expectedResult);
     }
