@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesInventory\Test\Unit\Model\Order;
 
 use Magento\CatalogInventory\Api\StockManagementInterface;
@@ -73,7 +75,7 @@ class ReturnProcessorTest extends TestCase
     /** @var  MockObject|StoreInterface */
     private $storeMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
             ->disableOriginalConstructor()
