@@ -43,10 +43,13 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)->getMockForAbstractClass();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMockForAbstractClass();
+        $responseMock = $this->getMockBuilder(ResponseInterface::class)
+            ->getMockForAbstractClass();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getResponse'])

@@ -74,7 +74,8 @@ class PostTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->mailMock = $this->getMockBuilder(MailInterface::class)->getMockForAbstractClass();
+        $this->mailMock = $this->getMockBuilder(MailInterface::class)
+            ->getMockForAbstractClass();
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager']
@@ -200,9 +201,9 @@ class PostTest extends TestCase
     private function stubRequestPostData($post): void
     {
         $this->requestStub
-             ->expects($this->once())
-             ->method('isPost')
-             ->willReturn(!empty($post));
+            ->expects($this->once())
+            ->method('isPost')
+            ->willReturn(!empty($post));
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
