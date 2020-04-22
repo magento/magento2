@@ -64,7 +64,7 @@ class InputValidatorTest extends TestCase
 
         $localeObjectMock->expects($this->any())->method('isValid')
             ->with('en_US')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->inputValidator = $this->objectManagerHelper->getObject(
             InputValidator::class,
