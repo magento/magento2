@@ -68,7 +68,8 @@ class SearchDataTest extends TestCase
         $this->contextMock = $this->getMockBuilder(TemplateContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->block = $this->getMockBuilder(SearchData::class)->setConstructorArgs(
+        $this->block = $this->getMockBuilder(SearchData::class)
+            ->setConstructorArgs(
             [
                 $this->contextMock,
                 $this->dataProvider,
