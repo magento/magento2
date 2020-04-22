@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\FileSystem as ViewFilesystem;
+use Magento\Framework\View\FileSystem as FilesystemView;
 use Magento\Widget\Model\Config\Data;
 use Magento\Widget\Model\Config\Reader;
 use Magento\Widget\Model\NamespaceResolver;
@@ -34,7 +34,7 @@ class InstanceTest extends TestCase
     protected $_widgetModelMock;
 
     /**
-     * @var ViewFilesystem|MockObject
+     * @var FilesystemView|MockObject
      */
     protected $_viewFileSystemMock;
 
@@ -66,21 +66,17 @@ class InstanceTest extends TestCase
     {
         $this->_widgetModelMock = $this->getMockBuilder(
             Widget::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
         $this->_viewFileSystemMock = $this->getMockBuilder(
-            ViewFilesystem::class
-        )->disableOriginalConstructor()
-            ->getMock();
+            FilesystemView::class
+        )->disableOriginalConstructor()->getMock();
         $this->_namespaceResolver = $this->getMockBuilder(
             NamespaceResolver::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
         $this->_cacheTypesListMock = $this->createMock(TypeListInterface::class);
         $this->_readerMock = $this->getMockBuilder(
             Reader::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $filesystemMock = $this->createMock(Filesystem::class);
         $this->_directoryMock = $this->createMock(Read::class);
@@ -88,11 +84,11 @@ class InstanceTest extends TestCase
             $this->any()
         )->method(
             'getDirectoryRead'
-        )->willReturn(
-            $this->_directoryMock
+        )->will(
+            $this->returnValue($this->_directoryMock)
         );
-        $this->_directoryMock->expects($this->any())->method('isReadable')->willReturnArgument(0);
-        $this->_directoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
+        $this->_directoryMock->expects($this->any())->method('isReadable')->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $objectManagerHelper = new ObjectManager($this);
         $this->serializer = $this->createMock(Json::class);
         $args = $objectManagerHelper->getConstructArguments(
@@ -142,11 +138,11 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
         $xmlFile = __DIR__ . '/../_files/widget.xml';
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn($xmlFile);
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue($xmlFile));
         $themeConfigFile = __DIR__ . '/../_files/mappedConfigArrayAll.php';
         $themeConfig = include $themeConfigFile;
         $this->_readerMock->expects(
@@ -155,8 +151,8 @@ class InstanceTest extends TestCase
             'readFile'
         )->with(
             $this->equalTo($xmlFile)
-        )->willReturn(
-            $themeConfig
+        )->will(
+            $this->returnValue($themeConfig)
         );
 
         $result = $this->_model->getWidgetConfigAsArray();
@@ -174,10 +170,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [
             'default' => [
                 'value' => 'product/widget/link/link_block.phtml',
@@ -215,10 +211,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [
             'default' => ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Template'],
         ];
@@ -239,10 +235,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
     }
@@ -255,10 +251,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = ['left', 'content'];
         $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
@@ -276,10 +272,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = [];
         $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
@@ -292,10 +288,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [
             ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template'],
             ['value' => 'product/widget/link/link_inline.phtml', 'label' => 'Product Link Inline Template'],
@@ -311,10 +307,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [
             ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template'],
         ];
@@ -345,10 +341,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = [
             'default' => ['value' => 'product/widget/link/link_block.phtml', 'label' => 'Template'],
         ];
@@ -363,10 +359,10 @@ class InstanceTest extends TestCase
             $this->once()
         )->method(
             'getWidgetByClassType'
-        )->willReturn(
-            $widget
+        )->will(
+            $this->returnValue($widget)
         );
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->willReturn('');
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = [];
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
     }

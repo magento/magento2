@@ -66,8 +66,8 @@ abstract class AbstractTestCase extends TestCase
     protected function _getResource(Select $select)
     {
         $connection = $this->createMock(Mysql::class);
-        $connection->expects($this->once())->method('select')->willReturn($select);
-        $connection->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
+        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
         $resource = $this->getMockForAbstractClass(
             AbstractDb::class,
@@ -78,8 +78,8 @@ abstract class AbstractTestCase extends TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
-        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
-        $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         return $resource;
     }
@@ -98,14 +98,14 @@ abstract class AbstractTestCase extends TestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var MockObject $connection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $connection */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
         )->method(
             'prepareSqlCondition'
-        )->willReturnCallback(
-            [$this, 'verifyPrepareSqlCondition']
+        )->will(
+            $this->returnCallback([$this, 'verifyPrepareSqlCondition'])
         );
 
         // expected date without time
@@ -142,7 +142,7 @@ abstract class AbstractTestCase extends TestCase
         $this->assertArrayHasKey($key, $condition);
 
         if ($key == 'lt') {
-            $this->assertStringContainsString($value, $condition[$key]);
+            $this->assertContains($value, $condition[$key]);
         } else {
             $this->assertContains($value, $condition);
         }

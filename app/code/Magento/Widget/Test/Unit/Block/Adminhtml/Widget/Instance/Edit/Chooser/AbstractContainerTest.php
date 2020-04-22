@@ -99,8 +99,7 @@ abstract class AbstractContainerTest extends TestCase
             ->getMock();
         $this->themeMock = $this->getMockBuilder(
             Theme::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->layoutProcessorFactoryMock = $this->createPartialMock(
             ProcessorFactory::class,

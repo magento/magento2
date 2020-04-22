@@ -34,6 +34,5 @@ class ConverterTest extends TestCase
         $convertedFile = __DIR__ . '/../_files/widget_config.php';
         $expectedResult = include $convertedFile;
         $this->assertEquals($expectedResult, $this->_model->convert($dom), '');
-        $this->assertEqualsWithDelta($expectedResult, $this->_model->convert($dom), 0, '');
     }
 }
