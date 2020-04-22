@@ -90,7 +90,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
         $this->eventMock->expects($this->once())
             ->method('__call')
             ->with(
-                $this->equalTo('getOrderIds')
+                'getOrderIds'
             )
             ->willReturn([]);
         $this->layoutMock->expects($this->never())
@@ -115,7 +115,7 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
         $this->eventMock->expects($this->once())
             ->method('__call')
             ->with(
-                $this->equalTo('getOrderIds')
+                'getOrderIds'
             )
             ->willReturn($orderIds);
         $this->layoutMock->expects($this->once())
@@ -124,8 +124,8 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
         $blockMock->expects($this->once())
             ->method('__call')
             ->with(
-                $this->equalTo('setOrderIds'),
-                $this->equalTo([$orderIds])
+                'setOrderIds',
+                [$orderIds]
             );
 
         $this->orderSuccessObserver->execute($this->observerMock);
