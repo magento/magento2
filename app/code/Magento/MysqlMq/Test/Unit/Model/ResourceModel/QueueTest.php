@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 
@@ -38,7 +39,8 @@ class QueueTest extends TestCase
     protected function setUp(): void
     {
         $this->resources = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->queue = $objectManager->getObject(
@@ -102,7 +104,8 @@ class QueueTest extends TestCase
             )->willReturn(2);
         $connection->expects($this->once())->method('lastInsertId')->with($tableName)->willReturn($messageIds[0]);
         $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['qm' => $tableName], ['id'])->willReturnSelf();
         $select->expects($this->once())->method('where')->with('qm.id >= ?', $messageIds[0])->willReturnSelf();
@@ -123,14 +126,16 @@ class QueueTest extends TestCase
         $queueIds = [5, 6];
         $tableNames = ['queue', 'queue_message_status'];
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1]);
         $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['queue' => $tableNames[0]])->willReturnSelf();
         $select->expects($this->once())->method('columns')->with(['id'])->willReturnSelf();
@@ -167,14 +172,16 @@ class QueueTest extends TestCase
         $tableNames = ['queue_message', 'queue_message_status', 'queue'];
         $messages = [['message0_data'], ['message1_data']];
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(3))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'], [$tableNames[2], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1], $tableNames[2]);
         $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['queue_message' => $tableNames[0]],
@@ -233,14 +240,16 @@ class QueueTest extends TestCase
         $messageIds = [1, 2];
         $tableNames = ['queue_message_status', 'queue_message'];
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
             ->withConsecutive([$tableNames[0], 'default'], [$tableNames[1], 'default'])
             ->willReturnOnConsecutiveCalls($tableNames[0], $tableNames[1]);
         $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())
             ->method('from')->with(['queue_message_status' => $tableNames[0]], ['message_id'])->willReturnSelf();
@@ -264,7 +273,8 @@ class QueueTest extends TestCase
         $relationIds = [1, 2];
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -293,7 +303,8 @@ class QueueTest extends TestCase
         $relationId = 1;
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -319,7 +330,8 @@ class QueueTest extends TestCase
         $status = QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED;
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);

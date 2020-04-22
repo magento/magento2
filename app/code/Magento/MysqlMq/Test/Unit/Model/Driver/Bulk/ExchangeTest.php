@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MysqlMq\Test\Unit\Model\Driver\Bulk;
 
@@ -51,11 +52,14 @@ class ExchangeTest extends TestCase
         $this->messageQueueConfig = $this->getMockBuilder(
             TopologyConfigInterface::class
         )
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queueManagement = $this->getMockBuilder(QueueManagement::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->connnectionTypeResolver = $this->getMockBuilder(ConnectionTypeResolver::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->exchange = $objectManager->getObject(
@@ -117,7 +121,8 @@ class ExchangeTest extends TestCase
         $this->messageQueueConfig->expects($this->once())
             ->method('getExchanges')->willReturn([$exchange1, $exchange2]);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $envelope->expects($this->once())->method('getBody')->willReturn($envelopeBody);
         $this->queueManagement->expects($this->once())
             ->method('addMessagesToQueues')->with($topicName, [$envelopeBody], $queueNames);

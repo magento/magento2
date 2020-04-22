@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MysqlMq\Test\Unit\Model;
 
@@ -56,11 +57,14 @@ class QueueManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->messageResource = $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dateTime = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageStatusCollectionFactory = $this
             ->getMockBuilder(MessageStatusCollectionFactory::class)
             ->setMethods(['create'])
@@ -130,7 +134,8 @@ class QueueManagementTest extends TestCase
     {
         $messageId = 99;
         $collection = $this->getMockBuilder(MessageStatusCollection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageStatusCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->scopeConfig->expects($this->exactly(8))->method('getValue')
             ->withConsecutive(
@@ -224,7 +229,8 @@ class QueueManagementTest extends TestCase
     {
         $messageStatus = $this->getMockBuilder(MessageStatus::class)
             ->setMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $messageStatus->expects($this->once())->method('getUpdatedAt')->willReturn('2010-01-01 00:00:00');
         return $messageStatus;
     }
