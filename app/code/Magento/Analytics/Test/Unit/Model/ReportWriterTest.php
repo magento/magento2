@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\ConfigInterface;
@@ -75,11 +77,13 @@ class ReportWriterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->reportValidatorMock = $this->createMock(ReportValidator::class);
         $this->providerFactoryMock = $this->createMock(ProviderFactory::class);
         $this->reportProviderMock = $this->createMock(ReportProvider::class);
-        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->reportWriter = $this->objectManagerHelper->getObject(

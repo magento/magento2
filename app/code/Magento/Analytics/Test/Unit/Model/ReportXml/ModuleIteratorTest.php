@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\ReportXml;
 
@@ -24,7 +25,7 @@ class ModuleIteratorTest extends TestCase
      */
     private $moduleIterator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
         $objectManagerHelper = new ObjectManagerHelper($this);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model;
 
@@ -42,7 +43,7 @@ class IntegrationManagerTest extends TestCase
      */
     private $integrationManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);

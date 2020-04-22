@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
 use Magento\Analytics\ReportXml\ConnectionFactory;
@@ -13,7 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\MockObject\Stub\Stub;
 use PHPUnit\Framework\TestCase;
 
 class ReportValidatorTest extends TestCase
@@ -61,7 +63,8 @@ class ReportValidatorTest extends TestCase
         $this->connectionFactoryMock = $this->createMock(ConnectionFactory::class);
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
         $this->queryMock = $this->createMock(Query::class);
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
         $this->selectMock = $this->createMock(Select::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

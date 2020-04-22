@@ -107,7 +107,7 @@ class CollectionTimeLabelTest extends TestCase
         $this->localeResolverMock->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );
