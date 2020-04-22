@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,6 @@
 
 namespace Magento\Ups\Test\Unit\Model;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -25,7 +24,8 @@ use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
