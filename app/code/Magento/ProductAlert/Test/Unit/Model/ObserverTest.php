@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -159,11 +161,10 @@ class ObserverTest extends TestCase
             ->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->getMock();
-        $this->sitemapCollectionMock = $this->createPartialMock(
-            Collection::class,
-            ['getIterator']
-        );
-        $this->sitemapMock = $this->createPartialMock(Sitemap::class, ['generateXml']);
+        $this->sitemapCollectionMock = $this->getMockBuilder(Collection::class)
+            ->onlyMethods(['getIterator'])->disableOriginalConstructor()->getMock();
+        $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
+            ->onlyMethods(['generateXml'])->disableOriginalConstructor()->getMock();
 
         $this->emailFactoryMock = $this->getMockBuilder(
             EmailFactory::class
@@ -184,10 +185,8 @@ class ObserverTest extends TestCase
             ->setMethods(['create', 'addWebsiteFilter', 'setCustomerOrder', 'addStatusFilter'])
             ->getMock();
 
-        $this->websiteMock = $this->createPartialMock(
-            Website::class,
-            ['getDefaultGroup', 'getDefaultStore']
-        );
+        $this->websiteMock = $this->getMockBuilder(Website::class)
+            ->onlyMethods(['getDefaultGroup', 'getDefaultStore'])->disableOriginalConstructor()->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultStore', 'getId', 'setWebsiteId'])
@@ -205,7 +204,8 @@ class ObserverTest extends TestCase
                 ]
             )->getMock();
 
-        $this->productSalabilityMock = $this->createPartialMock(ProductSalability::class, ['isSalable']);
+        $this->productSalabilityMock = $this->getMockBuilder(ProductSalability::class)
+            ->onlyMethods(['isSalable'])->disableOriginalConstructor()->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
