@@ -40,7 +40,7 @@ class SearchEngineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $adapterFactory->expects($this->once())->method('create')->will($this->returnValue($this->adapter));
+        $adapterFactory->expects($this->once())->method('create')->willReturn($this->adapter);
 
         $this->searchEngine = $helper->getObject(
             SearchEngine::class,
@@ -62,8 +62,8 @@ class SearchEngineTest extends TestCase
 
         $this->adapter->expects($this->once())
             ->method('query')
-            ->with($this->equalTo($request))
-            ->will($this->returnValue($response));
+            ->with($request)
+            ->willReturn($response);
 
         $result = $this->searchEngine->search($request);
         $this->assertInstanceOf(ResponseInterface::class, $result);

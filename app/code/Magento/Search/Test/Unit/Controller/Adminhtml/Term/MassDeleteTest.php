@@ -113,13 +113,12 @@ class MassDeleteTest extends TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('search')
-            ->will($this->returnValue($ids));
+            ->willReturn($ids);
 
         $this->createQuery(0, 1);
         $this->createQuery(1, 2);
         $this->messageManager->expects($this->once())
-            ->method('addSuccessMessage')
-            ->will($this->returnSelf());
+            ->method('addSuccessMessage')->willReturnSelf();
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('search/*/')
@@ -140,16 +139,14 @@ class MassDeleteTest extends TestCase
             ->setMethods(['load', 'delete'])
             ->getMock();
         $query->expects($this->at(0))
-            ->method('delete')
-            ->will($this->returnSelf());
+            ->method('delete')->willReturnSelf();
         $query->expects($this->at(0))
             ->method('load')
-            ->with($id)
-            ->will($this->returnSelf());
+            ->with($id)->willReturnSelf();
         $this->objectManager->expects($this->at($index))
             ->method('create')
             ->with(Query::class)
-            ->will($this->returnValue($query));
+            ->willReturn($query);
         return $query;
     }
 }
