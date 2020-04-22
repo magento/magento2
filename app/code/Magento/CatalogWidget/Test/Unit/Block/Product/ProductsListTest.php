@@ -399,7 +399,8 @@ class ProductsListTest extends TestCase
             ->getMock();
 
         $product = $this->getMockBuilder(IdentityInterface::class)
-            ->onlyMethods(['getIdentities'])->getMockForAbstractClass();
+            ->onlyMethods(['getIdentities'])
+            ->getMockForAbstractClass();
         $notProduct = $this->getMockBuilder('NotProduct')
             ->setMethods(['getIdentities'])
             ->disableOriginalConstructor()
