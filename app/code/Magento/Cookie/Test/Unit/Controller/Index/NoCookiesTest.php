@@ -60,16 +60,18 @@ class NoCookiesTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setup(): void
+    protected function setup(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->responseMock = $this->getMockBuilder(HttpResponse::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectResponseMock = $this->getMockBuilder(RedirectInterface::class)->getMock();
+        $this->redirectResponseMock = $this->getMockBuilder(RedirectInterface::class)
+            ->getMock();
         $this->viewMock = $this->createMock(ViewInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
@@ -94,7 +96,7 @@ class NoCookiesTest extends TestCase
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
-                $this->equalTo('controller_action_nocookies'),
+                'controller_action_nocookies',
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
@@ -128,7 +130,7 @@ class NoCookiesTest extends TestCase
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
-                $this->equalTo('controller_action_nocookies'),
+                'controller_action_nocookies',
                 $this->callback(
                     function ($dataArray) {
                         $redirect = $dataArray['redirect'];
@@ -144,7 +146,7 @@ class NoCookiesTest extends TestCase
         // Verify response is set with redirect, which
         $this->redirectResponseMock->expects($this->once())
             ->method('redirect')
-            ->with($this->responseMock, $this->equalTo('\a\path'), $this->equalTo('&arg1key=arg1value'));
+            ->with($this->responseMock, '\a\path', '&arg1key=arg1value');
 
         // Verify request is set to dispatched
         $this->requestMock->expects($this->once())->method('setDispatched')->with($this->isTrue());

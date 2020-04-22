@@ -60,7 +60,7 @@ class CookieTest extends TestCase
         $this->contextMock = $this->createPartialMock(Context::class, ['getRequest', 'getScopeConfig']);
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);

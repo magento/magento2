@@ -49,19 +49,11 @@ class DomainTest extends TestCase
             ->method('getEventDispatcher')
             ->willReturn($eventDispatcherMock);
 
-        $this->resourceMock = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'beginTransaction',
-                'save',
-                'commit',
-                'addCommitCallback',
-                'rollBack',
-            ]
-        );
+        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName', 'save'])
+            ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback', 'rollBack'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->validatorMock = $this->getMockBuilder(CookieDomainValidator::class)
             ->disableOriginalConstructor()
@@ -89,16 +81,16 @@ class DomainTest extends TestCase
      */
     public function testBeforeSave($value, $isValid, $callNum, $callGetMessages = 0): void
     {
-        $this->resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
-        $this->resourceMock->expects($this->any())->method('commit')->will($this->returnSelf());
-        $this->resourceMock->expects($this->any())->method('rollBack')->will($this->returnSelf());
+        $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->resourceMock->expects($this->any())->method('commit')->willReturnSelf();
+        $this->resourceMock->expects($this->any())->method('rollBack')->willReturnSelf();
 
         $this->validatorMock->expects($this->exactly($callNum))
             ->method('isValid')
-            ->will($this->returnValue($isValid));
+            ->willReturn($isValid);
         $this->validatorMock->expects($this->exactly($callGetMessages))
             ->method('getMessages')
-            ->will($this->returnValue(['message']));
+            ->willReturn(['message']);
         $this->domain->setValue($value);
         try {
             $this->domain->beforeSave();

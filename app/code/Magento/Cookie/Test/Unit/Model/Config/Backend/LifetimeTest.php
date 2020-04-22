@@ -53,12 +53,11 @@ class LifetimeTest extends TestCase
 
     /**
      * Method is not publicly accessible, so it must be called through parent
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid cookie lifetime: must be numeric
      */
     public function testBeforeSaveException(): void
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Invalid cookie lifetime: must be numeric');
         $invalidCookieLifetime = 'invalid lifetime';
         $messages = ['must be numeric'];
         $this->validatorMock->expects($this->once())
