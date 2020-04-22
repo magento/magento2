@@ -43,9 +43,13 @@ class ConfigurableProductHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->configurableMock = $this->getMockBuilder(Configurable::class)
-            ->onlyMethods(['getChildrenIds'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getChildrenIds'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configurableProductsProviderMock = $this->getMockBuilder(ConfigurableProductsProvider::class)
-            ->onlyMethods(['getIds'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getIds'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->ruleMock = $this->createMock(Rule::class);
 
         $this->configurableProductHandler = new ConfigurableProductHandler(

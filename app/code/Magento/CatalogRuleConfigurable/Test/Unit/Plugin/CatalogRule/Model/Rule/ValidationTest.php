@@ -45,12 +45,16 @@ class ValidationTest extends TestCase
     protected function setUp(): void
     {
         $this->configurableMock = $this->getMockBuilder(Configurable::class)
-            ->onlyMethods(['getParentIdsByChild'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getParentIdsByChild'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->ruleMock = $this->createMock(Rule::class);
         $this->ruleConditionsMock = $this->createMock(Combine::class);
         $this->productMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getId'])->disableOriginalConstructor()->getMock();
+            ->addMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->validation = new Validation(
             $this->configurableMock
