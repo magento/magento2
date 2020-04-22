@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Console\Command;
 
@@ -110,7 +111,7 @@ class ConfigSetCommandTest extends TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('Some message')->render(),
             $tester->getDisplay()
         );
@@ -131,7 +132,7 @@ class ConfigSetCommandTest extends TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('You cannot run this command because the Magento application is not installed.')->render(),
             $tester->getDisplay()
         );
@@ -155,7 +156,7 @@ class ConfigSetCommandTest extends TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('This command is unavailable right now.')->render(),
             $tester->getDisplay()
         );
@@ -180,7 +181,7 @@ class ConfigSetCommandTest extends TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('The "test/test/test" path does not exists')->render(),
             $tester->getDisplay()
         );

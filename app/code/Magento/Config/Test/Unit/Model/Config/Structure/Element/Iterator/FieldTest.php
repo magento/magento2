@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Iterator;
 
 use Magento\Config\Model\Config\Structure\Element\Group;
@@ -71,7 +73,7 @@ class FieldTest extends TestCase
             ['_elementType' => 'group', 'id' => 'someGroup_2'],
             'scope'
         );
-        $this->_groupMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_groupMock->expects($this->any())->method('isVisible')->willReturn(true);
 
         $this->_fieldMock->expects(
             $this->at(0)
@@ -89,7 +91,7 @@ class FieldTest extends TestCase
             ['_elementType' => 'field', 'id' => 'someField_2'],
             'scope'
         );
-        $this->_fieldMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
+        $this->_fieldMock->expects($this->any())->method('isVisible')->willReturn(true);
 
         $items = [];
         foreach ($this->_model as $item) {

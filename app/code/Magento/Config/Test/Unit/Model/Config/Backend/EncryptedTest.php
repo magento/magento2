@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Config\Model\Config\Backend\Encrypted;
@@ -39,21 +41,14 @@ class EncryptedTest extends TestCase
             $this->any()
         )->method(
             'getEventDispatcher'
-        )->will(
-            $this->returnValue($eventDispatcherMock)
+        )->willReturn(
+            $eventDispatcherMock
         );
-        $this->_resourceMock = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'beginTransaction',
-                'save',
-                'commit',
-                'addCommitCallback',
-            ]
-        );
+        $this->_resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName', 'save'])
+            ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_configMock = $this->createMock(ScopeConfigInterface::class);
         $this->_encryptorMock = $this->createMock(EncryptorInterface::class);
         $this->_model = $helper->getObject(
@@ -77,8 +72,8 @@ class EncryptedTest extends TestCase
             'decrypt'
         )->with(
             $value
-        )->will(
-            $this->returnValue($result)
+        )->willReturn(
+            $result
         );
         $this->assertEquals($result, $this->_model->processValue($value));
     }
@@ -96,7 +91,7 @@ class EncryptedTest extends TestCase
         $this->_encryptorMock->expects($this->exactly($encryptMethodCall))
             ->method('encrypt')
             ->with($value)
-            ->will($this->returnValue('encrypted'));
+            ->willReturn('encrypted');
 
         $this->_model->setValue($value);
         $this->_model->setPath('some/path');

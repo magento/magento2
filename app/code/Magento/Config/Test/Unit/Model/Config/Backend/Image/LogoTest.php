@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend\Image;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
@@ -51,7 +53,7 @@ class LogoTest extends TestCase
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->uploaderMock));
+            ->willReturn($this->uploaderMock);
         $this->requestDataMock = $this
             ->getMockBuilder(RequestDataInterface::class)
             ->setMethods(['getTmpName'])
@@ -65,7 +67,7 @@ class LogoTest extends TestCase
             ->getMock();
         $filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($mediaDirectoryMock));
+            ->willReturn($mediaDirectoryMock);
         $this->model = $helper->getObject(
             Logo::class,
             [
@@ -80,10 +82,10 @@ class LogoTest extends TestCase
     {
         $this->requestDataMock->expects($this->once())
             ->method('getTmpName')
-            ->will($this->returnValue('/tmp/val'));
+            ->willReturn('/tmp/val');
         $this->uploaderMock->expects($this->once())
             ->method('setAllowedExtensions')
-            ->with($this->equalTo(['jpg', 'jpeg', 'gif', 'png']));
+            ->with(['jpg', 'jpeg', 'gif', 'png']);
         $this->model->beforeSave();
     }
 }

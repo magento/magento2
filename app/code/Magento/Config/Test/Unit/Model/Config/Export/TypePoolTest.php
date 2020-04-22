@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TypePoolTest extends TestCase
@@ -17,7 +19,7 @@ class TypePoolTest extends TestCase
      */
     private $excludeListMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
             ->disableOriginalConstructor()
@@ -83,7 +85,7 @@ class TypePoolTest extends TestCase
                 'environmentFieldList' => ['some/environment/field1' => '1'],
                 'field' => 'some/wrong/field',
                 'typeList' => TypePool::TYPE_SENSITIVE,
-                'excludeListCallback' => function (\PHPUnit\Framework\MockObject\MockObject $mockObject) {
+                'excludeListCallback' => function (MockObject $mockObject) {
                     $mockObject->expects($this->once())
                         ->method('isPresent')
                         ->willReturn(false);
@@ -103,7 +105,7 @@ class TypePoolTest extends TestCase
                 'environmentFieldList' => ['some/environment/field1' => '1'],
                 'field' => 'some/environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
-                'excludeListCallback' =>  function (\PHPUnit\Framework\MockObject\MockObject $mockObject) {
+                'excludeListCallback' =>  function (MockObject $mockObject) {
                     $mockObject->expects($this->once())
                         ->method('isPresent')
                         ->willReturn(false);
@@ -115,7 +117,7 @@ class TypePoolTest extends TestCase
                 'environmentFieldList' => ['some/sensitive-environment/field1' => '1'],
                 'field' => 'some/sensitive-environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
-                'excludeListCallback' =>  function (\PHPUnit\Framework\MockObject\MockObject $mockObject) {
+                'excludeListCallback' =>  function (MockObject $mockObject) {
                     $mockObject->expects($this->never())
                         ->method('isPresent');
                 },

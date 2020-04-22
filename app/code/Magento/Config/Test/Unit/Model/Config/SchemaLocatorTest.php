@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\SchemaLocator;
@@ -33,8 +35,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Config'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_model = new SchemaLocator($this->_moduleReaderMock);
     }

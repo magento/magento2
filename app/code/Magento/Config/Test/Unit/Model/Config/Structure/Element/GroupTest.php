@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Config\Model\Config\BackendClone\Factory;
@@ -84,8 +86,8 @@ class GroupTest extends TestCase
             'create'
         )->with(
             'clone_model_name'
-        )->will(
-            $this->returnValue($cloneModel)
+        )->willReturn(
+            $cloneModel
         );
         $this->_model->setData(['clone_model' => 'clone_model_name'], 'scope');
         $this->assertEquals($cloneModel, $this->_model->getCloneModel());
@@ -93,10 +95,10 @@ class GroupTest extends TestCase
 
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
-        $fieldsetMock = $this->createPartialMock(
-            Fieldset::class,
-            ['setOriginalData']
-        );
+        $fieldsetMock = $this->getMockBuilder(Fieldset::class)
+            ->addMethods(['setOriginalData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $fieldsetMock->expects(
             $this->once()
         )->method(
@@ -149,8 +151,8 @@ class GroupTest extends TestCase
         )->with(
             $fields,
             'test_scope'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_scope'));

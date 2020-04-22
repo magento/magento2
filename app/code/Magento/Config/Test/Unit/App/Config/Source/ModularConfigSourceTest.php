@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\ModularConfigSource;
@@ -25,7 +27,7 @@ class ModularConfigSourceTest extends TestCase
      */
     private $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

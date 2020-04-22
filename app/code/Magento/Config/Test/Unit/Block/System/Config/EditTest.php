@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Backend\Model\Url;
@@ -65,8 +67,8 @@ class EditTest extends TestCase
             'getParam'
         )->with(
             'section'
-        )->will(
-            $this->returnValue('test_section')
+        )->willReturn(
+            'test_section'
         );
 
         $this->_layoutMock = $this->createMock(Layout::class);
@@ -80,8 +82,8 @@ class EditTest extends TestCase
             'getElement'
         )->with(
             'test_section'
-        )->will(
-            $this->returnValue($this->_sectionMock)
+        )->willReturn(
+            $this->_sectionMock
         );
 
         $this->_jsonMock = $this->createMock(Json::class);
@@ -110,8 +112,8 @@ class EditTest extends TestCase
         )->with(
             null,
             'save_button'
-        )->will(
-            $this->returnValue('test_child_name')
+        )->willReturn(
+            'test_child_name'
         );
 
         $this->_layoutMock->expects(
@@ -120,8 +122,8 @@ class EditTest extends TestCase
             'renderElement'
         )->with(
             'test_child_name'
-        )->will(
-            $this->returnValue('element_html_code')
+        )->willReturn(
+            'element_html_code'
         );
 
         $this->assertEquals($expected, $this->_object->getSaveButtonHtml());
@@ -139,8 +141,8 @@ class EditTest extends TestCase
         )->with(
             $expectedUrl,
             $expectedParams
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());
@@ -196,7 +198,7 @@ class EditTest extends TestCase
 
         $requestMock->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValueMap($requestData));
+            ->willReturnMap($requestData);
         $this->_jsonMock->expects($this->once())
             ->method('serialize')
             ->with($expected);

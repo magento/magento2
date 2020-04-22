@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Importer;
 
 use Magento\Config\Model\Config\Backend\Currency\AbstractCurrency;
@@ -135,7 +137,7 @@ class SaveProcessorTest extends TestCase
                 ['web/unsecure/base_url', 'http://magento3.local/', 'websites', 'base', $value2]
             ]);
 
-        $this->assertSame(null, $this->model->process($data));
+        $this->assertNull($this->model->process($data));
     }
 
     public function testProcessWithNullValues()
@@ -168,6 +170,6 @@ class SaveProcessorTest extends TestCase
             ->method('getValue')
             ->willReturn(null);
 
-        $this->assertSame(null, $this->model->process($data));
+        $this->assertNull($this->model->process($data));
     }
 }

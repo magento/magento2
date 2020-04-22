@@ -19,7 +19,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Option\ArrayInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\View\Element\BlockInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -126,8 +125,8 @@ class FieldTest extends TestCase
             'getCommentText'
         )->with(
             'currentValue'
-        )->will(
-            $this->returnValue('translatedValue')
+        )->willReturn(
+            'translatedValue'
         );
         $this->_commentFactoryMock->expects(
             $this->once()
@@ -135,8 +134,8 @@ class FieldTest extends TestCase
             'create'
         )->with(
             'Model_Name'
-        )->will(
-            $this->returnValue($commentModelMock)
+        )->willReturn(
+            $commentModelMock
         );
         $this->assertEquals('translatedValue', $this->_model->getComment('currentValue'));
     }
@@ -220,7 +219,10 @@ class FieldTest extends TestCase
             'someArr' => ['testVar' => 'testVal'],
         ];
         $this->_model->setData($params, 'scope');
-        $elementMock = $this->createPartialMock(Text::class, ['setOriginalData']);
+        $elementMock = $this->getMockBuilder(Text::class)
+            ->addMethods(['setOriginalData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         unset($params['someArr']);
         $elementMock->expects($this->once())->method('setOriginalData')->with($params);
         $this->_model->populateInput($elementMock);
@@ -301,8 +303,8 @@ class FieldTest extends TestCase
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $expected = [['label' => 'test', 'value' => 0], ['label' => 'test2', 'value' => 1]];
         $sourceModelMock->expects(
@@ -311,8 +313,8 @@ class FieldTest extends TestCase
             'toOptionArray'
         )->with(
             false
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->assertEquals($expected, $this->_model->getOptions());
     }
@@ -323,22 +325,22 @@ class FieldTest extends TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'multiselect'],
             'scope'
         );
-        $sourceModelMock = $this->createPartialMock(
-            DataObject::class,
-            ['setPath', 'retrieveElements']
-        );
+        $sourceModelMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['setPath', 'retrieveElements'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $expected = ['testVar1' => 'testVal1', 'testVar2' => ['subvar1' => 'subval1']];
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
-        $sourceModelMock->expects($this->once())->method('retrieveElements')->will($this->returnValue($expected));
+        $sourceModelMock->expects($this->once())->method('retrieveElements')->willReturn($expected);
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 
@@ -348,26 +350,26 @@ class FieldTest extends TestCase
             ['source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'select'],
             'scope'
         );
-        $sourceModelMock = $this->createPartialMock(
-            DataObject::class,
-            ['setPath', 'retrieveElements']
-        );
+        $sourceModelMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['setPath', 'retrieveElements'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             'Source_Model_Name'
-        )->will(
-            $this->returnValue($sourceModelMock)
+        )->willReturn(
+            $sourceModelMock
         );
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
         $sourceModelMock->expects(
             $this->once()
         )->method(
             'retrieveElements'
-        )->will(
-            $this->returnValue(['var1' => 'val1', 'var2' => ['subvar1' => 'subval1']])
+        )->willReturn(
+            ['var1' => 'val1', 'var2' => ['subvar1' => 'subval1']]
         );
         $expected = [['label' => 'val1', 'value' => 'var1'], ['subvar1' => 'subval1']];
         $this->assertEquals($expected, $this->_model->getOptions());
@@ -401,8 +403,8 @@ class FieldTest extends TestCase
             $fields,
             'test_scope',
             'test_prefix'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_prefix', 'test_scope'));

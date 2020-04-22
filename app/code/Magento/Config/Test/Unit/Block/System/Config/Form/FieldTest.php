@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
 use Magento\Backend\Model\Url;
@@ -61,13 +63,9 @@ class FieldTest extends TestCase
             'elementHTML' => 'test_html',
         ];
 
-        $this->_elementMock = $this->createPartialMock(
-            Text::class,
-            [
-                'getHtmlId',
-                'getName',
+        $this->_elementMock = $this->getMockBuilder(Text::class)
+            ->addMethods([
                 'getLabel',
-                'getElementHtml',
                 'getComment',
                 'getHint',
                 'getScope',
@@ -77,38 +75,39 @@ class FieldTest extends TestCase
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
                 'setDisabled',
-                'getTooltip',
-                'setReadonly'
-            ]
-        );
+                'getTooltip'
+            ])
+            ->onlyMethods(['getHtmlId', 'getName', 'getElementHtml', 'setReadonly'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_elementMock->expects(
             $this->any()
         )->method(
             'getHtmlId'
-        )->will(
-            $this->returnValue($this->_testData['htmlId'])
+        )->willReturn(
+            $this->_testData['htmlId']
         );
         $this->_elementMock->expects(
             $this->any()
         )->method(
             'getName'
-        )->will(
-            $this->returnValue($this->_testData['name'])
+        )->willReturn(
+            $this->_testData['name']
         );
         $this->_elementMock->expects(
             $this->any()
         )->method(
             'getLabel'
-        )->will(
-            $this->returnValue($this->_testData['label'])
+        )->willReturn(
+            $this->_testData['label']
         );
         $this->_elementMock->expects(
             $this->any()
         )->method(
             'getElementHtml'
-        )->will(
-            $this->returnValue($this->_testData['elementHTML'])
+        )->willReturn(
+            $this->_testData['elementHTML']
         );
     }
 
@@ -131,45 +130,45 @@ class FieldTest extends TestCase
     public function testRenderValueWithCommentBlock()
     {
         $testComment = 'test_comment';
-        $this->_elementMock->expects($this->any())->method('getComment')->will($this->returnValue($testComment));
+        $this->_elementMock->expects($this->any())->method('getComment')->willReturn($testComment);
         $expected = '<td class="value">' .
             $this->_testData['elementHTML'] .
             '<p class="note"><span>' .
             $testComment .
             '</span></p></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderValueWithTooltipBlock()
     {
         $testTooltip = 'test_tooltip';
-        $this->_elementMock->expects($this->any())->method('getTooltip')->will($this->returnValue($testTooltip));
+        $this->_elementMock->expects($this->any())->method('getTooltip')->willReturn($testTooltip);
         $expected = '<td class="value with-tooltip">' .
             $this->_testData['elementHTML'] .
             '<div class="tooltip"><span class="help"><span></span></span><div class="tooltip-content">' .
             $testTooltip .
             '</div></div></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderHint()
     {
         $testHint = 'test_hint';
-        $this->_elementMock->expects($this->any())->method('getHint')->will($this->returnValue($testHint));
+        $this->_elementMock->expects($this->any())->method('getHint')->willReturn($testHint);
         $expected = '<td class=""><div class="hint"><div style="display: none;">' . $testHint . '</div></div>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderScopeLabel()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
 
         $testScopeLabel = 'test_scope_label';
-        $this->_elementMock->expects($this->any())->method('getScope')->will($this->returnValue(true));
-        $this->_elementMock->expects($this->any())->method('getScopeLabel')->will($this->returnValue($testScopeLabel));
+        $this->_elementMock->expects($this->any())->method('getScope')->willReturn(true);
+        $this->_elementMock->expects($this->any())->method('getScopeLabel')->willReturn($testScopeLabel);
 
         $expected = '<tr id="row_test_field_id">' .
             '<td class="label"><label for="test_field_id">' .
@@ -177,14 +176,14 @@ class FieldTest extends TestCase
             '</label></td><td class="value">test_html</td><td class=""></td></tr>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderInheritCheckbox()
     {
-        $this->_elementMock->expects($this->any())->method('getInherit')->will($this->returnValue(true));
-        $this->_elementMock->expects($this->any())->method('getCanUseWebsiteValue')->will($this->returnValue(true));
-        $this->_elementMock->expects($this->any())->method('getCanUseDefaultValue')->will($this->returnValue(true));
+        $this->_elementMock->expects($this->any())->method('getInherit')->willReturn(true);
+        $this->_elementMock->expects($this->any())->method('getCanUseWebsiteValue')->willReturn(true);
+        $this->_elementMock->expects($this->any())->method('getCanUseDefaultValue')->willReturn(true);
         $this->_elementMock->expects($this->once())->method('setDisabled')->with(true);
         $this->_elementMock->method('getIsDisableInheritance')->willReturn(true);
         $this->_elementMock->method('setReadonly')->with(true);
@@ -201,6 +200,6 @@ class FieldTest extends TestCase
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 }
