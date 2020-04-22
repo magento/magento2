@@ -120,7 +120,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '--area (-a) and --exclude-area cannot be used at the same time',
                 $e->getMessage()
             );
@@ -147,7 +147,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '--theme (-t) and --exclude-theme cannot be used at the same time',
                 $e->getMessage()
             );
@@ -173,7 +173,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '--language (-l) and --exclude-language cannot be used at the same time',
                 $e->getMessage()
             );
@@ -201,7 +201,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'Argument "' .
                 Options::CONTENT_VERSION
                 . '" has invalid value, content version should contain only characters, digits and dots',

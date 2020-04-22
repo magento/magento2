@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
@@ -140,7 +142,7 @@ class ModeTest extends TestCase
                 [State::PARAM_MODE => State::MODE_DEVELOPER]
             );
 
-        $this->assertSame(null, $this->model->getMode());
+        $this->assertNull($this->model->getMode());
         $this->assertSame(State::MODE_DEVELOPER, $this->model->getMode());
     }
 

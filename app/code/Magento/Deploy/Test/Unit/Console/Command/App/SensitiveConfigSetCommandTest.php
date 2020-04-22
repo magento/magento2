@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
 use Magento\Config\App\Config\Type\System;
@@ -12,7 +14,7 @@ use Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\Console\Cli;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -109,7 +111,7 @@ class SensitiveConfigSetCommandTest extends TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'This command is unavailable right now.',
             $tester->getDisplay()
         );
@@ -131,7 +133,7 @@ class SensitiveConfigSetCommandTest extends TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Some exception',
             $tester->getDisplay()
         );
