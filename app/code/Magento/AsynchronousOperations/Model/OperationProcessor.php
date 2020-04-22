@@ -123,7 +123,7 @@ class OperationProcessor
             $data = $this->jsonHelper->unserialize($operation->getSerializedData());
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
             $this->messageValidator->validate($topicName, $entityParams);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();
@@ -156,7 +156,7 @@ class OperationProcessor
                     $serviceMethod
                 );
                 $outputData = $this->jsonHelper->serialize($outputData);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $messages[] = $e->getMessage();
             }
         }
@@ -217,7 +217,7 @@ class OperationProcessor
             $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $result['error_code'] = $e->getCode();
             $result['messages'][] = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
             $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $result['error_code'] = $e->getCode();

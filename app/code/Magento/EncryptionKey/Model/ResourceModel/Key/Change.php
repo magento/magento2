@@ -125,7 +125,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->writer->saveConfig($configData);
             $this->commit();
             return $key;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             throw $e;
         }

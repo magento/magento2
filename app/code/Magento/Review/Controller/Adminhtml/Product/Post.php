@@ -65,7 +65,7 @@ class Post extends ProductController implements HttpPostActionInterface
                 return $resultRedirect;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
             }
         }

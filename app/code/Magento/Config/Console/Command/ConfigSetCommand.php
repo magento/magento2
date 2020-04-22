@@ -188,7 +188,7 @@ class ConfigSetCommand extends Command
             $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;

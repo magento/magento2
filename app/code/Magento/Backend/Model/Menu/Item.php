@@ -452,7 +452,7 @@ class Item
     {
         try {
             return $this->_acl->isAllowed((string)$this->_resource);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }

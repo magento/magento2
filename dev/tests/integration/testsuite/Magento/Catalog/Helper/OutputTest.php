@@ -104,7 +104,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
      * @param string $method
      * @param string $entityCode
      * @param string $expectedResult
-     * @throws \Exception on assertion failure
+     * @throws \Throwable on assertion failure
      */
     protected function _testAttribute($method, $entityCode, $expectedResult)
     {
@@ -126,7 +126,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
             );
 
             $attribute->setIsHtmlAllowedOnFront($isHtml)->setIsWysiwygEnabled($isWysiwyg);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $attribute->setIsHtmlAllowedOnFront($isHtml)->setIsWysiwygEnabled($isWysiwyg);
             throw $e;
         }

@@ -60,7 +60,7 @@ class Product extends AbstractPlugin
                 $this->reindexRow($product->getEntityId());
             });
             $productResource->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $productResource->rollBack();
             throw $e;
         }

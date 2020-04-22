@@ -47,14 +47,14 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
                             $config['hostname']
                         )
                     );
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addExceptionMessage(
                         $e,
                         __('We can\'t fetch reports from "%1@%2."', $config['username'], $config['hostname'])
                     );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

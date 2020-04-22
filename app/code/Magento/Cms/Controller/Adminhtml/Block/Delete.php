@@ -31,7 +31,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPost
                 $this->messageManager->addSuccessMessage(__('You deleted the block.'));
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // display error message
                 $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form

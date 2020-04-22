@@ -33,7 +33,7 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addSuccessMessage(__('You put the order on hold.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('You have not put the order on hold.'));
             }
             $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);

@@ -29,7 +29,7 @@ class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
                     ->unlock($userIds);
                 $this->getMessageManager()->addSuccess(__('Unlocked %1 user(s).', $affectedUsers));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError($e->getMessage());
         }
 

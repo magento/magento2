@@ -65,7 +65,7 @@ class CustomerPersistence implements CustomerPersistenceInterface
         $customer = $this->entityManager->load($customer, $id);
         try {
             $this->entityManager->delete($customer);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
         return true;

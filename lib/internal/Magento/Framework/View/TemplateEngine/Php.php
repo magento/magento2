@@ -74,7 +74,7 @@ class Php implements TemplateEngineInterface
             // phpcs:ignore
             include $fileName;
             $this->_currentBlock = $tmpBlock;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             ob_end_clean();
             throw $exception;
         }

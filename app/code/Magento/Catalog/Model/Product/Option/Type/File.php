@@ -155,7 +155,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             } elseif (isset($optionInfo['value'])) {
                 return $optionInfo['value'];
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $optionInfo['value'];
         }
     }
@@ -272,7 +272,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (LocalizedException $e) {
             $this->setIsValid(false);
             throw new LocalizedException(__($e->getMessage()));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($this->getSkipCheckRequiredOption()) {
                 $this->setUserValue(null);
             } else {
@@ -372,7 +372,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $this->_escaper->escapeHtml($title),
                 $sizes
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__('The file options format is invalid. Use a correct format and try again.'));
         }
     }
@@ -493,7 +493,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             } else {
                 $this->mediaDirectory->copyFile($quotePath, $orderPath);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this;
         }
         return $this;

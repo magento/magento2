@@ -63,7 +63,7 @@ class Image extends AbstractBackend
             $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this;
         }
         $path = $this->_filesystem->getDirectoryRead(

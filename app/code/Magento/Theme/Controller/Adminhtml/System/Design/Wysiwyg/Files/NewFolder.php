@@ -21,7 +21,7 @@ class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwy
             $result = $this->_getStorage()->createFolder($name, $path);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => __('Sorry, something went wrong. That\'s all we know.')];
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

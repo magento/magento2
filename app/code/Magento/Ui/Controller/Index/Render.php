@@ -140,7 +140,7 @@ class Render extends \Magento\Framework\App\Action\Action
             );
 
             return $resultJson->setData($result);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $result = [
                 'error' => __('UI component could not be rendered because of system exception'),

@@ -53,7 +53,7 @@ class MaintenanceModeEnablerTest extends TestCase
                 $this->createOutput(),
                 true
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 true,
                 $maintenanceMode->isOn(),
@@ -79,7 +79,7 @@ class MaintenanceModeEnablerTest extends TestCase
                 $this->createOutput(),
                 false
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 $maintenanceModeEnabledInitially,
                 $maintenanceMode->isOn(),

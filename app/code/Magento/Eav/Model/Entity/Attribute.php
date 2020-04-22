@@ -321,7 +321,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 $defaultValue->setTimezone(new \DateTimeZone($this->_localeDate->getDefaultTimezone()));
             }
             $utcValue = $defaultValue->format(DateTime::DATETIME_PHP_FORMAT);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
         }
 

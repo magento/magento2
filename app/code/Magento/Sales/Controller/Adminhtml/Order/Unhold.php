@@ -36,7 +36,7 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addSuccessMessage(__('You released the order from holding status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('The order was not on hold.'));
             }
             $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);

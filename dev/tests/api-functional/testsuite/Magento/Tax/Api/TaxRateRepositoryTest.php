@@ -131,7 +131,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['Code'], $errorObj['parameters']);
@@ -169,7 +169,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals('"%fieldName" is required. Enter and try again.', $errorObj['message']);
             $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
@@ -366,7 +366,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
             $this->assertContains(
@@ -423,7 +423,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, ['rateId' => $taxRateId]);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
             $this->assertContains(
@@ -490,7 +490,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, ['rateId' => $taxRateId]);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = "The tax rate can't be removed because it exists in a tax rule.";
 
             $this->assertContains(

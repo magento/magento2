@@ -383,7 +383,7 @@ class Dom
             if (!$result) {
                 $errors = self::getXmlErrors($errorFormat);
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
             array_unshift($errors, new Phrase('Processed schema file: %1', [$schema]));

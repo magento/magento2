@@ -99,7 +99,7 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
             $this->messageManager->addErrorMessage(__('The product was not found.'));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")

@@ -61,7 +61,7 @@ class Save extends StatusAction implements HttpPostActionInterface
                 return $resultRedirect->setPath('sales/*/');
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('We can\'t add the order status right now.')

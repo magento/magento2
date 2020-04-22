@@ -56,7 +56,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
     {
         try {
             $this->_imageFactory->create($this->getValue());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $message = __('The specified image adapter cannot be used because of: %1', $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException($message);
         }

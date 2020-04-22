@@ -128,7 +128,7 @@ class GenerateFixturesCommand extends Command
             $totalResultTime = $totalEndTime - $totalStartTime;
 
             $output->writeln('<info>Total execution time: ' . gmdate('H:i:s', $totalResultTime) . '</info>');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;

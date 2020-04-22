@@ -34,7 +34,7 @@ class Delete extends \Magento\Checkout\Controller\Cart implements HttpPostAction
                 // executed and the flag will be true already.
                 $this->cart->getQuote()->setTotalsCollectedFlag(false);
                 $this->cart->save();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t remove the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }

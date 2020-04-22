@@ -164,7 +164,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 
             $isOk = true;
             $productType = $product->getTypeId();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $isOk = false;
             $productType = null;
             $this->_coreRegistry->register('composite_configure_result_error_message', $e->getMessage());

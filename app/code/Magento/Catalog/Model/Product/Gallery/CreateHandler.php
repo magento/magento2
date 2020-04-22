@@ -468,7 +468,7 @@ class CreateHandler implements ExtensionInterface
 
             return str_replace('\\', '/', $destinationFile);
             // phpcs:ignore Magento2.Exceptions.ThrowCatch
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)

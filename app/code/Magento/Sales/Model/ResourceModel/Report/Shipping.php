@@ -120,7 +120,7 @@ class Shipping extends AbstractReport
             $select->group(['period', 'order_status', 'shipping_description']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
             $connection->query($insertQuery);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -243,7 +243,7 @@ class Shipping extends AbstractReport
             $select->group(['period', 'order_status', 'shipping_description']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
             $connection->query($insertQuery);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

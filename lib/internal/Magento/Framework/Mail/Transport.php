@@ -44,7 +44,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
             $this->laminasTransport->send(
                 LaminasMessage::fromString($this->message->getRawMessage())
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }
     }

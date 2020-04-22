@@ -66,7 +66,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         try {
             $connection->delete($this->getMainTable(), $whereCond);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -105,7 +105,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
             }
             $this->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getConnection()->rollBack();
             throw $e;
         }

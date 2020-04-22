@@ -175,7 +175,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
             $this->updateItems($formattedPrices, $this->priceTable);
             $this->updateItems($formattedDates, $this->datetimeTable);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Could not save Prices.'),
@@ -219,7 +219,7 @@ class SpecialPrice implements \Magento\Catalog\Api\SpecialPriceInterface
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
                 __('Could not delete Prices'),

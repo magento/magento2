@@ -52,7 +52,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
     {
         try {
             $this->_validateRequestPath($requestPath);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }
         return true;
@@ -71,7 +71,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         try {
             // Suffix itself must be a valid request path
             $this->_validateRequestPath($suffix);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Make message saying about suffix, not request path
             switch ($e->getCode()) {
                 case self::VERR_MANYSLASHES:

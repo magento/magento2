@@ -351,7 +351,7 @@ class DomMerger implements DomMergerInterface
         libxml_use_internal_errors(true);
         try {
             $errors = \Magento\Framework\Config\Dom::validateDomDocument($domDocument, $schema);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             libxml_use_internal_errors(false);
             throw $exception;
         }

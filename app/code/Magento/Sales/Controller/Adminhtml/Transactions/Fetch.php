@@ -41,7 +41,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             $this->messageManager->addSuccessMessage(__('The transaction details have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We can\'t update the transaction details.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

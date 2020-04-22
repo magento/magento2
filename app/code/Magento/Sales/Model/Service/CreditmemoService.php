@@ -169,7 +169,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             $this->creditmemoRepository->save($creditmemo);
             $this->getOrderRepository()->save($order);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }

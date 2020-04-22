@@ -28,7 +28,7 @@ class DeleteFiles extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysi
             foreach ($files as $file) {
                 $this->_getStorage()->deleteFile($file);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
                 $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)

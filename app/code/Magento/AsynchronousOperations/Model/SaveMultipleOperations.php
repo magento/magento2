@@ -49,7 +49,7 @@ class SaveMultipleOperations implements SaveMultipleOperationsInterface
                 $this->operationResource->getTable(OperationResource::TABLE_NAME),
                 $operationsToInsert
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
     }

@@ -40,7 +40,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Set implement
             $this->attributeSetRepository->deleteById($setId);
             $this->messageManager->addSuccessMessage(__('The attribute set has been removed.'));
             $resultRedirect->setPath('catalog/*/');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We can\'t delete this set right now.'));
             $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }

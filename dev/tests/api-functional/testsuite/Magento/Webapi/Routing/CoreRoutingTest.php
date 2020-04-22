@@ -56,7 +56,7 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
 
         try {
             $this->assertUnauthorizedException($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             /** Restore original status of integration associated with active OAuth credentials */
             $integration->setStatus($originalStatus)->save();
             throw $e;

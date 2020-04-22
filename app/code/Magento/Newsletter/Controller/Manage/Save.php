@@ -104,7 +104,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                 } else {
                     $this->messageManager->addSuccess(__('We have updated your subscription.'));
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
             }
         }

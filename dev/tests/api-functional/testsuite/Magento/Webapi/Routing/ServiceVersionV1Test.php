@@ -192,7 +192,7 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
         OauthHelper::getApiAccessCredentials([]);
         try {
             $this->assertUnauthorizedException($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             OauthHelper::clearApiAccessCredentials();
             throw $e;
         }

@@ -276,7 +276,7 @@ class ObjectManagerFactory
                 $validationState
             );
             $configData = $reader->read('primary');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\State\InitException(
                 new \Magento\Framework\Phrase($e->getMessage()),
                 $e

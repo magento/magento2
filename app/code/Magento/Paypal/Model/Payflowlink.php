@@ -364,7 +364,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             }
             $quote = $this->quoteRepository->get($order->getQuoteId())->setIsActive(false);
             $this->quoteRepository->save($quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot send the new order email.'));
         }
     }

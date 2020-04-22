@@ -144,7 +144,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
         try {
             $this->giftMessageSaveModel->saveAllInOrder();
             unset($this->orders[$orderId]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __('The gift message couldn\'t be added to the "%1" order.', $e->getMessage()),
                 $e

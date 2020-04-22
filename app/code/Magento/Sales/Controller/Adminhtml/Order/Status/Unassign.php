@@ -23,7 +23,7 @@ class Unassign extends \Magento\Sales\Controller\Adminhtml\Order\Status implemen
                 $this->messageManager->addSuccessMessage(__('You have unassigned the order status.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while unassigning the order.')

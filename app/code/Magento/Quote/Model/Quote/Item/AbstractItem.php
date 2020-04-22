@@ -334,7 +334,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->setHasError(true);
             $this->setMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->setHasError(true);
             $this->setMessage(__('Item qty declaration error'));
         }
@@ -348,7 +348,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             )->addMessage(
                 __('Some of the products below do not have all the required options.')
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->setHasError(true)->setMessage(__('Something went wrong during the item options declaration.'));
             $this->getQuote()->setHasError(true)->addMessage(__('We found an item options declaration error.'));
         }

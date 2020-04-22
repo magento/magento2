@@ -57,7 +57,7 @@ class Updater
 
             $this->queue->addJobs([['name' => $type, 'params' => $params]]);
             return '';
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $e->getMessage();
         }
     }

@@ -106,7 +106,7 @@ class Date extends AbstractElement
             } else {
                 $this->_value = '';
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_value = '';
         }
         return $this;

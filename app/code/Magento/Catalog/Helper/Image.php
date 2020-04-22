@@ -528,7 +528,7 @@ class Image extends AbstractHelper implements ArgumentInterface
         try {
             $this->applyScheduledActions();
             return $this->_getModel()->getUrl();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->getDefaultPlaceholderUrl();
         }
     }
@@ -570,7 +570,7 @@ class Image extends AbstractHelper implements ArgumentInterface
                 ]
             );
             $url = $imageAsset->getUrl();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $url = $this->_urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }

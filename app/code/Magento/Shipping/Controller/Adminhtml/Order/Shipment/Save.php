@@ -175,7 +175,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);

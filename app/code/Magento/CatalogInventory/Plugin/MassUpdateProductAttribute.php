@@ -105,7 +105,7 @@ class MassUpdateProductAttribute
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return $proceed();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')

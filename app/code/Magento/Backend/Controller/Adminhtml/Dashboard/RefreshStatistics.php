@@ -43,7 +43,7 @@ class RefreshStatistics extends Statistics implements HttpPostActionInterface
                 $this->_objectManager->create($collectionName)->aggregate();
             }
             $this->messageManager->addSuccessMessage(__('We updated lifetime statistic.'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We can\'t refresh lifetime statistics.'));
             $this->logger->critical($e);
         }

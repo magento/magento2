@@ -119,7 +119,7 @@ class Config
         } catch (\OutOfRangeException $e) {
             $this->_logger->critical($e);
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
     }

@@ -431,7 +431,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
             // Set data for indexer
             $this->setAffectedCategoryIds([$this->getId(), $oldParentId, $parentId]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_getResource()->rollBack();
             throw $e;
         }

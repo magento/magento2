@@ -79,7 +79,7 @@ class Status extends \Magento\Sales\Model\AbstractModel
         try {
             $resource->assignState($this->getStatus(), $state, $isDefault, $visibleOnFront);
             $resource->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $resource->rollBack();
             throw $e;
         }

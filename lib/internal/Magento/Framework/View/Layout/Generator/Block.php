@@ -137,7 +137,7 @@ class Block implements Layout\GeneratorInterface
                     if (!empty($data['actions'])) {
                         $blockActions[$elementName] = $data['actions'];
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->handleRenderException($e);
                     unset($blocks[$elementName]);
                 }
@@ -148,7 +148,7 @@ class Block implements Layout\GeneratorInterface
             try {
                 $block->setLayout($layout);
                 $this->eventManager->dispatch('core_layout_block_create_after', ['block' => $block]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->handleRenderException($e);
                 $layout->setBlock(
                     $elementName,
@@ -169,7 +169,7 @@ class Block implements Layout\GeneratorInterface
                         $this->generateAction($blocks[$elementName], $methodName, $actionArguments);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->handleRenderException($e);
                 $layout->setBlock(
                     $elementName,

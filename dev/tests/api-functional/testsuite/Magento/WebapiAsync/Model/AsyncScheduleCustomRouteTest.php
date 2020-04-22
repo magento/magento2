@@ -153,7 +153,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
             //nothing to delete
         }

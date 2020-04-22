@@ -72,7 +72,7 @@ class Marketplace extends AbstractActionController
             } else {
                 return new JsonModel(['success' => false, 'message' => $isValid['message']]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -100,7 +100,7 @@ class Marketplace extends AbstractActionController
             return new JsonModel(['success' => false, 'data' => [
                 PackagesAuth::KEY_USERNAME => $authDataJson[PackagesAuth::KEY_USERNAME]
             ]]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -115,7 +115,7 @@ class Marketplace extends AbstractActionController
         try {
             $result = $this->packagesAuth->removeCredentials();
             return new JsonModel(['success' => $result]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
         }
     }

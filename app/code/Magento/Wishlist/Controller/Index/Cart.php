@@ -202,7 +202,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $configureUrl;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
 

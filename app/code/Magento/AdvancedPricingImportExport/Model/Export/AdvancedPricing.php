@@ -572,7 +572,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return false;
             }
         }

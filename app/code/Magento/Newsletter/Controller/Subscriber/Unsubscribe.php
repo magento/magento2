@@ -29,7 +29,7 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements H
                 $this->messageManager->addSuccessMessage(__('You unsubscribed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e, $e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e, __('Something went wrong while unsubscribing you.'));
             }
         }

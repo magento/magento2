@@ -68,7 +68,7 @@ class Store implements SourceInterface
                 $this->websiteSource->get($store->getData('website_code')),
                 $this->initialConfig->getData("stores|{$scopeCode}")
             ));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [];
         }
     }

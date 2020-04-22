@@ -61,7 +61,7 @@ class Validator extends ConfigValidator
     {
         try {
             $this->methodsMap->getMethodParams($className, $methodName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Service method specified in the definition of topic "%s" is not available. Given "%s"',

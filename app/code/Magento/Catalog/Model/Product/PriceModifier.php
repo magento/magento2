@@ -73,7 +73,7 @@ class PriceModifier
         $product->setData('tier_price', $prices);
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('The tier_price data is invalid. Verify the data and try again.'));
         }
     }

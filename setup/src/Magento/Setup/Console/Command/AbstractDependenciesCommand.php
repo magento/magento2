@@ -99,7 +99,7 @@ abstract class AbstractDependenciesCommand extends Command
             Files::setInstance(new Files($componentRegistrar, $dirSearch, $themePackageList));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln(
                 '<error>Please check the path you provided. Dependencies report generator failed with error: ' .
                 $e->getMessage() . '</error>'

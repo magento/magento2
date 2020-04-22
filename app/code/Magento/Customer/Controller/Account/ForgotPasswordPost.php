@@ -83,7 +83,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
             } catch (SecurityViolationException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
                 return $resultRedirect->setPath('*/*/forgotpassword');
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
                     __('We\'re unable to send the password reset email.')

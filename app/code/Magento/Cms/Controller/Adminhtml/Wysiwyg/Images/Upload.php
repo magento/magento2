@@ -69,7 +69,7 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements
                 'size' => $uploaded['size'],
                 'file' => $uploaded['file']
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

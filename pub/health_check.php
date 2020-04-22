@@ -24,7 +24,7 @@ try {
     $deploymentConfig = $objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
     /** @var \Psr\Log\LoggerInterface $logger */
     $logger = $objectManager->get(\Psr\Log\LoggerInterface::class);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     http_response_code(500);
     // phpcs:ignore Magento2.Security.LanguageConstruct
     exit(1);
@@ -39,7 +39,7 @@ foreach ($deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNE
             ['config' => $connectionData]
         );
         $dbAdapter->getConnection();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
         http_response_code(500);
         $logger->error("MySQL connection failed: " . $e->getMessage());
         // phpcs:ignore Magento2.Security.LanguageConstruct
@@ -68,7 +68,7 @@ if ($cacheConfigs) {
             /** @var \Zend_Cache_Backend_Interface $backend */
             $backend = $cacheFrontendFactory->create($cacheConfig);
             $backend->test('test_cache_id');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             http_response_code(500);
             $logger->error("Cache storage is not accessible");
             // phpcs:ignore Magento2.Security.LanguageConstruct

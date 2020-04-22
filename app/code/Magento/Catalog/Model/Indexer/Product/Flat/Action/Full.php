@@ -27,7 +27,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             foreach ($this->_storeManager->getStores() as $store) {
                 $this->_reindex($store->getId());
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
         return $this;

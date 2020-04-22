@@ -239,7 +239,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
                 true,
                 $this->getStoreCreateDateTimezone()
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             return '';
         }

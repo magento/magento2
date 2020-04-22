@@ -136,7 +136,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         $data->setStores([$storeId]);
         try {
             $this->resourceModel->save($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('The "%1" checkout agreement couldn\'t be saved.', $data->getAgreementId())
             );
@@ -151,7 +151,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     {
         try {
             $this->resourceModel->delete($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
                 __('The "%1" checkout agreement couldn\'t be removed.', $data->getAgreementId())
             );

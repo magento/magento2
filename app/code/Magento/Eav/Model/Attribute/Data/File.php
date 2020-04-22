@@ -261,7 +261,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
                 $uploader->save($this->_directory->getAbsolutePath($destinationFolder), $value['name']);
                 $fileName = $uploader->getUploadedFileName();
                 $this->getEntity()->setData($attribute->getAttributeCode(), $fileName);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         }

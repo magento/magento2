@@ -151,7 +151,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
 
         try {
             $this->model->changeEncryptionKey($key);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return;
         }
 

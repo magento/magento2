@@ -74,7 +74,7 @@ class Modules extends AbstractActionController
             $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
             $enabledModules = isset($params['selectedModules']) ? $params['selectedModules'] : [];
             return $this->checkGraph($enabledModules);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
         }
     }

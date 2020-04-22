@@ -99,7 +99,7 @@ class Transport implements TransportInterface
             }
 
             $this->laminasTransport->send($laminasMessage);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new MailException(new Phrase($e->getMessage()), $e);
         }
     }

@@ -141,7 +141,7 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
             return $page;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return $this->noProductRedirect();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $resultForward = $this->resultForwardFactory->create();
             $resultForward->forward('noroute');

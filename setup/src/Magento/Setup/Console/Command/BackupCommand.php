@@ -147,7 +147,7 @@ class BackupCommand extends AbstractSetupCommand
                         );
                     }
                     return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     return \Magento\Framework\Console\Cli::RETURN_FAILURE;
                 }

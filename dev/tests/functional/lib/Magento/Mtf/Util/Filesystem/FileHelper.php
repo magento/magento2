@@ -76,7 +76,7 @@ class FileHelper
             if (!mkdir($path, $mode)) {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (!is_dir($path)) {
                 throw new \Exception("Failed to create directory \"$path\"");
             }
@@ -84,7 +84,7 @@ class FileHelper
 
         try {
             return chmod($path, $mode);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception("Failed to change permissions for directory \"$path\"");
         }
     }

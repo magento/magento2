@@ -91,7 +91,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             if ($file[0]['status'] === 'new') {
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Something went wrong while saving the file(s).')
                     );

@@ -124,7 +124,7 @@ class Repository implements CartItemRepositoryInterface
         try {
             $quote->removeItem($itemId);
             $this->quoteRepository->save($quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The item couldn't be removed from the quote."));
         }
 

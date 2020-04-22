@@ -160,7 +160,7 @@ class ConfigShowCommand extends Command
 
             $this->outputResult($output, $configValue, $this->inputPath);
             return Cli::RETURN_SUCCESS;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Cli::RETURN_FAILURE;
         }

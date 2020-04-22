@@ -141,7 +141,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imple
                 return;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );

@@ -550,7 +550,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     /**
      * Process rest exception result.
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      * @return array
      * <pre> ex.
      * 'message' => "No such entity with %fieldName1 = %value1, %fieldName2 = %value2"
@@ -563,7 +563,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * </pre>
      */
-    public function processRestExceptionResult(\Exception $e)
+    public function processRestExceptionResult(\Throwable $e)
     {
         $error = json_decode($e->getMessage(), true);
         //Remove line breaks and replace with space
@@ -739,7 +739,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         try {
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected throwing exception');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
                 self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(WebapiException::HTTP_BAD_REQUEST, $e->getCode());

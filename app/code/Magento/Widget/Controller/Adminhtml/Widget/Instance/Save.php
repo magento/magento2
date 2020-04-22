@@ -45,7 +45,7 @@ class Save extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implemen
                 $this->_redirect('adminhtml/*/');
             }
             return;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addError($exception->getMessage());
             $this->_logger->critical($exception);
             $this->_redirect('adminhtml/*/edit', ['_current' => true]);

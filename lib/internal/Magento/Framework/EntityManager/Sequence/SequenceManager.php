@@ -83,7 +83,7 @@ class SequenceManager
                 $this->appResource->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value' => $identifier]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
 
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
@@ -109,7 +109,7 @@ class SequenceManager
                 $this->appResource->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value = ?' => $identifier]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }

@@ -271,10 +271,10 @@ class CreateAddressTest extends TestCase
      * @dataProvider createWrongAddressesDataProvider
      *
      * @param array $addressData
-     * @param \Exception $expectException
+     * @param \Throwable $expectException
      * @return void
      */
-    public function testExceptionThrownDuringCreateAddress(array $addressData, \Exception $expectException): void
+    public function testExceptionThrownDuringCreateAddress(array $addressData, \Throwable $expectException): void
     {
         $customer = $this->customerRepository->get('customer5@example.com');
         $this->expectExceptionObject($expectException);

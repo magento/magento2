@@ -87,7 +87,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $connection->insertMultiple($this->_rowsTable, $rows);
                 }
                 $connection->commit();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $connection->rollBack();
             }
         }

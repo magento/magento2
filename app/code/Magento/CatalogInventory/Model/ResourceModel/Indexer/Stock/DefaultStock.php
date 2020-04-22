@@ -107,7 +107,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         try {
             $this->_prepareIndexTable();
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             throw $e;
         }

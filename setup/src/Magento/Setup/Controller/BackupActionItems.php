@@ -112,7 +112,7 @@ class BackupActionItems extends AbstractActionController
                     'size' => true
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
@@ -149,7 +149,7 @@ class BackupActionItems extends AbstractActionController
                     'files' => $backupFiles
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,

@@ -147,7 +147,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
             } else {
                 $this->_soapServer->handle();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_prepareErrorResponse($e);
         }
         return $this->_response;

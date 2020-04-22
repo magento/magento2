@@ -96,7 +96,7 @@ abstract class AbstractResource
                 foreach ($callbacks as $callback) {
                     call_user_func($callback);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->getLogger()->critical($e);
             }
         }

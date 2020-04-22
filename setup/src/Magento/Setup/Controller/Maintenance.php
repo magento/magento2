@@ -45,7 +45,7 @@ class Maintenance extends AbstractActionController
             $action = isset($params['disable']) && $params['disable'] ? false : true;
             $this->maintenanceMode->set($action);
             return new JsonModel(['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,

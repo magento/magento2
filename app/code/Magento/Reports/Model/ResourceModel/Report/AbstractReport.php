@@ -264,7 +264,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
                 while (true == ($date = $query->fetchColumn())) {
                     $selectResult[] = $date;
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $selectResult = false;
             }
             $selectResultCache[$cacheKey] = $selectResult;
@@ -475,7 +475,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
                 }
                 $nextPeriod = $tr['time'];
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
 

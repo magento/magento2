@@ -56,7 +56,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration imple
             }
         } catch (IntegrationException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
 

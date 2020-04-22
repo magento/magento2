@@ -62,7 +62,7 @@ class SeleniumSessionAnalyzer extends \Symfony\Component\Console\Command\Command
         try {
             $driver = $this->objectManager->create(Driver::class);
             $driver->closeWindow();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->outputMessages(['error' =>
                 [
                     'The Selenium Server session cannot be established. Check if:'

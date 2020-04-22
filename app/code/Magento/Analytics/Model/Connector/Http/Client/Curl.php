@@ -85,7 +85,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
             }
 
             $response = $this->responseFactory->create($result);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
         }
 

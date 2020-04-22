@@ -68,7 +68,7 @@ class ConsumerRunner
     {
         try {
             $consumer = $this->consumerFactory->get($name);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorMsg = '"%callbackMethod" callback method specified in crontab.xml '
                 . 'must have corresponding consumer declared in some queue.xml.';
             throw new LocalizedException(__($errorMsg, ['callbackMethod' => $name]));

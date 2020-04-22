@@ -167,7 +167,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             }
 
             return $this->goBack($url);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t add this item to your shopping cart right now.')

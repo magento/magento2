@@ -109,7 +109,7 @@ abstract class EntityAbstract
                     $this->_addError('Can\'t generate source code.');
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_addError($e->getMessage());
         }
         return false;

@@ -508,7 +508,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $response = $client->getRates($ratesRequest);
                 $this->_setCachedQuotes($requestString, $response);
                 $debugData['result'] = $response;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $this->_logger->critical($e);
             }
@@ -740,7 +740,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
                 $debugData['result'] = $this->filterDebugData($responseBody);
                 $this->_setCachedQuotes($request, $responseBody);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $responseBody = '';
             }
@@ -1086,7 +1086,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $response = $client->track($trackRequest);
                 $this->_setCachedQuotes($requestString, $response);
                 $debugData['result'] = $response;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $this->_logger->critical($e);
             }

@@ -100,7 +100,7 @@ class Elasticsearch
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
@@ -118,7 +118,7 @@ class Elasticsearch
     {
         try {
             $response = $this->client->ping();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
@@ -161,7 +161,7 @@ class Elasticsearch
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
                 $this->client->bulkQuery($bulkIndexDocuments);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 throw $e;
             }
@@ -221,7 +221,7 @@ class Elasticsearch
                 self::BULK_ACTION_DELETE
             );
             $this->client->bulkQuery($bulkDeleteDocuments);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw $e;
         }

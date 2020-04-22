@@ -73,7 +73,7 @@ class SubmitObserver implements ObserverInterface
                 if ($invoice) {
                     $this->invoiceSender->send($invoice);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
             }
         }

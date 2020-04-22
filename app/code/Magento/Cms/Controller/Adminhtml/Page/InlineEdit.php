@@ -94,7 +94,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             } catch (\RuntimeException $e) {
                 $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
                 $error = true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $messages[] = $this->getErrorWithPageId(
                     $page,
                     __('Something went wrong while saving the page.')

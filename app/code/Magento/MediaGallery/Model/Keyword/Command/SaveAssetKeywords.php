@@ -84,7 +84,7 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
 
                 $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);

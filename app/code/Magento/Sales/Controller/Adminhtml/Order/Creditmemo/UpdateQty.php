@@ -75,7 +75,7 @@ class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInt
             $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['error' => true, 'message' => __('We can\'t update the item\'s quantity right now.')];
         }
         if (is_array($response)) {

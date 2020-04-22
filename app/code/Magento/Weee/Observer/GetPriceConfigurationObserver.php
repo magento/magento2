@@ -65,7 +65,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                     $weeeAttributesForBundle
                 );
                 $priceConfigObj->setConfig($priceConfig);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return $this;
             }
         }

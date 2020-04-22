@@ -41,7 +41,7 @@ class MaxHeapTableSizeProcessorOnFullReindex
     {
         try {
             $this->maxHeapTableSizeProcessor->set();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e);
         }
     }
@@ -56,7 +56,7 @@ class MaxHeapTableSizeProcessorOnFullReindex
     {
         try {
             $this->maxHeapTableSizeProcessor->restore();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e);
         }
         return $result;

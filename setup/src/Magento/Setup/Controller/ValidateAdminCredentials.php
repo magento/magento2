@@ -54,7 +54,7 @@ class ValidateAdminCredentials extends AbstractActionController
             $data = $this->requestDataConverter->convert($source);
             $this->adminCredentialsValidator->validate($data);
             return new JsonModel(['success' => true]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
         }
     }

@@ -744,7 +744,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($params['store'])) {
             try {
                 $store = $this->_storeManager->getStore($params['store']);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new \Magento\Framework\Exception\MailException(
                     __('Requested invalid store "%1"', $params['store'])
                 );
@@ -1007,7 +1007,7 @@ class Filter extends \Magento\Framework\Filter\Template
                 $this->cssInliner->disableStyleBlocksParsing();
 
                 $processedHtml = $this->cssInliner->process();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
                         . PHP_EOL
@@ -1036,7 +1036,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         try {
             $value = parent::filter($value);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
             // prevent callbacks running for unrelated content (e.g., email subject and email body)
             $this->resetAfterFilterCallbacks();

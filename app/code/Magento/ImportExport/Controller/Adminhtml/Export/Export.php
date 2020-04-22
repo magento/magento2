@@ -97,7 +97,7 @@ class Export extends ExportController implements HttpPostActionInterface
                         . ' Make sure your cron job is running to export the file'
                     )
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError(__('Please correct the data sent value.'));
             }

@@ -187,7 +187,7 @@ class Subscriber extends AbstractDb
                 ['subscriber_id = ?' => $subscriber->getId(), 'queue_id = ?' => $queue->getId()]
             );
             $this->connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->connection->rollBack();
             throw new LocalizedException(__('We cannot mark as received subscriber.'));
         }

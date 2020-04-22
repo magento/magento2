@@ -64,7 +64,7 @@ class Delete extends \Magento\Backend\App\Action
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->logger->error($e);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('An error was encountered while performing delete operation.')
                 );

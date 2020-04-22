@@ -93,7 +93,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     {
         try {
             $this->attributeSetResource->save($attributeSet);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(
                 __(
                     'The attribute set couldn\'t be saved due to an error. '
@@ -166,7 +166,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
             $this->attributeSetResource->delete($attributeSet);
         } catch (\Magento\Framework\Exception\StateException $exception) {
             throw new CouldNotDeleteException(__('The default attribute set can\'t be deleted.'));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __(
                     'The attribute set couldn\'t be deleted due to an error. '

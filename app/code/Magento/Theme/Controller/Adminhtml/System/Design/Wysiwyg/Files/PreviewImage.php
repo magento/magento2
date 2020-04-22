@@ -27,7 +27,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
                 ['type' => 'filename', 'value' => $helper->getThumbnailPath($file)],
                 DirectoryList::MEDIA
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_redirect('core/index/notFound');
         }

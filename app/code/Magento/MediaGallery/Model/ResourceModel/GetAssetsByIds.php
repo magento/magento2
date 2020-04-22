@@ -75,7 +75,7 @@ class GetAssetsByIds implements GetAssetsByIdsInterface
                     ]
                 );
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new LocalizedException(__('Could not retrieve media assets'), $exception);
         }

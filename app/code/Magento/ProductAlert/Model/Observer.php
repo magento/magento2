@@ -173,7 +173,7 @@ class Observer
         if ($this->_websites === null) {
             try {
                 $this->_websites = $this->_storeManager->getWebsites();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_errors[] = $e->getMessage();
                 throw $e;
             }
@@ -210,7 +210,7 @@ class Observer
                 $collection = $this->_priceColFactory->create()->addWebsiteFilter(
                     $website->getId()
                 )->setCustomerOrder();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_errors[] = $e->getMessage();
                 throw $e;
             }
@@ -254,7 +254,7 @@ class Observer
                         $alert->setStatus(1);
                         $alert->save();
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_errors[] = $e->getMessage();
                     throw $e;
                 }
@@ -262,7 +262,7 @@ class Observer
             if ($previousCustomer) {
                 try {
                     $email->send();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_errors[] = $e->getMessage();
                     throw $e;
                 }
@@ -304,7 +304,7 @@ class Observer
                 )->addStatusFilter(
                     0
                 )->setCustomerOrder();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_errors[] = $e->getMessage();
                 throw $e;
             }
@@ -345,7 +345,7 @@ class Observer
                         $alert->setStatus(1);
                         $alert->save();
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_errors[] = $e->getMessage();
                     throw $e;
                 }
@@ -354,7 +354,7 @@ class Observer
             if ($previousCustomer) {
                 try {
                     $email->send();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_errors[] = $e->getMessage();
                     throw $e;
                 }

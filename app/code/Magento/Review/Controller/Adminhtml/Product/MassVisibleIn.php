@@ -39,7 +39,7 @@ class MassVisibleIn extends ProductController implements HttpPostActionInterface
                 );
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while updating these review(s).')

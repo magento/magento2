@@ -216,7 +216,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 if (!empty($data['send_email']) || $this->salesData->canSendNewInvoiceEmail()) {
                     $this->invoiceSender->send($invoice);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addErrorMessage(__('We can\'t send the invoice email right now.'));
             }
@@ -225,7 +225,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     if (!empty($data['send_email']) || $this->salesData->canSendNewShipmentEmail()) {
                         $this->shipmentSender->send($shipment);
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                     $this->messageManager->addErrorMessage(__('We can\'t send the shipment right now.'));
                 }
@@ -239,7 +239,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(
                 __("The invoice can't be saved at this time. Please try again later.")
             );

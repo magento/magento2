@@ -510,7 +510,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 
         try {
             $this->layoutValidator->isValid($layoutStr, Validator::LAYOUT_SCHEMA_MERGED, false);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $messages = $this->layoutValidator->getMessages();
             //Add first message to exception
             $message = reset($messages);
@@ -981,7 +981,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             try {
                 $updateXml = $this->_loadXmlString($update);
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 // ignore invalid
             }
 

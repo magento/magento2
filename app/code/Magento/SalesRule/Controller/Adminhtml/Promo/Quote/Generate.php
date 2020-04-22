@@ -102,7 +102,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
                 $result['error'] = __('Invalid data provided');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $result['error'] = $e->getMessage();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $result['error'] = __(
                     'Something went wrong while generating coupons. Please review the log and try again.'
                 );

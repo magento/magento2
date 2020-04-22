@@ -109,7 +109,7 @@ class UpdateQty extends AbstractView implements HttpPostActionInterface
             $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
         } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['error' => true, 'message' => __('Cannot update item quantity.')];
         }
         if (is_array($response)) {

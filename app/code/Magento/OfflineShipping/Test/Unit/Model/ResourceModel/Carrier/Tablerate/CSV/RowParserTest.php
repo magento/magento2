@@ -120,7 +120,7 @@ class RowParserTest extends \PHPUnit\Framework\TestCase
                 $conditionShortName,
                 $columnValueMap
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $actualMessage = $e->getMessage();
             $exception = $e;
         }

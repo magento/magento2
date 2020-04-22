@@ -93,7 +93,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex implements Actio
             $this->messageManager->addErrorMessage(
                 __('We can\'t delete the item from Wish List right now because of an error: %1.', $e->getMessage())
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We can\'t delete the item from the Wish List right now.'));
         }
 

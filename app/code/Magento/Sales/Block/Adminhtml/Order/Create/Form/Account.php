@@ -163,7 +163,7 @@ class Account extends AbstractForm
     {
         try {
             $customer = $this->customerRepository->getById($this->getCustomerId());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $data = [];
         }
         $data = isset($customer)

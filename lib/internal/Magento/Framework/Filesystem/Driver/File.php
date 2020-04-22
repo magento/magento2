@@ -266,7 +266,7 @@ class File implements DriverInterface
             }
             sort($result);
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new FileSystemException(new Phrase($e->getMessage()), $e);
         }
     }
@@ -962,7 +962,7 @@ class File implements DriverInterface
             foreach ($iterator as $file) {
                 $result[] = $file->getPathname();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new FileSystemException(new Phrase($e->getMessage()), $e);
         }
         return $result;

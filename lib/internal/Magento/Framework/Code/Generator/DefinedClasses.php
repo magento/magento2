@@ -57,7 +57,7 @@ class DefinedClasses
     {
         try {
             return (bool)AutoloaderRegistry::getAutoloader()->findFile($className);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Couldn't get access to the autoloader so we need to allow class_exists to call autoloader chain
             return (class_exists($className) || interface_exists($className));
         }

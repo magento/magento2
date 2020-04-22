@@ -52,7 +52,7 @@ class MassUnsubscribe extends Subscriber
                     $subscriber->unsubscribe();
                 }
                 $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', count($subscribersIds)));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError($e->getMessage());
             }
         }

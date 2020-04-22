@@ -15,6 +15,6 @@ $mediaAssetDelete = $objectManager->get(DeleteByPathInterface::class);
 
 try {
     $mediaAssetDelete->execute('testDirectory/path.jpg');
-} catch (\Exception $exception) {
+} catch (\Throwable $exception) {
 
 }

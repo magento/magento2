@@ -36,7 +36,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPo
                 $this->messageManager->addSuccessMessage(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('You have not canceled the item.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }

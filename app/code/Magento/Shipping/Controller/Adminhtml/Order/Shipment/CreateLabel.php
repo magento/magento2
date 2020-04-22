@@ -63,7 +63,7 @@ class CreateLabel extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $response->setError(true);
             $response->setMessage(__('An error occurred while creating shipping label.'));

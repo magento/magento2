@@ -32,7 +32,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
                 return $resultRedirect->setPath('tax/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(__('We can\'t save this tax rule right now.'));
             }
 

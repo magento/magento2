@@ -66,7 +66,7 @@ class PhpReadinessCheck
     {
         try {
             $requiredVersion = $this->composerInformation->getRequiredPhpVersion();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [
                 'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                 'data' => [
@@ -154,7 +154,7 @@ class PhpReadinessCheck
         try {
             $required = $this->composerInformation->getRequiredExtensions();
             $current = $this->phpInformation->getCurrent();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [
                 'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                 'data' => [

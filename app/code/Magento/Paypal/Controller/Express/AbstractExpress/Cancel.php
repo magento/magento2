@@ -41,7 +41,7 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('Unable to cancel Express Checkout'));
         }
 

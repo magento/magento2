@@ -120,7 +120,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 }
             }
             return $templates;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             trigger_error(
                 "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
                 " Exception: {$e}",

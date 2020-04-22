@@ -29,7 +29,7 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $resultPage = $this->_initAction();
                 $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 $this->messageManager->addErrorMessage(__('Exception occurred during order load'));
                 $resultRedirect->setPath('sales/order/index');

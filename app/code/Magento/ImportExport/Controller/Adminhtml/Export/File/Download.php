@@ -77,7 +77,7 @@ class Download extends ExportController implements HttpGetActionInterface
                 );
             }
             $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         }
 

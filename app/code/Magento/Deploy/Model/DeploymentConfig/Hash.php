@@ -97,7 +97,7 @@ class Hash
             $flag = $this->getFlagObject();
             $flag->setFlagData($hashes);
             $this->flagResource->save($flag);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new LocalizedException(__("The hash isn't saved."), $exception);
         }
     }

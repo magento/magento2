@@ -32,7 +32,7 @@ class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status implem
                     return $resultRedirect->setPath('sales/*/');
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addExceptionMessage(
                         $e,
                         __('Something went wrong while assigning the order status.')

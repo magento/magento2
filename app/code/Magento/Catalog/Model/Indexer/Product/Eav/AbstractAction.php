@@ -147,7 +147,7 @@ abstract class AbstractAction
             // insert new index
             $indexer->insertFromTable($indexer->getIdxTable(), $destinationTable);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

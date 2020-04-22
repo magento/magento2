@@ -112,7 +112,7 @@ class MassDelete extends Action implements HttpPostActionInterface
             $message = __($e->getMessage());
             $error = true;
             $this->logger->critical($e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $message = __('We can\'t mass delete the addresses right now.');
             $error = true;
             $this->logger->critical($e);

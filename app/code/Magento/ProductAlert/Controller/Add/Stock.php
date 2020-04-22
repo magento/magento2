@@ -81,7 +81,7 @@ class Stock extends AddController implements HttpGetActionInterface
             $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
             $resultRedirect->setUrl($backUrl);
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")

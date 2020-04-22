@@ -224,7 +224,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             );
             $this->assertEquals(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
             $this->_undo($duplicate);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_undo($duplicate);
             throw $e;
         }

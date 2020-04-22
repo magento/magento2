@@ -112,7 +112,7 @@ class CheckItems extends Checkout
             $this->jsonResponse();
         } catch (LocalizedException $e) {
             $this->jsonResponse($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $this->jsonResponse('We are unable to process your request. Please, try again later.');
         }

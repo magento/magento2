@@ -187,7 +187,7 @@ class Processor
 
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__('The "%1" file couldn\'t be moved.', $e->getMessage()));
         }
 

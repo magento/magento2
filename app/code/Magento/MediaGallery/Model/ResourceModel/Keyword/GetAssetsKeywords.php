@@ -69,7 +69,7 @@ class GetAssetsKeywords implements GetAssetsKeywordsInterface
     {
         try {
             return $this->getAssetKeywords($this->getKeywordsData($assetIds));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new IntegrationException(__('Could not retrieve asset keywords.'), $exception);
         }

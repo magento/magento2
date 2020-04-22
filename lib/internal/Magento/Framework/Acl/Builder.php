@@ -66,7 +66,7 @@ class Builder
             foreach ($this->_loaderPool as $loader) {
                 $loader->populateAcl($this->_acl);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException('Could not create an acl object: ' . $e->getMessage());
         }
 

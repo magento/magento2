@@ -120,7 +120,7 @@ class BulkManagement implements BulkManagementInterface
             $this->entityManager->save($bulkSummary);
 
             $connection->commit();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $connection->rollBack();
             $this->logger->critical($exception->getMessage());
             return false;
@@ -178,7 +178,7 @@ class BulkManagement implements BulkManagementInterface
             }
 
             $connection->commit();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $connection->rollBack();
             $this->logger->critical($exception->getMessage());
             return 0;

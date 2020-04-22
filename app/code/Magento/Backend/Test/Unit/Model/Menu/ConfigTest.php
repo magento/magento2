@@ -165,7 +165,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         try {
             $this->model->getMenu();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return;
         }
         $this->fail("Generic \Exception was not thrown");

@@ -45,7 +45,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if (!$_formated && $object->hasData($attributeName)) {
             try {
                 $value = $this->formatDate($object->getData($attributeName));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
             }
 

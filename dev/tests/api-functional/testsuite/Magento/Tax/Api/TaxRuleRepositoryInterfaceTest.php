@@ -196,7 +196,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->fail('Did not throw expected InputException');
         } catch (\SoapFault $e) {
             $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
         }
     }
@@ -237,7 +237,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['Code'], $errorObj['parameters']);
@@ -427,7 +427,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
             $this->assertContains(
@@ -539,7 +539,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
             $this->assertContains(

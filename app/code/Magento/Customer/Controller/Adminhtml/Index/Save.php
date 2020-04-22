@@ -401,7 +401,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_addSessionErrorMessages($exception->getMessage());
                 $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
                     __('Something went wrong while saving the customer.')

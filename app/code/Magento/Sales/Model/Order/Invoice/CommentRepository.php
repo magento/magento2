@@ -116,7 +116,7 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
     {
         try {
             $this->commentResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the invoice comment.'), $e);
         }
         return true;
@@ -129,14 +129,14 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
     {
         try {
             $this->commentResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the invoice comment.'), $e);
         }
 
         try {
             $invoice = $this->invoiceRepository->get($entity->getParentId());
             $this->invoiceCommentSender->send($invoice, $entity->getIsCustomerNotified(), $entity->getComment());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
 

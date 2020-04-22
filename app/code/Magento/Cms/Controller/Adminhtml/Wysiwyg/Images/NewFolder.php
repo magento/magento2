@@ -60,7 +60,7 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images impleme
                 );
             }
             $result = $this->getStorage()->createDirectory($name, $path);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

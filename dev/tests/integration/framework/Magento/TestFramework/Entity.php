@@ -56,7 +56,7 @@ class Entity
             $this->_testRead();
             $this->_testUpdate();
             $this->_testDelete();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_model->delete();
             throw $e;
         }

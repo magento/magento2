@@ -62,7 +62,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
         try {
             /** @var $product Product */
             $product = $this->productRepository->get('simple');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('No such product entity');
         }
 

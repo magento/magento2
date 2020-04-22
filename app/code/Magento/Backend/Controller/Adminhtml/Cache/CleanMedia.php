@@ -32,7 +32,7 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache implements 
             $this->messageManager->addSuccessMessage(__('The JavaScript/CSS cache has been cleaned.'));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager
                 ->addExceptionMessage($e, __('An error occurred while clearing the JavaScript/CSS cache.'));
         }

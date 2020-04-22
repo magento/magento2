@@ -199,7 +199,7 @@ class Http extends File
     {
         try {
             $result = @stream_get_line($resource, $length, $ending);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
             );

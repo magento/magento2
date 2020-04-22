@@ -79,7 +79,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             $this->getResponse()->representJson(
                 $this->serializer->serialize($template->getData())
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }

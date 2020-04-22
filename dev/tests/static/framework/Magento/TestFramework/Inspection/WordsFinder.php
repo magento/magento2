@@ -145,7 +145,7 @@ class WordsFinder
         }
         try {
             $xml = new \SimpleXMLElement(file_get_contents($configFile));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\TestFramework\Inspection\Exception($e->getMessage(), $e->getCode(), $e);
         }
 

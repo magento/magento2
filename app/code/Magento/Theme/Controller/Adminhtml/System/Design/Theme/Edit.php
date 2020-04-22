@@ -43,7 +43,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*/');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(__('We cannot find the theme.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_redirect('adminhtml/*/');

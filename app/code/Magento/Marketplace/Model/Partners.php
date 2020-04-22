@@ -77,7 +77,7 @@ class Partners
             } else {
                 return $this->getCache()->loadPartnersFromCache();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->getCache()->loadPartnersFromCache();
         }
     }

@@ -50,7 +50,7 @@ class Cancel extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccessMessage(__('The credit memo has been canceled.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('Credit memo has not been canceled.'));
             }
             $resultRedirect = $this->resultRedirectFactory->create();

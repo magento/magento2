@@ -58,7 +58,7 @@ class Unlock extends \Magento\Backend\App\Action implements HttpGetActionInterfa
                 $this->authentication->unlock($customerId);
                 $this->getMessageManager()->addSuccessMessage(__('Customer has been unlocked successfully.'));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 

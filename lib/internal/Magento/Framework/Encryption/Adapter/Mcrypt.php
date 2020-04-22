@@ -75,7 +75,7 @@ class Mcrypt implements EncryptionAdapterInterface
                 );
             }
             $this->initVector = $initVector;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // @codingStandardsIgnoreLine
             @mcrypt_module_close($this->handle);
             throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($e->getMessage()));

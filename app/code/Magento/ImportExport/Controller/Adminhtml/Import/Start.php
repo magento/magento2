@@ -89,7 +89,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
 
             try {
                 $this->importModel->importSource();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
                 $message = $this->exceptionMessageFactory->createMessage($e);
                 $html = $resultMessageBlock->addMessage($message)->toHtml();

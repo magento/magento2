@@ -64,7 +64,7 @@ class EntryPoint
                 $this->_locator = $locatorFactory->create();
             }
             return $this->_locator->create($applicationName, $arguments)->launch();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $message = "Error happened during application run.\n";
             $message .= $exception->getMessage();
             throw new \DomainException($message);

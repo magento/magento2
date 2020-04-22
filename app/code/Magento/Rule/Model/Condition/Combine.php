@@ -243,7 +243,7 @@ class Combine extends AbstractCondition
                     $condition = $this->_conditionFactory->create($conditionArr['type']);
                     $this->addCondition($condition);
                     $condition->loadArray($conditionArr, $key);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                 }
             }

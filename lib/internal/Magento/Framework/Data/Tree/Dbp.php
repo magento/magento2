@@ -361,7 +361,7 @@ class Dbp extends \Magento\Framework\Data\Tree
             );
 
             $this->_conn->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_conn->rollBack();
             throw new \Exception("Can't move tree node due to error: " . $e->getMessage());
         }

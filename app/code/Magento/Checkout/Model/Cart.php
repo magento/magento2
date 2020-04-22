@@ -432,7 +432,7 @@ class Cart extends DataObject implements CartInterface
                     $request = $this->getQtyRequest($product);
                     try {
                         $this->getQuote()->addProduct($product, $request);
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $allAdded = false;
                     }
                 } else {

@@ -61,7 +61,7 @@ class Sidebar extends ListCompare
                 $result[] = $element->getText();
             }
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $isEmpty = $this->_rootElement->find($this->isEmpty);
             if ($isEmpty->isVisible()) {
                 return $isEmpty->getText();

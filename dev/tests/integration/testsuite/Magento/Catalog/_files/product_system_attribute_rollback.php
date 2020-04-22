@@ -30,7 +30,7 @@ try {
         $attribute->delete();
     }
     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
 }
 
 $registry->unregister('isSecureArea');

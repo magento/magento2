@@ -38,7 +38,7 @@ class Website extends \Magento\Framework\Model\AbstractModel
     {
         try {
             $this->_getResource()->removeProducts($websiteIds, $productIds);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while removing products from the websites.')
             );
@@ -58,7 +58,7 @@ class Website extends \Magento\Framework\Model\AbstractModel
     {
         try {
             $this->_getResource()->addProducts($websiteIds, $productIds);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while adding products to websites.')
             );

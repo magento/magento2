@@ -53,7 +53,7 @@ class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer imple
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addException(
                     $e,
                     __("We couldn't invalidate indexer(s) because of an error.")

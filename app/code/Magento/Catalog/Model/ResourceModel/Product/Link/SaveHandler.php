@@ -104,7 +104,7 @@ class SaveHandler
                 $links,
                 $linkTypesToId[$entity->getLinkType()]
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('The linked products data is invalid. Verify the data and try again.'));
         }
         return $entity;

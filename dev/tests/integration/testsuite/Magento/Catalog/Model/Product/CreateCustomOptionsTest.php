@@ -224,11 +224,11 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsWithErrorDataProvider
      *
      * @param array $optionData
-     * @param \Exception $expectedErrorObject
+     * @param \Throwable $expectedErrorObject
      *
      * @magentoDbIsolation enabled
      */
-    public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
+    public function testCreateOptionWithError(array $optionData, \Throwable $expectedErrorObject): void
     {
         $product = $this->productRepository->get('simple');
         $createdOption = $this->customOptionFactory->create(['data' => $optionData]);

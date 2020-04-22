@@ -37,7 +37,7 @@ class PlaceOrderDefault implements PlaceOrderInterface
         foreach ($orderList as $order) {
             try {
                 $this->orderManagement->place($order);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $incrementId = $order->getIncrementId();
                 $errorList[$incrementId] = $e;
             }

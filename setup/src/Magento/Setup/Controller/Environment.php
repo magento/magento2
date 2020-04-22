@@ -152,7 +152,7 @@ class Environment extends AbstractActionController
                 return  $jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type];
             }
             return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
         }
     }

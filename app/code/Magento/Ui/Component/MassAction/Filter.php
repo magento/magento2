@@ -141,7 +141,7 @@ class Filter
                     ->setValue($selected);
                 $dataProvider->addFilter($this->filterBuilder->create());
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
     }
@@ -170,7 +170,7 @@ class Filter
             } else {
                 throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
         return $collection;

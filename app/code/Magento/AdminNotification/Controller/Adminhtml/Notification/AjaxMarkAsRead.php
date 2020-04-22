@@ -47,7 +47,7 @@ class AjaxMarkAsRead extends Notification implements HttpPostActionInterface
         try {
             $this->notificationService->markAsRead($notificationId);
             $responseData['success'] = true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $responseData['success'] = false;
         }
 

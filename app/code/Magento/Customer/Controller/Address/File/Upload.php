@@ -96,7 +96,7 @@ class Upload extends Action implements HttpPostActionInterface
             }
         } catch (LocalizedException $e) {
             $result = $this->processError($e->getMessage(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $result = $this->processError($e->getMessage(), $e->getCode());
         }

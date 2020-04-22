@@ -130,7 +130,7 @@ class Consumer
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();
             $message = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $errorCode = $e->getCode();

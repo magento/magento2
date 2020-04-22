@@ -207,7 +207,7 @@ class StaticProperties
 
             try {
                 $reflectionClass = self::getReflectionClass($className);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 continue;
             }
             if (self::_isClassCleanable($reflectionClass)) {

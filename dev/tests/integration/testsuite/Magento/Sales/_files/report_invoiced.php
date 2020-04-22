@@ -14,7 +14,7 @@ $reportResource->beginTransaction();
 try {
     $reportResource->aggregate();
     $reportResource->commit();
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     $reportResource->rollBack();
     throw $e;
 }

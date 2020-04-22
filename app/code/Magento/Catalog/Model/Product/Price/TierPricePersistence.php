@@ -80,7 +80,7 @@ class TierPricePersistence
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Could not save Tier Prices'),
@@ -116,7 +116,7 @@ class TierPricePersistence
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Could not replace Tier Prices'),
@@ -144,7 +144,7 @@ class TierPricePersistence
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
                 __('Could not delete Tier Prices'),

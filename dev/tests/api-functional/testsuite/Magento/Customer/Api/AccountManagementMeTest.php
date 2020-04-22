@@ -240,7 +240,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 $this->customerData[CustomerInterface::ID],
                 $customerResponseData[CustomerInterface::ID]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Customer is not activated.');
         }
     }

@@ -55,7 +55,7 @@ class Synchronization
         $storage = $this->storageFactory->create();
         try {
             $storage->loadByFilename($relativeFileName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
         if ($storage->getId()) {
             /** @var WriteInterface $file */

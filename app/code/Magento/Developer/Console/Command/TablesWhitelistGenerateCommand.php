@@ -82,7 +82,7 @@ class TablesWhitelistGenerateCommand extends Command
         } catch (ConfigurationMismatchException $e) {
             $output->writeln($e->getMessage());
             return Cli::RETURN_FAILURE;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln($e->getMessage());
             return Cli::RETURN_FAILURE;
         }

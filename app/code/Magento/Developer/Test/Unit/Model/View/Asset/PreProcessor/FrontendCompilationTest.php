@@ -125,7 +125,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
 
         try {
             $frontendCompilation->process($this->getChainMockExpects('', 0, 1));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             self::assertInstanceOf('\Exception', $e);
         }
     }

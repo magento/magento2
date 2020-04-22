@@ -138,7 +138,7 @@ class Action extends AbstractResource
                 $this->_processAttributeValues();
             }
             $this->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getConnection()->rollBack();
             throw $e;
         }

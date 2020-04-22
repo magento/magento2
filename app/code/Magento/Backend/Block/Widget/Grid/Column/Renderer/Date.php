@@ -61,7 +61,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
                     self::$_format = $this->_localeDate->getDateFormat(
                         \IntlDateFormatter::MEDIUM
                     );
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                 }
             }

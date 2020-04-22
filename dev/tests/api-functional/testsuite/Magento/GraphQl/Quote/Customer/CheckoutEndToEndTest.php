@@ -482,7 +482,7 @@ QUERY;
         $email = 'customer@example.com';
         try {
             $customer = $this->customerRepository->get($email);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             return;
         }
         $this->registry->unregister('isSecureArea');

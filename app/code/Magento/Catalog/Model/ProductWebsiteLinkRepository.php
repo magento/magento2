@@ -38,7 +38,7 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
         $product->setWebsiteIds(array_merge($product->getWebsiteIds(), [$productWebsiteLink->getWebsiteId()]));
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __(
                     'Could not assign product "%1" to websites "%2"',
@@ -69,7 +69,7 @@ class ProductWebsiteLinkRepository implements \Magento\Catalog\Api\ProductWebsit
 
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __(
                     'Could not save product "%1" with websites %2',

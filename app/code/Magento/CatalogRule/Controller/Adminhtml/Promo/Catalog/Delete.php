@@ -31,7 +31,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imp
                 return;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('We can\'t delete this rule right now. Please review the log and try again.')
                 );

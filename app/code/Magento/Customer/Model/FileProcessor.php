@@ -231,7 +231,7 @@ class FileProcessor
                 $this->entityTypeCode . '/' . self::TMP_DIR . '/' . $fileName,
                 $destinationPath . '/' . $destinationFileName
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while saving the file.')
             );

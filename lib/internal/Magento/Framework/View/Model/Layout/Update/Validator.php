@@ -161,7 +161,7 @@ class Validator extends \Zend_Validate_Abstract
         } catch (ValidationSchemaException $e) {
             $this->_error(self::XSD_INVALID, $e->getMessage());
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_error(self::XML_INVALID);
             throw $e;
         }

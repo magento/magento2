@@ -87,7 +87,7 @@ class Create extends \Magento\Framework\App\Action\Action
                     'message' => __('A letter with further instructions will be sent to your email.')
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
             throw $e;
         }

@@ -58,7 +58,7 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
         try {
             $args = $this->_resolveArguments($requestedType, $parameters, $arguments);
             unset($this->creationStack[$requestedType]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             unset($this->creationStack[$requestedType]);
             throw $e;
         }

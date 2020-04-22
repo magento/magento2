@@ -38,12 +38,12 @@ class Acl implements PolicyInterface
     {
         try {
             return $this->_aclBuilder->getAcl()->isAllowed($roleId, $resourceId, $privilege);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             try {
                 if (!$this->_aclBuilder->getAcl()->has($resourceId)) {
                     return $this->_aclBuilder->getAcl()->isAllowed($roleId, null, $privilege);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             }
         }
         return false;

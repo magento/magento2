@@ -121,7 +121,7 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate(
                 new ArrayInput([], $inputDefinition)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains('--area (-a) and --exclude-area cannot be used at the same time', $e->getMessage());
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
@@ -145,7 +145,7 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate(
                 new ArrayInput([], $inputDefinition)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains('--theme (-t) and --exclude-theme cannot be used at the same time', $e->getMessage());
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
@@ -168,7 +168,7 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate(
                 new ArrayInput([], $inputDefinition)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 '--language (-l) and --exclude-language cannot be used at the same time',
                 $e->getMessage()
@@ -196,7 +196,7 @@ class InputValidatorTest extends TestCase
             $this->inputValidator->validate(
                 new ArrayInput([], $inputDefinition)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 'Argument "' .
                 Options::CONTENT_VERSION

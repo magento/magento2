@@ -75,7 +75,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
             $product = $this->productRepository->save($product);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($e instanceof InputException) {
                 throw $e;
             } else {
@@ -123,7 +123,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new StateException(__("The product can't be saved."));
         }
         return true;
@@ -166,7 +166,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     {
         try {
             $product = $this->productRepository->get($sku);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new NoSuchEntityException(__("The product doesn't exist. Verify and try again."));
         }
 

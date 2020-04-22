@@ -53,7 +53,7 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
             } else {
                 throw new \Exception($deleteFailMessage);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $resultData->setIsSuccess(false);
             $this->messageManager->addErrorMessage($deleteFailMessage);
         }

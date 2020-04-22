@@ -528,7 +528,7 @@ class Multishipping extends \Magento\Framework\DataObject
             try {
                 $address = $this->addressRepository->getById($addressId);
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             }
             if (isset($address)) {
                 if (!($quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId()))) {
@@ -568,7 +568,7 @@ class Multishipping extends \Magento\Framework\DataObject
         try {
             $address = $this->addressRepository->getById($addressId);
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             //
         }
         if (isset($address)) {
@@ -596,7 +596,7 @@ class Multishipping extends \Magento\Framework\DataObject
         try {
             $address = $this->addressRepository->getById($addressId);
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             //
         }
         if (isset($address)) {
@@ -870,7 +870,7 @@ class Multishipping extends \Magento\Framework\DataObject
             );
 
             return $this;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_eventManager->dispatch('checkout_multishipping_refund_all', ['orders' => $orders]);
             throw $e;
         }

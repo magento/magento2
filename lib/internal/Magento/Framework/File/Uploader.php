@@ -242,7 +242,7 @@ class Uploader
 
         try {
             $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // if the file exists and we had an exception continue anyway
             if (file_exists($destinationFile)) {
                 $this->_result = true;

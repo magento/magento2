@@ -41,7 +41,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new \Exception("Unable to instantiate '{$class}'", 0, $e);
                 }
             },
@@ -79,7 +79,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             }
             asort($templateBlocks);
             return $templateBlocks;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             trigger_error(
                 "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
                 " Exception: {$e}",

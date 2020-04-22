@@ -43,7 +43,7 @@ class Synchronize extends \Magento\MediaStorage\Controller\Adminhtml\System\Conf
 
         try {
             $this->_getSyncSingleton()->synchronize($storage);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $flag->passError($e);
         }

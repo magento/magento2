@@ -110,7 +110,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
             $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
         } catch (\SoapFault $e) {
             $exceptionMessage = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $exceptionMessage = $errorObj['message'];
         }

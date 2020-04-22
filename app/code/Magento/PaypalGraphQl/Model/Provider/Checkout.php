@@ -60,7 +60,7 @@ class Checkout
                     ],
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new GraphQlInputException(__('The requested Payment Method is not available.'));
         }
 

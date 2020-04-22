@@ -25,7 +25,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
             $this->quoteRepository->save($this->_quote);
 
             $updateResult->setOk(true);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $updateResult->setError(true);
             $updateResult->setMessage($e->getMessage());
         }

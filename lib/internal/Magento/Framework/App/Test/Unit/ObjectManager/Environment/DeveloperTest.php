@@ -35,7 +35,7 @@ class DeveloperTest extends \PHPUnit\Framework\TestCase
     {
         try {
             $origObjectManager = ObjectManager::getInstance();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $origObjectManager = null;
         }
 

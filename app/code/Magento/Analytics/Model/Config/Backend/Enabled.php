@@ -69,7 +69,7 @@ class Enabled extends Value
                 $enabled = $this->getData('value');
                 $enabled ? $this->subscriptionHandler->processEnabled() : $this->subscriptionHandler->processDisabled();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->error($e->getMessage());
             throw new LocalizedException(__('There was an error save new configuration value.'));
         }

@@ -117,7 +117,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements HttpGetAction
         } catch (LocalizedException $e) {
             $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $item->getProductUrl();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

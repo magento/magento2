@@ -189,7 +189,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         try {
             $this->reindex();
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             throw $e;
         }

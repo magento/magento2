@@ -325,7 +325,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         }
         try {
             $sample->delete();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new StateException(__('The sample with "%1" ID can\'t be deleted.', $sample->getId()), $exception);
         }
         return true;

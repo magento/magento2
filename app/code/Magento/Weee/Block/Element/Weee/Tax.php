@@ -88,7 +88,7 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
                     // default format:  1234.56
                     $values[$key]['value'] = number_format($price, 2, null, '');
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $values[$key]['value'] = $price;
             }
         }

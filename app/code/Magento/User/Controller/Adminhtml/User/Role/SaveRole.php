@@ -121,7 +121,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
             return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('An error occurred while saving this role.'));
         }
 
@@ -230,7 +230,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     {
         try {
             $this->_userFactory->create()->setRoleId($roleId)->setUserId($userId)->deleteFromRole();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
         return true;

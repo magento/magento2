@@ -19,7 +19,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\View\Giftmessage
             )->saveAllInOrder();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('Something went wrong while saving the gift message.'));
         }
 

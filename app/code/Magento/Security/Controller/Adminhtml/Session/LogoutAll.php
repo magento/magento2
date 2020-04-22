@@ -41,7 +41,7 @@ class LogoutAll extends \Magento\Backend\App\Action
             $this->messageManager->addSuccessMessage(__('All other open sessions for this account were terminated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __("We couldn't logout because of an error."));
         }
         $this->_redirect('*/*/activity');

@@ -150,7 +150,7 @@ class PostDataProcessor
             return false;
         } catch (ValidationSchemaException $e) {
             return false;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e);
             return false;
         }

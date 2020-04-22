@@ -53,7 +53,7 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
                     \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree::class
                 )->getTreeJson()
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $resultJson->setData($result);
         }

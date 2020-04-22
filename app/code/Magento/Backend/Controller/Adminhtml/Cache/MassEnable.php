@@ -70,7 +70,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('An error occurred while enabling cache.'));
         }
     }

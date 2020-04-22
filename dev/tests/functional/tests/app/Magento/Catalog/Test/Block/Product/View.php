@@ -572,7 +572,7 @@ class View extends AbstractConfigureBlock
     {
         try {
             $this->waitForElementNotVisible($this->ajaxLoading);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
     }
 

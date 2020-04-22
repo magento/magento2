@@ -69,7 +69,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
         );
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__("The group price couldn't be saved."));
         }
         return true;

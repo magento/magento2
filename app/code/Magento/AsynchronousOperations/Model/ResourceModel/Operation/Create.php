@@ -76,7 +76,7 @@ class Create implements \Magento\Framework\EntityManager\Operation\CreateInterfa
                 ]
             );
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

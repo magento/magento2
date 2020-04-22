@@ -185,7 +185,7 @@ class AttributeSetManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals(
                 $expectedMessage,

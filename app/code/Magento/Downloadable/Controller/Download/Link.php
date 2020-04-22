@@ -124,7 +124,7 @@ class Link extends \Magento\Downloadable\Controller\Download
                 $linkPurchasedItem->save();
                 // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
             }
         } elseif ($status == PurchasedLink::LINK_STATUS_EXPIRED) {

@@ -91,7 +91,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
                 $mode = $this->configReader->getValue($configPath) ?: self::DIMENSION_MODE_NONE;
                 $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $mode);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln('"' . $indexer->getTitle() . '" indexer process unknown error:' . PHP_EOL);
             $output->writeln($e->getMessage() . PHP_EOL);
             // we must have an exit code higher than zero to indicate something was wrong

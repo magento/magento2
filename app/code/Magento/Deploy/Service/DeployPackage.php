@@ -138,7 +138,7 @@ class DeployPackage
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
                 $package->deleteFile($file->getFileId());
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical(
                     'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
                 );

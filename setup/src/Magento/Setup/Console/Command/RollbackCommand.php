@@ -143,7 +143,7 @@ class RollbackCommand extends AbstractSetupCommand
                     $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
 
                     return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     // we must have an exit code higher than zero to indicate something was wrong
                     return \Magento\Framework\Console\Cli::RETURN_FAILURE;

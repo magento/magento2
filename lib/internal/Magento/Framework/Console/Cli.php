@@ -82,7 +82,7 @@ class Cli extends Console\Application
 
             $this->assertCompilerPreparation();
             $this->initObjectManager();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
@@ -113,7 +113,7 @@ class Cli extends Console\Application
         $exitCode = null;
         try {
             $exitCode = parent::doRun($input, $output);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
             $this->logger->error($errorMessage);
             $this->initException = $e;
@@ -158,7 +158,7 @@ class Cli extends Console\Application
                 $commands,
                 $this->getVendorCommands($this->objectManager)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->initException = $e;
         }
 

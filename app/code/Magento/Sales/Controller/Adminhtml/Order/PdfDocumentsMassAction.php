@@ -26,7 +26,7 @@ abstract class PdfDocumentsMassAction extends \Magento\Sales\Controller\Adminhtm
         try {
             $collection = $this->filter->getCollection($this->getOrderCollection()->create());
             return $this->massAction($collection);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -135,7 +135,7 @@ class XmlCatalogGenerateCommand extends Command
         foreach ($urns as $urn) {
             try {
                 $paths[$urn] = $this->urnResolver->getRealPath($urn);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // don't add unsupported element to array
                 if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                     $output->writeln($e->getMessage());

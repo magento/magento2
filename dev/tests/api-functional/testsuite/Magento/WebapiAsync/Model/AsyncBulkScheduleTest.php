@@ -183,7 +183,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $response = null;
         try {
             $response = $this->saveProductAsync($products);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(500, $e->getCode());
         }
         $this->assertNull($response);
@@ -240,7 +240,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
             //nothing to delete
         }

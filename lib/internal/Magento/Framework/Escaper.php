@@ -94,7 +94,7 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
                 }

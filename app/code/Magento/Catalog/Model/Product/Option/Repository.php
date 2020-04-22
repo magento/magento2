@@ -202,7 +202,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             if (empty($options)) {
                 $this->productRepository->save($product);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The custom option couldn't be removed."));
         }
         return true;

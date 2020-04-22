@@ -110,7 +110,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) status.')

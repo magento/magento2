@@ -72,7 +72,7 @@ class Ftp extends AbstractRollback
         try {
             $this->_ftpClient = new \Magento\Framework\System\Ftp();
             $this->_ftpClient->connect($this->_snapshot->getFtpConnectString());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new FtpConnectionFailed(
                 new Phrase($e->getMessage())
             );

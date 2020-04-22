@@ -96,7 +96,7 @@ class ScheduleStatus extends AbstractRenderer
             );
 
             return '<span class="' . $class . '"><span>' . $text . '</span></span>';
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             return '<span class="grid-severity-minor"><span>' .
                 $this->escaper->escapeHtml(
                     get_class($exception) . ': ' . $exception->getMessage()

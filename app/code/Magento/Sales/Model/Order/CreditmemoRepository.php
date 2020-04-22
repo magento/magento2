@@ -122,7 +122,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
         try {
             $this->metadata->getMapper()->delete($entity);
             unset($this->registry[$entity->getEntityId()]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__("The credit memo couldn't be deleted."), $e);
         }
         return true;
@@ -142,7 +142,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
             $this->registry[$entity->getEntityId()] = $entity;
         } catch (LocalizedException $e) {
             throw new CouldNotSaveException(__($e->getMessage()), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The credit memo couldn't be saved."), $e);
         }
         return $this->registry[$entity->getEntityId()];

@@ -309,7 +309,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
         }
@@ -352,7 +352,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['0' => 20, '1' => 10], $errorObj['parameters']);
@@ -385,7 +385,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
         }

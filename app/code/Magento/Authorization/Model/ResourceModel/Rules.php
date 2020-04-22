@@ -133,7 +133,7 @@ class Rules extends AbstractDb
         } catch (LocalizedException $e) {
             $connection->rollBack();
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             $this->_logger->critical($e);
         }

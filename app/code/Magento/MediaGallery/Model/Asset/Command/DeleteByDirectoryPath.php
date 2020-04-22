@@ -68,7 +68,7 @@ class DeleteByDirectoryPath implements DeleteByDirectoryPathInterface
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
             $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' LIKE ?' => $directoryPath . '%']);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __(
                 'Could not delete media assets by path %path: %error',

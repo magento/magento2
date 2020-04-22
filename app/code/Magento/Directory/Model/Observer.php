@@ -120,7 +120,7 @@ class Observer
                 $importModel = $this->_importFactory->create($service);
                 $rates = $importModel->fetchRates();
                 $errors = $importModel->getMessages();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $importWarnings[] = __('FATAL ERROR:') . ' '
                     . __("The import model can't be initialized. Verify the model and try again.");
                 throw $e;

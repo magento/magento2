@@ -137,7 +137,7 @@ class UpgradeCommand extends AbstractSetupCommand
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln($e->getMessage());
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }

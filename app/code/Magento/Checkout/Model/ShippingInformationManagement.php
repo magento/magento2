@@ -197,7 +197,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
                     ['message' => $e->getMessage()]
                 )
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new InputException(
                 __('The shipping information was unable to be saved. Verify the input data and try again.')

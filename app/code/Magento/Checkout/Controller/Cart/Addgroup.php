@@ -70,7 +70,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
                     } else {
                         $this->messageManager->addErrorMessage($e->getMessage());
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addExceptionMessage(
                         $e,
                         __('We can\'t add this item to your shopping cart right now.')

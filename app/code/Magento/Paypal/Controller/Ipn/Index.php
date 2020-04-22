@@ -99,7 +99,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             /** @todo eliminate usage of exit statement */
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $this->getResponse()->setHttpResponseCode(500);
         }

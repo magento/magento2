@@ -121,7 +121,7 @@ class AddTrack extends Action implements HttpPostActionInterface
             }
         } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
 

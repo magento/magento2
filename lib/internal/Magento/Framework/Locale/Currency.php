@@ -80,7 +80,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
                 $currencyObject = $this->_currencyFactory->create(
                     ['options' => $currency, 'locale' => $this->_localeResolver->getLocale()]
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $currencyObject = $this->_currencyFactory->create(
                     ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale()]
                 );

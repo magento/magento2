@@ -33,7 +33,7 @@ class ZipTest extends \PHPUnit\Framework\TestCase
             $reflectedClass = new \ReflectionClass(\Magento\Framework\Archive\Zip::class);
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke($this->zip, []);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Failed asserting that no exceptions is thrown');
         }
     }

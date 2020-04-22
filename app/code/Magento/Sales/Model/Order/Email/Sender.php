@@ -84,14 +84,14 @@ abstract class Sender
 
         try {
             $sender->send();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
             return false;
         }
         if ($this->identityContainer->getCopyMethod() == 'copy') {
             try {
                 $sender->sendCopyTo();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->error($e->getMessage());
             }
         }

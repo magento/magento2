@@ -117,7 +117,7 @@ class BlockRepository implements BlockRepositoryInterface
 
         try {
             $this->resource->save($block);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
         return $block;
@@ -174,7 +174,7 @@ class BlockRepository implements BlockRepositoryInterface
     {
         try {
             $this->resource->delete($block);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;

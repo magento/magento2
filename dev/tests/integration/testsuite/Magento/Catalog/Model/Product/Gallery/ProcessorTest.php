@@ -89,7 +89,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertFalse($this->_model->validate($product));
             $this->_model->getAttribute()->setIsRequired(false);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_model->getAttribute()->setIsRequired(false);
             throw $e;
         }

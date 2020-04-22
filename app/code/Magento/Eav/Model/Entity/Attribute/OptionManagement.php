@@ -94,7 +94,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             if ($optionLabel && $attribute->getAttributeCode()) {
                 $this->setOptionValue($option, $attribute, $optionLabel);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
@@ -125,7 +125,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         $attribute->addData($removalMarker);
         try {
             $this->resourceModel->save($attribute);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__('The "%1" attribute can\'t be saved.', $attributeCode));
         }
 
@@ -144,7 +144,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
 
         try {
             $options = $attribute->getOptions();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__('The options for "%1" attribute can\'t be loaded.', $attributeCode));
         }
 

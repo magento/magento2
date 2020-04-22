@@ -39,7 +39,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setStockData($stockDataConfig);
 try {
     $productRepository->save($product);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     // problems during save
 }
 
@@ -58,6 +58,6 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setUrlKey('надзвичайний продукт на кожен день');
 try {
     $productRepository->save($product);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     // problems during save
 }

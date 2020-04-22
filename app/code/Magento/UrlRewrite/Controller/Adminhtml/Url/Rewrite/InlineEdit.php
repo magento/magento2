@@ -94,7 +94,7 @@ class InlineEdit extends Rewrite implements HttpPostActionInterface
                     $e->getMessage()
                 );
                 $error = true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $messages[] = $this->getErrorWithUrlRewriteId(
                     $urlRewrite,
                     __('Something went wrong while saving the url rewrite.')

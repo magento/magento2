@@ -100,7 +100,7 @@ class Management implements ProductLinkManagementInterface
         $product->setProductLinks($newLinks);
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(
                 __('The linked products data is invalid. Verify the data and try again.')
             );

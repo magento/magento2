@@ -97,7 +97,7 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             try {
                 $group = $this->_optionFactory->create()->groupFactory($optionInfo['option_type']);
                 return $group->getCustomizedView($optionInfo);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return $_default;
             }
         }

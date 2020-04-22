@@ -131,7 +131,7 @@ class PurgeCache
                 );
                 $socketAdapter->read();
                 $socketAdapter->close();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $unresponsiveServerError[] = "Cache host: " . $server->getHost() . ":" . $server->getPort() .
                     "resulted in error message: " . $e->getMessage();
             }

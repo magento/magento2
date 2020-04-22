@@ -143,7 +143,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             );
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/billing');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             try {
                 $this->_objectManager->get(
@@ -153,7 +153,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
                     $e->getMessage(),
                     'multi-shipping'
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->error($e->getMessage());
             }
             $this->messageManager->addError(__('Order place error'));

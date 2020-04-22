@@ -189,7 +189,7 @@ class FieldsProvider
         try {
             $connection = $this->resource->getConnection($resourceName);
             return $connection;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             return $e;
         }

@@ -134,7 +134,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\SoapFault $e) {
             //Expects soap exception
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
@@ -366,7 +366,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals([$attributeCode], $errorObj['parameters']);

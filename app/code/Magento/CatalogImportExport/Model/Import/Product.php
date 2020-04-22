@@ -1087,7 +1087,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ]
                     );
                     $this->transactionManager->commit();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->transactionManager->rollBack();
                     throw $e;
                 }
@@ -2159,7 +2159,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         try {
             $res = $this->_getUploader()->move($fileName, $renameFileOff);
             return $res['file'];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             return '';
         }

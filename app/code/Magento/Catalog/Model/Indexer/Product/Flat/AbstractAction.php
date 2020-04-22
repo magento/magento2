@@ -160,7 +160,7 @@ abstract class AbstractAction
 
             $this->_updateRelationProducts($storeId, $changedIds);
             $this->_cleanRelationProducts($storeId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $attributes = $this->_productIndexerHelper->getAttributes();
             $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
             $this->_cleanOnFailure($eavAttributes, $storeId);

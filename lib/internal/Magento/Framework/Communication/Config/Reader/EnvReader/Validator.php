@@ -148,7 +148,7 @@ class Validator extends ConfigValidator
         }
         try {
             $this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'The attribute "%s" for topic "%s" should have the value of the boolean type. '

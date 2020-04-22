@@ -93,7 +93,7 @@ class Listener implements \PHPUnit\Framework\TestListener
                         'Errors were added to log during test execution.'
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $test->getTestResultObject()->addError($test, $e, 0);
             }
         }

@@ -255,7 +255,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
             $this->getMessageManager()
                 ->addError($this->getErrorWithCustomerId($this->escaper->escapeHtml($e->getMessage())));
             $this->logger->critical($e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getMessageManager()
                 ->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);

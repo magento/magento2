@@ -50,7 +50,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category implements H
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while trying to delete the category.'));
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             }

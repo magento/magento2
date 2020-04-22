@@ -136,7 +136,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMsg = __('You need more permissions to perform a rollback.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMsg = __('Failed to rollback.');
         }

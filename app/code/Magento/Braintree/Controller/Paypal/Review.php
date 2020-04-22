@@ -92,7 +92,7 @@ class Review extends AbstractAction implements HttpPostActionInterface, HttpGetA
             $reviewBlock->getChildBlock('shipping_method')->setData('quote', $quote);
 
             return $resultPage;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

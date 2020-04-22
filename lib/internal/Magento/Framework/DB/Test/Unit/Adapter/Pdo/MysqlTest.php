@@ -187,7 +187,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     {
         try {
             $this->_mockAdapter->query($query);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertNotContains(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
@@ -198,7 +198,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $select->from('user');
         try {
             $this->_mockAdapter->query($select);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertNotContains(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
@@ -266,7 +266,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_adapter->rollBack();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
                 $e->getMessage()
@@ -282,7 +282,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
                 $e->getMessage()
@@ -394,7 +394,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->rollBack();
             $this->_adapter->commit();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
@@ -417,7 +417,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             $this->_adapter->rollBack();
             $this->_adapter->beginTransaction();
             throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(
                 AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()

@@ -109,7 +109,7 @@ class LockProcessor implements ConfigSetProcessorInterface
                     false
                 );
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }
     }

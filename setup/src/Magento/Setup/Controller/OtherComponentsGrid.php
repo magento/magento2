@@ -100,7 +100,7 @@ class OtherComponentsGrid extends AbstractActionController
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR

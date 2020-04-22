@@ -1128,7 +1128,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
              */
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->printLogQuery(false, true, $query);
             throw $e;
         }
@@ -1199,7 +1199,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                         $select = $selects;
                     }
                     $values = $this->getConnection()->fetchAll($select);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->printLogQuery(true, true, $select);
                     throw $e;
                 }

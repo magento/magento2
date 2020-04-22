@@ -46,7 +46,7 @@ class ConfigSectionChecker
             return true;
         } catch (\Zend_Acl_Exception $e) {
             throw new NotFoundException(__('Page not found.'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }

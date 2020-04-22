@@ -89,7 +89,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit\Framework\TestCase
         );
         try {
             $reader->read();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Merged email templates configuration does not pass XSD validation: ' . $e->getMessage());
         }
     }

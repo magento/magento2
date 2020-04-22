@@ -220,7 +220,7 @@ class ImageUploader
                 $baseTmpImagePath,
                 $baseImagePath
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while saving the file(s).'),
@@ -275,7 +275,7 @@ class ImageUploader
             try {
                 $relativePath = rtrim($baseTmpPath, '/') . '/' . ltrim($result['file'], '/');
                 $this->coreFileStorageDatabase->saveFile($relativePath);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Something went wrong while saving the file(s).'),

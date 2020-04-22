@@ -21,7 +21,7 @@ class Delete extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implem
             try {
                 $this->_getUrlRewrite()->delete();
                 $this->messageManager->addSuccess(__('You deleted the URL rewrite.'));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addException($e, __('We can\'t delete URL Rewrite right now.'));
                 $this->_redirect('adminhtml/*/edit/', ['id' => $this->_getUrlRewrite()->getId()]);
                 return;

@@ -66,7 +66,7 @@ class CouponManagement implements CouponManagementInterface
             $this->quoteRepository->save($quote->collectTotals());
         } catch (LocalizedException $e) {
             throw new CouldNotSaveException(__('The coupon code couldn\'t be applied: ' .$e->getMessage()), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __("The coupon code couldn't be applied. Verify the coupon code and try again."),
                 $e
@@ -92,7 +92,7 @@ class CouponManagement implements CouponManagementInterface
         try {
             $quote->setCouponCode('');
             $this->quoteRepository->save($quote->collectTotals());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(
                 __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
             );

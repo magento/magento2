@@ -66,7 +66,7 @@ class SaveShippingMethod extends AbstractAction
 
                 return;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

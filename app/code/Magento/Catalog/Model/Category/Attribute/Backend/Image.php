@@ -144,7 +144,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $newImgRelativePath = $this->imageUploader->moveFileFromTmp($imageName, true);
                 $value[0]['url'] = '/' . $baseMediaDir . '/' . $newImgRelativePath;
                 $value[0]['name'] = $value[0]['url'];
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         } elseif ($this->fileResidesOutsideCategoryDir($value)) {

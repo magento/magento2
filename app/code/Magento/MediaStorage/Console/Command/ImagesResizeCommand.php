@@ -159,7 +159,7 @@ class ImagesResizeCommand extends Command
                 $progress->advance();
                 $generator->next();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             // we must have an exit code higher than zero to indicate something was wrong
             return Cli::RETURN_FAILURE;
@@ -215,7 +215,7 @@ class ImagesResizeCommand extends Command
                 $progress->setMessage($image['filepath']);
                 $progress->advance();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             // we must have an exit code higher than zero to indicate something was wrong
             return Cli::RETURN_FAILURE;

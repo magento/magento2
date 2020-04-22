@@ -109,7 +109,7 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
 
         try {
             $this->get($productSku, $optionId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
         }
     }

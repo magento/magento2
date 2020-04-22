@@ -51,7 +51,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $resultBlock->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
             return $resultLayout;

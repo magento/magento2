@@ -165,7 +165,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
                 try {
                     $group = $this->_productOptionFactory->create()->groupFactory($optionInfo['option_type']);
                     return ['value' => $group->getCustomizedView($optionInfo)];
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $_default;
                 }
             }

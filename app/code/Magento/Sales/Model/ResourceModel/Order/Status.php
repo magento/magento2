@@ -186,7 +186,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 }
             }
             $this->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getConnection()->rollBack();
             throw new LocalizedException(__('The status needs to remain assigned to its state.'));
         }

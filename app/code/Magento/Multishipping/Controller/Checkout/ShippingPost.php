@@ -25,7 +25,7 @@ class ShippingPost extends \Magento\Multishipping\Controller\Checkout
             $this->_getState()->setActiveStep(State::STEP_BILLING);
             $this->_getState()->setCompleteStep(State::STEP_SHIPPING);
             $this->_redirect('*/*/billing');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/shipping');
         }

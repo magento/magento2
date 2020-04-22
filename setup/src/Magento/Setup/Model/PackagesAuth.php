@@ -118,7 +118,7 @@ class PackagesAuth
             } else {
                 $response = ['success' => false, 'message' => 'Bad credentials'];
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['success' => false, 'message' => $e->getMessage()];
         }
         return $this->serializer->serialize($response);
@@ -135,7 +135,7 @@ class PackagesAuth
             $authJson = $this->getAuthJson();
             $serviceUrl = $this->getCredentialBaseUrl();
             $authJsonData = isset($authJson['http-basic'][$serviceUrl]) ? $authJson['http-basic'][$serviceUrl] : false;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $authJsonData = false;
         }
         return $authJsonData;
@@ -154,7 +154,7 @@ class PackagesAuth
             try {
                 $data = $directory->readFile(self::PATH_TO_AUTH_FILE);
                 return json_decode($data, true);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new LocalizedException(new Phrase('Error in reading Auth file'));
             }
         }

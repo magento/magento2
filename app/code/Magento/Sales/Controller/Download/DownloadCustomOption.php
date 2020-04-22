@@ -112,7 +112,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
                 return $resultForward->forward('noroute');
             }
             $this->download->downloadFile($info);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $resultForward->forward('noroute');
         }
         $this->endExecute();

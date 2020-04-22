@@ -92,7 +92,7 @@ class Reader implements ReaderInterface
         foreach ($this->getRemoteServices() as $serviceInterface => $remoteImplementation) {
             try {
                 $methodsMap = $this->serviceMethodsMap->getMethodsMap($serviceInterface);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new \LogicException(sprintf('Service interface was expected, "%s" given', $serviceInterface));
             }
             foreach ($methodsMap as $methodName => $returnType) {

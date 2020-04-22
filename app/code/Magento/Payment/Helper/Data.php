@@ -210,7 +210,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $paymentBlock->getMethod()
                 ->setStore($storeId);
             $paymentBlockHtml = $paymentBlock->toHtml();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->_appEmulation->stopEnvironmentEmulation();
             throw $exception;
         }

@@ -82,7 +82,7 @@ class Soap implements ClientInterface
                 : [$response];
 
             $this->logger->debug(['response' => $result]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->debug(['trace' => $client->__getLastRequest()]);
             throw $e;
         }

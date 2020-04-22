@@ -66,7 +66,7 @@ class LinkProviderTest extends WebapiAbstract
         if (!$this->isTestBaseUrlSecure()) {
             try {
                 $this->_webApiCall($serviceInfo);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->assertContains(
                     'Operation allowed only in HTTPS',
                     $e->getMessage()

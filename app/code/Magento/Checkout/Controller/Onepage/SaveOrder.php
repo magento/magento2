@@ -111,7 +111,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage implements HttpPost
                 }
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_objectManager->get(\Magento\Checkout\Helper\Data::class)
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());

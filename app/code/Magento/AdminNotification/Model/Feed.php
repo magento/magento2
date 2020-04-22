@@ -233,7 +233,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         try {
             $xml = new \SimpleXMLElement($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
 
@@ -250,7 +250,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         try {
             $data = $this->getFeedData();
             $xml = new \SimpleXMLElement($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?>');
         }
 

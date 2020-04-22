@@ -133,7 +133,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         $this->giftMessageSaveModel->setGiftmessages($message);
         try {
             $this->giftMessageSaveModel->saveAllInOrder();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __('The gift message couldn\'t be added to the "%1" order.', $e->getMessage()),
                 $e

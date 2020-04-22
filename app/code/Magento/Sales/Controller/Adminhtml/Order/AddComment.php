@@ -66,7 +66,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 return $this->resultPageFactory->create();
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $response = ['error' => true, 'message' => $e->getMessage()];
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $response = ['error' => true, 'message' => __('We cannot add order history.')];
             }
             if (is_array($response)) {

@@ -519,7 +519,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 'fieldValue' => $taxRateId,
             ];
             $this->assertEquals($expectedParams, $e->getParameters());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Caught unexpected exception');
         }
     }
@@ -551,7 +551,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 'fieldValue' => $taxRateId,
             ];
             $this->assertEquals($expectedParams, $e->getParameters());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Caught unexpected exception');
         }
     }

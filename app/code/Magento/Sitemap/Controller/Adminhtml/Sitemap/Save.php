@@ -164,7 +164,7 @@ class Save extends Sitemap implements HttpPostActionInterface
             // clear previously saved data from session
             $this->_session->setFormData(false);
             return $model->getId();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // display error message
             $this->messageManager->addErrorMessage($e->getMessage());
             // save data in session

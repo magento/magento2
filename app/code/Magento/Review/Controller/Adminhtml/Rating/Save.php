@@ -63,7 +63,7 @@ class Save extends RatingController implements HttpPostActionInterface
 
                 $this->messageManager->addSuccessMessage(__('You saved the rating.'));
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRatingData(false);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)
                     ->setRatingData($this->getRequest()->getPostValue());

@@ -164,7 +164,7 @@ class FixerIo extends AbstractImport
                 ->getBody();
 
             $response = json_decode($jsonResponse, true);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
             }

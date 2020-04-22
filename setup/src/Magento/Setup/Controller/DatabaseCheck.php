@@ -63,7 +63,7 @@ class DatabaseCheck extends AbstractActionController
             $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';
             $this->dbValidator->checkDatabaseTablePrefix($tablePrefix);
             return new JsonModel(['success' => true]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
         }
     }

@@ -107,7 +107,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
         try {
             $this->groupResource->save($group);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__("The attributeGroup can't be saved."));
         }
         return $group;
@@ -155,7 +155,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     {
         try {
             $this->groupResource->delete($group);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(
                 __(
                     'The attribute group with id "%1" can\'t be deleted.',

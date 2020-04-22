@@ -204,7 +204,7 @@ class Page extends AbstractDb
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;

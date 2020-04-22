@@ -104,7 +104,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
                 'error' => $e->getMessage(),
                 'errorcode' => $e->getCode(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $result = [
                 'error' => __('Something went wrong while saving file.'),

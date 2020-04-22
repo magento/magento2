@@ -120,7 +120,7 @@ class Tokenizer
                     break;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [];
         }
         return $arguments;

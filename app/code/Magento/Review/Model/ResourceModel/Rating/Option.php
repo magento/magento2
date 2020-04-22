@@ -153,7 +153,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->aggregate($option);
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Exception($e->getMessage());
         }

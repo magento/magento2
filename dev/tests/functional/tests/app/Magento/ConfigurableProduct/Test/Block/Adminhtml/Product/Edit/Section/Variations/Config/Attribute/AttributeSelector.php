@@ -26,7 +26,7 @@ class AttributeSelector extends SuggestElement
                     return $this->find($this->searchResult)->isVisible() ? true : null;
                 }
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // In parallel run on windows change the focus is lost on element
             // that causes disappearing of result suggest list.
         }

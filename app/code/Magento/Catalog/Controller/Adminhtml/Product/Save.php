@@ -179,7 +179,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
                 $data = isset($product) ? $this->persistMediaData($product, $data) : $data;
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $data = isset($product) ? $this->persistMediaData($product, $data) : $data;

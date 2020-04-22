@@ -35,7 +35,7 @@ class StartWizard extends \Magento\Paypal\Controller\Billing\Agreement
                 return $this->getResponse()->setRedirect($agreement->initToken());
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e, $e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('We can\'t start the billing agreement wizard.')

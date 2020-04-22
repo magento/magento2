@@ -42,7 +42,7 @@ class SilentPost extends \Magento\Paypal\Controller\Payflow implements CsrfAware
             $paymentModel = $this->_payflowModelFactory->create();
             try {
                 $paymentModel->process($data);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         }

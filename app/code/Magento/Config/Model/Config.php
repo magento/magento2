@@ -227,7 +227,7 @@ class Config extends \Magento\Framework\DataObject
                     'changed_paths' => $changedPaths,
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // re-init configuration
             $this->_appConfig->reinit();
             throw $e;

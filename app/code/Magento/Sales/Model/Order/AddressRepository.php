@@ -187,7 +187,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
             $this->metadata->getMapper()->delete($entity);
 
             unset($this->registry[$entity->getEntityId()]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__("The order address couldn't be deleted."), $e);
         }
 
@@ -220,7 +220,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The order address couldn't be saved."), $e);
         }
 

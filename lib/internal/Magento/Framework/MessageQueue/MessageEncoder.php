@@ -98,7 +98,7 @@ class MessageEncoder
     {
         try {
             $decodedMessage = $this->jsonDecoder->decode($message);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(new Phrase("Error occurred during message decoding."));
         }
         return $this->convertMessage($topic, $decodedMessage, self::DIRECTION_DECODE, $requestType);

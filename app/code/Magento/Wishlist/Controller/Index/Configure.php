@@ -107,7 +107,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Ac
             $this->messageManager->addErrorMessage($e->getMessage());
             $resultRedirect->setPath('*');
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We can\'t configure the product right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $resultRedirect->setPath('*');

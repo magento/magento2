@@ -191,7 +191,7 @@ class AccountManagementTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception did not occur.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
                 $expectedException->addError(__('"Email" is not a valid email address.'));
@@ -236,7 +236,7 @@ class AccountManagementTest extends WebapiAbstract
         try {
             $customerData = $this->_webApiCall($serviceInfo, $requestData, null, 'all');
             $this->assertNotNull($customerData['id']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Customer should be created without optional fields.');
         }
     }
@@ -279,7 +279,7 @@ class AccountManagementTest extends WebapiAbstract
         try {
             $result = $this->_webApiCall($serviceInfo, $requestData);
             $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Customer is not activated.');
         }
     }
@@ -307,7 +307,7 @@ class AccountManagementTest extends WebapiAbstract
         try {
             $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
             $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Customer is not activated.');
         }
     }
@@ -377,7 +377,7 @@ class AccountManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "Exception message does not match"
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
@@ -396,7 +396,7 @@ class AccountManagementTest extends WebapiAbstract
 
         try {
             $this->_webApiCall($serviceInfo);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
@@ -466,7 +466,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedErrorParameters =
                 [
                     'fieldName' => 'email',
@@ -560,7 +560,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedErrorParameters =
                 [
                     'fieldName' => 'email',

@@ -23,7 +23,7 @@ class TreeJson extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
                     $this->_getStorage()->getTreeArray()
                 )
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->getResponse()->representJson(
                 $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([])

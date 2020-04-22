@@ -105,7 +105,7 @@ class Attribute
                 }
                 $this->_afterSaveAttribute($object, $attributes);
                 $this->getConnection()->commit();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->getConnection()->rollBack();
                 throw $e;
             }

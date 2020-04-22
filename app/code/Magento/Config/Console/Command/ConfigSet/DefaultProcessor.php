@@ -96,7 +96,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
             ]]);
             $config->setDataByPath($path, $value);
             $config->save();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }
     }

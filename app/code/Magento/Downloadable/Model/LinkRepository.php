@@ -340,7 +340,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         }
         try {
             $link->delete();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new StateException(__('The link with "%1" ID can\'t be deleted.', $link->getId()), $exception);
         }
         return true;

@@ -26,7 +26,7 @@ class MassDelete extends TermController implements HttpPostActionInterface
                     $model->delete();
                 }
                 $this->messageManager->addSuccessMessage(__('Total of %1 record(s) were deleted.', count($searchIds)));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
         }

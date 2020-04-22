@@ -78,7 +78,7 @@ class Delete extends Sitemap implements HttpPostActionInterface
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // display error message
                 $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form

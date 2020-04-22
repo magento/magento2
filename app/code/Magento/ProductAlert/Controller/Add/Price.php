@@ -107,7 +107,7 @@ class Price extends AddController implements HttpGetActionInterface
                 $resultRedirect->setPath('/');
             }
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")

@@ -137,7 +137,7 @@ class CronRunCommand extends AbstractSetupCommand
                         sprintf('Job "%s" has been successfully completed', $job),
                         \Psr\Log\LogLevel::INFO
                     );
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->status->toggleUpdateError(true);
                     $this->status->add(
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
@@ -146,7 +146,7 @@ class CronRunCommand extends AbstractSetupCommand
                     $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->status->add($e->getMessage(), \Psr\Log\LogLevel::ERROR);
             $this->status->toggleUpdateError(true);
             $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;

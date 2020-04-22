@@ -79,7 +79,7 @@ class TestConnection extends Action
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result['errorMessage'] = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $message = __($e->getMessage());
             $result['errorMessage'] = $this->tagFilter->filter($message);
         }

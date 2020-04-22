@@ -74,7 +74,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     {
         try {
             $this->bookmarkResourceModel->save($bookmark);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
         return $bookmark;
@@ -137,7 +137,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     {
         try {
             $this->bookmarkResourceModel->delete($bookmark);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;

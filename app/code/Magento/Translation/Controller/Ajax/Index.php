@@ -37,7 +37,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
         try {
             $response = $this->inlineParser->processAjaxPost($translate);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = "{error:true,message:'" . $e->getMessage() . "'}";
         }
         $this->getResponse()->representJson(json_encode($response));

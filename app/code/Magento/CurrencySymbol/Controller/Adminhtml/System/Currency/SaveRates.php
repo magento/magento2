@@ -40,7 +40,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
 
                 $this->_objectManager->create(\Magento\Directory\Model\Currency::class)->saveRates($data);
                 $this->messageManager->addSuccessMessage(__('All valid rates have been saved.'));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
         }

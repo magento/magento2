@@ -1239,7 +1239,7 @@ class Installer
 
         try {
             $this->cleanCaches();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->log->log(
                 'Can\'t clear cache due to the following error: '
                 . $e->getMessage() . PHP_EOL
@@ -1351,7 +1351,7 @@ class Installer
                 if (!$connection) {
                     $this->log->log("Can't create connection to database - skipping database cleanup");
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->log->log($e->getMessage() . ' - skipping database cleanup');
                 return;
             }

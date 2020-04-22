@@ -67,7 +67,7 @@ class GetNonce extends Action
             )
                 ->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             return $this->processBadRequest($response);
         }

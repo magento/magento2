@@ -75,7 +75,7 @@ class ExtensionGrid extends AbstractActionController
             try {
                 $lastSyncData = $this->packagesData->syncPackagesData();
                 $extensions = $this->gridExtension->getList();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $error = $e->getMessage();
             }
         }
@@ -104,7 +104,7 @@ class ExtensionGrid extends AbstractActionController
             $authDataJson = $this->packagesAuth->getAuthJsonData();
             $this->packagesAuth->checkCredentials($authDataJson['username'], $authDataJson['password']);
             $lastSyncData = $this->packagesData->syncPackagesData();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = $e->getMessage();
         }
         return new JsonModel(

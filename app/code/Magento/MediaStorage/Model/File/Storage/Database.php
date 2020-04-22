@@ -244,7 +244,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
                 )->getId() : null;
 
                 $this->_getResource()->saveFile($file);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_errors[] = $e->getMessage();
                 $this->_logger->critical($e);
             }

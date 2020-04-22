@@ -124,7 +124,7 @@ class Directive extends Action implements HttpGetActionInterface
             $image->open($imagePath);
             $resultRaw->setHeader('Content-Type', $image->getMimeType());
             $resultRaw->setContents($image->getImage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             /** @var Config $config */
             $imagePath = $this->config->getSkinImagePlaceholderPath();
             try {
@@ -132,7 +132,7 @@ class Directive extends Action implements HttpGetActionInterface
                 $resultRaw->setHeader('Content-Type', $image->getMimeType());
                 $resultRaw->setContents($image->getImage());
                 $this->logger->warning($e);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->warning($e);
             }
         }

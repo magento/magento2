@@ -159,7 +159,7 @@ class SensitiveConfigSetCommand extends Command
             $this->hash->regenerate(System::CONFIG_TYPE);
 
             return Cli::RETURN_SUCCESS;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln(
                 sprintf('<error>%s</error>', $e->getMessage())
             );

@@ -95,7 +95,7 @@ try {
         )
     );
     unset($bootstrap, $application, $settings, $shell);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     echo $e . PHP_EOL;
     exit(1);
 }

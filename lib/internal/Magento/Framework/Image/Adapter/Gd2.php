@@ -287,7 +287,7 @@ class Gd2 extends AbstractAdapter
                     return $transparentColor;
                 }
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // fallback to default background color
             }
         }
@@ -717,7 +717,7 @@ class Gd2 extends AbstractAdapter
         $this->_resized = true;
         try {
             $this->_createImageFromTtfText($text, $font);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = true;
         }
 

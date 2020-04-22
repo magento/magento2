@@ -190,7 +190,7 @@ class Full extends AbstractAction
 
             //Final replacement of tables from replica to main
             $this->switchTables();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
     }

@@ -89,7 +89,7 @@ class FileProcessor
         try {
             $result = $this->save($fileId, $this->getAbsoluteTmpMediaPath());
             $result['url'] = $this->getTmpMediaUrl($result['file']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         return $result;

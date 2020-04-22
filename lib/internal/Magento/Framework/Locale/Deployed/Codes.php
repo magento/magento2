@@ -54,7 +54,7 @@ class Codes implements AvailableLocalesInterface
             $theme = $this->flyweightFactory->create($code, $area);
             $reader = $this->fileSystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
             $dirs = $reader->read($theme->getFullPath());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return [];
         }
 

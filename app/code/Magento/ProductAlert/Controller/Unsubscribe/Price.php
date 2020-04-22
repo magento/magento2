@@ -83,7 +83,7 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
             $this->messageManager->addErrorMessage(__("The product wasn't found. Verify the product and try again."));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")

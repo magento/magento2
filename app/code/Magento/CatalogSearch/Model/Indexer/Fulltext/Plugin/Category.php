@@ -49,7 +49,7 @@ class Category extends AbstractPlugin
                 }
             });
             $resourceCategory->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $resourceCategory->rollBack();
             throw $e;
         }

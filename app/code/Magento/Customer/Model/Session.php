@@ -430,7 +430,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->customerRepository->getById($customerId);
             $this->_isCustomerIdChecked = $customerId;
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }
@@ -484,7 +484,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $customer = $this->customerRepository->getById($customerId);
             $this->setCustomerDataAsLoggedIn($customer);
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }

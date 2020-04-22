@@ -104,7 +104,7 @@ class Builder
                 if ($attributeSetId) {
                     $product->setAttributeSetId($attributeSetId);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $product = $this->createEmptyProduct(ProductTypes::DEFAULT_TYPE, $attributeSetId, $storeId);
                 $this->logger->critical($e);
             }

@@ -33,7 +33,7 @@ class Save extends \Magento\Backend\App\Action
         } else {
             try {
                 $model->save();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving this group.'));
             }
         }

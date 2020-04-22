@@ -298,7 +298,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
                 $checkResult->setData('is_available', $result->isValid());
             }
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // pass
         }
 
@@ -330,7 +330,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     {
         try {
             $validator = $this->getValidatorPool()->get('country');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return true;
         }
 
@@ -345,7 +345,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     {
         try {
             $validator = $this->getValidatorPool()->get('currency');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return true;
         }
 
@@ -400,7 +400,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     {
         try {
             $validator = $this->getValidatorPool()->get('global');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this;
         }
 

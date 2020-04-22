@@ -106,7 +106,7 @@ class GetToken extends AbstractExpress implements HttpGetActionInterface
                     'type' => 'error'
                 ]
             ]);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,
                 __('We can\'t start Express Checkout.')

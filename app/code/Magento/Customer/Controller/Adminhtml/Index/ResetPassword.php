@@ -58,7 +58,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index impleme
             $this->_addSessionErrorMessages($messages);
         } catch (SecurityViolationException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,
                 __('Something went wrong while resetting customer password.')

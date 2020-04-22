@@ -216,7 +216,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 $e->getMessage(),
                 "Exception message does not match"
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());

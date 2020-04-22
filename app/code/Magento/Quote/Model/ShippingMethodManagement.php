@@ -180,13 +180,13 @@ class ShippingMethodManagement implements
         $quote = $this->quoteRepository->getActive($cartId);
         try {
             $this->apply($cartId, $carrierCode, $methodCode);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
 
         try {
             $this->quoteRepository->save($quote->collectTotals());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('The shipping method can\'t be set. %1', $e->getMessage()));
         }
         return true;

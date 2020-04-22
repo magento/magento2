@@ -120,7 +120,7 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
             $localFileFullPath = $this->appendAbsoluteFileSystemPath($localUniqFilePath);
             $this->imageAdapter->validateUploadFile($localFileFullPath);
             $result = $this->appendResultSaveRemoteImage($localUniqFilePath);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
             $fileWriter = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
             if (isset($localFileFullPath) && $fileWriter->isExist($localFileFullPath)) {

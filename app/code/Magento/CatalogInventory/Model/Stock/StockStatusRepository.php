@@ -82,7 +82,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     {
         try {
             $this->resource->save($stockStatus);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(
                 __('The stock status was unable to be saved. Please try again.'),
                 $exception
@@ -126,7 +126,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
         try {
             $this->resource->delete($stockStatus);
             $this->getStockRegistryStorage()->removeStockStatus($stockStatus->getProductId());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock Status for product %1', $stockStatus->getProductId()),
                 $exception
@@ -145,7 +145,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
         try {
             $stockStatus = $this->get($id);
             $this->delete($stockStatus);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock Status for product %1', $id),
                 $exception

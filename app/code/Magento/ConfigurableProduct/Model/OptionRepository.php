@@ -152,14 +152,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         try {
             $this->configurableTypeResource->saveProducts($product, []);
             $this->configurableType->resetConfigurableAttributes($product);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new StateException(
                 __('The variations from the "%1" product can\'t be deleted.', $entityId)
             );
         }
         try {
             $this->optionResource->delete($option);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new StateException(
                 __('The option with "%1" ID can\'t be deleted.', $option->getId())
             );
@@ -228,7 +228,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
         try {
             $option->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('An error occurred while saving the option. Please try to save again.'));
         }
 

@@ -117,7 +117,7 @@ class Refunded extends AbstractReport
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
             $connection->query($insertQuery);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -238,7 +238,7 @@ class Refunded extends AbstractReport
             $select->group(['period', 'order_status']);
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
             $connection->query($insertQuery);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

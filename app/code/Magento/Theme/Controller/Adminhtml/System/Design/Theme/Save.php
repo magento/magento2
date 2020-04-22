@@ -72,7 +72,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_getSession()->setThemeData($themeData);
             $this->_getSession()->setThemeCustomCssData($customCssData);
             $redirectBack = true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError('The theme was not saved');
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

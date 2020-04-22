@@ -111,7 +111,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             $requestData = ['username' => $username, 'password' => $password];
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertInputExceptionMessages($e);
         }
         if ($noExceptionOccurred) {
@@ -134,7 +134,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             $requestData = ['username' => $customerUserName, 'password' => $password];
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertInvalidCredentialsException($e);
         }
         if ($noExceptionOccurred) {
@@ -213,7 +213,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
             }
         }
         if ($noExceptionOccurred) {
@@ -256,7 +256,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->assertInvalidCredentialsException($e);
             }
             if ($noExceptionOccurred) {
@@ -268,7 +268,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $validCredentials);
             $noExceptionOccurred = true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertInvalidCredentialsException($e);
         }
         if ($noExceptionOccurred) {

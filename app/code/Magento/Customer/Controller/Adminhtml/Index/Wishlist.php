@@ -19,7 +19,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customerId && $itemId) {
             try {
                 $this->_objectManager->create(\Magento\Wishlist\Model\Item::class)->load($itemId)->delete();
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($exception);
             }
         }

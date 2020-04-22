@@ -102,7 +102,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             $this->assertTrue($this->_helper->hasItems());
 
             $session->unsCatalogCompareItemsCount();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $session->unsCatalogCompareItemsCount();
             throw $e;
         }

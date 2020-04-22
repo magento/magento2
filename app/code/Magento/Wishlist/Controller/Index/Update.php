@@ -106,7 +106,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                 } elseif (0 == $qty) {
                     try {
                         $item->delete();
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                         $this->messageManager->addErrorMessage(__('We can\'t delete item from Wish List right now.'));
                     }
@@ -122,7 +122,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                         __('%1 has been updated in your Wish List.', $item->getProduct()->getName())
                     );
                     $updatedItems++;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addErrorMessage(
                         __(
                             'Can\'t save description %1',
@@ -137,7 +137,7 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpP
                 try {
                     $wishlist->save();
                     $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addErrorMessage(__('Can\'t update wish list'));
                 }
             }

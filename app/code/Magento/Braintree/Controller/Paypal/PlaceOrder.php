@@ -71,7 +71,7 @@ class PlaceOrder extends AbstractAction implements HttpPostActionInterface
 
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             return $resultRedirect->setPath('checkout/onepage/success', ['_secure' => true]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $this->messageManager->addExceptionMessage(
                 $e,

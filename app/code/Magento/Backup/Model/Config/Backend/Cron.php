@@ -105,7 +105,7 @@ class Cron extends \Magento\Framework\App\Config\Value
             )->setPath(
                 self::CRON_MODEL_PATH
             )->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t save the Cron expression.'));
         }
         return parent::afterSave();

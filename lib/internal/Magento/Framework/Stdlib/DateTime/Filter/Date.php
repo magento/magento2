@@ -65,7 +65,7 @@ class Date implements \Zend_Filter_Interface
         try {
             $value = $this->_localeDate->date($value, null, false, false);
             return $value->format('Y-m-d');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception("Invalid input date format '$value'");
         }
     }

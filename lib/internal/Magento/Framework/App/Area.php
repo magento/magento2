@@ -179,7 +179,7 @@ class Area implements \Magento\Framework\App\AreaInterface
                 $this->_getDesign()->setDesignTheme($theme);
                 return true;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
         return false;

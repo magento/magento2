@@ -71,7 +71,7 @@ class SaveAssetLinks
                     AdapterInterface::INSERT_IGNORE
                 );
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new CouldNotSaveException(
                 __('Could not save asset keyword links'),

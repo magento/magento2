@@ -89,7 +89,7 @@ class UpdateContentAssetLinks implements UpdateContentAssetLinksInterface
     {
         try {
             $this->updateRelation($contentIdentity, $data);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
     }

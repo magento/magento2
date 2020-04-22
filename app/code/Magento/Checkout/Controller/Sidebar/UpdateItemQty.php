@@ -63,7 +63,7 @@ class UpdateItemQty extends Action
             return $this->jsonResponse();
         } catch (LocalizedException $e) {
             return $this->jsonResponse($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             return $this->jsonResponse($e->getMessage());
         }

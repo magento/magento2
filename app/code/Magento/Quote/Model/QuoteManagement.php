@@ -254,7 +254,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);
             $this->quoteRepository->save($quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
         return $quote->getId();
@@ -272,7 +272,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $this->quoteRepository->save($quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The quote can't be created."));
         }
         return (int)$quote->getId();
@@ -570,7 +570,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 ]
             );
             $this->quoteRepository->save($quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
         }
@@ -694,7 +694,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
-        } catch (\Exception $consecutiveException) {
+        } catch (\Throwable $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
                 $consecutiveException->getMessage()

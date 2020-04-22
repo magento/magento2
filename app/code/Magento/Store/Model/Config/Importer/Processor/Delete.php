@@ -133,7 +133,7 @@ class Delete implements ProcessorInterface
                         break;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new RuntimeException(__('%1', $e->getMessage()), $e);
         } finally {
             $this->registry->unregister('isSecureArea');

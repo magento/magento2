@@ -31,7 +31,7 @@ try {
     /** @var \Magento\Framework\App\Cron $app */
     $app = $bootstrap->createApplication(\Magento\Framework\App\Cron::class, ['parameters' => $opt]);
     $bootstrap->run($app);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     echo $e;
     exit(1);
 }

@@ -350,7 +350,7 @@ class File extends AbstractData
                 $uploader->setAllowRenameFiles(true);
                 $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
                 $result = $uploader->getUploadedFileName();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         }

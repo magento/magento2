@@ -174,7 +174,7 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
         $resultRaw = $this->resultRawFactory->create();
         try {
             $credentials = $this->helper->jsonDecode($this->getRequest()->getContent());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
         if (!$credentials || $this->getRequest()->getMethod() !== 'POST' || !$this->getRequest()->isXmlHttpRequest()) {
@@ -206,7 +206,7 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
                 'errors' => true,
                 'message' => $e->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = [
                 'errors' => true,
                 'message' => __('Invalid login or password.'),

@@ -84,7 +84,7 @@ class HistoryRepository implements OrderStatusHistoryRepositoryInterface
     {
         try {
             $this->historyResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the order status history.'), $e);
         }
         return true;
@@ -97,7 +97,7 @@ class HistoryRepository implements OrderStatusHistoryRepositoryInterface
     {
         try {
             $this->historyResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the order status history.'), $e);
         }
         return $entity;

@@ -62,7 +62,7 @@ class MimePart implements MimePartInterface
     ) {
         try {
             $this->mimePart = new LaminasMimePart($content);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
         $this->mimePart->setType($type);

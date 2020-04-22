@@ -319,7 +319,7 @@ abstract class Index extends \Magento\Backend\App\Action
             try {
                 $singleAction($customerId);
                 $customersUpdated++;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
             }
         }

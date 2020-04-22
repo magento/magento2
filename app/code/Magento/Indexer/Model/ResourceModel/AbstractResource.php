@@ -89,7 +89,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
             $this->getConnection()->delete($this->getMainTable());
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable(), false);
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             throw $e;
         }

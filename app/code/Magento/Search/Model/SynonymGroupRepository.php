@@ -72,7 +72,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     {
         try {
             $this->resourceModel->delete($synonymGroup);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __(
                     'The synonym group with the "%1" ID can\'t be deleted. %2',

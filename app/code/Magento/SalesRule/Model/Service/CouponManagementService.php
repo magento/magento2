@@ -128,7 +128,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
 
             $this->couponGenerator->generatePool();
             return $this->couponGenerator->getGeneratedCodes();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Error occurred when generating coupons: %1', $e->getMessage())
             );
@@ -217,7 +217,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
             $couponValue = ($fieldName == 'code') ? $coupon->getCode() : $coupon->getCouponId();
             try {
                 $this->repository->deleteById($coupon->getCouponId());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $failedItems[] = $couponValue;
             }
             unset($fieldValues[$couponValue]);

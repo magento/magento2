@@ -144,7 +144,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
 
             try {
                 $transport->sendMessage();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e->getMessage());
             }
         }

@@ -238,7 +238,7 @@ class Rule extends AbstractResource
             if (!empty($deleteByStoreIds)) {
                 $connection->delete($table, ['rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

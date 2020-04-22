@@ -116,7 +116,7 @@ class Install extends AbstractActionController
                 $json->setVariable('isSampleDataError', true);
             }
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->log->logError($e);
             $json->setVariable('messages', $e->getMessage());
             $json->setVariable('success', false);
@@ -153,7 +153,7 @@ class Install extends AbstractActionController
             if ($this->sampleDataState->hasError()) {
                 $json->setVariable('isSampleDataError', true);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $contents = [(string)$e];
         }
 

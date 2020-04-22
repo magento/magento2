@@ -153,7 +153,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
                 ['data' => $product['product']]
             );
             $this->productRepository->save($productModel);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail("Precondition failed: product was not created.");
         }
 
@@ -249,7 +249,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
             //nothing to delete
         }

@@ -543,7 +543,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             } else {
                 $result = $this->_renderContainer($name, false);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
                 throw $e;
             }

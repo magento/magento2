@@ -125,7 +125,7 @@ class Delete implements DeleteInterface
                 ]
             );
             $this->transactionManager->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->transactionManager->rollBack();
             throw $e;
         }

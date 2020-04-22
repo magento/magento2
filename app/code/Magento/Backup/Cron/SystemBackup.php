@@ -143,7 +143,7 @@ class SystemBackup
             $backupManager->create();
             $message = $this->_backupData->getCreateSuccessMessageByType($type);
             $this->_logger->info($message);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_errors[] = $e->getMessage();
             $this->_errors[] = $e->getTrace();
             throw $e;

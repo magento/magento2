@@ -78,7 +78,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             }
 
             $this->_model->delete();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_model->delete();
             throw $e;
         }

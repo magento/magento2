@@ -74,7 +74,7 @@ class JobStaticRegenerate extends AbstractJob
                 );
                 $this->getCleanFilesObject()->clearMaterializedViewFiles();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getStatusObject()->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
         }

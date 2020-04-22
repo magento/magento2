@@ -56,7 +56,7 @@ class DeleteContentAssetLinksByAssetIds implements DeleteContentAssetLinksByAsse
                     self::ASSET_ID . ' IN (?)' => $commaSeparatedAssetIds
                  ]
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __(
                 'Could not remove media content relations for assets ids: %ids',

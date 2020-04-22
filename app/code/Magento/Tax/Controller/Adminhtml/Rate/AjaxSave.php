@@ -68,7 +68,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPos
                 'tax_calculation_rate_id' => '',
                 'code' => '',
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $responseContent = [
                 'success' => false,
                 'error_message' => __('We can\'t save this rate right now.'),

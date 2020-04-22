@@ -50,7 +50,7 @@ class MarkAsRead extends Notification implements HttpGetActionInterface
                 $this->messageManager->addSuccessMessage(__('The message has been marked as Read.'));
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't mark the notification as Read because of an error.")

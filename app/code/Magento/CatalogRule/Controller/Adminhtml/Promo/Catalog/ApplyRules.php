@@ -30,7 +30,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
             } elseif ($ruleJob->hasError()) {
                 $this->messageManager->addErrorMessage($errorMessage . ' ' . $ruleJob->getError());
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->create(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->messageManager->addErrorMessage($errorMessage);
         }

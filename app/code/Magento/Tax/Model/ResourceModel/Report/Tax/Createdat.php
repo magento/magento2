@@ -134,7 +134,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
             $insertQuery = $connection->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
             $connection->query($insertQuery);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

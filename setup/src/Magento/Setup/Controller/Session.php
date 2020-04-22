@@ -83,7 +83,7 @@ class Session extends \Laminas\Mvc\Controller\AbstractActionController
                 return new \Laminas\View\Model\JsonModel(['success' => true]);
             }
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
         return new \Laminas\View\Model\JsonModel(['success' => false]);
     }

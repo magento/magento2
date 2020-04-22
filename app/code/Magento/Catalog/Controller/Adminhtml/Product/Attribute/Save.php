@@ -176,7 +176,7 @@ class Save extends Attribute implements HttpPostActionInterface
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addExceptionMessage(
                         $e,
                         __('Something went wrong while saving the attribute.')
@@ -313,7 +313,7 @@ class Save extends Attribute implements HttpPostActionInterface
                     );
                 }
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_session->setAttributeData($data);
                 return $this->returnResult(

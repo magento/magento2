@@ -73,7 +73,7 @@ class MassDelete extends \Magento\Backend\App\Action implements HttpPostActionIn
             try {
                 $this->synGroupRepository->delete($synonymGroup);
                 $deletedItems++;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             }
         }

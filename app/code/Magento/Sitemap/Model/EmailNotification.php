@@ -96,7 +96,7 @@ class EmailNotification
 
             $transport = $this->transportBuilder->getTransport();
             $transport->sendMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error('Sitemap sendErrors: '.$e->getMessage());
         } finally {
             $this->inlineTranslation->resume();

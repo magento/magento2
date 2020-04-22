@@ -355,7 +355,7 @@ class Tree
                 $this->_db->rollBack();
                 echo $p->getMessage();
                 exit;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_db->rollBack();
                 echo $e->getMessage();
                 echo $sql;
@@ -463,7 +463,7 @@ class Tree
                 $this->_db->query($sql);
                 $this->_db->commit();
                 return new Node($info, $this->getKeys());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_db->rollBack();
                 echo $e->getMessage();
             }
@@ -794,7 +794,7 @@ class Tree
             $this->_db->commit();
             echo "alert('node moved');";
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_db->rollBack();
             echo "alert('node not moved: fatal error');";
             echo $e->getMessage();
@@ -998,7 +998,7 @@ class Tree
         try {
             $this->_db->query($sql);
             $this->_db->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_db->rollBack();
             echo $e->getMessage();
             echo "<br>\r\n";
@@ -1047,7 +1047,7 @@ class Tree
     {
         try {
             $info = $this->getNodeInfo($nodeId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             echo $e->getMessage();
             exit;
         }

@@ -64,7 +64,7 @@ class ShowModeCommand extends Command
             $output->writeln(
                 "Current application mode: $currentMode. (Note: Environment variables may override this value.)"
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());

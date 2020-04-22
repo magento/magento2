@@ -89,7 +89,7 @@ class HtaccessAnalyzer extends \Symfony\Component\Console\Command\Command
                 $output->outputMessages($message);
             }
             $this->curl->close();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->outputMessages(['error' => [$e->getMessage()]]);
         }
         $output->writeln(".htaccess check finished.");

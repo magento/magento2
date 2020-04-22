@@ -106,7 +106,7 @@ class Observer
             /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
             try {
                 $sitemap->generateXml();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $errors[] = $e->getMessage();
             }
         }

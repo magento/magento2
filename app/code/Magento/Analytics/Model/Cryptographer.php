@@ -55,7 +55,7 @@ class Cryptographer
         if (!is_string($source)) {
             try {
                 $source = (string)$source;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new LocalizedException(
                     __(
                         'The data is invalid. '

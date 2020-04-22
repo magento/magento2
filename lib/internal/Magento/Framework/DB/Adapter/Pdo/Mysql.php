@@ -549,7 +549,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $result = parent::query($sql, $bind);
                 $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
                 return $result;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // Finalize broken query
                 $profiler = $this->getProfiler();
                 if ($profiler instanceof Profiler) {
@@ -2736,7 +2736,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             try {
                 $result = $this->rawQuery($query);
                 $cycle  = false;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 if (in_array(strtolower($indexType), ['primary', 'unique'])) {
                     $match = [];
                     // phpstan:ignore

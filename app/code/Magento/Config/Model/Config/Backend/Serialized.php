@@ -58,7 +58,7 @@ class Serialized extends \Magento\Framework\App\Config\Value
         if (!is_array($value)) {
             try {
                 $this->setValue(empty($value) ? false : $this->serializer->unserialize($value));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical(
                     sprintf(
                         'Failed to unserialize %s config value. The error is: %s',

@@ -321,7 +321,7 @@ class Advanced extends Generic
             $localizedDate = $this->_localeDate->date($attributeObject->getDefaultValue(), null, false);
             $localizedDate->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
             $localizedDate = $localizedDate->format(DateTime::DATETIME_PHP_FORMAT);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__('The default date is invalid.'));
         }
 

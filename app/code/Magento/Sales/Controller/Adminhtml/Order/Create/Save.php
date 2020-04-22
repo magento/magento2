@@ -72,7 +72,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements H
             if (!empty($message)) {
                 $this->messageManager->addErrorMessage($message);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
         }
 

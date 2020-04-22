@@ -794,7 +794,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 if ($schedule->tryLockJob()) {
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->processError($schedule, $e);
             }
             if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {

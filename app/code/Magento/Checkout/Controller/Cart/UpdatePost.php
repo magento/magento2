@@ -60,7 +60,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
             $this->cart->truncate()->save();
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addExceptionMessage($exception, __('We can\'t update the shopping cart.'));
         }
     }
@@ -86,7 +86,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
             $this->messageManager->addErrorMessage(
                 $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t update the shopping cart.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

@@ -59,7 +59,7 @@ class JobSetMaintenanceMode extends AbstractJob
             // Prepare the arguments to invoke Symfony run()
             $arguments['command'] = $this->getCommand();
             $this->command->run(new ArrayInput($arguments), $this->output);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(
                 $this->getExceptionMessage($e->getMessage())

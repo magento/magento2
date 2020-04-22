@@ -56,7 +56,7 @@ class MassRemove extends Notification implements HttpPostActionInterface
                 $this->messageManager->addSuccessMessage(__('Total of %1 record(s) have been removed.', count($ids)));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't remove the messages because of an error.")

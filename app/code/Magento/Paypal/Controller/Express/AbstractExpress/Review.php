@@ -34,7 +34,7 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $e,
                 $e->getMessage()
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t initialize Express Checkout review.')

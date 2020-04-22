@@ -337,7 +337,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     {
         try {
             $this->_verifyThisTransactionExists();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($dryRun) {
                 return false;
             }
@@ -525,7 +525,7 @@ class Transaction extends AbstractModel implements TransactionInterface
                 if ($paymentTransaction) {
                     $paymentTransaction->close($shouldSave);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 if (!$this->_isFailsafe) {
                     throw $e;
                 }

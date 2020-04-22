@@ -20,7 +20,7 @@ for ($i = 1; $i <= 5; $i++) {
         /** @var CustomerInterface $customer */
         $customer = $customerRepository->get('customer'.$i.'@example.com');
         $customerRepository->delete($customer);
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
     }
 }
 

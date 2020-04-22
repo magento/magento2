@@ -101,7 +101,7 @@ class Alert extends \Magento\Framework\App\Config\Value
             )->setPath(
                 self::CRON_MODEL_PATH
             )->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception(__('We can\'t save the cron expression.'));
         }
 

@@ -101,7 +101,7 @@ class AttributeSetFixture
 
         try {
             $attributeSet = $this->attributeSetManagement->create($attributeSet, 4);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->getFormattedAttributeSetData($attributeSetData);
         }
         $attributeSetId = $attributeSet->getAttributeSetId();

@@ -219,7 +219,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             foreach ($e->getErrors() as $error) {
                 $this->messageManager->addErrorMessage($error->getMessage());
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $redirectUrl = $this->_buildUrl('*/*/index');
             $this->messageManager->addExceptionMessage($e, __('We can\'t save the address.'));
         }

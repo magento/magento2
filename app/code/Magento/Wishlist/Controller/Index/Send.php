@@ -273,7 +273,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
 
                     $sent++;
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $wishlist->setShared($wishlist->getShared() + $sent);
                 $wishlist->save();
                 throw $e;
@@ -287,7 +287,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());

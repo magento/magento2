@@ -62,7 +62,7 @@ class MessageProcessor implements MessageProcessorInterface
             $this->messageStatusProcessor->acknowledgeMessages($queue, $messages);
         } catch (ConnectionLostException $e) {
             $this->resource->getConnection()->rollBack();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $retry = false;
             $this->resource->getConnection()->rollBack();
             if (strpos($e->getMessage(), 'Error while sending QUERY packet') !== false

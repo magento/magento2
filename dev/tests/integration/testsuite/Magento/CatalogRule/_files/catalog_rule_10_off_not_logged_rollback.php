@@ -20,7 +20,7 @@ try {
     /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
     $ruleRepository = $objectManager->create(\Magento\CatalogRule\Api\CatalogRuleRepositoryInterface::class);
     $ruleRepository->deleteById($ruleId);
-} catch (\Exception $ex) {
+} catch (\Throwable $e) {
     //Nothing to remove
 }
 /** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */

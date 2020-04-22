@@ -315,7 +315,7 @@ class DbStorage extends AbstractStorage
             } else {
                 throw $e->getPrevious() ?: $e;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->connection->rollBack();
             throw $e;
         }
@@ -335,7 +335,7 @@ class DbStorage extends AbstractStorage
     {
         try {
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY)
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {

@@ -186,7 +186,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         try {
             $processor = $this->requestProcessorPool->getProcessor($this->_request);
             $processor->process($this->_request);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
         }

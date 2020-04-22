@@ -181,7 +181,7 @@ class AdminAccount
                 . "WHERE username = :username OR email = :email",
                 ['username' => $this->data[self::KEY_USER], 'email' => $this->data[self::KEY_EMAIL]]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return; // New installation, no need to validate existing users.
         }
 

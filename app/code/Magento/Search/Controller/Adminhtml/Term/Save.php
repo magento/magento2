@@ -50,7 +50,7 @@ class Save extends TermController implements HttpPostActionInterface
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $this->proceedToEdit($data);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while saving the search query.')

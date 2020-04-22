@@ -216,7 +216,7 @@ class AddAttributeToTemplate extends Product implements HttpPostActionInterface
         } catch (LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $response->setError(true);
             $response->setMessage(__('Unable to add attribute'));

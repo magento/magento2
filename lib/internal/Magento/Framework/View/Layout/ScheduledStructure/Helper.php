@@ -190,7 +190,7 @@ class Helper
             if ($structure->hasElement($parentName)) {
                 try {
                     $structure->setAsChild($name, $parentName, $alias);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->logger->critical($e);
                 }
             } else {

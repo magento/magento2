@@ -47,7 +47,7 @@ class PdfConfigFilesTest extends \PHPUnit\Framework\TestCase
         );
         try {
             $reader->read();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Merged pdf.xml files do not pass XSD validation: ' . $e->getMessage());
         }
     }

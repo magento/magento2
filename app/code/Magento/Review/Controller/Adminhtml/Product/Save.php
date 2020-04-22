@@ -66,7 +66,7 @@ class Save extends ProductController implements HttpPostActionInterface
                     $this->messageManager->addSuccessMessage(__('You saved the review.'));
                 } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
                 }
             }

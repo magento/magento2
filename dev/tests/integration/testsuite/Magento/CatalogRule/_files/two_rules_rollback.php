@@ -20,7 +20,7 @@ foreach (['test_rule_one', 'test_rule_two'] as $ruleName) {
 
     try {
         $ruleRepository->deleteById($ruleId);
-    } catch (\Exception $ex) {
+    } catch (\Throwable $e) {
         //Nothing to remove
     }
 }

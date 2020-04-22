@@ -27,7 +27,7 @@ class Delete extends TermController implements HttpPostActionInterface
                 $this->messageManager->addSuccessMessage(__('You deleted the search.'));
                 $resultRedirect->setPath('search/*/');
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('search/*/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;

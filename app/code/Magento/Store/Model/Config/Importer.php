@@ -108,7 +108,7 @@ class Importer implements ImporterInterface
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->resource->rollBack();
             $this->reinitStores();
 

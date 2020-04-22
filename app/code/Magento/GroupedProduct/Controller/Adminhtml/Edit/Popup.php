@@ -76,7 +76,7 @@ class Popup extends AbstractAction
         if ($productId) {
             try {
                 $product->load($productId);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
                 $this->logger->critical($e);
             }

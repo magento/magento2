@@ -103,7 +103,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey('label', $path['category3']);
             $this->assertArrayHasKey('link', $path['category3']);
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
@@ -120,7 +120,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertSame($category, $this->helper->getCategory());
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
@@ -137,7 +137,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertSame($product, $this->helper->getProduct());
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_product');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_product');
             throw $e;
         }
@@ -158,7 +158,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertEquals('test', $this->helper->getAttributeHiddenFields());
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
             throw $e;
         }

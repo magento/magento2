@@ -90,7 +90,7 @@ class AclRetriever
             $allowedResources = $this->getAllowedResourcesByRole($role->getId());
         } catch (AuthorizationException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new LocalizedException(
                 __(

@@ -29,7 +29,7 @@ $emailsToDelete = [
 foreach ($emailsToDelete as $email) {
     try {
         $customer->loadByEmail($email)->delete();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
     }
 }
 $registry->unregister('isSecureArea');

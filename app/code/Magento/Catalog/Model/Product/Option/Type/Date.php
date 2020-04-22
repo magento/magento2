@@ -269,7 +269,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         try {
             $date = new \DateTime($optionValue);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return null;
         }
         return $date->format('Y-m-d H:i:s');
@@ -293,7 +293,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             } else {
                 return ['date_internal' => $optionValue];
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return ['date_internal' => $optionValue];
         }
     }

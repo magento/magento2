@@ -165,7 +165,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             foreach ($this->skus as $sku) {
                 $this->productRepository->deleteById($sku);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             //nothing to delete
         }
         $this->registry->unregister('isSecureArea');

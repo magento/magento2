@@ -286,7 +286,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         try {
             $this->_webApiCall($this->getServiceInfo($order), $requestData);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertExceptionMessage(
                 $exception,
                 'Shipment Document Validation Error(s): You can\'t create a shipment without products.'
@@ -329,11 +329,11 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /**
      * Assert correct exception message.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param string $expectedMessage
      * @return void
      */
-    private function assertExceptionMessage(\Exception $exception, string $expectedMessage): void
+    private function assertExceptionMessage(\Throwable $exception, string $expectedMessage): void
     {
         $actualMessage = '';
         switch (TESTS_WEB_API_ADAPTER) {

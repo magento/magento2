@@ -154,7 +154,7 @@ class MassSchedule
                     $this->encryptor->hash($operation->getSerializedData(), Encryptor::HASH_VERSION_SHA256)
                 );
                 $requestItems[] = $requestItem;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->error($exception);
                 $requestItem->setId($key);
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);

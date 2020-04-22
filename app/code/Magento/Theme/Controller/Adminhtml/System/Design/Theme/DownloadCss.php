@@ -47,7 +47,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
                 ],
                 DirectoryList::ROOT
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addException($e, __('File not found: "%1".', $fileId));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

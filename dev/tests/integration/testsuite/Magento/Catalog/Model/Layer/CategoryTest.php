@@ -121,7 +121,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             $this->assertSame($existingCategory, $model->getCurrentCategory());
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             $this->assertSame($existingCategory, $model->getCurrentCategory());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }

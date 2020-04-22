@@ -252,7 +252,7 @@ class IndexBuilder
             }
 
             $this->reindexRuleGroupWebsite->execute();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Catalog rule indexing failed. See details in exception log.')
@@ -272,7 +272,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexByIds($ids);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
@@ -316,7 +316,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexFull();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")

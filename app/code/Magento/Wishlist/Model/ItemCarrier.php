@@ -154,7 +154,7 @@ class ItemCarrier
                 if ($cartItem) {
                     $cart->getQuote()->deleteItem($cartItem);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 $messages[] = __('We can\'t add this item to your shopping cart right now.');
             }
@@ -195,7 +195,7 @@ class ItemCarrier
             // save wishlist model for setting date of last update
             try {
                 $wishlist->save();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t update the Wish List right now.'));
                 $redirectUrl = $indexUrl;
             }

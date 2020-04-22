@@ -65,7 +65,7 @@ class SaveContentAssetLinks implements SaveContentAssetLinksInterface
                 ];
             }
             $connection->insertMultiple($tableName, $data);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new CouldNotSaveException(
                 __('An error occurred while saving relation between media asset and media content.'),

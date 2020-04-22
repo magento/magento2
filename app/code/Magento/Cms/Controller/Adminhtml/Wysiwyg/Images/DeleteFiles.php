@@ -92,7 +92,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
 
             return $this->resultRawFactory->create();
             // phpcs:ignore Magento2.Exceptions.ThrowCatch
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
 
             return $resultJson->setData($result);

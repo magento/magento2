@@ -151,7 +151,7 @@ class EntityGenerator
             $this->sqlCollector->disable();
             $entity->delete();
             $this->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getConnection()->rollBack();
             throw new LocalizedException(
                 __('Cannot generate entities - error occurred during template creation: %1', $e->getMessage()),
@@ -261,7 +261,7 @@ class EntityGenerator
                 $this->getConnection()->insertMultiple($table, $data);
             }
             $this->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getConnection()->rollBack();
             throw new LocalizedException(
                 __('Cannot save entity. Error occurred: %1', $e->getMessage()),

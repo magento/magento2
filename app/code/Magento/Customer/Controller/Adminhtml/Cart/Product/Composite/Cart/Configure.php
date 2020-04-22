@@ -33,7 +33,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
             $configureResult->setBuyRequest($quoteItem->getBuyRequest());
             $configureResult->setCurrentStoreId($quoteItem->getStoreId());
             $configureResult->setCurrentCustomerId($this->_customerId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());
         }

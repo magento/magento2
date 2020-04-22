@@ -55,7 +55,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
 
         try {
             $result = $this->imageUploader->saveFileToTmpDir($imageId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);

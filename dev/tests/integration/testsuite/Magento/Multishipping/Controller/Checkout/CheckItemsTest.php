@@ -79,7 +79,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
         try {
             /** @var $product Product */
             $product = $this->productRepository->get('simple');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('No such product entity');
         }
 

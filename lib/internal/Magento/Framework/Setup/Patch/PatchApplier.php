@@ -165,7 +165,7 @@ class PatchApplier
                         $this->patchHistory->fixPatch($patchAlias);
                     }
                     $this->moduleDataSetup->getConnection()->commit();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
                     throw new SetupException(
                         new Phrase(
@@ -243,7 +243,7 @@ class PatchApplier
                 foreach ($schemaPatch->getAliases() as $patchAlias) {
                     $this->patchHistory->fixPatch($patchAlias);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new SetupException(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
@@ -283,7 +283,7 @@ class PatchApplier
                     $dataPatch->revert();
                     $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
                     $adapter->commit();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $adapter->rollBack();
                     throw new SetupException(new Phrase($e->getMessage()));
                 } finally {

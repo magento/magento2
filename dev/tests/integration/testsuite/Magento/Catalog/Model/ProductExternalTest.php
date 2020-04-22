@@ -74,7 +74,7 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertEquals(5, $this->_model->getCategoryId());
             $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
@@ -93,7 +93,7 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
             $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
             $this->assertEquals(3, $category->getId());
             $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }

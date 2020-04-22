@@ -70,7 +70,7 @@ class Handlers implements ValidatorInterface
         }
         try {
             $this->methodsMap->getMethodParams($handler['type'], $handler['method']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Service method specified as handler for of consumer "%s" is not available. Given "%s"',

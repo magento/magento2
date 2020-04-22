@@ -97,7 +97,7 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('%1', $e->getMessage()));
             }
 

@@ -83,7 +83,7 @@ class ItemRepository implements ShipmentItemRepositoryInterface
     {
         try {
             $this->itemResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the shipment item.'), $e);
         }
         return true;
@@ -96,7 +96,7 @@ class ItemRepository implements ShipmentItemRepositoryInterface
     {
         try {
             $this->itemResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the shipment item.'), $e);
         }
         return $entity;

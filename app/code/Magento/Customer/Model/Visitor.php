@@ -217,7 +217,7 @@ class Visitor extends AbstractModel
             $this->save();
             $this->_eventManager->dispatch('visitor_activity_save', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
         return $this;

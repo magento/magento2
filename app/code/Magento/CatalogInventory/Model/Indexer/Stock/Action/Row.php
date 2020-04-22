@@ -32,7 +32,7 @@ class Row extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
         }
         try {
             $this->_reindexRows([$id]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }

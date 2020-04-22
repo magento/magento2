@@ -125,7 +125,7 @@ class PricePersistence
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Could not save Prices.'),
@@ -157,7 +157,7 @@ class PricePersistence
                 );
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\CouldNotDeleteException(
                 __('Could not delete Prices'),

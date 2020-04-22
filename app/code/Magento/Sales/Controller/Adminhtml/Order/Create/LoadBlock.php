@@ -59,7 +59,7 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_reloadQuote();
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }

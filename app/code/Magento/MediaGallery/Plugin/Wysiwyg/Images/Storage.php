@@ -95,7 +95,7 @@ class Storage
 
         try {
             $this->deleteMediaAssetByPath->execute($relativePath);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
 

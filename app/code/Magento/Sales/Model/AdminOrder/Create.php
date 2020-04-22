@@ -1094,7 +1094,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return $e;
             }
         }
@@ -1135,7 +1135,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->recollectCart();
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
         $this->recollectCart();
@@ -1173,7 +1173,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         );
                     }
                     list($label, $value) = explode(':', $_additionalOption, 2);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('There is an error in one of the option rows.')
                     );
@@ -1869,7 +1869,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $billingAddressDataObject = $this->accountManagement->getDefaultBillingAddress($customer->getId());
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 /** Billing address does not exist. */
             }
             $isShippingAsBilling = $quoteCustomerAddress->getSameAsBilling();

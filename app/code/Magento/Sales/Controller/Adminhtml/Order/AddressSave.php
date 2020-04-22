@@ -131,7 +131,7 @@ class AddressSave extends Order implements HttpPostActionInterface
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('We can\'t update the order address right now.'));
             }
             return $resultRedirect->setPath('sales/*/address', ['address_id' => $address->getId()]);

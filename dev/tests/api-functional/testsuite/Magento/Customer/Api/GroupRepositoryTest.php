@@ -191,7 +191,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorData = json_decode($e->getMessage(), true);
 
             $this->assertEquals(
@@ -260,7 +260,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // @codingStandardsIgnoreStart
             $this->assertContains(
                 '\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"code"}',
@@ -297,7 +297,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // @codingStandardsIgnoreStart
             $this->assertContains(
                 '{"message":"Invalid value of \"%value\" provided for the %fieldName field.","parameters":{"fieldName":"taxClassId","value":9999}',
@@ -331,7 +331,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 '{"message":"No such entity with %fieldName = %fieldValue","parameters":{"fieldName":"id","fieldValue":88}',
                 $e->getMessage(),
@@ -437,7 +437,7 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = '{"message":"No such entity with %fieldName = %fieldValue",'
              . '"parameters":{"fieldName":"id","fieldValue":9999}';
             $this->assertContains(
@@ -697,7 +697,7 @@ class GroupRepositoryTest extends WebapiAbstract
 
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
             $this->assertContains(
@@ -775,7 +775,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
             $this->assertContains($expectedMessage, $e->getMessage(), "SoapFault does not contain expected message.");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals($expectedParameters, $errorObj['parameters']);
@@ -814,7 +814,7 @@ class GroupRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),

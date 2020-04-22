@@ -70,7 +70,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
         foreach ($remoteServices as $serviceInterface => $remoteImplementation) {
             try {
                 $methodsMap = $this->serviceMethodsMap->getMethodsMap($serviceInterface);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new \LogicException(sprintf('Service interface was expected, "%s" given', $serviceInterface));
             }
             foreach ($methodsMap as $methodName => $returnType) {

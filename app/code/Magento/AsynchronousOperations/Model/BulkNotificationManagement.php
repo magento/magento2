@@ -74,7 +74,7 @@ class BulkNotificationManagement
                 ['bulk_uuid'],
                 $bulkUuids
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception->getMessage());
             return false;
         }
@@ -98,7 +98,7 @@ class BulkNotificationManagement
                 $this->resourceConnection->getTableName('magento_acknowledged_bulk'),
                 ['bulk_uuid IN(?)' => $bulkUuids]
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception->getMessage());
             return false;
         }

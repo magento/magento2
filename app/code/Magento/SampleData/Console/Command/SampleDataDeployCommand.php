@@ -137,7 +137,7 @@ class SampleDataDeployCommand extends Command
         if (!$directory->isExist(PackagesAuth::PATH_TO_AUTH_FILE)) {
             try {
                 $directory->writeFile(PackagesAuth::PATH_TO_AUTH_FILE, '{}');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $message = 'Error in writing Auth file '
                     . $directory->getAbsolutePath(PackagesAuth::PATH_TO_AUTH_FILE)
                     . '. Please check permissions for writing.';

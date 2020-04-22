@@ -30,7 +30,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements Htt
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The customer group no longer exists.'));
                 return $resultRedirect->setPath('customer/*/');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
             }

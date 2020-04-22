@@ -113,7 +113,7 @@ class StorefrontAnalyzer extends \Symfony\Component\Console\Command\Command
             if (strpos($response, 'Home Page') === false) {
                 $messages['error'][] = 'Magento seems not installed. Check your Magento instance.';
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $messages['error'][] = $e->getMessage();
         }
         $this->curlTransport->close();

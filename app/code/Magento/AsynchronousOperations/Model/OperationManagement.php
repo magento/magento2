@@ -66,7 +66,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
             $operationEntity->setSerializedData($data);
             $operationEntity->setResultSerializedData($resultData);
             $this->entityManager->save($operationEntity);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception->getMessage());
             return false;
         }

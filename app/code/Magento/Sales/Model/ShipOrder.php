@@ -172,7 +172,7 @@ class ShipOrder implements ShipOrderInterface
             $this->shipmentRepository->save($shipment);
             $this->orderRepository->save($order);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotShipException(

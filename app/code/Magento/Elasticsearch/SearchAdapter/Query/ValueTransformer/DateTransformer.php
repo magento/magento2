@@ -35,7 +35,7 @@ class DateTransformer implements ValueTransformerInterface
     {
         try {
             $formattedDate = $this->dateFieldType->formatDate(null, $value);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $formattedDate = null;
         }
 

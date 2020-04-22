@@ -74,7 +74,7 @@ class GetContentByAssetIds implements GetContentByAssetIdsInterface
                 $contentIdentities[] = $this->factory->create($contentIdentityData);
             }
             return $contentIdentities;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new IntegrationException(
                 __('An error occurred at getting media asset to content relation by media asset id.')

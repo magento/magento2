@@ -24,7 +24,7 @@ class StockAll extends UnsubscribeController
                         ->getWebsiteId()
                 );
             $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
         }
 

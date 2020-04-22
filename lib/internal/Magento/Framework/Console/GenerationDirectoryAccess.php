@@ -59,7 +59,7 @@ class GenerationDirectoryAccess
             if (!$directoryWrite->isExist()) {
                 try {
                     $directoryWrite->create();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return false;
                 }
             }

@@ -73,7 +73,7 @@ class OperationStatusValidatorTest extends TestCase
         try {
             $this->operation->setStatus($status);
             $this->assertEquals($expectedResult, $this->operation->getStatus());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertEquals($expectedResult, $exception->getMessage());
         }
     }

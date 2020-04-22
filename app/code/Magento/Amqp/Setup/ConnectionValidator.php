@@ -63,7 +63,7 @@ class ConnectionValidator
             $connection = $this->connectionFactory->create($options);
 
             $connection->close();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
 

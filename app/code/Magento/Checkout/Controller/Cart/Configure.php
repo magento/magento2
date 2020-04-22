@@ -85,7 +85,7 @@ class Configure extends \Magento\Checkout\Controller\Cart implements HttpGetActi
                     $params
                 );
             return $resultPage;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('We cannot configure the product.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();

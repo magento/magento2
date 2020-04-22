@@ -432,7 +432,7 @@ abstract class AbstractEntity
                         }
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // ignore exceptions connected with source models
             }
         }

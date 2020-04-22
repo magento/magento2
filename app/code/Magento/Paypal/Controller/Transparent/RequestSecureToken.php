@@ -108,7 +108,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
                     'error' => false
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->getErrorResponse();
         }
     }

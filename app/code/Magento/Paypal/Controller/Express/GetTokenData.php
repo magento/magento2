@@ -145,7 +145,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
 
             $responseContent['success'] = false;
             $responseContent['error_message'] = $exception->getMessage();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
 
             $responseContent['success'] = false;

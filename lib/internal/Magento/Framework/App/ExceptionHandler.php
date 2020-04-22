@@ -93,7 +93,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
                 try {
                     $this->redirectToSetup($bootstrap, $exception, $response);
                     return true;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $exception = $e;
                 }
             }
@@ -175,7 +175,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
             try {
                 $this->redirectToSetup($bootstrap, $exception, $response);
                 return true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $exception = $e;
             }
         }

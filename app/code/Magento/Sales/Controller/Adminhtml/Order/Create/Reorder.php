@@ -122,7 +122,7 @@ class Reorder extends Create implements HttpGetActionInterface
                 $this->logger->critical($e);
                 $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('sales/*');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 $this->messageManager->addException($e, __('Error while processing order.'));
                 return $resultRedirect->setPath('sales/*');

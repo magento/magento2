@@ -278,7 +278,7 @@ class DeclarativeInstallerTest extends SetupTestCase
 
         try {
             $this->cliCommand->install($modules);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $installException = $e->getPrevious();
             self::assertSame(1, $installException->getCode());
             self::assertContains(

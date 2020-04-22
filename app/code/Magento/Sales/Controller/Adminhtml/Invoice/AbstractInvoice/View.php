@@ -88,7 +88,7 @@ abstract class View extends \Magento\Backend\App\Action
         try {
             $invoice = $this->invoiceRepository->get($this->getRequest()->getParam('invoice_id'));
             $this->registry->register('current_invoice', $invoice);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('Invoice capturing error'));
             return false;
         }

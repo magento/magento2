@@ -84,7 +84,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
         foreach ($this->_items as $key => $item) {
             try {
                 $unserializedData = $this->jsonHelper->jsonDecode($item['serialized_data']);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->error($e->getMessage());
                 $unserializedData = [];
             }

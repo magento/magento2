@@ -24,7 +24,7 @@ class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addSuccessMessage(__('The payment has been voided.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t void the payment right now.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }

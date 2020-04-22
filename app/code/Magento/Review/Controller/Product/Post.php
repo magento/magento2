@@ -67,7 +67,7 @@ class Post extends ProductController implements HttpPostActionInterface
 
                     $review->aggregate();
                     $this->messageManager->addSuccessMessage(__('You submitted your review for moderation.'));
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->reviewSession->setFormData($data);
                     $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
                 }

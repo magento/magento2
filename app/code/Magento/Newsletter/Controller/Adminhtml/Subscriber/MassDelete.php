@@ -56,7 +56,7 @@ class MassDelete extends Subscriber implements HttpPostActionInterface
                     $subscriber->delete();
                 }
                 $this->messageManager->addSuccess(__('Total of %1 record(s) were deleted.', count($subscribersIds)));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError($e->getMessage());
             }
         }

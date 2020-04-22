@@ -88,7 +88,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         try {
             $this->getInfoCategory(-1);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains('No such entity with %fieldName = %fieldValue', $e->getMessage());
         }
     }
@@ -167,7 +167,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         try {
             $this->deleteCategory(-1);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains('No such entity with %fieldName = %fieldValue', $e->getMessage());
         }
     }

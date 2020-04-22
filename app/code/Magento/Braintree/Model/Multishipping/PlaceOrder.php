@@ -77,7 +77,7 @@ class PlaceOrder implements PlaceOrderInterface
                 $orderPayment = $order->getPayment();
                 $this->setVaultPayment($orderPayment, $paymentToken);
                 $this->orderManagement->place($order);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $incrementId = $order->getIncrementId();
                 $errorList[$incrementId] = $e;
             }

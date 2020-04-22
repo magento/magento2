@@ -95,7 +95,7 @@ class Save extends Action
             foreach ($messages as $message) {
                 $this->messageManager->addErrorMessage(__('%1', $message));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()

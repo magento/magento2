@@ -976,7 +976,7 @@ class LinkRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
             $this->assertEquals($expectedMessage, $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains($expectedMessage, $e->getMessage());
         }
     }

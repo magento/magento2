@@ -62,7 +62,7 @@ class HttpContentProvider implements ContentProviderInterface
                     $result = $this->retrieveContent($version, '', 'default');
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->warning(
                 sprintf(
                     'Failed to retrieve the release notification content. The response is: %s',

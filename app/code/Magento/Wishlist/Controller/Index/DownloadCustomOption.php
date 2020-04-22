@@ -103,7 +103,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
                     $info['type']
                 );
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $resultForward->forward('noroute');
             return $resultForward;
         }

@@ -123,7 +123,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         try {
             $this->consumerModel->setData($this->validDataArray);
             $this->consumerModel->beforeSave();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Exception not expected for beforeSave with valid data.');
         }
     }

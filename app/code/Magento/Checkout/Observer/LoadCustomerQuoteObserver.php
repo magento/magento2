@@ -43,7 +43,7 @@ class LoadCustomerQuoteObserver implements ObserverInterface
             $this->checkoutSession->loadCustomerQuote();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('Load customer quote error'));
         }
     }

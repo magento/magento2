@@ -112,7 +112,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         if (!file_exists($absoluteImagePath)) {
             try {
                 $this->generateSwatchVariations($file);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return '';
             }
         }

@@ -109,7 +109,7 @@ class BackendDecorator implements CurlInterface
                 $isAuthorized = true;
                 $_ENV['app_backend_url'] = $url;
                 break;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 continue;
             }
         }

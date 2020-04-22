@@ -92,7 +92,7 @@ class Access extends Action implements CsrfAwareActionInterface
             $integration = $this->integrationService->findByConsumerId($consumer->getId());
             $integration->setStatus(IntegrationModel::STATUS_ACTIVE);
             $integration->save();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $response = $this->helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));

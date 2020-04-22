@@ -88,7 +88,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
         try {
             $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // no directories matched white list
             return [];
         }
@@ -259,7 +259,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     {
         try {
             return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // nothing is whitelisted
             return [];
         }
@@ -412,7 +412,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             $blackList = Files::init()->readLists(
                 self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // nothing matched black list
             $blackList = [];
         }

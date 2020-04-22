@@ -367,7 +367,7 @@ QUERY;
         $newEmail = 'new_customer@example.com';
         try {
             $customer = $this->customerRepository->get($newEmail);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             return;
         }
 

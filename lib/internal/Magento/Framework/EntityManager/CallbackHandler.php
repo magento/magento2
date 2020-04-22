@@ -54,7 +54,7 @@ class CallbackHandler
                 foreach ($callbacks as $callback) {
                     call_user_func($callback);
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->error($e->getMessage(), $e->getTrace());
                 throw $e;
             }

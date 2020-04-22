@@ -123,7 +123,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
     ) {
         try {
             $this->_webApiCall($serviceInfo, $data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals($httpStatus, $e->getCode(), 'Checking HTTP status code');
 
             $body = json_decode($e->getMessage(), true);

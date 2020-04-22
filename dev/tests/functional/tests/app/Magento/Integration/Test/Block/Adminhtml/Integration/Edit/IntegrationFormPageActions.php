@@ -41,7 +41,7 @@ class IntegrationFormPageActions extends FormPageActions
         try {
             $this->browser->getAlertText();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }
@@ -57,7 +57,7 @@ class IntegrationFormPageActions extends FormPageActions
             while (true) {
                 $this->browser->acceptAlert();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return;
         }
     }

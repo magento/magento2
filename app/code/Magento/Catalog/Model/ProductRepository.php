@@ -592,7 +592,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\StateException(
                 __('The "%1" product couldn\'t be removed.', $sku),
                 $e
@@ -845,7 +845,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(__($e->getMessage()));
         } catch (LocalizedException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __('The product was unable to be saved. Please try again.'),
                 $e

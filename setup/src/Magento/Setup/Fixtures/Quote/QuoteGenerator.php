@@ -147,7 +147,7 @@ class QuoteGenerator
 
             try {
                 $this->saveQuoteWithQuoteItems($entityId, $itemIdSequence);
-            } catch (\Exception $lastException) {
+            } catch (\Throwable $lastException) {
                 foreach ($this->resourceConnections as $connection) {
                     if ($connection->getTransactionLevel() > 0) {
                         $connection->rollBack();

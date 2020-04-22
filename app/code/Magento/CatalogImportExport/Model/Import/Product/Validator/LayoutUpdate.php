@@ -76,7 +76,7 @@ class LayoutUpdate extends AbstractImportValidator
             if (!$layoutXmlValidator->isValid($xml)) {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
 

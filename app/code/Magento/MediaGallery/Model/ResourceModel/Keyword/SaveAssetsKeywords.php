@@ -65,7 +65,7 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
         foreach ($assetKeywords as $assetKeyword) {
             try {
                 $this->saveAssetKeywords($assetKeyword->getKeywords(), $assetKeyword->getAssetId());
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical($exception);
                 $failedAssetIds[] = $assetKeyword->getAssetId();
             }

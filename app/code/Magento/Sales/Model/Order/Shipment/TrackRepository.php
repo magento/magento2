@@ -109,7 +109,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     {
         try {
             $this->trackResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the shipment tracking.'), $e);
         }
         return true;
@@ -132,7 +132,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
 
         try {
             $this->trackResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the shipment tracking.'), $e);
         }
         return $entity;

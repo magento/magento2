@@ -68,7 +68,7 @@ class Request extends Action implements CsrfAwareActionInterface
 
             // Request request token
             $response = $this->oauthService->getRequestToken($request, $requestUrl, $this->getRequest()->getMethod());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $response = $this->helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));

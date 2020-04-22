@@ -58,7 +58,7 @@ class EmulatedAdminhtmlAreaProcessor
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
                 return call_user_func_array($callback, $params);
             });
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $exception;
         } finally {
             $this->scope->setCurrentScope($currentScope);

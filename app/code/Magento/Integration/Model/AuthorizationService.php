@@ -101,7 +101,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
                 $role = $this->_createRole($integrationId);
             }
             $this->_associateResourcesWithRole($role, $resources);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(
                 __('An error occurred during the attempt to grant permissions. For details, see the exceptions log.')
@@ -124,7 +124,7 @@ class AuthorizationService implements \Magento\Integration\Api\AuthorizationServ
     {
         try {
             $this->_deleteRole($integrationId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(
                 __(

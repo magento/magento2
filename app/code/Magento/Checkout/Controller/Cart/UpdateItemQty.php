@@ -108,7 +108,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
             $this->jsonResponse();
         } catch (LocalizedException $e) {
             $this->jsonResponse($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $this->jsonResponse('Something went wrong while saving the page. Please refresh the page and try again.');
         }

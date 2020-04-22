@@ -141,7 +141,7 @@ class Full extends AbstractAction
                 }
                 $this->activeTableSwitcher->switchTable($indexer->getConnection(), [$indexer->getMainTable()]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
     }
@@ -166,7 +166,7 @@ class Full extends AbstractAction
             );
             $connection->query($query);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

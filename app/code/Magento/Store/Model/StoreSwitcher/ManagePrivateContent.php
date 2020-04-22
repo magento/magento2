@@ -60,7 +60,7 @@ class ManagePrivateContent implements StoreSwitcherInterface
                 \uniqid('updated-', true),
                 $publicCookieMetadata
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CannotSwitchStoreException($e);
         }
 

@@ -96,7 +96,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $connection->insert($this->getTable('newsletter_queue_link'), $data);
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
         }
     }
@@ -119,7 +119,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
 
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

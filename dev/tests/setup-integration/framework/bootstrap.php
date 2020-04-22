@@ -97,7 +97,7 @@ try {
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     echo $e . PHP_EOL;
     exit(1);
 }

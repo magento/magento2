@@ -262,7 +262,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
                     $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     if (empty($value)) {
                         continue;
                     } else {

@@ -42,7 +42,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"item"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,
@@ -69,7 +69,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"entityItem"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertContains(
                 $expectedMessage,

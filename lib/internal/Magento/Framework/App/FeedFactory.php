@@ -67,7 +67,7 @@ class FeedFactory implements FeedFactoryInterface
                 $this->formats[$format],
                 ['data' => $data]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
             throw new \Magento\Framework\Exception\RuntimeException(
                 new \Magento\Framework\Phrase('There has been an error with import'),

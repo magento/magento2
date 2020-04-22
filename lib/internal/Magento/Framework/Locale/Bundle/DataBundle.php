@@ -46,7 +46,7 @@ class DataBundle
     {
         try {
             $bundle = new \ResourceBundle($locale, $path);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // HHVM compatibility: constructor throws on invalid resource
             $bundle = null;
         }

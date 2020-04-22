@@ -44,7 +44,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product implem
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(
                 __('An error occurred while showing the product views report. Please review the log and try again.')
             );

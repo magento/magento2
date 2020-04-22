@@ -245,7 +245,7 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             $select->group(['period', 'order_status']);
             $connection->query($select->insertFromSelect($this->getMainTable(), array_keys($columns)));
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

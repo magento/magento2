@@ -28,7 +28,7 @@ class RefreshLifetime extends Statistics implements HttpPostActionInterface
             $this->messageManager->addSuccess(__('You refreshed lifetime statistics.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

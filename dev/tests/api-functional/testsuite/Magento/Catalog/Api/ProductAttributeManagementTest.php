@@ -68,7 +68,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals([$payload['attributeSetId']], $errorObj['parameters']);
@@ -91,7 +91,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals([$payload['attributeGroupId']], $errorObj['parameters']);
@@ -115,7 +115,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals([$payload['attributeCode']], $errorObj['parameters']);

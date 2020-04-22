@@ -84,7 +84,7 @@ class StockRepository implements StockRepositoryInterface
     {
         try {
             $this->resource->save($stock);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('The stock was unable to be saved. Please try again.'), $exception);
         }
         return $stock;
@@ -131,7 +131,7 @@ class StockRepository implements StockRepositoryInterface
         try {
             $this->resource->delete($stock);
             $this->getStockRegistryStorage()->removeStock();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock with id "%1"', $stock->getStockId()),
                 $exception
@@ -150,7 +150,7 @@ class StockRepository implements StockRepositoryInterface
         try {
             $stock = $this->get($id);
             $this->delete($stock);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock with id "%1"', $id),
                 $exception

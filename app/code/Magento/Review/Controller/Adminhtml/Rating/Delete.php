@@ -29,7 +29,7 @@ class Delete extends RatingController implements HttpPostActionInterface
                 $model = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
                 $model->load($this->getRequest()->getParam('id'))->delete();
                 $this->messageManager->addSuccessMessage(__('You deleted the rating.'));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;

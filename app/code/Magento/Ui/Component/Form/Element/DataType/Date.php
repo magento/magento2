@@ -118,7 +118,7 @@ class Date extends AbstractDataType
                 $dateObj->setTimezone(new \DateTimeZone('UTC'));
             }
             return $dateObj;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return null;
         }
     }

@@ -225,7 +225,7 @@ class Consumer implements ConsumerInterface
             } catch (\Magento\Framework\Exception\NotFoundException $e) {
                 $queue->acknowledge($message);
                 $this->logger->warning($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $queue->reject($message, false, $e->getMessage());
                 if ($lock) {
                     $this->resource->getConnection()

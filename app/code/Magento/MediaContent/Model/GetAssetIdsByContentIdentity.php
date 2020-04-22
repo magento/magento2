@@ -69,7 +69,7 @@ class GetAssetIdsByContentIdentity implements GetAssetIdsByContentIdentityInterf
                 );
 
             return array_keys($connection->fetchAssoc($select));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred at getting asset used in content information.');
             throw new IntegrationException($message);

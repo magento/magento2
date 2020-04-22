@@ -69,7 +69,7 @@ class SetVaultPaymentNonce
         try {
             $result = $this->command->execute($subject)->get();
             $paymentData[ConfigProvider::CC_VAULT_CODE]['payment_method_nonce'] = $result['paymentMethodNonce'];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new GraphQlInputException(__('Sorry, but something went wrong'));
         }

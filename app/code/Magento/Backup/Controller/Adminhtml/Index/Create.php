@@ -95,7 +95,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index implements HttpP
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMessage = __('You need more permissions to create a backup.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMessage = __('We can\'t create the backup right now.');
         }

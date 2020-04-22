@@ -116,7 +116,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             if (isset($entities[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Please enter a correct entity model.')
@@ -162,7 +162,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             if (isset($fileFormats[$this->getFileFormat()])) {
                 try {
                     $this->_writer = $this->_exportAdapterFac->create($fileFormats[$this->getFileFormat()]['model']);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Please enter a correct entity model.')

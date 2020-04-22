@@ -95,7 +95,7 @@ class GetByPath implements GetByPathInterface
                     'updatedAt' => $data['updated_at'],
                 ]
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
             throw new IntegrationException($message, $exception);

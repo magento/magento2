@@ -31,7 +31,7 @@ for ($i = 1; $i <= 5; $i++) {
         ->setEmail('customer'.$i.'@example.com');
     try {
         $customerRepository->save($customer, 'password');
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
     }
 }
 
@@ -45,5 +45,5 @@ $indexerRegistry = $objectManager->create(IndexerRegistry::class);
 $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
 try {
     $indexer->reindexAll();
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
 }

@@ -257,7 +257,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => $invalidId], $errorObj['parameters']);
@@ -346,7 +346,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj =  $this->customerHelper->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message'], 'Invalid message: "' . $e->getMessage() . '"');
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
@@ -397,7 +397,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => -1], $errorObj['parameters']);
@@ -434,7 +434,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception did not occur.');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
                 $expectedException->addError(
@@ -592,7 +592,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         ];
         try {
             $this->_webApiCall($serviceInfo);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [

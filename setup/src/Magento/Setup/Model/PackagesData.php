@@ -99,7 +99,7 @@ class PackagesData
             $packagesForInstall = $this->syncPackagesForInstall();
             $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
             return $lastSyncData;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \RuntimeException($e->getMessage());
         }
     }
@@ -257,7 +257,7 @@ class PackagesData
                 [];
 
             return $this->packagesJson;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \RuntimeException('Error in reading packages.json');
         }
     }
@@ -292,7 +292,7 @@ class PackagesData
             }
             $packagesForInstall['packages'] = $this->filterPackagesList($installPackages);
             return $packagesForInstall;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \RuntimeException('Error in syncing packages for Install');
         }
     }
@@ -390,7 +390,7 @@ class PackagesData
             }
             $installPackagesInfo['packages'] = $actualInstallPackages;
             return $installPackagesInfo;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \RuntimeException('Error in getting new packages to install');
         }
     }

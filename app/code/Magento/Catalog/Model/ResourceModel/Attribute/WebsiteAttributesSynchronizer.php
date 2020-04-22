@@ -133,7 +133,7 @@ class WebsiteAttributesSynchronizer
 
             $this->markSynchronized();
             $this->connection->commit();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->connection->rollBack();
             $this->scheduleSynchronization();
             throw $exception;

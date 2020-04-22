@@ -234,7 +234,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             foreach ($messages as $message) {
                 $this->messageManager->addError($message);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addException(
                 $e,
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()

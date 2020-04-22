@@ -70,7 +70,7 @@ class MassDelete extends ProductController implements HttpPostActionInterface
                 );
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while deleting these records.'));
             }
         }

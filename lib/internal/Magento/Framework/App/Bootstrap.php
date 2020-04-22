@@ -236,7 +236,7 @@ class Bootstrap
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
             }
             return $application;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->terminate($e);
         }
     }
@@ -260,7 +260,7 @@ class Bootstrap
                 $response = $application->launch();
                 $response->sendResponse();
                 \Magento\Framework\Profiler::stop('magento');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 \Magento\Framework\Profiler::stop('magento');
                 $this->objectManager->get(LoggerInterface::class)->error($e->getMessage());
                 if (!$application->catchException($this, $e)) {
@@ -435,7 +435,7 @@ class Bootstrap
                     throw new \DomainException();
                 }
                 $this->objectManager->get(LoggerInterface::class)->critical($e);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
             echo $message;

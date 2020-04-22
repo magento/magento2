@@ -520,7 +520,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             if ($shippingMethod) {
                 $shippingMethodData = $shippingMethod->__toArray();
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $shippingMethodData = null;
         }
         return $shippingMethodData;

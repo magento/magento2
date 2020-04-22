@@ -55,7 +55,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             unset($this->rules[$rule->getId()]);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __('The "%1" rule was unable to be saved. Please try again.', $rule->getRuleId())
             );
@@ -94,7 +94,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             unset($this->rules[$rule->getId()]);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('The "%1" rule couldn\'t be removed.', $rule->getRuleId()));
         }
         return true;

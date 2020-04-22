@@ -102,7 +102,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
             $output->writeln("<info>Unused product attributes successfully cleaned up:</info>");
             $output->writeln("<comment>  " . implode("\n  ", $attributeTables) . "</comment>");
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->attributeResource->rollBack();
 
             $output->writeln("");

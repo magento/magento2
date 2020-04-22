@@ -23,7 +23,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
             $responseContent = ['success' => true, 'error_message' => ''];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent = ['success' => false, 'error_message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $responseContent = [
                 'success' => false,
                 'error_message' => __('We can\'t delete this tax rate right now.')

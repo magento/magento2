@@ -968,7 +968,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
         }
         return $exportData;

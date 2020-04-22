@@ -115,7 +115,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
 
         try {
             $address->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }

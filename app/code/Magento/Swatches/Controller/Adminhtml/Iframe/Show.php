@@ -105,7 +105,7 @@ class Show extends \Magento\Backend\App\Action
             $this->swatchHelper->generateSwatchVariations($newFile);
             $fileData = ['swatch_path' => $this->swatchHelper->getSwatchMediaUrl(), 'file_path' => $newFile];
             $this->getResponse()->setBody(json_encode($fileData));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
             $this->getResponse()->setBody(json_encode($result));
         }

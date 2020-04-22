@@ -133,7 +133,7 @@ class Importer implements ImporterInterface
 
             $this->scope->setCurrentScope($currentScope);
             $this->flagManager->saveFlag(static::FLAG_CODE, $data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new InvalidTransitionException(__('%1', $e->getMessage()), $e);
         } finally {
             $this->scope->setCurrentScope($currentScope);

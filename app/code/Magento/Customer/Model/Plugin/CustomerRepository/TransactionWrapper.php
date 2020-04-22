@@ -44,7 +44,7 @@ class TransactionWrapper
             $result = $proceed($customer, $passwordHash);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->resourceModel->rollBack();
             throw $e;
         }

@@ -681,7 +681,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 } else {
                     throw $e;
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 if ($collectExceptionMessages) {
                     $results[$attrCode] = $e->getMessage();
                 } else {
@@ -1186,7 +1186,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;
@@ -1697,7 +1697,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $this->_processAttributeValues();
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -1762,7 +1762,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->afterDeleteCommit();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->transactionManager->rollBack();
             throw $e;
         }

@@ -56,7 +56,7 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
             try {
                 $this->validateDirectoryPath($path);
                 $this->deleteAssetsByDirectoryPath($path);
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical($exception);
                 $failedPaths[] = $path;
             }

@@ -113,7 +113,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
             try {
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $linkField = 'entity_id';
             }
 

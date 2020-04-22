@@ -62,7 +62,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
                 $this->_processDownload($resource, $resourceType);
                 // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(
                     __('Sorry, there was an error getting requested content. Please contact the store owner.')
                 );

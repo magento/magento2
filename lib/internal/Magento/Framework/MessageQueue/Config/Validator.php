@@ -50,7 +50,7 @@ class Validator
     {
         try {
             $this->methodsMap->getMethodParams($schemaType, $schemaMethod);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Service method specified for topic "%s" is not available. Given "%s"',
@@ -74,7 +74,7 @@ class Validator
     {
         try {
             $this->methodsMap->getMethodParams($serviceName, $methodName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Service method specified in handler for consumer "%s"'
@@ -168,7 +168,7 @@ class Validator
     {
         try {
             $this->validateType($responseSchema);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Response schema definition for topic "%s" should reference existing type or service class. '
@@ -192,7 +192,7 @@ class Validator
     {
         try {
             $this->validateType($schema);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Schema definition for topic "%s" should reference existing type or service class. '

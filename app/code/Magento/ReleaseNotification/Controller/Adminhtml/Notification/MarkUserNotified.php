@@ -74,7 +74,7 @@ class MarkUserNotified extends Action
                 'success' => false,
                 'error_message' => $e->getMessage()
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
             $responseContent = [
                 'success' => false,

@@ -70,7 +70,7 @@ class Inline implements RendererInterface
                     . implode('}}{{', array_reverse($source))
                     . '}}{{' . $this->translator->getTheme() . '}}}';
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             throw $e;
         }

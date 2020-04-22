@@ -178,7 +178,7 @@ class DataFixtureBeforeTransaction
             } else {
                 require $fixture;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new Exception(
                 sprintf(
                     "Error in fixture: %s.\n %s\n %s",

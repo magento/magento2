@@ -21,7 +21,7 @@ class Contents extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg
             $this->_view->renderLayout();
 
             $this->_getSession()->setStoragePath($this->storage->getCurrentPath());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
                 $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)

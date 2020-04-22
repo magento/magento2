@@ -107,7 +107,7 @@ class DeleteAction extends CardsManagement
 
         try {
             $this->tokenRepository->delete($paymentToken);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->createErrorResponse(self::ACTION_EXCEPTION);
         }
 

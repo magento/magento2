@@ -105,7 +105,7 @@ class FraudHandler implements HandlerInterface
             foreach ($rulesXml->{'rule'} as $rule) {
                 $rules[(string)$rule->{'ruleDescription'}] = (string)$rule->{'triggeredMessage'};
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         } finally {
             libxml_use_internal_errors(false);
         }

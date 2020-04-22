@@ -55,7 +55,7 @@ class SaveTest extends AbstractBackendController
         $error = '';
         try {
             $this->dispatch($this->uri);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = $e->getMessage();
         }
 

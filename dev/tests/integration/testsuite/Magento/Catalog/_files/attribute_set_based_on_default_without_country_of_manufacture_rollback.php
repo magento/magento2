@@ -49,7 +49,7 @@ try {
         $attributeSet = reset($items);
         $attributeSetRepository->deleteById($attributeSet->getId());
     }
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     // In case of test run with DB isolation there is already no object in database
     // since rollback fixtures called after transaction rollback.
 }

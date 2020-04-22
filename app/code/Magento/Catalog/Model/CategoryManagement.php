@@ -136,7 +136,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
         }
         try {
             $model->move($parentId, $afterId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Could not move category'));
         }
         return true;

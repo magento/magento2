@@ -258,7 +258,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => $storeIds];
             $connection->delete($table, $where);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $connection->rollBack();
         }
@@ -281,7 +281,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         try {
             $connection->insertMultiple($table, $data);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $connection->rollBack();
         }

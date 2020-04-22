@@ -20,10 +20,10 @@ class ResponseContainsErrorsException extends \Exception
     /**
      * @param string $message
      * @param array $responseData
-     * @param \Exception|null $cause
+     * @param \Throwable|null $cause
      * @param int $code
      */
-    public function __construct(string $message, array $responseData, \Exception $cause = null, int $code = 0)
+    public function __construct(string $message, array $responseData, ?\Throwable $cause = null, int $code = 0)
     {
         parent::__construct($message, $code, $cause);
         $this->responseData = $responseData;

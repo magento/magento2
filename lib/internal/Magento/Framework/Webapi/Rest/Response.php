@@ -59,7 +59,7 @@ class Response extends \Magento\Framework\Webapi\Response
                 $this->_renderMessages();
             }
             parent::sendResponse();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($e instanceof \Magento\Framework\Webapi\Exception) {
                 // If the server does not support all MIME types accepted by the client it SHOULD send 406.
                 $httpCode = $e->getHttpCode() ==

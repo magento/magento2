@@ -87,7 +87,7 @@ class ExtractAssetsFromContent implements ExtractAssetsFromContentInterface
                 /** @var AssetInterface $asset */
                 $asset = $this->getMediaAssetByPath->execute($this->getPathStartingWithSlash($path));
                 $assets[$asset->getId()] = $asset;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical($exception);
             }
         }

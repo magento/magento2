@@ -60,7 +60,7 @@ class InlineParserTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertEquals($translatedText, $model->getTranslate());
             $model->delete();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $model->delete();
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get(\Psr\Log\LoggerInterface::class)

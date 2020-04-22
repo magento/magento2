@@ -169,7 +169,7 @@ class PageRepository implements PageRepositoryInterface
             }
             $this->resource->save($page);
             $this->identityMap->add($page);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the page: %1', $exception->getMessage()),
                 $exception
@@ -232,7 +232,7 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
             $this->identityMap->remove($page->getId());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('Could not delete the page: %1', $exception->getMessage())
             );

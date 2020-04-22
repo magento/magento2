@@ -41,7 +41,7 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
                     $resultRedirect->setPath('adminhtml/*/');
                 }
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('adminhtml/*/edit', ['_current' => true]);
             }

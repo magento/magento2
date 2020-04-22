@@ -56,7 +56,7 @@ class EncryptionPaymentDataUpdateCommand extends Command
     {
         try {
             $this->paymentResource->reEncryptCreditCardNumbers();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         }

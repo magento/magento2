@@ -49,7 +49,7 @@ class TransactionWrapper
             $result = $proceed($product, $saveOptions);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->resourceModel->rollBack();
             throw $e;
         }
@@ -76,7 +76,7 @@ class TransactionWrapper
             $result = $proceed($product);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->resourceModel->rollBack();
             throw $e;
         }
@@ -103,7 +103,7 @@ class TransactionWrapper
             $result = $proceed($productSku);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->resourceModel->rollBack();
             throw $e;
         }

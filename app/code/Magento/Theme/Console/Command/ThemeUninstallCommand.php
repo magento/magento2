@@ -232,7 +232,7 @@ class ThemeUninstallCommand extends Command
 
                     $this->cleanup($input, $output);
                     return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
                     // we must have an exit code higher than zero to indicate something was wrong

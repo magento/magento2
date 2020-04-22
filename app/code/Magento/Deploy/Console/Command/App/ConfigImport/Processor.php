@@ -147,7 +147,7 @@ class Processor
                 $output->writeln($messages);
                 $this->configHash->regenerate($section);
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->error($exception);
             throw new RuntimeException(__('Import failed: %1', $exception->getMessage()), $exception);
         }

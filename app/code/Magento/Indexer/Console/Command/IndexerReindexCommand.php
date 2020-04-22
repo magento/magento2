@@ -100,7 +100,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
                 $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $output->writeln('process unknown error:');
                 $output->writeln($e->getMessage());
 

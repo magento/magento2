@@ -128,7 +128,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             return $consumer;
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new \Magento\Framework\Oauth\Exception(
                 __(
                     "The oAuth consumer account couldn't be created due to an unexpected error. Please try again later."
@@ -149,7 +149,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
                 $existingToken->delete();
                 unset($existingToken);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
         if (!isset($existingToken)) {
             $consumer = $this->_consumerFactory->create()->load($consumerId);
@@ -172,7 +172,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             if ($token->getType() != OauthTokenModel::TYPE_ACCESS) {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
         return $token;
@@ -187,7 +187,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             return $this->_consumerFactory->create()->load($consumerId);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new \Magento\Framework\Oauth\Exception(
                 __("The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later.")
             );
@@ -203,7 +203,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             return $this->_consumerFactory->create()->load($key, 'key');
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new \Magento\Framework\Oauth\Exception(
                 __("The oAuth consumer account couldn't be loaded due to an unexpected error. Please try again later.")
             );
@@ -245,7 +245,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             throw $exception;
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->_logger->critical($exception);
             throw new \Magento\Framework\Oauth\Exception(
                 __('The attempt to post data to consumer failed due to an unexpected error. Please try again later.')
@@ -274,7 +274,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
             $existingToken = $this->_tokenProvider->getIntegrationTokenByConsumerId($consumer->getId());
             $existingToken->delete();
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }

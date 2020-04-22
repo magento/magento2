@@ -28,7 +28,7 @@ class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design impleme
                 $this->messageManager->addSuccessMessage(__('You deleted the design change.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __("You can't delete the design change."));
             }
         }

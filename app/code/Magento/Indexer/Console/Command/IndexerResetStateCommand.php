@@ -42,7 +42,7 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
                 $output->writeln($indexer->getTitle() . ' indexer has been invalidated.');
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
                 $output->writeln($e->getMessage());
             }

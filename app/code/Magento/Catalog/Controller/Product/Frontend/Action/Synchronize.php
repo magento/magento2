@@ -69,7 +69,7 @@ class Synchronize extends \Magento\Framework\App\Action\Action implements HttpPo
             $productsData = $this->getRequest()->getParam('ids', []);
             $typeId = $this->getRequest()->getParam('type_id', null);
             $this->synchronizer->syncActions($productsData, $typeId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $resultJson->setStatusHeader(
                 \Laminas\Http\Response::STATUS_CODE_400,
                 \Laminas\Http\AbstractMessage::VERSION_11,

@@ -61,7 +61,7 @@ class OrderCancellation
     ) {
         try {
             return $proceed($cartId, $payment);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $quote = $this->quoteRepository->get((int) $cartId);
             $payment = $quote->getPayment();
             $paymentCodes = [

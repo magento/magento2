@@ -47,7 +47,7 @@ class Fields
                 $queryFields = array_merge($queryFields, $this->extractVariables($variables));
             }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // If a syntax error is encountered do not collect fields
         }
         if (isset($queryFields['IntrospectionQuery']) || (isset($queryFields['__schema'])) ||

@@ -116,7 +116,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             $adapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
             return $adapter;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->markTestSkipped($e->getMessage());
         }
     }
@@ -152,7 +152,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter = $this->_getAdapter($adapterType);
         try {
             $adapter->open($image);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = $this->_isFormatSupported($image, $adapter);
             $this->assertFalse($result);
         }
@@ -197,7 +197,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 $this->_getFixtureImageSize(),
                 [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = $this->_isFormatSupported($image, $adapter);
             $this->assertFalse($result);
         }
@@ -220,7 +220,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             $tempPath = join('', $tempPath);
             $this->assertFileExists($tempPath);
             unlink($tempPath);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertFalse(is_dir($tempPath[0]) && is_writable($tempPath[0]));
         }
     }
@@ -251,7 +251,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         try {
             $adapter->resize($dims[0], $dims[1]);
             $this->assertEquals($dims, [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = $dims[0] !== null && $dims[0] <= 0 ||
                 $dims[1] !== null && $dims[1] <= 0 ||
                 empty(${$dims[0]}) && empty(${$dims[1]});

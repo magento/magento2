@@ -58,7 +58,7 @@ class Show extends Action implements HttpGetActionInterface
         } catch (LocalizedException $e) {
             $this->getMessageManager()->addExceptionMessage($e, $e->getMessage());
             $resultRedirect->setPath('adminhtml');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getMessageManager()->addExceptionMessage(
                 $e,
                 __('Sorry, there has been an error processing your request. Please try again later.')

@@ -91,7 +91,7 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
         try {
             $errors = [];
             $mergedConfig->validate($this->mergedSchemaFile, $errors);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->fail('Merged routes config is invalid: ' . "\n" . implode("\n", $errors));
         }
     }

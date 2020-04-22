@@ -27,7 +27,7 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
                 $this->_getSession()->setFormData(false);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addException($e, __('We can\'t delete this template right now.'));
             }
         }

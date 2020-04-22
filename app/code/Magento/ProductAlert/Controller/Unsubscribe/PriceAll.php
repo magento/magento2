@@ -24,7 +24,7 @@ class PriceAll extends UnsubscribeController
                         ->getWebsiteId()
                 );
             $this->messageManager->addSuccess(__('You will no longer receive price alerts for this product.'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
         }
 

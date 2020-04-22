@@ -176,7 +176,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                     'localizedSubscriptionErrorMessage',
                     ['message' => $e->getMessage()]
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }

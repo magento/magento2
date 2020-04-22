@@ -155,7 +155,7 @@ class Invoiced extends AbstractReport
             $insertQuery = $select->insertFromSelect($table, array_keys($columns));
             $connection->query($insertQuery);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

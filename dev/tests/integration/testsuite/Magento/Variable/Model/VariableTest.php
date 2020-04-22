@@ -57,7 +57,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         try {
             $this->assertTrue($this->_model->validate());
             $this->_model->delete();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_model->delete();
             throw $e;
         }

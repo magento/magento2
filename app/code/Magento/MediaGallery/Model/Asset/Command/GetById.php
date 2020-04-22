@@ -74,7 +74,7 @@ class GetById implements GetByIdInterface
                 ->from(['amg' => $mediaAssetTable])
                 ->where('amg.id = ?', $mediaAssetId);
             $mediaAssetData = $connection->query($select)->fetch();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __(
                 'En error occurred during get media asset data by id %id: %error',
@@ -103,7 +103,7 @@ class GetById implements GetByIdInterface
                     'updatedAt' => $mediaAssetData['updated_at'],
                 ]
             );
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __(
                 'En error occurred during initialize media asset with id %id: %error',

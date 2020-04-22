@@ -15,6 +15,6 @@ $eavRepository = $objectManager->get(\Magento\Eav\Api\AttributeRepositoryInterfa
 try {
     $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), 'test_attribute');
     $eavRepository->delete($attribute);
-} catch (\Exception $ex) {
+} catch (\Throwable $e) {
     //Nothing to remove
 }

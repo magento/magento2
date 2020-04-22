@@ -44,7 +44,7 @@ class DateTime extends Date
         try {
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
         }
     }

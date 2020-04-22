@@ -399,7 +399,7 @@ class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $connection->insert($this->_aggregateTable, $data->getData());
             }
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
         }
     }

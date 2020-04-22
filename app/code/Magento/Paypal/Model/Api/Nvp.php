@@ -1194,7 +1194,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
                 $this->_buildQuery($request)
             );
             $response = $http->read();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $debugData['http_error'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
             $this->_debug($debugData);
             throw $e;

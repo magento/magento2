@@ -705,7 +705,7 @@ class Onepage
         if ($isNewCustomer) {
             try {
                 $this->_involveNewCustomer();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         }
@@ -730,7 +730,7 @@ class Onepage
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
                     $this->orderSender->send($order);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                 }
             }

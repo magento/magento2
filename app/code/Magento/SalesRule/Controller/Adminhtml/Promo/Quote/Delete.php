@@ -28,7 +28,7 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote impleme
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('We can\'t delete the rule right now. Please review the log and try again.')
                 );

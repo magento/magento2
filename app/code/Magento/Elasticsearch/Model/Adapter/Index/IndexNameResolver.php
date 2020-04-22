@@ -65,7 +65,7 @@ class IndexNameResolver
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')

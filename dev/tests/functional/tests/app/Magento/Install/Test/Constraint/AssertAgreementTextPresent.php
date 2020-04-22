@@ -39,7 +39,7 @@ class AssertAgreementTextPresent extends AbstractConstraint
                 $installPage->getLicenseBlock()->getLicense(),
                 'License agreement text is absent.'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             \PHPUnit\Framework\Assert::assertContains(
                 self::DEFAULT_LICENSE_AGREEMENT_TEXT,
                 $installPage->getLicenseBlock()->getLicense(),

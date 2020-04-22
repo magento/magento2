@@ -671,7 +671,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             $xml = new \SimpleXMLElement($data);
             $this->filterXmlData($xml);
             $data = $xml->asXML();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
         }
         return $data;
     }

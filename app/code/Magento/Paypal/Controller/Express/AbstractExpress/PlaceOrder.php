@@ -133,7 +133,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $this->_processPaypalApiError($e);
         } catch (LocalizedException $e) {
             $this->processException($e, $e->getRawMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->processException($e, 'We can\'t place the order.');
         }
     }

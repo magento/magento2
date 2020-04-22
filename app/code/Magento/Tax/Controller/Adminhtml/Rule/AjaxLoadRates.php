@@ -76,7 +76,7 @@ class AjaxLoadRates extends Action
                 'errorMessage' => '',
                 'result'=> $options,
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = [
                 'success' => false,
                 'errorMessage' => __('An error occurred while loading tax rates.')

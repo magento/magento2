@@ -26,7 +26,7 @@ class Preview extends Template implements HttpGetActionInterface, HttpPostAction
             $this->_view->loadLayout();
             $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Email Preview'));
             $this->_view->renderLayout();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(
                 __('An error occurred. The email template can not be opened for preview.')
             );

@@ -100,7 +100,7 @@ class Importer implements ImporterInterface
                     $this->themeResourceModel->delete($theme);
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
         }
 

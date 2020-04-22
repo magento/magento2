@@ -54,7 +54,7 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');

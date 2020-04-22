@@ -54,7 +54,7 @@ class Translate extends \Magento\Backend\App\Action
         try {
             $this->inlineParser->processAjaxPost($translate);
             $response = ['success' => 'true'];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $response = ['error' => 'true', 'message' => $e->getMessage()];
         }
 

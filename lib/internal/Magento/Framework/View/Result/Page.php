@@ -324,7 +324,7 @@ class Page extends Layout
         try {
             extract($this->viewVars, EXTR_SKIP);
             include $fileName;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             ob_end_clean();
             throw $exception;
         }

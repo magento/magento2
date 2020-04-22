@@ -95,7 +95,7 @@ class EntityManager
         try {
             $entity = $operation->execute($entity, $arguments);
             $this->callbackHandler->process($entityType);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->callbackHandler->clear($entityType);
             throw $e;
         }
@@ -134,7 +134,7 @@ class EntityManager
         try {
             $operation->execute($entity, $arguments);
             $this->callbackHandler->process($entityType);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->callbackHandler->clear($entityType);
             throw $e;
         }

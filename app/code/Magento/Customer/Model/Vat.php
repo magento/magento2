@@ -209,7 +209,7 @@ class Vat
             } else {
                 $gatewayResponse->setRequestMessage(__('Please enter a valid VAT number.'));
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $gatewayResponse->setIsValid(false);
             $gatewayResponse->setRequestDate('');
             $gatewayResponse->setRequestIdentifier('');

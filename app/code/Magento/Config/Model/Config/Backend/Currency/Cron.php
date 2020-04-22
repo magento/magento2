@@ -77,7 +77,7 @@ class Cron extends \Magento\Framework\App\Config\Value
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_STRING_PATH, 'path');
             $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Exception(__('We can\'t save the Cron expression.'));
         }
         return parent::afterSave();

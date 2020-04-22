@@ -90,7 +90,7 @@ abstract class ImportResult extends Import
                     . '">' . __('Download full report') . '</a><br>'
                     . '<div class="import-error-list">' . $message . '</div></div>'
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 foreach ($this->getErrorMessages($errorAggregator) as $errorMessage) {
                     $resultBlock->addError($errorMessage);
                 }

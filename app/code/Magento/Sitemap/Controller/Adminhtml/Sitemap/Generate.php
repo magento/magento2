@@ -62,7 +62,7 @@ class Generate extends Sitemap implements HttpGetActionInterface
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('We can\'t generate the sitemap right now.'));
             }
         } else {

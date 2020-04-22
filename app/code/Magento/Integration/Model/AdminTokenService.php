@@ -116,7 +116,7 @@ class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInt
             foreach ($tokenCollection as $token) {
                 $token->delete();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__("The tokens couldn't be revoked."));
         }
         return true;

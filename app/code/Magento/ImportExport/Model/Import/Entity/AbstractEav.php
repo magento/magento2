@@ -235,7 +235,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                     }
                 }
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // ignore exceptions connected with source models
             }
         }

@@ -142,7 +142,7 @@ class PreparedValueFactory
             }
 
             return $backendModel;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new RuntimeException(__('%1', $exception->getMessage()), $exception);
         }
     }

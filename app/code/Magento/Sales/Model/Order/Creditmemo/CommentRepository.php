@@ -116,7 +116,7 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
     {
         try {
             $this->commentResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the comment.'), $e);
         }
         return true;
@@ -129,14 +129,14 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
     {
         try {
             $this->commentResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the creditmemo comment.'), $e);
         }
 
         try {
             $creditmemo = $this->creditmemoRepository->get($entity->getParentId());
             $this->creditmemoCommentSender->send($creditmemo, $entity->getIsCustomerNotified(), $entity->getComment());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
 

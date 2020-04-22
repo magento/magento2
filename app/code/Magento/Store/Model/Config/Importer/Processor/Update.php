@@ -113,7 +113,7 @@ class Update implements ProcessorInterface
                         $this->updateGroups($items, $data);
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new RuntimeException(__('%1', $exception->getMessage()), $exception);
         }
     }

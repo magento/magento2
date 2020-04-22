@@ -137,7 +137,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         $document = new \DOMDocument();
         try {
             $document->loadXML($content);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Config\Dom\ValidationException($e->getMessage());
         }
         $this->compiler->compile($document->documentElement, $object, $object);

@@ -128,7 +128,7 @@ class GroupManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
@@ -217,7 +217,7 @@ class GroupManagementTest extends WebapiAbstract
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),

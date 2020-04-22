@@ -56,7 +56,7 @@ class CustomerGroup extends Column
                         ->getCode();
                 } catch (NoSuchEntityException $exception) {
                     $item[$this->getData('name')] = __('Group was removed');
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     $item[$this->getData('name')] = '';
                 }
             }

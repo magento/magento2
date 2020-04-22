@@ -99,7 +99,7 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
                 $this->messageManager->addSuccessMessage(__('Please check your email for confirmation key.'));
             } catch (InvalidTransitionException $e) {
                 $this->messageManager->addSuccessMessage(__('This email does not require confirmation.'));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Wrong email.'));
                 $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;

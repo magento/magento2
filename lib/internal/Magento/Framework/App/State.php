@@ -184,7 +184,7 @@ class State
         $this->_isAreaCodeEmulated = true;
         try {
             $result = call_user_func_array($callback, $params);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_areaCode = $currentArea;
             $this->_isAreaCodeEmulated = false;
             throw $e;

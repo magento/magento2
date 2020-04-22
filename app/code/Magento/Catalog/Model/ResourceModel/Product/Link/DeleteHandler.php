@@ -94,7 +94,7 @@ class DeleteHandler
 
         try {
             $this->linkResource->deleteProductLink($linkId);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('The linked products data is invalid. Verify the data and try again.')
             );

@@ -62,7 +62,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
         $category->setPostedProducts($productPositions);
         try {
             $category->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __(
                     'Could not save product "%1" with position %2 to category %3',
@@ -103,7 +103,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
         $category->setPostedProducts($productPositions);
         try {
             $category->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __(
                     'Could not save product "%product" with position %position to category %category',
@@ -143,7 +143,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
 
         try {
             $category->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(
                 __(
                     'Could not save products "%products" to category %category',

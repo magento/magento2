@@ -126,7 +126,7 @@ class AdminAnalyzer extends \Symfony\Component\Console\Command\Command
                 $curl->close();
                 $isUrlValid = true;
                 break;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 continue;
             }
         }

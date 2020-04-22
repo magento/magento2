@@ -173,7 +173,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);
         }
     }

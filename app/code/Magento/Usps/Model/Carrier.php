@@ -2159,7 +2159,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
             $data = $xml->asXML();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return '*Failed to read XML*';
         }
 

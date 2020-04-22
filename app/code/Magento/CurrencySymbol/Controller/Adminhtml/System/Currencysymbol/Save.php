@@ -63,7 +63,7 @@ class Save extends CurrencysymbolController implements HttpPostActionInterface
             $currencySymbol = $this->currencySymbolFactory->create();
             $currencySymbol->setCurrencySymbolsData($symbolsDataArray);
             $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 

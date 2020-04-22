@@ -391,7 +391,7 @@ class Checkout
                     $this->_getApi()->callGetPalDetails();
                     $pal = $this->_getApi()->getPal();
                     $this->_configCacheType->save($pal, $cacheId);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_configCacheType->save(self::PAL_CACHE_ID, $cacheId);
                     $this->_logger->critical($e);
                 }
@@ -753,7 +753,7 @@ class Checkout
             $debugData['response'] = $response;
             $this->_logger->debug(var_export($debugData, true));
             return $response;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->debug(var_export($debugData, true));
             throw $e;
         }
@@ -829,7 +829,7 @@ class Checkout
                     if (!$order->getEmailSent()) {
                         $this->orderSender->send($order);
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                 }
                 $this->_checkoutSession->start();

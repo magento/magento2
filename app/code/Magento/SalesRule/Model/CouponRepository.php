@@ -120,7 +120,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
             }
             $coupon->setUsageLimit($rule->getUsesPerCoupon());
             $coupon->setUsagePerCustomer($rule->getUsesPerCustomer());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Error occurred when saving coupon: %1', $e->getMessage())
             );

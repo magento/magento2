@@ -47,7 +47,7 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
                     continue;
                 }
                 $this->_argInterpreter->evaluate($argumentData);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->fail($e->getMessage());
             }
         }

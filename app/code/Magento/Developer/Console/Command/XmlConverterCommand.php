@@ -130,7 +130,7 @@ class XmlConverterCommand extends Command
             }
 
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $errorMessage = $exception->getMessage();
             $output->writeln("<error>$errorMessage</error>");
             // we must have an exit code higher than zero to indicate something was wrong

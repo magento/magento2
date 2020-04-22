@@ -69,7 +69,7 @@ class JobUpgrade extends AbstractJob
             );
             $this->params['command'] = 'setup:upgrade';
             $this->command->run(new ArrayInput($this->params), $this->output);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
         }

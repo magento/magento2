@@ -76,7 +76,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
                 );
             }
             $this->cache->clean();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->_session->setFormData(['crypt_key' => $key]);
         }

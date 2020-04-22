@@ -93,7 +93,7 @@ class WishlistProvider implements WishlistProviderInterface
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return false;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t create the Wish List right now.'));
             return false;
         }

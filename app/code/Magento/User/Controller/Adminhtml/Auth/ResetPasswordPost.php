@@ -48,7 +48,7 @@ class ResetPasswordPost extends Auth
 
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->getResponse()->setRedirect(
                 $this->backendDataHelper->getHomePageUrl()

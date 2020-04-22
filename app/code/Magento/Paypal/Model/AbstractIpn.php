@@ -97,7 +97,7 @@ class AbstractIpn
         $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', ['Connection: close'], $postbackQuery);
         try {
             $postbackResult = $httpAdapter->read();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_addDebugData('http_error', ['error' => $e->getMessage(), 'code' => $e->getCode()]);
             throw $e;
         }

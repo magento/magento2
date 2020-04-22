@@ -125,7 +125,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')

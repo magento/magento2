@@ -57,7 +57,7 @@ class DeleteContentAssetLinks implements DeleteContentAssetLinksInterface
             $tableName = $this->resourceConnection->getTableName(self::MEDIA_CONTENT_ASSET_TABLE_NAME);
             $whereSql = $this->buildWhereSqlPart($contentAssetLinks);
             $connection->delete($tableName, $whereSql);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new CouldNotDeleteException(
                 __('An error occurred at deleting links between the media asset and media content.')

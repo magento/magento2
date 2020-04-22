@@ -74,7 +74,7 @@ class Template
         try {
             $this->templateNode->ownerDocument->normalizeDocument();
             $result = $this->templateNode->ownerDocument->saveHTML();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             $result = '';
         }

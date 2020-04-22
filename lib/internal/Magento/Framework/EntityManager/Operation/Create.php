@@ -132,7 +132,7 @@ class Create implements CreateInterface
         } catch (DuplicateException $e) {
             $connection->rollBack();
             throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

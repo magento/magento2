@@ -61,7 +61,7 @@ class DeleteByPaths implements DeleteDirectoriesByPathsInterface
             }
             try {
                 $this->storage->deleteDirectory($this->storage->getCmsWysiwygImages()->getStorageRoot() . $path);
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical($exception);
                 $failedPaths[] = $path;
             }

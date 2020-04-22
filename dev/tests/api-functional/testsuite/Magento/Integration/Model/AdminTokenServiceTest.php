@@ -108,7 +108,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             $requestData = ['username' => '', 'password' => ''];
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertInputExceptionMessages($exception);
         }
         if ($noExceptionOccurred) {
@@ -131,7 +131,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             $requestData = ['username' => $customerUserName, 'password' => $password];
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertInvalidCredentialsException($exception);
         }
         if ($noExceptionOccurred) {
@@ -191,7 +191,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $noExceptionOccurred = true;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertUnauthorizedAccessException($exception);
         }
         if ($noExceptionOccurred) {
@@ -227,7 +227,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
             }
         }
         if ($noExceptionOccurred) {
@@ -269,7 +269,7 @@ class AdminTokenServiceTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo, $invalidCredentials);
                 $noExceptionOccurred = true;
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->assertInvalidCredentialsException($exception);
             }
             if ($noExceptionOccurred) {
@@ -281,7 +281,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $validCredentials);
             $noExceptionOccurred = true;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->assertInvalidCredentialsException($exception);
         }
         if ($noExceptionOccurred) {

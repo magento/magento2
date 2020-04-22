@@ -80,7 +80,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->dataPersistor->set('contact_us', $this->getRequest()->getParams());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $this->messageManager->addErrorMessage(
                 __('An error occurred while processing your form. Please try again later.')

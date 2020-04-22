@@ -51,7 +51,7 @@ class Delete extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 ]);
                 
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_eventManager->dispatch(
                     'adminhtml_cmspage_on_delete',
                     ['title' => $title, 'status' => 'fail']

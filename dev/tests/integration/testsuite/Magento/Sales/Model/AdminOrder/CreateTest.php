@@ -494,7 +494,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->addSharedInstance($orderManagement, OrderManagementInterface::class);
         try {
             $this->model->createOrder();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->objectManager->removeSharedInstance(OrderManagementInterface::class);
         }
 

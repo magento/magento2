@@ -197,7 +197,7 @@ class Bestsellers extends AbstractReport
             $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
             $this->_updateRatingPos(self::AGGREGATION_YEARLY);
             $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
 

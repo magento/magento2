@@ -40,7 +40,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index implements Htt
             try {
                 $this->_customerRepository->deleteById($customerId);
                 $this->messageManager->addSuccessMessage(__('You deleted the customer.'));
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
             }
         }

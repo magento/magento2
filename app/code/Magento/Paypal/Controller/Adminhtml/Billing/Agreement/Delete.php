@@ -37,7 +37,7 @@ class Delete extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
                     $e,
                     $e->getMessage()
                 );
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('We can\'t delete the billing agreement.')

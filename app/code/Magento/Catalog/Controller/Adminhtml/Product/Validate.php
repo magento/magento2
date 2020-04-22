@@ -138,7 +138,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $layout = $this->layoutFactory->create();
             $layout->initMessages();

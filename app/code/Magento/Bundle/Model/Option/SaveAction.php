@@ -104,7 +104,7 @@ class SaveAction
 
         try {
             $this->optionResource->save($option);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 

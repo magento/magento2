@@ -64,7 +64,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         'prices'
                     );
                     $priceConfigObj->setConfig($priceConfig);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $this;
                 }
             }

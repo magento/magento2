@@ -35,7 +35,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
                 return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('We can\'t delete email template data right now. Please review log and try again.')
                 );

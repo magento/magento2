@@ -92,7 +92,7 @@ class Payment extends Block
         try {
             $this->waitForElementNotVisible($this->waitElement);
             $this->waitForElementVisible($paymentLabelSelector);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new \Exception('Such payment method is absent.');
         }
         $browser = $this->browser;

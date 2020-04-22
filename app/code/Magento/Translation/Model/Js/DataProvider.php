@@ -111,7 +111,7 @@ class DataProvider implements DataProviderInterface
                     if ($phrase != $translatedPhrase) {
                         $dictionary[$phrase] = $translatedPhrase;
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new LocalizedException(
                         __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0]),
                         $e

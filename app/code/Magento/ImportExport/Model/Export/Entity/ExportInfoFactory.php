@@ -149,7 +149,7 @@ class ExportInfoFactory
         if (isset($entities[$entity])) {
             try {
                 $entityAdapter = $this->entityFactory->create($entities[$entity]['model']);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please enter a correct entity model.')
@@ -200,7 +200,7 @@ class ExportInfoFactory
         if (isset($fileFormats[$fileFormat])) {
             try {
                 $writer = $this->exportAdapterFac->create($fileFormats[$fileFormat]['model']);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please enter a correct entity model.')

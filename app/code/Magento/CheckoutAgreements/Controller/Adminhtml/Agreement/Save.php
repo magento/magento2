@@ -60,7 +60,7 @@ class Save extends Agreement implements HttpPostActionInterface
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));
             }
 

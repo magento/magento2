@@ -139,7 +139,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         }
         try {
             $this->productRepository->save($product);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($e instanceof TemporaryStateExceptionInterface) {
                 // temporary state exception must be already localized
                 throw $e;

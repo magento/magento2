@@ -119,7 +119,7 @@ class Create implements ProcessorInterface
                         break;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new RuntimeException(__('%1', $e->getMessage()), $e);
         }
     }

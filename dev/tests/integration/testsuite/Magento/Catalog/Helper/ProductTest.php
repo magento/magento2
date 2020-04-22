@@ -120,7 +120,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $this->helper->getEmailToFriendUrl($product)
             );
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }

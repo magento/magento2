@@ -54,7 +54,7 @@ class PaymentMethod extends Column
                     $item[$this->getData('name')] = $this->paymentHelper
                         ->getMethodInstance($item[$this->getData('name')])
                         ->getTitle();
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     //Displaying payment code (with no changes) if payment method is not available in system
                 }
             }

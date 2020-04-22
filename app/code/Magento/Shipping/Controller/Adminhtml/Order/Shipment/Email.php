@@ -61,7 +61,7 @@ class Email extends \Magento\Backend\App\Action
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(__('Cannot send shipment information.'));
         }
 

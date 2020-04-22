@@ -37,7 +37,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
                 'success' => false,
                 'error_message' => $e->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $responseContent = [
                 'success' => false,
                 'error_message' => __('An error occurred while loading this tax rate.'),

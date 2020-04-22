@@ -38,7 +38,7 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 
         try {
             $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
         $this->_initAction();

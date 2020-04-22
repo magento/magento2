@@ -208,7 +208,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
                         __('Parent directory does not exist: %1', $dir['path'])
                     );
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
             }
         }

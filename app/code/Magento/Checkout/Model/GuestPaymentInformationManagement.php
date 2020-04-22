@@ -101,7 +101,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                 __($e->getMessage()),
                 $e
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getLogger()->critical($e);
             throw new CouldNotSaveException(
                 __('An error occurred on the server. Please try to place the order again.'),

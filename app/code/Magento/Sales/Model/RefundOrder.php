@@ -163,7 +163,7 @@ class RefundOrder implements RefundOrderInterface
             $order = $this->orderRepository->save($order);
             $creditmemo = $this->creditmemoRepository->save($creditmemo);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotRefundException(

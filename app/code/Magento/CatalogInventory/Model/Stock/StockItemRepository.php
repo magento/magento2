@@ -183,7 +183,7 @@ class StockItemRepository implements StockItemRepositoryInterface
             $stockItem->setStockId($stockItem->getStockId());
 
             $this->resource->save($stockItem);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotSaveException(__('The stock item was unable to be saved. Please try again.'), $exception);
         }
         return $stockItem;
@@ -226,7 +226,7 @@ class StockItemRepository implements StockItemRepositoryInterface
             $this->resource->delete($stockItem);
             $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
             $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __(
                     'The stock item with the "%1" ID wasn\'t found. Verify the ID and try again.',
@@ -246,7 +246,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         try {
             $stockItem = $this->get($id);
             $this->delete($stockItem);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new CouldNotDeleteException(
                 __('The stock item with the "%1" ID wasn\'t found. Verify the ID and try again.', $id),
                 $exception

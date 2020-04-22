@@ -233,7 +233,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__('Unable to import data'), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -281,7 +281,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             foreach ($this->import->getData($file, $websiteId, $conditionName, $conditionFullName) as $bunch) {
                 $this->importData($columns, $bunch);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while importing table rates.')

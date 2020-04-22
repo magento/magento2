@@ -60,7 +60,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
         try {
             $this->migrateStoresAllowedCountriesToWebsite();
             $this->moduleDataSetup->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->moduleDataSetup->getConnection()->rollBack();
             throw $e;
         }

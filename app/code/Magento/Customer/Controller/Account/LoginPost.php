@@ -211,7 +211,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     );
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addErrorMessage(
                         __('An unspecified error occurred. Please contact us for assistance.')

@@ -85,7 +85,7 @@ class GetAssetKeywords implements GetAssetKeywordsInterface
             }
 
             return $keywords;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get asset keywords: %1', $exception->getMessage());
             throw new IntegrationException($message, $exception);

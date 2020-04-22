@@ -54,7 +54,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
             $result = ['error' => false, 'files' => $customization->generateFileInfo($customJsFiles)];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = ['error' => true, 'message' => __('We can\'t upload the JS file right now.')];
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

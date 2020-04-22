@@ -125,7 +125,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
             return $this->_redirectToOrder($orderId);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->messageManager->addExceptionMessage($exception, 'Cannot create an invoice.');
             return $this->_redirectToOrder($orderId);
         }

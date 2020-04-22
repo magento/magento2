@@ -33,7 +33,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
             $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }

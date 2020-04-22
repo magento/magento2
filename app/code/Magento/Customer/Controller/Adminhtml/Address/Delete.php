@@ -75,7 +75,7 @@ class Delete extends Action implements HttpPostActionInterface
             try {
                 $this->addressRepository->deleteById($addressId);
                 $message = __('You deleted the address.');
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $error = true;
                 $message = __('We can\'t delete the address right now.');
                 $this->logger->critical($e);

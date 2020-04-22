@@ -163,7 +163,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent['success'] = false;
             $responseContent['error_message'] = $e->getMessage();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $responseContent['success'] = false;
             $responseContent['error_message'] = __('We can\'t process Express Checkout approval.');
         }

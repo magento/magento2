@@ -119,7 +119,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                             break;
                         }
                     }
-                } catch (\Exception $exception) {
+                } catch (\Throwable $exception) {
                     $this->messageManager->addExceptionMessage(
                         $exception,
                         __('We\'re unable to send the password reset email.')

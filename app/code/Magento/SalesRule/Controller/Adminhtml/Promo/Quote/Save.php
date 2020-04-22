@@ -143,7 +143,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     $this->_redirect('sales_rule/*/new');
                 }
                 return;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );

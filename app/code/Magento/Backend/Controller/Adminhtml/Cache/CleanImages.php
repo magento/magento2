@@ -32,7 +32,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache implements
             $this->messageManager->addSuccessMessage(__('The image cache was cleaned.'));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('An error occurred while clearing the image cache.'));
         }
 

@@ -61,7 +61,7 @@ abstract class AbstractTransaction implements ClientInterface
 
         try {
             $response['object'] = $this->process($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $message = __($e->getMessage() ?: 'Sorry, but something went wrong');
             $this->logger->critical($message);
             throw new ClientException($message);

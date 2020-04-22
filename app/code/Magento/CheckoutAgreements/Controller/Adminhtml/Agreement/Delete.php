@@ -55,7 +55,7 @@ class Delete extends Agreement implements HttpPostActionInterface
             return;
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));
         }
 

@@ -75,7 +75,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
             $this->messageManager->addExceptionMessage($e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = true;
             $this->messageManager->addErrorMessage(__('There was a category move error.'));
             $this->logger->critical($e);

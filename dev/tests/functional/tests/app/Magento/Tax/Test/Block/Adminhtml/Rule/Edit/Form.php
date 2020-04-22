@@ -242,7 +242,7 @@ class Form extends FormInterface
                 $element->find($this->saveButton)->click();
                 $this->waitUntilOptionIsVisible($element, $taxClass);
                 return;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // In parallel run on windows change the focus is lost on element
                 $count++;
             }

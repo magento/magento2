@@ -97,7 +97,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
 
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;

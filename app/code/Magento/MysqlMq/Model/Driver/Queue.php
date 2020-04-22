@@ -112,7 +112,7 @@ class Queue implements QueueInterface
                 try {
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     call_user_func($callback, $envelope);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->reject($envelope);
                 }
             }

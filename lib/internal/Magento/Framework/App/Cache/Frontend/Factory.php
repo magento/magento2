@@ -283,7 +283,7 @@ class Factory
                                 $backendType = $type;
                             }
                         }
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                     }
                 }
         }

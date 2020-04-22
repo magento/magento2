@@ -34,7 +34,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
             $this->messageManager->addSuccessMessage(__('You canceled the invoice.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('Invoice canceling error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

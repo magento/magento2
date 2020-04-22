@@ -271,7 +271,7 @@ class Import extends AbstractModel
             if (isset($entities[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->_logger->critical($e);
                     throw new LocalizedException(
                         __('Please enter a correct entity model.')
@@ -573,7 +573,7 @@ class Import extends AbstractModel
         $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
         try {
             $result = $uploader->save($this->getWorkingDir(), $fileName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__('The file cannot be uploaded.'));
         }
 
@@ -620,7 +620,7 @@ class Import extends AbstractModel
         $sourceFile = $this->uploadSource();
         try {
             $source = $this->_getSourceAdapter($sourceFile);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_varDirectory->delete($this->_varDirectory->getRelativePath($sourceFile));
             throw new LocalizedException(__($e->getMessage()));
         }
@@ -668,7 +668,7 @@ class Import extends AbstractModel
         try {
             $adapter = $this->_getEntityAdapter()->setSource($source);
             $adapter->validateData();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorAggregator->addError(
                 AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
@@ -793,7 +793,7 @@ class Import extends AbstractModel
             if (isset($entities[$entity])) {
                 try {
                     $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     throw new LocalizedException(
                         __('Please enter a correct entity model')
                     );

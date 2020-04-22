@@ -511,7 +511,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 for ($attemptNum = 0; $attemptNum < $saveAttemptCount; $attemptNum++) {
                     try {
                         $coupon->save();
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         if ($e instanceof \Magento\Framework\Exception\LocalizedException || $coupon->getId()) {
                             throw $e;
                         }

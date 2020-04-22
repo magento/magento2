@@ -67,7 +67,7 @@ class VoidAction extends Action
                 $this->messageManager->addSuccessMessage(__('You voided the credit memo.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('We can\'t void the credit memo.'));
             }
             $resultRedirect = $this->resultRedirectFactory->create();

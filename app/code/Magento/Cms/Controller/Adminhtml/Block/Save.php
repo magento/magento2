@@ -97,7 +97,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
                 return $this->processBlockReturn($model, $data, $resultRedirect);
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the block.'));
             }
 

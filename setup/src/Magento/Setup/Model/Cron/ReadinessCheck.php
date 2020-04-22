@@ -140,7 +140,7 @@ class ReadinessCheck
         try {
             $filePaths = $this->basePackageInfo->getPaths();
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $filePaths;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorMessage = $e->getMessage();
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = [];
             $errorLogMessages[] = $errorMessage;
@@ -253,7 +253,7 @@ class ReadinessCheck
                 $dbInfo[\Magento\Framework\Config\ConfigOptionsListConstants::KEY_USER],
                 $dbInfo[\Magento\Framework\Config\ConfigOptionsListConstants::KEY_PASSWORD]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $errorLogMessage = $e->getMessage();
         }
         return $errorLogMessage;

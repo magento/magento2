@@ -493,7 +493,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                         $this->_connection->quoteInto($productEntityLinkField . ' IN (?)', $this->_cachedSkuToDelete)
                     );
                     return true;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return false;
                 }
             } else {

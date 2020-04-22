@@ -51,7 +51,7 @@ class Autoloader
         if (! class_exists($className)) {
             try {
                 $this->_generator->generateClass($className);
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->tryToLogExceptionMessageIfNotDuplicate($exception);
             }
         }
@@ -89,7 +89,7 @@ class Autoloader
         try {
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             $logger->debug($exception->getMessage(), ['exception' => $exception]);
-        } catch (\Exception $ignoreThisException) {
+        } catch (\Throwable $ignoreThisException) {
             // Do not take an action here, since the original exception might have been caused by logger
         }
     }

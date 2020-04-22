@@ -95,7 +95,7 @@ class Processor implements ContentProcessorInterface
             } else {
                 return $content;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new ContentProcessorException(new Phrase($e->getMessage()));
         }
     }

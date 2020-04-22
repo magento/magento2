@@ -69,7 +69,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
                     $name,
                     $this->storage->getCmsWysiwygImages()->getStorageRoot() . $folder
                 );
-            } catch (\Exception $exception) {
+            } catch (\Throwable $exception) {
                 $this->logger->critical($exception);
                 $failedPaths[] = $path;
             }

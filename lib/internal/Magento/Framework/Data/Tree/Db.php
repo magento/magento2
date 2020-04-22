@@ -272,7 +272,7 @@ class Db extends \Magento\Framework\Data\Tree
             $this->_conn->update($this->_table, $dataReorderOld, $conditionReorderOld);
             $this->_updateChildLevels($node->getId(), $data[$this->_levelField]);
             $this->_conn->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_conn->rollBack();
             throw new \Exception('Can\'t move tree node');
         }
@@ -354,7 +354,7 @@ class Db extends \Magento\Framework\Data\Tree
             // Update old node branch
             $this->_conn->update($this->_table, $dataReorderOld, $conditionReorderOld);
             $this->_conn->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_conn->rollBack();
             throw new \Exception('Can\'t remove tree node');
         }

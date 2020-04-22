@@ -141,7 +141,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index imple
                 $this->tokenService->revokeCustomerAccessToken($customerId);
                 $this->messageManager->addSuccessMessage(__('You have revoked the customer\'s tokens.'));
                 $resultRedirect->setPath('customer/index/edit', ['id' => $customerId, '_current' => true]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('customer/index/edit', ['id' => $customerId, '_current' => true]);
             }

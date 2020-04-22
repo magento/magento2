@@ -97,7 +97,7 @@ class Generator implements NonceGeneratorInterface
             $nonceObj->setNonce($nonce)->setConsumerId($consumer->getId())->setTimestamp($timestamp)->save();
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new \Magento\Framework\Oauth\Exception(__('An error occurred validating the nonce'));
         }
     }

@@ -17,7 +17,7 @@ class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $errorMessage = null;
         try {
             $this->_initSession()->_processData();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_reloadQuote();
             $errorMessage = $e->getMessage();
         }

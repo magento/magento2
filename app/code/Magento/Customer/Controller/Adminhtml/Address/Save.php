@@ -151,7 +151,7 @@ class Save extends Action implements HttpPostActionInterface
             $error = true;
             $message = __($e->getMessage());
             $this->logger->critical($e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = true;
             $message = __('We can\'t change customer address right now.');
             $this->logger->critical($e);

@@ -85,7 +85,7 @@ class ConnectionManager
     {
         try {
             $this->client = $this->clientFactory->create($this->clientConfig->prepareClientOptions($options));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
             throw new \RuntimeException('Elasticsearch client is not set.');
         }

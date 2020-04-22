@@ -58,7 +58,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_removeNotVisibleEntityFromIndex();
             $this->syncData();
             $this->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             throw $e;
         }
@@ -275,7 +275,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $where = $connection->quoteInto('attribute_id = ?', $attributeId);
             $connection->delete($this->getMainTable(), $where);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }
@@ -301,7 +301,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             // insert new index
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $connection->rollBack();
             throw $e;
         }

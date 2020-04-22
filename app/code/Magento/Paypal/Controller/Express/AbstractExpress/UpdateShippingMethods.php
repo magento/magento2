@@ -33,7 +33,7 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
                 $e,
                 $e->getMessage()
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t update shipping method.')

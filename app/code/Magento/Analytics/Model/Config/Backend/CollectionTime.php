@@ -83,7 +83,7 @@ class CollectionTime extends Value
 
         try {
             $this->configWriter->save(self::CRON_SCHEDULE_PATH, $cronExprString);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->error($e->getMessage());
             throw new LocalizedException(__('Cron settings can\'t be saved'));
         }

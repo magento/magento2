@@ -214,7 +214,7 @@ class OrderService implements OrderManagementInterface
 
         try {
             $order = $this->orderRepository->save($order);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical(
                 'Saving order ' . $order->getIncrementId() . ' failed: ' . $e->getMessage()
             );

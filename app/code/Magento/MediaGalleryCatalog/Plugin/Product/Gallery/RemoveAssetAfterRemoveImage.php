@@ -64,7 +64,7 @@ class RemoveAssetAfterRemoveImage
 
         try {
             $this->deleteByPaths->execute([$file]);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
 

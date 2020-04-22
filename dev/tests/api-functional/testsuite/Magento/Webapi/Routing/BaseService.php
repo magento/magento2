@@ -42,7 +42,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     {
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->assertContains(
                 '{"message":"The consumer isn\'t authorized to access %resources.',
                 $e->getMessage(),
@@ -81,7 +81,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     {
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $error = json_decode($e->getMessage(), true);
             $this->assertEquals('Request does not match any route.', $error['message']);
             $this->assertEquals(WebapiException::HTTP_NOT_FOUND, $e->getCode());
@@ -99,7 +99,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     {
         try {
             $this->_webApiCall($serviceInfo, $requestData);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (get_class($e) !== 'SoapFault') {
                 $this->fail(
                     sprintf(

@@ -126,7 +126,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
             ));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t move the item to the wish list.'));
         }
         return $resultRedirect->setUrl($this->cartHelper->getCartUrl());

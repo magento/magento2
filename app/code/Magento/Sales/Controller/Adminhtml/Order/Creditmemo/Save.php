@@ -122,7 +122,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->_getSession()->setFormData($data);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->messageManager->addErrorMessage(__('We can\'t save the credit memo right now.'));
         }

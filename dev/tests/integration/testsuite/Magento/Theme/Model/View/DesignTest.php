@@ -206,7 +206,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf(\Magento\Framework\Config\View::class, $config);
             $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $directory->delete($relativePath);
             throw $e;
         }

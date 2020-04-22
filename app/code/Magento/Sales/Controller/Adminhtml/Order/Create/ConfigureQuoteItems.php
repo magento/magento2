@@ -43,7 +43,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
             $configureResult->setProductId($quoteItem->getProductId());
             $sessionQuote = $this->_objectManager->get(\Magento\Backend\Model\Session\Quote::class);
             $configureResult->setCurrentCustomerId($sessionQuote->getCustomerId());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());
         }

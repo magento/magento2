@@ -95,7 +95,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('An error occurred while saving account.'));
         }
 

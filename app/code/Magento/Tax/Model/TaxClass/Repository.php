@@ -151,7 +151,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
             $this->taxClassResource->delete($taxClass);
         } catch (CouldNotDeleteException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return false;
         }
         $this->classModelRegistry->remove($taxClassId);

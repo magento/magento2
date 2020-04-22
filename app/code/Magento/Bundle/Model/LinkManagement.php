@@ -183,7 +183,7 @@ class LinkManagement implements ProductLinkManagementInterface
 
         try {
             $selectionModel->save();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
 
@@ -313,7 +313,7 @@ class LinkManagement implements ProductLinkManagementInterface
         try {
             $selectionModel->save();
             $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
 

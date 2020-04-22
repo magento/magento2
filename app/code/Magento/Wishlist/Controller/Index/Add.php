@@ -146,7 +146,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
             $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t add the item to Wish List right now.')

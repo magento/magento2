@@ -66,7 +66,7 @@ class GiftMessageManager
                         try {
                             $giftMessage->delete();
                             $entity->setGiftMessageId(0)->save();
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                         }
                     }
                     continue;
@@ -84,7 +84,7 @@ class GiftMessageManager
                     )->save();
 
                     $entity->setGiftMessageId($giftMessage->getId())->save();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                 }
             }
         }
@@ -111,7 +111,7 @@ class GiftMessageManager
 
         try {
             $this->add($message, $quote);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The gift message couldn't be added to Cart."));
         }
     }

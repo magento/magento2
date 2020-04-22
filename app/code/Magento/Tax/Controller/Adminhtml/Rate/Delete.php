@@ -33,7 +33,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
                 return $resultRedirect->setPath("tax/*/");
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError(__('Something went wrong deleting this rate.'));
             }
 

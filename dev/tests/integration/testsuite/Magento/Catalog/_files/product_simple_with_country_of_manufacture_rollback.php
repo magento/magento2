@@ -24,7 +24,7 @@ try {
     /** @var Product $product */
     $product = $productRepository->get('simple_with_com');
     $productRepository->delete($product);
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     // In case of test run with DB isolation there is already no object in database
     // since rollback fixtures called after transaction rollback.
 }

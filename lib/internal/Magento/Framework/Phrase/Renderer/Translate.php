@@ -55,7 +55,7 @@ class Translate implements RendererInterface
 
         try {
             $data = $this->translator->getData();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
             throw $e;
         }

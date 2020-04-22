@@ -116,7 +116,7 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
     {
         try {
             $this->commentResource->delete($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotDeleteException(__('Could not delete the shipment comment.'), $e);
         }
         return true;
@@ -129,14 +129,14 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
     {
         try {
             $this->commentResource->save($entity);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__('Could not save the shipment comment.'), $e);
         }
 
         try {
             $shipment = $this->shipmentRepository->get($entity->getParentId());
             $this->shipmentCommentSender->send($shipment, $entity->getIsCustomerNotified(), $entity->getComment());
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
         }
 

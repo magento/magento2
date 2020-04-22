@@ -79,7 +79,7 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard implements 
                         $resultRaw->setHeader('Content-type', $headers['Content-type'])
                             ->setContents($response->getBody());
                         return $resultRaw;
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                         $error = __('see error log for details');
                         $httpCode = 503;

@@ -160,7 +160,7 @@ class ImageProcessor implements ImageProcessorInterface
             $this->uploader->setAllowRenameFiles(true);
             $destinationFolder = $entityType;
             $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationFolder), $fileName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical($e);
         }
         return $this->uploader->getUploadedFileName();

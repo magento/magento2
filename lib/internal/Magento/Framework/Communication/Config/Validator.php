@@ -54,7 +54,7 @@ class Validator
                 $e->getCode(),
                 $e
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Response schema definition for topic "%s" should reference existing type or service class. '
@@ -83,7 +83,7 @@ class Validator
                 $e->getCode(),
                 $e
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Request schema definition for topic "%s" should reference existing service class. '
@@ -108,7 +108,7 @@ class Validator
     {
         try {
             $this->methodsMap->getMethodParams($serviceName, $methodName);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new \LogicException(
                 sprintf(
                     'Service method specified in the definition of handler "%s" for topic "%s"'

@@ -299,7 +299,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     $this->cleanup($input, $output);
 
                     return Cli::RETURN_SUCCESS;
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                     $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
                     return Cli::RETURN_FAILURE;

@@ -87,7 +87,7 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
             try {
                 $customer = $this->customerAccountManagement->authenticate($login, $password);
                 $this->customerSession->setCustomerDataAsLoggedIn($customer);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
             }
         }

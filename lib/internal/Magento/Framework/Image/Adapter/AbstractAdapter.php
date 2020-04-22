@@ -738,7 +738,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
         try {
             $imageSize = getimagesize($filePath);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $imageSize = false;
         }
 

@@ -106,7 +106,7 @@ class BraintreeAdapter
     {
         try {
             return ClientToken::generate($params);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return null;
         }
     }
@@ -119,7 +119,7 @@ class BraintreeAdapter
     {
         try {
             return CreditCard::find($token);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return null;
         }
     }

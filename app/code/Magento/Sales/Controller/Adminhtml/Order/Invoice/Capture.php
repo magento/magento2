@@ -36,7 +36,7 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $this->messageManager->addSuccessMessage(__('The invoice has been captured.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('Invoice capturing error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

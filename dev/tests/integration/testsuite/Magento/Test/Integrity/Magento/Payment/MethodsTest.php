@@ -83,7 +83,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
                     )->getStore()->setId(
                         $storeId
                     );
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     Bootstrap::getObjectManager()->get(
                         \Magento\Store\Model\StoreManagerInterface::class
                     )->getStore()->setId(

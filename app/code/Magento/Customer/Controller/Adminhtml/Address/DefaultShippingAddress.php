@@ -79,7 +79,7 @@ class DefaultShippingAddress extends Action implements HttpPostActionInterface
                 $this->addressRepository->save($address);
                 $message = __('Default shipping address has been changed.');
                 $error = false;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $message = __('We can\'t change default shipping address right now.');
                 $this->logger->critical($e);
             }

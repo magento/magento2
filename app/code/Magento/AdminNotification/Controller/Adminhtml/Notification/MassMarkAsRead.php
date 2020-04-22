@@ -58,7 +58,7 @@ class MassMarkAsRead extends Notification implements HttpPostActionInterface
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't mark the notification as Read because of an error.")

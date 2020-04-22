@@ -87,7 +87,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     {
         try {
             $this->eavResource->save($attribute);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__("The attribute can't be saved."));
         }
         return $attribute;
@@ -180,7 +180,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     {
         try {
             $this->eavResource->delete($attribute);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new StateException(__("The attribute can't be deleted."));
         }
         return true;

@@ -37,7 +37,7 @@ class VoidAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $this->messageManager->addSuccessMessage(__('The invoice has been voided.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->messageManager->addErrorMessage(__('Invoice voiding error'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

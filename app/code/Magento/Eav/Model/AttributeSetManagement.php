@@ -54,7 +54,7 @@ class AttributeSetManagement implements AttributeSetManagementInterface
         try {
             $attributeSet->setEntityTypeId($this->eavConfig->getEntityType($entityTypeCode)->getId());
             $attributeSet->validate();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new InputException(__($exception->getMessage()));
         }
 

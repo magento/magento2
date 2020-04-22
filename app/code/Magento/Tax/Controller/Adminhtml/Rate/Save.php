@@ -40,7 +40,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addError($e->getMessage());
             }
             return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));

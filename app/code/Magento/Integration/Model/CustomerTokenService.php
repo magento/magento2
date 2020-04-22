@@ -90,7 +90,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         $this->getRequestThrottler()->throttle($username, RequestThrottler::USER_TYPE_CUSTOMER);
         try {
             $customerDataObject = $this->accountManagement->authenticate($username, $password);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
             throw new AuthenticationException(
                 __(
@@ -123,7 +123,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
             foreach ($tokenCollection as $token) {
                 $token->delete();
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new LocalizedException(__("The tokens couldn't be revoked."));
         }
         return true;

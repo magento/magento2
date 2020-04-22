@@ -138,7 +138,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_getSession()->setPostData($postData);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage(
                     $e,
                     __('Something went wrong while saving. Please review the error log.')

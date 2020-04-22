@@ -79,7 +79,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
@@ -118,7 +118,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirect('*/*/');
             return null;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
             $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');

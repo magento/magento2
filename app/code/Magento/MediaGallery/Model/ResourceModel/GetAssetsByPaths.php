@@ -76,7 +76,7 @@ class GetAssetsByPaths implements GetAssetsByPathsInterface
                     ]
                 );
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->logger->critical($exception);
             throw new LocalizedException(
                 __(

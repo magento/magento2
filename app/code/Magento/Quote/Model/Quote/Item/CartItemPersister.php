@@ -105,7 +105,7 @@ class CartItemPersister
             throw $e;
         } catch (LocalizedException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new CouldNotSaveException(__("The quote couldn't be saved."));
         }
         $itemId = $item->getId();
