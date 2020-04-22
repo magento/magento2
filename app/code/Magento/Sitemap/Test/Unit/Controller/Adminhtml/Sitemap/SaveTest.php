@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
 use Magento\Backend\App\Action\Context;
@@ -141,8 +143,8 @@ class SaveTest extends TestCase
             ->getMock();
         $this->pathValidator =
             $this->getMockBuilder(AvailablePath::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->fileSystem = $this->createMock(Filesystem::class);
         $this->siteMapFactory = $this->createMock(SitemapFactory::class);
 

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 
@@ -45,7 +46,7 @@ class CategoryTest extends TestCase
         $resolver = new CategoryItemResolver($configReaderMock, $categoryFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
 
-        $this->assertTrue(count($items) == count($categories));
+        $this->assertCount(count($categories), $items);
         foreach ($categories as $index => $category) {
             $this->assertSame($category->getUpdatedAt(), $items[$index]->getUpdatedAt());
             $this->assertSame('daily', $items[$index]->getChangeFrequency());

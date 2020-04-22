@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 
@@ -45,7 +46,7 @@ class ProductTest extends TestCase
         $resolver = new ProductItemResolver($configReaderMock, $productFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
 
-        self::assertTrue(count($items) == count($products));
+        self::assertCount(count($products), $items);
         foreach ($products as $index => $product) {
             self::assertSame($product->getUpdatedAt(), $items[$index]->getUpdatedAt());
             self::assertSame('daily', $items[$index]->getChangeFrequency());

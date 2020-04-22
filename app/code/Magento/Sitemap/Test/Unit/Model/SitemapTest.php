@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
@@ -27,6 +30,7 @@ use Magento\Sitemap\Model\SitemapConfigReaderInterface;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -446,8 +450,8 @@ class SitemapTest extends TestCase
                 ->method('renameFile')
                 ->willReturnCallback(
                     function ($from, $to) {
-                        \PHPUnit\Framework\Assert::assertEquals('/sitemap-1-1.xml', $from);
-                        \PHPUnit\Framework\Assert::assertEquals('/sitemap.xml', $to);
+                        Assert::assertEquals('/sitemap-1-1.xml', $from);
+                        Assert::assertEquals('/sitemap.xml', $to);
                     }
                 );
         }
@@ -562,7 +566,7 @@ class SitemapTest extends TestCase
                 ]
             );
 
-        /** @var $model Sitemap */
+        /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
             ->setMethods($methods)
             ->setConstructorArgs($this->getModelConstructorArgs())
@@ -605,7 +609,7 @@ class SitemapTest extends TestCase
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $escaper = $objectManager->getObject(Escaper::class);
 
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
@@ -639,7 +643,7 @@ class SitemapTest extends TestCase
      */
     public function testGetSitemapUrl($storeBaseUrl, $documentRoot, $baseDir, $sitemapPath, $sitemapFileName, $result)
     {
-        /** @var $model Sitemap */
+        /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
             ->setMethods(
                 [
@@ -751,7 +755,7 @@ class SitemapTest extends TestCase
         $this->store->setCode('store');
         $this->store->method('getBaseUrl')->willReturn($storeBaseUrl);
         $this->directoryMock->method('getAbsolutePath')->willReturn($baseDir);
-        /** @var $model Sitemap */
+        /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
             ->setMethods(['_construct'])
             ->setConstructorArgs($this->getModelConstructorArgs())

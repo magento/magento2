@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
 
@@ -45,7 +46,7 @@ class CmsPageTest extends TestCase
         $resolver = new CmsPageItemResolver($configReaderMock, $cmsPageFactoryMock, $itemFactoryMock);
         $items = $resolver->getItems(1);
 
-        $this->assertTrue(count($items) == count($pages));
+        $this->assertCount(count($pages), $items);
         foreach ($pages as $index => $page) {
             $this->assertSame($page->getUpdatedAt(), $items[$index]->getUpdatedAt());
             $this->assertSame('daily', $items[$index]->getChangeFrequency());
