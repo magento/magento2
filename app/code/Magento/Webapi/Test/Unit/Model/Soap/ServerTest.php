@@ -65,22 +65,22 @@ class ServerTest extends TestCase
             $this->any()
         )->method(
             'getBaseUrl'
-        )->will(
-            $this->returnValue('http://magento.com/')
+        )->willReturn(
+            'http://magento.com/'
         );
-        $this->_storeMock->expects($this->any())->method('getCode')->will($this->returnValue('storeCode'));
+        $this->_storeMock->expects($this->any())->method('getCode')->willReturn('storeCode');
 
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
 
         $areaListMock = $this->createMock(AreaList::class);
         $configScopeMock = $this->createMock(ScopeInterface::class);
-        $areaListMock->expects($this->any())->method('getFrontName')->will($this->returnValue('soap'));
+        $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
         $this->_requestMock = $this->getMockBuilder(
             Request::class
@@ -125,7 +125,7 @@ class ServerTest extends TestCase
      */
     public function testGetApiCharset()
     {
-        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('Windows-1251'));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn('Windows-1251');
         $this->assertEquals(
             'Windows-1251',
             $this->_soapServer->getApiCharset(),
@@ -138,7 +138,7 @@ class ServerTest extends TestCase
      */
     public function testGetApiCharsetDefaultEncoding()
     {
-        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue(null));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
         $this->assertEquals(
             Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),

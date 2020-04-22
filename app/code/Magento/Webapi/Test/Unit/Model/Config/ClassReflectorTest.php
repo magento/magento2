@@ -35,8 +35,8 @@ class ClassReflectorTest extends TestCase
             ->addMethods(['process'])
             ->getMock();
         $this->_typeProcessor->method('process')
-            ->will(
-                $this->returnValueMap([['string', 'str'], ['int', 'int']])
+            ->willReturnMap(
+                [['string', 'str'], ['int', 'int']]
             );
         $this->_classReflector = new ClassReflector($this->_typeProcessor);
     }

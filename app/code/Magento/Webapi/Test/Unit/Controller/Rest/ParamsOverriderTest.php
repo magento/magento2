@@ -35,8 +35,8 @@ class ParamsOverriderTest extends TestCase
 
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
-        $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
-        $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
+        $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
+        $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
         $paramOverriderCustomerId = $objectManager->getObject(
             ParamOverriderCustomerId::class,

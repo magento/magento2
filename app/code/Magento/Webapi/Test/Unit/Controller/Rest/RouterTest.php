@@ -46,7 +46,7 @@ class RouterTest extends TestCase
 
         $areaListMock->expects($this->once())
             ->method('getFrontName')
-            ->will($this->returnValue('rest'));
+            ->willReturn('rest');
 
         $objectManager = new ObjectManager($this);
         $this->_request = $objectManager->getObject(

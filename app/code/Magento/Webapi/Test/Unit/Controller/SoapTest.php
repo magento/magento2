@@ -116,13 +116,13 @@ class SoapTest extends TestCase
         )->disableOriginalConstructor()->setMethods(
             ['getLocale']
         )->getMock();
-        $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue('en'));
+        $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
 
-        $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
+        $this->_responseMock->expects($this->any())->method('clearHeaders')->willReturnSelf();
         $this->_responseMock
             ->expects($this->any())
             ->method('getHeaders')
-            ->will($this->returnValue(new Headers()));
+            ->willReturn(new Headers());
 
         $appconfig = $this->createMock(Config::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
@@ -131,13 +131,13 @@ class SoapTest extends TestCase
             $appconfig
         );
 
-        $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
-        $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
-        $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->will($this->returnSelf());
+        $this->_soapServerMock->expects($this->any())->method('setWSDL')->willReturnSelf();
+        $this->_soapServerMock->expects($this->any())->method('setEncoding')->willReturnSelf();
+        $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->willReturnSelf();
         $pathProcessorMock = $this->createMock(PathProcessor::class);
         $areaListMock = $this->createMock(AreaList::class);
         $areaMock = $this->createMock(AreaInterface::class);
-        $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+        $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
 
         $rendererMock = $this->getMockBuilder(RendererFactory::class)
             ->disableOriginalConstructor()

@@ -155,6 +155,6 @@ class OauthUserContextTest extends TestCase
 
         $integration->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($integrationId));
+            ->willReturn($integrationId);
     }
 }

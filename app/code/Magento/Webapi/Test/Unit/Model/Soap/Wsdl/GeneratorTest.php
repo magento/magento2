@@ -82,13 +82,13 @@ class GeneratorTest extends TestCase
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
-        $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
+        $this->_wsdlFactoryMock->expects($this->any())->method('create')->willReturn($_wsdlMock);
 
         $this->_cacheMock = $this->getMockBuilder(
             Webapi::class
         )->disableOriginalConstructor()->getMock();
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        $this->_cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->_cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
 

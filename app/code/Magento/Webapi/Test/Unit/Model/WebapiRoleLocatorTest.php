@@ -69,10 +69,10 @@ class WebapiRoleLocatorTest extends TestCase
             ->getMock();
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($userId));
+            ->willReturn($userId);
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue($userType));
+            ->willReturn($userType);
 
         $this->roleCollectionFactory = $this->getMockBuilder(
             \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
@@ -84,11 +84,11 @@ class WebapiRoleLocatorTest extends TestCase
             ->getMock();
         $this->roleCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->roleCollection));
+            ->willReturn($this->roleCollection);
         $this->roleCollection->expects($this->once())
             ->method('setUserFilter')
             ->with($userId, $userType)
-            ->will($this->returnValue($this->roleCollection));
+            ->willReturn($this->roleCollection);
 
         $this->role = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
@@ -97,7 +97,7 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->roleCollection->expects($this->once())
             ->method('getFirstItem')
-            ->will($this->returnValue($this->role));
+            ->willReturn($this->role);
 
         $this->locator = $this->_objectManager->getObject(
             WebapiRoleLocator::class,

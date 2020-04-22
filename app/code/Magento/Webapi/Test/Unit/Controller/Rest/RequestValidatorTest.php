@@ -92,10 +92,10 @@ class RequestValidatorTest extends TestCase
             );
 
         // Set default expectations used by all tests
-        $this->routeMock->expects($this->any())->method('getServiceClass')->will($this->returnValue(self::SERVICE_ID));
+        $this->routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
         $this->routeMock->expects($this->any())->method('getServiceMethod')
-            ->will($this->returnValue(self::SERVICE_METHOD));
-        $routerMock->expects($this->any())->method('match')->will($this->returnValue($this->routeMock));
+            ->willReturn(self::SERVICE_METHOD);
+        $routerMock->expects($this->any())->method('match')->willReturn($this->routeMock);
 
         parent::setUp();
     }
@@ -107,11 +107,11 @@ class RequestValidatorTest extends TestCase
      */
     public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
     {
-        $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
-        $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->routeMock->expects($this->any())->method('isSecure')->willReturn($isSecureRoute);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['1']);
+        $this->requestMock->expects($this->any())->method('getRequestData')->willReturn([]);
+        $this->requestMock->expects($this->any())->method('isSecure')->willReturn($isSecureRequest);
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
         $this->requestValidator->validate();
     }
 
@@ -133,10 +133,10 @@ class RequestValidatorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Webapi\Exception');
         $this->expectExceptionMessage('Operation allowed only in HTTPS');
-        $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->routeMock->expects($this->any())->method('isSecure')->willReturn(true);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['1']);
+        $this->requestMock->expects($this->any())->method('isSecure')->willReturn(false);
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $this->requestValidator->validate();
     }
@@ -145,8 +145,8 @@ class RequestValidatorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\AuthorizationException');
         $this->expectExceptionMessage('The consumer isn\'t authorized to access 5, 6.');
-        $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
+        $this->authorizationMock->expects($this->once())->method('isAllowed')->willReturn(false);
+        $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['5', '6']);
         $this->requestValidator->validate();
     }
 }
