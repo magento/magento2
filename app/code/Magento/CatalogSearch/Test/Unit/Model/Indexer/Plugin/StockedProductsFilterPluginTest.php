@@ -75,7 +75,9 @@ class StockedProductsFilterPluginTest extends TestCase
     public function testBeforePrepareProductIndex(): void
     {
         /** @var DataProvider|MockObject $dataProviderMock */
-        $dataProviderMock = $this->getMockBuilder(DataProvider::class)->disableOriginalConstructor()->getMock();
+        $dataProviderMock = $this->getMockBuilder(DataProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $indexData = [
             1 => [],
             2 => [],
@@ -88,7 +90,8 @@ class StockedProductsFilterPluginTest extends TestCase
             ->method('isShowOutOfStock')
             ->willReturn(false);
 
-        $stockStatusCriteriaMock = $this->getMockBuilder(StockStatusCriteriaInterface::class)->getMock();
+        $stockStatusCriteriaMock = $this->getMockBuilder(StockStatusCriteriaInterface::class)
+            ->getMock();
         $stockStatusCriteriaMock
             ->expects($this->once())
             ->method('setProductsFilter')
@@ -98,11 +101,13 @@ class StockedProductsFilterPluginTest extends TestCase
             ->method('create')
             ->willReturn($stockStatusCriteriaMock);
 
-        $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)->getMock();
+        $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
+            ->getMock();
         $stockStatusMock->expects($this->atLeastOnce())
             ->method('getStockStatus')
             ->willReturnOnConsecutiveCalls(Stock::STOCK_IN_STOCK, Stock::STOCK_OUT_OF_STOCK);
-        $stockStatusCollectionMock = $this->getMockBuilder(StockStatusCollectionInterface::class)->getMock();
+        $stockStatusCollectionMock = $this->getMockBuilder(StockStatusCollectionInterface::class)
+            ->getMock();
         $stockStatusCollectionMock
             ->expects($this->once())
             ->method('getItems')

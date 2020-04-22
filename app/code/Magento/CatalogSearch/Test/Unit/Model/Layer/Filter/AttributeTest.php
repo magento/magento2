@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
@@ -20,7 +21,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\StripTags;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -83,12 +84,12 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->fulltextCollection =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
+                ->getMock();
         $this->layer->expects($this->atLeastOnce())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
+            ->willReturn($this->fulltextCollection);
         /** @var DataBuilder $itemDataBuilder */
         $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
@@ -108,7 +109,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->frontend = $this->getMockBuilder(AbstractFrontend::class)
             ->disableOriginalConstructor()
@@ -129,7 +130,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $stripTagsFilter->expects($this->any())
             ->method('filter')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -153,54 +154,48 @@ class AttributeTest extends TestCase
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode, $attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeCode, $attributeValue)->willReturnSelf();
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
 
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $filterItem->expects($this->once())
             ->method('setFilter')
-            ->with($this->target)
-            ->will($this->returnSelf());
+            ->with($this->target)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($attributeLabel)
-            ->will($this->returnSelf());
+            ->with($attributeLabel)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeValue)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
-            ->with(0)
-            ->will($this->returnSelf());
+            ->with(0)->willReturnSelf();
 
         $this->state->expects($this->once())
             ->method('addFilter')
-            ->with($filterItem)
-            ->will($this->returnSelf());
+            ->with($filterItem)->willReturnSelf();
 
         $result = $this->target->apply($this->request);
 
@@ -215,33 +210,31 @@ class AttributeTest extends TestCase
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode, $attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeCode, $attributeValue)->willReturnSelf();
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $this->state->expects($this->once())
             ->method('addFilter')
-            ->with($filterItem)
-            ->will($this->returnSelf());
+            ->with($filterItem)->willReturnSelf();
 
         $expectedFilterItems = [];
 
@@ -299,20 +292,20 @@ class AttributeTest extends TestCase
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->frontend->expects($this->once())
             ->method('getSelectOptions')
-            ->will($this->returnValue($selectedOptions));
+            ->willReturn($selectedOptions);
 
         $this->fulltextCollection->expects($this->once())
             ->method('getFacetedData')
-            ->will($this->returnValue($facetedData));
+            ->willReturn($facetedData);
 
         $this->itemDataBuilder->expects($this->at(0))
             ->method('addItemData')
@@ -320,19 +313,17 @@ class AttributeTest extends TestCase
                 $selectedOptions[0]['label'],
                 $selectedOptions[0]['value'],
                 $facetedData[$selectedOptions[0]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
         $this->itemDataBuilder->expects($this->at(1))
             ->method('addItemData')
             ->with(
                 $selectedOptions[1]['label'],
                 $selectedOptions[1]['value'],
                 $facetedData[$selectedOptions[1]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
-            ->will($this->returnValue($builtData));
+            ->willReturn($builtData);
 
         $expectedFilterItems = [
             $this->createFilterItem(0, $builtData[0]['label'], $builtData[0]['value'], $builtData[0]['count']),
@@ -381,7 +372,7 @@ class AttributeTest extends TestCase
             ->willReturn(AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
@@ -399,8 +390,7 @@ class AttributeTest extends TestCase
                 $selectedOptions[0]['label'],
                 $selectedOptions[0]['value'],
                 $facetedData[$selectedOptions[0]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
 
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
@@ -457,27 +447,23 @@ class AttributeTest extends TestCase
 
         $filterItem->expects($this->once())
             ->method('setFilter')
-            ->with($this->target)
-            ->will($this->returnSelf());
+            ->with($this->target)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($label)
-            ->will($this->returnSelf());
+            ->with($label)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($value)
-            ->will($this->returnSelf());
+            ->with($value)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
-            ->with($count)
-            ->will($this->returnSelf());
+            ->with($count)->willReturnSelf();
 
         $this->filterItemFactory->expects($this->at($index))
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         return $filterItem;
     }

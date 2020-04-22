@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
 
 use Magento\CatalogSearch\Model\Autocomplete\DataProvider;
@@ -123,13 +125,13 @@ class DataProviderTest extends TestCase
             ));
         $itemMock->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->itemFactory->expects($this->any())->method('create')->willReturn($itemMock);
 
         $result = $this->model->getItems();
         $this->assertEquals($expected, $result[0]->toArray());
-        $this->assertEquals($this->limit, count($result));
+        $this->assertCount($this->limit, $result);
     }
 
     /**
@@ -143,6 +145,6 @@ class DataProviderTest extends TestCase
         }
         $this->suggestCollection->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator($collectionData)));
+            ->willReturn(new \ArrayIterator($collectionData));
     }
 }

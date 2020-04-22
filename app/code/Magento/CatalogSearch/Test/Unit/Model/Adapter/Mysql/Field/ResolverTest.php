@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Field;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
@@ -113,8 +115,8 @@ class ResolverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         return [
-          [['code_1'], 1, $field, ['code_1' => $field]],
-          [['*'], null, $field, [$field]],
+            [['code_1'], 1, $field, ['code_1' => $field]],
+            [['*'], null, $field, [$field]],
         ];
     }
 }

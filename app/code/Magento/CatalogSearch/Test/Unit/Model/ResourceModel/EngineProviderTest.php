@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
@@ -40,8 +42,8 @@ class EngineProviderTest extends TestCase
         ];
 
         $this->engineResolverMock->expects($this->once())
-        ->method('getCurrentSearchEngine')
-        ->willReturn($currentEngine);
+            ->method('getCurrentSearchEngine')
+            ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
             ->setMethods(['isAvailable'])

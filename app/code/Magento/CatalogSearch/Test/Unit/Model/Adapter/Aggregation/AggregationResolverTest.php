@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation;
 
 use Magento\Catalog\Api\AttributeSetFinderInterface;
@@ -71,7 +73,9 @@ class AggregationResolverTest extends TestCase
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeCollection = $this->getMockBuilder(
             Collection::class
         )
