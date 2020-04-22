@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Block;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -64,14 +66,15 @@ class FormTest extends TestCase
             ->method('getIsGuestAllowToWrite')
             ->willReturn(true);
 
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->getMockForAbstractClass();
         $this->context = $this->createMock(Context::class);
         $this->context->expects(
             $this->any()
         )->method(
             'getStoreManager'
-        )->will(
-            $this->returnValue($this->storeManager)
+        )->willReturn(
+            $this->storeManager
         );
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -79,7 +82,8 @@ class FormTest extends TestCase
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
 
-        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
@@ -107,8 +111,8 @@ class FormTest extends TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue(new DataObject(['id' => $storeId]))
+        )->willReturn(
+            new DataObject(['id' => $storeId])
         );
 
         $this->requestMock->expects($this->once())
@@ -166,7 +170,7 @@ class FormTest extends TestCase
         ];
 
         $this->serializerMock->expects($this->once())->method('serialize')
-            ->will($this->returnValue(json_encode($jsLayout)));
+            ->willReturn(json_encode($jsLayout));
         $this->assertEquals('{"some-layout":"layout information"}', $this->object->getJsLayout());
     }
 }

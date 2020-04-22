@@ -74,12 +74,10 @@ class ReviewSummaryTest extends TestCase
             ['getData', '__wakeup']
         );
         $summaryData->expects($this->atLeastOnce())->method('getData')->willReturnMap(
-            
-                [
-                    ['reviews_count', null, $testSummaryData['reviews_count']],
-                    ['rating_summary', null, $testSummaryData['rating_summary']]
-                ]
-            
+            [
+                ['reviews_count', null, $testSummaryData['reviews_count']],
+                ['rating_summary', null, $testSummaryData['rating_summary']]
+            ]
         );
         $summaryCollection = $this->createPartialMock(
             Collection::class,

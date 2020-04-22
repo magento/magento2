@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Block\Customer;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -47,8 +49,8 @@ class RecentTest extends TestCase
             $this->any()
         )->method(
             'getStoreManager'
-        )->will(
-            $this->returnValue($this->storeManager)
+        )->willReturn(
+            $this->storeManager
         );
         $this->collection = $this->createMock(Collection::class);
         $this->collectionFactory = $this->createPartialMock(
@@ -59,8 +61,8 @@ class RecentTest extends TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->collection)
+        )->willReturn(
+            $this->collection
         );
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);
 
@@ -81,10 +83,10 @@ class RecentTest extends TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue(new DataObject(['id' => 42]))
+        )->willReturn(
+            new DataObject(['id' => 42])
         );
-        $this->currentCustomer->expects($this->any())->method('getCustomerId')->will($this->returnValue(4242));
+        $this->currentCustomer->expects($this->any())->method('getCustomerId')->willReturn(4242);
 
         $this->collection->expects(
             $this->any()
@@ -92,8 +94,8 @@ class RecentTest extends TestCase
             'addStoreFilter'
         )->with(
             42
-        )->will(
-            $this->returnValue($this->collection)
+        )->willReturn(
+            $this->collection
         );
         $this->collection->expects(
             $this->any()
@@ -101,15 +103,15 @@ class RecentTest extends TestCase
             'addCustomerFilter'
         )->with(
             4242
-        )->will(
-            $this->returnValue($this->collection)
+        )->willReturn(
+            $this->collection
         );
         $this->collection->expects(
             $this->any()
         )->method(
             'setDateOrder'
-        )->with()->will(
-            $this->returnValue($this->collection)
+        )->with()->willReturn(
+            $this->collection
         );
         $this->collection->expects(
             $this->any()
@@ -117,16 +119,16 @@ class RecentTest extends TestCase
             'setPageSize'
         )->with(
             5
-        )->will(
-            $this->returnValue($this->collection)
+        )->willReturn(
+            $this->collection
         );
-        $this->collection->expects($this->any())->method('load')->with()->will($this->returnValue($this->collection));
+        $this->collection->expects($this->any())->method('load')->with()->willReturn($this->collection);
         $this->collection->expects(
             $this->any()
         )->method(
             'addReviewSummary'
-        )->with()->will(
-            $this->returnValue($this->collection)
+        )->with()->willReturn(
+            $this->collection
         );
 
         $this->assertSame($this->collection, $this->object->getReviews());

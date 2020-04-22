@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action\Context;
@@ -121,15 +123,17 @@ class PostTest extends TestCase
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeModelMock = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
-        $this->reviewMock = $this->createPartialMock(
-            Review::class,
-            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate', 'getEntityIdByCode']
-        );
+        $this->reviewMock = $this->getMockBuilder(Review::class)
+            ->addMethods(['create'])
+            ->onlyMethods(['__wakeup', 'save', 'getId', 'getResource', 'aggregate', 'getEntityIdByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->reviewFactoryMock = $this->createPartialMock(ReviewFactory::class, ['create']);
-        $this->ratingMock = $this->createPartialMock(
-            Rating::class,
-            ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote']
-        );
+        $this->ratingMock = $this->getMockBuilder(Rating::class)
+            ->addMethods(['setRatingId', 'setReviewId'])
+            ->onlyMethods(['__wakeup', 'addOptionVote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->ratingFactoryMock = $this->createPartialMock(RatingFactory::class, ['create']);
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

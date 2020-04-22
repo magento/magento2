@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Model;
 
@@ -55,9 +56,9 @@ class RssTest extends TestCase
     public function testGetProductCollection()
     {
         $reviewModel = $this->createPartialMock(Review::class, [
-                '__wakeUp',
-                'getProductCollection'
-            ]);
+            '__wakeUp',
+            'getProductCollection'
+        ]);
         $productCollection = $this->createPartialMock(
             Collection::class,
             [
@@ -67,12 +68,12 @@ class RssTest extends TestCase
             ]
         );
         $reviewModel->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue($productCollection));
-        $this->reviewFactory->expects($this->once())->method('create')->will($this->returnValue($reviewModel));
-        $productCollection->expects($this->once())->method('addStatusFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('setDateOrder')->will($this->returnSelf());
-        $this->managerInterface->expects($this->once())->method('dispatch')->will($this->returnSelf());
+            ->willReturn($productCollection);
+        $this->reviewFactory->expects($this->once())->method('create')->willReturn($reviewModel);
+        $productCollection->expects($this->once())->method('addStatusFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('setDateOrder')->willReturnSelf();
+        $this->managerInterface->expects($this->once())->method('dispatch')->willReturnSelf();
         $this->assertEquals($productCollection, $this->rss->getProductCollection());
     }
 }

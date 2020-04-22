@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Model;
 
@@ -114,7 +115,7 @@ class ReviewTest extends TestCase
         $collection = $this->createMock(Collection::class);
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         $this->assertSame($collection, $this->review->getProductCollection());
     }
 
@@ -123,7 +124,7 @@ class ReviewTest extends TestCase
         $collection = $this->createMock(\Magento\Review\Model\ResourceModel\Review\Status\Collection::class);
         $this->statusFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         $this->assertSame($collection, $this->review->getStatusCollection());
     }
 
@@ -134,16 +135,16 @@ class ReviewTest extends TestCase
         $storeId = 0;
         $result = 5;
         $this->resource->expects($this->once())->method('getTotalReviews')
-            ->with($this->equalTo($primaryKey), $this->equalTo($approvedOnly), $this->equalTo($storeId))
-            ->will($this->returnValue($result));
+            ->with($primaryKey, $approvedOnly, $storeId)
+            ->willReturn($result);
         $this->assertSame($result, $this->review->getTotalReviews($primaryKey, $approvedOnly, $storeId));
     }
 
     public function testAggregate()
     {
         $this->resource->expects($this->once())->method('aggregate')
-            ->with($this->equalTo($this->review))
-            ->will($this->returnValue($this->review));
+            ->with($this->review)
+            ->willReturn($this->review);
         $this->assertSame($this->review, $this->review->aggregate());
     }
 
@@ -158,25 +159,25 @@ class ReviewTest extends TestCase
         $summary = new DataObject();
         $summary->setData($testSummaryData);
 
-        $product = $this->createPartialMock(
-            Product::class,
-            ['getId', 'setRatingSummary', '__wakeup']
-        );
-        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->once())->method('setRatingSummary')->with($summary)->will($this->returnSelf());
+        $product = $this->getMockBuilder(Product::class)
+            ->addMethods(['setRatingSummary'])
+            ->onlyMethods(['getId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $product->expects($this->once())->method('setRatingSummary')->with($summary)->willReturnSelf();
 
-        $summaryData = $this->createPartialMock(
-            Summary::class,
-            ['load', 'getData', 'setStoreId', '__wakeup']
-        );
+        $summaryData = $this->getMockBuilder(Summary::class)
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['load', 'getData', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $summaryData->expects($this->once())->method('setStoreId')
-            ->with($this->equalTo($storeId))
-            ->will($this->returnSelf());
+            ->with($storeId)->willReturnSelf();
         $summaryData->expects($this->once())->method('load')
-            ->with($this->equalTo($productId))
-            ->will($this->returnSelf());
-        $summaryData->expects($this->once())->method('getData')->will($this->returnValue($testSummaryData));
-        $this->summaryModMock->expects($this->once())->method('create')->will($this->returnValue($summaryData));
+            ->with($productId)->willReturnSelf();
+        $summaryData->expects($this->once())->method('getData')->willReturn($testSummaryData);
+        $this->summaryModMock->expects($this->once())->method('create')->willReturn($summaryData);
         $this->assertNull($this->review->getEntitySummary($product, $storeId));
     }
 
@@ -189,8 +190,8 @@ class ReviewTest extends TestCase
     {
         $result = 'http://some.url';
         $this->urlInterfaceMock->expects($this->once())->method('getUrl')
-            ->with($this->equalTo('review/product/view'), $this->equalTo(['id' => $this->reviewId]))
-            ->will($this->returnValue($result));
+            ->with('review/product/view', ['id' => $this->reviewId])
+            ->willReturn($result);
         $this->assertSame($result, $this->review->getReviewUrl());
     }
 
@@ -204,13 +205,12 @@ class ReviewTest extends TestCase
     {
         if ($storeId) {
             $this->urlInterfaceMock->expects($this->once())->method('setScope')
-                ->with($this->equalTo($storeId))
-                ->will($this->returnSelf());
+                ->with($storeId)->willReturnSelf();
         }
 
         $this->urlInterfaceMock->expects($this->once())->method('getUrl')
-            ->with($this->equalTo('catalog/product/view'), $this->equalTo(['id' => $productId]))
-            ->will($this->returnValue($result));
+            ->with('catalog/product/view', ['id' => $productId])
+            ->willReturn($result);
         $this->assertSame($result, $this->review->getProductUrl($productId, $storeId));
     }
 
@@ -239,11 +239,11 @@ class ReviewTest extends TestCase
     {
         $store = $this->createMock(Store::class);
         if ($storeId) {
-            $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+            $store->expects($this->once())->method('getId')->willReturn($storeId);
             $this->storeManagerMock->expects($this->once())
                 ->method('getStore')
-                ->with($this->equalTo($store))
-                ->will($this->returnValue($store));
+                ->with($store)
+                ->willReturn($store);
         }
         $this->assertSame($result, $this->review->isAvailableOnStore($store));
     }
@@ -265,8 +265,8 @@ class ReviewTest extends TestCase
         $entityCode = 'test';
         $result = 22;
         $this->resource->expects($this->once())->method('getEntityIdByCode')
-            ->with($this->equalTo($entityCode))
-            ->will($this->returnValue($result));
+            ->with($entityCode)
+            ->willReturn($result);
         $this->assertSame($result, $this->review->getEntityIdByCode($entityCode));
     }
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product;
@@ -114,12 +116,11 @@ class CollectionTest extends TestCase
             ->expects($this->once())
             ->method('prepareSqlCondition')
             ->with($attribute, $condition)
-            ->will($this->returnValue($conditionSqlQuery));
+            ->willReturn($conditionSqlQuery);
         $this->dbSelect
             ->expects($this->once())
             ->method('where')
-            ->with($conditionSqlQuery)
-            ->will($this->returnSelf());
+            ->with($conditionSqlQuery)->willReturnSelf();
         $this->model->addAttributeToFilter($attribute, $condition);
     }
 
@@ -146,7 +147,7 @@ class CollectionTest extends TestCase
             ->expects($this->at(0))
             ->method('quoteInto')
             ->with('rt.review_id=store.review_id AND store.store_id = ?', $storeId)
-            ->will($this->returnValue('sqlQuery'));
+            ->willReturn('sqlQuery');
         $this->model->addAttributeToFilter('stores', ['eq' => $storeId]);
         $this->model->load();
     }
@@ -169,13 +170,13 @@ class CollectionTest extends TestCase
             ->expects($this->at(0))
             ->method('prepareSqlCondition')
             ->with('rdt.customer_id', $sqlConditionWith)
-            ->will($this->returnValue($conditionSqlQuery));
+            ->willReturn($conditionSqlQuery);
         if ($sqlConditionWithSec) {
             $this->connectionMock
                 ->expects($this->at(1))
                 ->method('prepareSqlCondition')
                 ->with('rdt.store_id', $sqlConditionWithSec)
-                ->will($this->returnValue($conditionSqlQuery));
+                ->willReturn($conditionSqlQuery);
         }
         $conditionSqlQuery = $doubleConditionSqlQuery
             ? $conditionSqlQuery . ' AND ' . $conditionSqlQuery
@@ -183,8 +184,7 @@ class CollectionTest extends TestCase
         $this->dbSelect
             ->expects($this->once())
             ->method('where')
-            ->with($conditionSqlQuery)
-            ->will($this->returnSelf());
+            ->with($conditionSqlQuery)->willReturnSelf();
         $this->model->addAttributeToFilter('type', $condition);
     }
 

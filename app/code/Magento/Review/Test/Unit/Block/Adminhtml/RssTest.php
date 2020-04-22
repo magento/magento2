@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Block\Adminhtml;
 
@@ -76,21 +77,20 @@ class RssTest extends TestCase
             'link' => $rssUrl,
             'charset' => 'UTF-8',
             'entries' => [
-                    'title' => 'Product: "Product Name" reviewed by: Product Nick',
-                    'link' => 'http://product.magento.com',
-                    'description' => [
-                            'rss_url' => $rssUrl,
-                            'name' => 'Product Name',
-                            'summary' => 'Product Title',
-                            'review' => 'Product Detail',
-                            'store' => 'Store Name',
+                'title' => 'Product: "Product Name" reviewed by: Product Nick',
+                'link' => 'http://product.magento.com',
+                'description' => [
+                    'rss_url' => $rssUrl,
+                    'name' => 'Product Name',
+                    'summary' => 'Product Title',
+                    'review' => 'Product Detail',
+                    'store' => 'Store Name',
 
-                        ],
                 ],
+            ],
         ];
-        $productModel = $this->createPartialMock(
-            Product::class,
-            [
+        $productModel = $this->getMockBuilder(Product::class)
+            ->addMethods([
                 'getStoreId',
                 'getId',
                 'getReviewId',
@@ -99,28 +99,29 @@ class RssTest extends TestCase
                 'getTitle',
                 'getNickname',
                 'getProductUrl'
-            ]
-        );
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeModel = $this->createMock(Store::class);
-        $this->storeManagerInterface->expects($this->once())->method('getStore')->will($this->returnValue($storeModel));
+        $this->storeManagerInterface->expects($this->once())->method('getStore')->willReturn($storeModel);
         $storeModel->expects($this->once())->method('getName')
-            ->will($this->returnValue($rssData['entries']['description']['store']));
-        $this->urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue($rssUrl));
-        $this->urlBuilder->expects($this->once())->method('setScope')->will($this->returnSelf());
-        $productModel->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
-        $productModel->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $productModel->expects($this->once())->method('getReviewId')->will($this->returnValue(1));
-        $productModel->expects($this->any())->method('getNickName')->will($this->returnValue('Product Nick'));
+            ->willReturn($rssData['entries']['description']['store']);
+        $this->urlBuilder->expects($this->any())->method('getUrl')->willReturn($rssUrl);
+        $this->urlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
+        $productModel->expects($this->any())->method('getStoreId')->willReturn(1);
+        $productModel->expects($this->any())->method('getId')->willReturn(1);
+        $productModel->expects($this->once())->method('getReviewId')->willReturn(1);
+        $productModel->expects($this->any())->method('getNickName')->willReturn('Product Nick');
         $productModel->expects($this->any())->method('getName')
-            ->will($this->returnValue($rssData['entries']['description']['name']));
+            ->willReturn($rssData['entries']['description']['name']);
         $productModel->expects($this->once())->method('getDetail')
-            ->will($this->returnValue($rssData['entries']['description']['review']));
+            ->willReturn($rssData['entries']['description']['review']);
         $productModel->expects($this->once())->method('getTitle')
-            ->will($this->returnValue($rssData['entries']['description']['summary']));
+            ->willReturn($rssData['entries']['description']['summary']);
         $productModel->expects($this->any())->method('getProductUrl')
-            ->will($this->returnValue('http://product.magento.com'));
+            ->willReturn('http://product.magento.com');
         $this->rss->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue([$productModel]));
+            ->willReturn([$productModel]);
 
         $data = $this->block->getRssData();
 
@@ -130,11 +131,26 @@ class RssTest extends TestCase
         $this->assertEquals($rssData['charset'], $data['charset']);
         $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
         $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
-        $this->assertContains($rssData['entries']['description']['rss_url'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['name'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['summary'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['review'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['store'], $data['entries'][0]['description']);
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['rss_url'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['name'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['summary'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['review'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['store'],
+            $data['entries'][0]['description']
+        );
     }
 
     /**

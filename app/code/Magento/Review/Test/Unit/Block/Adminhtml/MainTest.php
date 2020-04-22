@@ -62,26 +62,26 @@ class MainTest extends TestCase
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with('customer id')
-            ->will($this->returnValue($dummyCustomer));
+            ->willReturn($dummyCustomer);
         $this->customerViewHelper->expects($this->once())
             ->method('getCustomerName')
             ->with($dummyCustomer)
-            ->will($this->returnValue(new DataObject()));
+            ->willReturn(new DataObject());
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with('customerId', false)
-            ->will($this->returnValue('customer id'));
+            ->willReturn('customer id');
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with('productId', false)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

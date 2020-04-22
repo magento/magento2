@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Block\Product;
 
@@ -174,7 +175,8 @@ class ReviewTest extends TestCase
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $this->context = $this->getMockBuilder(Context::class)

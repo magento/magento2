@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Helper\Action;
 
 use Magento\Backend\Model\Session;
@@ -22,15 +24,16 @@ class PagerTest extends TestCase
     {
         $sessionMock = $this->getMockBuilder(
             Session::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setData', 'getData']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setData', 'getData']
+            )->getMock();
         $sessionMock->expects(
             $this->any()
         )->method(
             'setData'
         )->with(
-            $this->equalTo('search_result_idsreviews'),
+            'search_result_idsreviews',
             $this->anything()
         );
         $sessionMock->expects(
@@ -38,7 +41,7 @@ class PagerTest extends TestCase
         )->method(
             'getData'
         )->with(
-            $this->equalTo('search_result_idsreviews')
+            'search_result_idsreviews'
         )->willReturn(
             [3, 2, 6, 5]
         );

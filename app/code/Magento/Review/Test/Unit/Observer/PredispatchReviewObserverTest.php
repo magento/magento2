@@ -59,17 +59,17 @@ class PredispatchReviewObserverTest extends TestCase
     protected function setUp() : void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-                                 ->disableOriginalConstructor()
-                                 ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-                              ->disableOriginalConstructor()
-                              ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-                                   ->disableOriginalConstructor()
-                                   ->setMethods(['setRedirect'])
-                                   ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->setMethods(['setRedirect'])
+            ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
-                                   ->getMock();
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->mockObject = $this->objectManager->getObject(
             PredispatchReviewObserver::class,

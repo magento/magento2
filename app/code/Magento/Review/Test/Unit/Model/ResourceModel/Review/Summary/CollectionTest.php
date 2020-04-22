@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Summary;
 
@@ -91,17 +92,17 @@ class CollectionTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->willReturn('main_table_name');
 
         $this->resourceMock->expects($this->once())
             ->method('getTable')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
         $this->collection = $objectManager->getObject(
@@ -121,12 +122,12 @@ class CollectionTest extends TestCase
         $statementMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
         $statementMock->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($this->selectMock, $this->anything())
-            ->will($this->returnValue($statementMock));
+            ->willReturn($statementMock);
 
         $objectMock = $this->createPartialMock(AbstractModel::class, ['setData']);
         $objectMock->expects($this->once())
@@ -135,7 +136,7 @@ class CollectionTest extends TestCase
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
             ->with(Summary::class)
-            ->will($this->returnValue($objectMock));
+            ->willReturn($objectMock);
         $item = $this->collection->fetchItem();
 
         $this->assertEquals($objectMock, $item);
@@ -148,7 +149,7 @@ class CollectionTest extends TestCase
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->selectMock, [])
-            ->will($this->returnValue([$data]));
+            ->willReturn([$data]);
 
         $objectMock = $this->createPartialMock(DataObject::class, ['addData']);
         $objectMock->expects($this->once())
@@ -157,7 +158,7 @@ class CollectionTest extends TestCase
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
             ->with(Summary::class)
-            ->will($this->returnValue($objectMock));
+            ->willReturn($objectMock);
 
         $this->collection->load();
     }

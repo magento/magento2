@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -51,9 +53,9 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $store = $this->createPartialMock(Store::class, ['getId']);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->objectManager = (new ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()

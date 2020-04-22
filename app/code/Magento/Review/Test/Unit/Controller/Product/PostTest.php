@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Controller\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -131,38 +133,35 @@ class PostTest extends TestCase
             Validator::class,
             ['validate']
         );
-        $this->reviewSession = $this->createPartialMock(
-            Generic::class,
-            ['getFormData', 'getRedirectUrl']
-        );
+        $this->reviewSession = $this->getMockBuilder(Generic::class)
+            ->addMethods(['getFormData', 'getRedirectUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->eventManager = $this->createMock(ManagerInterface::class);
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->coreRegistry = $this->createMock(Registry::class);
-        $this->review = $this->createPartialMock(
-            Review::class,
-            [
+        $this->review = $this->getMockBuilder(Review::class)
+            ->addMethods(['setEntityPkValue', 'setStatusId', 'setCustomerId', 'setStoreId', 'setStores'])
+            ->onlyMethods([
                 'setData',
                 'validate',
                 'setEntityId',
                 'getEntityIdByCode',
-                'setEntityPkValue',
-                'setStatusId',
-                'setCustomerId',
-                'setStoreId',
-                'setStores',
                 'save',
                 'getId',
                 'aggregate',
                 'unsetData'
-            ]
-        );
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $reviewFactory = $this->createPartialMock(ReviewFactory::class, ['create']);
         $reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
         $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerId']);
-        $this->rating = $this->createPartialMock(
-            Rating::class,
-            ['setRatingId', 'setReviewId', 'setCustomerId', 'addOptionVote']
-        );
+        $this->rating = $this->getMockBuilder(Rating::class)
+            ->addMethods(['setRatingId', 'setReviewId', 'setCustomerId'])
+            ->onlyMethods(['addOptionVote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $ratingFactory = $this->createPartialMock(RatingFactory::class, ['create']);
         $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rss\Grid;
 
 use Magento\Framework\App\Rss\UrlBuilderInterface;
@@ -44,7 +46,7 @@ class LinkTest extends TestCase
     public function testGetLink()
     {
         $rssUrl = 'http://rss.magento.com';
-        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
+        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->willReturn($rssUrl);
         $this->assertEquals($rssUrl, $this->link->getLink());
     }
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
 
 use Magento\Framework\Data\Form;
@@ -112,21 +114,26 @@ class FormTest extends TestCase
         $this->ratingOptionCollection = $this->createMock(
             Collection::class
         );
-        $this->element = $this->createPartialMock(
-            Text::class,
-            ['setValue', 'setIsChecked']
-        );
-        $this->session = $this->createPartialMock(
-            Generic::class,
-            ['getRatingData', 'setRatingData']
-        );
-        $this->rating = $this->createPartialMock(Rating::class, ['getId', 'getRatingCodes']);
+        $this->element = $this->getMockBuilder(Text::class)
+            ->addMethods(['setValue', 'setIsChecked'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->session = $this->getMockBuilder(Generic::class)
+            ->addMethods(['getRatingData', 'setRatingData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rating = $this->getMockBuilder(Rating::class)
+            ->addMethods(['getRatingCodes'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->optionRating = $this->createMock(Option::class);
         $this->store = $this->createMock(Store::class);
-        $this->form = $this->createPartialMock(
-            Form::class,
-            ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement', 'setValues']
-        );
+        $this->form = $this->getMockBuilder(Form::class)
+            ->addMethods(['setForm', 'setRenderer'])
+            ->onlyMethods(['addFieldset', 'addField', 'getElement', 'setValues'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->directoryReadInterface = $this->createMock(ReadInterface::class);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
