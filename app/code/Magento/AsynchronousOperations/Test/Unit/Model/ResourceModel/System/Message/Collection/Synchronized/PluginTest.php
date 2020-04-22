@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\System\Message\Collection\Synchronized;
 
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
@@ -123,8 +125,11 @@ class PluginTest extends TestCase
      */
     public function testAfterTo($operationDetails)
     {
-        $methods = ['getBulkId', 'getDescription', 'getStatus', 'getStartTime'];
-        $bulkMock = $this->createPartialMock(BulkSummary::class, $methods);
+        $bulkMock = $this->getMockBuilder(BulkSummary::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getBulkId', 'getDescription', 'getStartTime'])
+            ->addMethods(['getStatus'])
+            ->getMock();
         $result = ['items' =>[], 'totalRecords' => 1];
         $userBulks = [$bulkMock];
         $userId = 1;

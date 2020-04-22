@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\Listing\Column;
 
@@ -40,11 +41,11 @@ class NotificationDismissActionsTest extends TestCase
     {
         $this->context = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
-        $processor = $this->createPartialMock(
-            Processor::class,
-            ['getProcessor']
-        );
-        $this->context->expects($this->never())->method('getProcessor')->will($this->returnValue($processor));
+        $processor = $this->getMockBuilder(Processor::class)
+            ->addMethods(['getProcessor'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $objectManager = new ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(
             NotificationDismissActions::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Bulk;
 
 use Magento\AsynchronousOperations\Controller\Adminhtml\Bulk\Details;
@@ -68,10 +70,10 @@ class DetailsTest extends TestCase
         $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
         $layoutMock = $this->createMock(LayoutInterface::class);
 
-        $blockMock = $this->createPartialMock(
-            BlockInterface::class,
-            ['setActive', 'getMenuModel', 'toHtml']
-        );
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['setActive', 'getMenuModel'])
+            ->onlyMethods(['toHtml'])
+            ->getMockForAbstractClass();
         $menuModelMock = $this->createMock(Menu::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
@@ -85,7 +87,7 @@ class DetailsTest extends TestCase
         $this->requestMock->expects($this->once())->method('getParam')->with($parameterName)->willReturn($id);
         $pageMock->expects($this->once())->method('getConfig')->willReturn($pageConfigMock);
         $pageConfigMock->expects($this->once())->method('getTitle')->willReturn($titleMock);
-        $titleMock->expects($this->once())->method('prepend')->with($this->stringContains($id));
+        $titleMock->expects($this->once())->method('prepend');
         $pageMock->expects($this->once())->method('initLayout');
         $this->assertEquals($pageMock, $this->model->execute());
     }
