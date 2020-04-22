@@ -19,6 +19,9 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\Newsletter\Model\Problem
+ */
 class ProblemTest extends TestCase
 {
     /**
@@ -54,7 +57,7 @@ class ProblemTest extends TestCase
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var ProblemModel

@@ -29,6 +29,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @covers \Magento\Newsletter\Model\Queue\TransportBuilder
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransportBuilderTest extends TestCase
@@ -36,40 +38,40 @@ class TransportBuilderTest extends TestCase
     /**
      * @var string
      */
-    protected $builderClassName = TransportBuilder::class;
+    private $builderClassName = TransportBuilder::class;
 
     /**
      * @var TransportBuilder
      */
-    protected $builder;
+    private $builder;
 
     /**
-     * @var FactoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FactoryInterface|MockObject
      */
-    protected $templateFactoryMock;
+    private $templateFactoryMock;
 
     /**
-     * @var Message|\PHPUnit\Framework\MockObject\MockObject
+     * @var Message|MockObject
      */
-    protected $messageMock;
+    private $messageMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
-    protected $objectManagerMock;
+    private $objectManagerMock;
 
     /**
-     * @var SenderResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SenderResolverInterface|MockObject
      */
-    protected $senderResolverMock;
+    private $senderResolverMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
-    protected $mailTransportFactoryMock;
+    private $mailTransportFactoryMock;
 
     /**
-     * @var MessageInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var MessageInterfaceFactory|MockObject
      */
     private $messageFactoryMock;
 

@@ -14,6 +14,9 @@ use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Magento\Newsletter\Model\Observer
+ */
 class ObserverTest extends TestCase
 {
     /**

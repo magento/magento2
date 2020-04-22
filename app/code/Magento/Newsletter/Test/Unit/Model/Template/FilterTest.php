@@ -21,13 +21,16 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
-use Magento\Widget\Model\ResourceModel\Widget;
+use Magento\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
+use Magento\Widget\Model\Widget as WidgetModel;
 use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
+ * @covers \Magento\Newsletter\Model\Template\Filter
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterTest extends TestCase
@@ -35,17 +38,17 @@ class FilterTest extends TestCase
     /**
      * @var Filter
      */
-    protected $filter;
+    private $filter;
 
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManagerMock;
 
     /**
      * @var State|MockObject
      */
-    protected $appState;
+    private $appStateMock;
 
     protected function setUp(): void
     {
@@ -55,7 +58,7 @@ class FilterTest extends TestCase
             '',
             false
         );
-        $this->storeManager = $this->getMockForAbstractClass(
+        $this->storeManagerMock = $this->getMockForAbstractClass(
             StoreManagerInterface::class,
             [],
             '',
@@ -69,11 +72,11 @@ class FilterTest extends TestCase
         $assetRepo = $this->createMock(Repository::class);
         $coreVariableFactory = $this->createPartialMock(VariableFactory::class, ['create']);
         $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
-        $this->appState = $this->createMock(State::class);
+        $this->appStateMock = $this->createMock(State::class);
         $emogrifier = $this->createMock(Emogrifier::class);
         $configVariables = $this->createMock(Variables::class);
-        $widgetResource = $this->createMock(Widget::class);
-        $widget = $this->createMock(\Magento\Widget\Model\Widget::class);
+        $widgetResource = $this->createMock(WidgetResourceModel::class);
+        $widget = $this->createMock(WidgetModel::class);
 
         $this->filter = new Filter(
             $string,
@@ -82,10 +85,10 @@ class FilterTest extends TestCase
             $assetRepo,
             $scopeConfig,
             $coreVariableFactory,
-            $this->storeManager,
+            $this->storeManagerMock,
             $layout,
             $layoutFactory,
-            $this->appState,
+            $this->appStateMock,
             $urlModel,
             $emogrifier,
             $configVariables,
@@ -105,10 +108,10 @@ class FilterTest extends TestCase
         $store->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->storeManager->expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($store);
-        $this->appState->expects($this->once())
+        $this->appStateMock->expects($this->once())
             ->method('emulateAreaCode')
             ->with(
                 'frontend',
@@ -138,7 +141,7 @@ class FilterTest extends TestCase
     {
         $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
-        $this->storeManager->expects($this->never())
+        $this->storeManagerMock->expects($this->never())
             ->method('getStore');
         $result = $this->filter->widgetDirective(
             [
