@@ -8,7 +8,7 @@
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="WYSIWYGDisabledSuite">
         <before>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled disabled" />
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSYWYG" />
         </before>
         <include>
             <group name="WYSIWYGDisabled"/>
@@ -17,7 +17,7 @@
             <group name="skip"/>
         </exclude>
         <after>
-            <magentoCLI stepKey="disableWYSYWYG" command="config:set cms/wysiwyg/enabled enabled" />
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="disableWYSYWYG" />
         </after>
     </suite>
 </suites>
