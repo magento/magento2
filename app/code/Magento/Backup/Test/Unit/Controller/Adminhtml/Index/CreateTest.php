@@ -95,7 +95,7 @@ class CreateTest extends TestCase
      */
     private $createController;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
