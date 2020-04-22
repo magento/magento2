@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Group;
 
 use Magento\Config\Model\Config\Structure\Element\Group;
@@ -40,15 +42,15 @@ class ProxyTest extends TestCase
         $groupMock = $this->createMock(Group::class);
 
         $groupMock->expects($this->once())->method('setData');
-        $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));
+        $groupMock->expects($this->once())->method('getId')->willReturn('group_id');
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
             Group::class
-        )->will(
-            $this->returnValue($groupMock)
+        )->willReturn(
+            $groupMock
         );
 
         $this->_model->setData([], '');

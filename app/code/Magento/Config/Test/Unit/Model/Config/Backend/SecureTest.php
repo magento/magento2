@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Config\Model\Config\Backend\Secure;
@@ -24,7 +26,7 @@ class SecureTest extends TestCase
         $context = (new ObjectManager($this))->getObject(Context::class);
 
         $resource = $this->createMock(Data::class);
-        $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
+        $resource->expects($this->any())->method('addCommitCallback')->willReturn($resource);
         $resourceCollection = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

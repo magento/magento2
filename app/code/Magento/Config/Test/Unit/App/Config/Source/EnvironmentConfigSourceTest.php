@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\EnvironmentConfigSource;
@@ -108,7 +110,7 @@ class EnvironmentConfigSourceTest extends TestCase
         $this->assertSame($expectedArray, $this->source->get());
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($_ENV['CONFIG__UNIT__TEST__VALUE']);
     }

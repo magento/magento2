@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Fieldset\Modules;
 
 use Magento\Backend\Block\Context;
@@ -110,16 +112,16 @@ class DisableOutputTest extends TestCase
 
         $this->moduleListMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Test Name']));
+            ->willReturn(['Test Name']);
         $this->moduleListMock->expects($this->any())
             ->method('has')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->moduleListMock->expects($this->any())
             ->method('getAll')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->moduleListMock->expects($this->any())
             ->method('getOne')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['getUser'])
@@ -139,7 +141,7 @@ class DisableOutputTest extends TestCase
             ->setMethods(['getFieldsetCss'])
             ->disableOriginalConstructor()
             ->getMock();
-        $groupMock->expects($this->any())->method('getFieldsetCss')->will($this->returnValue('test_fieldset_css'));
+        $groupMock->expects($this->any())->method('getFieldsetCss')->willReturn('test_fieldset_css');
 
         $factory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
@@ -188,34 +190,34 @@ class DisableOutputTest extends TestCase
 
         $this->elementMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($this->elementData['htmlId']));
+            ->willReturn($this->elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue($this->elementData['htmlId']));
+            ->willReturn($this->elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($this->elementData['name']));
+            ->willReturn($this->elementData['name']);
         $this->elementMock->expects($this->any())
             ->method('getLegend')
-            ->will($this->returnValue($this->elementData['legend']));
+            ->willReturn($this->elementData['legend']);
         $this->elementMock->expects($this->any())
             ->method('getComment')
-            ->will($this->returnValue($this->elementData['comment']));
+            ->willReturn($this->elementData['comment']);
         $this->elementMock->expects($this->any())
             ->method('getTooltip')
-            ->will($this->returnValue($this->elementData['tooltip']));
+            ->willReturn($this->elementData['tooltip']);
         $this->elementMock->expects($this->any())
             ->method('toHtml')
-            ->will($this->returnValue($this->elementData['elementHTML']));
+            ->willReturn($this->elementData['elementHTML']);
         $this->elementMock->expects($this->any())
             ->method('addField')
-            ->will($this->returnValue($this->elementMock));
+            ->willReturn($this->elementMock);
         $this->elementMock->expects($this->any())
             ->method('setRenderer')
-            ->will($this->returnValue($this->elementMock));
+            ->willReturn($this->elementMock);
         $this->elementMock->expects($this->any())
             ->method('getElements')
-            ->will($this->returnValue([$this->elementMock]));
+            ->willReturn([$this->elementMock]);
     }
 
     /**
@@ -226,18 +228,18 @@ class DisableOutputTest extends TestCase
      */
     public function testRender($expanded, $nested, $extra)
     {
-        $this->elementMock->expects($this->any())->method('getExpanded')->will($this->returnValue($expanded));
-        $this->elementMock->expects($this->any())->method('getIsNested')->will($this->returnValue($nested));
+        $this->elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
+        $this->elementMock->expects($this->any())->method('getIsNested')->willReturn($nested);
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $actualHtml = $this->object->render($this->elementMock);
 
-        $this->assertContains($this->elementData['htmlId'], $actualHtml);
-        $this->assertContains($this->elementData['legend'], $actualHtml);
-        $this->assertContains($this->elementData['comment'], $actualHtml);
-        $this->assertContains($this->elementData['tooltip'], $actualHtml);
-        $this->assertContains($this->elementData['elementHTML'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['htmlId'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['legend'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['comment'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['tooltip'], $actualHtml);
+        $this->assertStringContainsString($this->elementData['elementHTML'], $actualHtml);
         if ($nested) {
-            $this->assertContains('nested', $actualHtml);
+            $this->assertStringContainsString('nested', $actualHtml);
         }
     }
 

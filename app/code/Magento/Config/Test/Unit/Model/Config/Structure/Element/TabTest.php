@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Config\Model\Config\Structure\Element\Iterator\Field;
@@ -42,8 +44,8 @@ class TabTest extends TestCase
     public function testIsVisibleOnlyChecksPresenceOfChildren()
     {
         $this->_model->setData(['showInStore' => 0, 'showInWebsite' => 0, 'showInDefault' => 0], 'store');
-        $this->_iteratorMock->expects($this->once())->method('current')->will($this->returnValue(true));
-        $this->_iteratorMock->expects($this->once())->method('valid')->will($this->returnValue(true));
+        $this->_iteratorMock->expects($this->once())->method('current')->willReturn(true);
+        $this->_iteratorMock->expects($this->once())->method('valid')->willReturn(true);
         $this->assertTrue($this->_model->isVisible());
     }
 }

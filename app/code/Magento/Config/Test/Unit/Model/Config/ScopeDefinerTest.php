@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\ScopeDefiner;
@@ -46,8 +48,8 @@ class ScopeDefinerTest extends TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, 'someStore']]
         );
         $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
@@ -58,8 +60,8 @@ class ScopeDefinerTest extends TestCase
             $this->any()
         )->method(
             'getParam'
-        )->will(
-            $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
+        )->willReturnMap(
+            [['website', null, 'someWebsite'], ['store', null, null]]
         );
         $this->assertEquals(ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Regexceptions
@@ -126,7 +127,7 @@ class RegexceptionsTest extends TestCase
 
         $actual = $this->object->renderCellTemplate($columnName);
         foreach ($this->cellParameters as $parameter) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $parameter,
                 $actual,
                 'Parameter \'' . $parameter . '\' missing in render output.'

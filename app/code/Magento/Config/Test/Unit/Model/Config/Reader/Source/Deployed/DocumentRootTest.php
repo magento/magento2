@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
@@ -28,7 +30,7 @@ class DocumentRootTest extends TestCase
      */
     private $documentRoot;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
@@ -55,7 +57,7 @@ class DocumentRootTest extends TestCase
     {
         $this->configMockSetForDocumentRootIsPub();
 
-        $this->assertSame(true, $this->documentRoot->isPub());
+        $this->assertTrue($this->documentRoot->isPub());
     }
 
     private function configMockSetForDocumentRootIsPub()

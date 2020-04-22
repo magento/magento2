@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
@@ -60,13 +61,11 @@ class TemplateTest extends TestCase
             $this->once()
         )->method(
             'toOptionArray'
-        )->will(
-            $this->returnValue(
-                [
-                    ['value' => 'template_one', 'label' => 'Template One'],
-                    ['value' => 'template_two', 'label' => 'Template Two'],
-                ]
-            )
+        )->willReturn(
+            [
+                ['value' => 'template_one', 'label' => 'Template One'],
+                ['value' => 'template_two', 'label' => 'Template Two'],
+            ]
         );
         $this->_coreRegistry->expects(
             $this->once()
@@ -74,8 +73,8 @@ class TemplateTest extends TestCase
             'registry'
         )->with(
             'config_system_email_template'
-        )->will(
-            $this->returnValue($collection)
+        )->willReturn(
+            $collection
         );
         $this->_emailConfig->expects(
             $this->once()
@@ -83,8 +82,8 @@ class TemplateTest extends TestCase
             'getTemplateLabel'
         )->with(
             'template_new'
-        )->will(
-            $this->returnValue('Template New')
+        )->willReturn(
+            'Template New'
         );
         $expectedResult = [
             [

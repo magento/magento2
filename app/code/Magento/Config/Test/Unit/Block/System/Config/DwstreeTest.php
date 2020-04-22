@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Backend\Block\Template\Context;
@@ -91,14 +93,12 @@ class DwstreeTest extends TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['section', $section],
-                        ['website', $website['expected']['code']],
-                        ['store', $store['expected']['code']],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['section', $section],
+                    ['website', $website['expected']['code']],
+                    ['store', $store['expected']['code']],
+                ]
             );
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsites')

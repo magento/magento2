@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\Loader;
@@ -32,10 +34,11 @@ class LoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_configValueFactory = $this->createPartialMock(
-            ValueFactory::class,
-            ['create', 'getCollection']
-        );
+        $this->_configValueFactory = $this->getMockBuilder(ValueFactory::class)
+            ->addMethods(['getCollection'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_model = new Loader($this->_configValueFactory);
         $this->_configCollection = $this->createMock(Collection::class);
         $this->_configCollection->expects(
@@ -46,34 +49,30 @@ class LoaderTest extends TestCase
             'scope',
             'scopeId',
             'section'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
 
         $configDataMock = $this->createMock(Value::class);
         $this->_configValueFactory->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($configDataMock)
+        )->willReturn(
+            $configDataMock
         );
         $configDataMock->expects(
             $this->any()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->_configCollection)
+        )->willReturn(
+            $this->_configCollection
         );
 
         $this->_configCollection->expects(
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue(
-                [new DataObject(['path' => 'section', 'value' => 10, 'config_id' => 20])]
-            )
+        )->willReturn(
+            [new DataObject(['path' => 'section', 'value' => 10, 'config_id' => 20])]
         );
     }
 

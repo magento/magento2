@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Image
@@ -68,7 +69,7 @@ class ImageTest extends TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->will($this->returnValue($url));
+            ->with(['_type' => $type])->willReturn($url);
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);
@@ -102,11 +103,11 @@ class ImageTest extends TestCase
             . $this->testData['html_id_suffix'];
 
         $html = $this->image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value="test_value"', $html);
-        $this->assertContains(
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value="test_value"', $html);
+        $this->assertStringContainsString(
             '<a href="'
             . $url
             . $this->testData['path']
@@ -115,6 +116,6 @@ class ImageTest extends TestCase
             . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"',
             $html
         );
-        $this->assertContains('<input type="checkbox"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

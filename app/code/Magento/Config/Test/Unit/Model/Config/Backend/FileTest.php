@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Config\Model\Config\Backend\File;
@@ -71,7 +73,7 @@ class FileTest extends TestCase
             ->getMock();
         $this->requestDataMock
             = $this->getMockBuilder(RequestDataInterface::class)
-            ->getMockForAbstractClass();
+                ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();

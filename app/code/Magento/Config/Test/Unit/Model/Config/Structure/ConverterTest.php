@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
 use Magento\Config\Model\Config\Structure\Converter;
@@ -22,8 +24,8 @@ class ConverterTest extends TestCase
         $factoryMock = $this->createMock(Factory::class);
 
         $mapperMock = $this->createMock(Dependencies::class);
-        $mapperMock->expects($this->any())->method('map')->will($this->returnArgument(0));
-        $factoryMock->expects($this->any())->method('create')->will($this->returnValue($mapperMock));
+        $mapperMock->expects($this->any())->method('map')->willReturnArgument(0);
+        $factoryMock->expects($this->any())->method('create')->willReturn($mapperMock);
 
         $this->_model = new Converter($factoryMock);
     }

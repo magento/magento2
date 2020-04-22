@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Config\Model\Config\Structure\Element\Field;
@@ -45,14 +47,12 @@ class FlyweightFactoryTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValueMap(
-                [
-                    [Section::class, [], 'sectionObject'],
-                    [Group::class, [], 'groupObject'],
-                    [Field::class, [], 'fieldObject'],
-                ]
-            )
+        )->willReturnMap(
+            [
+                [Section::class, [], 'sectionObject'],
+                [Group::class, [], 'groupObject'],
+                [Field::class, [], 'fieldObject'],
+            ]
         );
         $this->assertEquals('sectionObject', $this->_model->create('section'));
         $this->assertEquals('groupObject', $this->_model->create('group'));
