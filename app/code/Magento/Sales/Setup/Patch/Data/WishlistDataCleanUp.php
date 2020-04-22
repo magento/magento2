@@ -67,9 +67,29 @@ class WishlistDataCleanUp implements DataPatchInterface
      * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws LocalizedException
      */
     public function apply()
+    {
+        try {
+            $this->cleanSalesOrderItemsTable();
+        } catch (Exception $e) {
+            $this->logger->error(
+                'Sales module WishlistDataCleanUp patch experienced an error and could not be completed.'
+                . ' Please submit a support ticket or email us at security@magento.com.'
+            );
+
+            return $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove login data from sales_order_item table.
+     *
+     * @throws LocalizedException
+     */
+    private function cleanSalesOrderItemsTable()
     {
         $salesSetup = $this->salesSetupFactory->create();
         $tableName = $salesSetup->getTable('sales_order_item');
@@ -116,7 +136,6 @@ class WishlistDataCleanUp implements DataPatchInterface
                 . '". Please submit a support ticket or email us at security@magento.com.'
             );
         }
-        return $this;
     }
 
     /**

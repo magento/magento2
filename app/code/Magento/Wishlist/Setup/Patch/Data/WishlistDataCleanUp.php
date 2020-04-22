@@ -65,10 +65,29 @@ class WishlistDataCleanUp implements DataPatchInterface
 
     /**
      * @inheritdoc
+     */
+    public function apply()
+    {
+        try {
+            $this->cleanWishlistItemOptionTable();
+        } catch (Exception $e) {
+            $this->logger->error(
+                'Wishlist module WishlistDataCleanUp patch experienced an error and could not be completed.'
+                . ' Please submit a support ticket or email us at security@magento.com.'
+            );
+
+            return $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove login data from wishlist_item_option table.
      *
      * @throws LocalizedException
      */
-    public function apply()
+    private function cleanWishlistItemOptionTable()
     {
         $tableName = $this->moduleDataSetup->getTable('wishlist_item_option');
         $select = $this->moduleDataSetup
@@ -113,7 +132,6 @@ class WishlistDataCleanUp implements DataPatchInterface
                 . '". Please submit a support ticket or email us at security@magento.com.'
             );
         }
-        return $this;
     }
 
     /**

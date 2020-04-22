@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Magento\Quote\Setup\Patch\Data;
 
 use Exception;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\DB\Query\Generator;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Psr\Log\LoggerInterface;
 
@@ -65,10 +65,29 @@ class WishlistDataCleanUp implements DataPatchInterface
 
     /**
      * @inheritdoc
+     */
+    public function apply()
+    {
+        try {
+            $this->cleanQuoteItemOptionTable();
+        } catch (Exception $e) {
+            $this->logger->error(
+                'Quote module WishlistDataCleanUp patch experienced an error and could not be completed.'
+                . ' Please submit a support ticket or email us at security@magento.com.'
+            );
+
+            return $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove login data from quote_item_option table.
      *
      * @throws LocalizedException
      */
-    public function apply()
+    private function cleanQuoteItemOptionTable()
     {
         $quoteSetup = $this->quoteSetupFactory->create();
         $tableName = $quoteSetup->getTable('quote_item_option');
@@ -114,7 +133,6 @@ class WishlistDataCleanUp implements DataPatchInterface
                 . '". Please submit a support ticket or email us at security@magento.com.'
             );
         }
-        return $this;
     }
 
     /**
