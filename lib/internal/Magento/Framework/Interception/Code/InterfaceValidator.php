@@ -65,12 +65,6 @@ class InterfaceValidator
                     )
                 );
             }
-            $originMethod = $type->getMethod($originMethodName);
-
-            $pluginMethodParameters = $this->getMethodParameters($pluginMethod);
-            $originMethodParameters = $this->getMethodParameters($originMethod);
-
-            $methodType = $this->getMethodType($pluginMethod->getName());
 
             $subject = array_shift($pluginMethodParameters);
             if ($subject['type'] === null
@@ -82,6 +76,11 @@ class InterfaceValidator
                     )
                 );
             }
+
+            $originMethod = $type->getMethod($originMethodName);
+            $originMethodParameters = $this->getMethodParameters($originMethod);
+            $pluginMethodParameters = $this->getMethodParameters($pluginMethod);
+            $methodType = $this->getMethodType($pluginMethod->getName());
 
             if (self::METHOD_AFTER === $methodType && count($pluginMethodParameters) > 1) {
                 // remove result
