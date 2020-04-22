@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Amqp\Test\Unit\Setup;
 
@@ -184,15 +185,15 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
                 ['queue' => ['amqp' => [
-                            'host' => 'host',
-                            'port' => 'port',
-                            'user' => 'user',
-                            'password' => 'password',
-                            'virtualhost' => 'virtual host',
-                            'ssl' => 'ssl',
-                            'ssl_options' => ['ssl_option' => 'test'],
-                         ]
-                    ]
+                    'host' => 'host',
+                    'port' => 'port',
+                    'user' => 'user',
+                    'password' => 'password',
+                    'virtualhost' => 'virtual host',
+                    'ssl' => 'ssl',
+                    'ssl_options' => ['ssl_option' => 'test'],
+                ]
+                ]
                 ],
             ],
             [
@@ -206,15 +207,15 @@ class ConfigOptionsListTest extends TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
                 ['queue' => ['amqp' => [
-                            'host' => 'host',
-                            'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
-                            'user' => 'user',
-                            'password' => 'password',
-                            'virtualhost' => 'virtual host',
-                            'ssl' => 'ssl',
-                            'ssl_options' => ['ssl_option' => 'test'],
-                         ]
-                    ]
+                    'host' => 'host',
+                    'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
+                    'user' => 'user',
+                    'password' => 'password',
+                    'virtualhost' => 'virtual host',
+                    'ssl' => 'ssl',
+                    'ssl_options' => ['ssl_option' => 'test'],
+                ]
+                ]
                 ],
             ],
             [
