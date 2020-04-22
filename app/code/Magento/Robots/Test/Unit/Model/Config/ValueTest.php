@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Robots\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -93,7 +95,8 @@ class ValueTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
 
         $this->storeManager->expects($this->once())
             ->method('getStore')
