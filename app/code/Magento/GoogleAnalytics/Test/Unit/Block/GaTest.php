@@ -62,7 +62,9 @@ class GaTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock->expects($this->once())
             ->method('getEscaper')
@@ -72,7 +74,9 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
         $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
@@ -139,7 +143,8 @@ class GaTest extends TestCase
     public function testGetCurrentWebsiteId()
     {
         $websiteId = 100;
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)->getMock();
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
+            ->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
         $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
@@ -213,7 +218,9 @@ class GaTest extends TestCase
             $orderItems[] = $orderItemMock;
         }
 
-        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
         $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
         $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
