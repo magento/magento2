@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\AdminNotification\Model\NotificationService
@@ -27,7 +28,7 @@ class NotificationServiceTest extends TestCase
     protected function _getServiceInstanceForMarkAsReadTest($notificationId)
     {
         /**
-         * @var $notificationFactory MockObject|InboxFactory
+         * @var MockObject|InboxFactory $notificationFactory
          */
         $notificationFactory = $this->createPartialMock(
             InboxFactory::class,
@@ -37,17 +38,17 @@ class NotificationServiceTest extends TestCase
             Inbox::class,
             ['load', 'getId', 'save', 'setData', '__sleep', '__wakeup']
         );
-        $notification->expects($this->once())->method('load')->with($notificationId)->will($this->returnSelf());
-        $notification->expects($this->once())->method('getId')->will($this->returnValue($notificationId));
+        $notification->expects($this->once())->method('load')->with($notificationId)->willReturnSelf();
+        $notification->expects($this->once())->method('getId')->willReturn($notificationId);
 
         // when notification Id is valid, add additional expectations
         if ($notificationId) {
-            $notification->expects($this->once())->method('save')->will($this->returnSelf());
+            $notification->expects($this->once())->method('save')->willReturnSelf();
             $notification->expects($this->once())->method('setData')
-                ->with('is_read', 1)->will($this->returnSelf());
+                ->with('is_read', 1)->willReturnSelf();
         }
 
-        $notificationFactory->expects($this->once())->method('create')->will($this->returnValue($notification));
+        $notificationFactory->expects($this->once())->method('create')->willReturn($notification);
         return new NotificationService($notificationFactory);
     }
 
