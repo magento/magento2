@@ -182,9 +182,9 @@ class CatalogRulePriceTest extends TestCase
         $convertedPrice = 0.0;
 
         $this->saleableItemMock->expects($this->once())->method('hasData')
-                ->with('catalog_rule_price')->willReturn(true);
+            ->with('catalog_rule_price')->willReturn(true);
         $this->saleableItemMock->expects($this->once())->method('getData')
-                    ->with('catalog_rule_price')->willReturn($catalogRulePrice);
+            ->with('catalog_rule_price')->willReturn($catalogRulePrice);
 
         $this->assertEquals($convertedPrice, $this->object->getValue());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
@@ -51,8 +53,8 @@ class RuleProductPricesPersistorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->tableSwapperMock = $this->getMockForAbstractClass(
             IndexerTableSwapperInterface::class
         );
@@ -73,7 +75,7 @@ class RuleProductPricesPersistorTest extends TestCase
     {
         $priceData = [
             [
-               'product_id' => 1,
+                'product_id' => 1,
                 'rule_date' => '2017-05-01',
                 'latest_start_date' => '2017-05-10',
                 'earliest_end_date' => '2017-05-20',
