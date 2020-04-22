@@ -50,16 +50,20 @@ class StockTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->_helper = $this->getMockBuilder(Data::class)
-            ->onlyMethods(['isStockAlertAllowed', 'getSaveUrl'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['isStockAlertAllowed', 'getSaveUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_product = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['isAvailable', 'getId', '__wakeup'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['isAvailable', 'getId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             Registry::class
         )->disableOriginalConstructor()
             ->setMethods(
-            ['registry']
-        )->getMock();
+                ['registry']
+            )->getMock();
         $this->_block = $objectManager->getObject(
             Stock::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]

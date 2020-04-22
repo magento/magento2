@@ -162,9 +162,13 @@ class ObserverTest extends TestCase
         $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->getMock();
         $this->sitemapCollectionMock = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['getIterator'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getIterator'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
-            ->onlyMethods(['generateXml'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['generateXml'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->emailFactoryMock = $this->getMockBuilder(
             EmailFactory::class
@@ -186,7 +190,9 @@ class ObserverTest extends TestCase
             ->getMock();
 
         $this->websiteMock = $this->getMockBuilder(Website::class)
-            ->onlyMethods(['getDefaultGroup', 'getDefaultStore'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getDefaultGroup', 'getDefaultStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultStore', 'getId', 'setWebsiteId'])
@@ -205,7 +211,9 @@ class ObserverTest extends TestCase
             )->getMock();
 
         $this->productSalabilityMock = $this->getMockBuilder(ProductSalability::class)
-            ->onlyMethods(['isSalable'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['isSalable'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(

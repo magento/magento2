@@ -50,16 +50,21 @@ class PriceTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->_helper = $this->getMockBuilder(Data::class)
-            ->onlyMethods(['isPriceAlertAllowed', 'getSaveUrl'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['isPriceAlertAllowed', 'getSaveUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCanShowPrice'])->onlyMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
+            ->addMethods(['getCanShowPrice'])
+            ->onlyMethods(['getId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             Registry::class
         )->disableOriginalConstructor()
             ->setMethods(
-            ['registry']
-        )->getMock();
+                ['registry']
+            )->getMock();
         $this->_block = $objectManager->getObject(
             Price::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]

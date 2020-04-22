@@ -40,7 +40,9 @@ class StockTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->_filter = $this->getMockBuilder(MaliciousCode::class)
-            ->onlyMethods(['filter'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['filter'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->imageBuilder = $this->getMockBuilder(ImageBuilder::class)
             ->disableOriginalConstructor()
