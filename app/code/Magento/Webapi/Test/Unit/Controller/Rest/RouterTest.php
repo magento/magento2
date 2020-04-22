@@ -41,8 +41,8 @@ class RouterTest extends TestCase
             Route::class
         )->disableOriginalConstructor()
             ->setMethods(
-            ['match']
-        )->getMock();
+                ['match']
+            )->getMock();
 
         $areaListMock = $this->createMock(AreaList::class);
 

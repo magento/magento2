@@ -56,7 +56,7 @@ class ManagerTest extends TestCase
             IntegrationServiceInterface::class
         )->disableOriginalConstructor()
             ->setMethods(
-            [
+                [
                 'findByName',
                 'update',
                 'create',
@@ -65,19 +65,19 @@ class ManagerTest extends TestCase
                 'findActiveIntegrationByConsumerId',
                 'delete',
                 'getSelectedResources'
-            ]
-        )->getMock();
+                ]
+            )->getMock();
 
         $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
             AuthorizationServiceInterface::class
         )->disableOriginalConstructor()
             ->setMethods(
-            [
+                [
                 'grantPermissions',
                 'grantAllPermissions',
                 'removePermissions'
-            ]
-        )->getMock();
+                ]
+            )->getMock();
 
         $this->subjectMock = $this->createMock(ConfigBasedIntegrationManager::class);
 

@@ -64,7 +64,7 @@ class GeneratorTest extends TestCase
             Wsdl::class
         )->disableOriginalConstructor()
             ->setMethods(
-            [
+                [
                 'addSchemaTypeSection',
                 'addService',
                 'addPortType',
@@ -77,8 +77,8 @@ class GeneratorTest extends TestCase
                 'addBindingOperation',
                 'addSoapOperation',
                 'toXML',
-            ]
-        )->getMock();
+                ]
+            )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
             WsdlFactory::class
         )->setMethods(
