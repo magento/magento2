@@ -342,7 +342,8 @@ class ShippingMethodManagementTest extends TestCase
             'request_success' => false,
             'request_message' => __('Error during VAT Number verification.'),
         ]);
-        $customerVat = $this->createPartialMock(Vat::class,
+        $customerVat = $this->createPartialMock(
+            Vat::class,
             [
                 'checkVatNumber',
                 'isCountryInEU',
