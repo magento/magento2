@@ -35,16 +35,16 @@ class DataTest extends TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnCallback(function ($code) {
+            ->willReturnCallback(function ($code) {
                 $dir = $this->getMockForAbstractClass(ReadInterface::class);
                 $dir->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->willReturnCallback(function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
-                    }));
+                    });
                 return $dir;
-            }));
+            });
 
         $this->helper = (new ObjectManager($this))
             ->getObject(

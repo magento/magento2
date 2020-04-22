@@ -25,12 +25,12 @@ class CollectionTest extends TestCase
         $directoryWrite = $this->getMockBuilder(
             WriteInterface::class
         )->disableOriginalConstructor()->getMock();
-        $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryWrite));
+        $filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryWrite);
 
         $backupData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()->getMock();
-        $backupData->expects($this->any())->method('getExtensions')->will($this->returnValue([]));
+        $backupData->expects($this->any())->method('getExtensions')->willReturn([]);
 
         $directoryWrite->expects($this->any())->method('create')->with('backups');
         $directoryWrite->expects($this->any())->method('getAbsolutePath')->with('backups');

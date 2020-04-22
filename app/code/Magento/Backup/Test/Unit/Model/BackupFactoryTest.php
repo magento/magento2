@@ -55,8 +55,8 @@ class BackupFactoryTest extends TestCase
             $this->at(0)
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator([new DataObject($this->_data)]))
+        )->willReturn(
+            new \ArrayIterator([new DataObject($this->_data)])
         );
 
         $this->_backupModel = $this->createMock(Backup::class);
@@ -68,8 +68,8 @@ class BackupFactoryTest extends TestCase
             'create'
         )->with(
             Collection::class
-        )->will(
-            $this->returnValue($this->_fsCollection)
+        )->willReturn(
+            $this->_fsCollection
         );
         $this->_objectManager->expects(
             $this->at(1)
@@ -77,8 +77,8 @@ class BackupFactoryTest extends TestCase
             'create'
         )->with(
             Backup::class
-        )->will(
-            $this->returnValue($this->_backupModel)
+        )->willReturn(
+            $this->_backupModel
         );
 
         $this->_instance = new BackupFactory($this->_objectManager);
