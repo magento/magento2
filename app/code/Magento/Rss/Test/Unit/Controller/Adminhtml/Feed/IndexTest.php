@@ -69,7 +69,8 @@ class IndexTest extends TestCase
 
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $controllerArguments = $objectManagerHelper->getConstructArguments(
