@@ -57,11 +57,13 @@ class GeneratorTest extends TestCase
     {
         $this->serviceMetadata = $this->getMockBuilder(
             ServiceMetadata::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $_wsdlMock = $this->getMockBuilder(
             Wsdl::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             [
                 'addSchemaTypeSection',
                 'addService',
@@ -81,12 +83,14 @@ class GeneratorTest extends TestCase
             WsdlFactory::class
         )->setMethods(
             ['create']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->willReturn($_wsdlMock);
 
         $this->_cacheMock = $this->getMockBuilder(
             Webapi::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->willReturn(false);
         $this->_cacheMock->expects($this->any())->method('save')->willReturn(true);
 

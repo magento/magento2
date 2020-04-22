@@ -120,21 +120,27 @@ class RestTest extends TestCase
         $this->_requestMock = $this->getRequestMock();
         $this->_requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->_responseMock = $this->getResponseMock();
-        $routerMock = $this->getMockBuilder(Router::class)->setMethods(['match'])
-            ->disableOriginalConstructor()->getMock();
+        $routerMock = $this->getMockBuilder(Router::class)
+            ->setMethods(['match'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_routeMock = $this->getRouteMock();
-        $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)->setMethods([self::SERVICE_METHOD])
-            ->disableOriginalConstructor()->getMock();
+        $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)
+            ->setMethods([self::SERVICE_METHOD])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_oauthServiceMock = $this->getMockBuilder(OauthInterface::class)
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
         $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $paramsOverriderMock = $this->getMockBuilder(ParamsOverrider::class)
             ->setMethods(['overrideParams'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
@@ -142,7 +148,8 @@ class RestTest extends TestCase
             ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $errorProcessorMock = $this->createMock(ErrorProcessor::class);
         $errorProcessorMock->expects($this->any())->method('maskException')->willReturnArgument(0);
@@ -150,7 +157,8 @@ class RestTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->serviceInputProcessorMock = $this->getMockBuilder(ServiceInputProcessor::class)
-            ->disableOriginalConstructor()->setMethods(['process'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['process'])->getMock();
 
         $areaListMock = $this->createMock(AreaList::class);
         $areaMock = $this->createMock(AreaInterface::class);
@@ -303,7 +311,8 @@ class RestTest extends TestCase
                 'getAclResources',
                 'getParameters',
             ])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -323,7 +332,8 @@ class RestTest extends TestCase
                     'getHttpHost',
                     'getMethod',
                 ]
-            )->disableOriginalConstructor()->getMock();
+            )->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**

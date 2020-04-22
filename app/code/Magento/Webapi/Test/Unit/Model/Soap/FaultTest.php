@@ -56,12 +56,14 @@ class FaultTest extends TestCase
         );
         $this->_soapServerMock = $this->getMockBuilder(
             Server::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_soapServerMock->expects($this->any())->method('generateUri')->willReturn(self::WSDL_URL);
 
         $this->_localeResolverMock = $this->getMockBuilder(
             Resolver::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_localeResolverMock->expects(
             $this->any()
         )->method(

@@ -113,7 +113,8 @@ class SoapTest extends TestCase
 
         $localeResolverMock = $this->getMockBuilder(
             Resolver::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['getLocale']
         )->getMock();
         $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');

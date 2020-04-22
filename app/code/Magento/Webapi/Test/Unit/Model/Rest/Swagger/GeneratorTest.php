@@ -66,7 +66,8 @@ class GeneratorTest extends TestCase
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
             ServiceMetadata::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
 
@@ -75,7 +76,8 @@ class GeneratorTest extends TestCase
             SwaggerFactory::class
         )->setMethods(
             ['create']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
         $this->cacheMock = $this->getMockBuilder(Webapi::class)
@@ -93,7 +95,8 @@ class GeneratorTest extends TestCase
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
             ServiceTypeListInterface::class
-        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
+        )->disableOriginalConstructor()
+            ->setMethods(['getDataTypes'])
             ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
             ->method('getDataTypes')
@@ -101,7 +104,8 @@ class GeneratorTest extends TestCase
 
         $storeMock = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $storeMock->expects($this->any())
             ->method('getCode')

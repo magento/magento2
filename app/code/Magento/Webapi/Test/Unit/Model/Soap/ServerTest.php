@@ -56,11 +56,13 @@ class ServerTest extends TestCase
     {
         $this->_storeManagerMock = $this->getMockBuilder(
             StoreManager::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_storeMock = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_storeMock->expects(
             $this->any()
         )->method(
@@ -84,11 +86,13 @@ class ServerTest extends TestCase
 
         $this->_requestMock = $this->getMockBuilder(
             Request::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_soapServerFactory = $this->getMockBuilder(
             ServerFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
         $this->wsdlGenerator = $this->createMock(Generator::class);
