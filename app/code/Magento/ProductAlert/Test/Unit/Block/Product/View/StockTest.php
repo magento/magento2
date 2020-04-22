@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
@@ -55,10 +57,11 @@ class StockTest extends TestCase
             Product::class,
             ['isAvailable', 'getId', '__wakeup']
         );
-        $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
             Registry::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['registry']
         )->getMock();
         $this->_block = $objectManager->getObject(
@@ -70,18 +73,18 @@ class StockTest extends TestCase
 
     public function testSetTemplateStockUrlAllowed()
     {
-        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->willReturn(true);
         $this->_helper->expects(
             $this->once()
         )->method(
             'getSaveUrl'
         )->with(
             'stock'
-        )->will(
-            $this->returnValue('http://url')
+        )->willReturn(
+            'http://url'
         );
 
-        $this->_product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+        $this->_product->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $this->_registry->expects(
             $this->any()
@@ -89,8 +92,8 @@ class StockTest extends TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -111,12 +114,12 @@ class StockTest extends TestCase
             $this->once()
         )->method(
             'isStockAlertAllowed'
-        )->will(
-            $this->returnValue($stockAlertAllowed)
+        )->willReturn(
+            $stockAlertAllowed
         );
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
-        $this->_product->expects($this->any())->method('isAvailable')->will($this->returnValue($productAvailable));
+        $this->_product->expects($this->any())->method('isAvailable')->willReturn($productAvailable);
 
         $this->_registry->expects(
             $this->any()
@@ -124,8 +127,8 @@ class StockTest extends TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($this->_product)
+        )->willReturn(
+            $this->_product
         );
 
         $this->_block->setLayout($this->_layout);
@@ -149,7 +152,7 @@ class StockTest extends TestCase
 
     public function testSetTemplateNoProduct()
     {
-        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
+        $this->_helper->expects($this->once())->method('isStockAlertAllowed')->willReturn(true);
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
         $this->_registry->expects(
@@ -158,8 +161,8 @@ class StockTest extends TestCase
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_block->setLayout($this->_layout);

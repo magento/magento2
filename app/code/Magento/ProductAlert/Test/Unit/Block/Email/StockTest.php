@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Block\Email;
 
 use Magento\Catalog\Block\Product\Image;
@@ -60,7 +62,7 @@ class StockTest extends TestCase
     public function testGetFilteredContent($contentToFilter, $contentFiltered)
     {
         $this->_filter->expects($this->once())->method('filter')->with($contentToFilter)
-            ->will($this->returnValue($contentFiltered));
+            ->willReturn($contentFiltered);
         $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 
