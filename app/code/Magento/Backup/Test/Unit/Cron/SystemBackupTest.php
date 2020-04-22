@@ -32,7 +32,9 @@ class SystemBackupTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->helperMock = $this->getMockBuilder(Helper::class)->disableOriginalConstructor()->getMock();
+        $this->helperMock = $this->getMockBuilder(Helper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cron = $objectManager->getObject(SystemBackup::class, ['backupData' => $this->helperMock]);
     }
 

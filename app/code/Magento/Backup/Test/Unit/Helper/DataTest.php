@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backup\Test\Unit\Helper;
 
 use Magento\Backup\Helper\Data;
@@ -28,21 +30,22 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnCallback(function ($code) {
+            ->willReturnCallback(function ($code) {
                 $dir = $this->getMockForAbstractClass(ReadInterface::class);
                 $dir->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->willReturnCallback(function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
-                    }));
+                    });
                 return $dir;
-            }));
+            });
 
         $this->helper = (new ObjectManager($this))
             ->getObject(

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backup\Test\Unit\Model\Fs;
 
 use Magento\Backup\Helper\Data;
@@ -22,12 +24,14 @@ class CollectionTest extends TestCase
             ->getMock();
         $directoryWrite = $this->getMockBuilder(
             WriteInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryWrite);
 
         $backupData = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $backupData->expects($this->any())->method('getExtensions')->willReturn([]);
 
         $directoryWrite->expects($this->any())->method('create')->with('backups');
