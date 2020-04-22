@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
@@ -80,7 +81,7 @@ class CleanStaticFilesTest extends TestCase
             ->getMock();
         $cleanupFilesMock->expects($this->once())
             ->method('clearMaterializedViewFiles');
-        $this->objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($cleanupFilesMock));
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($cleanupFilesMock);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')

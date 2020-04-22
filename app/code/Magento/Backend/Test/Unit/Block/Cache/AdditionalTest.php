@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Cache;
 
@@ -59,7 +60,7 @@ class AdditionalTest extends TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanImages')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanImagesUrl());
     }
 
@@ -69,7 +70,7 @@ class AdditionalTest extends TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanMedia')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanMediaUrl());
     }
 
@@ -79,7 +80,7 @@ class AdditionalTest extends TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('*/*/cleanStaticFiles')
-            ->will($this->returnValue($expectedUrl));
+            ->willReturn($expectedUrl);
         $this->assertEquals($expectedUrl, $this->additionalBlock->getCleanStaticFilesUrl());
     }
 

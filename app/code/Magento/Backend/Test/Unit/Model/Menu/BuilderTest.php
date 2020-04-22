@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
 use Magento\Backend\Model\Menu;
@@ -36,7 +38,11 @@ class BuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(Factory::class);
-        $this->menuMock = $this->createPartialMock(Menu::class, ['addChild', 'add']);
+        $this->menuMock = $this->getMockBuilder(Menu::class)
+            ->addMethods(['addChild'])
+            ->onlyMethods(['add'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             Builder::class,
@@ -49,10 +55,10 @@ class BuilderTest extends TestCase
     public function testProcessCommand()
     {
         $command = $this->createMock(Add::class);
-        $command->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $command->expects($this->any())->method('getId')->willReturn(1);
         $command2 = $this->createMock(Update::class);
-        $command2->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $command->expects($this->once())->method('chain')->with($this->equalTo($command2));
+        $command2->expects($this->any())->method('getId')->willReturn(1);
+        $command->expects($this->once())->method('chain')->with($command2);
         $this->model->processCommand($command);
         $this->model->processCommand($command2);
     }
@@ -60,11 +66,11 @@ class BuilderTest extends TestCase
     public function testGetResultBuildsTreeStructure()
     {
         $item1 = $this->createMock(Item::class);
-        $item1->expects($this->once())->method('getChildren')->will($this->returnValue($this->menuMock));
-        $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
+        $item1->expects($this->once())->method('getChildren')->willReturn($this->menuMock);
+        $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $item2 = $this->createMock(Item::class);
-        $this->factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($item2));
+        $this->factoryMock->expects($this->at(1))->method('create')->willReturn($item2);
 
         $this->menuMock->expects(
             $this->at(0)
@@ -72,8 +78,8 @@ class BuilderTest extends TestCase
             'add'
         )->with(
             $this->isInstanceOf(Item::class),
-            $this->equalTo(null),
-            $this->equalTo(2)
+            null,
+            2
         );
 
         $this->menuMock->expects(
@@ -82,8 +88,8 @@ class BuilderTest extends TestCase
             'add'
         )->with(
             $this->isInstanceOf(Item::class),
-            $this->equalTo(null),
-            $this->equalTo(4)
+            null,
+            4
         );
 
         $this->model->processCommand(
@@ -136,7 +142,7 @@ class BuilderTest extends TestCase
     {
         $this->expectException('OutOfRangeException');
         $item1 = $this->createMock(Item::class);
-        $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
+        $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $this->model->processCommand(
             new Add(

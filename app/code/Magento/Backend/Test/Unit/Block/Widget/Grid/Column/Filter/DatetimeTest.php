@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
@@ -124,11 +125,11 @@ class DatetimeTest extends TestCase
         $this->model->setValue($value);
 
         $output = $this->model->getHtml();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(),
             $output
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(),
             $output
         );

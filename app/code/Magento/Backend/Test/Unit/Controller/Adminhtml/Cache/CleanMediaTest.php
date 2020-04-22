@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
@@ -108,7 +109,7 @@ class CleanMediaTest extends TestCase
             [MergeService::class, $mergeService],
             [SessionManager::class, $session],
         ];
-        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $resultRedirect->expects($this->once())
             ->method('setPath')

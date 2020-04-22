@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
@@ -72,8 +73,8 @@ class ColumnSetTest extends TestCase
             $this->any()
         )->method(
             'getChildBlocks'
-        )->will(
-            $this->returnValue(['column' => $this->_columnMock])
+        )->willReturn(
+            ['column' => $this->_columnMock]
         );
         $this->_factoryMock = $this->createMock(UrlGeneratorFactory::class);
 
@@ -148,9 +149,9 @@ class ColumnSetTest extends TestCase
         )->method(
             'getUrl'
         )->with(
-            $this->equalTo($itemMock)
-        )->will(
-            $this->returnValue('http://localhost/mng/item/edit')
+            $itemMock
+        )->willReturn(
+            'http://localhost/mng/item/edit'
         );
 
         $factoryMock = $this->createPartialMock(
@@ -162,10 +163,10 @@ class ColumnSetTest extends TestCase
         )->method(
             'createUrlGenerator'
         )->with(
-            $this->equalTo($generatorClass),
-            $this->equalTo(['args' => ['generatorClass' => $generatorClass]])
-        )->will(
-            $this->returnValue($rowUrlGenerator)
+            $generatorClass,
+            ['args' => ['generatorClass' => $generatorClass]]
+        )->willReturn(
+            $rowUrlGenerator
         );
 
         $arguments = [
@@ -177,7 +178,7 @@ class ColumnSetTest extends TestCase
         ];
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var $model \Magento\Backend\Block\Widget\Grid\ColumnSet */
+        /** @var \Magento\Backend\Block\Widget\Grid\ColumnSet $model */
         $model = $objectManagerHelper->getObject(ColumnSet::class, $arguments);
 
         $url = $model->getRowUrl($itemMock);
@@ -287,8 +288,8 @@ class ColumnSetTest extends TestCase
             'countTotals'
         )->with(
             $subCollection
-        )->will(
-            $this->returnValue(new DataObject(['column' => '2']))
+        )->willReturn(
+            new DataObject(['column' => '2'])
         );
 
         // prepare item
@@ -309,8 +310,8 @@ class ColumnSetTest extends TestCase
             'countTotals'
         )->with(
             $collection
-        )->will(
-            $this->returnValue(new DataObject(['test1' => '3', 'test2' => '2']))
+        )->willReturn(
+            new DataObject(['test1' => '3', 'test2' => '2'])
         );
 
         $this->assertEquals(
@@ -329,7 +330,7 @@ class ColumnSetTest extends TestCase
     {
         // prepare block grid
         $gridMock = $this->createPartialMock(Grid::class, ['getCollection']);
-        $gridMock->expects($this->any())->method('getCollection')->will($this->returnValue($collection));
+        $gridMock->expects($this->any())->method('getCollection')->willReturn($collection);
 
         return $gridMock;
     }
@@ -369,8 +370,8 @@ class ColumnSetTest extends TestCase
             'getParentName'
         )->with(
             'grid.columnSet'
-        )->will(
-            $this->returnValue('grid')
+        )->willReturn(
+            'grid'
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -378,8 +379,8 @@ class ColumnSetTest extends TestCase
             'getBlock'
         )->with(
             'grid'
-        )->will(
-            $this->returnValue($gridMock)
+        )->willReturn(
+            $gridMock
         );
     }
 }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Cron;
 
 use Magento\Backend\Cron\CleanCache;
@@ -32,8 +34,8 @@ class CleanCacheTest extends TestCase
             $this->once()
         )->method(
             'getBackend'
-        )->will(
-            $this->returnValue($cacheBackendMock)
+        )->willReturn(
+            $cacheBackendMock
         );
 
         $frontendPoolMock->expects(
@@ -48,8 +50,8 @@ class CleanCacheTest extends TestCase
             $this->any()
         )->method(
             'current'
-        )->will(
-            $this->returnValue($cacheFrontendMock)
+        )->willReturn(
+            $cacheFrontendMock
         );
 
         $objectManagerHelper = new ObjectManager($this);

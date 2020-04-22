@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column;
 
 use Magento\Backend\Block\Widget\Grid\Column\Multistore;
@@ -48,13 +50,13 @@ class MultistoreTest extends TestCase
 
     public function testIsDisplayedReturnsTrueInMultiStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
         $this->assertTrue($this->_model->isDisplayed());
     }
 
     public function testIsDisplayedReturnsFalseInSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
         $this->assertFalse($this->_model->isDisplayed());
     }
 }

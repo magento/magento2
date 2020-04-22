@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Serializer;
@@ -33,7 +35,7 @@ class SerializerTest extends TestCase
             Chooser::class,
             ['getSelectedProducts']
         );
-        $grid->expects($this->once())->method('getSelectedProducts')->will($this->returnValue(['product1']));
+        $grid->expects($this->once())->method('getSelectedProducts')->willReturn(['product1']);
         $arguments = [
             'data' => [
                 'grid_block' => $grid,

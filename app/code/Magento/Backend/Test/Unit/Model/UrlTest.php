@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Helper\Data;
@@ -97,37 +99,38 @@ class UrlTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_menuMock = $this->createPartialMock(
-            Menu::class,
-            ['getFirstAvailableChild', 'get', 'getFirstAvailable']
-        );
+        $this->_menuMock = $this->getMockBuilder(Menu::class)
+            ->addMethods(['getFirstAvailableChild'])
+            ->onlyMethods(['get', 'getFirstAvailable'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_menuConfigMock = $this->createMock(Config::class);
-        $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
+        $this->_menuConfigMock->expects($this->any())->method('getMenu')->willReturn($this->_menuMock);
 
         $this->_formKey = $this->createPartialMock(FormKey::class, ['getFormKey']);
-        $this->_formKey->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
+        $this->_formKey->expects($this->any())->method('getFormKey')->willReturn('salt');
 
         $mockItem = $this->createMock(Item::class);
-        $mockItem->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
-        $mockItem->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $mockItem->expects($this->any())->method('isDisabled')->willReturn(false);
+        $mockItem->expects($this->any())->method('isAllowed')->willReturn(true);
         $mockItem->expects(
             $this->any()
         )->method(
             'getId'
-        )->will(
-            $this->returnValue('Magento_Backend::system_acl_roles')
+        )->willReturn(
+            'Magento_Backend::system_acl_roles'
         );
-        $mockItem->expects($this->any())->method('getAction')->will($this->returnValue('adminhtml/user_role'));
+        $mockItem->expects($this->any())->method('getAction')->willReturn('adminhtml/user_role');
 
         $this->_menuMock->expects(
             $this->any()
         )->method(
             'get'
         )->with(
-            $this->equalTo('Magento_Backend::system_acl_roles')
-        )->will(
-            $this->returnValue($mockItem)
+            'Magento_Backend::system_acl_roles'
+        )->willReturn(
+            $mockItem
         );
 
         $helperMock = $this->createMock(Data::class);
@@ -135,8 +138,8 @@ class UrlTest extends TestCase
             $this->any()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue($this->_areaFrontName)
+        )->willReturn(
+            $this->_areaFrontName
         );
         $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_scopeConfigMock->expects(
@@ -145,8 +148,8 @@ class UrlTest extends TestCase
             'getValue'
         )->with(
             Url::XML_PATH_STARTUP_MENU_ITEM
-        )->will(
-            $this->returnValue('Magento_Backend::system_acl_roles')
+        )->willReturn(
+            'Magento_Backend::system_acl_roles'
         );
 
         $this->_authSessionMock = $this->createMock(Session::class);
@@ -170,12 +173,10 @@ class UrlTest extends TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
         $this->_model = $objectManager->getObject(
             Url::class,
@@ -198,14 +199,18 @@ class UrlTest extends TestCase
     public function testFindFirstAvailableMenuDenied()
     {
         $user = $this->createMock(User::class);
-        $user->expects($this->once())->method('setHasAvailableResources')->with($this->equalTo(false));
-        $mockSession = $this->createPartialMock(Session::class, ['getUser', 'isAllowed']);
+        $user->expects($this->once())->method('setHasAvailableResources')->with(false);
+        $mockSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getUser'])
+            ->onlyMethods(['isAllowed'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $mockSession->expects($this->any())->method('getUser')->will($this->returnValue($user));
+        $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
         $this->_model->setSession($mockSession);
 
-        $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->will($this->returnValue(null));
+        $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->willReturn(null);
 
         $this->assertEquals('*/denied', $this->_model->findFirstAvailableMenu());
     }
@@ -213,15 +218,19 @@ class UrlTest extends TestCase
     public function testFindFirstAvailableMenu()
     {
         $user = $this->createMock(User::class);
-        $mockSession = $this->createPartialMock(Session::class, ['getUser', 'isAllowed']);
+        $mockSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getUser'])
+            ->onlyMethods(['isAllowed'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $mockSession->expects($this->any())->method('getUser')->will($this->returnValue($user));
+        $mockSession->expects($this->any())->method('getUser')->willReturn($user);
 
         $this->_model->setSession($mockSession);
 
         $itemMock = $this->createMock(Item::class);
-        $itemMock->expects($this->once())->method('getAction')->will($this->returnValue('adminhtml/user'));
-        $this->_menuMock->expects($this->any())->method('getFirstAvailable')->will($this->returnValue($itemMock));
+        $itemMock->expects($this->once())->method('getAction')->willReturn('adminhtml/user');
+        $this->_menuMock->expects($this->any())->method('getFirstAvailable')->willReturn($itemMock);
 
         $this->assertEquals('adminhtml/user', $this->_model->findFirstAvailableMenu());
     }
@@ -238,8 +247,8 @@ class UrlTest extends TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue($this->_areaFrontName)
+        )->willReturn(
+            $this->_areaFrontName
         );
 
         $helper = new ObjectManager($this);
@@ -303,18 +312,18 @@ class UrlTest extends TestCase
             $this->exactly(3)
         )->method(
             'getBeforeForwardInfo'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
-        $this->_requestMock->expects($this->once())->method('getRouteName')->will($this->returnValue($routeName));
+        $this->_requestMock->expects($this->once())->method('getRouteName')->willReturn($routeName);
         $this->_requestMock->expects(
             $this->once()
         )->method(
             'getControllerName'
-        )->will(
-            $this->returnValue($controllerName)
+        )->willReturn(
+            $controllerName
         );
-        $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue($actionName));
+        $this->_requestMock->expects($this->once())->method('getActionName')->willReturn($actionName);
         $this->_model->setRequest($this->_requestMock);
 
         $keyFromRequest = $this->_model->getSecretKey();
@@ -338,8 +347,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'route_name'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->_requestMock->expects(
@@ -348,8 +357,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'route_name'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->_requestMock->expects(
@@ -358,8 +367,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'controller_name'
-        )->will(
-            $this->returnValue('catalog')
+        )->willReturn(
+            'catalog'
         );
 
         $this->_requestMock->expects(
@@ -368,8 +377,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'controller_name'
-        )->will(
-            $this->returnValue('catalog')
+        )->willReturn(
+            'catalog'
         );
 
         $this->_requestMock->expects(
@@ -378,8 +387,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'action_name'
-        )->will(
-            $this->returnValue('index')
+        )->willReturn(
+            'index'
         );
 
         $this->_requestMock->expects(
@@ -388,8 +397,8 @@ class UrlTest extends TestCase
             'getBeforeForwardInfo'
         )->with(
             'action_name'
-        )->will(
-            $this->returnValue('index')
+        )->willReturn(
+            'index'
         );
 
         $this->_model->setRequest($this->_requestMock);

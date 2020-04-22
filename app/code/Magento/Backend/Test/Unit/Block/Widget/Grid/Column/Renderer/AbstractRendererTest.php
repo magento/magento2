@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column;
@@ -40,9 +42,9 @@ class AbstractRendererTest extends TestCase
             ->getMock();
         $this->renderer =
             $this->getMockBuilder(AbstractRenderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(null)
+                ->getMock();
     }
 
     /**

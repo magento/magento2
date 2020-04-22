@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Block\Widget\Button
@@ -65,7 +66,7 @@ class ButtonTest extends TestCase
     {
         $this->_blockMock->setData($data);
         $attributes = $this->_blockMock->getAttributesHtml();
-        $this->assertRegExp($expect, $attributes);
+        $this->assertMatchesRegularExpression($expect, $attributes);
     }
 
     /**

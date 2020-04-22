@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer\Radio;
 
 use Magento\Backend\Block\Context;
@@ -37,10 +39,10 @@ class ExtendedTest extends TestCase
             Converter::class,
             ['toFlatArray']
         );
-        $this->_column = $this->createPartialMock(
-            Column::class,
-            ['getValues', 'getIndex', 'getHtmlName']
-        );
+        $this->_column = $this->getMockBuilder(Column::class)
+            ->addMethods(['getValues', 'getIndex', 'getHtmlName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_object = new Extended($context, $this->_converter);
         $this->_object->setColumn($this->_column);
     }
@@ -53,9 +55,9 @@ class ExtendedTest extends TestCase
     public function testRender(array $rowData, $expectedResult)
     {
         $selectedFlatArray = [1 => 'One'];
-        $this->_column->expects($this->once())->method('getValues')->will($this->returnValue($selectedFlatArray));
-        $this->_column->expects($this->once())->method('getIndex')->will($this->returnValue('label'));
-        $this->_column->expects($this->once())->method('getHtmlName')->will($this->returnValue('test[]'));
+        $this->_column->expects($this->once())->method('getValues')->willReturn($selectedFlatArray);
+        $this->_column->expects($this->once())->method('getIndex')->willReturn('label');
+        $this->_column->expects($this->once())->method('getHtmlName')->willReturn('test[]');
         $this->_converter->expects($this->never())->method('toFlatArray');
         $this->assertEquals($expectedResult, $this->_object->render(new DataObject($rowData)));
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
 use Magento\Backend\App\AbstractAction;
@@ -62,11 +64,11 @@ class MassactionKeyTest extends TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getPost')
             ->with('massaction_prepare_key')
-            ->will($this->returnValue('key'));
+            ->willReturn('key');
         $this->requestMock->expects($this->at(1))
             ->method('getPost')
             ->with('key')
-            ->will($this->returnValue($postData));
+            ->willReturn($postData);
         $this->requestMock->expects($this->once())
             ->method('setPostValue')
             ->with('key', $convertedData);
@@ -90,7 +92,7 @@ class MassactionKeyTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('massaction_prepare_key')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->requestMock->expects($this->never())
             ->method('setPostValue');
 

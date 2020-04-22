@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Response\Http;
 
 use Magento\Backend\App\Response\Http\FileFactory as HttpFileFactory;
@@ -52,10 +54,13 @@ class FileFactoryTest extends TestCase
             $this->any()
         )->method(
             'setRedirect'
-        )->will(
-            $this->returnValue($this->_responseMock)
+        )->willReturn(
+            $this->_responseMock
         );
-        $this->_sessionMock = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->_sessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_backendUrl = $this->createMock(Url::class);
         $this->_authMock = $this->createMock(Auth::class);
         $this->_model = $helper->getObject(
@@ -75,8 +80,8 @@ class FileFactoryTest extends TestCase
             \Magento\Backend\Model\Auth\Session::class,
             ['isFirstPageAfterLogin', 'processLogout', 'processLogin']
         );
-        $this->_authMock->expects($this->once())->method('getAuthStorage')->will($this->returnValue($authStorageMock));
-        $authStorageMock->expects($this->once())->method('isFirstPageAfterLogin')->will($this->returnValue(true));
+        $this->_authMock->expects($this->once())->method('getAuthStorage')->willReturn($authStorageMock);
+        $authStorageMock->expects($this->once())->method('isFirstPageAfterLogin')->willReturn(true);
         $this->_sessionMock->expects($this->once())->method('setIsUrlNotice');
         $this->_model->create('fileName', null);
     }
