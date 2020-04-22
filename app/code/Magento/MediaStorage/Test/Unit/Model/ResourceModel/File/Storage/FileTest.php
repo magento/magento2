@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\ResourceModel\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -83,28 +85,26 @@ class FileTest extends TestCase
         )->method(
             'getDirectoryRead'
         )->with(
-            $this->equalTo(DirectoryList::MEDIA)
-        )->will(
-            $this->returnValue($this->directoryReadMock)
+            DirectoryList::MEDIA
+        )->willReturn(
+            $this->directoryReadMock
         );
 
         $this->directoryReadMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->will(
-            $this->returnValueMap(
-                [
-                    ['/', true],
-                    ['folder_one', true],
-                    ['file_three.txt', false],
-                    ['folder_one/.svn', false],
-                    ['folder_one/file_one.txt', false],
-                    ['folder_one/folder_two', true],
-                    ['folder_one/folder_two/.htaccess', false],
-                    ['folder_one/folder_two/file_two.txt', false],
-                ]
-            )
+        )->willReturnMap(
+            [
+                ['/', true],
+                ['folder_one', true],
+                ['file_three.txt', false],
+                ['folder_one/.svn', false],
+                ['folder_one/file_one.txt', false],
+                ['folder_one/folder_two', true],
+                ['folder_one/folder_two/.htaccess', false],
+                ['folder_one/folder_two/file_two.txt', false],
+            ]
         );
 
         $paths = [
@@ -136,9 +136,9 @@ class FileTest extends TestCase
         )->method(
             'readRecursively'
         )->with(
-            $this->equalTo('/')
-        )->will(
-            $this->returnValue($paths)
+            '/'
+        )->willReturn(
+            $paths
         );
 
         $expected = [

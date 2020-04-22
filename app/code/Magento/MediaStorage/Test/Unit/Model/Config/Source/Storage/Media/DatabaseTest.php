@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
@@ -32,13 +34,11 @@ class DatabaseTest extends TestCase
             'get'
         )->with(
             'resource'
-        )->will(
-            $this->returnValue(
-                [
-                    'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
-                    'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
-                ]
-            )
+        )->willReturn(
+            [
+                'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
+                'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
+            ]
         );
         $this->mediaDatabase = new Database($this->deploymentConfig);
     }

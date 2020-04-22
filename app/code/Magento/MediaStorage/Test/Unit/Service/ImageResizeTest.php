@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Service;
 
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
@@ -167,7 +169,7 @@ class ImageResizeTest extends TestCase
             ->willReturn($this->imageMock);
         $this->assetImageMock->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue($this->testfilepath));
+            ->willReturn($this->testfilepath);
         $this->assetImageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->assetImageMock);
@@ -204,10 +206,10 @@ class ImageResizeTest extends TestCase
             ->method('getMediaEntities')
             ->willReturn(
                 ['product_small_image' => [
-                        'type' => 'small_image',
-                        'width' => 75,
-                        'height' => 75
-                    ]
+                    'type' => 'small_image',
+                    'width' => 75,
+                    'height' => 75
+                ]
                 ]
             );
         $this->viewConfigMock->expects($this->any())
@@ -249,31 +251,29 @@ class ImageResizeTest extends TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('fileExists')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->productImageMock->expects($this->any())
             ->method('getCountUsedProductImages')
             ->willReturn(1);
         $this->productImageMock->expects($this->any())
             ->method('getUsedProductImages')
-            ->will(
-                $this->returnCallback(
-                    function () {
-                        $data = [[ 'filepath' => $this->testfilename ]];
-                        foreach ($data as $e) {
-                            yield $e;
-                        }
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
                     }
-                )
+                }
             );
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->with($this->testfilepath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
@@ -292,10 +292,10 @@ class ImageResizeTest extends TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('fileExists')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
@@ -330,11 +330,11 @@ class ImageResizeTest extends TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
@@ -357,10 +357,10 @@ class ImageResizeTest extends TestCase
     {
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('fileExists')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')

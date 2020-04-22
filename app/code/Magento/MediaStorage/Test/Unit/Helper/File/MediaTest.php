@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Helper\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -41,13 +43,13 @@ class MediaTest extends TestCase
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($this->dirMock));
+            ->willReturn($this->dirMock);
         $dateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $dateMock->expects($this->any())
             ->method('date')
-            ->will($this->returnValue(self::UPDATE_TIME));
+            ->willReturn(self::UPDATE_TIME);
         $this->helper = $this->objectManager->getObject(
             Media::class,
             ['filesystem' => $filesystemMock, 'date' => $dateMock]
@@ -69,19 +71,19 @@ class MediaTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $expected = [
             'filename' => $expectedFile,
@@ -115,19 +117,19 @@ class MediaTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->dirMock->expects($this->never())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->never())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->helper->collectFileInfo($mediaDirectory, $path);
     }
@@ -143,19 +145,19 @@ class MediaTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('getRelativePath')
             ->with($mediaDirectory . '/' . $path)
-            ->will($this->returnValue($relativePath));
+            ->willReturn($relativePath);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->with($relativePath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('isReadable')
             ->with($relativePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->dirMock->expects($this->never())
             ->method('readFile')
             ->with($relativePath)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->helper->collectFileInfo($mediaDirectory, $path);
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -20,14 +22,16 @@ class SynchronizationTest extends TestCase
         $content = 'content';
         $relativeFileName = 'config.xml';
 
-        $storageFactoryMock = $this->createPartialMock(
-            DatabaseFactory::class,
-            ['create', '_wakeup']
-        );
-        $storageMock = $this->createPartialMock(
-            Database::class,
-            ['getContent', 'getId', 'loadByFilename', '__wakeup']
-        );
+        $storageFactoryMock = $this->getMockBuilder(DatabaseFactory::class)
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storageMock = $this->getMockBuilder(Database::class)
+            ->addMethods(['getContent'])
+            ->onlyMethods(['getId', 'loadByFilename', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storageFactoryMock->expects($this->once())->method('create')->willReturn($storageMock);
 
         $storageMock->expects($this->once())->method('getContent')->willReturn($content);

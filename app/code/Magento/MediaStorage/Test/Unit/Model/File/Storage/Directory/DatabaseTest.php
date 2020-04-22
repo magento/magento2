@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage\Directory;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -83,10 +85,12 @@ class DatabaseTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->helperStorageDatabase = $this->createMock(DatabaseHelper::class);
         $this->dateModelMock = $this->createMock(DateTime::class);
-        $this->directoryMock = $this->createPartialMock(
-            \Magento\MediaStorage\Model\File\Storage\Directory\Database::class,
-            ['setPath', 'setName', '__wakeup', 'save', 'getParentId']
-        );
+        $this->directoryMock = $this->getMockBuilder(
+            \Magento\MediaStorage\Model\File\Storage\Directory\Database::class
+        )->addMethods(['setPath', 'setName'])
+            ->onlyMethods(['__wakeup', 'save', 'getParentId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->directoryFactoryMock = $this->createPartialMock(
             DatabaseFactory::class,
             ['create']
@@ -100,8 +104,8 @@ class DatabaseTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->directoryMock)
+        )->willReturn(
+            $this->directoryMock
         );
 
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
@@ -112,11 +116,11 @@ class DatabaseTest extends TestCase
         )->with(
             Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
             'default'
-        )->will(
-            $this->returnValue($this->customConnectionName)
+        )->willReturn(
+            $this->customConnectionName
         );
 
-        $this->contextMock->expects($this->once())->method('getLogger')->will($this->returnValue($this->loggerMock));
+        $this->contextMock->expects($this->once())->method('getLogger')->willReturn($this->loggerMock);
 
         $this->directoryDatabase = new \Magento\MediaStorage\Model\File\Storage\Directory\Database(
             $this->contextMock,
@@ -137,7 +141,7 @@ class DatabaseTest extends TestCase
      */
     public function testImportDirectories()
     {
-        $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(1));
+        $this->directoryMock->expects($this->any())->method('getParentId')->willReturn(1);
         $this->directoryMock->expects($this->any())->method('save');
 
         $this->directoryMock->expects(
@@ -161,7 +165,7 @@ class DatabaseTest extends TestCase
      */
     public function testImportDirectoriesFailureWithoutParent()
     {
-        $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(null));
+        $this->directoryMock->expects($this->any())->method('getParentId')->willReturn(null);
 
         $this->loggerMock->expects($this->any())->method('critical');
 
@@ -173,7 +177,7 @@ class DatabaseTest extends TestCase
      */
     public function testImportDirectoriesFailureNotArray()
     {
-        $this->directoryMock->expects($this->never())->method('getParentId')->will($this->returnValue(null));
+        $this->directoryMock->expects($this->never())->method('getParentId')->willReturn(null);
 
         $this->directoryDatabase->importDirectories('not an array');
     }

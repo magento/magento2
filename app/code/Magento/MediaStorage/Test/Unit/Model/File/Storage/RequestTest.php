@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
 use Magento\Framework\App\Request\Http;
@@ -31,7 +33,7 @@ class RequestTest extends TestCase
     {
         $path = '..PathInfo';
         $this->_requestMock = $this->createMock(Http::class);
-        $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
+        $this->_requestMock->expects($this->once())->method('getPathInfo')->willReturn($path);
         $this->_model = new Request($this->_requestMock);
     }
 
