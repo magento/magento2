@@ -37,6 +37,12 @@ class FlushCacheByTags
      */
     private $tagResolver;
 
+    /**
+     * @param FrontendPool $cachePool
+     * @param StateInterface $cacheState
+     * @param string[] $cacheList
+     * @param Resolver $tagResolver
+     */
     public function __construct(
         FrontendPool $cachePool,
         StateInterface $cacheState,
@@ -52,6 +58,10 @@ class FlushCacheByTags
     /**
      * Clean cache when object is saved
      *
+     * @param AbstractResource $subject
+     * @param AbstractResource $result
+     * @param AbstractModel $object
+     * @return AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
@@ -68,6 +78,10 @@ class FlushCacheByTags
     /**
      * Clean cache when object is deleted
      *
+     * @param AbstractResource $subject
+     * @param AbstractResource $result
+     * @param AbstractModel $object
+     * @return AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
@@ -85,6 +99,7 @@ class FlushCacheByTags
      * Clean cache by tags
      *
      * @param string[] $tags
+     * @return void
      */
     private function cleanCacheByTags(array $tags): void
     {
