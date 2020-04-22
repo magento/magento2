@@ -143,8 +143,8 @@ class SaveTest extends TestCase
             ->getMock();
         $this->pathValidator =
             $this->getMockBuilder(AvailablePath::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->fileSystem = $this->createMock(Filesystem::class);
         $this->siteMapFactory = $this->createMock(SitemapFactory::class);
 
