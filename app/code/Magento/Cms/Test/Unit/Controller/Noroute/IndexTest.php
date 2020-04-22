@@ -96,7 +96,7 @@ class IndexTest extends TestCase
         $this->_controller = $helper->getObject(
             Index::class,
             ['response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock,
-            'resultForwardFactory' => $this->forwardFactoryMock
+                'resultForwardFactory' => $this->forwardFactoryMock
             ]
         );
     }

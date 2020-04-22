@@ -66,7 +66,7 @@ class DataProviderTest extends TestCase
      */
     private $requestFieldName = 'id';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()

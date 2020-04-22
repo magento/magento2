@@ -39,7 +39,7 @@ class GetPageByIdentifierTest extends TestCase
      */
     protected $pageResource;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor(true)

@@ -129,7 +129,8 @@ class SaveTest extends TestCase
 
         $this->blockMock = $this->getMockBuilder(
             Block::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
@@ -291,7 +292,8 @@ class SaveTest extends TestCase
 
         $duplicateBlockMock = $this->getMockBuilder(
             Block::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->blockFactory->expects($this->at(1))
             ->method('create')

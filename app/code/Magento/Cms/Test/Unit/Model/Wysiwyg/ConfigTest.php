@@ -142,7 +142,8 @@ class ConfigTest extends TestCase
             ->setConstructorArgs(
                 [
                     'activeEditor' => $this->getMockBuilder(ActiveEditor::class)
-                        ->disableOriginalConstructor()->getMock(),
+                        ->disableOriginalConstructor()
+                        ->getMock(),
                     'configProviderFactory' => $configProviderFactory,
                     'variablePluginConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                     'widgetPluginConfigProvider' => ['default' => WysiwygDefaultConfig::class],

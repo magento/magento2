@@ -109,7 +109,8 @@ class EditTest extends TestCase
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
 
