@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CmsUrlRewrite\Test\Unit\Model;
 
 use Magento\Cms\Model\Page;
@@ -91,7 +93,7 @@ class CmsPageUrlRewriteGeneratorTest extends TestCase
 
         $urls = $this->urlRewriteGenerator->generate($cmsPage);
         $this->assertEquals($initializesStores[0], $urls[0]->getStoreId());
-        $this->assertFalse(isset($urls[1]));
+        $this->assertArrayNotHasKey(1, $urls);
     }
 
     public function testGenerateForSpecificStores()
