@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website as WebsiteValidator;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\Directory\Model\Currency;
 use Magento\Store\Model\Website;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class WebsiteTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\WebSite|MockObject
+     * @var Website|MockObject
      */
     protected $webSiteModel;
 
@@ -26,7 +28,7 @@ class WebsiteTest extends TestCase
     protected $storeResolver;
 
     /**
-     * @var  AdvancedPricing\Validator\Website|MockObject
+     * @var  WebsiteValidator|MockObject
      */
     protected $website;
 
@@ -42,7 +44,7 @@ class WebsiteTest extends TestCase
         );
 
         $this->website = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
+            WebsiteValidator::class
         )
             ->setMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])
@@ -87,7 +89,7 @@ class WebsiteTest extends TestCase
         ];
         $allWebsitesValue = 'not tier|group price website value';
         $colTierPriceWebsite = false;
-        $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
+        $expectedMessages = [WebsiteValidator::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
@@ -109,7 +111,7 @@ class WebsiteTest extends TestCase
 
         $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
         $websiteString = $this->getMockBuilder(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class
+            WebsiteValidator::class
         )
             ->setMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel])

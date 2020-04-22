@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
 
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
@@ -18,6 +21,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -86,7 +90,7 @@ class AdvancedPricingTest extends TestCase
     protected $attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryColFactory;
 
@@ -174,27 +178,21 @@ class AdvancedPricingTest extends TestCase
             ]
         );
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
-        $this->productFactory = $this->createPartialMock(
-            ProductFactory::class,
-            [
-                'create',
-                'getTypeId',
-            ]
-        );
-        $this->attrSetColFactory = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
-            [
-                'create',
-                'setEntityTypeFilter',
-            ]
-        );
-        $this->categoryColFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
-            [
-                'create',
-                'addNameToResult',
-            ]
-        );
+        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
+            ->addMethods(['getTypeId'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
+            ->addMethods(['setEntityTypeFilter'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
+            ->addMethods(['addNameToResult'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->itemFactory = $this->createMock(ItemFactory::class);
         $this->optionColFactory = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
@@ -214,9 +212,9 @@ class AdvancedPricingTest extends TestCase
         $this->writer = $this->createPartialMock(
             AbstractAdapter::class,
             [
-            'setHeaderCols',
-            'writeRow',
-            'getContents',
+                'setHeaderCols',
+                'writeRow',
+                'getContents',
             ]
         );
         $constructorMethods = [
@@ -249,7 +247,7 @@ class AdvancedPricingTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($constructorMethods as $method) {
-            $this->advancedPricing->expects($this->once())->method($method)->will($this->returnSelf());
+            $this->advancedPricing->expects($this->once())->method($method)->willReturnSelf();
         }
         $this->advancedPricing->__construct(
             $this->localeDate,

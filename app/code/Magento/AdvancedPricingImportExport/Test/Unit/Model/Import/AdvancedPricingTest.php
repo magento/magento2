@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
@@ -194,10 +195,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
         );
         $this->stringObject = $this->createMock(StringUtils::class);
         $this->errorAggregator = $this->getErrorAggregatorObject();
-        $this->dateTime = $this->createPartialMock(
-            DateTime::class,
-            ['date', 'format']
-        );
+        $this->dateTime = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['format'])
+            ->onlyMethods(['date'])
+            ->getMock();
         $this->dateTime->method('date')->willReturnSelf();
 
         $this->advancedPricing = $this->getAdvancedPricingMock(
