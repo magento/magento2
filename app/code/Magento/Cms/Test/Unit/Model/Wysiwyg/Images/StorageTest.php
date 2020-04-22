@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Backend\Model\Session;
@@ -41,7 +43,6 @@ class StorageTest extends TestCase
      * Directory paths samples
      */
     const STORAGE_ROOT_DIR = '/storage/root/dir/';
-
     const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
 
     /**
@@ -155,20 +156,15 @@ class StorageTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
+            ->onlyMethods(['getRealPathSafety'])
             ->getMockForAbstractClass();
 
-        $this->directoryMock = $this->createPartialMock(
-            Write::class,
-            ['delete', 'getDriver', 'create', 'getRelativePath', 'isExist', 'isFile']
-        );
-        $this->directoryMock->expects(
-            $this->any()
-        )->method(
-            'getDriver'
-        )->will(
-            $this->returnValue($this->driverMock)
-        );
+        $this->directoryMock = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['delete', 'create', 'getRelativePath', 'isExist', 'isFile', 'getDriver'])
+            ->getMock();
+        $this->directoryMock->method('getDriver')
+            ->will($this->returnValue($this->driverMock));
 
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->filesystemMock->expects(
@@ -377,7 +373,10 @@ class StorageTest extends TestCase
         $collection = [];
         foreach ($fileNames as $filename) {
             /** @var DataObject|MockObject $objectMock */
-            $objectMock = $this->createPartialMock(DataObject::class, ['getFilename']);
+            $objectMock = $this->getMockBuilder(DataObject::class)
+                ->disableOriginalConstructor()
+                ->addMethods(['getFilename'])
+                ->getMock();
             $objectMock->expects($this->any())
                 ->method('getFilename')
                 ->willReturn(self::STORAGE_ROOT_DIR . $filename);

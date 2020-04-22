@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\Page;
@@ -117,9 +119,7 @@ class PageTest extends TestCase
             ->with($identifier, $storeId)
             ->willReturn($fetchOneResult);
 
-        $this->assertInternalType('string', $this->model->checkIdentifier($identifier, $storeId));
-        # TODO: After migration to PHPUnit 8, replace deprecated method
-        # $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
+        $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
     }
 
     public function testBeforeSave404Identifier()

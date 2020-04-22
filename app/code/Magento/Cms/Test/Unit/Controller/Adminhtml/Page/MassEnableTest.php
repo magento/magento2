@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\MassEnable;
@@ -90,10 +92,11 @@ class MassEnableTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->createPartialMock(
-            Collection::class,
-            ['setIsActive', 'save']
-        );
+        $pageMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setIsActive'])
+            ->onlyMethods(['save'])
+            ->getMock();
         $pageMock->expects($this->once())->method('setIsActive')->with(true)->willReturn(true);
         $pageMock->expects($this->once())->method('save')->willReturn(true);
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\MassDelete;
@@ -24,7 +26,7 @@ class MassDeleteTest extends AbstractMassActionTest
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\Collection|MockObject
+     * @var Collection|MockObject
      */
     protected $pageCollectionMock;
 
@@ -32,13 +34,11 @@ class MassDeleteTest extends AbstractMassActionTest
     {
         parent::setUp();
 
-        $this->collectionFactoryMock = $this->createPartialMock(
-            CollectionFactory::class,
-            ['create']
-        );
-
-        $this->pageCollectionMock =
-            $this->createMock(Collection::class);
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $this->pageCollectionMock = $this->createMock(Collection::class);
 
         $this->massDeleteController = $this->objectManager->getObject(
             MassDelete::class,
@@ -87,11 +87,14 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Page Collection Mock
      *
-     * @return \Magento\Cms\Model\ResourceModel\Page\Collection|MockObject
+     * @return \Magento\Cms\Api\Data\PageInterface|MockObject
      */
     protected function getPageMock()
     {
-        $pageMock = $this->createPartialMock(Collection::class, ['delete']);
+        $pageMock = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['delete'])
+            ->getMockForAbstractClass();
         $pageMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $pageMock;
