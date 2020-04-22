@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Helper;
 
@@ -69,7 +70,7 @@ class CacheTest extends TestCase
         $this->serializer->expects($this->never())
             ->method('unserialize');
 
-        $this->assertSame(false, $this->cacheHelper->loadPartnersFromCache());
+        $this->assertFalse($this->cacheHelper->loadPartnersFromCache());
     }
 
     public function testSavePartnersToCache()

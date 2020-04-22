@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Model;
 
@@ -63,7 +64,7 @@ class PartnersTest extends TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
@@ -72,17 +73,17 @@ class PartnersTest extends TestCase
             ->method('setOptions');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->returnValue($this->returnPackages));
+            ->willReturn($this->returnPackages);
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache']);
         $cacheMock->expects($this->once())
             ->method('savePartnersToCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 
@@ -96,17 +97,17 @@ class PartnersTest extends TestCase
     {
         $this->partnersModelMock->expects($this->once())
             ->method('getApiUrl')
-            ->will($this->returnValue($this->apiUrl));
+            ->willReturn($this->apiUrl);
 
         $curlMock = $this->getCurlMock(['post', 'getBody', 'setOptions']);
         $curlMock->expects($this->once())
             ->method('post');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
-            ->will($this->returnValue($curlMock));
+            ->willReturn($curlMock);
 
         $cacheMock = $this->getCacheMock(['savePartnersToCache', 'loadPartnersFromCache']);
         $cacheMock->expects($this->never())
@@ -115,7 +116,7 @@ class PartnersTest extends TestCase
             ->method('loadPartnersFromCache');
         $this->partnersModelMock->expects($this->once())
             ->method('getCache')
-            ->will($this->returnValue($cacheMock));
+            ->willReturn($cacheMock);
         $this->partnersModelMock->expects($this->once())
             ->method('getReferer');
 

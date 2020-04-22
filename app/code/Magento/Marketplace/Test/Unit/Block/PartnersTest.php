@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Block;
 
@@ -34,11 +35,11 @@ class PartnersTest extends TestCase
         $partnersModelMock = $this->getPartnersModelMock(['getPartners']);
         $partnersModelMock->expects($this->once())
             ->method('getPartners')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->partnersBlockMock->expects($this->once())
             ->method('getPartnersModel')
-            ->will($this->returnValue($partnersModelMock));
+            ->willReturn($partnersModelMock);
 
         $this->partnersBlockMock->getPartners();
     }

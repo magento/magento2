@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Controller\Index;
 
@@ -23,7 +24,7 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->indexControllerMock = $this->getControllerIndexMock(['getResultPageFactory']);
+        $this->indexControllerMock = $this->createPartialMock(Index::class, ['getResultPageFactory']);
     }
 
     /**
@@ -31,75 +32,37 @@ class IndexTest extends TestCase
      */
     public function testExecute()
     {
-        $pageMock = $this->getPageMock(['setActiveMenu', 'addBreadcrumb', 'getConfig']);
+        $pageMock = $this->getMockBuilder(Page::class)
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods(['getConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $pageMock->expects($this->once())
             ->method('setActiveMenu');
         $pageMock->expects($this->once())
             ->method('addBreadcrumb');
 
-        $resultPageFactoryMock = $this->getResultPageFactoryMock(['create']);
+        $resultPageFactoryMock = $this->createPartialMock(PageFactory::class, ['create']);
 
         $resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($pageMock));
+            ->willReturn($pageMock);
 
         $this->indexControllerMock->expects($this->once())
             ->method('getResultPageFactory')
-            ->will($this->returnValue($resultPageFactoryMock));
+            ->willReturn($resultPageFactoryMock);
 
-        $titleMock = $this->getTitleMock(['prepend']);
+        $titleMock = $this->createPartialMock(Title::class, ['prepend']);
         $titleMock->expects($this->once())
             ->method('prepend');
-        $configMock =  $this->getConfigMock(['getTitle']);
+        $configMock = $this->createPartialMock(Config::class, ['getTitle']);
         $configMock->expects($this->once())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $pageMock->expects($this->once())
             ->method('getConfig')
-            ->will($this->returnValue($configMock));
+            ->willReturn($configMock);
 
         $this->indexControllerMock->execute();
-    }
-
-    /**
-     * Gets index controller mock
-     *
-     * @return MockObject|Index
-     */
-    public function getControllerIndexMock($methods = null)
-    {
-        return $this->createPartialMock(Index::class, $methods);
-    }
-
-    /**
-     * @return MockObject|PageFactory
-     */
-    public function getResultPageFactoryMock($methods = null)
-    {
-        return $this->createPartialMock(PageFactory::class, $methods, []);
-    }
-
-    /**
-     * @return MockObject|Config
-     */
-    public function getConfigMock($methods = null)
-    {
-        return $this->createPartialMock(Config::class, $methods, []);
-    }
-
-    /**
-     * @return MockObject|Title
-     */
-    public function getTitleMock($methods = null)
-    {
-        return $this->createPartialMock(Title::class, $methods, []);
-    }
-
-    /**
-     * @return MockObject|Title
-     */
-    public function getPageMock($methods = null)
-    {
-        return $this->createPartialMock(Page::class, $methods, []);
     }
 }
