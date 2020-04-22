@@ -94,7 +94,9 @@ class DateRangeTest extends TestCase
     public function testPrepare($name, $filterData, $expectedCondition)
     {
         /** @var FormDate|MockObject $uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)->disableOriginalConstructor()->getMock();
+        $uiComponent = $this->getMockBuilder(FormDate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $uiComponent->expects($this->any())
             ->method('getContext')

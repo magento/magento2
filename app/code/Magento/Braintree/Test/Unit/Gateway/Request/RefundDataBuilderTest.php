@@ -46,7 +46,7 @@ class RefundDataBuilderTest extends TestCase
      */
     private $transactionId = 'xsd7n';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->paymentModelMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
