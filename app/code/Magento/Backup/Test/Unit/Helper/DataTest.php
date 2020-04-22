@@ -30,7 +30,8 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem->expects($this->any())

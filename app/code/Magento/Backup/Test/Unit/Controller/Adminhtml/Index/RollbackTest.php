@@ -142,9 +142,9 @@ class RollbackTest extends TestCase
             ->getMock();
         $this->resultRedirectFactoryMock =
             $this->getMockBuilder(RedirectFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
