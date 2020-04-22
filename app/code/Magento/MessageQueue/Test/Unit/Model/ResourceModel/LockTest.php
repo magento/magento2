@@ -50,8 +50,10 @@ class LockTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)->disableOriginalConstructor()->getMock();
-        $this->lockFactoryMock = $this->getMockBuilder(LockFactory::class)->disableOriginalConstructor()->getMock();
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->lockFactoryMock = $this->getMockBuilder(LockFactory::class)
+            ->disableOriginalConstructor()->getMock();
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,7 +71,8 @@ class LockTest extends TestCase
     public function testReleaseOutdatedLocks()
     {
         /** @var AdapterInterface|MockObject $adapterMock */
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()->getMock();
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $tableName = 'queue_lock_mock';
         $this->resourceConnectionMock->expects($this->once())->method('getTableName')->willReturn($tableName);
