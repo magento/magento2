@@ -121,7 +121,8 @@ class DataTest extends TestCase
     {
         $storeId = 1;
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMock();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMock();
 
         $this->storeManager->expects($this->once())
             ->method('getStore')
