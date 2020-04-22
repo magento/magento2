@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Module;
 
 use Magento\Framework\Module\FullModuleList;
@@ -106,23 +108,23 @@ class CollectTest extends TestCase
         ];
         $testChangesMockArray = [
             ['entity' => '3',
-            'name' => 'Name',
-            'active' => 'true',
-            'state' => 'enabled',
-            'setup_version' => '2.0.0',
-            'updated_at' => '2015-09-02 18:38:17'],
+                'name' => 'Name',
+                'active' => 'true',
+                'state' => 'enabled',
+                'setup_version' => '2.0.0',
+                'updated_at' => '2015-09-02 18:38:17'],
             ['entity' => '4',
-             'name' => 'Name',
-             'active' => 'true',
-             'state' => 'disabled',
-             'setup_version' => '2.0.0',
-             'updated_at' => '2015-09-02 18:38:17'],
+                'name' => 'Name',
+                'active' => 'true',
+                'state' => 'disabled',
+                'setup_version' => '2.0.0',
+                'updated_at' => '2015-09-02 18:38:17'],
             ['entity' => '5',
-             'name' => 'Name',
-             'active' => 'true',
-             'state' => 'uninstalled',
-             'setup_version' => '2.0.0',
-             'updated_at' => '2015-09-02 18:38:17']
+                'name' => 'Name',
+                'active' => 'true',
+                'state' => 'uninstalled',
+                'setup_version' => '2.0.0',
+                'updated_at' => '2015-09-02 18:38:17']
         ];
         $itemMockArray = [$itemMock];
         $enabledModulesMockArray = [];
@@ -163,7 +165,7 @@ class CollectTest extends TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType('array', $this->model->getModuleData());
+        $this->assertIsArray($this->model->getModuleData());
     }
 
     /**
@@ -180,10 +182,11 @@ class CollectTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Module|MockObject $itemMock */
-        $itemMock = $this->createPartialMock(
-            Module::class,
-            ['getName', 'getData', 'setData', 'getState', 'save']
-        );
+        $itemMock = $this->getMockBuilder(Module::class)
+            ->addMethods(['getName', 'getState'])
+            ->onlyMethods(['getData', 'setData', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -250,7 +253,7 @@ class CollectTest extends TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType('array', $this->model->getModuleData());
+        $this->assertIsArray($this->model->getModuleData());
     }
 
     /**
@@ -267,10 +270,11 @@ class CollectTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Module|MockObject $itemMock */
-        $itemMock = $this->createPartialMock(
-            Module::class,
-            ['getName', 'getData', 'setData', 'getState', 'save']
-        );
+        $itemMock = $this->getMockBuilder(Module::class)
+            ->addMethods(['getName', 'getState'])
+            ->onlyMethods(['getData', 'setData', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $modulesMockArray = [
             'Module_Name1' => [
                 'name' => 'Module_Name1',
@@ -337,7 +341,7 @@ class CollectTest extends TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->assertInternalType('array', $this->model->getModuleData());
+        $this->assertIsArray($this->model->getModuleData());
     }
 
     /**

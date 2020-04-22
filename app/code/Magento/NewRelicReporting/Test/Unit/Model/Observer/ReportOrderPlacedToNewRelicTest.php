@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
 use Magento\Framework\Event;
@@ -96,7 +98,9 @@ class ReportOrderPlacedToNewRelicTest extends TestCase
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
-        $order = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $event->expects($this->once())
             ->method('getOrder')
             ->willReturn($order);

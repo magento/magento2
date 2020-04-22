@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
 use Magento\Backend\Model\Auth\Session;
@@ -111,7 +113,9 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $userMock = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+        $userMock = $this->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->backendAuthSession->expects($this->once())
             ->method('getUser')
             ->willReturn($userMock);
