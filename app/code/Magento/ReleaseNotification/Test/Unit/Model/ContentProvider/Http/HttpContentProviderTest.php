@@ -102,7 +102,7 @@ class HttpContentProviderTest extends TestCase
         $this->httpClientMock->expects($this->once())
             ->method('get')
             ->with($url)
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->httpClientMock->expects($this->never())->method('getBody');
         $this->loggerMock->expects($this->once())
             ->method('warning');
