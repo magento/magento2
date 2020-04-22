@@ -68,8 +68,8 @@ class PathProcessorTest extends TestCase
         $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
         $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
         $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
-           ->method('setCurrentStore')
-           ->with($storeCodeSet);
+            ->method('setCurrentStore')
+            ->with($storeCodeSet);
         $result = $this->model->process($inPath);
         $this->assertSame($this->endpointPath, $result);
     }

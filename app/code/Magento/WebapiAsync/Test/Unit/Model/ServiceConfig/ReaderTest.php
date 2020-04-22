@@ -27,7 +27,7 @@ class ReaderTest extends TestCase
      */
     private $fileResolver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->fileResolver = $this
