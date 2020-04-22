@@ -116,7 +116,7 @@ class BlockTest extends TestCase
     public function testGetIdentities()
     {
         $result = $this->blockModel->getIdentities();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
     }
 
     /**
@@ -334,6 +334,6 @@ class BlockTest extends TestCase
     public function testGetAvailableStatuses()
     {
         $result = $this->blockModel->getAvailableStatuses();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
     }
 }

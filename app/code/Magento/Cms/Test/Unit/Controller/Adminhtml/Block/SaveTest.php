@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
 use Magento\Backend\App\Action\Context;
@@ -127,7 +129,8 @@ class SaveTest extends TestCase
 
         $this->blockMock = $this->getMockBuilder(
             Block::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
@@ -289,7 +292,8 @@ class SaveTest extends TestCase
 
         $duplicateBlockMock = $this->getMockBuilder(
             Block::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->blockFactory->expects($this->at(1))
             ->method('create')

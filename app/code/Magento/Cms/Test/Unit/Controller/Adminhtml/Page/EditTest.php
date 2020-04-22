@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action\Context;
@@ -106,7 +108,8 @@ class EditTest extends TestCase
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
 

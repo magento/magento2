@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
 
 use Magento\Backend\Model\UrlInterface;
@@ -140,7 +142,8 @@ class ConfigTest extends TestCase
             ->setConstructorArgs(
                 [
                     'activeEditor' => $this->getMockBuilder(ActiveEditor::class)
-                        ->disableOriginalConstructor()->getMock(),
+                        ->disableOriginalConstructor()
+                        ->getMock(),
                     'configProviderFactory' => $configProviderFactory,
                     'variablePluginConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                     'widgetPluginConfigProvider' => ['default' => WysiwygDefaultConfig::class],

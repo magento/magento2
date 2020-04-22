@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Helper;
 
 use Magento\Cms\Helper\Page;
@@ -323,7 +325,7 @@ class PageTest extends TestCase
             ->method('getCustomPageLayout')
             ->willReturn($customPageLayout);
         $this->resultPageFactory->expects($this->any())->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);

@@ -56,7 +56,7 @@ class PageActionsTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->scopeUrlBuilderMock = $this->createMock(UrlBuilder::class);
@@ -152,49 +152,49 @@ class PageActionsTest extends TestCase
         $name = 'item_name';
 
         return [
-           [
-              'pageId' => $pageId,
-              'title' => $title,
-              'name' => $name,
-              'items' => [
-                 'data' => [
-                    'items' => [
-                           [
-                                  'page_id' => $pageId,
-                                  'title' => $title,
-                                  'identifier' => $identifier
+            [
+                'pageId' => $pageId,
+                'title' => $title,
+                'name' => $name,
+                'items' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'page_id' => $pageId,
+                                'title' => $title,
+                                'identifier' => $identifier
                             ]
-                          ]
-                      ]
-                  ],
-              'expectedItems' => [
-                  [
-                      'page_id' => $pageId,
-                      'title' => $title,
-                      'identifier' => $identifier,
-                       $name => [
-                          'edit' => [
-                              'href' => 'test/url/edit',
-                              'label' => __('Edit'),
-                          ],
-                          'delete' => [
-                              'href' => 'test/url/delete',
-                              'label' => __('Delete'),
-                              'confirm' => [
-                                  'title' => __('Delete %1', $title),
-                                  'message' => __('Are you sure you want to delete a %1 record?', $title),
-                              ],
-                              'post' => true,
-                          ],
-                          'preview' => [
-                              'href' => 'test/url/view',
-                              'label' => __('View'),
-                              'target' => '_blank'
-                          ]
-                       ],
-                  ],
-              ]
-           ]
+                        ]
+                    ]
+                ],
+                'expectedItems' => [
+                    [
+                        'page_id' => $pageId,
+                        'title' => $title,
+                        'identifier' => $identifier,
+                        $name => [
+                            'edit' => [
+                                'href' => 'test/url/edit',
+                                'label' => __('Edit'),
+                            ],
+                            'delete' => [
+                                'href' => 'test/url/delete',
+                                'label' => __('Delete'),
+                                'confirm' => [
+                                    'title' => __('Delete %1', $title),
+                                    'message' => __('Are you sure you want to delete a %1 record?', $title),
+                                ],
+                                'post' => true,
+                            ],
+                            'preview' => [
+                                'href' => 'test/url/view',
+                                'label' => __('View'),
+                                'target' => '_blank'
+                            ]
+                        ],
+                    ],
+                ]
+            ]
         ];
     }
 }

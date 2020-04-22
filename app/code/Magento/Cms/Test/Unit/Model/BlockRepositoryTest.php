@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
@@ -118,7 +120,8 @@ class BlockRepositoryTest extends TestCase
         $store->expects($this->any())->method('getId')->willReturn(0);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)->disableOriginalConstructor()->getMock();
+        $this->block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)->disableOriginalConstructor()
+            ->getMock();
         $this->blockData = $this->getMockBuilder(BlockInterface::class)
             ->getMock();
         $this->blockSearchResult = $this->getMockBuilder(BlockSearchResultsInterface::class)
@@ -252,7 +255,8 @@ class BlockRepositoryTest extends TestCase
         $total = 10;
 
         /** @var SearchCriteriaInterface $criteria */
-        $criteria = $this->getMockBuilder(SearchCriteriaInterface::class)->getMock();
+        $criteria = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->getMock();
 
         $this->collection->addItem($this->block);
         $this->collection->expects($this->once())

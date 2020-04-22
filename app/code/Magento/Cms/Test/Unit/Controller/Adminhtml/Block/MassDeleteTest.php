@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
 use Magento\Cms\Controller\Adminhtml\Block\MassDelete;
@@ -91,7 +93,10 @@ class MassDeleteTest extends AbstractMassActionTest
      */
     protected function getBlockMock()
     {
-        $blockMock = $this->createPartialMock(Collection::class, ['delete']);
+        $blockMock = $this->getMockBuilder(Collection::class)
+            ->addMethods(['delete'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $blockMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $blockMock;

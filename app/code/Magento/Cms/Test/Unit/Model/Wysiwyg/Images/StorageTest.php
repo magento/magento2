@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
 use Magento\Backend\Model\Session;
@@ -166,8 +168,8 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getDriver'
-        )->will(
-            $this->returnValue($this->driverMock)
+        )->willReturn(
+            $this->driverMock
         );
 
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
@@ -177,8 +179,8 @@ class StorageTest extends TestCase
             'getDirectoryWrite'
         )->with(
             DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->directoryMock)
+        )->willReturn(
+            $this->directoryMock
         );
 
         $this->fileMock   = $this->objectManagerHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
@@ -187,12 +189,10 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getPathInfo'
-        )->will(
-            $this->returnCallback(
-                function ($path) {
-                    return pathinfo($path);
-                }
-            )
+        )->willReturnCallback(
+            function ($path) {
+                return pathinfo($path);
+            }
         );
 
         $this->adapterFactoryMock = $this->createMock(AdapterFactory::class);
@@ -204,8 +204,8 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getStorageRoot'
-        )->will(
-            $this->returnValue(self::STORAGE_ROOT_DIR)
+        )->willReturn(
+            self::STORAGE_ROOT_DIR
         );
 
         $this->resizeParameters = ['width' => 100, 'height' => 50];
@@ -303,7 +303,7 @@ class StorageTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Directory /storage/some/another/dir is not under storage root path.');
-        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
@@ -314,7 +314,7 @@ class StorageTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We can\'t delete root directory /storage/root/dir right now.');
-        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->will($this->returnArgument(0));
+        $this->driverMock->expects($this->atLeastOnce())->method('getRealPathSafety')->willReturnArgument(0);
         $this->imagesStorage->deleteDirectory(self::STORAGE_ROOT_DIR);
     }
 
@@ -377,7 +377,10 @@ class StorageTest extends TestCase
         $collection = [];
         foreach ($fileNames as $filename) {
             /** @var DataObject|MockObject $objectMock */
-            $objectMock = $this->createPartialMock(DataObject::class, ['getFilename']);
+            $objectMock = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getFilename'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $objectMock->expects($this->any())
                 ->method('getFilename')
                 ->willReturn(self::STORAGE_ROOT_DIR . $filename);

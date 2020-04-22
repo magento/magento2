@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Config\Source;
 
 use Magento\Cms\Model\Config\Source\Page;
@@ -57,11 +59,11 @@ class PageTest extends TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($pageCollectionMock));
+            ->willReturn($pageCollectionMock);
 
         $pageCollectionMock->expects($this->once())
             ->method('toOptionIdArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->page->toOptionArray());
     }

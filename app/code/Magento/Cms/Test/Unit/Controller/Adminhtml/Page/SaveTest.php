@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Backend\Model\View\Result\Redirect;
@@ -96,7 +98,8 @@ class SaveTest extends TestCase
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
             PostDataProcessor::class
-        )->setMethods(['filter'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['filter'])->disableOriginalConstructor()
+            ->getMock();
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
