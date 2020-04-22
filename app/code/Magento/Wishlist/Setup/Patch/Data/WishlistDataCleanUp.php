@@ -6,7 +6,6 @@
 declare(strict_types=1);
 namespace Magento\Wishlist\Setup\Patch\Data;
 
-use Exception;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -70,8 +69,8 @@ class WishlistDataCleanUp implements DataPatchInterface
     {
         try {
             $this->cleanWishlistItemOptionTable();
-        } catch (Exception $e) {
-            $this->logger->error(
+        } catch (\Throwable $e) {
+            $this->logger->warning(
                 'Wishlist module WishlistDataCleanUp patch experienced an error and could not be completed.'
                 . ' Please submit a support ticket or email us at security@magento.com.'
             );
@@ -119,7 +118,7 @@ class WishlistDataCleanUp implements DataPatchInterface
                         ['value' => $rowValue],
                         ['option_id = ?' => $optionRow['option_id']]
                     );
-                } catch (Exception $e) {
+                } catch (\Throwable $e) {
                     $rowErrorFlag = true;
                     continue;
                 }
