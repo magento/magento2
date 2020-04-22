@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
@@ -98,18 +99,19 @@ class DownloadableTest extends AbstractImportTestCase
         parent::setUp();
 
         //connection and sql query results
-        $this->connectionMock = $this->createPartialMock(
-            Mysql::class,
-            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
-        );
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['joinLeft'])
+            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->select = $this->createMock(Select::class);
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $adapter = $this->createMock(Mysql::class);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $adapter->expects($this->any())->method('quoteInto')->willReturn('query');
         $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
 
         $this->connectionMock->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connectionMock->expects($this->any())->method('delete')->willReturnSelf();
@@ -128,7 +130,7 @@ class DownloadableTest extends AbstractImportTestCase
         $this->attrSetColMock
             ->expects($this->any())
             ->method('setEntityTypeFilter')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         // 2. $prodAttrColFac
         $this->prodAttrColFacMock = $this->createPartialMock(
@@ -139,35 +141,35 @@ class DownloadableTest extends AbstractImportTestCase
         $attrCollection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
 
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
-        $this->prodAttrColFacMock->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
+        $this->prodAttrColFacMock->expects($this->any())->method('create')->willReturn($attrCollection);
 
         // 3. $resource
         $this->resourceMock = $this->createPartialMock(
             ResourceConnection::class,
             ['getConnection', 'getTableName']
         );
-        $this->resourceMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connectionMock)
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+            $this->connectionMock
         );
-        $this->resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnValue('tableName')
+        $this->resourceMock->expects($this->any())->method('getTableName')->willReturn(
+            'tableName'
         );
 
         // 4. $params
         $this->entityModelMock = $this->createPartialMock(Product::class, [
-                'addMessageTemplate',
-                'getEntityTypeId',
-                'getBehavior',
-                'getNewSku',
-                'getNextBunch',
-                'isRowAllowedToImport',
-                'getParameters',
-                'addRowError'
-            ]);
+            'addMessageTemplate',
+            'getEntityTypeId',
+            'getBehavior',
+            'getNewSku',
+            'getNextBunch',
+            'isRowAllowedToImport',
+            'getParameters',
+            'addRowError'
+        ]);
 
-        $this->entityModelMock->expects($this->any())->method('addMessageTemplate')->will($this->returnSelf());
-        $this->entityModelMock->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(5));
-        $this->entityModelMock->expects($this->any())->method('getParameters')->will($this->returnValue([]));
+        $this->entityModelMock->expects($this->any())->method('addMessageTemplate')->willReturnSelf();
+        $this->entityModelMock->expects($this->any())->method('getEntityTypeId')->willReturn(5);
+        $this->entityModelMock->expects($this->any())->method('getParameters')->willReturn([]);
         $this->paramsArray = [
             $this->entityModelMock,
             'downloadable'
@@ -199,9 +201,9 @@ class DownloadableTest extends AbstractImportTestCase
      */
     public function testSaveDataAppend($newSku, $bunch, $allowImport, $fetchResult)
     {
-        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
-        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
-        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->willReturn($newSku);
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->willReturn($bunch);
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->willReturn(null);
         $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
 
         $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(true);
@@ -698,8 +700,11 @@ class DownloadableTest extends AbstractImportTestCase
             $this->select
         )->willReturn([]);
 
-        $metadataPoolMock = $this
-            ->createPartialMock(MetadataPool::class, ['getLinkField', 'getMetadata']);
+        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->addMethods(['getLinkField'])
+            ->onlyMethods(['getMetadata'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
         $metadataPoolMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
         $this->downloadableHelper->expects($this->atLeastOnce())
@@ -718,12 +723,12 @@ class DownloadableTest extends AbstractImportTestCase
                 'metadataPool' => $metadataPoolMock,
             ]
         );
-        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
-        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
-        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
+        $this->entityModelMock->expects($this->once())->method('getNewSku')->willReturn($newSku);
+        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->willReturn($bunch);
+        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->willReturn(null);
         $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
         $exception = new LocalizedException(new Phrase('Error'));
-        $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
+        $this->uploaderMock->expects($this->any())->method('move')->willThrowException($exception);
         $this->entityModelMock->expects($this->exactly(2))->method('addRowError');
         $result = $this->downloadableModelMock->saveData();
         $this->assertNotNull($result);
