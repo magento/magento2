@@ -36,7 +36,9 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->helperMock = $this->getMockBuilder(Data::class)
-            ->onlyMethods(['isDevAllowed'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['isDevAllowed'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Config(
             $this->scopeConfigMock,
             $this->helperMock
