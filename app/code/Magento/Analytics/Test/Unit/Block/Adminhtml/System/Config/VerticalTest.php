@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 
 use Magento\Analytics\Block\Adminhtml\System\Config\Vertical;
@@ -72,11 +74,11 @@ class VerticalTest extends TestCase
             ->method('getHint')
             ->willReturn('New hint');
         $html = $this->vertical->render($this->abstractElementMock);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New comment/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New hint/",
             $html
         );

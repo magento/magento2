@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 
 use Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel;
@@ -79,7 +81,7 @@ class SubscriptionStatusLabelTest extends TestCase
         $this->abstractElementMock
             ->method('getComment')
             ->willReturn('Subscription status: Enabled');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/Subscription status: Enabled/",
             $this->subscriptionStatusLabel->render($this->abstractElementMock)
         );

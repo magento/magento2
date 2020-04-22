@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Connector;
@@ -37,7 +39,7 @@ class ExportDataHandlerNotificationTest extends TestCase
         $exportDataHandlerMockObject = $this->createExportDataHandlerMock();
         $analyticsConnectorMockObject = $this->createAnalyticsConnectorMock();
         /**
-         * @var $exportDataHandlerNotification ExportDataHandlerNotification
+         * @var ExportDataHandlerNotification $exportDataHandlerNotification
          */
         $exportDataHandlerNotification = $this->objectManagerHelper->getObject(
             ExportDataHandlerNotification::class,
