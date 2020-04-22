@@ -48,15 +48,15 @@ class AdapterFactoryTest extends TestCase
     public function testCreate()
     {
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager->expects($this->once())->method('create')
-            ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue($adapter));
+            ->with('ClassName', ['input'])
+            ->willReturn($adapter);
 
         $result = $this->adapterFactory->create(['input']);
         $this->assertInstanceOf(AdapterInterface::class, $result);
@@ -66,11 +66,11 @@ class AdapterFactoryTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('ClassName'));
+            ->willReturn('ClassName');
 
         $this->objectManager->expects($this->once())->method('create')
-            ->with($this->equalTo('ClassName'), $this->equalTo(['input']))
-            ->will($this->returnValue('t'));
+            ->with('ClassName', ['input'])
+            ->willReturn('t');
 
         $this->adapterFactory->create(['input']);
     }
@@ -79,7 +79,7 @@ class AdapterFactoryTest extends TestCase
     {
         $this->expectException('LogicException');
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
-            ->will($this->returnValue('Class'));
+            ->willReturn('Class');
 
         $this->adapterFactory->create(['input']);
     }

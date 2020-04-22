@@ -100,7 +100,7 @@ class DataTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 null
             )
-            ->will($this->returnValue($return));
+            ->willReturn($return);
         $this->assertEquals($return, $this->model->getMinQueryLength());
     }
 
@@ -114,7 +114,7 @@ class DataTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 null
             )
-            ->will($this->returnValue($return));
+            ->willReturn($return);
         $this->assertEquals($return, $this->model->getMaxQueryLength());
     }
 
@@ -129,9 +129,9 @@ class DataTest extends TestCase
         $this->stringMock
             ->expects($this->any())
             ->method('strlen')
-            ->will($this->returnCallback(function ($queryText) {
+            ->willReturnCallback(function ($queryText) {
                 return strlen($queryText);
-            }));
+            });
         $this->stringMock
             ->expects($this->any())
             ->method('substr')

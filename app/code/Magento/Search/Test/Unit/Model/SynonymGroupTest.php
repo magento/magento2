@@ -18,7 +18,7 @@ class SynonymGroupTest extends TestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->model = (new ObjectManager($this))
             ->getObject(SynonymGroup::class);

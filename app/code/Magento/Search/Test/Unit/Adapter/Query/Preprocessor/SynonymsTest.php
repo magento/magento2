@@ -78,8 +78,8 @@ class SynonymsTest extends TestCase
     {
         $this->synonymAnalyzer->expects($this->once())
             ->method('getSynonymsForPhrase')
-            ->with($this->equalTo($query))
-            ->will($this->returnValue($result));
+            ->with($query)
+            ->willReturn($result);
 
         $result = $this->synonymPreprocessor->process($query);
         $this->assertEquals($result, $newQuery);

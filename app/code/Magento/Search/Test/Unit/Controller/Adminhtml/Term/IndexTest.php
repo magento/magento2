@@ -49,7 +49,7 @@ class IndexTest extends TestCase
      */
     private $indexController;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
