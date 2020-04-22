@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Model\ResourceModel;
 
@@ -63,7 +64,7 @@ class BookmarkRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        /** @var $bookmarkFactoryMock \Magento\Ui\Api\Data\BookmarkInterfaceFactory */
+        /** @var BookmarkInterfaceFactory $bookmarkFactoryMock */
         $bookmarkFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->bookmarkMock);
@@ -77,7 +78,8 @@ class BookmarkRepositoryTest extends TestCase
         /** @var $searchResultsFactoryMock \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory */
         $searchResultsFactoryMock = $this->getMockBuilder(
             BookmarkSearchResultsInterfaceFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
         $this->collectionProcessor = $this->createMock(
             CollectionProcessorInterface::class

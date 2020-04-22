@@ -44,7 +44,7 @@ class ImageTest extends MediaTest
      */
     private $image;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +64,8 @@ class ImageTest extends MediaTest
 
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
-        $this->fileSize = $this->getMockBuilder(Size::class)->getMock();
+        $this->fileSize = $this->getMockBuilder(Size::class)
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
 

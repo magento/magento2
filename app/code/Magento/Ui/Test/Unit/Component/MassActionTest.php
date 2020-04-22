@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -52,7 +54,7 @@ class MassActionTest extends TestCase
             ]
         );
 
-        $this->assertTrue($massAction->getComponentName() === MassAction::NAME);
+        $this->assertSame(MassAction::NAME, $massAction->getComponentName());
     }
 
     /**

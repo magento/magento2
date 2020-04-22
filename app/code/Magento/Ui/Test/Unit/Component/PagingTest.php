@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -60,7 +62,7 @@ class PagingTest extends TestCase
             ]
         );
 
-        $this->assertTrue($paging->getComponentName() === Paging::NAME);
+        $this->assertSame(Paging::NAME, $paging->getComponentName());
     }
 
     /**
@@ -123,7 +125,8 @@ class PagingTest extends TestCase
             ]
         );
         /** @var DataProviderInterface|MockObject $dataProviderMock */
-        $dataProviderMock = $this->getMockBuilder(DataProviderInterface::class)->getMockForAbstractClass();
+        $dataProviderMock = $this->getMockBuilder(DataProviderInterface::class)
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->once())
             ->method('getRequestParam')

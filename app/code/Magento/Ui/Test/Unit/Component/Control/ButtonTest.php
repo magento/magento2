@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Control;
 
 use Magento\Framework\Escaper;
@@ -38,10 +40,11 @@ class ButtonTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            Context::class,
-            ['getPageLayout', 'getUrlBuilder', 'getEscaper']
-        );
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getPageLayout'])
+            ->onlyMethods(['getUrlBuilder', 'getEscaper'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
         $this->escaperMock = $this->createPartialMock(Escaper::class, ['escapeHtml']);

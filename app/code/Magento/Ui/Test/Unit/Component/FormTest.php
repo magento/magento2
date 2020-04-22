@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\Api\Filter;
@@ -61,7 +63,7 @@ class FormTest extends TestCase
         /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
             $this->getMockBuilder(DataProviderInterface::class)
-            ->getMock();
+                ->getMock();
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -79,8 +81,8 @@ class FormTest extends TestCase
 
         /** @var Filter|MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')

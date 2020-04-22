@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Model;
 
@@ -85,19 +86,23 @@ class ManagerTest extends TestCase
     {
         $this->componentConfigProvider = $this->getMockBuilder(
             \Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->domMerger = $this->getMockBuilder(
             DomMergerInterface::class
         )->getMockForAbstractClass();
         $this->aggregatedFileCollector = $this->getMockBuilder(
             AggregatedFileCollector::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->aggregatedFileCollectorFactory = $this->getMockBuilder(
             AggregatedFileCollectorFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->arrayObjectFactory = $this->getMockBuilder(
             ArrayObjectFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->arrayObjectFactory->expects($this->at(0))
             ->method('create')
             ->willReturn(new \ArrayObject([]));
@@ -106,7 +111,8 @@ class ManagerTest extends TestCase
         )->getMockForAbstractClass();
         $this->readerFactory = $this->getMockBuilder(
             ReaderFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->cacheConfig = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
         $this->argumentInterpreter = $this->getMockBuilder(InterpreterInterface::class)
@@ -203,16 +209,16 @@ class ManagerTest extends TestCase
     {
         $cachedData = new \ArrayObject(
             ['test_component1' => [
-                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['value' => 'value1']],
-                    ManagerInterface::CHILDREN_KEY => [
-                        'custom' => [
-                            ManagerInterface::COMPONENT_ARGUMENTS_KEY => [
-                                'custom_name1' => ['value' => 'custom_value1']
-                            ],
-                            ManagerInterface::CHILDREN_KEY => [],
+                ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['value' => 'value1']],
+                ManagerInterface::CHILDREN_KEY => [
+                    'custom' => [
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY => [
+                            'custom_name1' => ['value' => 'custom_value1']
                         ],
+                        ManagerInterface::CHILDREN_KEY => [],
                     ],
-                ]
+                ],
+            ]
             ]
         );
 
@@ -240,16 +246,16 @@ class ManagerTest extends TestCase
                 'test_component2',
                 new \ArrayObject(
                     ['test_component2' => [
-                            ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
-                            ManagerInterface::CHILDREN_KEY => [
-                                'test_component21' => [
-                                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => [
-                                        'argument_name21' => ['value' => 'value21']
-                                    ],
-                                    ManagerInterface::CHILDREN_KEY => [],
+                        ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
+                        ManagerInterface::CHILDREN_KEY => [
+                            'test_component21' => [
+                                ManagerInterface::COMPONENT_ARGUMENTS_KEY => [
+                                    'argument_name21' => ['value' => 'value21']
                                 ],
+                                ManagerInterface::CHILDREN_KEY => [],
                             ],
-                        ]
+                        ],
+                    ]
                     ]
                 ),
                 false,
@@ -257,9 +263,9 @@ class ManagerTest extends TestCase
                     Converter::DATA_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
                     Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
                     'test_component21' => [0 => [
-                            Converter::DATA_ARGUMENTS_KEY => ['argument_name21' => ['value' => 'value21']],
-                            Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
-                        ]
+                        Converter::DATA_ARGUMENTS_KEY => ['argument_name21' => ['value' => 'value21']],
+                        Converter::DATA_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
+                    ]
                     ],
                 ]]],
                 [

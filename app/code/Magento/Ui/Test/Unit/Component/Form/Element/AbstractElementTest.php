@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -37,7 +39,8 @@ abstract class AbstractElementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -71,21 +74,21 @@ abstract class AbstractElementTest extends TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(null, $this->getModel()->getValue());
+        $this->assertNull($this->getModel()->getValue());
     }
 
     public function testGetFormInputName()
     {
-        $this->assertSame(null, $this->getModel()->getFormInputName());
+        $this->assertNull($this->getModel()->getFormInputName());
     }
 
     public function testIsReadonly()
     {
-        $this->assertSame(false, $this->getModel()->isReadonly());
+        $this->assertFalse($this->getModel()->isReadonly());
     }
 
     public function testGetCssClasses()
     {
-        $this->assertSame(null, $this->getModel()->getCssClasses());
+        $this->assertNull($this->getModel()->getCssClasses());
     }
 }

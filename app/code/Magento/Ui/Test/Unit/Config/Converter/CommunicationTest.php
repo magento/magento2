@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\Communication;
@@ -16,7 +18,7 @@ class CommunicationTest extends TestCase
      */
     private $converter;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->converter = new Communication(new ConverterUtils());
     }

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component\MassAction;
 
@@ -93,10 +94,11 @@ class FilterTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
-        $this->filterBuilderMock = $this->createPartialMock(
-            FilterBuilder::class,
-            ['value', 'setConditionType', 'create', 'setField']
-        );
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
+            ->addMethods(['value'])
+            ->onlyMethods(['setConditionType', 'create', 'setField'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
         $this->uiComponentMock = $this->createMock(UiComponentInterface::class);

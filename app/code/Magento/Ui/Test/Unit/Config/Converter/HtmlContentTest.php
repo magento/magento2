@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\HtmlContent;
@@ -18,7 +20,7 @@ class HtmlContentTest extends TestCase
     /**
      * Set up mocks
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->converter = new HtmlContent();
     }
@@ -55,7 +57,7 @@ class HtmlContentTest extends TestCase
         $node = $domXpath->query('//form/htmlContent/block')->item(0);
 
         $actualResult = $this->converter->convert($node, []);
-        $this->assertTrue(isset($actualResult['item']['layout']['value']));
+        $this->assertArrayHasKey('value', $actualResult['item']['layout']);
 
         // assert xml structures
         $this->assertXmlStringEqualsXmlString($xml, $actualResult['item']['layout']['value']);

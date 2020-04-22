@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Model;
 
@@ -140,7 +141,8 @@ class BookmarkManagementTest extends TestCase
             ]
         );
         $bookmarkId = 1;
-        $bookmark = $this->getMockBuilder(BookmarkInterface::class)->getMockForAbstractClass();
+        $bookmark = $this->getMockBuilder(BookmarkInterface::class)
+            ->getMockForAbstractClass();
         $bookmark->expects($this->once())->method('getId')->willReturn($bookmarkId);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMockForAbstractClass();

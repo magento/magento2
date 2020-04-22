@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Control;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -48,6 +50,6 @@ class ActionTest extends TestCase
      */
     public function testGetComponentName()
     {
-        $this->assertTrue($this->action->getComponentName() === Action::NAME);
+        $this->assertSame(Action::NAME, $this->action->getComponentName());
     }
 }

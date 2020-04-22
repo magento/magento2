@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\MassAction\Columns;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -67,7 +69,7 @@ class ColumnTest extends TestCase
     public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
-        $this->assertTrue($this->column->getComponentName() === Column::NAME);
+        $this->assertSame(Column::NAME, $this->column->getComponentName());
     }
 
     /**

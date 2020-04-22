@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\Search\DocumentInterface;
@@ -146,12 +148,12 @@ class ConvertToCsvTest extends TestCase
             ->with($document, $componentName);
 
         $result = $this->model->getCsvFile();
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);
-        $this->assertContains($componentName, $result);
-        $this->assertContains('.csv', $result);
+        $this->assertStringContainsString($componentName, $result['value']);
+        $this->assertStringContainsString('.csv', $result['value']);
     }
 
     /**

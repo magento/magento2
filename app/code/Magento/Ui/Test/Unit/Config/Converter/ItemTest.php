@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\Item;
@@ -28,12 +30,13 @@ class ItemTest extends TestCase
      */
     private $urlConverter;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');
         $this->domXpath = new \DOMXPath($dom);
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
+        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
+            ->getMockForAbstractClass();
         $this->converter = new Item($this->urlConverter, new ConverterUtils());
     }
 

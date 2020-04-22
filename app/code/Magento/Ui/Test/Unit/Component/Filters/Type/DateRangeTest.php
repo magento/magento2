@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -76,7 +78,7 @@ class DateRangeTest extends TestCase
             $this->filterModifierMock,
             []
         );
-        $this->assertTrue($dateRange->getComponentName() === DateRange::NAME);
+        $this->assertSame(DateRange::NAME, $dateRange->getComponentName());
     }
 
     /**

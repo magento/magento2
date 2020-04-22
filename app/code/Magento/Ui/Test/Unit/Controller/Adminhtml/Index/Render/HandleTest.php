@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index\Render;
 
 use Magento\Backend\App\Action\Context;
@@ -71,11 +73,11 @@ class HandleTest extends TestCase
     private $uiFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface|MockObject
+     * @var DataProviderInterface|MockObject
      */
     private $dataProviderMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
 

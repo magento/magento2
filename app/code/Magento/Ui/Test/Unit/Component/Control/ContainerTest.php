@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Control;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -43,7 +45,11 @@ class ContainerTest extends TestCase
             ->willReturn($blockButtonMock);
         $contextMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
 
-        $itemMock = $this->createPartialMock(Item::class, ['getId', 'getData']);
+        $itemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getId'])
+            ->onlyMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $itemMock->expects($this->any())->method('getData')->willReturn($data);
         $itemMock->expects($this->any())->method('getId')->willReturn($id);
 
