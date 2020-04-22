@@ -3,53 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
+use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class AnchorUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator */
+    /** @var AnchorUrlRewriteGenerator */
     protected $anchorUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductUrlPathGenerator|MockObject */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|MockObject */
     protected $product;
 
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryRepositoryInterface|MockObject */
     private $categoryRepositoryInterface;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectRegistry|MockObject */
     protected $categoryRegistry;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewriteFactory|MockObject */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRewrite|MockObject */
     protected $urlRewrite;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+        $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()->getMock();
         $this->categoryRepositoryInterface = $this->getMockBuilder(
-            \Magento\Catalog\Api\CategoryRepositoryInterface::class
+            CategoryRepositoryInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->categoryRegistry = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ObjectRegistry::class)
+        $this->categoryRegistry = $this->getMockBuilder(ObjectRegistry::class)
             ->disableOriginalConstructor()->getMock();
         $this->productUrlPathGenerator = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class
+            ProductUrlPathGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->anchorUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator::class,
+            AnchorUrlRewriteGenerator::class,
             [
                 'productUrlPathGenerator' => $this->productUrlPathGenerator,
                 'urlRewriteFactory' => $this->urlRewriteFactory,
@@ -58,7 +72,12 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGenerateEmpty()
+    /**
+     * Verify generate if category registry list is empty.
+     *
+     * @return void
+     */
+    public function testGenerateEmpty(): void
     {
         $this->categoryRegistry->expects($this->any())->method('getList')->will($this->returnValue([]));
 
@@ -68,7 +87,12 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGenerateCategories()
+    /**
+     * Verify generate product rewrites for anchor categories.
+     *
+     * @return void
+     */
+    public function testGenerateCategories(): void
     {
         $urlPathWithCategory = 'category1/category2/category3/simple-product.html';
         $storeId = 10;
@@ -100,9 +124,9 @@ class AnchorUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('get')
             ->withConsecutive(
-                [ 'category_id' => $categoryIds[0]],
-                [ 'category_id' => $categoryIds[1]],
-                [ 'category_id' => $categoryIds[2]]
+                [$categoryIds[0], $storeId],
+                [$categoryIds[1], $storeId],
+                [$categoryIds[2], $storeId]
             )
             ->will($this->returnValue($category));
         $this->categoryRegistry->expects($this->any())->method('getList')

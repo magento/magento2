@@ -108,7 +108,7 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Current user does not have an active cart.
+     * @expectedExceptionMessage The cart isn't active.
      */
     public function testGuestCartExpiryAfterMerge()
     {

@@ -129,7 +129,6 @@ class ColumnFactoryTest extends TestCase
                     'visible' => null,
                     'filter' => $filter,
                     'component' => 'Magento_Ui/js/grid/columns/column',
-                    '__disableTmpl' => ['label' => true]
                 ],
             ],
             'context' => $this->context,
@@ -206,7 +205,6 @@ class ColumnFactoryTest extends TestCase
                     'component' => 'Magento_Ui/js/grid/columns/date',
                     'timezone' => $expectedTimezone,
                     'dateFormat' => $expectedDateFormat,
-                    '__disableTmpl' => ['label' => true],
                     'options' => [
                         'showsTime' => $showsTime
                     ]

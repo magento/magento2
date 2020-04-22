@@ -18,5 +18,6 @@
         <element name="configureSelectAttribute" type="select" selector="select[id*=attribute]"/>
         <element name="itemsSKU" type="text" selector="(//div[contains(@class, 'product-sku-block')])[{{productNumber}}]" parameterized="true"/>
         <element name="moveProduct" type="select" selector="//td[contains(.,'{{productName}}')]/../..//td//select" parameterized="true"/>
+        <element name="productMessage" type="text" selector="//section[@id = 'order-items']//span[text()='{{productName}}']/ancestor::tr/..//div[contains(@class, 'message-{{messageType}}')]" parameterized="true"/>
     </section>
 </sections>
