@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ups\Test\Unit\Model;
 
@@ -485,7 +486,7 @@ class CarrierTest extends TestCase
      *
      * @return ElementFactory|MockObject
      */
-    private function getXmlFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getXmlFactory(): MockObject
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
@@ -511,7 +512,7 @@ class CarrierTest extends TestCase
      *
      * @return ClientFactory|MockObject
      */
-    private function getHttpClientFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getHttpClientFactory(): MockObject
     {
         $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
             ->disableOriginalConstructor()
@@ -527,7 +528,7 @@ class CarrierTest extends TestCase
     /**
      * @return MockObject
      */
-    private function getRateFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getRateFactory(): MockObject
     {
         $this->rate = $this->createPartialMock(Result::class, ['getError']);
         $rateFactory = $this->createPartialMock(ResultFactory::class, ['create']);
