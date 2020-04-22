@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Helper;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
@@ -148,8 +150,8 @@ class DownloadTest extends TestCase
             $this->once()
         )->method(
             'getFileType'
-        )->will(
-            $this->returnValue(self::MIME_TYPE)
+        )->willReturn(
+            self::MIME_TYPE
         );
 
         $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
@@ -197,13 +199,13 @@ class DownloadTest extends TestCase
      */
     protected function _setupFileMocks($doesExist = true, $size = self::FILE_SIZE, $path = self::FILE_PATH)
     {
-        $this->_handleMock->expects($this->any())->method('stat')->will($this->returnValue(['size' => $size]));
+        $this->_handleMock->expects($this->any())->method('stat')->willReturn(['size' => $size]);
         $this->_downloadableFileMock->expects($this->any())->method('ensureFileInFilesystem')->with($path)
-            ->will($this->returnValue($doesExist));
+            ->willReturn($doesExist);
         $this->_workingDirectoryMock->expects($doesExist ? $this->once() : $this->never())->method('openFile')
-            ->will($this->returnValue($this->_handleMock));
+            ->willReturn($this->_handleMock);
         $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($this->_workingDirectoryMock));
+            ->willReturn($this->_workingDirectoryMock);
         $this->_helper->setResource($path, DownloadHelper::LINK_TYPE_FILE);
     }
 
@@ -218,16 +220,16 @@ class DownloadTest extends TestCase
             $this->any()
         )->method(
             'stat'
-        )->will(
-            $this->returnValue(array_merge(['size' => $size, 'type' => self::MIME_TYPE], $additionalStatData))
+        )->willReturn(
+            array_merge(['size' => $size, 'type' => self::MIME_TYPE], $additionalStatData)
         );
 
         $this->fileReadFactory->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_handleMock)
+        )->willReturn(
+            $this->_handleMock
         );
 
         self::$headers = ['200 OK'];

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
 use Magento\Catalog\Model\Product;
@@ -72,9 +74,9 @@ class DownloadableTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getPost')
             ->with('downloadable')
-            ->will($this->returnValue(['link' => [['is_delete' => '']]]));
+            ->willReturn(['link' => [['is_delete' => '']]]);
         $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn(false);
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())
             ->method('setTypeId')
             ->with(Type::TYPE_DOWNLOADABLE);
@@ -108,9 +110,9 @@ class DownloadableTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getPost')
             ->with('downloadable')
-            ->will($this->returnValue($downloadableData));
+            ->willReturn($downloadableData);
         $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn($hasWeight);
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->never())->method('setTypeId');
 
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);

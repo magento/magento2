@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
 use Magento\Catalog\Model\Product;
@@ -93,17 +95,10 @@ class LinkSampleTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->request = $this->createMock(RequestInterface::class);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader',
-                'setRedirect'
-            ]
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader', 'setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
 
         $this->helperData = $this->createPartialMock(
             Data::class,
@@ -120,16 +115,11 @@ class LinkSampleTest extends TestCase
                 'output'
             ]
         );
-        $this->product = $this->createPartialMock(
-            Product::class,
-            [
-                '_wakeup',
-                'load',
-                'getId',
-                'getProductUrl',
-                'getName'
-            ]
-        );
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['load', 'getId', 'getProductUrl', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->redirect = $this->createMock(RedirectInterface::class);
         $this->urlInterface = $this->createMock(UrlInterface::class);

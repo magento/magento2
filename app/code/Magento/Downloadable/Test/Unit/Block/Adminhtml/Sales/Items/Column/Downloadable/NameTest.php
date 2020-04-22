@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
@@ -76,9 +77,9 @@ class NameTest extends TestCase
             ->getMock();
         $itemCollection =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['addFieldToFilter'])
+                ->getMock();
 
         $this->block->setData('item', $item);
         $this->purchasedFactory->expects($this->once())->method('create')->willReturn($linkPurchased);
