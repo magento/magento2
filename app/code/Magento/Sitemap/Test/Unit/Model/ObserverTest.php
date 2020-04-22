@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -83,13 +85,11 @@ class ObserverTest extends TestCase
             Collection::class,
             ['getIterator']
         );
-        $this->sitemapMock = $this->createPartialMock(
-            Sitemap::class,
-            [
-                'generateXml',
-                'getStoreId',
-            ]
-        );
+        $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['generateXml'])
+            ->addMethods(['getStoreId'])
+            ->getMock();
         $this->appEmulationMock = $this->createMock(Emulation::class);
         $this->emailNotificationMock = $this->createMock(EmailNotification::class);
         $this->objectManager = new ObjectManager($this);

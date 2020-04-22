@@ -96,29 +96,24 @@ class EmailNotificationTest extends TestCase
             ->method('suspend');
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
+            ->method('setTemplateIdentifier')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
             ->with([
                 'area' => FrontNameResolver::AREA_CODE,
                 'store' => Store::DEFAULT_STORE_ID,
-            ])
-            ->will($this->returnSelf());
+            ])->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
-            ->with(['warnings' => $exception])
-            ->will($this->returnSelf());
+            ->with(['warnings' => $exception])->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('setFrom')
-            ->will($this->returnSelf());
+            ->method('setFrom')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('addTo')
-            ->will($this->returnSelf());
+            ->method('addTo')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')
