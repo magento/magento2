@@ -95,12 +95,12 @@ class SaveTest extends TestCase
         $this->requestMock
             ->expects($this->at(0))
             ->method('getPost')
-            ->with($this->equalTo('generate_random'))
+            ->with('generate_random')
             ->willReturn(0);
         $this->requestMock
             ->expects($this->at(1))
             ->method('getPost')
-            ->with($this->equalTo('crypt_key'))
+            ->with('crypt_key')
             ->willReturn($key);
         $this->encryptMock->expects($this->once())->method('validateKey');
         $this->changeMock->expects($this->once())->method('changeEncryptionKey')->willReturn($newKey);
@@ -117,12 +117,12 @@ class SaveTest extends TestCase
         $this->requestMock
             ->expects($this->at(0))
             ->method('getPost')
-            ->with($this->equalTo('generate_random'))
+            ->with('generate_random')
             ->willReturn(0);
         $this->requestMock
             ->expects($this->at(1))
             ->method('getPost')
-            ->with($this->equalTo('crypt_key'))
+            ->with('crypt_key')
             ->willReturn($key);
         $this->managerMock->expects($this->once())->method('addErrorMessage');
 
@@ -135,7 +135,7 @@ class SaveTest extends TestCase
         $this->requestMock
             ->expects($this->at(0))
             ->method('getPost')
-            ->with($this->equalTo('generate_random'))
+            ->with('generate_random')
             ->willReturn(1);
         $this->changeMock->expects($this->once())->method('changeEncryptionKey')->willReturn($newKey);
         $this->managerMock->expects($this->once())->method('addSuccessMessage');
