@@ -195,9 +195,9 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Did not throw expected InputException');
         } catch (\SoapFault $e) {
-            $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
         } catch (\Exception $e) {
-            $this->assertContains('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
+            $this->assertStringContainsString('No such entity with customer_tax_class_ids = %fieldValue', $e->getMessage());
         }
     }
 
@@ -232,7 +232,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
@@ -430,7 +430,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -542,7 +542,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
