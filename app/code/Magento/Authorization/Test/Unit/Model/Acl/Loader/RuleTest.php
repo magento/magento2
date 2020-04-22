@@ -53,10 +53,11 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $this->rootResource = new RootResource('Magento_Backend::all');
-        $this->resourceMock = $this->createPartialMock(
-            ResourceConnection::class,
-            ['getTable', 'getConnection']
-        );
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+            ->addMethods(['getTable'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,

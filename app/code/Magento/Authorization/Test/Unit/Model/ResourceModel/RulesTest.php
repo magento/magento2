@@ -113,7 +113,7 @@ class RulesTest extends TestCase
 
         $this->resourceConnectionMock->method('getTableName')
             ->with('authorization_rule', 'default')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -202,7 +202,7 @@ class RulesTest extends TestCase
         $this->connectionMock->expects($this->once())
             ->method('delete')
             ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID])
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
 
         $this->connectionMock->expects($this->once())->method('rollBack');
 
@@ -222,7 +222,7 @@ class RulesTest extends TestCase
         $this->connectionMock->expects($this->once())
             ->method('delete')
             ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID])
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
 
         $this->connectionMock->expects($this->once())->method('rollBack');
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);

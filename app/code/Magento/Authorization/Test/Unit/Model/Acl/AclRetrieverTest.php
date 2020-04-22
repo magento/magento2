@@ -75,13 +75,13 @@ class AclRetrieverTest extends TestCase
         $this->expectException(AuthorizationException::class);
         $this->expectExceptionMessage("The role wasn't found for the user. Verify the role and try again.");
 
-        $this->roleMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->roleMock->expects($this->once())->method('getId')->willReturn(null);
         $this->aclRetriever->getAllowedResourcesByUser(UserContextInterface::USER_TYPE_INTEGRATION, null);
     }
 
     public function testGetAllowedResourcesByUser()
     {
-        $this->roleMock->method('getId')->will($this->returnValue(1));
+        $this->roleMock->method('getId')->willReturn(1);
         $expectedResources = ['Magento_Backend::dashboard', 'Magento_Cms::page'];
         $this->assertEquals(
             $expectedResources,
@@ -103,8 +103,8 @@ class AclRetrieverTest extends TestCase
             RoleCollection::class,
             ['setUserFilter', 'getFirstItem']
         );
-        $roleCollectionMock->method('setUserFilter')->will($this->returnSelf());
-        $roleCollectionMock->method('getFirstItem')->will($this->returnValue($this->roleMock));
+        $roleCollectionMock->method('setUserFilter')->willReturnSelf();
+        $roleCollectionMock->method('getFirstItem')->willReturn($this->roleMock);
 
         /**
          * @var RoleCollectionFactory|MockObject $roleCollectionFactoryMock
@@ -113,28 +113,30 @@ class AclRetrieverTest extends TestCase
             RoleCollectionFactory::class,
             ['create']
         );
-        $roleCollectionFactoryMock->method('create')->will(
-            $this->returnValue($roleCollectionMock)
+        $roleCollectionFactoryMock->method('create')->willReturn(
+            $roleCollectionMock
         );
 
         /**
          * @var Rules|MockObject $rulesMock1
          */
-        $rulesMock1 = $this->createPartialMock(
-            Rules::class,
-            ['getResourceId', '__wakeup']
-        );
-        $rulesMock1->method('getResourceId')->will(
-            $this->returnValue('Magento_Backend::dashboard')
+        $rulesMock1 = $this->getMockBuilder(Rules::class)
+            ->addMethods(['getResourceId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $rulesMock1->method('getResourceId')->willReturn(
+            'Magento_Backend::dashboard'
         );
         /**
          * @var Rules|MockObject $rulesMock2
          */
-        $rulesMock2 = $this->createPartialMock(
-            Rules::class,
-            ['getResourceId', '__wakeup']
-        );
-        $rulesMock2->method('getResourceId')->will($this->returnValue('Magento_Cms::page'));
+        $rulesMock2 = $this->getMockBuilder(Rules::class)
+            ->addMethods(['getResourceId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $rulesMock2->method('getResourceId')->willReturn('Magento_Cms::page');
 
         /**
          * @var RulesCollection|MockObject $rulesCollectionMock
@@ -143,10 +145,10 @@ class AclRetrieverTest extends TestCase
             RulesCollection::class,
             ['getByRoles', 'load', 'getItems']
         );
-        $rulesCollectionMock->method('getByRoles')->will($this->returnSelf());
-        $rulesCollectionMock->method('load')->will($this->returnSelf());
-        $rulesCollectionMock->method('getItems')->will(
-            $this->returnValue([$rulesMock1, $rulesMock2])
+        $rulesCollectionMock->method('getByRoles')->willReturnSelf();
+        $rulesCollectionMock->method('load')->willReturnSelf();
+        $rulesCollectionMock->method('getItems')->willReturn(
+            [$rulesMock1, $rulesMock2]
         );
 
         /**
@@ -156,22 +158,22 @@ class AclRetrieverTest extends TestCase
             RulesCollectionFactory::class,
             ['create']
         );
-        $rulesCollectionFactoryMock->expects($this->any())->method('create')->will(
-            $this->returnValue($rulesCollectionMock)
+        $rulesCollectionFactoryMock->expects($this->any())->method('create')->willReturn(
+            $rulesCollectionMock
         );
 
         /**
          * @var Acl|MockObject $aclMock
          */
         $aclMock = $this->createPartialMock(Acl::class, ['has', 'isAllowed']);
-        $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
-        $aclMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $aclMock->expects($this->any())->method('has')->willReturn(true);
+        $aclMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         /**
          * @var Builder|MockObject $aclBuilderMock
          */
         $aclBuilderMock = $this->createPartialMock(Builder::class, ['getAcl']);
-        $aclBuilderMock->expects($this->any())->method('getAcl')->will($this->returnValue($aclMock));
+        $aclBuilderMock->expects($this->any())->method('getAcl')->willReturn($aclMock);
 
         return new AclRetriever(
             $aclBuilderMock,
