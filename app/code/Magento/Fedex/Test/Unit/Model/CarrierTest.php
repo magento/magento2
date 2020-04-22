@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Fedex\Test\Unit\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -35,7 +37,7 @@ use Magento\Shipping\Model\Tracking\Result\StatusFactory;
 use Magento\Shipping\Model\Tracking\ResultFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -410,7 +412,7 @@ class CarrierTest extends TestCase
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
 
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         /** @var Error $current */
         $current = $tracks[0];
@@ -467,7 +469,7 @@ class CarrierTest extends TestCase
             ->willReturn($status);
 
         $tracks = $this->carrier->getTracking($tracking)->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         $current = $tracks[0];
         $fields = [
@@ -591,11 +593,11 @@ class CarrierTest extends TestCase
 
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertEquals(1, count($tracks));
+        $this->assertCount(1, $tracks);
 
         $current = $tracks[0];
         $this->assertNotEmpty($current['progressdetail']);
-        $this->assertEquals(1, count($current['progressdetail']));
+        $this->assertCount(1, $current['progressdetail']);
 
         $event = $current['progressdetail'][0];
         $fields = ['activity', 'deliverylocation'];
