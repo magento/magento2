@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
@@ -16,7 +17,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -78,11 +79,10 @@ class DecimalTest extends TestCase
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $this->filterItem->expects($this->any())
-            ->method($this->anything())
-            ->will($this->returnSelf());
+            ->method($this->anything())->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->filterItem));
+            ->willReturn($this->filterItem);
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
             Collection::class
@@ -92,20 +92,20 @@ class DecimalTest extends TestCase
 
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
+            ->willReturn($this->fulltextCollection);
 
         $filterDecimalFactory =
             $this->getMockBuilder(DecimalFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $filterDecimalFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
 
         $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
@@ -118,7 +118,7 @@ class DecimalTest extends TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -149,17 +149,15 @@ class DecimalTest extends TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
-                    function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                        switch ($field) {
-                            case $requestField:
-                                return $requestValue;
-                            case $idField:
-                                return $idValue;
-                        }
+            ->willReturnCallback(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
                     }
-                )
+                }
             );
 
         $result = $this->target->apply($this->request);
@@ -195,24 +193,21 @@ class DecimalTest extends TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
-                    function ($field) use ($requestVar, $filter) {
-                        $this->assertTrue(in_array($field, [$requestVar, 'id']));
-                        return $filter;
-                    }
-                )
+            ->willReturnCallback(
+                function ($field) use ($requestVar, $filter) {
+                    $this->assertContains($field, [$requestVar, 'id']);
+                    return $filter;
+                }
             );
 
         $attributeCode = 'AttributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->with($attributeCode)->willReturnSelf();
 
         $this->target->apply($this->request);
     }

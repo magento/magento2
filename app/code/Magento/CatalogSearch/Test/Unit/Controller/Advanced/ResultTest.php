@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Controller\Advanced;
 
 use Magento\CatalogSearch\Controller\Advanced\Result;
@@ -47,33 +49,35 @@ class ResultTest extends TestCase
             ['loadLayout', 'renderLayout', 'getPage', 'getLayout']
         );
         $update = $this->createPartialMock(Merge::class, ['getHandles']);
-        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
-        $layout = $this->createPartialMock(Layout::class, ['getUpdate']);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
-        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $update->expects($this->once())->method('getHandles')->willReturn([]);
+        $layout = $this->getMockBuilder(Layout::class)
+            ->addMethods(['getUpdate'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout->expects($this->once())->method('getUpdate')->willReturn($update);
+        $view->expects($this->once())->method('getLayout')->willReturn($layout);
         $page = $this->createPartialMock(Page::class, ['initLayout']);
-        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
-        $view->expects($this->once())->method('loadLayout')->will(
-            $this->returnCallback(
-                function () use (&$filters, $expectedQuery) {
-                    $this->assertEquals($expectedQuery, $filters);
-                }
-            )
+        $view->expects($this->once())->method('getPage')->willReturn($page);
+        $view->expects($this->once())->method('loadLayout')->willReturnCallback(
+            function () use (&$filters, $expectedQuery) {
+                $this->assertEquals($expectedQuery, $filters);
+            }
         );
 
-        $request = $this->createPartialMock(Request::class, ['getQueryValue']);
-        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
+        $request = $this->getMockBuilder(Request::class)
+            ->addMethods(['getQueryValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(
             Advanced::class,
             ['addFilters', '__wakeup']
         );
-        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
-            $this->returnCallback(
-                function ($added) use (&$filters) {
-                    $filters = $added;
-                }
-            )
+        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->willReturnCallback(
+            function ($added) use (&$filters) {
+                $filters = $added;
+            }
         );
 
         $objectManager = new ObjectManager($this);
@@ -115,10 +119,10 @@ class ResultTest extends TestCase
             ['addFilters']
         );
 
-        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->will(
-            $this->throwException(new LocalizedException(
+        $catalogSearchAdvanced->expects($this->once())->method('addFilters')->willThrowException(
+            new LocalizedException(
                 new Phrase("Test Exception")
-            ))
+            )
         );
 
         $responseMock = $this->createMock(Response::class);
@@ -166,7 +170,7 @@ class ResultTest extends TestCase
         $urlFactoryMock = $this->createMock(UrlFactory::class);
         $urlFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($urlMock));
+            ->willReturn($urlMock);
 
         $objectManager = new ObjectManager($this);
 
@@ -192,10 +196,13 @@ class ResultTest extends TestCase
         $expectedQuery = 'notExistTerm';
 
         $update = $this->createPartialMock(Merge::class, ['getHandles']);
-        $update->expects($this->once())->method('getHandles')->will($this->returnValue([]));
+        $update->expects($this->once())->method('getHandles')->willReturn([]);
 
-        $layout = $this->createPartialMock(Layout::class, ['getUpdate']);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($update));
+        $layout = $this->getMockBuilder(Layout::class)
+            ->addMethods(['getUpdate'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout->expects($this->once())->method('getUpdate')->willReturn($update);
 
         $page = $this->createPartialMock(Page::class, ['initLayout']);
 
@@ -207,11 +214,14 @@ class ResultTest extends TestCase
         $view->expects($this->once())->method('loadLayout')
             ->with([Result::DEFAULT_NO_RESULT_HANDLE]);
 
-        $view->expects($this->once())->method('getPage')->will($this->returnValue($page));
-        $view->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
+        $view->expects($this->once())->method('getPage')->willReturn($page);
+        $view->expects($this->once())->method('getLayout')->willReturn($layout);
 
-        $request = $this->createPartialMock(Request::class, ['getQueryValue']);
-        $request->expects($this->once())->method('getQueryValue')->will($this->returnValue($expectedQuery));
+        $request = $this->getMockBuilder(Request::class)
+            ->addMethods(['getQueryValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request->expects($this->once())->method('getQueryValue')->willReturn($expectedQuery);
 
         $catalogSearchAdvanced = $this->createPartialMock(
             Advanced::class,

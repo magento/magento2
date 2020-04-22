@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -187,17 +189,17 @@ class AdvancedTest extends TestCase
     ) {
         $registry = new Registry();
 
-        $this->collection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('setStore')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addMinimalPrice')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addTaxPercents')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('addStoreFilter')->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('setVisibility')->will($this->returnSelf());
+        $this->collection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $this->collection->expects($this->any())->method('setStore')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addMinimalPrice')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addTaxPercents')->willReturnSelf();
+        $this->collection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
+        $this->collection->expects($this->any())->method('setVisibility')->willReturnSelf();
         $this->resource->expects($this->any())->method('prepareCondition')
-            ->will($this->returnValue(['like' => '%simple%']));
-        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('entity_id'));
+            ->willReturn(['like' => '%simple%']);
+        $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('entity_id');
         $this->dataCollection->expects($this->any())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator($attributes)));
+            ->willReturn(new \ArrayIterator($attributes));
         $objectManager = new ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder(AdvancedFactory::class)
@@ -208,9 +210,9 @@ class AdvancedTest extends TestCase
 
         $productCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->collection);
 
         $this->store->expects($this->any())
@@ -393,20 +395,20 @@ class AdvancedTest extends TestCase
         $backendType = null
     ) {
         $attribute = $this->createPartialMock(Attribute::class, [
-                'getAttributeCode',
-                'getStoreLabel',
-                'getFrontendInput',
-                'getBackend',
-                'getBackendType',
-                'getSource',
-                '__wakeup'
-            ]);
+            'getAttributeCode',
+            'getStoreLabel',
+            'getFrontendInput',
+            'getBackend',
+            'getBackendType',
+            'getSource',
+            '__wakeup'
+        ]);
         $attribute->expects($this->any())->method('getBackend')->willReturn($backend);
         $attribute->expects($this->any())->method('getSource')->willReturn($source);
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $attribute->expects($this->any())->method('getStoreLabel')->will($this->returnValue($storeLabel));
-        $attribute->expects($this->any())->method('getFrontendInput')->will($this->returnValue($frontendInput));
-        $attribute->expects($this->any())->method('getBackendType')->will($this->returnValue($backendType));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->expects($this->any())->method('getStoreLabel')->willReturn($storeLabel);
+        $attribute->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
+        $attribute->expects($this->any())->method('getBackendType')->willReturn($backendType);
         return $attribute;
     }
 }

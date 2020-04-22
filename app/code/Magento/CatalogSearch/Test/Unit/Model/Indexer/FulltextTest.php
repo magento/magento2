@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
@@ -82,7 +84,8 @@ class FulltextTest extends TestCase
             ->setMethods(['switchIndex'])
             ->getMock();
 
-        $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)->getMock();
+        $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
+            ->getMock();
         $stateMock = $this->getMockBuilder(State::class)
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -150,7 +153,9 @@ class FulltextTest extends TestCase
         $this->dimensionProviderMock->expects($this->once())->method('getIterator')->willReturn(
             (function () use ($stores) {
                 foreach ($stores as $storeId) {
-                    $dimension = $this->getMockBuilder(Dimension::class)->disableOriginalConstructor()->getMock();
+                    $dimension = $this->getMockBuilder(Dimension::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
                     $dimension->expects($this->once())
                         ->method('getValue')
                         ->willReturn($storeId);
