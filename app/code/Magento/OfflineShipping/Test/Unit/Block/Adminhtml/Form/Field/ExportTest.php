@@ -40,24 +40,29 @@ class ExportTest extends TestCase
     {
         $expected = 'some test data';
 
-        $form = $this->createPartialMock(Form::class, ['getParent']);
+        $form = $this->getMockBuilder(Form::class)
+            ->addMethods(['getParent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $parentObjectMock = $this->createPartialMock(Template::class, ['getLayout']);
         $layoutMock = $this->createMock(Layout::class);
 
         $blockMock = $this->createMock(Button::class);
 
         $requestMock = $this->createMock(RequestInterface::class);
-        $requestMock->expects($this->once())->method('getParam')->with('website')->will($this->returnValue(1));
+        $requestMock->expects($this->once())->method('getParam')->with('website')->willReturn(1);
 
-        $mockData = $this->createPartialMock(\stdClass::class, ['toHtml']);
-        $mockData->expects($this->once())->method('toHtml')->will($this->returnValue($expected));
+        $mockData = $this->getMockBuilder(\stdClass::class)->addMethods(['toHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockData->expects($this->once())->method('toHtml')->willReturn($expected);
 
-        $blockMock->expects($this->once())->method('getRequest')->will($this->returnValue($requestMock));
-        $blockMock->expects($this->any())->method('setData')->will($this->returnValue($mockData));
+        $blockMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
+        $blockMock->expects($this->any())->method('setData')->willReturn($mockData);
 
-        $layoutMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
-        $parentObjectMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
-        $form->expects($this->once())->method('getParent')->will($this->returnValue($parentObjectMock));
+        $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
+        $parentObjectMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
+        $form->expects($this->once())->method('getParent')->willReturn($parentObjectMock);
 
         $this->_object->setForm($form);
         $this->assertEquals($expected, $this->_object->getElementHtml());

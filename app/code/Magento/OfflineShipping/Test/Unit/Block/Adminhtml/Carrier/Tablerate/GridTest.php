@@ -71,7 +71,7 @@ class GridTest extends TestCase
             $this->getMockBuilder(
                 CollectionFactory::class
             )->disableOriginalConstructor()
-            ->getMock();
+                ->getMock();
 
         $this->tablerateMock = $this->getMockBuilder(Tablerate::class)
             ->disableOriginalConstructor()

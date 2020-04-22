@@ -37,12 +37,12 @@ class CalculatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $item = $this->createPartialMock(Item::class, ['getAddress', '__wakeup']);
-        $item->expects($this->once())->method('getAddress')->will($this->returnValue($addressMock));
+        $item->expects($this->once())->method('getAddress')->willReturn($addressMock);
 
         $this->_model->expects($this->once())
             ->method('_getRules')
             ->with($addressMock)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertInstanceOf(
             Calculator::class,

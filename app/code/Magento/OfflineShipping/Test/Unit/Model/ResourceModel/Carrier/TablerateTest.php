@@ -83,10 +83,10 @@ class TablerateTest extends TestCase
     public function testUploadAndImport()
     {
         $_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'] = 'some/path/to/file';
-        $object = $this->createPartialMock(
-            \Magento\OfflineShipping\Model\Config\Backend\Tablerate::class,
-            ['getScopeId']
-        );
+        $object = $this->getMockBuilder(\Magento\OfflineShipping\Model\Config\Backend\Tablerate::class)
+            ->addMethods(['getScopeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $websiteMock = $this->createMock(WebsiteInterface::class);
         $directoryReadMock = $this->createMock(ReadInterface::class);

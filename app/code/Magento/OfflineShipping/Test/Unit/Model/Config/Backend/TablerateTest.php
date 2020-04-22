@@ -29,9 +29,9 @@ class TablerateTest extends TestCase
     {
         $this->tableateFactoryMock =
             $this->getMockBuilder(TablerateFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

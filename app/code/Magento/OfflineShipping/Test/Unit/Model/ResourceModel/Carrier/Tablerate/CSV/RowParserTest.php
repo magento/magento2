@@ -57,7 +57,7 @@ class RowParserTest extends TestCase
     public function testGetColumns()
     {
         $columns = $this->rowParser->getColumns();
-        $this->assertTrue(is_array($columns), 'Columns should be array, ' . gettype($columns) . ' given');
+        $this->assertIsArray($columns, 'Columns should be array, ' . gettype($columns) . ' given');
         $this->assertNotEmpty($columns);
     }
 

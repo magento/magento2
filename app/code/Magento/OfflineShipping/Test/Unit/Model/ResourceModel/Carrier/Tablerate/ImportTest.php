@@ -148,7 +148,9 @@ class ImportTest extends TestCase
             ]
         ];
 
-        $columnResolver = $this->getMockBuilder(ColumnResolver::class)->disableOriginalConstructor()->getMock();
+        $columnResolver = $this->getMockBuilder(ColumnResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->columnResolverFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -191,7 +193,9 @@ class ImportTest extends TestCase
             ],
         ];
 
-        $columnResolver = $this->getMockBuilder(ColumnResolver::class)->disableOriginalConstructor()->getMock();
+        $columnResolver = $this->getMockBuilder(ColumnResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->columnResolverFactoryMock
             ->expects($this->once())
             ->method('create')
