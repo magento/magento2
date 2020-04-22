@@ -37,12 +37,14 @@ class ComplexTypeStrategyTest extends TestCase
             TypeProcessor::class
         )->setMethods(
             ['getTypeData']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_wsdl = $this->getMockBuilder(
             \Magento\Webapi\Model\Soap\Wsdl::class
         )->setMethods(
             ['toDomDocument', 'getTypes', 'getSchema']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_strategy = new ComplexTypeStrategy($this->_typeProcessor);
         $this->_strategy->setContext($this->_wsdl);
         parent::setUp();

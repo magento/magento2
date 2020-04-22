@@ -64,17 +64,22 @@ class RequestValidatorTest extends TestCase
                     'getHttpHost',
                     'getMethod',
                 ]
-            )->disableOriginalConstructor()->getMock();
+            )->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
-        $routerMock = $this->getMockBuilder(Router::class)->setMethods(['match'])
-            ->disableOriginalConstructor()->getMock();
+        $routerMock = $this->getMockBuilder(Router::class)
+            ->setMethods(['match'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->routeMock = $this->getMockBuilder(Route::class)
             ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);

@@ -76,7 +76,8 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->roleCollectionFactory = $this->getMockBuilder(
             \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $this->roleCollection = $this->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\Collection::class)
             ->disableOriginalConstructor()

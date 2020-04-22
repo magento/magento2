@@ -54,7 +54,8 @@ class ManagerTest extends TestCase
     {
         $this->integrationServiceMock = $this->getMockBuilder(
             IntegrationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             [
                 'findByName',
                 'update',
@@ -69,7 +70,8 @@ class ManagerTest extends TestCase
 
         $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
             AuthorizationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             [
                 'grantPermissions',
                 'grantAllPermissions',
