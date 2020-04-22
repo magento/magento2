@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
@@ -90,7 +91,7 @@ class DbStorageTest extends TestCase
 
         $this->connectionMock
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
@@ -99,8 +100,7 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -108,8 +108,7 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with(['urlRewrite2'], ['row2'], UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite2'], ['row2'], UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
@@ -131,7 +130,7 @@ class DbStorageTest extends TestCase
             ->with('col2 IN (?)', 'val2');
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
@@ -142,8 +141,7 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -174,7 +172,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -224,7 +222,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -255,8 +253,7 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -288,7 +285,7 @@ class DbStorageTest extends TestCase
 
         $this->connectionMock
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -319,8 +316,7 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -351,7 +347,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -402,7 +398,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -553,7 +549,7 @@ class DbStorageTest extends TestCase
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
         $this->connectionMock->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->select->expects($this->at(1))
             ->method('where')

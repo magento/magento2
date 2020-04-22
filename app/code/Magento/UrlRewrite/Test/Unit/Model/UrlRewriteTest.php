@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Test\Unit\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -27,10 +29,11 @@ class UrlRewriteTest extends TestCase
 
         $context = $this->createMock(Context::class);
         $registry = $this->createMock(Registry::class);
-        $resource = $this->createPartialMock(
-            AbstractResource::class,
-            ['getIdFieldName', '_construct', 'getConnection']
-        );
+        $resource = $this->getMockBuilder(AbstractResource::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_construct', 'getConnection'])
+            ->addMethods(['getIdFieldName'])
+            ->getMock();
         $resourceCollection = $this->createMock(AbstractDb::class);
         $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())

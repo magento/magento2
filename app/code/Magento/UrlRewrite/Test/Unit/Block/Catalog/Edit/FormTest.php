@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Test\Unit\Block\Catalog\Edit;
 
@@ -74,27 +75,25 @@ class FormTest extends TestCase
     public function testAddErrorMessageWhenProductWithoutStores()
     {
         $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $form->expects($this->any())->method('getElement')->will(
-            $this->returnValue(
-                $this->getMockForAbstractClass(
-                    AbstractElement::class,
-                    [],
-                    '',
-                    false
-                )
+        $form->expects($this->any())->method('getElement')->willReturn(
+            $this->getMockForAbstractClass(
+                AbstractElement::class,
+                [],
+                '',
+                false
             )
         );
         $this->formFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
         $fieldset = $this->createMock(Fieldset::class);
         $form->expects($this->once())
             ->method('addFieldset')
-            ->will($this->returnValue($fieldset));
-        $storeElement = $this->createPartialMock(
-            AbstractElement::class,
-            ['setAfterElementHtml', 'setValues']
-        );
+            ->willReturn($fieldset);
+        $storeElement = $this->getMockBuilder(AbstractElement::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setAfterElementHtml', 'setValues'])
+            ->getMock();
         $fieldset->expects($this->at(2))
             ->method('addField')
             ->with(

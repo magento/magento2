@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
 use Laminas\Stdlib\ParametersInterface;
@@ -83,10 +85,11 @@ class RouterTest extends TestCase
         $this->actionFactory = $this->createMock(ActionFactory::class);
         $this->url = $this->createMock(UrlInterface::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['sendResponse'])
+            ->addMethods(['setRedirect'])
+            ->getMockForAbstractClass();
         $this->requestQuery = $this->createMock(ParametersInterface::class);
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()->getMock();
