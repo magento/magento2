@@ -11,8 +11,10 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Vat;
+use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -20,6 +22,8 @@ use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\GuestShippingMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
+use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
@@ -299,6 +303,8 @@ class ShippingMethodManagementTest extends TestCase
      */
     public function testEstimateByAddressWithInclExclTaxAndVATGroup()
     {
+        $this->mockCustomerVat();
+
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
@@ -325,10 +331,44 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
+     * Create a test double fot customer vat class
+     */
+    private function mockCustomerVat(): void
+    {
+        $gatewayResponse = new DataObject([
+            'is_valid' => false,
+            'request_date' => '',
+            'request_identifier' => '123123123',
+            'request_success' => false,
+            'request_message' => __('Error during VAT Number verification.'),
+        ]);
+        $customerVat = $this->createPartialMock(Vat::class,
+            [
+                'checkVatNumber',
+                'isCountryInEU',
+                'getCustomerGroupIdBasedOnVatNumber',
+                'getMerchantCountryCode',
+                'getMerchantVatNumber'
+            ]
+        );
+        $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
+        $customerVat->method('isCountryInEU')->willReturn(true);
+        $customerVat->method('getMerchantCountryCode')->willReturn('GB');
+        $customerVat->method('getMerchantVatNumber')->willReturn('11111');
+        $customerVat->method('getCustomerGroupIdBasedOnVatNumber')->willReturn('4');
+        $this->objectManager->removeSharedInstance(Vat::class);
+        $this->objectManager->addSharedInstance($customerVat, Vat::class);
+
+        // Remove instances where the customer vat object is cached
+        $this->objectManager->removeSharedInstance(CollectTotalsObserver::class);
+        $this->objectManager->removeSharedInstance(AfterAddressSaveObserver::class);
+        $this->objectManager->removeSharedInstance(VatValidator::class);
+    }
+
+    /**
      * Find the group with a given code.
      *
      * @param string $code
-     *
      * @return GroupInterface
      */
     protected function findCustomerGroupByCode(string $code): ?GroupInterface
@@ -394,11 +434,6 @@ class ShippingMethodManagementTest extends TestCase
         $configData = [
             [
                 'path' => Vat::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
-                'value' => $customerGroupId,
-                'scope' => ScopeInterface::SCOPE_STORE,
-            ],
-            [
-                'path' => Vat::XML_PATH_CUSTOMER_VIV_ERROR_GROUP,
                 'value' => $customerGroupId,
                 'scope' => ScopeInterface::SCOPE_STORE,
             ],
