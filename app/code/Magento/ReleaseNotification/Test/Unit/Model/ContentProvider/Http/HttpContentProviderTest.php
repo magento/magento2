@@ -40,7 +40,7 @@ class HttpContentProviderTest extends TestCase
      */
     private $httpClientMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();

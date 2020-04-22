@@ -37,7 +37,7 @@ class CanViewNotificationTest extends TestCase
     /** @var MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();

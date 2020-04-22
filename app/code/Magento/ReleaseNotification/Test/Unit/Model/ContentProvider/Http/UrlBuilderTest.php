@@ -25,7 +25,7 @@ class UrlBuilderTest extends TestCase
      */
     private $urlBuilder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();

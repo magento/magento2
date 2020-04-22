@@ -61,7 +61,7 @@ class MarkUserNotifiedTest extends TestCase
      */
     private $action;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storageMock = $this->getMockBuilder(StorageInterface::class)
             ->setMethods(['getId'])
