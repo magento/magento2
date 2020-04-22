@@ -38,10 +38,9 @@ class PurchaseorderTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $eventManager = $this->createMock(EventManagerInterface::class);
         $paymentDataMock = $this->createMock(PaymentHelper::class);
-        $this->scopeConfigMock = $this->createPartialMock(
-            ScopeConfigInterface::class,
-            ['getValue', 'isSetFlag']
-        );
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->onlyMethods(['getValue', 'isSetFlag'])
+            ->getMockForAbstractClass();
         $this->object = $objectManagerHelper->getObject(
             Purchaseorder::class,
             [

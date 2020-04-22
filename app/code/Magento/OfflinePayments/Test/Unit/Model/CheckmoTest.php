@@ -32,7 +32,9 @@ class CheckmoTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $eventManager = $this->createMock(ManagerInterface::class);
         $paymentDataMock = $this->createMock(Data::class);
-        $this->scopeConfigMock = $this->createPartialMock(ScopeConfigInterface::class, ['getValue', 'isSetFlag']);
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->onlyMethods(['getValue', 'isSetFlag'])
+            ->getMockForAbstractClass();
         $this->object = $objectManagerHelper->getObject(
             Checkmo::class,
             [
