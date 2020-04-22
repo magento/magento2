@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogWidget\Test\Unit\Block\Product\Widget;
 
 use Magento\Backend\Block\Template\Context;
@@ -198,10 +200,10 @@ class ConditionsTest extends TestCase
     public function testRender()
     {
         $data = ['area' => 'backend'];
-        $abstractElementMock = $this->createPartialMock(
-            AbstractElement::class,
-            ['getContainer']
-        );
+        $abstractElementMock = $this->getMockBuilder(AbstractElement::class)
+            ->addMethods(['getContainer'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $eventManagerMock = $this->createMock(ManagerInterface::class);
         $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $fieldsetMock = $this->createMock(Fieldset::class);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
@@ -50,7 +51,7 @@ class ConditionsTest extends TestCase
             ->setMethods(['setBody', 'sendResponse'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->response->expects($this->once())->method('setBody')->will($this->returnSelf());
+        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -72,10 +73,13 @@ class ConditionsTest extends TestCase
     public function testExecute()
     {
         $type = 'Magento\CatalogWidget\Model\Rule\Condition\Product|attribute_set_id';
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->will($this->returnValue('1--1'));
-        $this->request->expects($this->at(1))->method('getParam')->with('type')->will($this->returnValue($type));
-        $this->request->expects($this->at(2))->method('getParam')->with('form')
-            ->will($this->returnValue('request_form_param_value'));
+        $this->request->expects($this->at(0))
+            ->method('getParam')->with('id')->willReturn('1--1');
+        $this->request->expects($this->at(1))
+            ->method('getParam')->with('type')->willReturn($type);
+        $this->request->expects($this->at(2))
+            ->method('getParam')->with('form')
+            ->willReturn('request_form_param_value');
 
         $condition = $this->getMockBuilder(Product::class)
             ->setMethods([
@@ -88,20 +92,26 @@ class ConditionsTest extends TestCase
                 'setJsFormObject',
             ])->disableOriginalConstructor()
             ->getMock();
-        $condition->expects($this->once())->method('setId')->with('1--1')->will($this->returnSelf());
-        $condition->expects($this->once())->method('setType')
-            ->with(Product::class)
-            ->will($this->returnSelf());
-        $condition->expects($this->once())->method('setRule')->with($this->rule)->will($this->returnSelf());
-        $condition->expects($this->once())->method('setPrefix')->with('conditions')->will($this->returnSelf());
-        $condition->expects($this->once())->method('setJsFormObject')->with('request_form_param_value')
-            ->will($this->returnSelf());
-        $condition->expects($this->once())->method('setAttribute')->with('attribute_set_id')->will($this->returnSelf());
-        $condition->expects($this->once())->method('asHtmlRecursive')->will($this->returnValue('<some_html>'));
+        $condition->expects($this->once())
+            ->method('setId')->with('1--1')->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('setType')
+            ->with(Product::class)->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('setRule')->with($this->rule)->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('setPrefix')->with('conditions')->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('setJsFormObject')->with('request_form_param_value')->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('setAttribute')->with('attribute_set_id')->willReturnSelf();
+        $condition->expects($this->once())
+            ->method('asHtmlRecursive')->willReturn('<some_html>');
 
-        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($condition));
+        $this->objectManager->expects($this->once())->method('create')->willReturn($condition);
 
-        $this->response->expects($this->once())->method('setBody')->with('<some_html>')->will($this->returnSelf());
+        $this->response->expects($this->once())
+            ->method('setBody')->with('<some_html>')->willReturnSelf();
         $this->controller->execute();
     }
 }

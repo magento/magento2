@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
@@ -68,9 +69,9 @@ class CombineTest extends TestCase
             ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
-        $productCondition->expects($this->any())->method('loadAttributeOptions')->will($this->returnSelf());
+        $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
         $productCondition->expects($this->any())->method('getAttributeOption')
-            ->will($this->returnValue($attributeOptions));
+            ->willReturn($attributeOptions);
 
         $this->conditionFactory->expects($this->atLeastOnce())->method('create')->willReturn($productCondition);
 
@@ -83,10 +84,10 @@ class CombineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $condition = $this->getMockBuilder(Combine::class)
-            ->disableOriginalConstructor()->setMethods(['collectValidatedAttributes'])
+            ->disableOriginalConstructor()
+            ->setMethods(['collectValidatedAttributes'])
             ->getMock();
-        $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)
-            ->will($this->returnSelf());
+        $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)->willReturnSelf();
 
         $this->condition->setConditions([$condition]);
 

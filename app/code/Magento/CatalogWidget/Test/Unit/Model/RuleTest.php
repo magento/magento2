@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogWidget\Test\Unit\Model;
 
 use Magento\CatalogWidget\Model\Rule;
@@ -51,7 +53,7 @@ class RuleTest extends TestCase
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->combineFactory->expects($this->once())->method('create')->will($this->returnValue($condition));
+        $this->combineFactory->expects($this->once())->method('create')->willReturn($condition);
         $this->assertSame($condition, $this->rule->getConditionsInstance());
     }
 
