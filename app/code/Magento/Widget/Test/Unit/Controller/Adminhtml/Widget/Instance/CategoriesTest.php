@@ -70,10 +70,11 @@ class CategoriesTest extends TestCase
     {
         $this->request = $this->createMock(RequestInterface::class);
         $this->mathRandom = $this->createMock(Random::class);
-        $this->chooser = $this->createPartialMock(
-            $this->blockClass,
-            ['setUseMassaction', 'setId', 'setIsAnchorOnly', 'setSelectedCategories', 'toHtml']
-        );
+        $this->chooser = $this->getMockBuilder($this->blockClass)
+            ->disableOriginalConstructor()
+            ->addMethods(['setUseMassaction', 'setId', 'setIsAnchorOnly'])
+            ->onlyMethods(['setSelectedCategories', 'toHtml'])
+            ->getMock();
         $this->layout = $this->createMock(Layout::class);
         $this->resultRaw = $this->createMock(Raw::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);

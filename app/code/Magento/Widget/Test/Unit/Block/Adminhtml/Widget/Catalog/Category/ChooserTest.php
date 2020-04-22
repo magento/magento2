@@ -81,14 +81,16 @@ class ChooserTest extends TestCase
     {
         $this->collection = $this->createMock(Collection::class);
 
-        $this->childNode = $this->createPartialMock(
-            Node::class,
-            ['getLevel', 'hasChildren']
-        );
-        $this->rootNode = $this->createPartialMock(
-            Node::class,
-            ['getLevel', 'hasChildren', 'getChildren']
-        );
+        $this->childNode = $this->getMockBuilder(Node::class)
+            ->addMethods(['getLevel'])
+            ->onlyMethods(['hasChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rootNode = $this->getMockBuilder(Node::class)
+            ->addMethods(['getLevel'])
+            ->onlyMethods(['hasChildren', 'getChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->categoryTree = $this->createMock(Tree::class);
         $this->store = $this->createMock(Store::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
