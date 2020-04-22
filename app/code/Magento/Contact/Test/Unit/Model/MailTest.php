@@ -53,7 +53,8 @@ class MailTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,8 +91,7 @@ class MailTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
+            ->method('setTemplateIdentifier')->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
             ->with(
@@ -99,22 +99,17 @@ class MailTest extends TestCase
                     'area' => 'frontend',
                     'store' => 555,
                 ]
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
-            ->with($templateVars)
-            ->will($this->returnSelf());
+            ->with($templateVars)->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
-            ->method('setFrom')
-            ->will($this->returnSelf());
+            ->method('setFrom')->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
-            ->method('addTo')
-            ->will($this->returnSelf());
+            ->method('addTo')->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('setReplyTo')
-            ->with($email)
-            ->will($this->returnSelf());
+            ->with($email)->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')
             ->willReturn($transport);

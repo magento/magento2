@@ -33,6 +33,6 @@ class LinksTest extends TestCase
      */
     public function testGetIdentities(): void
     {
-        $this->assertTrue(is_array($this->model->getIdentities()));
+        $this->assertIsArray($this->model->getIdentities());
     }
 }

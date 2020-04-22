@@ -90,7 +90,7 @@ class DataTest extends TestCase
             ->method('getValue')
             ->willReturn('1');
 
-        $this->assertTrue(is_string($this->helper->isEnabled()));
+        $this->assertIsString($this->helper->isEnabled());
     }
 
     /**
@@ -102,7 +102,7 @@ class DataTest extends TestCase
             ->method('getValue')
             ->willReturn(null);
 
-        $this->assertTrue(null === $this->helper->isEnabled());
+        $this->assertNull($this->helper->isEnabled());
     }
 
     /**

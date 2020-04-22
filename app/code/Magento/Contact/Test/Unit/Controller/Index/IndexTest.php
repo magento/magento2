@@ -49,7 +49,8 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(
@@ -57,23 +58,22 @@ class IndexTest extends TestCase
             )->disableOriginalConstructor(
             )->getMock();
 
-        $this->urlMock = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
+        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
+            ->getMockForAbstractClass();
 
         $contextMock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->urlMock));
+            ->willReturn($this->urlMock);
 
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue(
-                $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()
-            ));
+            ->willReturn($this->getMockBuilder(RequestInterface::class)
+            ->getMockForAbstractClass());
 
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue(
-                $this->getMockBuilder(ResponseInterface::class)->getMockForAbstractClass()
-            ));
+            ->willReturn($this->getMockBuilder(ResponseInterface::class)
+            ->getMockForAbstractClass());
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -81,7 +81,7 @@ class IndexTest extends TestCase
 
         $contextMock->expects($this->once())
             ->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactoryMock));
+            ->willReturn($this->resultFactoryMock);
 
         $this->controller = (new ObjectManagerHelper($this))->getObject(
             Index::class,
