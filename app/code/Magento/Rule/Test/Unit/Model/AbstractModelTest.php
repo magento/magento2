@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model;
 
@@ -85,7 +86,7 @@ class AbstractModelTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
 
         $resourceMock = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
@@ -131,22 +132,18 @@ class AbstractModelTest extends TestCase
 
         $serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         return $serializerMock;
@@ -161,11 +158,11 @@ class AbstractModelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $conditions->expects($this->once())->method('setRule')->will($this->returnSelf());
-        $conditions->expects($this->once())->method('setId')->will($this->returnSelf());
-        $conditions->expects($this->once())->method('setPrefix')->will($this->returnSelf());
+        $conditions->expects($this->once())->method('setRule')->willReturnSelf();
+        $conditions->expects($this->once())->method('setId')->willReturnSelf();
+        $conditions->expects($this->once())->method('setPrefix')->willReturnSelf();
 
-        $this->model->expects($this->once())->method('getConditionsInstance')->will($this->returnValue($conditions));
+        $this->model->expects($this->once())->method('getConditionsInstance')->willReturn($conditions);
 
         $this->model->setConditionsSerialized($serializedConditions);
 
@@ -183,11 +180,11 @@ class AbstractModelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $actions->expects($this->once())->method('setRule')->will($this->returnSelf());
-        $actions->expects($this->once())->method('setId')->will($this->returnSelf());
-        $actions->expects($this->once())->method('setPrefix')->will($this->returnSelf());
+        $actions->expects($this->once())->method('setRule')->willReturnSelf();
+        $actions->expects($this->once())->method('setId')->willReturnSelf();
+        $actions->expects($this->once())->method('setPrefix')->willReturnSelf();
 
-        $this->model->expects($this->once())->method('getActionsInstance')->will($this->returnValue($actions));
+        $this->model->expects($this->once())->method('getActionsInstance')->willReturn($actions);
 
         $this->model->setActionsSerialized($actionsSerialized);
 
@@ -211,8 +208,8 @@ class AbstractModelTest extends TestCase
         $this->model->setConditions($conditions);
         $this->model->setActions($actions);
 
-        $conditions->expects($this->any())->method('asArray')->will($this->returnValue(['conditions' => 'array']));
-        $actions->expects($this->any())->method('asArray')->will($this->returnValue(['actions' => 'array']));
+        $conditions->expects($this->any())->method('asArray')->willReturn(['conditions' => 'array']);
+        $actions->expects($this->any())->method('asArray')->willReturn(['actions' => 'array']);
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch');
 

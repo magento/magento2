@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rule\Test\Unit\Model\Condition\Product;
 
 use Magento\Catalog\Model\ProductCategoryList;
@@ -94,7 +96,10 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->createPartialMock(AbstractModel::class, ["getAttribute"]);
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_condition->setAttribute('category_ids');
         $this->_condition->setValueParsed('1');
         $this->_condition->setOperator('{}');
@@ -122,10 +127,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValues()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ["getAttribute", 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->expects($this->once())
             ->method('getResource')
             ->willReturn(null);
@@ -144,10 +150,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValuesWithResource()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ["getAttribute", 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->setId(1);
         $time = '04/19/2012 11:59 am';
         $product->setData('someAttribute', $time);
@@ -195,10 +202,11 @@ class AbstractProductTest extends TestCase
     public function testValidateSetEntityAttributeValuesWithResource()
     {
         $this->_condition->setAttribute('someAttribute');
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ['getAttribute', 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['getAttribute'])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->setAtribute('attribute');
         $product->setId(12);
 
@@ -241,10 +249,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateSetEntityAttributeValuesWithoutResource()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ['someMethod', 'getResource', 'load']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['someMethod'])
+            ->onlyMethods(['getResource', 'load'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_condition->setAttribute('someAttribute');
         $product->setAtribute('attribute');
         $product->setId(12);

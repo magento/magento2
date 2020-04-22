@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model\Renderer;
 
@@ -35,10 +36,10 @@ class ConditionsTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditions = $this->objectManagerHelper->getObject(Conditions::class);
-        $this->_element = $this->createPartialMock(
-            AbstractElement::class,
-            ['getRule']
-        );
+        $this->_element = $this->getMockBuilder(AbstractElement::class)
+            ->addMethods(['getRule'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     public function testRender()
@@ -51,15 +52,15 @@ class ConditionsTest extends TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getConditions')
-            ->will($this->returnValue($conditions));
+            ->willReturn($conditions);
 
         $conditions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('conditions html'));
+            ->willReturn('conditions html');
 
         $this->assertEquals('conditions html', $this->conditions->render($this->_element));
     }
