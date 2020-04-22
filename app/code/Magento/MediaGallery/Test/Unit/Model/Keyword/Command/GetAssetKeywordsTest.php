@@ -147,7 +147,8 @@ class GetAssetKeywordsTest extends TestCase
         $selectStub->method('join')->willReturnSelf();
         $selectStub->method('where')->willReturnSelf();
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $connectionMock
             ->method('select')
             ->willReturn($selectStub);
@@ -162,7 +163,8 @@ class GetAssetKeywordsTest extends TestCase
 
     private function configureAssetKeywordFactoryStub(): void
     {
-        $keywordStub = $this->getMockBuilder(KeywordInterface::class)->getMock();
+        $keywordStub = $this->getMockBuilder(KeywordInterface::class)
+            ->getMock();
         $this->assetKeywordFactoryStub
             ->method('create')
             ->willReturn($keywordStub);

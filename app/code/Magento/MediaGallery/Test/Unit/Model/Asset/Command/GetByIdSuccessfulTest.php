@@ -99,7 +99,8 @@ class GetByIdSuccessfulTest extends TestCase
         $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
         $this->adapter->method('query')->willReturn($this->statementMock);
 
-        $mediaAssetStub = $this->getMockBuilder(AssetInterface::class)->getMock();
+        $mediaAssetStub = $this->getMockBuilder(AssetInterface::class)
+            ->getMock();
         $this->assetFactory->expects($this->once())->method('create')->willReturn($mediaAssetStub);
 
         $this->assertEquals(
