@@ -73,6 +73,7 @@ class Template extends \Magento\Framework\View\Element\Template
         $this->formKey = $context->getFormKey();
         $this->nameBuilder = $context->getNameBuilder();
         $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
+        $data['directoryHelper']= ObjectManager::getInstance()->get(\Magento\Directory\Helper\Data::class);
         parent::__construct($context, $data);
     }
 

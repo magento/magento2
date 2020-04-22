@@ -175,9 +175,9 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             '-link">' . $element->getLegend() . '</a>' .
             /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
                 'onclick',
-                "Fieldset.toggleCollapse(\'' . $element->getHtmlId() . '\', \'' .
-                 $this->_urlBuilder->getUrl('*/*/state') . '\'); return false;",
-                'a#' . $element->getHtmlId()
+                "Fieldset.toggleCollapse('" . $element->getHtmlId() . "', '" .
+                 $this->_urlBuilder->getUrl('*/*/state') . "'); return false;",
+                'a#' . $element->getHtmlId() . '-head'
             );
     }
 

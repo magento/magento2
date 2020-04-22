@@ -85,10 +85,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $this->_resourceHelper = $resourceHelper;
         $this->_backendSession = $backendSession;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
-        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
-        $random = $random ?? ObjectManager::getInstance()->get(Random::class);
-        $this->secureRenderer = $secureRenderer;
-        $this->random = $random;
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**

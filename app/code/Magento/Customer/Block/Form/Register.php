@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Newsletter\Model\Config;
 
 /**
@@ -72,6 +73,7 @@ class Register extends \Magento\Directory\Block\Data
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         $this->newsLetterConfig = $newsLetterConfig ?: ObjectManager::getInstance()->get(Config::class);
+        $data['addressHelper'] = ObjectManager::getInstance()->get(AddressHelper::class);
         parent::__construct(
             $context,
             $directoryHelper,

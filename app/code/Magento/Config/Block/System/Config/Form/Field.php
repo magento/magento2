@@ -135,7 +135,7 @@ class Field extends \Magento\Backend\Block\Template implements
         $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
             'onclick',
             "toggleValueElements(this, Element.previous(this.parentNode))",
-            'input#' . $htmlId
+            'input#' . $htmlId . '_inherit'
         );
         $html .= '<label for="' . $htmlId . '_inherit" class="inherit">' . $this->_getInheritCheckboxLabel(
             $element

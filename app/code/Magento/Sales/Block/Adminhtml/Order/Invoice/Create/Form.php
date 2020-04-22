@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml invoice create form
  *
@@ -14,6 +16,22 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
+        array $data = []
+    ) {
+        $data['taxHelper'] = ObjectManager::getInstance()->get(\Magento\Tax\Helper\Data::class);
+        parent::__construct($context, $registry, $adminHelper, $data);
+    }
+
     /**
      * Retrieve invoice order
      *

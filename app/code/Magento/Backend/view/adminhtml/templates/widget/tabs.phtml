@@ -80,7 +80,7 @@
                 <?php endif; ?>
                 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                     'display:none',
-                    'div#' . $block->escapeHtmlAttr($block->getTabId($_tab))
+                    'div#' . $block->escapeHtmlAttr($block->getTabId($_tab)) . '_content'
                 ); ?>
             </li>
         <?php endforeach; ?>
