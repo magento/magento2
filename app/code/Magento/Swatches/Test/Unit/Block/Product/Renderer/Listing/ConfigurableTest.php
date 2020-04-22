@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer\Listing;
 
 use Magento\Catalog\Helper\Image;
@@ -82,7 +84,7 @@ class ConfigurableTest extends TestCase
     /** @var MockObject */
     private $variationPricesMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
         $this->jsonEncoder = $this->createMock(EncoderInterface::class);
@@ -225,10 +227,10 @@ class ConfigurableTest extends TestCase
         $productAttribute1->expects($this->any())->method('getId')->willReturn(1);
         $productAttribute1->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
-        $attribute1 = $this->createPartialMock(
-            Attribute::class,
-            ['getProductAttribute']
-        );
+        $attribute1 = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getProductAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $attribute1->expects($this->any())->method('getProductAttribute')->willReturn($productAttribute1);
 
         $this->helper->expects($this->any())->method('getAllowAttributes')->with($this->product)

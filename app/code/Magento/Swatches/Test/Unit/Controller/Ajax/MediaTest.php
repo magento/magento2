@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 
 use Magento\Catalog\Model\Product;
@@ -132,8 +134,7 @@ class MediaTest extends TestCase
         $this->jsonMock
             ->expects($this->once())
             ->method('setData')
-            ->with($this->mediaGallery)
-            ->will($this->returnSelf());
+            ->with($this->mediaGallery)->willReturnSelf();
 
         $result = $this->controller->execute();
 

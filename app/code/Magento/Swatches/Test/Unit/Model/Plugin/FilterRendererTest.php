@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
@@ -51,10 +52,11 @@ class FilterRendererTest extends TestCase
             ['setSwatchFilter', 'toHtml']
         );
 
-        $this->filterMock = $this->createPartialMock(
-            AbstractFilter::class,
-            ['getAttributeModel', 'hasAttributeModel']
-        );
+        $this->filterMock = $this->getMockBuilder(AbstractFilter::class)
+            ->addMethods(['hasAttributeModel'])
+            ->onlyMethods(['getAttributeModel'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->filterRendererMock = $this->createMock(
             \Magento\LayeredNavigation\Block\Navigation\FilterRenderer::class
@@ -86,7 +88,7 @@ class FilterRendererTest extends TestCase
             ->willReturn(true);
 
         $this->layoutMock->expects($this->once())->method('createBlock')->willReturn($this->blockMock);
-        $this->blockMock->expects($this->once())->method('setSwatchFilter')->will($this->returnSelf());
+        $this->blockMock->expects($this->once())->method('setSwatchFilter')->willReturnSelf();
 
         $this->plugin->aroundRender($this->filterRendererMock, $this->closureMock, $this->filterMock);
     }

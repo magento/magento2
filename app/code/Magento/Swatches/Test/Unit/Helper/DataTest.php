@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Helper;
 
@@ -202,7 +203,7 @@ class DataTest extends TestCase
             ->expects($this->at(0))
             ->method('getData')
             ->with('additional_data')
-            ->will($this->returnValue($dataFromDb));
+            ->willReturn($dataFromDb);
 
         $i = 1;
         foreach ($attributeData as $key => $value) {
@@ -310,7 +311,7 @@ class DataTest extends TestCase
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
         $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);
-        $this->productMock->method('load')->with(95)->will($this->returnSelf());
+        $this->productMock->method('load')->with(95)->willReturnSelf();
 
         $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
     }
@@ -415,9 +416,9 @@ class DataTest extends TestCase
 
         $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
         if ($mediaGallery) {
-            $this->assertContains($image, $productMediaGallery['large']);
-            $this->assertContains($image, $productMediaGallery['medium']);
-            $this->assertContains($image, $productMediaGallery['small']);
+            $this->assertStringContainsString($image, $productMediaGallery['large']);
+            $this->assertStringContainsString($image, $productMediaGallery['medium']);
+            $this->assertStringContainsString($image, $productMediaGallery['small']);
         } else {
             $this->assertEmpty($productMediaGallery);
         }
@@ -620,7 +621,7 @@ class DataTest extends TestCase
 
         $storeId = 1;
 
-        $this->attributeMock->method('setStoreId')->with($storeId)->will($this->returnSelf());
+        $this->attributeMock->method('setStoreId')->with($storeId)->willReturnSelf();
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -720,7 +721,7 @@ class DataTest extends TestCase
             ->willReturn($optionsData[1]['option_id']);
 
         $swatchCollectionMock = $this->createMock(Collection::class);
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
         $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock, $swatchMock]);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
@@ -765,7 +766,7 @@ class DataTest extends TestCase
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
         $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock, $swatchMock]);
 
         $storeMock = $this->createMock(Store::class);
@@ -796,7 +797,7 @@ class DataTest extends TestCase
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
         $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock]);
 
         $storeMock = $this->createMock(Store::class);

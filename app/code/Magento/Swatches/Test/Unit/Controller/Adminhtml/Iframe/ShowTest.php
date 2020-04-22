@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Iframe;
 
 use Magento\Backend\App\Action\Context;
@@ -104,7 +106,7 @@ class ShowTest extends TestCase
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->controller->execute();
     }
 

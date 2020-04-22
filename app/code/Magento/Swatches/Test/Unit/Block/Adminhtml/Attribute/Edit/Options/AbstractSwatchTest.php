@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options;
 
 use Magento\Backend\Block\Template\Context;
@@ -110,10 +112,10 @@ class AbstractSwatchTest extends TestCase
         if ($values === null) {
             $objectManager = new ObjectManager($this);
 
-            $option = $this->createPartialMock(
-                Option::class,
-                ['getId', 'getValue', 'getLabel']
-            );
+            $option = $this->getMockBuilder(Option::class)
+                ->addMethods(['getId', 'getValue', 'getLabel'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
             $attrOptionCollectionMock = $objectManager->getCollectionMock(
                 Collection::class,
@@ -125,7 +127,10 @@ class AbstractSwatchTest extends TestCase
                 ->method('create')
                 ->willReturn($attrOptionCollectionMock);
 
-            $attribute = $this->createPartialMock(Attribute::class, ['getId']);
+            $attribute = $this->getMockBuilder(Attribute::class)
+                ->addMethods(['getId'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $attribute->expects($this->once())->method('getId')->willReturn(23);
 
             $this->registryMock

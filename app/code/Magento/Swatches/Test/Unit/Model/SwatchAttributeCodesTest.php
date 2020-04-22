@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Model;
 
 use Magento\Eav\Model\Entity\Attribute;
@@ -48,12 +50,12 @@ class SwatchAttributeCodesTest extends TestCase
     protected function setUp(): void
     {
         $this->cache = $this->createPartialMock(CacheInterface::class, [
-                'getFrontend',
-                'load',
-                'save',
-                'remove',
-                'clean'
-            ]);
+            'getFrontend',
+            'load',
+            'save',
+            'remove',
+            'clean'
+        ]);
 
         $this->resourceConnection = $this->createPartialMock(
             ResourceConnection::class,

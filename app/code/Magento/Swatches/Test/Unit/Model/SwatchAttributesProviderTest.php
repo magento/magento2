@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Model;
 
@@ -45,10 +46,11 @@ class SwatchAttributesProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeConfigurable = $this->createPartialMock(
-            Configurable::class,
-            ['getConfigurableAttributes', 'getCodes', 'getProductAttribute']
-        );
+        $this->typeConfigurable = $this->getMockBuilder(Configurable::class)
+            ->addMethods(['getCodes', 'getProductAttribute'])
+            ->onlyMethods(['getConfigurableAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->swatchAttributeCodes = $this->createMock(SwatchAttributeCodes::class);
 
@@ -73,10 +75,10 @@ class SwatchAttributesProviderTest extends TestCase
             ->setMethods(['setStoreId', 'getData', 'setData', 'getSource', 'hasData'])
             ->getMock();
 
-        $configAttributeMock = $this->createPartialMock(
-            Configurable\Attribute::class,
-            ['getAttributeId', 'getProductAttribute']
-        );
+        $configAttributeMock = $this->getMockBuilder(Configurable\Attribute::class)->addMethods(['getProductAttribute'])
+            ->onlyMethods(['getAttributeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $configAttributeMock
             ->method('getAttributeId')
             ->willReturn(1);

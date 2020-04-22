@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
@@ -298,13 +299,13 @@ class EavAttributeTest extends TestCase
     /**
      * Test afterSave plugin for visual swatch
      *
-     * @param string $swatchType
+     * @param int $swatchType
      * @param string $swatch1
      * @param string $swatch2
      *
      * @dataProvider visualSwatchProvider
      */
-    public function testAfterAfterSaveVisualSwatch(string $swatchType, string $swatch1, string $swatch2)
+    public function testAfterAfterSaveVisualSwatch(int $swatchType, string $swatch1, string $swatch2)
     {
         $options = self::VISUAL_SWATCH_OPTIONS;
         $options['value'][self::OPTION_1_ID] = $swatch1;

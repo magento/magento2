@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Observer;
 
 use Magento\Config\Model\Config\Source\Yesno;
@@ -40,10 +42,11 @@ class AddFieldsToAttributeObserverTest extends TestCase
         $this->moduleManagerMock = $this->createMock(Manager::class);
 
         $this->yesNoMock = $this->createMock(Yesno::class);
-        $this->eventObserverMock = $this->createPartialMock(
-            Observer::class,
-            ['getForm', 'getEvent', 'getAttribute']
-        );
+        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getForm', 'getAttribute'])
+            ->onlyMethods(['getEvent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->formMock = $this->createPartialMock(Form::class, ['getElement']);
 
         $objectManager = new ObjectManager($this);

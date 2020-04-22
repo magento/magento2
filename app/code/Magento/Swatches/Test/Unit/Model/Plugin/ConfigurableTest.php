@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -49,7 +51,8 @@ class ConfigurableTest extends TestCase
 
     public function testAfterGetUsedProductCollection()
     {
-        $product = $this->getMockBuilder(ProductInterface::class)->getMock();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMock();
 
         $subject = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,

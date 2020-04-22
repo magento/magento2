@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Model;
 
@@ -50,15 +51,15 @@ class AttributesListTest extends TestCase
         );
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
-        $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
-        $this->attributeMock = $this->createPartialMock(
-            Attribute::class,
-            $methods
-        );
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getFrontendLabel'])
+            ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionMock
             ->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(['id' => $this->attributeMock]));
+            ->willReturn(['id' => $this->attributeMock]);
 
         $this->attributeListModel = new AttributesList(
             $collectionFactoryMock,
@@ -84,13 +85,13 @@ class AttributesListTest extends TestCase
             ->method('addFieldToFilter')
             ->with('main_table.attribute_id', $ids);
 
-        $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
+        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
+        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
 
         $source = $this->createMock(AbstractSource::class);
-        $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue(['options']));
-        $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
+        $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn(['options']);
+        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
 
         $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
             ->with($this->attributeMock)

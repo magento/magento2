@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product\Media\Config;
@@ -81,7 +83,7 @@ class MediaTest extends TestCase
         $this->fileSystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->mediaDirectoryMock));
+            ->willReturn($this->mediaDirectoryMock);
 
         $this->mediaHelperObject = $objectManager->getObject(
             Media::class,
@@ -142,15 +144,15 @@ class MediaTest extends TestCase
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(1);
         $this->fileStorageDbMock->expects($this->atLeastOnce())->method('getUniqueFilename')->willReturn('file___1');
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
-        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
+        $this->mediaDirectoryMock->expects($this->exactly(2))->method('delete')->willReturnSelf();
         $this->mediaHelperObject->moveImageFromTmp('file.tmp');
     }
 
     public function testMoveImageFromTmpNoDb()
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
-        $this->fileStorageDbMock->method('renameFile')->will($this->returnSelf());
+        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }
@@ -163,19 +165,19 @@ class MediaTest extends TestCase
             ->willReturn('attribute/swatch/e/a/earth.png');
 
         $image = $this->createPartialMock(Image::class, [
-                'resize',
-                'save',
-                'keepTransparency',
-                'constrainOnly',
-                'keepFrame',
-                'keepAspectRatio',
-                'backgroundColor',
-                'quality'
-            ]);
+            'resize',
+            'save',
+            'keepTransparency',
+            'constrainOnly',
+            'keepFrame',
+            'keepAspectRatio',
+            'backgroundColor',
+            'quality'
+        ]);
 
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
-        $image->expects($this->any())->method('resize')->will($this->returnSelf());
+        $image->expects($this->any())->method('resize')->willReturnSelf();
         $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }
