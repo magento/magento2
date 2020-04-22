@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,55 +6,62 @@
 
 namespace Magento\Paypal\Test\Unit\Controller\Ipn;
 
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Controller\Ipn\Index;
 use Magento\Paypal\Model\IpnFactory;
 use Magento\Paypal\Model\IpnInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /** @var Index */
     private $model;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseInterface|MockObject */
     private $responseMock;
 
     /**
-     * @var IpnFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var IpnFactory|MockObject
      */
     private $ipnFactoryMock;
 
     /**
-     * @var OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->ipnFactoryMock = $this->createMock(IpnFactory::class);
         $this->orderFactoryMock = $this->createMock(OrderFactory::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             Index::class,
             [

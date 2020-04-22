@@ -1,56 +1,57 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model;
 
-use Magento\NewRelicReporting\Model\Counter;
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Customer\Api\CustomerManagementInterface;
-use Magento\Store\Api\WebsiteManagementInterface;
+use Magento\NewRelicReporting\Model\Counter;
 use Magento\Store\Api\StoreManagementInterface;
+use Magento\Store\Api\WebsiteManagementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CounterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CounterTest extends \PHPUnit\Framework\TestCase
+class CounterTest extends TestCase
 {
     /**
-     * @var \Magento\NewRelicReporting\Model\Counter
+     * @var Counter
      */
     protected $model;
 
     /**
-     * @var ProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductManagementInterface|MockObject
      */
     protected $productManagement;
 
     /**
-     * @var ConfigurableProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductManagementInterface|MockObject
      */
     protected $configurableManagement;
 
     /**
-     * @var CategoryManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryManagementInterface|MockObject
      */
     protected $categoryManagement;
 
     /**
-     * @var CustomerManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerManagementInterface|MockObject
      */
     protected $customerManagement;
 
     /**
-     * @var WebsiteManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteManagementInterface|MockObject
      */
     protected $websiteManagement;
 
     /**
-     * @var StoreManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagementInterface|MockObject
      */
     protected $storeManagement;
 
@@ -59,25 +60,25 @@ class CounterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productManagement = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
+        $this->productManagement = $this->getMockBuilder(ProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configurableManagement = $this
-            ->getMockBuilder(\Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface::class)
+            ->getMockBuilder(ConfigurableProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->categoryManagement = $this->getMockBuilder(\Magento\Catalog\Api\CategoryManagementInterface::class)
+        $this->categoryManagement = $this->getMockBuilder(CategoryManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerManagement = $this->getMockBuilder(\Magento\Customer\Api\CustomerManagementInterface::class)
+        $this->customerManagement = $this->getMockBuilder(CustomerManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->websiteManagement = $this->getMockBuilder(\Magento\Store\Api\WebsiteManagementInterface::class)
+        $this->websiteManagement = $this->getMockBuilder(WebsiteManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagement = $this->getMockBuilder(\Magento\Store\Api\StoreManagementInterface::class)
+        $this->storeManagement = $this->getMockBuilder(StoreManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -102,10 +103,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getAllProductsCount()
-        );
+        $this->assertInternalType('int', $this->model->getAllProductsCount());
     }
 
     /**
@@ -119,10 +117,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getConfigurableCount()
-        );
+        $this->assertInternalType('int', $this->model->getConfigurableCount());
     }
 
     /**
@@ -137,10 +132,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->with(1)
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getActiveCatalogSize()
-        );
+        $this->assertInternalType('int', $this->model->getActiveCatalogSize());
     }
 
     /**
@@ -154,10 +146,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getCategoryCount()
-        );
+        $this->assertInternalType('int', $this->model->getCategoryCount());
     }
 
     /**
@@ -171,10 +160,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getCustomerCount()
-        );
+        $this->assertInternalType('int', $this->model->getCustomerCount());
     }
 
     /**
@@ -188,10 +174,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getWebsiteCount()
-        );
+        $this->assertInternalType('int', $this->model->getWebsiteCount());
     }
 
     /**
@@ -205,9 +188,6 @@ class CounterTest extends \PHPUnit\Framework\TestCase
             ->method('getCount')
             ->willReturn(1);
 
-        $this->assertInternalType(
-            'int',
-            $this->model->getStoreViewsCount()
-        );
+        $this->assertInternalType('int', $this->model->getStoreViewsCount());
     }
 }

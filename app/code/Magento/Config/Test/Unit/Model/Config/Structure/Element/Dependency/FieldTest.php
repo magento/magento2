@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
-class FieldTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Dependency\Field;
+use PHPUnit\Framework\TestCase;
+
+class FieldTest extends TestCase
 {
     /**#@+
      * SUT values
@@ -63,7 +66,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         if ($isNegative) {
             $data['negative'] = '1';
         }
-        return new \Magento\Config\Model\Config\Structure\Element\Dependency\Field($data, self::PREFIX);
+        return new Field($data, self::PREFIX);
     }
 
     /**

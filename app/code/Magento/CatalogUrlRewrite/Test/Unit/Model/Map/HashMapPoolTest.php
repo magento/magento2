@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,19 +11,18 @@ use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class HashMapPoolTest
- */
-class HashMapPoolTest extends \PHPUnit\Framework\TestCase
+class HashMapPoolTest extends TestCase
 {
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     private $objectManagerMock;
 
-    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 

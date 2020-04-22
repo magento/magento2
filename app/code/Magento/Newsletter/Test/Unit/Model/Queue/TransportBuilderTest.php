@@ -11,6 +11,7 @@ namespace Magento\Newsletter\Test\Unit\Model\Queue;
 use Magento\Email\Model\Template;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessageInterface;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\Message;
@@ -125,7 +126,7 @@ class TransportBuilderTest extends TestCase
      * @param string $bodyText
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testGetTransport(
         $templateType = TemplateTypesInterface::TYPE_HTML,

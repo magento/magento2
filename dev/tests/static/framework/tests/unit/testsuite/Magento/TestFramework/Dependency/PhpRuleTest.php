@@ -89,7 +89,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'something extends \Magento\SomeModule\Any\ClassName {',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
@@ -105,7 +105,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getViewFileUrl("Magento_SomeModule::js/order-by-sku-failure.js")',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento_SomeModule',
                     ]
@@ -121,7 +121,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->helper("Magento\SomeModule\Any\ClassName")',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
@@ -136,7 +136,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getLayout()->getBlock(\'block.name\');',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]
@@ -157,7 +157,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'Magento\Module2\Subject',
                 [
                     [
-                        'module' => 'Magento\Module2',
+                        'modules' => ['Magento\Module2'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\Subject',
                     ]
@@ -168,7 +168,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'Magento\Module2\NotSubject',
                 [
                     [
-                        'module' => 'Magento\Module2',
+                        'modules' => ['Magento\Module2'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\NotSubject',
                     ]
@@ -179,7 +179,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'Magento\OtherModule\NotSubject',
                 [
                     [
-                        'module' => 'Magento\OtherModule',
+                        'modules' => ['Magento\OtherModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\OtherModule\NotSubject',
                     ]
@@ -222,7 +222,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getUrl("cms/index/index")',
                 [
                     [
-                        'module' => 'Magento\Cms',
+                        'modules' => ['Magento\Cms'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getUrl("cms/index/index"',
                     ]
@@ -295,7 +295,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getLayout()->getBlock(\'block.name\');',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]

@@ -347,7 +347,7 @@ class TemplateTest extends TestCase
         $model->setTemplateId('123');
 
         $designParams = [
-            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'area' => Area::AREA_FRONTEND,
             'theme' => 'themeId',
             'locale' => 'localeId',
         ];

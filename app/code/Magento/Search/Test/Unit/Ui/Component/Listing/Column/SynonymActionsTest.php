@@ -44,7 +44,7 @@ class SynonymActionsTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
@@ -112,7 +112,6 @@ class SynonymActionsTest extends TestCase
                                         self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
-                                '__disableTmpl' => true
                             ],
                             'edit' => [
                                 'href' => sprintf(
@@ -120,7 +119,6 @@ class SynonymActionsTest extends TestCase
                                     self::STUB_SYNONYM_GROUP_ID
                                 ),
                                 'label' => (string)__('View/Edit'),
-                                '__disableTmpl' => true
                             ]
                         ]
                     ]

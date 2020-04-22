@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

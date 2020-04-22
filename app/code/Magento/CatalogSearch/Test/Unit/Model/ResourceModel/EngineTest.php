@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,27 +6,32 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use Magento\CatalogSearch\Model\ResourceModel\Engine;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EngineTest extends \PHPUnit\Framework\TestCase
+class EngineTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
+     * @var Engine
      */
     private $target;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIfNullSql'])
             ->getMockForAbstractClass();
-        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
@@ -40,7 +45,7 @@ class EngineTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            \Magento\CatalogSearch\Model\ResourceModel\Engine::class,
+            Engine::class,
             [
                 'resource' => $resource,
             ]

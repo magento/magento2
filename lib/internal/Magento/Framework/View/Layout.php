@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\ObjectManager;
@@ -261,7 +263,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * Public build.
      *
-     * Will be eliminated in MAGETWO-28359
+     * @todo Will be eliminated in MAGETWO-28359
      *
      * @return void
      */
@@ -1101,15 +1103,24 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
-     * Check is exists non-cacheable layout elements
+     * Check existed non-cacheable layout elements.
      *
      * @return bool
      */
     public function isCacheable()
     {
         $this->build();
-        $cacheableXml = !(bool)count($this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
-        return $this->cacheable && $cacheableXml;
+        $elements = $this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]');
+        $cacheable = $this->cacheable;
+        foreach ($elements as $element) {
+            $blockName = $element->getBlockName();
+            if ($blockName !== false && $this->structure->hasElement($blockName)) {
+                $cacheable = false;
+                break;
+            }
+        }
+
+        return $cacheable;
     }
 
     /**

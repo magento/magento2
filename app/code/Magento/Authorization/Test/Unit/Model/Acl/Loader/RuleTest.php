@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\Authorization\Model\Acl\Loader\Rule
+ * @covers \Magento\Authorization\Model\Acl\Loader\Rule
  */
 class RuleTest extends TestCase
 {
@@ -50,7 +50,7 @@ class RuleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rootResource = new RootResource('Magento_Backend::all');
         $this->resourceMock = $this->createPartialMock(

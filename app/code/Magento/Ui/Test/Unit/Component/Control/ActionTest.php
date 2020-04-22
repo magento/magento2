@@ -1,17 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
 
-use Magento\Ui\Component\Control\Action;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Control\Action;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ActionTest
- */
-class ActionTest extends \PHPUnit\Framework\TestCase
+class ActionTest extends TestCase
 {
     /**
      * @var Action
@@ -26,17 +26,17 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $context = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->objectManager = new ObjectManager($this);
         $this->action = $this->objectManager->getObject(
-            \Magento\Ui\Component\Control\Action::class,
+            Action::class,
             ['context' => $context]
         );
     }
