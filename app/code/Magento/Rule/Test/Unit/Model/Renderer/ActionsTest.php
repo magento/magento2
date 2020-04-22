@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model\Renderer;
 
@@ -35,10 +36,10 @@ class ActionsTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->actions = $this->objectManagerHelper->getObject(Actions::class);
-        $this->_element = $this->createPartialMock(
-            AbstractElement::class,
-            ['getRule']
-        );
+        $this->_element = $this->getMockBuilder(AbstractElement::class)
+            ->addMethods(['getRule'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     public function testRender()
@@ -51,15 +52,15 @@ class ActionsTest extends TestCase
 
         $this->_element->expects($this->any())
             ->method('getRule')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $rule->expects($this->any())
             ->method('getActions')
-            ->will($this->returnValue($actions));
+            ->willReturn($actions);
 
         $actions->expects($this->once())
             ->method('asHtmlRecursive')
-            ->will($this->returnValue('action html'));
+            ->willReturn('action html');
 
         $this->assertEquals('action html', $this->actions->render($this->_element));
     }
