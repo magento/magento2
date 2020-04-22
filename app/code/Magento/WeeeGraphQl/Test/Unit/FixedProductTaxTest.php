@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\WeeeGraphQl\Model\Resolver\FixedProductTax;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FixedProductTaxTest extends TestCase
@@ -85,7 +85,7 @@ class FixedProductTaxTest extends TestCase
     public function testExceptionWhenNoModelSpecified(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/value should be specified/');
+        $this->expectExceptionMessageMatches('/value should be specified/');
 
         $this->resolver->resolve(
             $this->getFieldStub(),
