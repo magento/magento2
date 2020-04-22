@@ -1,25 +1,32 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Model\Fs;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+use Magento\Backup\Helper\Data;
+use Magento\Backup\Model\Fs\Collection;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class CollectionTest extends TestCase
 {
     public function testConstructor()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $helper = new ObjectManager($this);
+        $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directoryWrite = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+            WriteInterface::class
         )->disableOriginalConstructor()->getMock();
         $filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryWrite);
 
         $backupData = $this->getMockBuilder(
-            \Magento\Backup\Helper\Data::class
+            Data::class
         )->disableOriginalConstructor()->getMock();
         $backupData->expects($this->any())->method('getExtensions')->willReturn([]);
 
@@ -27,7 +34,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $directoryWrite->expects($this->any())->method('getAbsolutePath')->with('backups');
 
         $classObject = $helper->getObject(
-            \Magento\Backup\Model\Fs\Collection::class,
+            Collection::class,
             ['filesystem' => $filesystem, 'backupData' => $backupData]
         );
         $this->assertNotNull($classObject);

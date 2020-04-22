@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,16 +11,18 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
+class AllowedCountriesTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     private $storeManagerMock;
 
@@ -32,10 +34,10 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setUp
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->allowedCountriesReader = new AllowedCountries(
             $this->scopeConfigMock,
@@ -48,7 +50,7 @@ class AllowedCountriesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllowedCountriesWithEmptyFilter()
     {
-        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website1 = $this->createMock(WebsiteInterface::class);
         $website1->expects($this->once())
             ->method('getId')
             ->willReturn(1);

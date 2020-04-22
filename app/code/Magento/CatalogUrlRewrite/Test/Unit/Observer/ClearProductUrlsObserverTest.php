@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,12 +11,14 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
+class ClearProductUrlsObserverTest extends TestCase
 {
     /**
      * @var ClearProductUrlsObserver
@@ -24,22 +26,22 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
     protected $clearProductUrlsObserver;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlPersistInterface|MockObject
      */
     protected $urlPersist;
 
     /**
-     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $observer;
 
     /**
-     * @var Event|\PHPUnit\Framework\MockObject\MockObject
+     * @var Event|MockObject
      */
     protected $event;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $importProduct;
 
@@ -95,7 +97,7 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->event);
         $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist);
     }

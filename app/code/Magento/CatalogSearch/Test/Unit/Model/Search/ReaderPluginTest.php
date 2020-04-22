@@ -1,30 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
-class ReaderPluginTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogSearch\Model\Search\ReaderPlugin;
+use Magento\CatalogSearch\Model\Search\RequestGenerator;
+use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ReaderPluginTest extends TestCase
 {
-    /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var RequestGenerator|MockObject */
     protected $requestGenerator;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
+    /** @var ObjectManager  */
     protected $objectManagerHelper;
 
-    /** @var \Magento\CatalogSearch\Model\Search\ReaderPlugin */
+    /** @var ReaderPlugin */
     protected $object;
 
     protected function setUp(): void
     {
-        $this->requestGenerator = $this->getMockBuilder(\Magento\CatalogSearch\Model\Search\RequestGenerator::class)
+        $this->requestGenerator = $this->getMockBuilder(RequestGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Search\ReaderPlugin::class,
+            ReaderPlugin::class,
             ['requestGenerator' => $this->requestGenerator]
         );
     }
@@ -34,10 +41,10 @@ class ReaderPluginTest extends \PHPUnit\Framework\TestCase
         $readerConfig = ['test' => 'b', 'd' => 'e'];
         $this->requestGenerator->expects($this->once())
             ->method('generate')
-            ->willReturn(['test' => 'a']);
+            ->will($this->returnValue(['test' => 'a']));
 
         $result = $this->object->afterRead(
-            $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
+            $this->getMockBuilder(ReaderInterface::class)
                 ->disableOriginalConstructor()->getMock(),
             $readerConfig,
             null

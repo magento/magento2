@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,32 +6,40 @@
 
 namespace Magento\Eav\Test\Unit\Helper;
 
+use Magento\Eav\Helper\Data;
+use Magento\Eav\Model\Entity\Attribute\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $eavConfig;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $attributeConfig;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $context;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
@@ -40,17 +48,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->attributeConfig = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Config::class);
+        $this->attributeConfig = $this->createMock(Config::class);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->context = $this->createPartialMock(\Magento\Framework\App\Helper\Context::class, ['getScopeConfig']);
+        $this->context = $this->createPartialMock(Context::class, ['getScopeConfig']);
 
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->helper = $objectManager->getObject(
-            \Magento\Eav\Helper\Data::class,
+            Data::class,
             [
                 'attributeConfig' => $this->attributeConfig,
                 'eavConfig' => $this->eavConfig,
@@ -61,15 +69,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAttributeMetadata()
     {
-        $attribute = new \Magento\Framework\DataObject([
+        $attribute = new DataObject([
             'entity_type_id' => '1',
             'attribute_id'   => '2',
-            'backend'        => new \Magento\Framework\DataObject(['table' => 'customer_entity_varchar']),
+            'backend'        => new DataObject(['table' => 'customer_entity_varchar']),
             'backend_type'   => 'varchar',
         ]);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->willReturn($attribute);
+            ->will($this->returnValue($attribute));
 
         $result = $this->helper->getAttributeMetadata('customer', 'lastname');
         $expected = [
@@ -118,7 +126,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->willReturn($lockedFields);
+            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
@@ -130,7 +138,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $lockedFields = ['lockedField1', 'lockedField2'];
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->willReturn($lockedFields);
+            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
 
         $this->helper->getAttributeLockedFields('entityTypeCode');
         $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
@@ -142,7 +150,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributeLockedFieldsNoLockedFields()
     {
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
-            ->with('entityTypeCode')->willReturn([]);
+            ->with('entityTypeCode')->will($this->returnValue([]));
 
         $this->assertEquals([], $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
@@ -152,7 +160,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $configValue = 'config_value';
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\Eav\Helper\Data::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, ScopeInterface::SCOPE_STORE)
+            ->with(Data::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, ScopeInterface::SCOPE_STORE)
             ->willReturn($configValue);
 
         $this->assertEquals($configValue, $this->helper->getInputTypesValidatorData());

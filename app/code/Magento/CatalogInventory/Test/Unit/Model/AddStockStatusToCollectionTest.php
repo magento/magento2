@@ -1,14 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\CatalogInventory\Helper\Stock;
 use Magento\CatalogInventory\Model\AddStockStatusToCollection;
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
+class AddStockStatusToCollectionTest extends TestCase
 {
     /**
      * @var AddStockStatusToCollection
@@ -16,25 +21,25 @@ class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit\Framework\MockObject\MockObject
+     * @var Stock|MockObject
      */
     protected $stockHelper;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EngineResolverInterface|MockObject
      */
     private $engineResolver;
 
     protected function setUp(): void
     {
-        $this->stockHelper = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
+        $this->stockHelper = $this->createMock(Stock::class);
         $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCurrentSearchEngine'])
             ->getMockForAbstractClass();
 
-        $this->plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\CatalogInventory\Model\AddStockStatusToCollection::class,
+        $this->plugin = (new ObjectManager($this))->getObject(
+            AddStockStatusToCollection::class,
             [
                 'stockHelper' => $this->stockHelper,
                 'engineResolver' => $this->engineResolver
@@ -44,7 +49,7 @@ class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddStockStatusToCollection()
     {
-        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+        $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,7 +60,7 @@ class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
         $this->stockHelper->expects($this->once())
             ->method('addIsInStockFilterToCollection')
             ->with($productCollection)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->plugin->beforeLoad($productCollection);
     }

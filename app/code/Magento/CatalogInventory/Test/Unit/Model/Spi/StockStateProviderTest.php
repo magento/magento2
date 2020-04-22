@@ -1,55 +1,63 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\CatalogInventory\Model\StockStateProvider;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Math\Division;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StockStateProviderTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockStateProviderTest extends \PHPUnit\Framework\TestCase
+class StockStateProviderTest extends TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface
+     * @var StockStateProviderInterface
      */
     protected $stockStateProvider;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductFactory|MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Product|MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\Math\Division|\PHPUnit\Framework\MockObject\MockObject
+     * @var Division|MockObject
      */
     protected $mathDivision;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FormatInterface|MockObject
      */
     protected $localeFormat;
 
     /**
-     * @var \Magento\Framework\DataObject\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     protected $object;
 
@@ -109,26 +117,29 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->mathDivision = $this->createPartialMock(\Magento\Framework\Math\Division::class, ['getExactDivision']);
+        $this->mathDivision = $this->createPartialMock(Division::class, ['getExactDivision']);
 
-        $this->localeFormat = $this->getMockForAbstractClass(\Magento\Framework\Locale\FormatInterface::class);
+        $this->localeFormat = $this->getMockForAbstractClass(
+            FormatInterface::class,
+            ['getNumber']
+        );
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
             ->willReturn($this->qty);
 
-        $this->object = $this->objectManagerHelper->getObject(\Magento\Framework\DataObject::class);
-        $this->objectFactory = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
+        $this->object = $this->objectManagerHelper->getObject(DataObject::class);
+        $this->objectFactory = $this->createPartialMock(Factory::class, ['create']);
         $this->objectFactory->expects($this->any())->method('create')->willReturn($this->object);
 
         $this->product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['load', 'isComposite', '__wakeup', 'isSaleable']
         );
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
         $this->stockStateProvider = $this->objectManagerHelper->getObject(
-            \Magento\CatalogInventory\Model\StockStateProvider::class,
+            StockStateProvider::class,
             [
                 'mathDivision' => $this->mathDivision,
                 'localeFormat' => $this->localeFormat,
@@ -304,7 +315,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
     {
         $variations = [];
         foreach ($this->getVariations() as $variation) {
-            $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            $stockItem = $this->getMockBuilder(StockItemInterface::class)
                 ->disableOriginalConstructor()
                 ->setMethods($this->stockItemMethods)
                 ->getMockForAbstractClass();
@@ -440,7 +451,7 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
     {
         $qty = 1;
         $qtyIncrements = 5;
-        $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+        $stockItem = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods($this->stockItemMethods)
             ->getMockForAbstractClass();

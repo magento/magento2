@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -214,13 +214,11 @@ class EavAttributeTest extends TestCase
 
     /**
      * Test beforeSave plugin on empty label
-     *
      */
     public function testBeforeSaveWithFailedValidation()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Admin is a required field in each row');
-
         $options = self::VISUAL_ATTRIBUTE_OPTIONS;
         $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
         $this->attribute->setData(
@@ -343,13 +341,13 @@ class EavAttributeTest extends TestCase
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
-                    $swatchType,
-                    $swatch1,
+                    (string)$swatchType,
+                    (string)$swatch1 ?: null,
                     1
                 ),
                 $this->createSwatchMock(
-                    $swatchType,
-                    $swatch2,
+                    (string)$swatchType,
+                    (string)$swatch2 ?: null,
                     null,
                     self::OPTION_2_ID,
                     self::ADMIN_STORE_ID
@@ -404,24 +402,24 @@ class EavAttributeTest extends TestCase
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID],
                     1
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID],
                     1
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
                     null,
                     self::OPTION_2_ID,
                     self::ADMIN_STORE_ID
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
                     null,
                     self::OPTION_2_ID,
@@ -472,7 +470,7 @@ class EavAttributeTest extends TestCase
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_VISUAL_COLOR,
+                    (string)Swatch::SWATCH_TYPE_VISUAL_COLOR,
                     self::VISUAL_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY],
                     null,
                     self::OPTION_2_ID,
@@ -526,14 +524,14 @@ class EavAttributeTest extends TestCase
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
                     null,
                     self::OPTION_2_ID,
                     self::ADMIN_STORE_ID
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID],
                     null,
                     self::OPTION_2_ID,
@@ -594,24 +592,24 @@ class EavAttributeTest extends TestCase
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     null,
                     1
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     null,
                     1
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     null,
                     null,
                     self::OPTION_2_ID,
                     self::ADMIN_STORE_ID
                 ),
                 $this->createSwatchMock(
-                    Swatch::SWATCH_TYPE_TEXTUAL,
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     null,
                     null,
                     self::OPTION_2_ID,

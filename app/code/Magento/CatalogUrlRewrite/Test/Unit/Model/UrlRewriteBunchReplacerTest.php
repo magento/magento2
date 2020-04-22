@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,11 +7,13 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
+class UrlRewriteBunchReplacerTest extends TestCase
 {
     /**
-     * @var UrlPersistInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var UrlPersistInterface|MockObject
      */
     private $urlPersistMock;
 
@@ -20,9 +22,9 @@ class UrlRewriteBunchReplacerTest extends \PHPUnit\Framework\TestCase
      */
     private $urlRewriteBunchReplacer;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->urlPersistMock = $this->getMockForAbstractClass(UrlPersistInterface::class);
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->urlRewriteBunchReplacer = new UrlRewriteBunchReplacer(
             $this->urlPersistMock
         );

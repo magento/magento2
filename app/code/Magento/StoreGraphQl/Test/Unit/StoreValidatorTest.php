@@ -42,9 +42,9 @@ class StoreValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -58,7 +58,7 @@ class StoreValidatorTest extends TestCase
                     'getHeader'
                 ]
             )
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 

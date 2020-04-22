@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,44 +7,43 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Paypal\Model\PayflowConfig;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\PayflowConfig;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PayflowConfigTest
- */
-class PayflowConfigTest extends \PHPUnit\Framework\TestCase
+class PayflowConfigTest extends TestCase
 {
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MethodInterface|MockObject
      */
     protected $methodInterfaceMock;
 
     /**
-     * @var PayflowConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var PayflowConfig|MockObject
      */
     protected $config;
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
-        $this->methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $this->methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
         $om = new ObjectManager($this);
         $this->config = $om->getObject(
-            \Magento\Paypal\Model\PayflowConfig::class,
+            PayflowConfig::class,
             [
                 'scopeConfig' => $this->scopeConfigMock
             ]
@@ -173,7 +172,7 @@ class PayflowConfigTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
-            ->willReturn('US');
+            ->will($this->returnValue('US'));
 
         $i = 0;
         foreach ($expectsMethods as $method => $isActive) {

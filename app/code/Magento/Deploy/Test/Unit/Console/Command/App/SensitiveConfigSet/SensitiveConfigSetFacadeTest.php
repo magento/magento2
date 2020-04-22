@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,13 +18,14 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
+class SensitiveConfigSetFacadeTest extends TestCase
 {
     /**
      * @var ConfigFilePool|MockObject
@@ -69,7 +70,7 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()
@@ -98,13 +99,10 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testConfigFileNotExist()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('File app/etc/config.php can\'t be read.');
-
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->with()
@@ -129,13 +127,10 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testWriterException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Some exception');
-
         $exceptionMessage = 'Some exception';
         $this->inputMock->expects($this->any())
             ->method('getOption')
@@ -172,13 +167,10 @@ class SensitiveConfigSetFacadeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testEmptyConfigPaths()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('There are no sensitive configurations to fill');
-
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->with()

@@ -1,58 +1,68 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Observer;
 
-class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Cms\Helper\Page;
+use Magento\Cms\Observer\NoCookiesObserver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NoCookiesObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Cms\Observer\NoCookiesObserver
+     * @var NoCookiesObserver
      */
     protected $noCookiesObserver;
 
     /**
-     * @var \Magento\Cms\Helper\Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     protected $cmsPageMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
+     * @var Event|MockObject
      */
     protected $eventMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     protected $objectMock;
 
     protected function setUp(): void
     {
         $this->cmsPageMock = $this
-            ->getMockBuilder(\Magento\Cms\Helper\Page::class)
+            ->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this
-            ->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->observerMock = $this
-            ->getMockBuilder(\Magento\Framework\Event\Observer::class)
+            ->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this
-            ->getMockBuilder(\Magento\Framework\Event::class)
+            ->getMockBuilder(Event::class)
             ->setMethods(
                 [
                     'getStatus',
@@ -62,7 +72,7 @@ class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectMock = $this
-            ->getMockBuilder(\Magento\Framework\DataObject::class)
+            ->getMockBuilder(DataObject::class)
             ->setMethods(
                 [
                     'setLoaded',
@@ -78,9 +88,9 @@ class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->noCookiesObserver = $objectManager->getObject(
-            \Magento\Cms\Observer\NoCookiesObserver::class,
+            NoCookiesObserver::class,
             [
                 'cmsPage' => $this->cmsPageMock,
                 'scopeConfig' => $this->scopeConfigMock

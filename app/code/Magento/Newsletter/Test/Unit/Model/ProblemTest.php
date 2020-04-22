@@ -16,46 +16,48 @@ use Magento\Newsletter\Model\Queue;
 use Magento\Newsletter\Model\ResourceModel\Problem as ProblemResource;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProblemTest
+ * @covers \Magento\Newsletter\Model\Problem
  */
-class ProblemTest extends \PHPUnit\Framework\TestCase
+class ProblemTest extends TestCase
 {
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var SubscriberFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var SubscriberFactory|MockObject
      */
     private $subscriberFactoryMock;
 
     /**
-     * @var Subscriber|\PHPUnit\Framework\MockObject\MockObject
+     * @var Subscriber|MockObject
      */
     private $subscriberMock;
 
     /**
-     * @var ProblemResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProblemResource|MockObject
      */
     private $resourceModelMock;
 
     /**
-     * @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractDb|MockObject
      */
     private $abstractDbMock;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var ProblemModel

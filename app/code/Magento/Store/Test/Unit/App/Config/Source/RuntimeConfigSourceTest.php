@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\App\Config\Source;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -11,8 +13,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Framework\DB\Select;
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -40,9 +42,9 @@ class RuntimeConfigSourceTest extends TestCase
      */
     private $resourceConnection;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

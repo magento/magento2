@@ -1,17 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Helper;
 
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Item;
+use Magento\Store\Model\Store;
 use Magento\Weee\Helper\Data as WeeeHelper;
+use Magento\Weee\Model\Config;
+use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     const ROW_AMOUNT_INVOICED = '200';
     const BASE_ROW_AMOUNT_INVOICED = '400';
@@ -23,12 +36,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     const BASE_TAX_AMOUNT_REFUNDED = '21';
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var Tax
      */
     protected $weeeTax;
 
@@ -42,23 +55,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helperData;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $weeeConfig = $this->createMock(\Magento\Weee\Model\Config::class);
-        $weeeConfig->expects($this->any())->method('isEnabled')->willReturn(true);
-        $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->willReturn(1);
-        $this->weeeTax = $this->createMock(\Magento\Weee\Model\Tax::class);
-        $this->weeeTax->expects($this->any())->method('getWeeeAmount')->willReturn('11.26');
+        $this->product = $this->createMock(Product::class);
+        $weeeConfig = $this->createMock(Config::class);
+        $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
+        $this->weeeTax = $this->createMock(Tax::class);
+        $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
         $this->taxData = $this->createPartialMock(
             \Magento\Tax\Helper\Data::class,
             ['getPriceDisplayType', 'priceIncludesTax']
         );
 
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
 
         $arguments = [
             'weeeConfig' => $weeeConfig,
@@ -66,24 +79,24 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'taxData' => $this->taxData,
             'serializer'  => $this->serializerMock
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
     }
 
     public function testGetAmount()
     {
-        $this->product->expects($this->any())->method('hasData')->willReturn(false);
-        $this->product->expects($this->any())->method('getData')->willReturn(11.26);
+        $this->product->expects($this->any())->method('hasData')->will($this->returnValue(false));
+        $this->product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
 
         $this->assertEquals('11.26', $this->helperData->getAmountExclTax($this->product));
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @return Item|MockObject
      */
     private function setupOrderItem()
     {
-        $orderItem = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
@@ -118,7 +131,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->willReturn($weeeTaxApplied);
+            ->will($this->returnValue($weeeTaxApplied));
 
         return $orderItem;
     }
@@ -192,7 +205,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $fptCode1 = 'fpt' . $prodId1;
         $fptCode2 = 'fpt' . $prodId2;
 
-        $weeeObject1 = new \Magento\Framework\DataObject(
+        $weeeObject1 = new DataObject(
             [
                 'code' => $fptCode1,
                 'amount' => '15',
@@ -200,7 +213,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'tax_amount' => '1'
             ]
         );
-        $weeeObject2 = new \Magento\Framework\DataObject(
+        $weeeObject2 = new DataObject(
             [
                 'code' => $fptCode2,
                 'amount' => '10',
@@ -208,7 +221,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'tax_amount' => '5'
             ]
         );
-        $expectedObject1 = new \Magento\Framework\DataObject(
+        $expectedObject1 = new DataObject(
             [
                 'code' => $fptCode1,
                 'amount' => $expectedAmount[0],
@@ -216,7 +229,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'tax_amount' => '1'
             ]
         );
-        $expectedObject2 = new \Magento\Framework\DataObject(
+        $expectedObject2 = new DataObject(
             [
                 'code' => $fptCode2,
                 'amount' => $expectedAmount[1],
@@ -228,7 +241,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
         $this->weeeTax->expects($this->any())
             ->method('getProductWeeeAttributes')
-            ->willReturn([$weeeObject1, $weeeObject2]);
+            ->will($this->returnValue([$weeeObject1, $weeeObject2]));
         $this->taxData->expects($this->any())
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
@@ -236,43 +249,43 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
-        $productSimple = $this->createPartialMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getId']);
+        $productSimple = $this->createPartialMock(Simple::class, ['getId']);
         $productSimple->expects($this->at(0))
             ->method('getId')
-            ->willReturn($prodId1);
+            ->will($this->returnValue($prodId1));
         $productSimple->expects($this->at(1))
             ->method('getId')
-            ->willReturn($prodId2);
+            ->will($this->returnValue($prodId2));
 
-        $productInstance = $this->createMock(\Magento\Bundle\Model\Product\Type::class);
+        $productInstance = $this->createMock(Type::class);
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
-            ->willReturn([$productSimple]);
+            ->will($this->returnValue([$productSimple]));
 
-        $store=$this->createMock(\Magento\Store\Model\Store::class);
-        /** @var \Magento\Catalog\Model\Product $product */
+        $store=$this->createMock(Store::class);
+        /** @var Product $product */
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId']
         );
         $product->expects($this->any())
             ->method('getTypeInstance')
-            ->willReturn($productInstance);
+            ->will($this->returnValue($productInstance));
         $product->expects($this->any())
             ->method('getStoreId')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $product->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->will($this->returnValue($store));
         $product->expects($this->any())
             ->method('getTypeId')
-            ->willReturn('bundle');
+            ->will($this->returnValue('bundle'));
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry=$this->createMock(Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->willReturn($product);
+            ->will($this->returnValue($product));
 
         $result =  $this->helperData->getWeeeAttributesForBundle($product);
         $this->assertEquals($expectedArray, $result);
@@ -302,15 +315,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $itemProductSimple->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->willReturn(json_encode($testArray));
+            ->will($this->returnValue(json_encode($testArray)));
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->willReturn($testArray);
+            ->will($this->returnValue($testArray));
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductSimple));
     }
@@ -327,11 +340,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->willReturn(json_encode($testArray1));
+            ->will($this->returnValue(json_encode($testArray1)));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->willReturn(json_encode($testArray2));
+            ->will($this->returnValue(json_encode($testArray2)));
 
         $itemProductBundle = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
@@ -339,17 +352,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $itemProductBundle->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $itemProductBundle->expects($this->any())
             ->method('isChildrenCalculated')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $itemProductBundle->expects($this->any())
             ->method('getChildren')
-            ->willReturn([$itemProductSimple1, $itemProductSimple2]);
+            ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->willReturn($testArray);
+            ->will($this->returnValue($testArray));
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
@@ -365,14 +378,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $itemProductSimple->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->willReturn($testAmountUnit);
+            ->will($this->returnValue($testAmountUnit));
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->willReturn($testAmountRow);
+            ->will($this->returnValue($testAmountRow));
 
         $this->assertEquals($testAmountUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductSimple));
         $this->assertEquals($testAmountRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductSimple));
@@ -399,17 +412,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->willReturn($testAmountUnit1);
+            ->will($this->returnValue($testAmountUnit1));
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->willReturn($testAmountRow1);
+            ->will($this->returnValue($testAmountRow1));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->willReturn($testAmountUnit2);
+            ->will($this->returnValue($testAmountUnit2));
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->willReturn($testAmountRow2);
+            ->will($this->returnValue($testAmountRow2));
 
         $itemProductBundle = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
@@ -417,13 +430,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
         $itemProductBundle->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $itemProductBundle->expects($this->any())
             ->method('isChildrenCalculated')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $itemProductBundle->expects($this->any())
             ->method('getChildren')
-            ->willReturn([$itemProductSimple1, $itemProductSimple2]);
+            ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
 
         $this->assertEquals($testTotalUnit, $this->helperData->getWeeeTaxAppliedAmount($itemProductBundle));
         $this->assertEquals($testTotalRow, $this->helperData->getWeeeTaxAppliedRowAmount($itemProductBundle));
@@ -431,10 +444,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductWeeeAttributesForDisplay()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $this->product->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->will($this->returnValue($store));
 
         $result = $this->helperData->getProductWeeeAttributesForDisplay($this->product);
         $this->assertNull($result);
@@ -444,11 +457,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 1;
         $taxData = $this->createPartialMock(\Magento\Tax\Helper\Data::class, ['getPriceDisplayType']);
-        $taxData->expects($this->any())->method('getPriceDisplayType')->willReturn($expected);
+        $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
         $arguments = [
             'taxData' => $taxData,
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
 
         $this->assertEquals($expected, $helperData->getTaxDisplayConfig());

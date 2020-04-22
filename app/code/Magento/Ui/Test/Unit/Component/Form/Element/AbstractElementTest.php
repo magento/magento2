@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,13 +7,12 @@ namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Ui\Component\Form\Element\AbstractElement;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Form\Element\AbstractElement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AbstractElementTest
- */
-abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractElementTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -26,12 +25,12 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     protected $processorMock;
 
@@ -72,21 +71,21 @@ abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValue()
     {
-        $this->assertNull($this->getModel()->getValue());
+        $this->assertSame(null, $this->getModel()->getValue());
     }
 
     public function testGetFormInputName()
     {
-        $this->assertNull($this->getModel()->getFormInputName());
+        $this->assertSame(null, $this->getModel()->getFormInputName());
     }
 
     public function testIsReadonly()
     {
-        $this->assertFalse($this->getModel()->isReadonly());
+        $this->assertSame(false, $this->getModel()->isReadonly());
     }
 
     public function testGetCssClasses()
     {
-        $this->assertNull($this->getModel()->getCssClasses());
+        $this->assertSame(null, $this->getModel()->getCssClasses());
     }
 }

@@ -7,17 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Frontend;
 
-use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
-use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
-use Magento\Framework\Serialize\Serializer\Json as Serializer;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\App\CacheInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\Serializer\Json as Serializer;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
+class DefaultFrontendTest extends TestCase
 {
     /**
      * @var DefaultFrontend

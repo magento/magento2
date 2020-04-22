@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
 
 use Magento\Authorization\Model\ResourceModel\Rules;
+use Magento\Authorization\Model\Rules as RulesModel;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\Acl\RootResource;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -21,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Unit test for Rules resource model.
+ * @covers \Magento\Authorization\Model\ResourceModel\Rules
  *
  * Covers control flow logic.
  * The resource saving is covered with integration test in \Magento\Authorization\Model\RulesTest.
@@ -76,9 +78,9 @@ class RulesTest extends TestCase
     private $connectionMock;
 
     /**
-     * @var \Magento\Authorization\Model\Rules|MockObject
+     * @var RulesModel|MockObject
      */
-    private $ruleMock;
+    private $rulesModelMock;
 
     /**
      * @inheritDoc
@@ -102,7 +104,7 @@ class RulesTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
@@ -111,7 +113,7 @@ class RulesTest extends TestCase
 
         $this->resourceConnectionMock->method('getTableName')
             ->with('authorization_rule', 'default')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -121,7 +123,7 @@ class RulesTest extends TestCase
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
@@ -131,17 +133,17 @@ class RulesTest extends TestCase
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->aclBuilderMock->method('getConfigCache')
             ->willReturn($this->aclDataCacheMock);
 
-        $this->ruleMock = $this->getMockBuilder(\Magento\Authorization\Model\Rules::class)
+        $this->rulesModelMock = $this->getMockBuilder(RulesModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRoleId'])
             ->getMock();
 
-        $this->ruleMock->method('getRoleId')
+        $this->rulesModelMock->method('getRoleId')
             ->willReturn(self::TEST_ROLE_ID);
 
         $objectManager = new ObjectManager($this);
@@ -174,17 +176,16 @@ class RulesTest extends TestCase
         $this->aclDataCacheMock->expects($this->once())
             ->method('clean');
 
-        $this->model->saveRel($this->ruleMock);
+        $this->model->saveRel($this->rulesModelMock);
     }
 
     /**
      * Test LocalizedException throw case.
-     *
      */
     public function testLocalizedExceptionOccurance()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('TestException');
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage("TestException");
 
         $exceptionPhrase = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
@@ -193,7 +194,7 @@ class RulesTest extends TestCase
 
         $exceptionPhrase->method('render')->willReturn('TestException');
 
-        $exception = new \Magento\Framework\Exception\LocalizedException($exceptionPhrase);
+        $exception = new LocalizedException($exceptionPhrase);
 
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
@@ -205,7 +206,7 @@ class RulesTest extends TestCase
 
         $this->connectionMock->expects($this->once())->method('rollBack');
 
-        $this->model->saveRel($this->ruleMock);
+        $this->model->saveRel($this->rulesModelMock);
     }
 
     /**
@@ -226,6 +227,6 @@ class RulesTest extends TestCase
         $this->connectionMock->expects($this->once())->method('rollBack');
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $this->model->saveRel($this->ruleMock);
+        $this->model->saveRel($this->rulesModelMock);
     }
 }

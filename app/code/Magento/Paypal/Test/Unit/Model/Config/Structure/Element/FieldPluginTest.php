@@ -1,15 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Structure\Element;
 
-use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructureMock;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FieldPluginTest extends \PHPUnit\Framework\TestCase
+class FieldPluginTest extends TestCase
 {
     /**
      * @var FieldConfigStructurePlugin
@@ -22,7 +24,7 @@ class FieldPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FieldConfigStructureMock|\PHPUnit\Framework\MockObject\MockObject
+     * @var FieldConfigStructureMock|MockObject
      */
     private $subjectMock;
 

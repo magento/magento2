@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
@@ -9,16 +9,25 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
-class FullTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Type;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class FullTest extends TestCase
 {
     public function testExecuteWithAdapterErrorThrowsException()
     {
         $indexerFactoryMock = $this->createMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory::class
+            StockFactory::class
         );
-        $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $resourceMock = $this->createMock(ResourceConnection::class);
+        $productTypeMock = $this->createMock(Type::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $productTypeMock
             ->method('getTypesByPriority')
@@ -34,9 +43,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
             ->method('getTableName')
             ->will($this->throwException(new \Exception($exceptionMessage)));
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
-            \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full::class,
+            Full::class,
             [
                'resource' => $resourceMock,
                'indexerFactory' => $indexerFactoryMock,
@@ -44,7 +53,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($exceptionMessage);
 
         $model->execute();

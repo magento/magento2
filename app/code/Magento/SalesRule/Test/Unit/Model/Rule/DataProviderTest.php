@@ -1,70 +1,78 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule;
 
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\DataProvider;
+use Magento\SalesRule\Model\Rule\Metadata\ValueProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Rule\DataProvider
+     * @var DataProvider
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $dataObjectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $collectionMock;
 
     protected function setUp(): void
     {
         $this->collectionFactoryMock = $this->createPartialMock(
-            \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
-        $this->collectionMock = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class);
+        $this->collectionMock = $this->createMock(Collection::class);
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
-        $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
-        $metaDataValueProviderMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Metadata\ValueProvider::class)
+        $ruleMock = $this->createMock(Rule::class);
+        $metaDataValueProviderMock = $this->getMockBuilder(ValueProvider::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $registryMock = $this->createMock(Registry::class);
         $registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
         $metaDataValueProviderMock->expects($this->once())->method('getMetadataValues')->willReturn(['data']);
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\SalesRule\Model\Rule\DataProvider::class,
+            DataProvider::class,
             [
                 'name' => 'Name',
                 'primaryFieldName' => 'Primary',
@@ -81,7 +89,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $ruleId = 42;
         $ruleData = ['name' => 'Sales Price Rule'];
 
-        $ruleMock = $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
+        $ruleMock = $this->createPartialMock(Rule::class, [
                 'getDiscountAmount',
                 'setDiscountAmount',
                 'getDiscountQty',

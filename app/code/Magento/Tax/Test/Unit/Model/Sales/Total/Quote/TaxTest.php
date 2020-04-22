@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
-use \Magento\Tax\Model\Sales\Total\Quote\Tax;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Tax\Model\Sales\Total\Quote\Tax
  */
 use Magento\Tax\Model\Calculation;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Sales\Total\Quote\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -55,16 +57,16 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxConfig
             ->expects($this->any())
             ->method('priceIncludesTax')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $taxConfig->expects($this->any())
             ->method('shippingPriceIncludesTax')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $taxConfig->expects($this->any())
             ->method('discountTax')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
@@ -74,19 +76,19 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $item
             ->expects($this->any())
             ->method('getParentItem')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $item
             ->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $item
             ->expects($this->any())
             ->method('getCode')
-            ->willReturn("1");
+            ->will($this->returnValue("1"));
         $item
             ->expects($this->any())
             ->method('getProduct')
-            ->willReturn($product);
+            ->will($this->returnValue($product));
 
         foreach ($itemData as $key => $value) {
             $item->setData($key, $value);
@@ -96,7 +98,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxDetails = $this->createMock(\Magento\Tax\Api\Data\TaxDetailsInterface::class);
         $taxDetails->expects($this->any())
             ->method('getItems')
-            ->willReturn($items);
+            ->will($this->returnValue($items));
 
         $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -107,7 +109,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $storeManager->expects($this->any())
             ->method('getStore')
-            ->willReturn($storeMock);
+            ->will($this->returnValue($storeMock));
 
         $calculatorFactory = $this->getMockBuilder(\Magento\Tax\Model\Calculation\CalculatorFactory::class)
             ->disableOriginalConstructor()
@@ -119,17 +121,17 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $calculationTool->expects($this->any())
             ->method('round')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
         $calculationTool->expects($this->any())
             ->method('getRate')
-            ->willReturn(20);
+            ->will($this->returnValue(20));
         $calculationTool->expects($this->any())
             ->method('calcTaxAmount')
-            ->willReturn(20);
+            ->will($this->returnValue(20));
 
         $calculationTool->expects($this->any())
             ->method('getAppliedRates')
-            ->willReturn($appliedRatesData);
+            ->will($this->returnValue($appliedRatesData));
         $calculator = $objectManager->getObject(
             \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             [
@@ -139,7 +141,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $calculatorFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($calculator);
+            ->will($this->returnValue($calculator));
 
         $taxCalculationService = $this->createMock(\Magento\Tax\Api\TaxCalculationInterface::class);
 
@@ -152,7 +154,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxClassKeyDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($taxClassKeyDataObjectMock);
+            ->will($this->returnValue($taxClassKeyDataObjectMock));
         $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setType')
@@ -171,7 +173,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $itemDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($itemDataObjectMock);
+            ->will($this->returnValue($itemDataObjectMock));
         $itemDataObjectMock
             ->expects($this->any())
             ->method('setTaxClassKey')
@@ -194,15 +196,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $regionFactory
             ->expects($this->any())
             ->method('setRegionId')
-            ->willReturn($regionFactory);
+            ->will($this->returnValue($regionFactory));
         $regionFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($region);
+            ->will($this->returnValue($region));
         $addressFactory
             ->expects($this->any())
             ->method('getRegionBuilder')
-            ->willReturn($regionFactory);
+            ->will($this->returnValue($regionFactory));
 
         $quoteDetails = $this->createMock(\Magento\Tax\Api\Data\QuoteDetailsInterface::class);
         $quoteDetailsDataObjectFactoryMock = $this->createPartialMock(
@@ -212,7 +214,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quoteDetailsDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($quoteDetails);
+            ->will($this->returnValue($quoteDetails));
 
         $quoteDetailsItemDataObjectFactoryMock = $this->createPartialMock(
             \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class,
@@ -237,12 +239,12 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $store
             ->expects($this->any())
             ->method('getStoreId')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quote
             ->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->will($this->returnValue($store));
         $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAssociatedTaxables',
@@ -252,19 +254,19 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $item
             ->expects($this->any())
             ->method('getQuote')
-            ->willReturn($quote);
+            ->will($this->returnValue($quote));
         $address
             ->expects($this->any())
             ->method('getQuote')
-            ->willReturn($quote);
+            ->will($this->returnValue($quote));
         $address
             ->expects($this->any())
             ->method('getAssociatedTaxables')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $address
             ->expects($this->any())
             ->method('getRegionId')
-            ->willReturn($region);
+            ->will($this->returnValue($region));
         $address
             ->expects($this->any())
             ->method('getCustomAttributesCodes')
@@ -272,11 +274,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quote
             ->expects($this->any())
             ->method('getBillingAddress')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
         $addressFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
 
         $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
@@ -401,7 +403,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxData
             ->expects($this->any())
             ->method('getCalculationSequence')
-            ->willReturn($calculationSequence);
+            ->will($this->returnValue($calculationSequence));
 
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject(
@@ -448,7 +450,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxClassKeyDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($taxClassKeyDataObjectMock);
+            ->will($this->returnValue($taxClassKeyDataObjectMock));
         $taxClassKeyDataObjectMock
             ->expects($this->any())
             ->method('setType')
@@ -469,7 +471,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $itemDataObjectFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($itemDataObjectMock);
+            ->will($this->returnValue($itemDataObjectMock));
         $itemDataObjectMock
             ->expects($this->any())
             ->method('setTaxClassKey')
@@ -492,15 +494,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $regionFactory
             ->expects($this->any())
             ->method('setRegionId')
-            ->willReturn($regionFactory);
+            ->will($this->returnValue($regionFactory));
         $regionFactory
             ->expects($this->any())
             ->method('create')
-            ->willReturn($region);
+            ->will($this->returnValue($region));
         $addressFactory
             ->expects($this->any())
             ->method('getRegionBuilder')
-            ->willReturn($regionFactory);
+            ->will($this->returnValue($regionFactory));
 
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
@@ -510,19 +512,19 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $item
             ->expects($this->any())
             ->method('getParentItem')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $item
             ->expects($this->any())
             ->method('getHasChildren')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $item
             ->expects($this->any())
             ->method('getCode')
-            ->willReturn("1");
+            ->will($this->returnValue("1"));
         $item
             ->expects($this->any())
             ->method('getProduct')
-            ->willReturn($product);
+            ->will($this->returnValue($product));
 
         foreach ($itemData as $key => $value) {
             $item->setData($key, $value);
@@ -552,7 +554,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quote
             ->expects($this->any())
             ->method('getBillingAddress')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
 
         $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
@@ -613,11 +615,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $taxConfig
             ->expects($this->once())
             ->method('displayCartTaxWithGrandTotal')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $taxConfig
             ->expects($this->once())
             ->method('displayCartSubtotalBoth')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $objectManager = new ObjectManager($this);
 
@@ -665,26 +667,26 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $totalsMock
             ->expects($this->once())
             ->method('getAppliedTaxes')
-            ->willReturn($appliedTaxesData);
+            ->will($this->returnValue($appliedTaxesData));
         $totalsMock
             ->expects($this->any())
             ->method('getGrandTotal')
-            ->willReturn(88);
+            ->will($this->returnValue(88));
         $quote
             ->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->will($this->returnValue($store));
         $quote->expects($this->any())
             ->method('getAllAddresses')
-            ->willReturn([$address]);
+            ->will($this->returnValue([$address]));
         $address
             ->expects($this->any())
             ->method('getQuote')
-            ->willReturn($quote);
+            ->will($this->returnValue($quote));
         $address
             ->expects($this->any())
             ->method('getTaxAmount')
-            ->willReturn($taxAmount);
+            ->will($this->returnValue($taxAmount));
         $address
             ->expects($this->any())
             ->method('getCustomAttributesCodes')
@@ -769,7 +771,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $shippingMock = $this->createMock(\Magento\Quote\Api\Data\ShippingInterface::class);
         $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
-        /** @var $address \Magento\Quote\Model\Quote\Address|PHPUnit\Framework\MockObject\MockObject */
+        /** @var $address \Magento\Quote\Model\Quote\Address|MockObject */
         $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -792,7 +794,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
         $shippingAssignmentMock->expects($this->once())
             ->method('getItems')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
 
         $objectManager = new ObjectManager($this);
         $taxCollector = $objectManager->getObject(\Magento\Tax\Model\Sales\Total\Quote\Tax::class);

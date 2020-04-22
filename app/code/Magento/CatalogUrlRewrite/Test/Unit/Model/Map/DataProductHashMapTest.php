@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,29 +13,28 @@ use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DataProductHashMapTest
- */
-class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
+class DataProductHashMapTest extends TestCase
 {
-    /** @var HashMapPool|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var HashMapPool|MockObject */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DataCategoryHashMap|MockObject */
     private $dataCategoryMapMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductCollection|MockObject
      */
     private $productCollectionMock;
 
-    /** @var DataProductHashMap|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DataProductHashMap|MockObject */
     private $model;
 
     protected function setUp(): void
@@ -73,7 +72,7 @@ class DataProductHashMapTest extends \PHPUnit\Framework\TestCase
         $productIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $productIdsOther = ['2' => [2, 3, 4]];
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->productCollectionMock->expects($this->exactly(3))

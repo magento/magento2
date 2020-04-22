@@ -1,19 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Config;
 
+use Laminas\Code\Reflection\ClassReflection;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Webapi\Model\Config\ClassReflector;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for class reflector.
  */
-class ClassReflectorTest extends \PHPUnit\Framework\TestCase
+class ClassReflectorTest extends TestCase
 {
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var TypeProcessor|MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector */
+    /** @var ClassReflector */
     protected $_classReflector;
 
     /**
@@ -22,23 +28,23 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_typeProcessor = $this->createPartialMock(
-            \Magento\Framework\Reflection\TypeProcessor::class,
+            TypeProcessor::class,
             ['process']
         );
         $this->_typeProcessor->expects(
             $this->any()
         )->method(
             'process'
-        )->willReturnMap(
-            [['string', 'str'], ['int', 'int']]
+        )->will(
+            $this->returnValueMap([['string', 'str'], ['int', 'int']])
         );
-        $this->_classReflector = new \Magento\Webapi\Model\Config\ClassReflector($this->_typeProcessor);
+        $this->_classReflector = new ClassReflector($this->_typeProcessor);
     }
 
     public function testReflectClassMethods()
     {
         $data = $this->_classReflector->reflectClassMethods(
-            \Magento\Webapi\Test\Unit\Model\Config\TestServiceForClassReflector::class,
+            TestServiceForClassReflector::class,
             ['generateRandomString' => ['method' => 'generateRandomString']]
         );
         $this->assertEquals(['generateRandomString' => $this->_getSampleReflectionData()], $data);
@@ -46,8 +52,8 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
 
     public function testExtractMethodData()
     {
-        $classReflection = new \Laminas\Code\Reflection\ClassReflection(
-            \Magento\Webapi\Test\Unit\Model\Config\TestServiceForClassReflector::class
+        $classReflection = new ClassReflection(
+            TestServiceForClassReflector::class
         );
         /** @var $methodReflection \Laminas\Code\Reflection\MethodReflection */
         $methodReflection = $classReflection->getMethods()[0];

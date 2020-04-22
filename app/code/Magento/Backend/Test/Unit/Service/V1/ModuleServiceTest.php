@@ -10,13 +10,15 @@ namespace Magento\Backend\Test\Unit\Service\V1;
 use Magento\Backend\Service\V1\ModuleService;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Module List Service Test
  *
  * Covers \Magento\Sales\Model\ValidatorResultMerger
  */
-class ModuleServiceTest extends \PHPUnit\Framework\TestCase
+class ModuleServiceTest extends TestCase
 {
     /**
      * Testable Object
@@ -26,7 +28,7 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
     private $moduleService;
 
     /**
-     * @var ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModuleListInterface|MockObject
      */
     private $moduleListMock;
 
@@ -44,7 +46,7 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->moduleService = $this->objectManager->getObject(
             ModuleService::class,

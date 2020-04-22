@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,12 +10,15 @@ use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\OTPRequest;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\HTTP\ZendClient;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * A unit test for testing of the representation of a 'OTP' request.
  */
-class OTPRequestTest extends \PHPUnit\Framework\TestCase
+class OTPRequestTest extends TestCase
 {
     /**
      * @var OTPRequest
@@ -23,55 +26,45 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClientInterface|MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseResolver|MockObject
      */
     private $responseResolverMock;
 
     /**
      * @return void
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->httpClientMock = $this->createMock(ClientInterface::class);
 
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
-        $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
+        $this->responseResolverMock = $this->createMock(ResponseResolver::class);
+
         $this->subject = new OTPRequest(
             $this->analyticsTokenMock,
             $this->httpClientMock,
@@ -92,7 +85,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             'otp' => 'thisisotp',
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
-            'method' => \Magento\Framework\HTTP\ZendClient::POST,
+            'method' => ZendClient::POST,
             'body'=> ['access-token' => 'thisisaccesstoken','url' => 'http://www.mystore.com'],
         ];
     }
@@ -111,7 +104,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($data['access-token']);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($data['url']);
 
@@ -162,7 +155,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
             ->method('getToken')
             ->willReturn($data['access-token']);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($data['url']);
 

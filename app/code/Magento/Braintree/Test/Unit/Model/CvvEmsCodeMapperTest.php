@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\CvvEmsCodeMapper;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
+class CvvEmsCodeMapperTest extends TestCase
 {
     /**
      * @var CvvEmsCodeMapper
@@ -38,7 +41,7 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $orderPayment->expects(self::once())
             ->method('getMethod')
@@ -60,11 +63,10 @@ class CvvEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "some_payment" does not supported by Braintree CVV mapper.');
-
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $orderPayment->expects(self::exactly(2))
             ->method('getMethod')

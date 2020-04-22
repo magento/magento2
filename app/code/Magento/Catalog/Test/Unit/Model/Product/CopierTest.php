@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use Magento\Catalog\Api\Data\ProductExtension;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
@@ -69,9 +69,9 @@ class CopierTest extends TestCase
     /**
      * @ingeritdoc
      */
-    protected function setUp(): void
+    protected function setUp()
     {
-        $this->copyConstructorMock = $this->getMockForAbstractClass(CopyConstructorInterface::class);
+        $this->copyConstructorMock = $this->createMock(CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
         $this->optionRepositoryMock = $this->createMock(Repository::class);
@@ -105,10 +105,10 @@ class CopierTest extends TestCase
      */
     public function testCopy(): void
     {
-        $stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
-        $extensionAttributes = $this->getMockBuilder(ProductExtension::class)
+        $stockItem = $this->createMock(StockItemInterface::class);
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributes
             ->expects($this->once())
             ->method('getStockItem')
@@ -262,9 +262,9 @@ class CopierTest extends TestCase
     {
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
             ->getMock();
-        $extensionAttributes = $this->getMockBuilder(ProductExtension::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributes
             ->expects($this->once())
             ->method('getStockItem')
@@ -322,7 +322,7 @@ class CopierTest extends TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
+        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
 
         $duplicateMock = $this->createPartialMock(
             Product::class,
@@ -344,7 +344,7 @@ class CopierTest extends TestCase
                 'getStoreIds',
             ]
         );
-        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
+        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);

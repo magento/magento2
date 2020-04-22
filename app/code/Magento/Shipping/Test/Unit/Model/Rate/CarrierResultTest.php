@@ -45,7 +45,6 @@ class CarrierResultTest extends TestCase
      */
     public function testComposing(): void
     {
-
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])

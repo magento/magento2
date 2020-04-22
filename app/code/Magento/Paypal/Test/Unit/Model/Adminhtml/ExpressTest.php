@@ -7,17 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Adminhtml;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Pro;
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
-use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,37 +32,37 @@ class ExpressTest extends TestCase
     private $express;
 
     /**
-     * @var Payment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Payment|MockObject
      */
     private $payment;
 
     /**
-     * @var MethodInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MethodInterface|MockObject
      */
     private $paymentInstance;
 
     /**
-     * @var Pro|\PHPUnit\Framework\MockObject\MockObject
+     * @var Pro|MockObject
      */
     private $pro;
 
     /**
-     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
+     * @var Nvp|MockObject
      */
     private $nvp;
 
     /**
-     * @var Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     private $order;
 
     /**
-     * @var TransactionRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransactionRepository|MockObject
      */
     private $transactionRepository;
 
     /**
-     * @var TransactionInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransactionInterface|MockObject
      */
     private $transaction;
 

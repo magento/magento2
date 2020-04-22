@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,18 +14,19 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TermDropdownStrategyTest.
  * Unit test for \Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy.
  *
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
+class TermDropdownStrategyTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $eavConfig;
 
@@ -35,12 +36,12 @@ class TermDropdownStrategyTest extends \PHPUnit\Framework\TestCase
     private $termDropdownStrategy;
 
     /**
-     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var AliasResolver|MockObject
      */
     private $aliasResolver;
 
     /**
-     * SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SelectBuilder|MockObject
      */
     private $selectBuilder;
 

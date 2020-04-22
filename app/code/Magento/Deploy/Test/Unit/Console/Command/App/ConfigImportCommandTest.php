@@ -1,20 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
-use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\RuntimeException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
+class ConfigImportCommandTest extends TestCase
 {
     /**
-     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     private $processorMock;
 

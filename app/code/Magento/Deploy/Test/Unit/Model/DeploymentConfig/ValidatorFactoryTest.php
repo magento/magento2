@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,8 +9,9 @@ use Magento\Deploy\Model\DeploymentConfig\ValidatorFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Config\Validator;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
+class ValidatorFactoryTest extends TestCase
 {
     /**
      * @var ValidatorFactory
@@ -52,9 +53,10 @@ class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWrongImplementation()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Type "className" is not instance of Magento\\Framework\\App\\DeploymentConfig\\ValidatorInterface');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            'Type "className" is not instance of Magento\Framework\App\DeploymentConfig\ValidatorInterface'
+        );
         $className = 'className';
 
         $stdMock = $this->getMockBuilder(\stdClass::class)

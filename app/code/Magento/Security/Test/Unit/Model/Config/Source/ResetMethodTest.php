@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,19 +7,21 @@
 namespace Magento\Security\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\Config\Source\ResetMethod;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\Config\Source\ResetMethod testing
  */
-class ResetMethodTest extends \PHPUnit\Framework\TestCase
+class ResetMethodTest extends TestCase
 {
     /**
-     * @var \Magento\Security\Model\Config\Source\ResetMethod
+     * @var ResetMethod
      */
     protected $model;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
@@ -30,26 +32,26 @@ class ResetMethodTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager->getObject(\Magento\Security\Model\Config\Source\ResetMethod::class);
+        $this->model = $this->objectManager->getObject(ResetMethod::class);
     }
 
     public function testToOptionArray()
     {
         $expected = [
             [
-                'value' => \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_IP_AND_EMAIL,
+                'value' => ResetMethod::OPTION_BY_IP_AND_EMAIL,
                 'label' => __('By IP and Email')
             ],
             [
-                'value' => \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_IP,
+                'value' => ResetMethod::OPTION_BY_IP,
                 'label' => __('By IP')
             ],
             [
-                'value' => \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_EMAIL,
+                'value' => ResetMethod::OPTION_BY_EMAIL,
                 'label' => __('By Email')
             ],
             [
-                'value' => \Magento\Security\Model\Config\Source\ResetMethod::OPTION_NONE,
+                'value' => ResetMethod::OPTION_NONE,
                 'label' => __('None')
             ],
         ];
@@ -59,10 +61,10 @@ class ResetMethodTest extends \PHPUnit\Framework\TestCase
     public function testToArray()
     {
         $expected = [
-            \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_IP_AND_EMAIL => __('By IP and Email'),
-            \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_IP => __('By IP'),
-            \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_EMAIL => __('By Email'),
-            \Magento\Security\Model\Config\Source\ResetMethod::OPTION_NONE => __('None'),
+            ResetMethod::OPTION_BY_IP_AND_EMAIL => __('By IP and Email'),
+            ResetMethod::OPTION_BY_IP => __('By IP'),
+            ResetMethod::OPTION_BY_EMAIL => __('By Email'),
+            ResetMethod::OPTION_NONE => __('None'),
         ];
         $this->assertEquals($expected, $this->model->toArray());
     }

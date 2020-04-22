@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,16 +7,15 @@ namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Form\Modifier\Manager;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class WebsiteTest
- */
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -29,27 +28,27 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LocatorInterface|MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var DirectoryHelper|\PHPUnit\Framework\MockObject\MockObject
+     * @var DirectoryHelper|MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var EavAttribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var EavAttribute|MockObject
      */
     protected $eavAttributeMock;
 
     /**
-     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductInterface|MockObject
      */
     protected $productMock;
 
@@ -103,6 +102,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             ->method('hasSingleStore')
             ->willReturn(true);
 
-        $this->assertFalse($this->model->isMultiWebsites());
+        $this->assertSame(false, $this->model->isMultiWebsites());
     }
 }

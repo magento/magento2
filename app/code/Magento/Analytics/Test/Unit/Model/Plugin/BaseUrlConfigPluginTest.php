@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,22 +7,23 @@ namespace Magento\Analytics\Test\Unit\Model\Plugin;
 
 use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
-use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
+class BaseUrlConfigPluginTest extends TestCase
 {
     /**
-     * @var SubscriptionUpdateHandler | \PHPUnit\Framework\MockObject\MockObject
+     * @var SubscriptionUpdateHandler|MockObject
      */
     private $subscriptionUpdateHandlerMock;
 
     /**
-     * @var Value | \PHPUnit\Framework\MockObject\MockObject
+     * @var Value|MockObject
      */
     private $configValueMock;
 
@@ -41,9 +42,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->subscriptionUpdateHandlerMock = $this->getMockBuilder(SubscriptionUpdateHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subscriptionUpdateHandlerMock = $this->createMock(SubscriptionUpdateHandler::class);
         $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
             ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])

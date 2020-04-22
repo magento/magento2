@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for version control abstract collection model.
@@ -15,12 +17,12 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     /**
      * Subject of testing.
      *
-     * @var AbstractCollectionStub|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractCollectionStub|MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
+     * @var Snapshot|MockObject
      */
     protected $entitySnapshot;
 
@@ -31,12 +33,12 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         $objectManager = new ObjectManager($this);
 
         $this->entitySnapshot = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
+            Snapshot::class,
             ['registerSnapshot']
         );
 
         $this->subject = $objectManager->getObject(
-            \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub::class,
+            AbstractCollectionStub::class,
             [
                 'entityFactory' => $this->coreEntityFactoryMock,
                 'universalFactory' => $this->validatorFactoryMock,
@@ -60,7 +62,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         if (!$data) {
             $this->entitySnapshot->expects($this->never())->method('registerSnapshot');
 
-            $this->assertFalse($this->subject->fetchItem());
+            $this->assertEquals(false, $this->subject->fetchItem());
         } else {
             $this->entitySnapshot->expects($this->once())->method('registerSnapshot')->with($item);
 

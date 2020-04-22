@@ -6,34 +6,35 @@
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\ColumnFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test ColumnFactory Class
  */
 class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Customer\Api\Data\OptionInterface|MockObject */
     protected $attributeOption;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
     protected $componentFactory;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|MockObject */
     protected $column;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|MockObject */
     protected $inlineEditUpdater;
 
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
@@ -93,7 +94,6 @@ class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                     'component' => 'Magento_Ui/js/grid/columns/column',
-                    '__disableTmpl' => 'true'
                 ],
             ],
             'context' => $this->context,

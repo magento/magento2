@@ -1,62 +1,77 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
+use Magento\Cms\Controller\Adminhtml\Page\Save;
+use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor|\PHPUnit\Framework\MockObject\MockObject
+     * @var PostDataProcessor|MockObject
      */
     private $dataProcessorMock;
 
     /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataPersistorInterface|MockObject
      */
     private $dataPersistorMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectFactory|MockObject
      */
     private $resultRedirectFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirect;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Cms\Model\PageFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageFactory|MockObject
      */
     private $pageFactory;
 
     /**
-     * @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageRepositoryInterface|MockObject
      */
     private $pageRepository;
 
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Page\Save
+     * @var Save
      */
     private $saveController;
 
@@ -67,40 +82,40 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
+        $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultRedirect);
         $this->dataProcessorMock = $this->getMockBuilder(
-            \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class
+            PostDataProcessor::class
         )->setMethods(['filter'])->disableOriginalConstructor()->getMock();
-        $this->dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
+        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam', 'getPostValue'])
             ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
-        $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
+        $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->pageRepository = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
+        $this->pageRepository = $this->getMockBuilder(PageRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->saveController = $objectManager->getObject(
-            \Magento\Cms\Controller\Adminhtml\Page\Save::class,
+            Save::class,
             [
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,
@@ -148,7 +163,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                     ['back', null, false],
                 ]
             );
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageFactory->expects($this->atLeastOnce())
@@ -168,7 +183,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('addSuccessMessage')
             ->with(__('You saved the page.'));
 
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
@@ -176,7 +191,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveActionWithoutData()
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
@@ -192,7 +207,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -202,11 +217,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->pageRepository->expects($this->once())
             ->method('getById')
             ->with($this->pageId)
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Error message')));
+            ->willThrowException(new NoSuchEntityException(__('Error message')));
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('This page no longer exists.'));
-        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
+        $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
@@ -233,7 +248,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->dataProcessorMock->expects($this->any())
             ->method('filter')
             ->willReturnArgument(0);
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
         $page->method('getId')->willReturn(1);
@@ -276,7 +291,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->dataProcessorMock->expects($this->any())
             ->method('filter')
             ->willReturnArgument(0);
-        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+        $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageFactory->expects($this->atLeastOnce())

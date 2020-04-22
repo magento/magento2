@@ -3,35 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Block\Item\Price;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\Item;
+use Magento\Store\Model\Store;
+use Magento\Tax\Block\Item\Price\Renderer;
+use Magento\Tax\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RendererTest extends \PHPUnit\Framework\TestCase
+class RendererTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer
+     * @var Renderer
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrency;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->priceCurrency = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+            PriceCurrencyInterface::class
         )->getMock();
-        $this->taxHelper = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
+        $this->taxHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'displayCartPriceExclTax',
@@ -44,7 +56,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $objectManager->getObject(
-            \Magento\Tax\Block\Item\Price\Renderer::class,
+            Renderer::class,
             [
                 'taxHelper' => $this->taxHelper,
                 'priceCurrency' => $this->priceCurrency,
@@ -57,18 +69,18 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $storeId
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Item
+     * @return MockObject|Item
      */
     protected function getItemMockWithStoreId($storeId)
     {
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
             ->method('getStoreId')
-            ->willReturn($storeId);
+            ->will($this->returnValue($storeId));
 
         return $itemMock;
     }
@@ -91,7 +103,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->taxHelper->expects($this->once())
             ->method($methodName)
             ->with($storeId)
-            ->willReturn($flag);
+            ->will($this->returnValue($flag));
 
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
@@ -141,7 +153,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->taxHelper->expects($this->once())
             ->method($methodName)
             ->with($storeId)
-            ->willReturn($flag);
+            ->will($this->returnValue($flag));
 
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
@@ -191,7 +203,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->taxHelper->expects($this->once())
             ->method($methodName)
             ->with($storeId)
-            ->willReturn($flag);
+            ->will($this->returnValue($flag));
 
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
@@ -228,7 +240,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $price = 3.554;
         $formattedPrice = "$3.55";
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['formatPrice', '__wakeup'])
             ->getMock();
@@ -236,7 +248,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($price, true)
-            ->willReturn($formattedPrice);
+            ->will($this->returnValue($formattedPrice));
 
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
@@ -245,7 +257,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->once())
             ->method('getStore')
-            ->willReturn($storeMock);
+            ->will($this->returnValue($storeMock));
 
         $this->renderer->setItem($itemMock);
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
@@ -256,23 +268,23 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $price = 3.554;
         $formattedPrice = "$3.55";
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $orderMock->expects($this->once())
             ->method('formatPrice')
             ->with($price, false)
-            ->willReturn($formattedPrice);
+            ->will($this->returnValue($formattedPrice));
 
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
             ->method('getOrder')
-            ->willReturn($orderMock);
+            ->will($this->returnValue($orderMock));
 
         $this->renderer->setItem($itemMock);
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
@@ -283,7 +295,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $price = 3.554;
         $formattedPrice = "$3.55";
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['formatPrice', '__wakeup'])
             ->getMock();
@@ -291,25 +303,25 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects($this->once())
             ->method('formatPrice')
             ->with($price, false)
-            ->willReturn($formattedPrice);
+            ->will($this->returnValue($formattedPrice));
 
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', '__wakeup'])
             ->getMock();
 
         $orderItemMock->expects($this->once())
             ->method('getOrder')
-            ->willReturn($orderMock);
+            ->will($this->returnValue($orderMock));
 
-        $invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Model\Invoice\Item::class)
+        $invoiceItemMock = $this->getMockBuilder(InvoiceItem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderItem', '__wakeup', 'getStoreId'])
             ->getMock();
 
         $invoiceItemMock->expects($this->once())
             ->method('getOrderItem')
-            ->willReturn($orderItemMock);
+            ->will($this->returnValue($orderItemMock));
 
         $this->renderer->setItem($invoiceItemMock);
         $this->assertEquals($formattedPrice, $this->renderer->formatPrice($price));
@@ -331,7 +343,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->once())
             ->method('getStoreId')
-            ->willReturn($storeId);
+            ->will($this->returnValue($storeId));
 
         $this->renderer->setItem($itemMock);
         $this->assertEquals($storeId, $this->renderer->getStoreId());
@@ -341,7 +353,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10;
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject $quoteItemMock */
+        /** @var \Magento\Quote\Model\Quote\Item|MockObject $quoteItemMock */
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCalculationPrice', '__wakeup'])
@@ -349,7 +361,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $quoteItemMock->expects($this->once())
             ->method('getCalculationPrice')
-            ->willReturn($price);
+            ->will($this->returnValue($price));
 
         $this->renderer->setItem($quoteItemMock);
         $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
@@ -359,15 +371,15 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10;
 
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItemMock */
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        /** @var Item|MockObject $orderItemMock */
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', '__wakeup'])
             ->getMock();
 
         $orderItemMock->expects($this->once())
             ->method('getPrice')
-            ->willReturn($price);
+            ->will($this->returnValue($price));
 
         $this->renderer->setItem($orderItemMock);
         $this->assertEquals($price, $this->renderer->getItemDisplayPriceExclTax());
@@ -382,7 +394,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $expectedValue = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount;
 
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -397,19 +409,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->once())
             ->method('getRowTotal')
-            ->willReturn($rowTotal);
+            ->will($this->returnValue($rowTotal));
 
         $itemMock->expects($this->once())
             ->method('getTaxAmount')
-            ->willReturn($taxAmount);
+            ->will($this->returnValue($taxAmount));
 
         $itemMock->expects($this->once())
             ->method('getDiscountTaxCompensationAmount')
-            ->willReturn($discountTaxCompensationAmount);
+            ->will($this->returnValue($discountTaxCompensationAmount));
 
         $itemMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->willReturn($discountAmount);
+            ->will($this->returnValue($discountAmount));
 
         $this->assertEquals($expectedValue, $this->renderer->getTotalAmount($itemMock));
     }
@@ -423,7 +435,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $expectedValue = 92;
 
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -438,19 +450,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $itemMock->expects($this->once())
             ->method('getBaseRowTotal')
-            ->willReturn($baseRowTotal);
+            ->will($this->returnValue($baseRowTotal));
 
         $itemMock->expects($this->once())
             ->method('getBaseTaxAmount')
-            ->willReturn($baseTaxAmount);
+            ->will($this->returnValue($baseTaxAmount));
 
         $itemMock->expects($this->once())
             ->method('getBaseDiscountTaxCompensationAmount')
-            ->willReturn($baseDiscountTaxCompensationAmount);
+            ->will($this->returnValue($baseDiscountTaxCompensationAmount));
 
         $itemMock->expects($this->once())
             ->method('getBaseDiscountAmount')
-            ->willReturn($baseDiscountAmount);
+            ->will($this->returnValue($baseDiscountAmount));
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,16 +9,18 @@ use Magento\Analytics\ReportXml\Query;
 use Magento\Analytics\ReportXml\SelectHydrator as selectHydrator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryTest extends \PHPUnit\Framework\TestCase
+class QueryTest extends TestCase
 {
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var selectHydrator|\PHPUnit\Framework\MockObject\MockObject
+     * @var selectHydrator|MockObject
      */
     private $selectHydratorMock;
 
@@ -42,13 +44,9 @@ class QueryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
 
-        $this->selectHydratorMock = $this->getMockBuilder(selectHydrator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectHydratorMock = $this->createMock(selectHydrator::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

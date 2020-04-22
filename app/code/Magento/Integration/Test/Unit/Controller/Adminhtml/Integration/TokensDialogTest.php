@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,10 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+use Magento\Integration\Controller\Adminhtml\Integration;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+
+class TokensDialogTest extends IntegrationTest
 {
     public function testTokensDialog()
     {
@@ -21,10 +24,10 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
             
                 [
                     [
-                        \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
+                        Integration::PARAM_INTEGRATION_ID,
                         null,
                         self::INTEGRATION_ID
-                    ],[\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 0],
+                    ],[Integration::PARAM_REAUTHORIZE, 0, 0],
                 ]
             
         );

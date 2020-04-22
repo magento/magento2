@@ -1,11 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
-class PaymentTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PaymentTest extends TestCase
 {
     /**#@+
      * Activity config path
@@ -20,26 +28,26 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement
+     * @var AbstractElement
      */
     protected $_element;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit\Framework\MockObject\MockObject
+     * @var Group|MockObject
      */
     protected $_group;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $_backendConfig;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $helper = new ObjectManager($this);
+        $this->_group = $this->createMock(Group::class);
         $this->_element = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             [],
             '',
             false,
@@ -49,22 +57,22 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->willReturn('html id');
+            ->will($this->returnValue('html id'));
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->willReturn('element html');
+            ->will($this->returnValue('element html'));
         $this->_element->expects($this->any())
             ->method('getName')
-            ->willReturn('name');
+            ->will($this->returnValue('name'));
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $this->_element->expects($this->any())
             ->method('getId')
-            ->willReturn('id');
-        $this->_backendConfig = $this->createMock(\Magento\Config\Model\Config::class);
+            ->will($this->returnValue('id'));
+        $this->_backendConfig = $this->createMock(Config::class);
         $this->_model = $helper->getObject(
-            \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment::class,
+            Payment::class,
             ['backendConfig' => $this->_backendConfig]
         );
         $this->_model->setGroup($this->_group);
@@ -78,9 +86,9 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
         $this->_element->setGroup($groupConfig);
         $this->_backendConfig->expects($this->any())
             ->method('getConfigDataValue')
-            ->willReturnMap(
+            ->will($this->returnValueMap(
                 [[self::CONFIG_PATH_ACTIVE, null, null, '1'], [self::CONFIG_PATH_NOT_ACTIVE, null, null, '0']]
-            );
+            ));
         $html = $this->_model->render($this->_element);
         $this->assertContains($expected, $html);
     }

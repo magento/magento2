@@ -30,7 +30,7 @@ class ValidationCompositeTest extends TestCase
     protected function setUp(): void
     {
         /** @var PageRepositoryInterface subject */
-        $this->subject = $this->getMockForAbstractClass(PageRepositoryInterface::class);
+        $this->subject = $this->createMock(PageRepositoryInterface::class);
     }
 
     /**
@@ -39,16 +39,15 @@ class ValidationCompositeTest extends TestCase
      */
     public function testConstructorValidation($validators)
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException('InvalidArgumentException');
         new ValidationComposite($this->subject, $validators);
     }
 
     public function testSaveInvokesValidatorsWithSucess()
     {
-        $validator1 = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $validator2 = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $page = $this->getMockForAbstractClass(PageInterface::class);
+        $validator1 = $this->createMock(ValidatorInterface::class);
+        $validator2 = $this->createMock(ValidatorInterface::class);
+        $page = $this->createMock(PageInterface::class);
 
         // Assert each are called
         $validator1
@@ -73,16 +72,13 @@ class ValidationCompositeTest extends TestCase
         self::assertSame('foo', $result);
     }
 
-    /**
-     */
     public function testSaveInvokesValidatorsWithErrors()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Oh no. That isn\'t right.');
-
-        $validator1 = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $validator2 = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $page = $this->getMockForAbstractClass(PageInterface::class);
+        $validator1 = $this->createMock(ValidatorInterface::class);
+        $validator2 = $this->createMock(ValidatorInterface::class);
+        $page = $this->createMock(PageInterface::class);
 
         // Assert the first is called
         $validator1
@@ -130,17 +126,17 @@ class ValidationCompositeTest extends TestCase
             [[''], false],
             [['foo'], false],
             [[new \stdClass()], false],
-            [[$this->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false],
+            [[$this->createMock(ValidatorInterface::class), 'foo'], false],
         ];
     }
 
     public function passthroughMethodDataProvider()
     {
         return [
-            ['save', $this->getMockForAbstractClass(PageInterface::class)],
+            ['save', $this->createMock(PageInterface::class)],
             ['getById', 1],
-            ['getList', $this->getMockForAbstractClass(SearchCriteriaInterface::class)],
-            ['delete', $this->getMockForAbstractClass(PageInterface::class)],
+            ['getList', $this->createMock(SearchCriteriaInterface::class)],
+            ['delete', $this->createMock(PageInterface::class)],
             ['deleteById', 1],
         ];
     }

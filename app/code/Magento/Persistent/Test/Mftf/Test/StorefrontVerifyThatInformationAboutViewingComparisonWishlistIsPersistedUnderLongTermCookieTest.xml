@@ -128,7 +128,7 @@
         </actionGroup>
 
         <!--Place the order-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>

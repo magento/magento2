@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,14 +8,20 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
 use Magento\Eav\Api\Data\AttributeOptionInterface as EavAttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface as EavAttributeOptionLabelInterface;
+use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute as EavAbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\OptionManagement;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table as EavAttributeSource;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Framework\Model\AbstractModel;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OptionManagementTest extends \PHPUnit\Framework\TestCase
+class OptionManagementTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\OptionManagement
+     * @var OptionManagement
      */
     protected $model;
 
@@ -31,10 +37,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Model\AttributeRepository::class);
+        $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
         $this->resourceModelMock =
-            $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
-        $this->model = new \Magento\Eav\Model\Entity\Attribute\OptionManagement(
+            $this->createMock(Attribute::class);
+        $this->model = new OptionManagement(
             $this->attributeRepositoryMock,
             $this->resourceModelMock
         );
@@ -74,13 +80,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('id_new_option', $this->model->add($entityType, $attributeCode, $optionMock));
     }
 
-    /**
-     */
     public function testAddWithEmptyAttributeCode()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('The attribute code is empty. Enter the code and try again.');
-
         $entityType = 42;
         $attributeCode = '';
         $optionMock = $this->getAttributeOption();
@@ -88,13 +91,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->add($entityType, $attributeCode, $optionMock);
     }
 
-    /**
-     */
     public function testAddWithWrongOptions()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The "testAttribute" attribute doesn\'t work with options.');
-
         $entityType = 42;
         $attributeCode = 'testAttribute';
         $attributeMock = $this->getAttribute();
@@ -106,13 +106,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->add($entityType, $attributeCode, $optionMock);
     }
 
-    /**
-     */
     public function testAddWithCannotSaveException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The "atrCde" attribute can\'t be saved.');
-
         $entityType = 42;
         $attributeCode = 'atrCde';
         $optionMock = $this->getAttributeOption();
@@ -152,7 +149,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'atrCode';
         $optionId = 'option';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -177,18 +174,15 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->delete($entityType, $attributeCode, $optionId));
     }
 
-    /**
-     */
     public function testDeleteWithCannotSaveException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The "atrCode" attribute can\'t be saved.');
-
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -214,18 +208,15 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->delete($entityType, $attributeCode, $optionId);
     }
 
-    /**
-     */
     public function testDeleteWithWrongOption()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('The "atrCode" attribute doesn\'t include an option with "option" ID.');
-
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -235,7 +226,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         );
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
-        $sourceMock = $this->getMockForAbstractClass(\Magento\Eav\Model\Entity\Attribute\Source\SourceInterface::class);
+        $sourceMock = $this->getMockForAbstractClass(SourceInterface::class);
         $sourceMock->expects($this->once())->method('getOptionText')->willReturn(false);
         $attributeMock->expects($this->once())->method('usesSource')->willReturn(true);
         $attributeMock->expects($this->once())->method('getSource')->willReturn($sourceMock);
@@ -244,18 +235,15 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->delete($entityType, $attributeCode, $optionId);
     }
 
-    /**
-     */
     public function testDeleteWithAbsentOption()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The "atrCode" attribute has no option.');
-
         $entityType = 42;
         $attributeCode = 'atrCode';
         $optionId = 'option';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -270,13 +258,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->delete($entityType, $attributeCode, $optionId);
     }
 
-    /**
-     */
     public function testDeleteWithEmptyAttributeCode()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('The attribute code is empty. Enter the code and try again.');
-
         $entityType = 42;
         $attributeCode = '';
         $optionId = 'option';
@@ -289,7 +274,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $entityType = 42;
         $attributeCode = 'atrCode';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -297,24 +282,21 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             true,
             ['getOptions']
         );
-        $optionsMock = [$this->getMockForAbstractClass(EavAttributeOptionInterface::class)];
+        $optionsMock = [$this->createMock(EavAttributeOptionInterface::class)];
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('getOptions')->willReturn($optionsMock);
         $this->assertEquals($optionsMock, $this->model->getItems($entityType, $attributeCode));
     }
 
-    /**
-     */
     public function testGetItemsWithCannotLoadException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The options for "atrCode" attribute can\'t be loaded.');
-
         $entityType = 42;
         $attributeCode = 'atrCode';
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -328,13 +310,10 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->getItems($entityType, $attributeCode);
     }
 
-    /**
-     */
     public function testGetItemsWithEmptyAttributeCode()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('The attribute code is empty. Enter the code and try again.');
-
         $entityType = 42;
         $attributeCode = '';
         $this->model->getItems($entityType, $attributeCode);

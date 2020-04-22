@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Custom import CSV file field for shipping table rates
@@ -11,31 +12,38 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
-class ImportTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ImportTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import
+     * @var Import
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_formMock;
 
     protected function setUp(): void
     {
         $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
+            Form::class,
             ['getFieldNameSuffix', 'addSuffixToName', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
         );
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
+            Import::class,
             [
                 'data' => $testData,
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class)
             ]
         );
         $this->_object->setForm($this->_formMock);
@@ -43,7 +51,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNameWhenFormFiledNameSuffixIsEmpty()
     {
-        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->willReturn(false);
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(false));
         $this->_formMock->expects($this->never())->method('addSuffixToName');
         $actual = $this->_object->getName();
         $this->assertEquals('test_name', $actual);
@@ -51,8 +59,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNameWhenFormFiledNameSuffixIsNotEmpty()
     {
-        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->willReturn(true);
-        $this->_formMock->expects($this->once())->method('addSuffixToName')->willReturn('test_suffix');
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(true));
+        $this->_formMock->expects($this->once())->method('addSuffixToName')->will($this->returnValue('test_suffix'));
         $actual = $this->_object->getName();
         $this->assertEquals('test_suffix', $actual);
     }
@@ -63,15 +71,15 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getHtmlIdPrefix'
-        )->willReturn(
-            'test_name_prefix'
+        )->will(
+            $this->returnValue('test_name_prefix')
         );
         $this->_formMock->expects(
             $this->any()
         )->method(
             'getHtmlIdSuffix'
-        )->willReturn(
-            'test_name_suffix'
+        )->will(
+            $this->returnValue('test_name_suffix')
         );
         $testString = $this->_object->getElementHtml();
         $this->assertStringStartsWith(

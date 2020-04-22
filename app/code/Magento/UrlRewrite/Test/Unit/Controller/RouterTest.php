@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
+use Laminas\Stdlib\ParametersInterface;
 use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\Action\Redirect;
 use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Controller\Router;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Store\Model\Store;
-use Laminas\Stdlib\ParametersInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -87,7 +88,7 @@ class RouterTest extends TestCase
             ['setRedirect', 'sendResponse']
         );
         $this->requestQuery = $this->createMock(ParametersInterface::class);
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->request->method('getQuery')->willReturn($this->requestQuery);
         $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);

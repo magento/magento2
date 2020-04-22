@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,22 +6,21 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-use Magento\Framework\Bulk\OperationInterface;
+use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\Bulk\OperationInterface;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class StatusMapperTest
- */
-class StatusMapperTest extends \PHPUnit\Framework\TestCase
+class StatusMapperTest extends TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Model\StatusMapper
+     * @var StatusMapper
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\AsynchronousOperations\Model\StatusMapper();
+        $this->model = new StatusMapper();
     }
 
     public function testOperationStatusToBulkSummaryStatus()

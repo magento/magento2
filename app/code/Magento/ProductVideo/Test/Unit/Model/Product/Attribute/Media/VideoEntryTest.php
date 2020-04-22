@@ -1,17 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
-/**
- * VideoEntry test
- */
-class VideoEntryTest extends \PHPUnit\Framework\TestCase
+use Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class VideoEntryTest extends TestCase
 {
     /**
-     * @var \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry|\PHPUnit\Framework\MockObject\MockObject
+     * @var VideoEntry|MockObject
      */
     protected $modelObject;
 
@@ -22,7 +23,7 @@ class VideoEntryTest extends \PHPUnit\Framework\TestCase
     {
         $this->modelObject =
             $this->createPartialMock(
-                \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry::class,
+                VideoEntry::class,
                 ['getData', 'setData']
             );
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,31 +10,28 @@ use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AnchorRendererTest extends \PHPUnit\Framework\TestCase
+class AnchorRendererTest extends TestCase
 {
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $activeMenuItemMock;
 
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $menuItemMock;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var MenuItemChecker|\PHPUnit\Framework\MockObject\MockObject
+     * @var MenuItemChecker|MockObject
      */
     private $menuItemCheckerMock;
 
@@ -42,6 +39,10 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
      * @var AnchorRenderer
      */
     private $anchorRenderer;
+    /**
+     * @var MockObject
+     */
+    private $menuItemWithoutChildrenMock;
 
     protected function setUp(): void
     {
@@ -61,8 +62,8 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->anchorRenderer =  $this->objectManagerHelper->getObject(
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->anchorRenderer =  $objectManagerHelper->getObject(
             AnchorRenderer::class,
             [
                 'menuItemChecker' => $this->menuItemCheckerMock,

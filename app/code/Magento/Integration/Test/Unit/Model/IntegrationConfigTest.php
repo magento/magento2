@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,16 @@
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\IntegrationConfig;
 use Magento\Integration\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\Config\Integration\Reader;
+use Magento\Integration\Model\IntegrationConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\IntegrationConfig
  */
-class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
+class IntegrationConfigTest extends TestCase
 {
     /**
      * @var IntegrationConfig
@@ -20,31 +23,31 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
     private $integrationConfigModel;
 
     /**
-     * @var TypeIntegration|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeIntegration|MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var  Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
     protected function setUp(): void
     {
-        $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeIntegration::class)
+        $this->configCacheTypeMock = $this->getMockBuilder(TypeIntegration::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Integration\Reader::class)
+        $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->integrationConfigModel = new IntegrationConfig(
             $this->configCacheTypeMock,
             $this->configReaderMock,
@@ -59,7 +62,7 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->willReturn($serializedIntegrations);
+            ->will($this->returnValue($serializedIntegrations));
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedIntegrations)
@@ -75,10 +78,10 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->configReaderMock->expects($this->once())
             ->method('read')
-            ->willReturn($integrations);
+            ->will($this->returnValue($integrations));
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($integrations)
@@ -86,7 +89,7 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('save')
             ->with($serializedIntegrations, IntegrationConfig::CACHE_ID, [TypeIntegration::CACHE_TAG])
-            ->willReturn(null);
+            ->will($this->returnValue(null));
 
         $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
     }

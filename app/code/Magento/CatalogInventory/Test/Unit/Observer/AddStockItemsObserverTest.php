@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,8 +18,12 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Observer\AddStockItemsObserver;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddStockItemsObserverTest extends TestCase
 {
     /**
@@ -29,17 +33,17 @@ class AddStockItemsObserverTest extends TestCase
      */
     private $subject;
     /**
-     * @var StockItemCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockItemCriteriaInterfaceFactory|MockObject
      */
     private $criteriaInterfaceFactoryMock;
 
     /**
-     * @var StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockItemRepositoryInterface|MockObject
      */
     private $stockItemRepositoryMock;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     private $stockConfigurationMock;
 
@@ -139,7 +143,7 @@ class AddStockItemsObserverTest extends TestCase
             ->with(self::identicalTo($productExtension))
             ->willReturnSelf();
 
-        /** @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject $productCollection */
+        /** @var ProductCollection|MockObject $productCollection */
         $productCollection = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -151,7 +155,7 @@ class AddStockItemsObserverTest extends TestCase
             ->with(self::identicalTo($productId))
             ->willReturn($product);
 
-        /** @var Observer|\PHPUnit\Framework\MockObject\MockObject $observer */
+        /** @var Observer|MockObject $observer */
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();

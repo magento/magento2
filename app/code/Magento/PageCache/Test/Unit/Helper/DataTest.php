@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,11 +9,14 @@
  */
 namespace Magento\PageCache\Test\Unit\Helper;
 
-/**
- * Class DataTest
- *
- */
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\View;
+use Magento\Framework\View\Layout\ProcessorInterface;
+use Magento\PageCache\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
      * @var Data
@@ -21,17 +24,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProcessorInterface|MockObject
      */
     protected $updateLayoutMock;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
+     * @var View|MockObject
      */
     protected $viewMock;
 
@@ -39,6 +42,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         // one year
         $age = 365 * 24 * 60 * 60;
-        $this->assertEquals($age, \Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
+        $this->assertEquals($age, Data::PRIVATE_MAX_AGE_CACHE);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,14 @@
 namespace Magento\Backend\Test\Unit\Setup;
 
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\Option\AbstractConfigOption;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
+class ConfigOptionsListTest extends TestCase
 {
     /**
      * @var ConfigOptionsList
@@ -16,22 +21,22 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     protected function setUp(): void
     {
         $this->object = new ConfigOptionsList();
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
     }
 
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertIsArray($options);
+        $this->assertInternalType('array', $options);
         foreach ($options as $option) {
-            $this->assertInstanceOf(\Magento\Framework\Setup\Option\AbstractConfigOption::class, $option);
+            $this->assertInstanceOf(AbstractConfigOption::class, $option);
         }
     }
 
@@ -50,10 +55,10 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertIsArray($actualConfig);
-        /** @var \Magento\Framework\Config\Data\ConfigData $config */
+        $this->assertInternalType('array', $actualConfig);
+        /** @var ConfigData $config */
         foreach ($actualConfig as $i => $config) {
-            $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $config);
+            $this->assertInstanceOf(ConfigData::class, $config);
             $this->assertSame($expectedData[$i]['file'], $config->getFileKey());
             $this->assertSame($expectedData[$i]['data'], $config->getData());
         }

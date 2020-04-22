@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,15 @@
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Auth\Session;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupTest extends TestCase
 {
     /**
      * @var Group
@@ -14,22 +22,22 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement
+     * @var AbstractElement
      */
     private $_element;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $_authSession;
 
     /**
-     * @var \Magento\User\Model\User|\PHPUnit\Framework\MockObject\MockObject
+     * @var User|MockObject
      */
     private $_user;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Config\Model\Config\Structure\Element\Group|MockObject
      */
     private $_group;
 
@@ -38,10 +46,10 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
+        $helper = new ObjectManager($this);
+        $this->_group = $this->createMock(Group::class);
         $this->_element = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             [],
             '',
             false,
@@ -51,25 +59,25 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->willReturn('html id');
+            ->will($this->returnValue('html id'));
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->willReturn('element html');
+            ->will($this->returnValue('element html'));
         $this->_element->expects($this->any())
             ->method('getName')
-            ->willReturn('name');
+            ->will($this->returnValue('name'));
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $this->_element->expects($this->any())
             ->method('getId')
-            ->willReturn('id');
-        $this->_user = $this->createMock(\Magento\User\Model\User::class);
-        $this->_authSession = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
+            ->will($this->returnValue('id'));
+        $this->_user = $this->createMock(User::class);
+        $this->_authSession = $this->createMock(Session::class);
         $this->_authSession->expects($this->any())
             ->method('__call')
             ->with('getUser')
-            ->willReturn($this->_user);
+            ->will($this->returnValue($this->_user));
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
             ['authSession' => $this->_authSession]

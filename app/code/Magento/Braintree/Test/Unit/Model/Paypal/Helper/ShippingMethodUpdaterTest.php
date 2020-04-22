@@ -3,37 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ShippingMethodUpdaterTest
- *
  * @see \Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater
  */
-class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
+class ShippingMethodUpdaterTest extends TestCase
 {
     const TEST_SHIPPING_METHOD = 'test-shipping-method';
 
     const TEST_EMAIL = 'test@test.loc';
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CartRepositoryInterface|MockObject
      */
     private $quoteRepositoryMock;
 
     /**
-     * @var Address|\PHPUnit\Framework\MockObject\MockObject
+     * @var Address|MockObject
      */
     private $shippingAddressMock;
 
@@ -67,13 +69,10 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testExecuteException()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "shippingMethod" field does not exists.');
-
         $quoteMock = $this->getQuoteMock();
 
         $this->shippingMethodUpdater->execute('', $quoteMock);
@@ -115,9 +114,9 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $quoteMock
+     * @param MockObject $quoteMock
      */
-    private function disabledQuoteAddressValidationStep(\PHPUnit\Framework\MockObject\MockObject $quoteMock)
+    private function disabledQuoteAddressValidationStep(MockObject $quoteMock)
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
@@ -140,27 +139,25 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $quoteMock
-     * @return Address|\PHPUnit\Framework\MockObject\MockObject
+     * @param MockObject $quoteMock
+     * @return Address|MockObject
      */
-    private function getBillingAddressMock(\PHPUnit\Framework\MockObject\MockObject $quoteMock)
+    private function getBillingAddressMock(MockObject $quoteMock)
     {
-        if (!isset($this->billingAddressMock)) {
-            $this->billingAddressMock = $this->getMockBuilder(Address::class)
+        $billingAddressMock = $this->getMockBuilder(Address::class)
                 ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        }
 
         $quoteMock->expects(self::any())
             ->method('getBillingAddress')
-            ->willReturn($this->billingAddressMock);
+            ->willReturn($billingAddressMock);
 
-        return $this->billingAddressMock;
+        return $billingAddressMock;
     }
 
     /**
-     * @return Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @return Quote|MockObject
      */
     private function getQuoteMock()
     {

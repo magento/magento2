@@ -1,23 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
-use \Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
-
 use Laminas\Soap\Wsdl;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Complex type strategy tests.
  */
-class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
+class ComplexTypeStrategyTest extends TestCase
 {
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var TypeProcessor|MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Webapi\Model\Soap\Wsdl|MockObject */
     protected $_wsdl;
 
     /** @var ComplexTypeStrategy */
@@ -29,7 +32,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_typeProcessor = $this->getMockBuilder(
-            \Magento\Framework\Reflection\TypeProcessor::class
+            TypeProcessor::class
         )->setMethods(
             ['getTypeData']
         )->disableOriginalConstructor()->getMock();
@@ -64,7 +67,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
         $testType = 'testComplexTypeName';
         $testTypeWsdlName = 'tns:' . $testType;
         $includedTypes = [$testType => $testTypeWsdlName];
-        $this->_wsdl->expects($this->exactly(2))->method('getTypes')->willReturn($includedTypes);
+        $this->_wsdl->expects($this->exactly(2))->method('getTypes')->will($this->returnValue($includedTypes));
 
         $this->assertEquals($testTypeWsdlName, $this->_strategy->addComplexType($testType));
     }
@@ -78,15 +81,15 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddComplexTypeSimpleParameters($type, $data)
     {
-        $this->_wsdl->expects($this->any())->method('getTypes')->willReturn([]);
+        $this->_wsdl->expects($this->any())->method('getTypes')->will($this->returnValue([]));
 
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
 
         $schemaMock = $this->getMockBuilder(\DOMElement::class)
             ->setConstructorArgs(['a'])
             ->getMock();
         $schemaMock->expects($this->any())->method('appendChild');
-        $this->_wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
+        $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
 
         $this->_typeProcessor->expects(
             $this->at(0)
@@ -94,8 +97,8 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
             'getTypeData'
         )->with(
             $type
-        )->willReturn(
-            $data
+        )->will(
+            $this->returnValue($data)
         );
 
         $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
@@ -220,29 +223,29 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->_wsdl->expects($this->at(0))->method('getTypes')->willReturn([]);
+        $this->_wsdl->expects($this->at(0))->method('getTypes')->will($this->returnValue([]));
         $this->_wsdl->expects(
             $this->any()
         )->method(
             'getTypes'
-        )->willReturn(
-            [$type => Wsdl::TYPES_NS . ':' . $type]
+        )->will(
+            $this->returnValue([$type => Wsdl::TYPES_NS . ':' . $type])
         );
 
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
         $schemaMock = $this->getMockBuilder(\DOMElement::class)
             ->setConstructorArgs(['a'])
             ->getMock();
         $schemaMock->expects($this->any())->method('appendChild');
-        $this->_wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
+        $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
         $this->_typeProcessor->expects(
             $this->at(0)
         )->method(
             'getTypeData'
         )->with(
             $type
-        )->willReturn(
-            $typeData
+        )->will(
+            $this->returnValue($typeData)
         );
         $this->_typeProcessor->expects(
             $this->at(1)
@@ -250,8 +253,8 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
             'getTypeData'
         )->with(
             $parameterType
-        )->willReturn(
-            $parameterData
+        )->will(
+            $this->returnValue($parameterData)
         );
 
         $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
@@ -263,7 +266,7 @@ class ComplexTypeStrategyTest extends \PHPUnit\Framework\TestCase
     public function testAddAnnotationToComplexType()
     {
         $dom = new \DOMDocument();
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn($dom);
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue($dom));
         $annotationDoc = "test doc";
         $complexType = $dom->createElement(Wsdl::XSD_NS . ':complexType');
         $complexType->setAttribute('name', 'testRequest');

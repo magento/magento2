@@ -1,43 +1,57 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Bulk;
 
+use Magento\AsynchronousOperations\Controller\Adminhtml\Bulk\Details;
+use Magento\Backend\Model\Menu;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DetailsTest extends \PHPUnit\Framework\TestCase
+class DetailsTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $viewMock;
-    
+
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\AsynchronousOperations\Controller\Adminhtml\Bulk\Details
+     * @var Details
      */
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $resultFactoryMock;
 
     protected function setUp(): void
     {
-        $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->resultFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
+        $objectManager =  new ObjectManager($this);
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->resultFactoryMock = $this->createMock(PageFactory::class);
         $this->model = $objectManager->getObject(
-            \Magento\AsynchronousOperations\Controller\Adminhtml\Bulk\Details::class,
+            Details::class,
             [
                 'request' => $this->requestMock,
                 'resultPageFactory' => $this->resultFactoryMock,
@@ -52,21 +66,21 @@ class DetailsTest extends \PHPUnit\Framework\TestCase
         $id = '42';
         $parameterName = 'uuid';
         $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\BlockInterface::class,
+            BlockInterface::class,
             ['setActive', 'getMenuModel', 'toHtml']
         );
-        $menuModelMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $menuModelMock = $this->createMock(Menu::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
         $blockMock->expects($this->once())->method('setActive')->with($itemId);
         $blockMock->expects($this->once())->method('getMenuModel')->willReturn($menuModelMock);
         $menuModelMock->expects($this->once())->method('getParentItems')->willReturn([]);
-        $pageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
-        $pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $pageMock = $this->createMock(Page::class);
+        $pageConfigMock = $this->createMock(Config::class);
+        $titleMock = $this->createMock(Title::class);
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($pageMock);
         $this->requestMock->expects($this->once())->method('getParam')->with($parameterName)->willReturn($id);
         $pageMock->expects($this->once())->method('getConfig')->willReturn($pageConfigMock);

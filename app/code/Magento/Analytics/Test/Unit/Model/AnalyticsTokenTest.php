@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,21 +10,23 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
+class AnalyticsTokenTest extends TestCase
 {
     /**
-     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
@@ -48,17 +50,11 @@ class AnalyticsTokenTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
 
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

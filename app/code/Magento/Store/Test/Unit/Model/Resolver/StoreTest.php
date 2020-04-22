@@ -4,14 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Resolver;
 
-use \Magento\Store\Model\Resolver\Store;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\Exception\State\InitException;
+use Magento\Store\Model\Resolver\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Store\Model\Resolver\Store
  */
-class StoreTest extends \PHPUnit\Framework\TestCase
+class StoreTest extends TestCase
 {
     /**
      * @var Store
@@ -19,13 +26,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->_model = new Store($this->_storeManagerMock);
     }
@@ -37,28 +44,25 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->createMock(\Magento\Framework\App\ScopeInterface::class);
+        $scopeMock = $this->createMock(ScopeInterface::class);
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getStore')
             ->with(0)
-            ->willReturn($scopeMock);
+            ->will($this->returnValue($scopeMock));
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }
 
-    /**
-     */
     public function testGetScopeWithInvalidScope()
     {
-        $this->expectException(\Magento\Framework\Exception\State\InitException::class);
-
+        $this->expectException(InitException::class);
         $scopeMock = new \StdClass();
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getStore')
             ->with(0)
-            ->willReturn($scopeMock);
+            ->will($this->returnValue($scopeMock));
 
         $this->assertEquals($scopeMock, $this->_model->getScope());
     }

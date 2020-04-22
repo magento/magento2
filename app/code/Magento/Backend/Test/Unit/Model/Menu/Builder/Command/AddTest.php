@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Builder\Command;
 
-class AddTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Menu\Builder\Command\Add;
+use PHPUnit\Framework\TestCase;
+
+class AddTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Menu\Builder\Command\Add
+     * @var Add
      */
     protected $_model;
 
@@ -22,7 +25,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Backend\Model\Menu\Builder\Command\Add($this->_params);
+        $this->_model = new Add($this->_params);
     }
 
     public function testExecuteFillsEmptyItemWithData()
@@ -38,12 +41,9 @@ class AddTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_params, $params);
     }
 
-    /**
-     */
     public function testChainWithAnotherAddCommandTrowsException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->_model->chain(new \Magento\Backend\Model\Menu\Builder\Command\Add($this->_params));
+        $this->expectException('InvalidArgumentException');
+        $this->_model->chain(new Add($this->_params));
     }
 }

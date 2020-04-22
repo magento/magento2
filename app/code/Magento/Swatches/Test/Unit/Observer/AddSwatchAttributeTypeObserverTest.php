@@ -1,35 +1,44 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Observer;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Swatches\Observer\AddSwatchAttributeTypeObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Observer test
  */
-class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
+class AddSwatchAttributeTypeObserverTest extends TestCase
 {
-    /** @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Manager|MockObject */
     protected $moduleManagerMock;
 
-    /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Observer|MockObject */
     protected $eventObserverMock;
 
-    /** @var \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AddSwatchAttributeTypeObserver|MockObject */
     protected $observerMock;
 
     protected function setUp(): void
     {
-        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->moduleManagerMock = $this->createMock(Manager::class);
 
         $this->eventObserverMock = $this->createPartialMock(
-            \Magento\Framework\Event\Observer::class,
+            Observer::class,
             ['getForm', 'getEvent', 'getAttribute']
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->observerMock = $objectManager->getObject(
-            \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver::class,
+            AddSwatchAttributeTypeObserver::class,
             [
                 'moduleManager' => $this->moduleManagerMock,
             ]
@@ -46,13 +55,13 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit\Framework\TestCase
             ->method('isOutputEnabled')
             ->willReturn($exp['isOutputEnabled']);
 
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getResponse']);
+        $eventMock = $this->createPartialMock(Event::class, ['getResponse']);
         $this->eventObserverMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getEvent')
             ->willReturn($eventMock);
 
-        $response = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getTypes']);
+        $response = $this->createPartialMock(DataObject::class, ['getTypes']);
         $eventMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getResponse')

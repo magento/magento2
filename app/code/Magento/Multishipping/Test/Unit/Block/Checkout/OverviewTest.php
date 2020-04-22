@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,13 +7,24 @@
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
 use Magento\Multishipping\Block\Checkout\Overview;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\Quote\Model\Quote\TotalsReader;
+use Magento\Sales\Model\Order\Total;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OverviewTest extends \PHPUnit\Framework\TestCase
+class OverviewTest extends TestCase
 {
     /**
      * @var Overview
@@ -21,45 +32,45 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $totalsReaderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $totalsCollectorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $checkoutMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $urlBuilderMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
+        $this->addressMock = $this->createPartialMock(Address::class, [
                 'getShippingMethod',
                 'getShippingRateByCode',
                 'getAllVisibleItems',
@@ -69,15 +80,15 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->priceCurrencyMock =
-            $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-        $this->totalsReaderMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsReader::class);
-        $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
+            $this->createMock(PriceCurrencyInterface::class);
+        $this->totalsReaderMock = $this->createMock(TotalsReader::class);
+        $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->checkoutMock =
-            $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
-        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
+            $this->createMock(Multishipping::class);
+        $this->quoteMock = $this->createMock(Quote::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->model = $objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Overview::class,
+            Overview::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
                 'totalsCollector' => $this->totalsCollectorMock,
@@ -90,9 +101,9 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetShippingRateByCode()
     {
-        $rateMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Rate::class);
+        $rateMock = $this->createMock(Rate::class);
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->willReturn('shipping method');
+            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -104,7 +115,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingRateByCodeWithEmptyRate()
     {
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->willReturn('shipping method');
+            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -122,7 +133,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingAddressTotals()
     {
         $totalMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Total::class,
+            Total::class,
             ['getCode', 'setTitle', '__wakeup']
         );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
@@ -136,7 +147,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingAddressTotalsWithNotBillingAddress()
     {
         $totalMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Total::class,
+            Total::class,
             ['getCode', 'setTitle', '__wakeup']
         );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
@@ -148,12 +159,12 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $address
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @param MockObject $address
+     * @return MockObject
      */
     protected function getTotalsMock($address)
     {
-        $totalMock = $this->createPartialMock(\Magento\Sales\Model\Order\Total::class, [
+        $totalMock = $this->createPartialMock(Total::class, [
                 'getCode',
                 'setTitle',
                 '__wakeup'

@@ -1,62 +1,73 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
-class TypeTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute\SetFactory;
+use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Eav\Model\Entity\StoreFactory;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Registry;
+use Magento\Framework\Validator\UniversalFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TypeTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Type
+     * @var Type
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $attrFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $attrSetFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $universalFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $resourceMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->attrFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
-        $this->attrSetFactoryMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\SetFactory::class);
-        $this->storeFactoryMock = $this->createPartialMock(\Magento\Eav\Model\Entity\StoreFactory::class, ['create']);
-        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->attrFactoryMock = $this->createMock(AttributeFactory::class);
+        $this->attrSetFactoryMock = $this->createMock(SetFactory::class);
+        $this->storeFactoryMock = $this->createPartialMock(StoreFactory::class, ['create']);
+        $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
         $this->resourceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -65,7 +76,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ['beginTransaction', 'rollBack', 'commit', 'getIdFieldName', '__wakeup']
         );
 
-        $this->model = new \Magento\Eav\Model\Entity\Type(
+        $this->model = new Type(
             $this->contextMock,
             $this->registryMock,
             $this->attrFactoryMock,
@@ -76,13 +87,10 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testFetchNewIncrementIdRollsBackTransactionAndRethrowsExceptionIfProgramFlowIsInterrupted()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Store instance cannot be created.');
-
         $this->model->setIncrementModel('\IncrementModel');
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         // Interrupt program flow by exception

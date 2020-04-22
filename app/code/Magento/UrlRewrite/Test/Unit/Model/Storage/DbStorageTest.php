@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -35,7 +35,7 @@ class DbStorageTest extends TestCase
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|MockObject
+     * @var Select|MockObject
      */
     private $select;
 
@@ -55,7 +55,7 @@ class DbStorageTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,7 +90,7 @@ class DbStorageTest extends TestCase
 
         $this->connectionMock
             ->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
@@ -100,7 +100,7 @@ class DbStorageTest extends TestCase
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -109,7 +109,7 @@ class DbStorageTest extends TestCase
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
             ->with(['urlRewrite2'], ['row2'], UrlRewrite::class)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
@@ -131,7 +131,7 @@ class DbStorageTest extends TestCase
             ->with('col2 IN (?)', 'val2');
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
@@ -143,7 +143,7 @@ class DbStorageTest extends TestCase
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -174,7 +174,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -224,7 +224,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -256,7 +256,7 @@ class DbStorageTest extends TestCase
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -288,7 +288,7 @@ class DbStorageTest extends TestCase
 
         $this->connectionMock
             ->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -320,7 +320,7 @@ class DbStorageTest extends TestCase
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
@@ -351,7 +351,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -402,7 +402,7 @@ class DbStorageTest extends TestCase
             ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
@@ -487,12 +487,9 @@ class DbStorageTest extends TestCase
         $this->assertEquals($urls, $this->storage->replace($urls));
     }
 
-    /**
-     */
     public function testReplaceIfThrewExceptionOnDuplicateUrl()
     {
-        $this->expectException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class);
-
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')
@@ -517,13 +514,11 @@ class DbStorageTest extends TestCase
      * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated
      *
      * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
-     *
      */
     public function testReplaceIfThrewExceptionOnDuplicateEntry()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('SQLSTATE[23000]: test: 1062 test');
-
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')
@@ -538,12 +533,9 @@ class DbStorageTest extends TestCase
         $this->storage->replace([$url]);
     }
 
-    /**
-     */
     public function testReplaceIfThrewCustomException()
     {
-        $this->expectException(\RuntimeException::class);
-
+        $this->expectException('RuntimeException');
         $url = $this->createMock(UrlRewrite::class);
 
         $url->method('toArray')
@@ -561,7 +553,7 @@ class DbStorageTest extends TestCase
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
         $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->select->expects($this->at(1))
             ->method('where')

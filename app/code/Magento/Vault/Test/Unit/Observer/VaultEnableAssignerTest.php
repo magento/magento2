@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,8 +13,10 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
+class VaultEnableAssignerTest extends TestCase
 {
     public function testExecuteNoActiveCode()
     {
@@ -45,7 +47,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
@@ -88,7 +90,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
                 PaymentInterface::KEY_ADDITIONAL_DATA => []
             ]
         );
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         $paymentModel->expects(static::never())
             ->method('setAdditionalInformation');
@@ -107,7 +109,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit\Framework\MockObject\MockObject|Observer
+     * @return MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {

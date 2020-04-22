@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,6 +11,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceAbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -18,14 +20,16 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Ui component massaction filter tests
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterTest extends \PHPUnit\Framework\TestCase
+class FilterTest extends TestCase
 {
     /**
      * MockObject
@@ -93,17 +97,17 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             FilterBuilder::class,
             ['value', 'setConditionType', 'create', 'setField']
         );
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
-        $this->uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
+        $this->uiComponentMock = $this->createMock(UiComponentInterface::class);
         $this->abstractDbMock = $this->createPartialMock(
             AbstractDb::class,
             ['getResource', 'addFieldToFilter']
         );
         $this->resourceAbstractDbMock = $this->createMock(ResourceAbstractDb::class);
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $this->searchResultMock = $this->getMockForAbstractClass(SearchResultInterface::class);
-        $uiComponentMockTwo = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->searchResultMock = $this->createMock(SearchResultInterface::class);
+        $uiComponentMockTwo = $this->createMock(UiComponentInterface::class);
         $this->filter = $this->objectManager->getObject(
             Filter::class,
             [
@@ -133,7 +137,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
     public function testApplySelectionOnTargetProvider($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
@@ -160,8 +164,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplySelectionOnTargetProviderException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
@@ -206,7 +209,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
     public function testGetCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
@@ -240,12 +243,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
     public function testGetCollectionWithCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
     {
-        $this->dataProviderMock = $this->createMock(\Magento\Ui\DataProvider\AbstractDataProvider::class);
+        $this->dataProviderMock = $this->createMock(AbstractDataProvider::class);
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
@@ -344,7 +347,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->searchResultMock);
         $this->searchResultMock->expects($this->any())
             ->method('getItems')
-            ->willReturn([new \Magento\Framework\DataObject(['id' => 1])]);
+            ->willReturn([new DataObject(['id' => 1])]);
         $filterMock = $this->createMock(ApiFilter::class);
         $this->requestMock->expects($this->at(0))
             ->method('getParam')

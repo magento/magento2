@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,12 +7,22 @@
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\GiftMessage\Model\GiftMessageManager;
 use Magento\GiftMessage\Model\ItemRepository;
+use Magento\GiftMessage\Model\Message;
+use Magento\GiftMessage\Model\MessageFactory;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
+class ItemRepositoryTest extends TestCase
 {
     /**
      * @var ItemRepository
@@ -20,27 +30,27 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $itemRepository;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteItemMock;
 
@@ -50,57 +60,57 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartId = 13;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $giftMessageManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->messageFactoryMock = $this->createPartialMock(
-            \Magento\GiftMessage\Model\MessageFactory::class,
+            MessageFactory::class,
             [
                 'create',
                 '__wakeup'
             ]
         );
-        $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
+        $this->messageMock = $this->createMock(Message::class);
         $this->quoteItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             [
                 'getGiftMessageId',
                 '__wakeup'
             ]
         );
         $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             [
                 'getGiftMessageId',
                 'getItemById',
                 '__wakeup',
             ]
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->giftMessageManagerMock =
-            $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);
+            $this->createMock(GiftMessageManager::class);
         $this->helperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->itemRepository = new \Magento\GiftMessage\Model\ItemRepository(
+        $this->storeMock = $this->createMock(Store::class);
+        $this->itemRepository = new ItemRepository(
             $this->quoteRepositoryMock,
             $this->storeManagerMock,
             $this->giftMessageManagerMock,
@@ -111,19 +121,21 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($this->cartId)
-            ->willReturn($this->quoteMock);
+            ->will($this->returnValue($this->quoteMock));
     }
 
-    /**
-     */
     public function testGetWithNoSuchEntityException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('No item with the provided ID was found in the Cart. Verify the ID and try again.');
-
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage(
+            'No item with the provided ID was found in the Cart. Verify the ID and try again.'
+        );
         $itemId = 2;
 
-        $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->willReturn(null);
+        $this->quoteMock->expects($this->once())
+            ->method('getItemById')
+            ->with($itemId)
+            ->will($this->returnValue(null));
 
         $this->itemRepository->get($this->cartId, $itemId);
     }
@@ -136,8 +148,8 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->willReturn($this->quoteItemMock);
-        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
+            ->will($this->returnValue($this->quoteItemMock));
+        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
 
         $this->assertNull($this->itemRepository->get($this->cartId, $itemId));
     }
@@ -150,28 +162,25 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->willReturn($this->quoteItemMock);
-        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
+            ->will($this->returnValue($this->quoteItemMock));
+        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->messageMock);
+            ->will($this->returnValue($this->messageMock));
         $this->messageMock->expects($this->once())
             ->method('load')
             ->with($messageId)
-            ->willReturn($this->messageMock);
+            ->will($this->returnValue($this->messageMock));
 
         $this->assertEquals($this->messageMock, $this->itemRepository->get($this->cartId, $itemId));
     }
 
-    /**
-     */
     public function testSaveWithNoSuchEntityException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $itemId = 1;
 
-        $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->willReturn(null);
+        $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
         $this->itemRepository->save($this->cartId, $this->messageMock, $itemId);
 
         $this->expectExceptionMessage(
@@ -179,21 +188,18 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testSaveWithInvalidTransitionException()
     {
-        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectException('Magento\Framework\Exception\State\InvalidTransitionException');
         $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
-
         $itemId = 1;
 
-        $quoteItem = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getIsVirtual', '__wakeup']);
+        $quoteItem = $this->createPartialMock(Item::class, ['getIsVirtual', '__wakeup']);
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->willReturn($quoteItem);
-        $quoteItem->expects($this->once())->method('getIsVirtual')->willReturn(1);
+            ->will($this->returnValue($quoteItem));
+        $quoteItem->expects($this->once())->method('getIsVirtual')->will($this->returnValue(1));
 
         $this->itemRepository->save($this->cartId, $this->messageMock, $itemId);
     }
@@ -202,21 +208,21 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $itemId = 1;
 
-        $quoteItem = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getIsVirtual', '__wakeup']);
+        $quoteItem = $this->createPartialMock(Item::class, ['getIsVirtual', '__wakeup']);
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->willReturn($quoteItem);
-        $quoteItem->expects($this->once())->method('getIsVirtual')->willReturn(0);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+            ->will($this->returnValue($quoteItem));
+        $quoteItem->expects($this->once())->method('getIsVirtual')->will($this->returnValue(0));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
         $this->helperMock->expects($this->once())
             ->method('isMessagesAllowed')
             ->with('items', $this->quoteMock, $this->storeMock)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->giftMessageManagerMock->expects($this->once())
             ->method('setMessage')
             ->with($this->quoteMock, 'quote_item', $this->messageMock, $itemId)
-            ->willReturn($this->giftMessageManagerMock);
+            ->will($this->returnValue($this->giftMessageManagerMock));
         $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->itemRepository->save($this->cartId, $this->messageMock, $itemId));

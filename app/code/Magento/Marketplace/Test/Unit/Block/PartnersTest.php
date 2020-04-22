@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,10 +6,14 @@
 
 namespace Magento\Marketplace\Test\Unit\Block;
 
-class PartnersTest extends \PHPUnit\Framework\TestCase
+use Magento\Marketplace\Block\Partners;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PartnersTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Block\Partners
+     * @var MockObject|Partners
      */
     private $partnersBlockMock;
 
@@ -30,11 +34,11 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
         $partnersModelMock = $this->getPartnersModelMock(['getPartners']);
         $partnersModelMock->expects($this->once())
             ->method('getPartners')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
 
         $this->partnersBlockMock->expects($this->once())
             ->method('getPartnersModel')
-            ->willReturn($partnersModelMock);
+            ->will($this->returnValue($partnersModelMock));
 
         $this->partnersBlockMock->getPartners();
     }
@@ -42,17 +46,17 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Block\Partners
+     * @return MockObject|Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->createPartialMock(\Magento\Marketplace\Block\Partners::class, $methods);
+        return $this->createPartialMock(Partners::class, $methods);
     }
 
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Model\Partners
+     * @return MockObject|\Magento\Marketplace\Model\Partners
      */
     public function getPartnersModelMock($methods)
     {

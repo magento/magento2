@@ -1,40 +1,46 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Area;
 
+use Laminas\Uri\Uri;
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Backend\App\Config;
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Request\Http;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
+class FrontNameResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Area\FrontNameResolver
+     * @var FrontNameResolver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Config
+     * @var MockObject|Config
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Laminas\Uri\Uri
+     * @var MockObject|Uri
      */
     protected $uri;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     protected $request;
 
@@ -45,18 +51,18 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|DeploymentConfig $deploymentConfigMock */
-        $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        /** @var MockObject|DeploymentConfig $deploymentConfigMock */
+        $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
-            ->willReturn($this->_defaultFrontName);
-        $this->uri = $this->createMock(\Laminas\Uri\Uri::class);
+            ->will($this->returnValue($this->_defaultFrontName));
+        $this->uri = $this->createMock(Uri::class);
 
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->request = $this->createMock(Http::class);
 
-        $this->configMock = $this->createMock(\Magento\Backend\App\Config::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->model = new FrontNameResolver(
             $this->configMock,
             $deploymentConfigMock,
@@ -74,8 +80,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->willReturn(
-            true
+        )->will(
+            $this->returnValue(true)
         );
         $this->configMock->expects(
             $this->at(1)
@@ -83,8 +89,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/custom_path'
-        )->willReturn(
-            'expectedValue'
+        )->will(
+            $this->returnValue('expectedValue')
         );
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
@@ -97,8 +103,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->willReturn(
-            false
+        )->will(
+            $this->returnValue(false)
         );
         $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
     }
@@ -115,8 +121,8 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->willReturnMap(
-                
+            ->will(
+                $this->returnValueMap(
                     [
                         [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                         [
@@ -132,12 +138,12 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
                             $customAdminUrl
                         ],
                     ]
-                
+                )
             );
 
         $this->request->expects($this->any())
             ->method('getServer')
-            ->willReturn($host);
+            ->will($this->returnValue($host));
 
         $urlParts = [];
         $this->uri->expects($this->once())

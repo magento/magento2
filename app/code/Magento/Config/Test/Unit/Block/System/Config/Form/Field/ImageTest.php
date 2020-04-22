@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,15 +9,23 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class ImageTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Image;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Image
+     * @var Image
      */
     protected $image;
 
@@ -28,13 +36,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
+        $objectManager = new ObjectManager($this);
+        $this->urlBuilderMock = $this->createMock(Url::class);
         $this->image = $objectManager->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Image::class,
+            Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
-                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $objectManager->getObject(Escaper::class)
             ]
         );
 
@@ -46,7 +54,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'value'          => 'test_value',
         ];
 
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
         $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->image->setForm($formMock);
@@ -60,7 +68,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->willReturn($url);
+            ->with(['_type' => $type])->will($this->returnValue($url));
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);

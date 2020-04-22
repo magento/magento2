@@ -1,24 +1,33 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class BooleanTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\Boolean;
+use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class BooleanTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\Boolean
+     * @var Boolean
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Boolean($timezoneMock, $loggerMock, $localeResolverMock);
+        $this->model = new Boolean($timezoneMock, $loggerMock, $localeResolverMock);
     }
 
     /**
@@ -31,10 +40,10 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
      */
     public function testOutputValue($format, $value, $expectedResult)
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->willReturn($value);
+        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
+        $attributeMock = $this->createMock(Attribute::class);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -48,17 +57,17 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => '0',
                 'expectedResult' => 'No',
             ],
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => '1',
                 'expectedResult' => 'Yes'
             ],
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => '2',
                 'expectedResult' => ''
             ],

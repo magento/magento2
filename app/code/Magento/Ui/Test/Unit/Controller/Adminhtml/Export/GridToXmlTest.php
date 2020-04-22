@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,8 +9,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Controller\Adminhtml\Export\GridToXml;
 use Magento\Ui\Model\Export\ConvertToXml;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GridToXmlTest extends \PHPUnit\Framework\TestCase
+class GridToXmlTest extends TestCase
 {
     /**
      * @var GridToXml
@@ -18,31 +20,31 @@ class GridToXmlTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var ConvertToXml | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConvertToXml|MockObject
      */
     protected $converter;
 
     /**
-     * @var FileFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactory;
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->converter = $this->getMockBuilder(\Magento\Ui\Model\Export\ConvertToXml::class)
+        $this->converter = $this->getMockBuilder(ConvertToXml::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 

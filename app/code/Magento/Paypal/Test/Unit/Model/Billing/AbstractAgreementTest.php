@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,13 @@
 namespace Magento\Paypal\Test\Unit\Model\Billing;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Paypal\Model\Billing\Agreement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
+class AbstractAgreementTest extends TestCase
 {
     /**
      * @var Agreement
@@ -15,7 +20,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $paymentDataMock;
 
@@ -23,19 +28,19 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->paymentDataMock = $this->getMockBuilder(\Magento\Payment\Helper\Data::class)
+        $this->paymentDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $objectManager->getObject(
-            \Magento\Paypal\Model\Billing\Agreement::class,
+            Agreement::class,
             ['paymentData' => $this->paymentDataMock]
         );
     }
 
     public function testGetPaymentMethodInstance()
     {
-        $paymentMethodInstance = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->setMethods(['setStore'])
             ->getMockForAbstractClass();

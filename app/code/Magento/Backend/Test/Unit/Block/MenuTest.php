@@ -1,73 +1,45 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Menu as MenuModel;
-use Magento\Backend\Block\Menu;
-use Magento\Backend\Model\UrlInterface;
-use Magento\Backend\Model\Menu\Filter\IteratorFactory;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Backend\Model\Menu\Config;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\Menu;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Menu as MenuModel;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Filter\IteratorFactory;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MenuTest extends \PHPUnit\Framework\TestCase
+class MenuTest extends TestCase
 {
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $activeItemMock;
 
     /**
-     * @var MenuModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var MenuModel|MockObject
      */
     private $menuModelMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $urlMock;
-
-    /**
-     * @var IteratorFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $iteratorFactoryMock;
-
-    /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $authSessionMock;
-
-    /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $menuConfigMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $localeResolverMock;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var MenuItemChecker|\PHPUnit\Framework\MockObject\MockObject
+     * @var MenuItemChecker|MockObject
      */
     private $menuItemCheckerMock;
-
-    /**
-     * @var AnchorRenderer|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $anchorRendererMock;
 
     /**
      * @var Menu
@@ -79,39 +51,36 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->activeItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->iteratorFactoryMock = $this->getMockBuilder(IteratorFactory::class)
+        $urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
+        $iteratorFactoryMock = $this->getMockBuilder(IteratorFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->menuConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->menuItemChecker = $this->getMockBuilder(MenuItemChecker::class)
+        $localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
+        $anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->menu =  $this->objectManagerHelper->getObject(
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->menu =  $objectManagerHelper->getObject(
             Menu::class,
             [
-                'url' => $this->urlMock,
-                'iteratorFactory' => $this->iteratorFactoryMock,
-                'authSession' => $this->authSessionMock,
+                'url' => $urlMock,
+                'iteratorFactory' => $iteratorFactoryMock,
+                'authSession' => $authSessionMock,
                 'menuConfig' => $this->menuConfigMock,
-                'localeResolver' => $this->localeResolverMock,
+                'localeResolver' => $localeResolverMock,
                 'menuItemChecker' => $this->menuItemCheckerMock,
-                'anchorRenderer' => $this->anchorRendererMock
+                'anchorRenderer' => $anchorRendererMock
             ]
         );
     }

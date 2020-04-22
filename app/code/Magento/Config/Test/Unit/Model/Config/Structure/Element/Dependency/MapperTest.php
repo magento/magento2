@@ -1,43 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Dependency;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Dependency\Field;
+use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
+use Magento\Config\Model\Config\Structure\Element\Dependency\Mapper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MapperTest extends TestCase
 {
-    /**
-     * Field prefix
-     */
-    const FIELD_PREFIX = 'prefix_';
+    private const FIELD_PREFIX = 'prefix_';
+    private const VALUE_IN_STORE = 'value in store';
+    private const FIELD_ID1 = 'field id 1';
+    private const FIELD_ID2 = 'field id 2';
+    private const STORE_CODE = 'some store code';
 
     /**
-     * Value in store
-     */
-    const VALUE_IN_STORE = 'value in store';
-
-    /**#@+
-     * Field ids
-     */
-    const FIELD_ID1 = 'field id 1';
-
-    const FIELD_ID2 = 'field id 2';
-
-    /**#@-*/
-
-    /**
-     * Store code
-     */
-    const STORE_CODE = 'some store code';
-
-    /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper
+     * @var Mapper
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_configStructureMock;
 
@@ -51,9 +42,14 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock of dependency field factory
      *
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_fieldFactoryMock;
+    
+    /**
+     * @var MockObject|ScopeConfigInterface
+     */
+    private $_scopeConfigMock;
 
     protected function setUp(): void
     {
@@ -63,19 +59,19 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->_configStructureMock = $this->getMockBuilder(
-            \Magento\Config\Model\Config\Structure::class
+            Structure::class
         )->setMethods(
             ['getElement']
         )->disableOriginalConstructor()->getMock();
         $this->_fieldFactoryMock = $this->getMockBuilder(
-            \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory::class
+            FieldFactory::class
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $this->_scopeConfigMock = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper(
+        $this->_model = new Mapper(
             $this->_configStructureMock,
             $this->_fieldFactoryMock,
             $this->_scopeConfigMock
@@ -113,8 +109,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getElement'
             )->with(
                 $data['id']
-            )->willReturn(
-                $field
+            )->will(
+                $this->returnValue($field)
             );
             $dependencyField = $this->_getDependencyField(
                 $isValueSatisfy,
@@ -128,8 +124,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'create'
             )->with(
                 ['fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX]
-            )->willReturn(
-                $dependencyField
+            )->will(
+                $this->returnValue($dependencyField)
             );
             $this->_scopeConfigMock->expects(
                 $this->at($i)
@@ -137,10 +133,10 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getValue'
             )->with(
                 $dependentPath,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 self::STORE_CODE
-            )->willReturn(
-                self::VALUE_IN_STORE
+            )->will(
+                $this->returnValue(self::VALUE_IN_STORE)
             );
             if (!$isValueSatisfy) {
                 $expected[$data['id']] = $dependencyField;
@@ -176,8 +172,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getElement'
             )->with(
                 $data['id']
-            )->willReturn(
-                $field
+            )->will(
+                $this->returnValue($field)
             );
             $dependencyField = $this->_getDependencyField(
                 (bool)$i,
@@ -191,8 +187,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'create'
             )->with(
                 ['fieldData' => $data, 'fieldPrefix' => self::FIELD_PREFIX]
-            )->willReturn(
-                $dependencyField
+            )->will(
+                $this->returnValue($dependencyField)
             );
             $expected[$data['id']] = $dependencyField;
         }
@@ -207,12 +203,12 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * @param bool $isFieldVisible
      * @param string $fieldId
      * @param string $mockClassName
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function _getDependencyField($isValueSatisfy, $isFieldVisible, $fieldId, $mockClassName)
     {
         $field = $this->getMockBuilder(
-            \Magento\Config\Model\Config\Structure\Element\Dependency\Field::class
+            Field::class
         )->setMethods(
             ['isValueSatisfy', 'getId']
         )->setMockClassName(
@@ -227,16 +223,16 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'isValueSatisfy'
             )->with(
                 self::VALUE_IN_STORE
-            )->willReturn(
-                $isValueSatisfy
+            )->will(
+                $this->returnValue($isValueSatisfy)
             );
         }
         $field->expects(
             $isFieldVisible || !$isValueSatisfy ? $this->once() : $this->never()
         )->method(
             'getId'
-        )->willReturn(
-            $fieldId
+        )->will(
+            $this->returnValue($fieldId)
         );
         return $field;
     }
@@ -247,7 +243,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      * @param bool $isVisible
      * @param string $path
      * @param string $mockClassName
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function _getField($isVisible, $path, $mockClassName)
     {
@@ -258,7 +254,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         )->setMockClassName(
             $mockClassName
         )->disableOriginalConstructor()->getMock();
-        $field->expects($this->once())->method('isVisible')->willReturn($isVisible);
+        $field->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
         if ($isVisible) {
             $field->expects($this->never())->method('getPath');
         } else {
@@ -268,8 +264,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
                 'getPath'
             )->with(
                 self::FIELD_PREFIX
-            )->willReturn(
-                $path
+            )->will(
+                $this->returnValue($path)
             );
         }
         return $field;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,30 +6,36 @@
 
 namespace Magento\Msrp\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Msrp\Helper\Data;
 use Magento\Msrp\Pricing\MsrpPriceCalculatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DataTest
- */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Msrp\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var MsrpPriceCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MsrpPriceCalculatorInterface|MockObject
      */
     private $msrpPriceCalculator;
 
@@ -38,18 +44,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
-        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])
             ->getMock();
         $this->msrpPriceCalculator = $this->getMockBuilder(MsrpPriceCalculatorInterface::class)
             ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->helper = $objectManager->getObject(
-            \Magento\Msrp\Helper\Data::class,
+            Data::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
                 'msrpPriceCalculator' => $this->msrpPriceCalculator,
@@ -58,7 +64,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testIsMinimalPriceLessMsrp()
     {
@@ -66,28 +72,28 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $convertedFinalPrice = 200;
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round(2 * $arg, 2);
                     }
-                
+                )
             );
 
-        $finalPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\FinalPrice::class)
+        $finalPriceMock = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $finalPriceMock->expects($this->any())
             ->method('getValue')
-            ->willReturn($convertedFinalPrice);
+            ->will($this->returnValue($convertedFinalPrice));
 
-        $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
+        $priceInfoMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->getMock();
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->willReturn($finalPriceMock);
+            ->with(FinalPrice::PRICE_CODE)
+            ->will($this->returnValue($finalPriceMock));
 
         $this->msrpPriceCalculator
             ->expects($this->any())

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,8 +10,9 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\PayflowConfig;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IAVSResponseTest extends \PHPUnit\Framework\TestCase
+class IAVSResponseTest extends TestCase
 {
     /**
      * Checks a case when IAVS validator retrieves different response from PayPal.

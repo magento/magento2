@@ -11,8 +11,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Product\Sold\Collection;
 use Magento\Sales\Model\Order;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Verify data collection class.
@@ -42,7 +42,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
             ->setMethods([
                 'getSelect',

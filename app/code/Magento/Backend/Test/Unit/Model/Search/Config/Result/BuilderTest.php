@@ -1,14 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Search\Config\Result;
 
+use Magento\Backend\Model\Search\Config\Result\Builder;
 use Magento\Backend\Model\Search\Config\Structure\ElementBuilderInterface;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Backend\Model\Search\Config\Result\Builder;
 use Magento\Config\Model\Config\StructureElementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,17 +23,17 @@ class BuilderTest extends TestCase
     protected $model;
 
     /**
-     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StructureElementInterface|MockObject
      */
     protected $structureElementMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ElementBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ElementBuilderInterface|MockObject
      */
     protected $structureElementUrlParamsBuilderMock;
 
@@ -49,7 +50,7 @@ class BuilderTest extends TestCase
         $this->structureElementMock
             ->expects($this->once())
             ->method('getData')
-            ->willReturn(['_elementType' => 'not_declared_structure_element_type']);
+            ->will($this->returnValue(['_elementType' => 'not_declared_structure_element_type']));
         $this->model->add($this->structureElementMock, '');
         $this->assertEquals([], $this->model->getAll());
     }
@@ -92,7 +93,7 @@ class BuilderTest extends TestCase
             ->expects($this->once())
             ->method('getUrl')
             ->with('*/system_config/edit', $buildUrlParams)
-            ->willReturn($generatedUrl);
+            ->will($this->returnValue($generatedUrl));
 
         $this->model->add($this->structureElementMock, $structureElementLabel);
         $this->assertEquals($expectedSearchResult, $this->model->getAll());

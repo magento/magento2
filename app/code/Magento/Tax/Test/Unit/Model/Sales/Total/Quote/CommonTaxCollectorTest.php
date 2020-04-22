@@ -8,29 +8,27 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Helper\Data as TaxHelper;
-use Magento\Tax\Api\Data\TaxDetailsItemInterface;
-use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Magento\Store\Model\Store;
-use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
-use Magento\Tax\Model\Config;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Model\Quote;
-use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxClassKeyInterface;
-use Magento\Tax\Model\Sales\Quote\ItemDetails;
-use Magento\Tax\Model\TaxClass\Key as TaxClassKey;
-use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
-use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total as QuoteAddressTotal;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Store\Model\Store;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
+use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
+use Magento\Tax\Api\Data\TaxDetailsItemInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\Sales\Quote\ItemDetails;
+use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
+use Magento\Tax\Model\TaxClass\Key as TaxClassKey;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Common tax collector test
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommonTaxCollectorTest extends TestCase

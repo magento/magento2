@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,19 @@
 namespace Magento\MediaStorage\Test\Unit\Model\ResourceModel\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Helper\File\Media;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class FileTest
- */
-class FileTest extends \PHPUnit\Framework\TestCase
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Io\File
+     * @var File
      */
     private $fileIoMock;
 
@@ -24,17 +28,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $storageFile;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Media|\PHPUnit\Framework\MockObject\MockObject
+     * @var Media|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
+     * @var Read|MockObject
      */
     protected $directoryReadMock;
 
@@ -43,14 +47,14 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
         $this->directoryReadMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Directory\Read::class,
+            Read::class,
             ['isDirectory', 'readRecursively']
         );
 
-        $this->fileIoMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+        $this->fileIoMock = $this->createPartialMock(File::class, ['getPathInfo']);
 
         $objectManager = new ObjectManager($this);
 
@@ -80,16 +84,16 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'getDirectoryRead'
         )->with(
             $this->equalTo(DirectoryList::MEDIA)
-        )->willReturn(
-            $this->directoryReadMock
+        )->will(
+            $this->returnValue($this->directoryReadMock)
         );
 
         $this->directoryReadMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->willReturnMap(
-            
+        )->will(
+            $this->returnValueMap(
                 [
                     ['/', true],
                     ['folder_one', true],
@@ -100,7 +104,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
                     ['folder_one/folder_two/.htaccess', false],
                     ['folder_one/folder_two/file_two.txt', false],
                 ]
-            
+            )
         );
 
         $paths = [
@@ -124,7 +128,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getPathInfo'
-        )->willReturnMap($pathInfos);
+        )->will($this->returnValueMap($pathInfos));
 
         sort($paths);
         $this->directoryReadMock->expects(
@@ -133,8 +137,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
             'readRecursively'
         )->with(
             $this->equalTo('/')
-        )->willReturn(
-            $paths
+        )->will(
+            $this->returnValue($paths)
         );
 
         $expected = [

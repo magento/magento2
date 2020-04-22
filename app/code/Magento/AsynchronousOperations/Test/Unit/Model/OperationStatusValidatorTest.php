@@ -1,19 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\OperationStatusPool;
+use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class OperationStatusValidatorTest implements logic for testing Operation::setStatus() method
- */
 class OperationStatusValidatorTest extends TestCase
 {
     /**
@@ -33,9 +30,7 @@ class OperationStatusValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->operationStatusPool = $this->getMockBuilder(OperationStatusPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->operationStatusPool = $this->createMock(OperationStatusPool::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -66,7 +61,6 @@ class OperationStatusValidatorTest extends TestCase
         string $expectedResult
     ) {
         $this->operationStatusPool
-            ->expects($this->any())
             ->method('getStatuses')
             ->willReturn($statusPool);
 

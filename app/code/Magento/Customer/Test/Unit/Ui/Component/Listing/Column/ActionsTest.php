@@ -6,25 +6,26 @@
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Ui\Component\Listing\Column\Actions;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class ActionsTest
+ * Class Actions test for Listing Colummn
  */
 class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Actions */
     protected $component;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
     protected $uiComponentFactory;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\UrlInterface|MockObject */
     protected $urlBuilder;
 
-    protected function setup(): void
+    public function setup()
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
@@ -68,7 +69,6 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
                                 'href' => 'http://magento.com/customer/index/edit',
                                 'label' => new \Magento\Framework\Phrase('Edit'),
                                 'hidden' => false,
-                                '__disableTmpl' => true,
                             ]
                         ]
                     ],

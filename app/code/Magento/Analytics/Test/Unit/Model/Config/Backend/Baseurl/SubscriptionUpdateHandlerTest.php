@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,26 +12,28 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
+class SubscriptionUpdateHandlerTest extends TestCase
 {
     /**
-     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
@@ -64,13 +66,9 @@ class SubscriptionUpdateHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
+
+        $this->flagManagerMock = $this->createMock(FlagManager::class);
 
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()

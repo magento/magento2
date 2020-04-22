@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,63 +7,74 @@
 
 namespace Magento\EncryptionKey\Test\Unit\Controller\Adminhtml\Crypt\Key;
 
+use Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save;
+use Magento\EncryptionKey\Model\ResourceModel\Key\Change;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test class for Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EncryptorInterface|MockObject */
     protected $encryptMock;
 
-    /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Change|MockObject */
     protected $changeMock;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CacheInterface|MockObject */
     protected $cacheMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var RequestInterface|MockObject */
     protected $requestMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResponseInterface|MockObject */
     protected $responseMock;
 
-    /** @var \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save */
+    /** @var Save */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->encryptMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+        $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->changeMock = $this->getMockBuilder(\Magento\EncryptionKey\Model\ResourceModel\Key\Change::class)
+        $this->changeMock = $this->getMockBuilder(Change::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPost'])
             ->getMockForAbstractClass();
-        $this->managerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->model = $helper->getObject(
-            \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save::class,
+            Save::class,
             [
                 'encryptor' => $this->encryptMock,
                 'change' => $this->changeMock,

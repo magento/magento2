@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,14 +9,13 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CategoryBasedProductRewriteGeneratorTest
- */
-class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class CategoryBasedProductRewriteGeneratorTest extends TestCase
 {
     /**
-     * @var ProductScopeRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductScopeRewriteGenerator|MockObject
      */
     private $productScopeRewriteGeneratorMock;
 
@@ -25,7 +24,7 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit\Framework\TestCa
      */
     private $generator;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
             ->disableOriginalConstructor()

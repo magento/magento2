@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,11 +10,9 @@ use Magento\Backend\Block\Cache\Permissions;
 use Magento\Framework\Authorization;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class PermissionsTest
- */
 class PermissionsTest extends TestCase
 {
     /**
@@ -23,7 +21,7 @@ class PermissionsTest extends TestCase
     private $permissions;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $mockAuthorization;
 
@@ -32,7 +30,7 @@ class PermissionsTest extends TestCase
      */
     private $objectManager;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

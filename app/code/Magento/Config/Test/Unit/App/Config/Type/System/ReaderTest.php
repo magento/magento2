@@ -1,35 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Type\System;
 
-use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Framework\App\Config\Spi\PreProcessorInterface;
-use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Config\App\Config\Type\System\Reader;
+use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Config\Processor\Fallback;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigSourceInterface|MockObject
      */
     private $source;
 
     /**
-     * @var Fallback|\PHPUnit\Framework\MockObject\MockObject
+     * @var Fallback|MockObject
      */
     private $fallback;
 
     /**
-     * @var PreProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PreProcessorInterface|MockObject
      */
     private $preProcessor;
 
     /**
-     * @var PostProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PostProcessorInterface|MockObject
      */
     private $postProcessor;
 
@@ -38,9 +41,9 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
             ->disableOriginalConstructor()

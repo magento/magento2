@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,15 +7,17 @@
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\XmlConverterCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Developer\Model\Tools\Formatter;
 use Magento\Framework\DomDocument\DomDocumentFactory;
 use Magento\Framework\XsltProcessor\XsltProcessorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 
-class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
+class XmlConverterCommandTest extends TestCase
 {
     /**
-     * @var Formatter|\PHPUnit\Framework\MockObject\MockObject
+     * @var Formatter|MockObject
      */
     private $formatter;
 
@@ -25,12 +27,12 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var DomDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var DomDocumentFactory|MockObject
      */
     private $domFactory;
 
     /**
-     * @var XsltProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var XsltProcessorFactory|MockObject
      */
     private $xsltProcessorFactory;
 
@@ -39,9 +41,9 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $this->formatter = $this->createMock(\Magento\Developer\Model\Tools\Formatter::class);
-        $this->domFactory = $this->createMock(\Magento\Framework\DomDocument\DomDocumentFactory::class);
-        $this->xsltProcessorFactory = $this->createMock(\Magento\Framework\XsltProcessor\XsltProcessorFactory::class);
+        $this->formatter = $this->createMock(Formatter::class);
+        $this->domFactory = $this->createMock(DomDocumentFactory::class);
+        $this->xsltProcessorFactory = $this->createMock(XsltProcessorFactory::class);
 
         $this->command = new XmlConverterCommand($this->formatter, $this->domFactory, $this->xsltProcessorFactory);
     }
@@ -73,13 +75,10 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('result', $commandTester->getDisplay());
     }
 
-    /**
-     */
     public function testWrongParameter()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Not enough arguments');
-
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
     }

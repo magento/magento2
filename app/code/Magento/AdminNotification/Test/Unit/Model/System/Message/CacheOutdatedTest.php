@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -37,9 +37,9 @@ class CacheOutdatedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $this->_urlInterfaceMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->_cacheTypeListMock = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->_urlInterfaceMock = $this->createMock(UrlInterface::class);
+        $this->_cacheTypeListMock = $this->createMock(TypeListInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = [
@@ -60,12 +60,10 @@ class CacheOutdatedTest extends TestCase
      */
     public function testGetIdentity($expectedSum, $cacheTypes)
     {
-        $this->_cacheTypeListMock->expects(
-            $this->any()
-        )->method(
+        $this->_cacheTypeListMock->method(
             'getInvalidated'
-        )->willReturn(
-            $cacheTypes
+        )->will(
+            $this->returnValue($cacheTypes)
         );
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
     }
@@ -76,10 +74,10 @@ class CacheOutdatedTest extends TestCase
     public function getIdentityDataProvider()
     {
         $cacheTypeMock1 = $this->createPartialMock(\stdClass::class, ['getCacheType']);
-        $cacheTypeMock1->expects($this->any())->method('getCacheType')->willReturn('Simple');
+        $cacheTypeMock1->method('getCacheType')->will($this->returnValue('Simple'));
 
         $cacheTypeMock2 = $this->createPartialMock(\stdClass::class, ['getCacheType']);
-        $cacheTypeMock2->expects($this->any())->method('getCacheType')->willReturn('Advanced');
+        $cacheTypeMock2->method('getCacheType')->will($this->returnValue('Advanced'));
 
         return [
             ['c13cfaddc2c53e8d32f59bfe89719beb', [$cacheTypeMock1]],
@@ -95,13 +93,11 @@ class CacheOutdatedTest extends TestCase
      */
     public function testIsDisplayed($expected, $allowed, $cacheTypes)
     {
-        $this->_authorizationMock->expects($this->once())->method('isAllowed')->willReturn($allowed);
-        $this->_cacheTypeListMock->expects(
-            $this->any()
-        )->method(
+        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue($allowed));
+        $this->_cacheTypeListMock->method(
             'getInvalidated'
-        )->willReturn(
-            $cacheTypes
+        )->will(
+            $this->returnValue($cacheTypes)
         );
         $this->assertEquals($expected, $this->_messageModel->isDisplayed());
     }
@@ -112,7 +108,7 @@ class CacheOutdatedTest extends TestCase
     public function isDisplayedDataProvider()
     {
         $cacheTypesMock = $this->createPartialMock(\stdClass::class, ['getCacheType']);
-        $cacheTypesMock->expects($this->any())->method('getCacheType')->willReturn('someVal');
+        $cacheTypesMock->method('getCacheType')->will($this->returnValue('someVal'));
         $cacheTypes = [$cacheTypesMock, $cacheTypesMock];
         return [
             [false, false, []],
@@ -126,15 +122,15 @@ class CacheOutdatedTest extends TestCase
     {
         $messageText = 'One or more of the Cache Types are invalidated';
 
-        $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')->willReturn([]);
-        $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->willReturn('someURL');
-        $this->assertStringContainsString($messageText, $this->_messageModel->getText());
+        $this->_cacheTypeListMock->method('getInvalidated')->will($this->returnValue([]));
+        $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->will($this->returnValue('someURL'));
+        $this->assertContains($messageText, $this->_messageModel->getText());
     }
 
     public function testGetLink()
     {
         $url = 'backend/admin/cache';
-        $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->willReturn($url);
+        $this->_urlInterfaceMock->expects($this->once())->method('getUrl')->will($this->returnValue($url));
         $this->assertEquals($url, $this->_messageModel->getLink());
     }
 }

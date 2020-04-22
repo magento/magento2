@@ -9,9 +9,10 @@ namespace Magento\Checkout\Test\Unit\Model\Cart;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\Locale\ResolverInterface;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RequestQuantityProcessorTest extends \PHPUnit\Framework\TestCase
+class RequestQuantityProcessorTest extends TestCase
 {
     /**
      * @var ResolverInterface | MockObject

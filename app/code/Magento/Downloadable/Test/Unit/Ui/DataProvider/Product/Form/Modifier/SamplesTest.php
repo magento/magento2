@@ -1,25 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples as SamplesData;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Model\Source\TypeUpload;
-use Magento\Framework\UrlInterface;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples as SamplesData;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SamplesTest extends \PHPUnit\Framework\TestCase
+class SamplesTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -27,37 +29,37 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LocatorInterface|MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductInterface|MockObject
      */
     protected $productMock;
 
     /**
-     * @var SamplesData|\PHPUnit\Framework\MockObject\MockObject
+     * @var SamplesData|MockObject
      */
     protected $samplesDataMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var TypeUpload|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeUpload|MockObject
      */
     protected $typeUploadMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ArrayManager|MockObject
      */
     protected $arrayManagerMock;
 
@@ -72,12 +74,12 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $this->samplesDataMock = $this->createMock(SamplesData::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->samples = $this->objectManagerHelper->getObject(
             Samples::class,

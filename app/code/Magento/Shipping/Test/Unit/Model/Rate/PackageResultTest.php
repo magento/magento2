@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\Shipping\Test\Unit\Model\Rate;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Shipping\Model\Rate\PackageResult;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 
 /**
  * Testing packages aware rates result.
@@ -46,7 +46,7 @@ class PackageResultTest extends TestCase
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -134,13 +134,11 @@ class PackageResultTest extends TestCase
 
     /**
      * Case when the same results are given more than once.
-     *
      */
     public function testAppendSameReference(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Same object received from carrier.');
-
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])

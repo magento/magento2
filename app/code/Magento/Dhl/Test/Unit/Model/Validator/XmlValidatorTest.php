@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,16 @@
 
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
+use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
+use Magento\Dhl\Model\Validator\XmlValidator;
+use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Xml\Security;
 use Magento\Sales\Exception\DocumentValidationException;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Framework\Xml\Security;
-use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Dhl\Model\Validator\XmlValidator;
-use Magento\Shipping\Model\Simplexml\Element;
+use PHPUnit\Framework\TestCase;
 
-class XmlValidatorTest extends \PHPUnit\Framework\TestCase
+class XmlValidatorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -84,7 +85,7 @@ class XmlValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateInvalidXml($data)
     {
-        $phrase = new \Magento\Framework\Phrase('Error #%1 : %2', ['111', 'Error in parsing request XML']);
+        $phrase = new Phrase('Error #%1 : %2', ['111', 'Error in parsing request XML']);
         $rawXml = file_get_contents(__DIR__ . '/_files/' . $data['file']);
         $this->xmlSecurityMock->expects($this->any())
             ->method('scan')
@@ -96,7 +97,7 @@ class XmlValidatorTest extends \PHPUnit\Framework\TestCase
 
         try {
             $this->xmlValidator->validate($rawXml);
-        } catch (\Magento\Sales\Exception\DocumentValidationException $exception) {
+        } catch (DocumentValidationException $exception) {
             $this->assertEquals($data['errorMessage'], $exception->getMessage());
             if (isset($data['code'])) {
                 $this->assertEquals($data['code'], $exception->getCode());

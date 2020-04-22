@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Menu\Builder\Command;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Menu\Builder\Command\Update;
+use PHPUnit\Framework\TestCase;
+
+class UpdateTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Menu\Builder\Command\Update
+     * @var Update
      */
     protected $_model;
 
@@ -16,7 +19,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Backend\Model\Menu\Builder\Command\Update($this->_params);
+        $this->_model = new Update($this->_params);
     }
 
     public function testExecuteFillsEmptyItemWithData()

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,19 +7,19 @@ namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
 
 use Magento\Developer\Model\Logger\Handler\Debug;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
-use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class DebugTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DebugTest extends \PHPUnit\Framework\TestCase
+class DebugTest extends TestCase
 {
     /**
      * @var Debug
@@ -27,27 +27,27 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DriverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DriverInterface|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var FormatterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FormatterInterface|MockObject
      */
     private $formatterMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 

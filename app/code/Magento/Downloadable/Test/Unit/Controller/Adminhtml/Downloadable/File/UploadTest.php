@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,61 +6,75 @@
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\File;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload;
+use Magento\Downloadable\Helper\File;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\Sample;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UploadTest extends \PHPUnit\Framework\TestCase
+class UploadTest extends TestCase
 {
-    /** @var \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload */
+    /** @var Upload */
     protected $upload;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
+     * @var MockObject|ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Link
+     * @var MockObject|Link
      */
     protected $link;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Sample
+     * @var MockObject|Sample
      */
     protected $sample;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
+     * @var MockObject|Context
      */
     protected $context;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
+     * @var MockObject|UploaderFactory
      */
     private $uploaderFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Helper\File\Storage\Database
+     * @var MockObject|Database
      */
     private $storageDatabase;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Helper\File
+     * @var MockObject|File
      */
     protected $fileHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\ResultFactory
+     * @var MockObject|ResultFactory
      */
     protected $resultFactory;
 
@@ -68,24 +82,24 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->storageDatabase = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+        $this->storageDatabase = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
             ->setMethods(['saveFile'])
             ->getMock();
-        $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
+        $this->uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
+            ResponseInterface::class,
             [
                 'setHttpResponseCode',
                 'clearBody',
@@ -94,25 +108,25 @@ class UploadTest extends \PHPUnit\Framework\TestCase
                 'setHeader'
             ]
         );
-        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
+        $this->fileHelper = $this->createPartialMock(File::class, [
                 'uploadFromTmp'
             ]);
         $this->context->expects($this->any())
             ->method('getRequest')
-            ->willReturn($this->request);
+            ->will($this->returnValue($this->request));
         $this->context->expects($this->any())
             ->method('getResultFactory')
-            ->willReturn($this->resultFactory);
+            ->will($this->returnValue($this->resultFactory));
 
-        $this->link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
+        $this->link = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sample = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
+        $this->sample = $this->getMockBuilder(Sample::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->upload = $this->objectManagerHelper->getObject(
-            \Magento\Downloadable\Controller\Adminhtml\Downloadable\File\Upload::class,
+            Upload::class,
             [
                 'context' => $this->context,
                 'link' => $this->link,
@@ -131,10 +145,10 @@ class UploadTest extends \PHPUnit\Framework\TestCase
             'path' => 'path',
             'file' => 'file'
         ];
-        $uploader = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+        $uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $resultJson = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();

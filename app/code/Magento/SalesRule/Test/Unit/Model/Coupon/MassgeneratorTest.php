@@ -1,17 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Coupon;
 
-/**
- * Class MassgeneratorTest
- */
-class MassgeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Helper\Coupon;
+use Magento\SalesRule\Model\Coupon\Massgenerator;
+use Magento\SalesRule\Model\CouponFactory;
+use PHPUnit\Framework\TestCase;
+
+class MassgeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -22,7 +26,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->charset = str_split(sha1((string)time()));
     }
 
@@ -36,18 +40,18 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateCode(array $data, $length)
     {
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
 
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
+        /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\Coupon\Massgenerator::class,
+            Massgenerator::class,
             ['salesRuleCoupon' => $salesRuleCouponMock, 'data' => $data]
         );
 
         $salesRuleCouponMock->expects($this->once())
             ->method('getCharset')
             ->with($data['format'])
-            ->willReturn($this->charset);
+            ->will($this->returnValue($this->charset));
         $code = $massgenerator->generateCode();
 
         $this->assertTrue(strlen($code) === $length);
@@ -66,17 +70,17 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDelimiter(array $data)
     {
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCodeSeparator']);
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCodeSeparator']);
+        /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\Coupon\Massgenerator::class,
+            Massgenerator::class,
             ['salesRuleCoupon' => $salesRuleCouponMock, 'data' => $data]
         );
 
         if (empty($data['delimiter'])) {
             $salesRuleCouponMock->expects($this->once())
                 ->method('getCodeSeparator')
-                ->willReturn('test-separator');
+                ->will($this->returnValue('test-separator'));
             $this->assertEquals('test-separator', $massgenerator->getDelimiter());
         } else {
             $this->assertEquals($data['delimiter'], $massgenerator->getDelimiter());
@@ -95,14 +99,14 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             'format' => 'test-format',
         ];
 
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
             ['exists', '__wakeup', 'getIdFieldName']
         );
-        $dateMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtTimestamp']);
+        $dateMock = $this->createPartialMock(DateTime::class, ['gmtTimestamp']);
         $dateTimeMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, ['formatDate']);
-        $couponFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\CouponFactory::class, ['create']);
+        $couponFactoryMock = $this->createPartialMock(CouponFactory::class, ['create']);
         $couponMock = $this->createPartialMock(
             \Magento\SalesRule\Model\Coupon::class,
             [
@@ -118,24 +122,24 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $couponMock->expects($this->any())->method('setId')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setRuleId')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setUsageLimit')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setUsagePerCustomer')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setCreatedAt')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setType')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setCode')->willReturnSelf();
-        $couponMock->expects($this->any())->method('save')->willReturnSelf();
+        $couponMock->expects($this->any())->method('setId')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setRuleId')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setUsageLimit')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setUsagePerCustomer')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setCreatedAt')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setType')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('setCode')->will($this->returnSelf());
+        $couponMock->expects($this->any())->method('save')->will($this->returnSelf());
         $couponFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($couponMock);
+            ->will($this->returnValue($couponMock));
         $salesRuleCouponMock->expects($this->any())
             ->method('getCharset')
             ->with($data['format'])
-            ->willReturn($this->charset);
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
+            ->will($this->returnValue($this->charset));
+        /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\Coupon\Massgenerator::class,
+            Massgenerator::class,
             [
                 'couponFactory' => $couponFactoryMock,
                 'dateTime' => $dateTimeMock,
@@ -157,9 +161,10 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGeneratePoolException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We cannot create the requested Coupon Qty. Please check your settings and try again.');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'We cannot create the requested Coupon Qty. Please check your settings and try again.'
+        );
         $data = [
             'qty' => 3,
             'length' => 15,
@@ -167,30 +172,30 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
             'max_attempts' => 0,
         ];
 
-        $salesRuleCouponMock = $this->createPartialMock(\Magento\SalesRule\Helper\Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
             ['exists', '__wakeup', 'getIdFieldName']
         );
-        $dateMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtTimestamp']);
+        $dateMock = $this->createPartialMock(DateTime::class, ['gmtTimestamp']);
         $dateTimeMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, ['formatDate']);
-        $couponFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\CouponFactory::class, ['create']);
+        $couponFactoryMock = $this->createPartialMock(CouponFactory::class, ['create']);
         $couponMock = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, ['__wakeup']);
 
         $couponFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($couponMock);
+            ->will($this->returnValue($couponMock));
         $salesRuleCouponMock->expects($this->any())
             ->method('getCharset')
             ->with($data['format'])
-            ->willReturn($this->charset);
+            ->will($this->returnValue($this->charset));
         $resourceMock->expects($this->any())
             ->method('exists')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
+        /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\Coupon\Massgenerator::class,
+            Massgenerator::class,
             [
                 'couponFactory' => $couponFactoryMock,
                 'dateTime' => $dateTimeMock,
@@ -214,8 +219,8 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateData(array $data, $result)
     {
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
-        $massgenerator = $this->objectManager->getObject(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
+        /** @var Massgenerator $massgenerator */
+        $massgenerator = $this->objectManager->getObject(Massgenerator::class);
 
         $this->assertEquals($result, $massgenerator->validateData($data));
     }
@@ -225,8 +230,8 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGeneratedCount()
     {
-        /** @var \Magento\SalesRule\Model\Coupon\Massgenerator $massgenerator */
-        $massgenerator = $this->objectManager->getObject(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
+        /** @var Massgenerator $massgenerator */
+        $massgenerator = $this->objectManager->getObject(Massgenerator::class);
 
         $this->assertEquals(0, $massgenerator->getGeneratedCount());
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,8 +23,8 @@ use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Verification for Media class
@@ -78,7 +78,7 @@ class MediaTest extends TestCase
     private $directoryMediaMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|MockObject
      */
     private $directoryPubMock;
 
@@ -92,14 +92,14 @@ class MediaTest extends TestCase
         );
         $this->configFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->configMock);
+            ->will($this->returnValue($this->configMock));
         $this->syncFactoryMock = $this->createPartialMock(
             SynchronizationFactory::class,
             ['create']
         );
         $this->syncFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->sync);
+            ->will($this->returnValue($this->sync));
 
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->directoryPubMock = $this->getMockForAbstractClass(
@@ -143,17 +143,17 @@ class MediaTest extends TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn(self::MEDIA_DIRECTORY);
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
         $this->directoryPubMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
-            ->willReturn($filePath);
+            ->will($this->returnValue($filePath));
         $this->configMock->expects($this->once())->method('save');
         $this->sync->expects($this->once())->method('synchronize')->with(self::RELATIVE_FILE_PATH);
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->mediaModel->launch();
     }
@@ -167,15 +167,15 @@ class MediaTest extends TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn(self::MEDIA_DIRECTORY);
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->directoryPubMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
-            ->willReturn($filePath);
+            ->will($this->returnValue($filePath));
         $this->responseMock->expects($this->once())->method('setFilePath')->with($filePath);
         $this->assertSame($this->responseMock, $this->mediaModel->launch());
     }
@@ -188,11 +188,11 @@ class MediaTest extends TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn(self::MEDIA_DIRECTORY);
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
         $this->directoryPubMock->expects($this->once())
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->assertSame($this->responseMock, $this->mediaModel->launch());
     }
 
@@ -215,7 +215,7 @@ class MediaTest extends TestCase
             ->with(404);
         $bootstrap->expects($this->once())
             ->method('isDeveloperMode')
-            ->willReturn($isDeveloper);
+            ->will($this->returnValue($isDeveloper));
         $this->responseMock->expects($this->exactly($setBodyCalls))
             ->method('setBody');
         $this->responseMock->expects($this->once())
@@ -232,7 +232,7 @@ class MediaTest extends TestCase
         $this->directoryMediaMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with(null)
-            ->willReturn(self::MEDIA_DIRECTORY);
+            ->will($this->returnValue(self::MEDIA_DIRECTORY));
         $this->configMock->expects($this->once())->method('save');
 
         $this->expectException(LogicException::class);

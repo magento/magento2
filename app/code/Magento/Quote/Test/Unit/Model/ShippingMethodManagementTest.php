@@ -1,17 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface as QuoteAddressInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
@@ -23,7 +24,7 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 use Magento\Quote\Model\ShippingMethodManagement;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,12 +38,12 @@ class ShippingMethodManagementTest extends TestCase
     protected $model;
 
     /**
-     * @var MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $shippingMethodMock;
 
     /**
-     * @var MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $methodDataFactoryMock;
 
@@ -101,14 +102,11 @@ class ShippingMethodManagementTest extends TestCase
      */
     private $quoteAddressResource;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
-        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->quoteRepository = $this->createMock(CartRepositoryInterface::class);
+        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
 
         $className = ShippingMethodInterfaceFactory::class;
         $this->methodDataFactoryMock = $this->createPartialMock($className, ['create']);
@@ -189,19 +187,16 @@ class ShippingMethodManagementTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetMethodWhenShippingAddressIsNotSet()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
-
         $cartId = 666;
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
-        $this->shippingAddress->expects($this->once())->method('getCountryId')->willReturn(null);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
 
         $this->assertNull($this->model->get($cartId));
     }
@@ -215,15 +210,15 @@ class ShippingMethodManagementTest extends TestCase
         $countryId = 1;
         $currencyCode = 'US_dollar';
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $this->quote->expects($this->once())
             ->method('getQuoteCurrencyCode')->willReturn($currencyCode);
         $this->shippingAddress->expects($this->any())
-            ->method('getCountryId')->willReturn($countryId);
+            ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddress->expects($this->any())
-            ->method('getShippingMethod')->willReturn('one_two');
+            ->method('getShippingMethod')->will($this->returnValue('one_two'));
 
         $this->shippingAddress->expects($this->once())->method('collectShippingRates')->willReturnSelf();
         $shippingRateMock = $this->createMock(Rate::class);
@@ -233,7 +228,7 @@ class ShippingMethodManagementTest extends TestCase
             ->with('one_two')
             ->willReturn($shippingRateMock);
 
-        $this->shippingMethodMock = $this->getMockForAbstractClass(ShippingMethodInterface::class);
+        $this->shippingMethodMock = $this->createMock(ShippingMethodInterface::class);
         $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($shippingRateMock, $currencyCode)
@@ -250,13 +245,13 @@ class ShippingMethodManagementTest extends TestCase
         $countryId = 1;
 
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $this->shippingAddress->expects($this->any())
-            ->method('getCountryId')->willReturn($countryId);
+            ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddress->expects($this->any())
-            ->method('getShippingMethod')->willReturn(null);
+            ->method('getShippingMethod')->will($this->returnValue(null));
 
         $this->assertNull($this->model->get($cartId));
     }
@@ -268,9 +263,9 @@ class ShippingMethodManagementTest extends TestCase
     {
         $cartId = 834;
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('isVirtual')->willReturn(true);
+            ->method('isVirtual')->will($this->returnValue(true));
 
         $this->assertEquals([], $this->model->getList($cartId));
     }
@@ -282,32 +277,29 @@ class ShippingMethodManagementTest extends TestCase
     {
         $cartId = 834;
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('isVirtual')->willReturn(false);
+            ->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getItemsCount')->willReturn(0);
+            ->method('getItemsCount')->will($this->returnValue(0));
 
         $this->assertEquals([], $this->model->getList($cartId));
     }
 
-    /**
-     */
     public function testGetListWhenShippingAddressIsNotSet()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
-
         $cartId = 834;
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('isVirtual')->willReturn(false);
+            ->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getItemsCount')->willReturn(3);
+            ->method('getItemsCount')->will($this->returnValue(3));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
-        $this->shippingAddress->expects($this->once())->method('getCountryId')->willReturn(null);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
 
         $this->model->getList($cartId);
     }
@@ -319,41 +311,38 @@ class ShippingMethodManagementTest extends TestCase
     {
         $cartId = 834;
         $this->quoteRepository->expects($this->once())
-            ->method('getActive')->with($cartId)->willReturn($this->quote);
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quote));
         $this->quote->expects($this->once())
-            ->method('isVirtual')->willReturn(false);
+            ->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getItemsCount')->willReturn(3);
+            ->method('getItemsCount')->will($this->returnValue(3));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
-        $this->shippingAddress->expects($this->once())->method('getCountryId')->willReturn(345);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(345));
         $this->shippingAddress->expects($this->once())->method('collectShippingRates');
         $shippingRateMock = $this->createMock(Rate::class);
         $this->shippingAddress->expects($this->once())
             ->method('getGroupedAllShippingRates')
-            ->willReturn([[$shippingRateMock]]);
+            ->will($this->returnValue([[$shippingRateMock]]));
 
         $currencyCode = 'EUR';
         $this->quote->expects($this->once())
             ->method('getQuoteCurrencyCode')
-            ->willReturn($currencyCode);
+            ->will($this->returnValue($currencyCode));
 
         $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($shippingRateMock, $currencyCode)
-            ->willReturn('RateValue');
+            ->will($this->returnValue('RateValue'));
         $this->assertEquals(['RateValue'], $this->model->getList($cartId));
     }
 
-    /**
-     */
     public function testSetMethodWithInputException()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage(
             'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.'
         );
-
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -361,19 +350,16 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(0);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->quote->expects($this->never())->method('isVirtual');
 
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     */
     public function testSetMethodWithVirtualProduct()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('The Cart includes virtual product(s) only, so a shipping address is not used.');
-
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -382,19 +368,16 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(1);
-        $this->quote->expects($this->once())->method('isVirtual')->willReturn(true);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
+        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
 
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     */
     public function testSetMethodWithoutShippingAddress()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
-
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -402,23 +385,20 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(1);
-        $this->quote->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
+        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
-        $this->shippingAddress->expects($this->once())->method('getCountryId')->willReturn(null);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
+        $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
         $this->quoteAddressResource->expects($this->once())->method('delete')->with($this->shippingAddress);
 
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     */
     public function testSetMethodWithCouldNotSaveException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('The shipping method can\'t be set. Custom Error');
-
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -428,8 +408,8 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(1);
-        $this->quote->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
+        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
@@ -449,13 +429,10 @@ class ShippingMethodManagementTest extends TestCase
         $this->model->set($cartId, $carrierCode, $methodCode);
     }
 
-    /**
-     */
     public function testSetMethodWithoutAddress()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
-
         $cartId = 12;
         $carrierCode = 34;
         $methodCode = 56;
@@ -463,8 +440,8 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(1);
-        $this->quote->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
+        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddress);
@@ -487,15 +464,15 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quote);
-        $this->quote->expects($this->once())->method('getItemsCount')->willReturn(1);
-        $this->quote->expects($this->once())->method('isVirtual')->willReturn(false);
+        $this->quote->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
+        $this->quote->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quote->expects($this->once())
-            ->method('getShippingAddress')->willReturn($this->shippingAddress);
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $this->shippingAddress->expects($this->once())
-            ->method('getCountryId')->willReturn($countryId);
+            ->method('getCountryId')->will($this->returnValue($countryId));
         $this->shippingAddress->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
-        $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->quote->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepository->expects($this->once())->method('save')->with($this->quote);
 
         $this->assertTrue($this->model->set($cartId, $carrierCode, $methodCode));
@@ -508,9 +485,6 @@ class ShippingMethodManagementTest extends TestCase
     {
         $cartId = 1;
 
-        $addressExtAttr = [
-            'discounts' => 100
-        ];
         $addressData = [
             'region' => 'California',
             'region_id' => 23,
@@ -520,7 +494,7 @@ class ShippingMethodManagementTest extends TestCase
         $currencyCode = 'UAH';
 
         /**
-         * @var \Magento\Quote\Api\Data\AddressInterface|MockObject $address
+         * @var QuoteAddressInterface|MockObject $address
          */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
@@ -528,7 +502,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->addressFactory->expects($this->any())
             ->method('create')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
 
         $this->quoteRepository->expects(static::once())
             ->method('getActive')
@@ -548,9 +522,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->dataProcessor->expects(static::any())
             ->method('buildOutputDataArray')
-            ->willReturn($addressData + [ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $addressExtAttr]);
-
-        $this->shippingAddress->expects($this->once())->method('addData')->with($addressData);
+            ->willReturn($addressData);
 
         $this->shippingAddress->expects(static::once())
             ->method('setCollectShippingRates')
@@ -602,19 +574,19 @@ class ShippingMethodManagementTest extends TestCase
         $currencyCode = 'UAH';
 
         /**
-         * @var AddressInterface|MockObject $address
+         * @var \Magento\Customer\Api\Data\AddressInterface|MockObject $address
          */
-        $address = $this->getMockBuilder(AddressInterface::class)
+        $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->addressRepository->expects($this->any())
             ->method('getById')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
 
         $this->addressFactory->expects($this->any())
             ->method('create')
-            ->willReturn($address);
+            ->will($this->returnValue($address));
 
         $this->quoteRepository->expects(static::once())
             ->method('getActive')

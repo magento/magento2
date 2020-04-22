@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,28 +6,30 @@
 namespace Magento\Paypal\Test\Unit\CustomerData;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\CustomerData\BillingAgreement;
 use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Escaper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BillingAgreementTest extends \PHPUnit\Framework\TestCase
+class BillingAgreementTest extends TestCase
 {
 
     /**
-     * @var CurrentCustomer | \PHPUnit\Framework\MockObject\MockObject
+     * @var CurrentCustomer|MockObject
      */
     private $currentCustomer;
 
     /**
-     * @var Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     private $paypalData;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $paypalConfig;
 
@@ -49,7 +51,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $this->paypalConfig
             ->expects($this->once())
             ->method('setMethod')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->paypalConfig->expects($this->once())
             ->method('setMethod')
@@ -58,7 +60,7 @@ class BillingAgreementTest extends \PHPUnit\Framework\TestCase
         $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->paypalConfig);
+            ->will($this->returnValue($this->paypalConfig));
 
         $customerId = 20;
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);

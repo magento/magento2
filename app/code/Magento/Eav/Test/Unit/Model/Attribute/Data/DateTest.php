@@ -1,29 +1,39 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class DateTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\Date;
+use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class DateTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\Date
+     * @var Date
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $timezoneMock;
 
     protected function setUp(): void
     {
-        $this->timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Date(
+        $this->model = new Date(
             $this->timezoneMock,
             $loggerMock,
             $localeResolverMock
@@ -41,11 +51,11 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->willReturn($value);
+        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
 
-        $attributeMock = $this->createPartialMock(\Magento\Eav\Model\Attribute::class, ['getInputFilter', '__wakeup']);
-        $attributeMock->expects($this->exactly($callTimes))->method('getInputFilter')->willReturn(false);
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getInputFilter', '__wakeup']);
+        $attributeMock->expects($this->exactly($callTimes))->method('getInputFilter')->will($this->returnValue(false));
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -59,13 +69,13 @@ class DateTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => 'value',
                 'callTimes' => 1,
                 'expectedResult' => 'value',
             ],
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => false,
                 'callTimes' => 0,
                 'expectedResult' => false
@@ -85,13 +95,13 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateValue($value, $rules, $originalValue, $isRequired, $expectedResult)
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->any())->method('getDataUsingMethod')->willReturn($originalValue);
+        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock->expects($this->any())->method('getDataUsingMethod')->will($this->returnValue($originalValue));
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
-        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
-        $attributeMock->expects($this->any())->method('getValidateRules')->willReturn($rules);
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
+        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
+        $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -158,11 +168,11 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testCompactValue($value, $expectedResult)
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $entityMock = $this->createMock(AbstractModel::class);
         $entityMock->expects($this->once())->method('setDataUsingMethod')->with('attrCode', $expectedResult);
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attrCode');
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attrCode'));
 
         $this->model->setAttribute($attributeMock);
         $this->model->setEntity($entityMock);
@@ -185,7 +195,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function testCompactValueWithFalseValue()
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $entityMock = $this->createMock(AbstractModel::class);
         $entityMock->expects($this->never())->method('setDataUsingMethod');
 
         $this->model->setEntity($entityMock);

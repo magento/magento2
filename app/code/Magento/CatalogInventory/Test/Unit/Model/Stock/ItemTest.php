@@ -1,69 +1,81 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection;
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\CatalogInventory\Model\Stock\Item
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit\Framework\TestCase
+class ItemTest extends TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Item
+     * @var Item
      */
     protected $item;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockItemRepositoryInterface|MockObject
      */
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $resourceCollection;
 
@@ -73,45 +85,48 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $storeId = 111;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $eventDispatcher;
 
     protected function setUp(): void
     {
-        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
 
-        $this->context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->registry = $this->createMock(Registry::class);
 
-        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSession = $this->createMock(Session::class);
 
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
+        $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(
+            StoreManagerInterface::class,
+            ['getStore']
+        );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
-            \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
+            StockItemRepositoryInterface::class
         );
 
         $this->resource = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
 
         $this->resourceCollection = $this->createMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class
+            Collection::class
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->item = $this->objectManagerHelper->getObject(
-            \Magento\CatalogInventory\Model\Stock\Item::class,
+            Item::class,
             [
                 'context' => $this->context,
                 'registry' => $this->registry,
@@ -153,7 +168,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testSetProduct()
     {
-        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $product = $this->createPartialMock(Product::class, [
                 'getId',
                 'getName',
                 'getStoreId',
@@ -167,13 +182,13 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $typeId = 'simple';
         $status = 1;
         $isChangedWebsites = false;
-        $product->expects($this->once())->method('getId')->willReturn($productId);
-        $product->expects($this->once())->method('getName')->willReturn($productName);
-        $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
+        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
+        $product->expects($this->once())->method('getName')->will($this->returnValue($productName));
+        $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $product->expects($this->once())->method('getTypeId')->will($this->returnValue($typeId));
         $product->expects($this->once())->method('dataHasChangedFor')
-            ->with($this->equalTo('status'))->willReturn($status);
-        $product->expects($this->once())->method('getIsChangedWebsites')->willReturn($isChangedWebsites);
+            ->with($this->equalTo('status'))->will($this->returnValue($status));
+        $product->expects($this->once())->method('getIsChangedWebsites')->will($this->returnValue($isChangedWebsites));
 
         $this->assertSame($this->item, $this->item->setProduct($product));
         $this->assertSame(
@@ -239,7 +254,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $setValue = 8;
         $this->customerSession->expects($this->once())
             ->method('getCustomerGroupId')
-            ->willReturn($groupId);
+            ->will($this->returnValue($groupId));
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
         $property->setAccessible(true);
@@ -277,7 +292,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             $this->stockConfiguration->expects($this->once())
                 ->method('getMinSaleQty')
                 ->with($this->storeId, $this->equalTo($groupId))
-                ->willReturn($minSaleQty);
+                ->will($this->returnValue($minSaleQty));
         } else {
             $this->setDataArrayValue('min_sale_qty', $minSaleQty);
         }
@@ -328,7 +343,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         if ($useConfigMinQty) {
             $this->stockConfiguration->expects($this->any())
                 ->method('getMinQty')
-                ->willReturn($minQty);
+                ->will($this->returnValue($minQty));
         } else {
             $this->setDataArrayValue('min_qty', $minQty);
         }

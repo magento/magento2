@@ -15,12 +15,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CheckUserLoginBackendObserverTest
- */
 class CheckUserLoginBackendObserverTest extends TestCase
 {
     /**
@@ -56,9 +53,9 @@ class CheckUserLoginBackendObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->helperMock = $this->createMock(Data::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->observer = new CheckUserLoginBackendObserver(
             $this->helperMock,
@@ -114,8 +111,7 @@ class CheckUserLoginBackendObserverTest extends TestCase
      */
     public function testCheckOnBackendLoginWithWrongCaptcha(): void
     {
-        $this->expectException(\Magento\Framework\Exception\Plugin\AuthenticationException::class);
-
+        $this->expectException('Magento\Framework\Exception\Plugin\AuthenticationException');
         $formId = 'backend_login';
         $login = 'admin';
         $captchaValue = 'captcha-value';

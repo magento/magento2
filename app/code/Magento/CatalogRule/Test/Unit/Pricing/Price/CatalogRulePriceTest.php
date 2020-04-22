@@ -18,13 +18,12 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CatalogRulePriceTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatalogRulePriceTest extends \PHPUnit\Framework\TestCase
+class CatalogRulePriceTest extends TestCase
 {
     /**
      * @var CatalogRulePrice

@@ -1,65 +1,79 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
 
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Text;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Review\Model\Rating;
+use Magento\Review\Model\Rating\Option;
+use Magento\Review\Model\Rating\OptionFactory;
+use Magento\Review\Model\ResourceModel\Rating\Option\Collection;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
-     * @var \Magento\Review\Model\Rating
+     * @var Rating
      */
     protected $rating;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Rating\Option\Collection
+     * @var Collection
      */
     protected $ratingOptionCollection;
 
     /**
-     * @var \Magento\Review\Model\Rating\Option
+     * @var Option
      */
     protected $optionRating;
 
     /**
-     * @var \Magento\Store\Model\Store
+     * @var Store
      */
     protected $store;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Text
+     * @var Text
      */
     protected $element;
 
     /**
-     * @var \Magento\Framework\Data\Form
+     * @var Form
      */
     protected $form;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $directoryReadInterface;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory
+     * @var FormFactory
      */
     protected $formFactory;
 
     /**
-     * @var \Magento\Review\Model\Rating\OptionFactory
+     * @var OptionFactory
      */
     protected $optionFactory;
 
@@ -69,22 +83,22 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected $systemStore;
 
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FilesystemView
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $fileSystem;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
@@ -96,30 +110,30 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->ratingOptionCollection = $this->createMock(
-            \Magento\Review\Model\ResourceModel\Rating\Option\Collection::class
+            Collection::class
         );
         $this->element = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Text::class,
+            Text::class,
             ['setValue', 'setIsChecked']
         );
         $this->session = $this->createPartialMock(
-            \Magento\Framework\Session\Generic::class,
+            Generic::class,
             ['getRatingData', 'setRatingData']
         );
-        $this->rating = $this->createPartialMock(\Magento\Review\Model\Rating::class, ['getId', 'getRatingCodes']);
-        $this->optionRating = $this->createMock(\Magento\Review\Model\Rating\Option::class);
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->rating = $this->createPartialMock(Rating::class, ['getId', 'getRatingCodes']);
+        $this->optionRating = $this->createMock(Option::class);
+        $this->store = $this->createMock(Store::class);
         $this->form = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
+            Form::class,
             ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement', 'setValues']
         );
-        $this->directoryReadInterface = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->formFactory = $this->createMock(\Magento\Framework\Data\FormFactory::class);
-        $this->optionFactory = $this->createPartialMock(\Magento\Review\Model\Rating\OptionFactory::class, ['create']);
+        $this->directoryReadInterface = $this->createMock(ReadInterface::class);
+        $this->registry = $this->createMock(Registry::class);
+        $this->formFactory = $this->createMock(FormFactory::class);
+        $this->optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
         $this->systemStore = $this->createMock(\Magento\Store\Model\System\Store::class);
-        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
-        $this->fileSystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $this->viewFileSystem = $this->createMock(FilesystemView::class);
+        $this->fileSystem = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
 
         $this->rating->expects($this->any())->method('getId')->willReturn('1');
         $this->ratingOptionCollection->expects($this->any())->method('addRatingFilter')->willReturnSelf();

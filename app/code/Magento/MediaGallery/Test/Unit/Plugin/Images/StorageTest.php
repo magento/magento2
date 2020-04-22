@@ -22,12 +22,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test the DeleteByDirectoryPath command model
+ * Test for the Sorage::deleteDirectory after plugin
  */
 class StorageTest extends TestCase
 {
     private const NON_STRING_PATH = 2020;
-    private const NON_EXISTENT_PATH = 'non_existent';
     private const INVALID_PATH = '&&';
     private const VALID_PATH = 'test-directory-path/';
 

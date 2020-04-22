@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,25 +10,28 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for checking settings that defined in config file
  */
-class SettingCheckerTest extends \PHPUnit\Framework\TestCase
+class SettingCheckerTest extends TestCase
 {
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PlaceholderInterface|MockObject
      */
     private $placeholderMock;
 
     /**
-     * @var Config\ScopeCodeResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config\ScopeCodeResolver|MockObject
      */
     private $scopeCodeResolverMock;
 
@@ -42,14 +45,14 @@ class SettingCheckerTest extends \PHPUnit\Framework\TestCase
      */
     private $env;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->getMockForAbstractClass();
-        $this->scopeCodeResolverMock = $this->getMockBuilder(Config\ScopeCodeResolver::class)
+        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,47 +6,53 @@
 
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
+use Magento\Backend\Controller\Adminhtml\Auth\Login;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\Plugin\LoginController;
 use Magento\Security\Model\SecurityCookie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\LoginController testing
  */
-class LoginControllerTest extends \PHPUnit\Framework\TestCase
+class LoginControllerTest extends TestCase
 {
-    /** @var  \Magento\Security\Model\Plugin\LoginController */
+    /** @var  LoginController */
     protected $controller;
 
-    /** @var \Magento\Framework\Message\ManagerInterface */
+    /** @var ManagerInterface */
     protected $messageManagerMock;
 
-    /** @var \Magento\Security\Model\AdminSessionsManager */
+    /** @var AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
     /** @var SecurityCookie */
     protected $securityCookieMock;
 
-    /** @var \Magento\Backend\Controller\Adminhtml\Auth\Login */
+    /** @var Login */
     protected $backendControllerAuthLoginMock;
 
-    /** @var \Magento\Framework\App\Request\Http */
+    /** @var Http */
     protected $requestMock;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var  ObjectManager */
     protected $objectManager;
 
     /**
      * Init mocks for tests
      * @return void
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->adminSessionsManagerMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionsManager::class,
+            AdminSessionsManager::class,
             ['getLogoutReasonMessageByStatus']
         );
 
@@ -56,14 +62,14 @@ class LoginControllerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->backendControllerAuthLoginMock = $this->createPartialMock(
-            \Magento\Backend\Controller\Adminhtml\Auth\Login::class,
+            Login::class,
             ['getRequest', 'getUrl']
         );
 
-        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getUri']);
+        $this->requestMock = $this->createPartialMock(Http::class, ['getUri']);
 
         $this->controller = $this->objectManager->getObject(
-            \Magento\Security\Model\Plugin\LoginController::class,
+            LoginController::class,
             [
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,

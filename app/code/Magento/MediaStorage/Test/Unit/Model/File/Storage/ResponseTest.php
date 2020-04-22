@@ -7,18 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
+use Laminas\Http\Headers;
+use Magento\Framework\File\Transfer\Adapter\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Model\File\Storage\Response;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /** Unit tests for \Magento\MediaStorage\Model\File\Storage\Response class */
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Response
+     * @var Response
      */
     private $response;
 
     /**
-     * @var \Magento\Framework\File\Transfer\Adapter\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     private $transferAdapter;
 
@@ -28,12 +33,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->transferAdapter = $this->getMockBuilder(\Magento\Framework\File\Transfer\Adapter\Http::class)
+        $this->transferAdapter = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['send'])
             ->getMock();
         $this->response = $objectManager->getObject(
-            \Magento\MediaStorage\Model\File\Storage\Response::class,
+            Response::class,
             [
                 'transferAdapter' => $this->transferAdapter,
                 'statusCode' => 200,
@@ -47,7 +52,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testSendResponse(): void
     {
         $filePath = 'file_path';
-        $headers = $this->getMockBuilder(\Laminas\Http\Headers::class)->getMock();
+        $headers = $this->getMockBuilder(Headers::class)->getMock();
         $this->response->setFilePath($filePath);
         $this->response->setHeaders($headers);
         $this->transferAdapter

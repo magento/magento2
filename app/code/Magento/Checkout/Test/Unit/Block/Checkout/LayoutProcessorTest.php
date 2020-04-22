@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -255,6 +255,7 @@ class LayoutProcessorTest extends TestCase
                 ],
                 'filterBy' => [
                     'target' => '${ $.provider }:${ $.parentScope }.country_id',
+                    '__disableTmpl' => ['target' => false],
                     'field' => 'country_id',
                 ],
             ],

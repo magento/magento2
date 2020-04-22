@@ -1,62 +1,73 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObject\Copy;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\ToOrder;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Address convert to order address
  */
-class ToOrderTest extends \PHPUnit\Framework\TestCase
+class ToOrderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
+     * @var Copy|MockObject
      */
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterfaceFactory|MockObject
      */
     protected $orderDataFactoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\ToOrder
+     * @var ToOrder
      */
     protected $converter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     protected $dataObjectHelper;
 
     protected function setUp(): void
     {
         $this->orderDataFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Api\Data\OrderInterfaceFactory::class,
+            OrderInterfaceFactory::class,
             ['create']
         );
-        $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $this->objectCopyMock = $this->createMock(Copy::class);
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
-            \Magento\Quote\Model\Quote\Address\ToOrder::class,
+            ToOrder::class,
             [
                 'orderFactory' => $this->orderDataFactoryMock,
                 'objectCopyService' => $this->objectCopyMock,
@@ -73,8 +84,8 @@ class ToOrderTest extends \PHPUnit\Framework\TestCase
         $quoteId = 1;
         $storeId = 777;
 
-        $object = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
-        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $object = $this->createMock(Address::class);
+        $quote = $this->createMock(Quote::class);
         $object->expects($this->exactly(5))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
@@ -84,7 +95,7 @@ class ToOrderTest extends \PHPUnit\Framework\TestCase
             $object
         )->willReturn($orderData);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
-            ->with($this->orderMock, ['test' => 'beer'], \Magento\Sales\Api\Data\OrderInterface::class)
+            ->with($this->orderMock, ['test' => 'beer'], OrderInterface::class)
             ->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setQuoteId')->with($quoteId)->willReturnSelf();

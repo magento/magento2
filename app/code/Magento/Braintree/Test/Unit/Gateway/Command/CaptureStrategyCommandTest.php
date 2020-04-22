@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
 use Braintree\IsNode;
+use Braintree\ResourceCollection;
+use Braintree\Transaction;
 use Magento\Braintree\Gateway\Command\CaptureStrategyCommand;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
@@ -20,13 +24,13 @@ use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
+class CaptureStrategyCommandTest extends TestCase
 {
     /**
      * @var CaptureStrategyCommand
@@ -83,7 +87,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->commandPool = $this->getMockBuilder(CommandPoolInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', '__wakeup'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
@@ -154,16 +158,16 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $lastTransactionId
-     * @return \Braintree\ResourceCollection|MockObject
+     * @return ResourceCollection|MockObject
      */
     private function getNotExpiredExpectedCollection($lastTransactionId)
     {
         $isExpectations = [
             'id' => ['is' => $lastTransactionId],
-            'status' => [\Braintree\Transaction::AUTHORIZATION_EXPIRED]
+            'status' => [Transaction::AUTHORIZATION_EXPIRED]
         ];
 
-        $collection = $this->getMockBuilder(\Braintree\ResourceCollection::class)
+        $collection = $this->getMockBuilder(ResourceCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -273,7 +277,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 
         $order = $this->getMockBuilder(OrderAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $mock->method('getOrder')
             ->willReturn($order);
@@ -349,6 +353,6 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,17 @@
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\ConsolidatedConfig as Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\Cache\TypeConsolidated as Type;
+use Magento\Integration\Model\Config\Consolidated\Reader;
+use Magento\Integration\Model\ConsolidatedConfig as Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\ConsolidatedConfig
  */
-class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
+class ConsolidatedConfigTest extends TestCase
 {
     /**
      * Integration config model
@@ -22,17 +26,17 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
     private $configModel;
 
     /**
-     * @var Type|\PHPUnit\Framework\MockObject\MockObject
+     * @var Type|MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Consolidated\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var  Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var  SerializerInterface|MockObject
      */
     private $serializer;
 
@@ -41,13 +45,13 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeConsolidated::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Consolidated\Reader::class)
+        $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            ->getMock();
+        $objectManagerHelper = new ObjectManager($this);
         $this->configModel = $objectManagerHelper->getObject(
             \Magento\Integration\Model\ConsolidatedConfig::class,
             [
@@ -65,7 +69,7 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
-            ->willReturn($serializedIntegrations);
+            ->will($this->returnValue($serializedIntegrations));
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedIntegrations)
@@ -81,10 +85,10 @@ class ConsolidatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->configReaderMock->expects($this->once())
             ->method('read')
-            ->willReturn($integrations);
+            ->will($this->returnValue($integrations));
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($integrations)

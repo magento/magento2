@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
-class ParserTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Widget\Grid\Parser;
+use PHPUnit\Framework\TestCase;
+
+class ParserTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Widget\Grid\Parser
+     * @var Parser
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Backend\Model\Widget\Grid\Parser();
+        $this->_model = new Parser();
     }
 
     /**

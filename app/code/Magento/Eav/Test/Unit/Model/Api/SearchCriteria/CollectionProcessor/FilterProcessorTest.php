@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,8 +11,10 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FilterProcessorTest extends \PHPUnit\Framework\TestCase
+class FilterProcessorTest extends TestCase
 {
     /**
      * Return model
@@ -31,7 +33,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcess()
     {
-        /** @var CustomFilterInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
+        /** @var CustomFilterInterface|MockObject $customFilterMock */
         $customFilterMock = $this->createPartialMock(CustomFilterInterface::class, ['apply']);
 
         $customFilterField = 'customFilterField';
@@ -62,17 +64,17 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($customFilters, $fieldMapping);
 
-        /** @var FilterGroup|\PHPUnit\Framework\MockObject\MockObject $filterGroupOneMock */
+        /** @var FilterGroup|MockObject $filterGroupOneMock */
         $filterGroupOneMock = $this->getMockBuilder(FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var FilterGroup|\PHPUnit\Framework\MockObject\MockObject $filterGroupTwoMock */
+        /** @var FilterGroup|MockObject $filterGroupTwoMock */
         $filterGroupTwoMock = $this->getMockBuilder(FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterOneMock */
+        /** @var Filter|MockObject $filterOneMock */
         $filterOneMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,7 +82,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getField')
             ->willReturn($customFilterField);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterTwoMock */
+        /** @var Filter|MockObject $filterTwoMock */
         $filterTwoMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -94,7 +96,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getConditionType')
             ->willReturn($otherFilterFieldCondition);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterThreeMock */
+        /** @var Filter|MockObject $filterThreeMock */
         $filterThreeMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -116,7 +118,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getFilters')
             ->willReturn([$filterThreeMock]);
 
-        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
@@ -124,7 +126,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroupOneMock, $filterGroupTwoMock]);
 
-        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
+        /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -144,13 +146,10 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    /**
-     */
     public function testProcessWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        /** @var \stdClass|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
+        $this->expectException('InvalidArgumentException');
+        /** @var \stdClass|MockObject $customFilterMock */
         $customFilterMock = $this->createPartialMock(\stdClass::class, ['apply']);
 
         $customFilterField = 'customFilterField';
@@ -158,12 +157,12 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($customFilters, []);
 
-        /** @var FilterGroup|\PHPUnit\Framework\MockObject\MockObject $filterGroupOneMock */
+        /** @var FilterGroup|MockObject $filterGroupOneMock */
         $filterGroupOneMock = $this->getMockBuilder(FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterOneMock */
+        /** @var Filter|MockObject $filterOneMock */
         $filterOneMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -175,7 +174,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getFilters')
             ->willReturn([$filterOneMock]);
 
-        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
@@ -183,7 +182,7 @@ class FilterProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getFilterGroups')
             ->willReturn([$filterGroupOneMock]);
 
-        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
+        /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -8,53 +8,61 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-/**
- * Class SetCheckoutSessionPersistentDataObserverTest
- */
-class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SetCheckoutSessionPersistentDataObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver
+     * @var SetCheckoutSessionPersistentDataObserver
      */
     private $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Data| \PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $sessionHelperMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Checkout\Model\Session|MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\Session|MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session| \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Persistent\Model\Session|MockObject
      */
     private $persistentSessionMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     private $observerMock;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
+     * @var Event|MockObject
      */
     private $eventMock;
 
@@ -63,20 +71,20 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
      */
     protected function setUp(): void
     {
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->sessionHelperMock = $this->createMock(Session::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getData']);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->eventMock = $this->createPartialMock(Event::class, ['getData']);
         $this->persistentSessionMock = $this->createPartialMock(
             \Magento\Persistent\Model\Session::class,
             ['getCustomerId']
         );
         $this->customerRepositoryMock = $this->createMock(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class
+            CustomerRepositoryInterface::class
         );
-        $this->model = new \Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver(
+        $this->model = new SetCheckoutSessionPersistentDataObserver(
             $this->sessionHelperMock,
             $this->customerSessionMock,
             $this->helperMock,
@@ -87,20 +95,20 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
     /**
      * Test execute method when session is not persistent
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testExecuteWhenSessionIsNotPersistent()
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->willReturn($this->eventMock);
+            ->will($this->returnValue($this->eventMock));
         $this->eventMock->expects($this->once())
             ->method('getData')
-            ->willReturn($this->checkoutSessionMock);
+            ->will($this->returnValue($this->checkoutSessionMock));
         $this->sessionHelperMock->expects($this->once())
             ->method('isPersistent')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->checkoutSessionMock->expects($this->never())
             ->method('setLoadInactive');
         $this->checkoutSessionMock->expects($this->never())
@@ -111,35 +119,35 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
     /**
      * Test execute method when session is persistent
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testExecute()
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->willReturn($this->eventMock);
+            ->will($this->returnValue($this->eventMock));
         $this->eventMock->expects($this->once())
             ->method('getData')
-            ->willReturn($this->checkoutSessionMock);
+            ->will($this->returnValue($this->checkoutSessionMock));
         $this->sessionHelperMock->expects($this->exactly(2))
             ->method('isPersistent')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->helperMock->expects($this->exactly(2))
             ->method('isShoppingCartPersist')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->persistentSessionMock->expects($this->once())
             ->method('getCustomerId')
-            ->willReturn(123);
+            ->will($this->returnValue(123));
         $this->sessionHelperMock->expects($this->once())
             ->method('getSession')
-            ->willReturn($this->persistentSessionMock);
+            ->will($this->returnValue($this->persistentSessionMock));
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
-            ->willReturn(true); //?
+            ->will($this->returnValue(true)); //?
         $this->checkoutSessionMock->expects($this->never())
             ->method('setLoadInactive');
         $this->checkoutSessionMock->expects($this->once())

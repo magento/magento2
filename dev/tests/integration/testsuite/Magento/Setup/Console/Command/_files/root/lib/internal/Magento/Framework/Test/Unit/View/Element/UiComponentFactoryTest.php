@@ -6,6 +6,8 @@
 namespace Magento\Framework\Test\Unit\View\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,28 +17,28 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Data\Argument\InterpreterInterface|MockObject */
     protected $interpreterMock;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextFactory|MockObject */
     protected $contextFactoryMock;
 
-    /** @var \Magento\Framework\Config\DataInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Config\DataInterfaceFactory|MockObject */
     protected $dataInterfaceFactoryMock;
 
-    /** @var \SafeReflectionClass|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \SafeReflectionClass|MockObject */
     protected $safeReflectionClassMock;
 
-    /** @var \SafeReflectionClass|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \SafeReflectionClass|MockObject */
     protected $safeReflectionClassMock2;
 
-    /** @var \Magento\Ui\Config\Reader\Definition\Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Ui\Config\Reader\Definition\Data|MockObject */
     protected $dataMock;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -58,6 +60,9 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);
+        $sanitizerMock = $this->createMock(Sanitizer::class);
+        $sanitizerMock->method('sanitize')->willReturnArgument(0);
+        $sanitizerMock->method('sanitizeComponentMetadata')->willReturnArgument(0);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Framework\View\Element\UiComponentFactory::class,
@@ -68,7 +73,8 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
                 'configFactory' => $this->dataInterfaceFactoryMock,
                 'data' => [],
                 'componentChildFactories' => [],
-                'definitionData' => $this->dataMock
+                'definitionData' => $this->dataMock,
+                'sanitizer' => $sanitizerMock
             ]
         );
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,14 +8,18 @@ namespace Magento\Security\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\PasswordResetRequestEvent;
+use Magento\Security\Model\SecurityManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\AccountManagement testing
  */
-class AccountManagementTest extends \PHPUnit\Framework\TestCase
+class AccountManagementTest extends TestCase
 {
     /**
      * @var  \Magento\Security\Model\Plugin\AccountManagement
@@ -23,27 +27,27 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var SecurityManager|MockObject
      */
     protected $securityManager;
 
     /**
-     * @var AccountManagement|\PHPUnit\Framework\MockObject\MockObject
+     * @var AccountManagement|MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
@@ -51,19 +55,19 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request =  $this->createMock(RequestInterface::class);
 
         $this->securityManager = $this->createPartialMock(
-            \Magento\Security\Model\SecurityManager::class,
+            SecurityManager::class,
             ['performSecurityCheck']
         );
 
         $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scope =  $this->createMock(ScopeInterface::class);
     }
 
     /**

@@ -1,29 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model;
 
-class UrlRewriteTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Model\UrlRewrite;
+use PHPUnit\Framework\TestCase;
+
+class UrlRewriteTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Model\UrlRewrite
+     * @var UrlRewrite
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $context = $this->createMock(\Magento\Framework\Model\Context::class);
-        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $context = $this->createMock(Context::class);
+        $registry = $this->createMock(Registry::class);
         $resource = $this->createPartialMock(
-            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
+            AbstractResource::class,
             ['getIdFieldName', '_construct', 'getConnection']
         );
-        $resourceCollection = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
-        $serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $resourceCollection = $this->createMock(AbstractDb::class);
+        $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
@@ -40,7 +49,7 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->model = $objectManager->getObject(
-            \Magento\UrlRewrite\Model\UrlRewrite::class,
+            UrlRewrite::class,
             [
                 'context' => $context,
                 'registry' => $registry,

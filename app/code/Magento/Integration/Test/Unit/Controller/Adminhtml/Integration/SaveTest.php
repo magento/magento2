@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,19 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
+use Magento\Integration\Controller\Adminhtml\Integration\Save;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Exception\AuthenticationException;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Security\Model\AdminSessionsManager;
 
-class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+class SaveTest extends IntegrationTest
 {
     public function testSaveAction()
     {
@@ -54,7 +59,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_integrationSvcMock->expects($this->any())
             ->method('get')
             ->with(self::INTEGRATION_ID)
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage))));
+            ->will($this->throwException(new LocalizedException(__($exceptionMessage))));
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
@@ -182,7 +187,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     public function testSaveActionExceptionOnIntegrationsCreatedFromConfigFile()
     {
         $exceptionMessage = "The integrations created in the config file can't be edited.";
-        $intData = new \Magento\Framework\DataObject(
+        $intData = new DataObject(
             [
                 Info::DATA_NAME => 'nameTest',
                 Info::DATA_ID => self::INTEGRATION_ID,
@@ -221,8 +226,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_requestMock->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
-                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
-                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+                [Save::PARAM_INTEGRATION_ID],
+                [Info::DATA_CONSUMER_PASSWORD]
             )
             ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 
@@ -242,7 +247,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 
         $this->securityCookieMock->expects($this->once())
             ->method('setLogoutReasonCookie')
-            ->with(\Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED);
+            ->with(AdminSessionsManager::LOGOUT_REASON_USER_LOCKED);
 
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
@@ -260,8 +265,8 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_requestMock->expects($this->any())
             ->method('getParam')
             ->withConsecutive(
-                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
-                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+                [Save::PARAM_INTEGRATION_ID],
+                [Info::DATA_CONSUMER_PASSWORD]
             )
             ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 

@@ -1,14 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Model;
 
-use Magento\Ui\Model\UiComponentTypeResolver;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Model\UiComponentTypeResolver;
+use PHPUnit\Framework\TestCase;
 
-class UiComponentTypeResolverTest extends \PHPUnit\Framework\TestCase
+class UiComponentTypeResolverTest extends TestCase
 {
     /**
      * @var UiComponentTypeResolver

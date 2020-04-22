@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,26 +7,30 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\Info;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Payment\Model\InfoInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PayflowproTest extends \PHPUnit\Framework\TestCase
+class PayflowproTest extends TestCase
 {
     /**
      * @var Payflowpro
@@ -34,7 +38,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     protected $payflowpro;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $helper;
 
@@ -89,14 +93,14 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $clientFactory->method('create')->willReturn($client);
+        $clientFactory->method('create')->will($this->returnValue($client));
 
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new ObjectManager($this);
         $this->payflowpro = $this->helper->getObject(
-            \Magento\Paypal\Model\Payflowpro::class,
+            Payflowpro::class,
             [
                 'eventDispatcher' => $this->eventManager,
                 'configFactory' => $configFactoryMock,
@@ -162,9 +166,9 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response);
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
-            ->willReturn('BNCODE');
-        $payment = $this->createPartialMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup']);
-        $payment->expects($this->once())->method('setTransactionId')->willReturnSelf();
+            ->will($this->returnValue('BNCODE'));
+        $payment = $this->createPartialMock(Info::class, ['setTransactionId', '__wakeup']);
+        $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
 
@@ -174,7 +178,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetTransStatus($response, $paymentExpected)
     {
-        $payment = $this->helper->getObject(\Magento\Payment\Model\Info::class);
+        $payment = $this->helper->getObject(Info::class);
         $this->payflowpro->setTransStatus($payment, $response);
         $this->assertEquals($paymentExpected->getData(), $payment->getData());
     }
@@ -186,13 +190,13 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'pnref' => 'V19A3D27B61E',
                         'result_code' => Payflowpro::RESPONSE_CODE_APPROVED,
                     ]
                 ),
-                'paymentExpected' => new \Magento\Framework\DataObject(
+                'paymentExpected' => new DataObject(
                     [
                         'transaction_id' => 'V19A3D27B61E',
                         'is_transaction_closed' => 0,
@@ -200,13 +204,13 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
                 ),
             ],
             [
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'pnref' => 'V19A3D27B61E',
                         'result_code' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
                     ]
                 ),
-                'paymentExpected' => new \Magento\Framework\DataObject(
+                'paymentExpected' => new DataObject(
                     [
                         'transaction_id' => 'V19A3D27B61E',
                         'is_transaction_closed' => 0,
@@ -308,7 +312,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     public function testCaptureAmountRounding($amount, $setAmount, $expectedResult)
     {
         $paymentMock = $this->getPaymentMock();
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -432,7 +436,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
     protected function initStoreMock()
     {
         $storeId = 27;
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -450,7 +454,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     protected function getGatewayResponseObject()
     {
-        return new \Magento\Framework\DataObject(
+        return new DataObject(
             [
                 'result' => '0',
                 'pnref' => 'V19A3D27B61E',
@@ -474,7 +478,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
             ->with(
-                $this->isInstanceOf(\Magento\Framework\DataObject::class),
+                $this->isInstanceOf(DataObject::class),
                 $this->isInstanceOf(PayflowConfig::class)
             )
             ->willReturn($response);
@@ -487,7 +491,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     protected function getPaymentMock()
     {
-        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+        $paymentMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getAdditionalInformation', 'getParentTransactionId', 'getOrder',
@@ -527,7 +531,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             'id' => 4,
             'increment_id' => '0000004'
         ];
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
@@ -551,7 +555,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -561,17 +565,16 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
     }
 
-    /**
-     */
     public function testPostRequestException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Payment Gateway is unreachable at the moment. Please use another payment option.');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'Payment Gateway is unreachable at the moment. Please use another payment option.'
+        );
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -599,7 +602,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $expectedData = new DataObject($data);
         $actualData = new DataObject();
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIncrementId', 'getId'])
             ->getMock();

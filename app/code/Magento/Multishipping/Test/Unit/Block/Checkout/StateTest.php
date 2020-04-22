@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,23 +7,26 @@
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
-use Magento\Multishipping\Block\Checkout\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Multishipping\Block\Checkout\State as StateBlock;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StateTest extends \PHPUnit\Framework\TestCase
+class StateTest extends TestCase
 {
     /**
-     * @var State
+     * @var StateBlock
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $mShippingStateMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->mShippingStateMock =
             $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping\State::class);
         $this->model = $objectManager->getObject(
@@ -37,7 +40,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
     public function testGetSteps()
     {
         $this->mShippingStateMock->expects($this->once())
-            ->method('getSteps')->willReturn(['expected array']);
+            ->method('getSteps')->will($this->returnValue(['expected array']));
 
         $this->assertEquals(['expected array'], $this->model->getSteps());
     }

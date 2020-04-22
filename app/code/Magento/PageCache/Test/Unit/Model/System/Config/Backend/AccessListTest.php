@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\System\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\System\Config\Backend\AccessList;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class AccessListTest extends TestCase
 {
@@ -85,8 +85,7 @@ class AccessListTest extends TestCase
      */
     public function testBeforeSaveInvalid($value)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->accessList->setValue($value);
         $this->accessList->beforeSave();
     }

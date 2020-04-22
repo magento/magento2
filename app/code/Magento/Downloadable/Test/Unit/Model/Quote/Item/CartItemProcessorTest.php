@@ -1,16 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Quote\Item;
 
+use Magento\Catalog\Model\Product\Configuration\Item\Option;
+use Magento\Downloadable\Api\Data\DownloadableOptionInterface;
+use Magento\Downloadable\Model\DownloadableOptionFactory;
 use Magento\Downloadable\Model\Quote\Item\CartItemProcessor;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\Data\ProductOptionExtension;
+use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
+use Magento\Quote\Api\Data\ProductOptionInterface;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\ProductOptionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
+class CartItemProcessorTest extends TestCase
 {
     /**
      * @var CartItemProcessor
@@ -18,44 +32,44 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $objectFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $objectHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $optionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $extensionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $downloadableOptionFactoryMock;
 
     protected function setUp(): void
     {
-        $this->objectFactoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
+        $this->objectFactoryMock = $this->createPartialMock(Factory::class, ['create']);
         $this->optionFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\ProductOptionFactory::class,
+            ProductOptionFactory::class,
             ['create']
         );
-        $this->objectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->objectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->extensionFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\ProductOptionExtensionFactory::class,
+            ProductOptionExtensionFactory::class,
             ['create']
         );
         $this->downloadableOptionFactoryMock = $this->createPartialMock(
-            \Magento\Downloadable\Model\DownloadableOptionFactory::class,
+            DownloadableOptionFactory::class,
             ['create']
         );
 
@@ -70,7 +84,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testConvertToBuyRequestReturnsNullIfItemDoesNotContainProductOption()
     {
-        $cartItemMock = $this->createMock(\Magento\Quote\Api\Data\CartItemInterface::class);
+        $cartItemMock = $this->createMock(CartItemInterface::class);
         $this->assertNull($this->model->convertToBuyRequest($cartItemMock));
     }
 
@@ -80,19 +94,19 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $itemQty = 1;
 
         $cartItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty']
         );
-        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
         $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
         $cartItemMock->expects($this->any())->method('getQty')->willReturn($itemQty);
-        $extAttributesMock = $this->getMockBuilder(\Magento\Quote\Api\Data\ProductOptionInterface::class)
+        $extAttributesMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->setMethods(['getDownloadableOption'])
             ->getMockForAbstractClass();
         $productOptionMock->expects($this->any())->method('getExtensionAttributes')->willReturn($extAttributesMock);
 
-        $downloadableOptionMock = $this->createMock(\Magento\Downloadable\Api\Data\DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
         $extAttributesMock->expects($this->any())
             ->method('getDownloadableOption')
             ->willReturn($downloadableOptionMock);
@@ -102,7 +116,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $buyRequestData = [
             'links' => $downloadableLinks,
         ];
-        $buyRequestMock = new \Magento\Framework\DataObject($buyRequestData);
+        $buyRequestMock = new DataObject($buyRequestData);
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with($buyRequestData)
@@ -114,10 +128,10 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
     public function testConvertToBuyRequestWithoutExtensionAttributes()
     {
         $cartItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty']
         );
-        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
 
         $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn(null);
@@ -129,11 +143,11 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $downloadableLinks = [1, 2];
 
-        $customOption = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
+        $customOption = $this->createMock(Option::class);
         $customOption->expects($this->once())->method('getValue')->willReturn(implode(',', $downloadableLinks));
 
         $cartItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['getProduct', 'getProductOption', 'setProductOption', 'getOptionByCode']
         );
         $cartItemMock->expects($this->once())
@@ -145,17 +159,17 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getProductOption')
             ->willReturn(null);
 
-        $downloadableOptionMock = $this->createMock(\Magento\Downloadable\Api\Data\DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
         $this->downloadableOptionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($downloadableOptionMock);
 
-        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
         $extAttributeMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\ProductOptionExtension::class,
+            ProductOptionExtension::class,
             ['setDownloadableOption']
         );
 
@@ -164,7 +178,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             [
                 'downloadable_links' => $downloadableLinks
             ],
-            \Magento\Downloadable\Api\Data\DownloadableOptionInterface::class
+            DownloadableOptionInterface::class
         );
 
         $this->extensionFactoryMock->expects($this->once())->method('create')->willReturn($extAttributeMock);
@@ -184,7 +198,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
         $downloadableLinks = [];
 
         $cartItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             ['getProduct', 'getProductOption', 'setProductOption', 'getOptionByCode']
         );
         $cartItemMock->expects($this->once())
@@ -192,10 +206,10 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('downloadable_link_ids');
 
         $extAttributeMock = $this->createPartialMock(
-            \Magento\Quote\Api\Data\ProductOptionExtension::class,
+            ProductOptionExtension::class,
             ['setDownloadableOption']
         );
-        $productOptionMock = $this->createMock(\Magento\Quote\Api\Data\ProductOptionInterface::class);
+        $productOptionMock = $this->createMock(ProductOptionInterface::class);
         $productOptionMock->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($extAttributeMock);
@@ -203,7 +217,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getProductOption')
             ->willReturn($productOptionMock);
 
-        $downloadableOptionMock = $this->createMock(\Magento\Downloadable\Api\Data\DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
         $this->downloadableOptionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($downloadableOptionMock);
@@ -216,7 +230,7 @@ class CartItemProcessorTest extends \PHPUnit\Framework\TestCase
             [
                 'downloadable_links' => $downloadableLinks
             ],
-            \Magento\Downloadable\Api\Data\DownloadableOptionInterface::class
+            DownloadableOptionInterface::class
         );
 
         $extAttributeMock->expects($this->once())

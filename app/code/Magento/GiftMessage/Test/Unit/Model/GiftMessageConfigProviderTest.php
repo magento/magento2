@@ -1,80 +1,94 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\UrlInterface;
+use Magento\GiftMessage\Api\CartRepositoryInterface;
+use Magento\GiftMessage\Api\ItemRepositoryInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\GiftMessage\Model\GiftMessageConfigProvider;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\ScopeInterface as Scope;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
+class GiftMessageConfigProviderTest extends TestCase
 {
     /**
-     * @var \Magento\GiftMessage\Model\GiftMessageConfigProvider
+     * @var GiftMessageConfigProvider
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $cartRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $itemRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $localeFormatMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $formKeyMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     protected function setUp(): void
     {
-        $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
-        $this->formKeyMock = $this->createMock(\Magento\Framework\Data\Form\FormKey::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->localeFormatMock = $this->createMock(FormatInterface::class);
+        $this->formKeyMock = $this->createMock(FormKey::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
-        $this->cartRepositoryMock = $this->createMock(\Magento\GiftMessage\Api\CartRepositoryInterface::class);
-        $this->itemRepositoryMock = $this->createMock(\Magento\GiftMessage\Api\ItemRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->itemRepositoryMock = $this->createMock(ItemRepositoryInterface::class);
         $contextMock->expects($this->atLeastOnce())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
-        $this->model = new \Magento\GiftMessage\Model\GiftMessageConfigProvider(
+        $this->model = new GiftMessageConfigProvider(
             $contextMock,
             $this->cartRepositoryMock,
             $this->itemRepositoryMock,
@@ -99,14 +113,14 @@ class GiftMessageConfigProviderTest extends \PHPUnit\Framework\TestCase
         $messageDataMock = ['from' => 'John Doe', 'to' => 'Jane Doe'];
         $formKey = 'ABCDEFGHIJKLMNOP';
         $baseUrl = 'https://magento.com/';
-        $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $quoteItemMock = $this->createMock(Item::class);
+        $productMock = $this->createMock(Product::class);
         $storeMock = $this->createPartialMock(
-            \Magento\Store\Model\Store::class,
+            Store::class,
             ['getBaseUrl', 'getCode']
         );
         $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId']
         );
         $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);

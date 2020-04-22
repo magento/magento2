@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -39,8 +39,8 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createPartialMock(
             CurlFactory::class,
             ['create']
@@ -68,14 +68,14 @@ class SecurityTest extends TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->cacheMock->expects($this->any())->method('load')->willReturn($cached);
-        $this->cacheMock->expects($this->any())->method('save')->willReturn(null);
+        $this->cacheMock->method('load')->will($this->returnValue($cached));
+        $this->cacheMock->method('save')->will($this->returnValue(null));
 
         $httpAdapterMock = $this->createMock(Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->willReturn($response);
-        $this->curlFactoryMock->expects($this->any())->method('create')->willReturn($httpAdapterMock);
+        $httpAdapterMock->method('read')->will($this->returnValue($response));
+        $this->curlFactoryMock->method('create')->will($this->returnValue($httpAdapterMock));
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(null);
+        $this->scopeConfigMock->method('getValue')->will($this->returnValue(null));
 
         $this->assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }

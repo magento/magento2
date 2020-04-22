@@ -1,11 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Payment\Model\Method\Adapter;
+use Magento\Payment\Model\Method\Cc;
+use Magento\Payment\Model\Method\InstanceFactory;
+use Magento\Paypal\Helper\Data;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\ConfigFactory;
+use Magento\Paypal\Model\Method\Agreement;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
      * @var string
@@ -19,49 +33,49 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private static $txnId = 'XXX123123XXX';
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentMethodListInterface|MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var InstanceFactory|MockObject
      */
     private $paymentMethodInstanceFactory;
 
     /**
-     * @var \Magento\Paypal\Model\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Paypal\Helper\Data
+     * @var Data
      */
     protected $_helper;
 
     protected function setUp(): void
     {
-        $this->paymentMethodList = $this->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
+        $this->paymentMethodList = $this->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->paymentMethodInstanceFactory = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\InstanceFactory::class
+            InstanceFactory::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->configMock = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configMockFactory = $this->getMockBuilder(\Magento\Paypal\Model\ConfigFactory::class)
+        $configMockFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
-        $this->configMock->expects($this->any())->method('setMethod')->willReturnSelf();
+        $this->configMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_helper = $objectManager->getObject(
-            \Magento\Paypal\Helper\Data::class,
+            Data::class,
             [
                 'methodCodes' => ['expressCheckout' => 'paypal_express', 'hostedPro' => 'hosted_pro'],
                 'configFactory' => $configMockFactory
@@ -107,26 +121,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function getBillingAgreementMethodsDataProvider()
     {
         $quoteMock = $this->getMockBuilder(
-            \Magento\Quote\Model\Quote::class
+            Quote::class
         )->disableOriginalConstructor()->getMock();
 
         $methodMock = $this->getMockBuilder(
-            \Magento\Payment\Api\Data\PaymentMethodInterface::class
+            PaymentMethodInterface::class
         )->getMock();
 
         $agreementMethodInstanceMock = $this->getMockBuilder(
-            \Magento\Paypal\Model\Method\Agreement::class
+            Agreement::class
         )->disableOriginalConstructor()->getMock();
         $agreementMethodInstanceMock->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
 
         $abstractMethodInstanceMock = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\Cc::class
+            Cc::class
         )->disableOriginalConstructor()->getMock();
 
         $adapterMethodInstanceMock = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\Adapter::class
+            Adapter::class
         )->disableOriginalConstructor()->getMock();
 
         return [

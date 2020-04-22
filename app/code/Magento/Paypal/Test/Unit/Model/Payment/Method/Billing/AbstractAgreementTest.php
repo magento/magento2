@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,27 +7,30 @@ namespace Magento\Paypal\Test\Unit\Model\Payment\Method\Billing;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Billing\Agreement;
+use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AbstractAgreementTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
+class AbstractAgreementTest extends TestCase
 {
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\AgreementFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AgreementFactory|MockObject
      */
     private $agreementFactory;
 
@@ -36,7 +39,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
      */
     private $payment;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -44,7 +47,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
 
-        $this->agreementFactory = $this->getMockBuilder(\Magento\Paypal\Model\Billing\AgreementFactory::class)
+        $this->agreementFactory = $this->getMockBuilder(AgreementFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -126,7 +129,7 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param DataObject $data
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function parentAssignDataExpectation(DataObject $data)
     {

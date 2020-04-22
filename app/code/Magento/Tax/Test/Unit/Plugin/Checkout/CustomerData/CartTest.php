@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Plugin\Checkout\CustomerData;
 
 use Magento\Checkout\CustomerData\Cart as CheckoutCart;
@@ -12,8 +14,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CartTest extends TestCase
 {
@@ -57,7 +59,7 @@ class CartTest extends TestCase
 
         $this->checkoutSession->method('getQuote')
             ->willReturn($this->quote);
-        
+
         $this->cart = new Cart(
             $this->checkoutSession,
             $this->checkoutHelper,
@@ -104,8 +106,8 @@ class CartTest extends TestCase
         self::assertArrayHasKey('subtotal_incl_tax', $result);
         self::assertArrayHasKey('subtotal_excl_tax', $result);
         self::assertArrayHasKey('items', $result);
-        self::assertIsArray($result['items']);
-        self::assertCount(2, $result['items']);
+        self::assertTrue(is_array($result['items']));
+        self::assertEquals(2, count($result['items']));
         self::assertEquals(1, $result['items'][0]['product_price']);
         self::assertEquals(1, $result['items'][1]['product_price']);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,32 +6,37 @@
 
 namespace Magento\Marketplace\Test\Unit\Helper;
 
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Marketplace\Helper\Cache;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CacheTest extends \PHPUnit\Framework\TestCase
+class CacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CacheInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var  SerializerInterface|MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Marketplace\Helper\Cache
+     * @var Cache
      */
     private $cacheHelper;
 
     protected function setUp(): void
     {
-        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Config\CacheInterface::class);
+        $this->cache = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->cacheHelper = $objectManagerHelper->getObject(
-            \Magento\Marketplace\Helper\Cache::class,
+            Cache::class,
             [
                 'cache' => $this->cache,
                 'serializer' => $this->serializer,
@@ -64,7 +69,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->serializer->expects($this->never())
             ->method('unserialize');
 
-        $this->assertFalse($this->cacheHelper->loadPartnersFromCache());
+        $this->assertSame(false, $this->cacheHelper->loadPartnersFromCache());
     }
 
     public function testSavePartnersToCache()

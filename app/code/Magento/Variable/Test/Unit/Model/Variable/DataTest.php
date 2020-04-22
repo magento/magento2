@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\Variable\Test\Unit\Model\Variable;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\TestCase;
-use Magento\Variable\Model\Variable\Data as VariableDataModel;
-use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory as VariableCollectionFactory;
 use Magento\Variable\Model\ResourceModel\Variable\Collection as VariableCollection;
+use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory as VariableCollectionFactory;
 use Magento\Variable\Model\Source\Variables as StoreVariables;
+use Magento\Variable\Model\Variable\Data as VariableDataModel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
@@ -28,12 +29,12 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var StoreVariables|PHPUnit\Framework\MockObject\MockObject
+     * @var StoreVariables|MockObject
      */
     private $storesVariablesMock;
 
     /**
-     * @var VariableCollectionFactory|PHPUnit\Framework\MockObject\MockObject
+     * @var VariableCollectionFactory|MockObject
      */
     private $variableCollectionFactoryMock;
 

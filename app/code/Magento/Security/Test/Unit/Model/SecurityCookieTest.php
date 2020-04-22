@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,26 +6,33 @@
 
 namespace Magento\Security\Test\Unit\Model;
 
+use Magento\Backend\Helper\Data;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\SecurityCookie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\SecurityCookie testing
  */
-class SecurityCookieTest extends \PHPUnit\Framework\TestCase
+class SecurityCookieTest extends TestCase
 {
-    /** @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager */
+    /** @var PhpCookieManager */
     protected $phpCookieManagerMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory */
+    /** @var PublicCookieMetadataFactory */
     protected $cookieMetadataFactoryMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
+    /** @var PublicCookieMetadata */
     protected $cookieMetadataMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface */
+    /** @var CookieReaderInterface */
     protected $cookieReaderMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
+    /** @var PublicCookieMetadata */
     protected $backendDataMock;
 
     /** @var SecurityCookie */
@@ -38,28 +45,28 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->phpCookieManagerMock = $this->createPartialMock(
-            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
+            PhpCookieManager::class,
             ['setPublicCookie']
         );
 
         $this->cookieMetadataFactoryMock = $this->createPartialMock(
-            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory::class,
+            PublicCookieMetadataFactory::class,
             ['create']
         );
 
         $this->cookieMetadataMock = $this->createPartialMock(
-            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
+            PublicCookieMetadata::class,
             ['setPath', 'setDuration']
         );
 
         $this->cookieReaderMock = $this->createPartialMock(
-            \Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class,
+            CookieReaderInterface::class,
             ['getCookie']
         );
 
-        $this->backendDataMock = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $this->backendDataMock = $this->createMock(Data::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             SecurityCookie::class,
             [

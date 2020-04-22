@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,25 +6,28 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model\Operation;
 
+use Magento\AsynchronousOperations\Model\Operation\Details;
+use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\Framework\Bulk\OperationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DetailsTest extends \PHPUnit\Framework\TestCase
+class DetailsTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $bulkStatusMock;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\Operation\Details
+     * @var Details
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->bulkStatusMock = $this->getMockBuilder(\Magento\Framework\Bulk\BulkStatusInterface::class)
-            ->getMock();
-        $this->model = new \Magento\AsynchronousOperations\Model\Operation\Details($this->bulkStatusMock);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
+        $this->model = new Details($this->bulkStatusMock);
     }
 
     public function testGetDetails()

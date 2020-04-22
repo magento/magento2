@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,11 +9,10 @@ use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Ui\Component\Control\Button;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ButtonTest
- */
-class ButtonTest extends \PHPUnit\Framework\TestCase
+class ButtonTest extends TestCase
 {
     /**
      * @var Button
@@ -21,31 +20,31 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     protected $button;
 
     /**
-     * @var Context| \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UrlInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
      * Escaper
      *
-     * @var Escaper| \PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             ['getPageLayout', 'getUrlBuilder', 'getEscaper']
         );
-        $this->urlBuilderMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
-        $this->escaperMock = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
+        $this->escaperMock = $this->createPartialMock(Escaper::class, ['escapeHtml']);
         $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->button = new Button($this->contextMock);
     }

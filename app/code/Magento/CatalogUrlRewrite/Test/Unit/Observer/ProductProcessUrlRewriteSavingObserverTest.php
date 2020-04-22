@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -17,8 +17,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,7 +62,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
         $this->product = $this->createPartialMock(Product::class, [
                 'getId',
                 'dataHasChangedFor',
@@ -73,7 +71,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'getIsChangedCategories',
                 'getStoreId'
             ]);
-        $this->product->expects($this->any())->method('getId')->willReturn(3);
+        $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
         $this->event = $this->createPartialMock(Event::class, ['getProduct']);
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
@@ -84,7 +82,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         );
         $this->productUrlRewriteGenerator->expects($this->any())
             ->method('generate')
-            ->willReturn([3 => 'rewrite']);
+            ->will($this->returnValue([3 => 'rewrite']));
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
             ProductProcessUrlRewriteSavingObserver::class,
@@ -173,27 +171,28 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $visibilityResult,
         $expectedReplaceCount
     ) {
-        $this->product->expects($this->any())->method('getStoreId')->willReturn(12);
+        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
+
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
-            ->willReturnMap(
+            ->will($this->returnValueMap(
                 [
                     ['visibility', $isChangedVisibility],
                     ['url_key', $isChangedUrlKey]
                 ]
-            );
+            ));
 
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')
-            ->willReturn($isChangedWebsites);
+            ->will($this->returnValue($isChangedWebsites));
 
         $this->product->expects($this->any())
             ->method('getIsChangedCategories')
-            ->willReturn($isChangedCategories);
+            ->will($this->returnValue($isChangedCategories));
 
         $this->product->expects($this->any())
             ->method('isVisibleInSiteVisibility')
-            ->willReturn($visibilityResult);
+            ->will($this->returnValue($visibilityResult));
 
         $this->urlPersist->expects($this->exactly($expectedReplaceCount))
             ->method('replace')

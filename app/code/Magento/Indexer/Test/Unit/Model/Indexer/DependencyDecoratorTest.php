@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,8 +14,10 @@ use Magento\Framework\Mview\View;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\DependencyDecorator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
+class DependencyDecoratorTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -28,17 +30,17 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
     private $dependencyDecorator;
 
     /**
-     * @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerInterface|MockObject
      */
     private $indexerMock;
 
     /**
-     * @var DependencyInfoProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DependencyInfoProviderInterface|MockObject
      */
     private $dependencyInfoProviderMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
@@ -305,7 +307,7 @@ class DependencyDecoratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
+     * @return MockObject|IndexerInterface
      */
     private function getIndexerMock()
     {

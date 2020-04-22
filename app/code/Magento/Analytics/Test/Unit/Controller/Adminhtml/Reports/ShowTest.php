@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,29 +13,31 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShowTest extends \PHPUnit\Framework\TestCase
+class ShowTest extends TestCase
 {
     /**
-     * @var ReportUrlProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReportUrlProvider|MockObject
      */
     private $reportUrlProviderMock;
 
     /**
-     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     private $redirectMock;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
@@ -54,21 +56,13 @@ class ShowTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->reportUrlProviderMock = $this->getMockBuilder(ReportUrlProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->reportUrlProviderMock = $this->createMock(ReportUrlProvider::class);
 
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
 
-        $this->redirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->redirectMock = $this->createMock(Redirect::class);
 
-        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -114,7 +108,6 @@ class ShowTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithException(\Exception $exception)
     {
-
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

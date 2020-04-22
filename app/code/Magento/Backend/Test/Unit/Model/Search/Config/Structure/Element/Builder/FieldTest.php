@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,12 +8,13 @@ namespace Magento\Backend\Test\Unit\Model\Search\Config\Structure\Element\Builde
 
 use Magento\Backend\Model\Search\Config\Structure\Element\Builder\Field;
 use Magento\Config\Model\Config\StructureElementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FieldTest extends TestCase
 {
     /**
-     * @var StructureElementInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StructureElementInterface|MockObject
      */
     private $structureElementMock;
 

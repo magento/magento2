@@ -1,14 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-class RelatedProductsTest extends \PHPUnit\Framework\TestCase
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Option;
+use Magento\Quote\Model\Quote\Item\RelatedProducts;
+use PHPUnit\Framework\TestCase;
+
+class RelatedProductsTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Item\RelatedProducts
+     * @var RelatedProducts
      */
     protected $model;
 
@@ -20,7 +25,7 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->relatedProductTypes = ['type1', 'type2', 'type3'];
-        $this->model = new \Magento\Quote\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);
+        $this->model = new RelatedProducts($this->relatedProductTypes);
     }
 
     /**
@@ -33,9 +38,9 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
-        $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $quoteItemMock = $this->createMock(Item::class);
         $itemOptionMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item\Option::class,
+            Option::class,
             ['getValue', 'getProductId', '__wakeup']
         );
 
@@ -79,7 +84,7 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelatedProductIdsNoOptions()
     {
-        $quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $quoteItemMock = $this->createMock(Item::class);
 
         $quoteItemMock->expects(
             $this->once()

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -52,13 +52,12 @@ class RuntimeConfigSourceTest extends TestCase
      * @var RuntimeConfigSource
      */
     private $configSource;
-
     /**
      * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

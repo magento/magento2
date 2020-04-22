@@ -1,21 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
+use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 use Magento\Config\Console\Command\ConfigShowCommand;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Framework\App\Scope\ValidatorInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\Config\ConfigPathResolver;
-use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
-class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
+class ConfigShowCommandTest extends TestCase
 {
     /**
      * @var ValidatorInterface|MockObject

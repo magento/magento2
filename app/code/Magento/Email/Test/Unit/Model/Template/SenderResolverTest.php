@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\Email\Test\Unit\Model\Template;
 
 use Magento\Email\Model\Template\SenderResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- *  SenderResolverTest
- */
-class SenderResolverTest extends \PHPUnit\Framework\TestCase
+class SenderResolverTest extends TestCase
 {
     /**
      * @var SenderResolver
@@ -23,18 +23,18 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
     private $senderResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
      * @return void
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->senderResolver = $objectManager->getObject(
             SenderResolver::class,
@@ -59,13 +59,13 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([
                [
                    'trans_email/ident_' . $sender . '/name',
-                   \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                   ScopeInterface::SCOPE_STORE,
                    $scopeId,
                    'Test Name'
                ],
                [
                    'trans_email/ident_' . $sender . '/email',
-                   \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                   ScopeInterface::SCOPE_STORE,
                    $scopeId,
                    'test@email.com'
                ]

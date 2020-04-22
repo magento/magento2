@@ -1,32 +1,39 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Currency\Import\Config;
+use Magento\Directory\Model\Currency\Import\Factory;
+use Magento\Directory\Model\Currency\Import\ImportInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Factory
+     * @var Factory
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $_importConfig;
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
-        $this->_model = new \Magento\Directory\Model\Currency\Import\Factory(
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_importConfig = $this->createMock(Config::class);
+        $this->_model = new Factory(
             $this->_objectManager,
             $this->_importConfig
         );
@@ -34,15 +41,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $expectedResult = $this->createMock(\Magento\Directory\Model\Currency\Import\ImportInterface::class);
+        $expectedResult = $this->createMock(ImportInterface::class);
         $this->_importConfig->expects(
             $this->once()
         )->method(
             'getServiceClass'
         )->with(
             'test'
-        )->willReturn(
-            'Test_Class'
+        )->will(
+            $this->returnValue('Test_Class')
         );
         $this->_objectManager->expects(
             $this->once()
@@ -51,48 +58,44 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Test_Class',
             ['argument' => 'value']
-        )->willReturn(
-            $expectedResult
+        )->will(
+            $this->returnValue($expectedResult)
         );
         $actualResult = $this->_model->create('test', ['argument' => 'value']);
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    /**
-     */
     public function testCreateUndefinedServiceClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Currency import service \'test\' is not defined');
-
         $this->_importConfig->expects(
             $this->once()
         )->method(
             'getServiceClass'
         )->with(
             'test'
-        )->willReturn(
-            null
+        )->will(
+            $this->returnValue(null)
         );
         $this->_objectManager->expects($this->never())->method('create');
         $this->_model->create('test');
     }
 
-    /**
-     */
     public function testCreateIrrelevantServiceClass()
     {
-        $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Class \'stdClass\' has to implement \\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface');
-
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage(
+            'Class \'stdClass\' has to implement \Magento\Directory\Model\Currency\Import\ImportInterface'
+        );
         $this->_importConfig->expects(
             $this->once()
         )->method(
             'getServiceClass'
         )->with(
             'test'
-        )->willReturn(
-            'stdClass'
+        )->will(
+            $this->returnValue('stdClass')
         );
         $this->_objectManager->expects(
             $this->once()
@@ -100,8 +103,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'stdClass'
-        )->willReturn(
-            new \stdClass()
+        )->will(
+            $this->returnValue(new \stdClass())
         );
         $this->_model->create('test');
     }

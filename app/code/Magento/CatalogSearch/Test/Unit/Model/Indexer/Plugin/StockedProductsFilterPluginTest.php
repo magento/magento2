@@ -7,15 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Plugin;
 
-use Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
+use Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin class.
@@ -23,20 +25,20 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
  * This plugin reverts changes introduced in commit 9ab466d8569ea556cb01393989579c3aac53d9a3 which break extensions
  * relying on stocks. Plugin location is changed for consistency purposes.
  */
-class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
+class StockedProductsFilterPluginTest extends TestCase
 {
     /**
-     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var StockStatusRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockStatusRepositoryInterface|MockObject
      */
     private $stockStatusRepositoryMock;
 
     /**
-     * @var StockStatusCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockStatusCriteriaInterfaceFactory|MockObject
      */
     private $stockStatusCriteriaFactoryMock;
 
@@ -52,10 +54,10 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
     {
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->stockStatusRepositoryMock = $this->getMockBuilder(StockStatusRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->stockStatusCriteriaFactoryMock = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,7 +74,7 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforePrepareProductIndex(): void
     {
-        /** @var DataProvider|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
+        /** @var DataProvider|MockObject $dataProviderMock */
         $dataProviderMock = $this->getMockBuilder(DataProvider::class)->disableOriginalConstructor()->getMock();
         $indexData = [
             1 => [],
@@ -110,7 +112,7 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn($stockStatusCollectionMock);
 
-        list ($indexData, $productData, $storeId) = $this->plugin->beforePrepareProductIndex(
+        list($indexData, $productData, $storeId) = $this->plugin->beforePrepareProductIndex(
             $dataProviderMock,
             $indexData,
             $productData,

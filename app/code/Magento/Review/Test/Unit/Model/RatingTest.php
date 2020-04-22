@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,14 @@
 namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Review\Model\Review;
 use Magento\Review\Model\Rating;
+use Magento\Review\Model\Review;
+use PHPUnit\Framework\TestCase;
 
-class RatingTest extends \PHPUnit\Framework\TestCase
+class RatingTest extends TestCase
 {
     /**
-     * @var \Magento\Review\Model\Rating
+     * @var Rating
      */
     private $rating;
 

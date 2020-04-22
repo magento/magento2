@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,20 +7,23 @@ namespace Magento\Security\Test\Unit\Model;
 
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\AdminSessionInfo testing
  */
-class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
+class AdminSessionInfoTest extends TestCase
 {
     /**
-     * @var  \Magento\Security\Model\AdminSessionInfo
+     * @var  AdminSessionInfo
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     protected $securityConfigMock;
 
@@ -30,7 +33,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     protected $dateTimeMock;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
@@ -38,10 +41,10 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
@@ -49,7 +52,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Security\Model\AdminSessionInfo::class,
+            AdminSessionInfo::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'dateTime' => $this->dateTimeMock,
@@ -62,13 +65,13 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLoggedInStatus()
     {
-        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setData('status', AdminSessionInfo::LOGGED_IN);
         $this->model->setUpdatedAt(901);
         $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertTrue($this->model->isLoggedInStatus());
+        $this->assertEquals(true, $this->model->isLoggedInStatus());
     }
 
     /**
@@ -76,14 +79,14 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLoggedInStatusExpired()
     {
-        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setData('status', AdminSessionInfo::LOGGED_IN);
         $this->model->setUpdatedAt(899);
         $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertFalse($this->model->isLoggedInStatus());
-        $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
+        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertEquals(AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
     /**
@@ -97,7 +100,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
 
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
-            ->willReturn($sessionLifetime);
+            ->will($this->returnValue($sessionLifetime));
 
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
@@ -137,7 +140,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOtherSessionsTerminated()
     {
-        $this->assertFalse($this->model->isOtherSessionsTerminated());
+        $this->assertEquals(false, $this->model->isOtherSessionsTerminated());
     }
 
     /**
@@ -147,7 +150,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     public function testSetIsOtherSessionsTerminated($isOtherSessionsTerminated)
     {
         $this->assertInstanceOf(
-            \Magento\Security\Model\AdminSessionInfo::class,
+            AdminSessionInfo::class,
             $this->model->setIsOtherSessionsTerminated($isOtherSessionsTerminated)
         );
     }

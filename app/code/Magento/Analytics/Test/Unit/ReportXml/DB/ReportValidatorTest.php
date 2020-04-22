@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,31 +12,34 @@ use Magento\Analytics\ReportXml\QueryFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 
-class ReportValidatorTest extends \PHPUnit\Framework\TestCase
+class ReportValidatorTest extends TestCase
 {
     /**
-     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConnectionFactory|MockObject
      */
     private $connectionFactoryMock;
 
     /**
-     * @var QueryFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var QueryFactory|MockObject
      */
     private $queryFactoryMock;
 
     /**
-     * @var Query|\PHPUnit\Framework\MockObject\MockObject
+     * @var Query|MockObject
      */
     private $queryMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
@@ -55,15 +58,11 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactory::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->queryFactoryMock = $this->getMockBuilder(QueryFactory::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->queryMock = $this->getMockBuilder(Query::class)->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionFactoryMock = $this->createMock(ConnectionFactory::class);
+        $this->queryFactoryMock = $this->createMock(QueryFactory::class);
+        $this->queryMock = $this->createMock(Query::class);
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->reportValidator = $this->objectManagerHelper->getObject(
@@ -79,9 +78,9 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider errorDataProvider
      * @param string $reportName
      * @param array $result
-     * @param \PHPUnit\Framework\MockObject\Stub $queryReturnStub
+     * @param Stub $queryReturnStub
      */
-    public function testValidate($reportName, $result, \PHPUnit\Framework\MockObject\Stub $queryReturnStub)
+    public function testValidate($reportName, $result, Stub $queryReturnStub)
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())

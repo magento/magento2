@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,8 +8,9 @@ namespace Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\Fil
 use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\AttributeGroupAttributeSetIdFilter;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection;
 use Magento\Framework\Api\Filter;
+use PHPUnit\Framework\TestCase;
 
-class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
+class AttributeGroupAttributeSetIdFilterTest extends TestCase
 {
     /**
      * @var AttributeGroupAttributeSetIdFilter

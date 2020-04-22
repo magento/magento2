@@ -1,26 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import\Source;
 
-class ServiceTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Currency\Import\Config;
+use Magento\Directory\Model\Currency\Import\Source\Service;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ServiceTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Source\Service
+     * @var Service
      */
     protected $_model;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $_importConfig;
 
     protected function setUp(): void
     {
-        $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
-        $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);
+        $this->_importConfig = $this->createMock(Config::class);
+        $this->_model = new Service($this->_importConfig);
     }
 
     public function testToOptionArray()
@@ -29,8 +34,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getAvailableServices'
-        )->willReturn(
-            ['service_one', 'service_two']
+        )->will(
+            $this->returnValue(['service_one', 'service_two'])
         );
         $this->_importConfig->expects(
             $this->at(1)
@@ -38,8 +43,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getServiceLabel'
         )->with(
             'service_one'
-        )->willReturn(
-            'Service One'
+        )->will(
+            $this->returnValue('Service One')
         );
         $this->_importConfig->expects(
             $this->at(2)
@@ -47,8 +52,8 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'getServiceLabel'
         )->with(
             'service_two'
-        )->willReturn(
-            'Service Two'
+        )->will(
+            $this->returnValue('Service Two')
         );
         $expectedResult = [
             ['value' => 'service_one', 'label' => 'Service One'],

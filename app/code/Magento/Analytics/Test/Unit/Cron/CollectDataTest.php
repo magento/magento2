@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,16 +9,18 @@ use Magento\Analytics\Cron\CollectData;
 use Magento\Analytics\Model\ExportDataHandlerInterface;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectDataTest extends \PHPUnit\Framework\TestCase
+class CollectDataTest extends TestCase
 {
     /**
-     * @var ExportDataHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ExportDataHandlerInterface|MockObject
      */
     private $exportDataHandlerMock;
 
     /**
-     * @var SubscriptionStatusProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var SubscriptionStatusProvider|MockObject
      */
     private $subscriptionStatusMock;
 
@@ -40,9 +42,7 @@ class CollectDataTest extends \PHPUnit\Framework\TestCase
         $this->exportDataHandlerMock = $this->getMockBuilder(ExportDataHandlerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->subscriptionStatusMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subscriptionStatusMock = $this->createMock(SubscriptionStatusProvider::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

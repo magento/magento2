@@ -1,13 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Model\Quote\Address\Total\Grand;
 use Magento\Framework\Pricing\PriceCurrencyInterface as PriceRounder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\Address\Total\Grand;
 use PHPUnit\Framework\MockObject\MockObject as ObjectMock;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +59,7 @@ class GrandTest extends TestCase
         $this->priceRounder->expects($this->at(1))->method('roundPrice')->willReturn($grandTotalBase + 2);
 
         $totalMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address\Total::class,
+            Total::class,
             [
                 'getAllTotalAmounts',
                 'getAllBaseTotalAmounts',
@@ -74,8 +77,8 @@ class GrandTest extends TestCase
         $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
 
         $this->model->collect(
-            $this->createMock(\Magento\Quote\Model\Quote::class),
-            $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class),
+            $this->createMock(Quote::class),
+            $this->createMock(ShippingAssignmentInterface::class),
             $totalMock
         );
     }

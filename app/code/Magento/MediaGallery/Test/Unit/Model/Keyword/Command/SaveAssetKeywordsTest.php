@@ -13,14 +13,11 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGallery\Model\Keyword\Command\SaveAssetKeywords;
-use Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * SaveAssetKeywordsTest.
- */
 class SaveAssetKeywordsTest extends TestCase
 {
     /**

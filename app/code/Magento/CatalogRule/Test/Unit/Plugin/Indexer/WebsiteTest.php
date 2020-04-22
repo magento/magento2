@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,21 +6,25 @@
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /**
      * Indexer processor mock
      *
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
+     * @var RuleProductProcessor|MockObject
      */
     protected $ruleProductProcessor;
 
     /**
      * Website mock
      *
-     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Store\Model\Website|MockObject
      */
     protected $subject;
 
@@ -34,9 +38,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->ruleProductProcessor = $this->createMock(
-            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class
+            RuleProductProcessor::class
         );
-        $this->subject = $this->createMock(\Magento\Store\Model\Website::class);
+        $this->subject = $this->createMock(Website::class);
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\CatalogRule\Plugin\Indexer\Website::class,

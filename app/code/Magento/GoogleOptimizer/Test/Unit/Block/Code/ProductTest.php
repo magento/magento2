@@ -1,28 +1,34 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Block\Code\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\GoogleOptimizer\Block\Code\Product
+     * @var Product
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $objectManager = new ObjectManager($this);
+        $this->registry = $this->createMock(Registry::class);
         $this->block = $objectManager->getObject(
-            \Magento\GoogleOptimizer\Block\Code\Product::class,
+            Product::class,
             ['registry' => $this->registry]
         );
     }
@@ -36,15 +42,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
+        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_product'
-        )->willReturn(
-            $product
+        )->will(
+            $this->returnValue($product)
         );
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

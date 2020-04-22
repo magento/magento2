@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Tax\Ui\DataProvider\Product\Listing\Collector\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends TestCase
 {
     /**
      * @var Tax
@@ -25,32 +29,32 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoInterface|MockObject
      */
     private $priceMock;
 
     /**
-     * @var PriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoInterfaceFactory|MockObject
      */
     private $priceInfoFactory;
 
     /**
-     * @var PriceInfoExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoExtensionInterface|MockObject
      */
     private $extensionAttributes;
 
     /**
-     * @var PriceInfoExtensionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoExtensionInterfaceFactory|MockObject
      */
     private $priceInfoExtensionFactory;
 
     /**
-     * @var FormattedPriceInfoBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var FormattedPriceInfoBuilder|MockObject
      */
     private $formattedPriceInfoBuilder;
 
@@ -106,7 +110,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $price = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();

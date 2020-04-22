@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,7 +15,8 @@ use Magento\Vault\Model\Ui\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConfigProviderTest
@@ -24,7 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject as MockObject;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
+class TokensConfigProviderTest extends TestCase
 {
     /**
      * @var StoreManagerInterface|MockObject
@@ -59,10 +60,10 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
+        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
 
         $this->customerTokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
             ->disableOriginalConstructor()
@@ -100,7 +101,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
-        
+
         $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn($vaultProviderCode);
@@ -108,7 +109,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->customerTokenManagement->expects(static::once())
             ->method('getCustomerSessionTokens')
             ->willReturn([$token]);
-        
+
         $token->expects(static::once())
             ->method('getPaymentMethodCode')
             ->willReturn($vaultProviderCode);

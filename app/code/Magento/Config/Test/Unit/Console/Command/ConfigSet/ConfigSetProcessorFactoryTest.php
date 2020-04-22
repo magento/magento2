@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,13 +12,14 @@ use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for ConfigSetProcessorFactory.
  *
  * @see ConfigSetProcessorFactory
  */
-class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
+class ConfigSetProcessorFactoryTest extends TestCase
 {
     /**
      * @var ConfigSetProcessorFactory
@@ -63,23 +64,19 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testCreateNonExisted()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The class for "dummyType" type wasn\'t declared. Enter the class and try again.');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'The class for "dummyType" type wasn\'t declared. Enter the class and try again.'
+        );
         $this->model->create('dummyType');
     }
 
-    /**
-     */
     public function testCreateWrongImplementation()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('stdClass should implement');
-
         $type = 'wrongType';
         $this->objectManagerMock->expects($this->once())
             ->method('create')

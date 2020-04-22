@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Magento\Braintree\Gateway\SubjectReader;
@@ -10,9 +12,10 @@ use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentNonceResponseValidatorTest extends \PHPUnit\Framework\TestCase
+class PaymentNonceResponseValidatorTest extends TestCase
 {
     /**
      * @var PaymentNonceResponseValidator

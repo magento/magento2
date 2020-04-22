@@ -1,25 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\SchemaLocator;
+use Magento\Framework\Module\Dir\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_moduleReaderMock;
 
     /**
-     * @var \Magento\Config\Model\Config\SchemaLocator
+     * @var SchemaLocator
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->_moduleReaderMock = $this->createMock(Reader::class);
 
         $this->_moduleReaderMock->expects(
             $this->any()
@@ -28,10 +33,10 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Config'
-        )->willReturn(
-            'schema_dir'
+        )->will(
+            $this->returnValue('schema_dir')
         );
-        $this->_model = new \Magento\Config\Model\Config\SchemaLocator($this->_moduleReaderMock);
+        $this->_model = new SchemaLocator($this->_moduleReaderMock);
     }
 
     public function testGetSchema()

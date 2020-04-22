@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,15 +8,17 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
-use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
+class ColumnsResolverTest extends TestCase
 {
     /**
-     * @var SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SelectBuilder|MockObject
      */
     private $selectBuilderMock;
 
@@ -26,12 +28,12 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
     private $columnsResolver;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
@@ -40,17 +42,11 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->selectBuilderMock = $this->getMockBuilder(SelectBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectBuilderMock = $this->createMock(SelectBuilder::class);
 
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->columnsResolver = $objectManager->getObject(
@@ -72,10 +68,10 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetColumnsWithFunction($expectedColumns, $expectedGroup, $entityConfig)
     {
-        $this->resourceConnectionMock->expects($this->any())
+        $this->resourceConnectionMock
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock
             ->method('quoteIdentifier')
             ->with('cpe.name')
             ->willReturn('`cpe`.`name`');
@@ -110,8 +106,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
                     'expectedGroup' => [
                         'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
                     ],
-                    'entityConfig' =>
-                        [
+                    'entityConfig' => [
                             'name' => 'catalog_product_entity',
                             'alias' => 'cpe',
                             'attribute' => [
@@ -129,8 +124,7 @@ class ColumnsResolverTest extends \PHPUnit\Framework\TestCase
                     'avg_name' => new ColumnValueExpression('AVG(`cpe`.`name`)')
                 ],
                 'expectedGroup' => [],
-                'entityConfig' =>
-                    [
+                'entityConfig' => [
                         'name' => 'catalog_product_entity',
                         'alias' => 'cpe',
                         'attribute' => [

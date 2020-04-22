@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Webapi\Model\Config\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Webapi\Model\Config\Converter
+     * @var Converter
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Webapi\Model\Config\Converter();
+        $this->_model = new Converter();
     }
 
     public function testConvert()

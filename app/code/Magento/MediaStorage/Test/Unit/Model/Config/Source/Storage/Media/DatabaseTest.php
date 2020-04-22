@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,39 +6,39 @@
 
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DatabaseTest
- */
-class DatabaseTest extends \PHPUnit\Framework\TestCase
+class DatabaseTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database
+     * @var Database
      */
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     protected $deploymentConfig;
 
     protected function setUp(): void
     {
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfig->expects(
             $this->any()
         )->method(
             'get'
         )->with(
             'resource'
-        )->willReturn(
-            
+        )->will(
+            $this->returnValue(
                 [
                     'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
                     'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
                 ]
-            
+            )
         );
         $this->mediaDatabase = new Database($this->deploymentConfig);
     }

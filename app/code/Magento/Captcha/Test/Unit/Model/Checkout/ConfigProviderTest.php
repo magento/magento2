@@ -1,29 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model\Checkout;
 
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\Checkout\ConfigProvider;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
@@ -33,19 +41,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     protected $formId = 1;
 
     /**
-     * @var \Magento\Captcha\Model\Checkout\ConfigProvider
+     * @var ConfigProvider
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
-        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->captchaHelperMock = $this->createMock(Data::class);
+        $this->captchaMock = $this->createMock(DefaultModel::class);
+        $this->storeMock = $this->createMock(Store::class);
         $formIds = [$this->formId];
 
-        $this->model = new \Magento\Captcha\Model\Checkout\ConfigProvider(
+        $this->model = new ConfigProvider(
             $this->storeManagerMock,
             $this->captchaHelperMock,
             $formIds
@@ -61,20 +69,20 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetConfig($isRequired, $captchaGenerations, $expectedConfig)
     {
         $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($this->formId)
-            ->willReturn($this->captchaMock);
+            ->will($this->returnValue($this->captchaMock));
 
-        $this->captchaMock->expects($this->any())->method('isCaseSensitive')->willReturn(1);
-        $this->captchaMock->expects($this->any())->method('getHeight')->willReturn('12px');
-        $this->captchaMock->expects($this->any())->method('isRequired')->willReturn($isRequired);
+        $this->captchaMock->expects($this->any())->method('isCaseSensitive')->will($this->returnValue(1));
+        $this->captchaMock->expects($this->any())->method('getHeight')->will($this->returnValue('12px'));
+        $this->captchaMock->expects($this->any())->method('isRequired')->will($this->returnValue($isRequired));
 
         $this->captchaMock->expects($this->exactly($captchaGenerations))->method('generate');
         $this->captchaMock->expects($this->exactly($captchaGenerations))->method('getImgSrc')
-            ->willReturn('source');
+            ->will($this->returnValue('source'));
 
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())->method('isCurrentlySecure')->will($this->returnValue(true));
         $this->storeMock->expects($this->once())->method('getUrl')->with('captcha/refresh', ['_secure' => true])
-            ->willReturn('https://magento.com/captcha');
+            ->will($this->returnValue('https://magento.com/captcha'));
 
         $config = $this->model->getConfig();
         unset($config['captcha'][$this->formId]['timestamp']);

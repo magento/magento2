@@ -16,12 +16,9 @@ use Magento\Quote\Model\Quote;
 use Magento\SalesRule\Api\Exception\CodeRequestLimitException;
 use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 use Magento\SalesRule\Observer\CouponCodeValidation;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CouponCodeValidationTest
- */
 class CouponCodeValidationTest extends TestCase
 {
     /**
@@ -30,32 +27,32 @@ class CouponCodeValidationTest extends TestCase
     private $couponCodeValidation;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|CodeLimitManagerInterface
+     * @var MockObject|CodeLimitManagerInterface
      */
     private $codeLimitManagerMock;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|CartRepositoryInterface
+     * @var MockObject|CartRepositoryInterface
      */
     private $cartRepositoryMock;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|SearchCriteriaBuilder
+     * @var MockObject|SearchCriteriaBuilder
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|Observer
+     * @var MockObject|Observer
      */
     private $observerMock;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $quoteMock;
 
@@ -64,7 +61,7 @@ class CouponCodeValidationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->codeLimitManagerMock = $this->getMockForAbstractClass(CodeLimitManagerInterface::class);
+        $this->codeLimitManagerMock = $this->createMock(CodeLimitManagerInterface::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()->getMockForAbstractClass();
@@ -133,13 +130,11 @@ class CouponCodeValidationTest extends TestCase
 
     /**
      * Testing the coupon code that reached the request limit
-     *
      */
     public function testReachingLimitForCouponCode()
     {
-        $this->expectException(\Magento\SalesRule\Api\Exception\CodeRequestLimitException::class);
+        $this->expectException('Magento\SalesRule\Api\Exception\CodeRequestLimitException');
         $this->expectExceptionMessage('Too many coupon code requests, please try again later.');
-
         $couponCode = 'AB123';
         $this->observerMock->expects($this->once())->method('getData')->with('quote')
             ->willReturn($this->quoteMock);

@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Model\Config\Converter;
 
-class XmlTest extends \PHPUnit\Framework\TestCase
+use Magento\Cron\Model\Config\Converter\Xml;
+use PHPUnit\Framework\TestCase;
+
+class XmlTest extends TestCase
 {
     /**
-     * @var \Magento\Cron\Model\Config\Converter\Xml
+     * @var Xml
      */
     protected $_converter;
 
@@ -17,7 +22,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->_converter = new \Magento\Cron\Model\Config\Converter\Xml();
+        $this->_converter = new Xml();
     }
 
     /**
@@ -76,12 +81,10 @@ class XmlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Testing converting not valid cron configuration, expect to get exception
-     *
      */
     public function testConvertWrongConfiguration()
     {
         $this->expectException(\InvalidArgumentException::class);
-
         $xmlFile = __DIR__ . '/../_files/crontab_invalid.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

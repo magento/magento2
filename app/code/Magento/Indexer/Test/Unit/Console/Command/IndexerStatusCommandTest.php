@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,11 @@
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View\Changelog;
 use Magento\Indexer\Console\Command\IndexerStatusCommand;
+use Magento\Indexer\Model\Mview\View\State;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
@@ -19,14 +23,14 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $indexerMock
+     * @param MockObject $indexerMock
      * @param array $data
      * @return mixed
      */
     private function attachViewToIndexerMock($indexerMock, array $data)
     {
-        /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit\Framework\MockObject\MockObject $changelog */
-        $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
+        /** @var Changelog|MockObject $changelog */
+        $changelog = $this->getMockBuilder(Changelog::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -34,16 +38,16 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('getList')
             ->willReturn(range(0, $data['view']['changelog']['list_size']-1));
 
-        /** @var \Magento\Indexer\Model\Mview\View\State|\PHPUnit\Framework\MockObject\MockObject $stateMock */
-        $stateMock = $this->getMockBuilder(\Magento\Indexer\Model\Mview\View\State::class)
+        /** @var State|MockObject $stateMock */
+        $stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
 
         $stateMock->addData($data['view']['state']);
 
-        /** @var \Magento\Framework\Mview\View|\PHPUnit\Framework\MockObject\MockObject $viewMock */
-        $viewMock = $this->getMockBuilder(\Magento\Framework\Mview\View::class)
+        /** @var View|MockObject $viewMock */
+        $viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->setMethods(['getChangelog', 'getState'])
             ->getMock();

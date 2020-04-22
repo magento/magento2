@@ -3,76 +3,77 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
-use Magento\Quote\Model\Quote;
-use Magento\Framework\View\Layout;
+use Magento\Braintree\Block\Paypal\Checkout\Review;
+use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 use Magento\Checkout\Model\Session;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\App\Response\RedirectInterface;
-use Magento\Braintree\Block\Paypal\Checkout\Review;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
-use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
-use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Page;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class SaveShippingMethodTest
- *
  * @see \Magento\Braintree\Controller\Paypal\SaveShippingMethod
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
+class SaveShippingMethodTest extends TestCase
 {
     /**
-     * @var ShippingMethodUpdater|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShippingMethodUpdater|MockObject
      */
     private $shippingMethodUpdaterMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseInterface|MockObject
      */
     private $responseMock;
 
     /**
-     * @var RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectInterface|MockObject
      */
     protected $redirectMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
@@ -83,7 +84,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        /** @var Context|\PHPUnit\Framework\MockObject\MockObject $contextMock */
+        /** @var Context|MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -287,7 +288,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Review|\PHPUnit\Framework\MockObject\MockObject
+     * @return Review|MockObject
      */
     private function getBlockMock()
     {
@@ -297,7 +298,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Layout|\PHPUnit\Framework\MockObject\MockObject
+     * @return Layout|MockObject
      */
     private function getLayoutMock()
     {
@@ -307,7 +308,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @return Quote|MockObject
      */
     private function getQuoteMock()
     {
@@ -317,7 +318,7 @@ class SaveShippingMethodTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Page|\PHPUnit\Framework\MockObject\MockObject
+     * @return Page|MockObject
      */
     private function getResponsePageMock()
     {

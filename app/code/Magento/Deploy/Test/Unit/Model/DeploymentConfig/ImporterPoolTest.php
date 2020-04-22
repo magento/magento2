@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,8 +11,9 @@ use Magento\Deploy\Model\DeploymentConfig\ValidatorFactory;
 use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-class ImporterPoolTest extends \PHPUnit\Framework\TestCase
+class ImporterPoolTest extends TestCase
 {
     /**
      * @var ImporterPool
@@ -71,9 +72,10 @@ class ImporterPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetImportersEmptyParameterClass()
     {
-        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
-        $this->expectExceptionMessage('The parameter "importer_class" is missing. Set the "importer_class" and try again.');
-
+        $this->expectException('Magento\Framework\Exception\ConfigurationMismatchException');
+        $this->expectExceptionMessage(
+            'The parameter "importer_class" is missing. Set the "importer_class" and try again.'
+        );
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
             $this->validatorFactoryMock,

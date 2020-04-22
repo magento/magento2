@@ -9,6 +9,8 @@ namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
@@ -27,13 +29,14 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Paypal transparent test class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TransparentTest extends \PHPUnit\Framework\TestCase
+class TransparentTest extends TestCase
 {
     /**
      * @var PayPalPayflowTransparent
@@ -75,7 +78,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      */
     private $order;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->initPayment();
 
@@ -99,8 +102,8 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider validAuthorizeRequestDataProvider
      * @param DataObject $validAuthorizeRequest
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws LocalizedException
+     * @throws InvalidTransitionException
      */
     public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
     {
@@ -200,7 +203,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
 

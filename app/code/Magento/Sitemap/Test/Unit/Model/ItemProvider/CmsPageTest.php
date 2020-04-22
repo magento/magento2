@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -14,8 +14,10 @@ use Magento\Sitemap\Model\ResourceModel\Cms\Page as CmsPageResource;
 use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
 use Magento\Sitemap\Model\SitemapItem;
 use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CmsPageTest extends \PHPUnit\Framework\TestCase
+class CmsPageTest extends TestCase
 {
     public function testGetItemsEmpty()
     {
@@ -72,7 +74,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getItemFactoryMock()
     {
@@ -94,7 +96,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getCmsPageFactoryMock($returnValue)
     {
@@ -111,7 +113,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getConfigReaderMock()
     {
@@ -128,7 +130,7 @@ class CmsPageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $returnValue
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getCmsPageCollectionMock($returnValue)
     {

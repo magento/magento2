@@ -9,14 +9,15 @@ declare(strict_types=1);
 namespace Magento\Backup\Test\Unit\Cron;
 
 use Magento\Backup\Cron\SystemBackup;
-use PHPUnit\Framework\TestCase;
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SystemBackupTest extends TestCase
 {
     /**
-     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Helper|MockObject
      */
     private $helperMock;
 

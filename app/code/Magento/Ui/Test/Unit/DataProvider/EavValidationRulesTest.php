@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,11 +9,10 @@ namespace Magento\Ui\Test\Unit\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class EavValidationRulesTest
- */
-class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
+class EavValidationRulesTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -21,12 +20,12 @@ class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Ui\DataProvider\EavValidationRules
+     * @var EavValidationRules
      */
     protected $subject;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAttribute|MockObject
      */
     protected $attributeMock;
 

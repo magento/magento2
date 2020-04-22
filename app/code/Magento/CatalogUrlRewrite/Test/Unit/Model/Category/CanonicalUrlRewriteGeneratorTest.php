@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,40 +6,47 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class CanonicalUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator */
+    /** @var CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CategoryUrlPathGenerator|MockObject */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Category|MockObject */
     protected $category;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlRewriteFactory|MockObject */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlRewrite|MockObject */
     protected $urlRewrite;
 
     protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+        $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
-        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()->getMock();
         $this->categoryUrlPathGenerator = $this->getMockBuilder(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class
+            CategoryUrlPathGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->canonicalUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator::class,
+            CanonicalUrlRewriteGenerator::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'urlRewriteFactory' => $this->urlRewriteFactory
@@ -54,22 +61,22 @@ class CanonicalUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store_id';
         $categoryId = 'category_id';
 
-        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
+        $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
         $this->categoryUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-            ->willReturn($requestPath);
+            ->will($this->returnValue($requestPath));
         $this->categoryUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-            ->willReturn($targetPath);
+            ->will($this->returnValue($targetPath));
         $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->urlRewrite->expects($this->any())->method('setEntityId')->with($categoryId)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->urlRewrite->expects($this->any())->method('setEntityType')
-            ->with(CategoryUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
+            ->with(CategoryUrlRewriteGenerator::ENTITY_TYPE)->will($this->returnSelf());
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)
-            ->willReturnSelf();
-        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+            ->will($this->returnSelf());
+        $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
         $this->assertEquals(
             ['category.html_store_id' => $this->urlRewrite],
             $this->canonicalUrlRewriteGenerator->generate($storeId, $this->category)

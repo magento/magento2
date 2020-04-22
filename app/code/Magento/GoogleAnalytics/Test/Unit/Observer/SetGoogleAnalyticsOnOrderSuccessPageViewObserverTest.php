@@ -15,32 +15,33 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\GoogleAnalytics\Helper\Data as GaDataHelper;
 use Magento\GoogleAnalytics\Observer\SetGoogleAnalyticsOnOrderSuccessPageViewObserver;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
 {
     /**
-     * @var Event|\PHPUnit\Framework\MockObject\MockObject
+     * @var Event|MockObject
      */
     private $eventMock;
 
     /**
-     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     private $observerMock;
 
     /**
-     * @var GaDataHelper|\PHPUnit\Framework\MockObject\MockObject
+     * @var GaDataHelper|MockObject
      */
     private $googleAnalyticsDataMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface|MockObject
      */
     private $layoutMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
@@ -59,10 +60,10 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->observerMock = $this->getMockBuilder(Observer::class)->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)->getMock();
 

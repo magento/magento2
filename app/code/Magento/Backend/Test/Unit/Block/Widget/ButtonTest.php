@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,39 +9,46 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
 
-class ButtonTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Button;
+use Magento\Backend\Model\Url;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ButtonTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_blockMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_buttonMock;
 
     protected function setUp(): void
     {
-        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->_layoutMock = $this->createMock(Layout::class);
 
         $arguments = [
-            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'urlBuilder' => $this->createMock(Url::class),
             'layout' => $this->_layoutMock,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_blockMock = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Button::class, $arguments);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->_blockMock = $objectManagerHelper->getObject(Button::class, $arguments);
     }
 
     protected function tearDown(): void
@@ -58,7 +65,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     {
         $this->_blockMock->setData($data);
         $attributes = $this->_blockMock->getAttributesHtml();
-        $this->assertMatchesRegularExpression($expect, $attributes);
+        $this->assertRegExp($expect, $attributes);
     }
 
     /**

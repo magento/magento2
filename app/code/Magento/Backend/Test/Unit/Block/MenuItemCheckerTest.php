@@ -1,28 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Menu;
 use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MenuItemCheckerTest extends \PHPUnit\Framework\TestCase
+class MenuItemCheckerTest extends TestCase
 {
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $activeMenuItemMock;
 
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $menuItemMock;
 
     /**
-     * @var Menu|\PHPUnit\Framework\MockObject\MockObject
+     * @var Menu|MockObject
      */
     private $menuMock;
 
