@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
 
 use Magento\Backend\App\Action\Context;
@@ -81,26 +83,26 @@ class ListActionTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, [
-                'getAuthorization',
-                'getSession',
-                'getActionFlag',
-                'getAuth',
-                'getView',
-                'getHelper',
-                'getBackendUrl',
-                'getFormKeyValidator',
-                'getLocaleResolver',
-                'getCanUseBaseUrl',
-                'getRequest',
-                'getResponse',
-                'getObjectManager',
-                'getMessageManager'
-            ]);
+            'getAuthorization',
+            'getSession',
+            'getActionFlag',
+            'getAuth',
+            'getView',
+            'getHelper',
+            'getBackendUrl',
+            'getFormKeyValidator',
+            'getLocaleResolver',
+            'getCanUseBaseUrl',
+            'getRequest',
+            'getResponse',
+            'getObjectManager',
+            'getMessageManager'
+        ]);
 
-        $response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
         $request = $this->getMockForAbstractClass(
             RequestInterface::class,
@@ -109,11 +111,11 @@ class ListActionTest extends TestCase
             false
         );
 
-        $this->view = $this->createPartialMock(ViewInterface::class, [
+        $this->view = $this->getMockBuilder(ViewInterface::class)
+            ->addMethods(['getConfig', 'getTitle'])
+            ->onlyMethods([
                 'loadLayout',
                 'getPage',
-                'getConfig',
-                'getTitle',
                 'loadLayoutUpdates',
                 'renderLayout',
                 'getDefaultLayoutHandle',
@@ -124,12 +126,13 @@ class ListActionTest extends TestCase
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
-            ]);
+            ])
+            ->getMock();
 
-        $this->block = $this->createPartialMock(
-            AbstractBlock::class,
-            ['setActive', 'getMenuModel']
-        );
+        $this->block = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setActive', 'getMenuModel'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->layout = $this->getMockForAbstractClass(
             LayoutInterface::class,
@@ -140,23 +143,29 @@ class ListActionTest extends TestCase
 
         $this->menu = $this->createPartialMock(Menu::class, ['getParentItems']);
 
-        $this->items = $this->createPartialMock(Item::class, ['getParentItems']);
+        $this->items = $this->getMockBuilder(Item::class)
+            ->addMethods(['getParentItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($request);
         $this->contextMock->expects($this->any())->method("getResponse")->willReturn($response);
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+        $this->contextMock->expects($this->any())->method('getView')->willReturn($this->view);
 
         $this->page = $this->createPartialMock(Page::class, ['getConfig']);
-        $this->config = $this->createPartialMock(Page::class, ['getTitle']);
+        $this->config = $this->getMockBuilder(Page::class)
+            ->addMethods(['getTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->title = $this->getMockBuilder('Title')
             ->setMethods(['prepend'])
             ->getMock();
 
-        $this->block->expects($this->any())->method('setActive')->will($this->returnValue(1));
-        $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $this->layout->expects($this->any())->method('getBlock')->with('menu')->will($this->returnValue($this->block));
-        $this->block->expects($this->any())->method('getMenuModel')->will($this->returnValue($this->menu));
-        $this->menu->expects($this->any())->method('getParentItems')->will($this->returnValue($this->items));
+        $this->block->expects($this->any())->method('setActive')->willReturn(1);
+        $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $this->layout->expects($this->any())->method('getBlock')->with('menu')->willReturn($this->block);
+        $this->block->expects($this->any())->method('getMenuModel')->willReturn($this->menu);
+        $this->menu->expects($this->any())->method('getParentItems')->willReturn($this->items);
 
         $this->object = new ListAction($this->contextMock);
     }

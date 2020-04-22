@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -38,8 +40,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         $stateMock = $this->createMock(State::class);
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
-            ->with(StateInterface::STATUS_INVALID)
-            ->will($this->returnSelf());
+            ->with(StateInterface::STATUS_INVALID)->willReturnSelf();
 
         $stateMock->expects($this->exactly(1))
             ->method('save');

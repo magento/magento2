@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel\Indexer\State;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
@@ -33,12 +35,12 @@ class CollectionTest extends TestCase
         $connectionMock = $this->createMock(Mysql::class);
         $selectRendererMock = $this->createMock(SelectRenderer::class);
         $resourceMock = $this->createMock(FlagResource::class);
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->getMockBuilder(Select::class)
             ->setMethods(['getPart', 'setPart', 'from', 'columns'])
             ->setConstructorArgs([$connectionMock, $selectRendererMock])
             ->getMock();
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
 
         $this->model = new Collection(
             $entityFactoryMock,

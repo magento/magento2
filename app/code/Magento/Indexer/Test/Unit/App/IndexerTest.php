@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\App;
 
 use Magento\Framework\App\Bootstrap;
@@ -40,10 +42,11 @@ class IndexerTest extends TestCase
     {
         $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->processor = $this->createMock(Processor::class);
-        $this->_response = $this->createPartialMock(
-            Response::class,
-            ['setCode', 'getCode']
-        );
+        $this->_response = $this->getMockBuilder(Response::class)
+            ->addMethods(['getCode'])
+            ->onlyMethods(['setCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->entryPoint = new Indexer(
             'reportDir',
@@ -61,12 +64,12 @@ class IndexerTest extends TestCase
     public function testExecute($isExist, $callCount)
     {
         $this->_response->expects($this->once())->method('setCode')->with(0);
-        $this->_response->expects($this->once())->method('getCode')->will($this->returnValue(0));
+        $this->_response->expects($this->once())->method('getCode')->willReturn(0);
         $dir = $this->createMock(Write::class);
-        $dir->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $dir->expects($this->once())->method('isExist')->will($this->returnValue($isExist));
-        $dir->expects($this->exactly($callCount))->method('delete')->will($this->returnValue(true));
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($dir));
+        $dir->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
+        $dir->expects($this->once())->method('isExist')->willReturn($isExist);
+        $dir->expects($this->exactly($callCount))->method('delete')->willReturn(true);
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($dir);
         $this->processor->expects($this->once())->method('reindexAll');
         $this->assertEquals(0, $this->entryPoint->launch()->getCode());
     }

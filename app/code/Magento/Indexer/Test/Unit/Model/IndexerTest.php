@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model;
 
 use Magento\Framework\Indexer\ActionFactory;
@@ -112,8 +114,8 @@ class IndexerTest extends TestCase
             'getIndexer'
         )->with(
             $indexId
-        )->will(
-            $this->returnValue($this->getIndexerData())
+        )->willReturn(
+            $this->getIndexerData()
         );
         $this->model->load($indexId);
     }
@@ -121,7 +123,7 @@ class IndexerTest extends TestCase
     public function testGetView()
     {
         $indexId = 'indexer_internal_name';
-        $this->viewMock->expects($this->once())->method('load')->with('view_test')->will($this->returnSelf());
+        $this->viewMock->expects($this->once())->method('load')->with('view_test')->willReturnSelf();
         $this->loadIndexer($indexId);
 
         $this->assertEquals($this->viewMock, $this->model->getView());
@@ -134,8 +136,8 @@ class IndexerTest extends TestCase
             State::class,
             ['loadByIndexer', 'getId', '__wakeup']
         );
-        $stateMock->expects($this->once())->method('loadByIndexer')->with($indexId)->will($this->returnSelf());
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('loadByIndexer')->with($indexId)->willReturnSelf();
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
 
         $this->loadIndexer($indexId);
 
@@ -153,17 +155,17 @@ class IndexerTest extends TestCase
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
 
-        $this->viewMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue($getViewIsEnabled));
-        $this->viewMock->expects($this->any())->method('getUpdated')->will($this->returnValue($getViewGetUpdated));
+        $this->viewMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->viewMock->expects($this->once())->method('isEnabled')->willReturn($getViewIsEnabled);
+        $this->viewMock->expects($this->any())->method('getUpdated')->willReturn($getViewGetUpdated);
 
         $stateMock = $this->createPartialMock(
             State::class,
             ['load', 'getId', 'setIndexerId', '__wakeup', 'getUpdated']
         );
 
-        $stateMock->expects($this->any())->method('getUpdated')->will($this->returnValue($getStateGetUpdated));
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->any())->method('getUpdated')->willReturn($getStateGetUpdated);
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
 
         if ($getViewIsEnabled && $getViewGetUpdated) {
             $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
@@ -205,15 +207,15 @@ class IndexerTest extends TestCase
             State::class,
             ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save']
         );
-        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->will($this->returnSelf());
+        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->willReturnSelf();
         $stateMock->expects($this->never())->method('setIndexerId');
-        $stateMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
-        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue('idle'));
-        $stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('getId')->willReturn(1);
+        $stateMock->expects($this->exactly(2))->method('setStatus')->willReturnSelf();
+        $stateMock->expects($this->once())->method('getStatus')->willReturn('idle');
+        $stateMock->expects($this->exactly(2))->method('save')->willReturnSelf();
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
 
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->viewMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->viewMock->expects($this->once())->method('suspend');
         $this->viewMock->expects($this->once())->method('resume');
 
@@ -227,8 +229,8 @@ class IndexerTest extends TestCase
             'create'
         )->with(
             'Some\Class\Name'
-        )->will(
-            $this->returnValue($actionMock)
+        )->willReturn(
+            $actionMock
         );
 
         $this->model->reindexAll();
@@ -245,15 +247,15 @@ class IndexerTest extends TestCase
             State::class,
             ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save']
         );
-        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->will($this->returnSelf());
+        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->willReturnSelf();
         $stateMock->expects($this->never())->method('setIndexerId');
-        $stateMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
-        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue('idle'));
-        $stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('getId')->willReturn(1);
+        $stateMock->expects($this->exactly(2))->method('setStatus')->willReturnSelf();
+        $stateMock->expects($this->once())->method('getStatus')->willReturn('idle');
+        $stateMock->expects($this->exactly(2))->method('save')->willReturnSelf();
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
 
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->viewMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->viewMock->expects($this->never())->method('suspend');
         $this->viewMock->expects($this->once())->method('resume');
 
@@ -261,12 +263,10 @@ class IndexerTest extends TestCase
             ActionInterface::class,
             ['executeFull', 'executeList', 'executeRow']
         );
-        $actionMock->expects($this->once())->method('executeFull')->will(
-            $this->returnCallback(
-                function () {
-                    throw new \Exception('Test exception');
-                }
-            )
+        $actionMock->expects($this->once())->method('executeFull')->willReturnCallback(
+            function () {
+                throw new \Exception('Test exception');
+            }
         );
         $this->actionFactoryMock->expects(
             $this->once()
@@ -274,8 +274,8 @@ class IndexerTest extends TestCase
             'create'
         )->with(
             'Some\Class\Name'
-        )->will(
-            $this->returnValue($actionMock)
+        )->willReturn(
+            $actionMock
         );
 
         $this->model->reindexAll();
@@ -292,15 +292,15 @@ class IndexerTest extends TestCase
             State::class,
             ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save']
         );
-        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->will($this->returnSelf());
+        $stateMock->expects($this->once())->method('load')->with($indexId, 'indexer_id')->willReturnSelf();
         $stateMock->expects($this->never())->method('setIndexerId');
-        $stateMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
-        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue('idle'));
-        $stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('getId')->willReturn(1);
+        $stateMock->expects($this->exactly(2))->method('setStatus')->willReturnSelf();
+        $stateMock->expects($this->once())->method('getStatus')->willReturn('idle');
+        $stateMock->expects($this->exactly(2))->method('save')->willReturnSelf();
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
 
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->viewMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->viewMock->expects($this->never())->method('suspend');
         $this->viewMock->expects($this->once())->method('resume');
 
@@ -308,12 +308,10 @@ class IndexerTest extends TestCase
             ActionInterface::class,
             ['executeFull', 'executeList', 'executeRow']
         );
-        $actionMock->expects($this->once())->method('executeFull')->will(
-            $this->returnCallback(
-                function () {
-                    throw new \Error('Test Engine Error');
-                }
-            )
+        $actionMock->expects($this->once())->method('executeFull')->willReturnCallback(
+            function () {
+                throw new \Error('Test Engine Error');
+            }
         );
         $this->actionFactoryMock->expects(
             $this->once()
@@ -321,8 +319,8 @@ class IndexerTest extends TestCase
             'create'
         )->with(
             'Some\Class\Name'
-        )->will(
-            $this->returnValue($actionMock)
+        )->willReturn(
+            $actionMock
         );
 
         $this->model->reindexAll();
@@ -353,8 +351,8 @@ class IndexerTest extends TestCase
             'getIndexer'
         )->with(
             $indexId
-        )->will(
-            $this->returnValue($this->getIndexerData())
+        )->willReturn(
+            $this->getIndexerData()
         );
         $this->model->load($indexId);
     }
@@ -387,8 +385,8 @@ class IndexerTest extends TestCase
     public function testIsScheduled()
     {
         $result = true;
-        $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue($result));
+        $this->viewMock->expects($this->once())->method('load')->willReturnSelf();
+        $this->viewMock->expects($this->once())->method('isEnabled')->willReturn($result);
         $this->assertEquals($result, $this->model->isScheduled());
     }
 
@@ -401,10 +399,10 @@ class IndexerTest extends TestCase
     {
         $stateMock = $this->createPartialMock(State::class, ['load', 'save']);
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
-        $this->viewMock->expects($this->once())->method($method)->will($this->returnValue(true));
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $this->viewMock->expects($this->once())->method('load')->willReturnSelf();
+        $this->viewMock->expects($this->once())->method($method)->willReturn(true);
+        $stateMock->expects($this->once())->method('save')->willReturnSelf();
         $this->model->setScheduled($scheduled);
     }
 
@@ -424,8 +422,8 @@ class IndexerTest extends TestCase
         $status = StateInterface::STATUS_WORKING;
         $stateMock = $this->createPartialMock(State::class, ['load', 'getStatus']);
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $stateMock->expects($this->once())->method('getStatus')->willReturn($status);
         $this->assertEquals($status, $this->model->getStatus());
     }
 
@@ -438,8 +436,8 @@ class IndexerTest extends TestCase
     {
         $stateMock = $this->createPartialMock(State::class, ['load', 'getStatus']);
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $stateMock->expects($this->once())->method('getStatus')->willReturn($status);
         $this->assertEquals(true, $this->model->$method());
     }
 
@@ -462,11 +460,9 @@ class IndexerTest extends TestCase
             ['load', 'setStatus', 'save']
         );
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('setStatus')->with(StateInterface::STATUS_INVALID)->will(
-            $this->returnSelf()
-        );
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $stateMock->expects($this->once())->method('setStatus')->with(StateInterface::STATUS_INVALID)->willReturnSelf();
+        $stateMock->expects($this->once())->method('save')->willReturnSelf();
         $this->model->invalidate();
     }
 
@@ -484,13 +480,13 @@ class IndexerTest extends TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($actionMock)
+        )->willReturn(
+            $actionMock
         );
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
-        $actionMock->expects($this->once())->method('executeRow')->with($id)->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $stateMock->expects($this->once())->method('save')->willReturnSelf();
+        $actionMock->expects($this->once())->method('executeRow')->with($id)->willReturnSelf();
         $this->model->reindexRow($id);
     }
 
@@ -508,13 +504,13 @@ class IndexerTest extends TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($actionMock)
+        )->willReturn(
+            $actionMock
         );
 
-        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
-        $actionMock->expects($this->once())->method('executeList')->with($ids)->will($this->returnSelf());
+        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
+        $stateMock->expects($this->once())->method('save')->willReturnSelf();
+        $actionMock->expects($this->once())->method('executeList')->with($ids)->willReturnSelf();
         $this->model->reindexList($ids);
     }
 }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Processor;
 
 use Magento\Framework\App\CacheInterface;
@@ -89,8 +91,8 @@ class CleanCacheTest extends TestCase
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
-                $this->equalTo('clean_cache_after_reindex'),
-                $this->equalTo(['object' => $this->contextMock])
+                'clean_cache_after_reindex',
+                ['object' => $this->contextMock]
             );
 
         $this->contextMock->expects($this->atLeastOnce())

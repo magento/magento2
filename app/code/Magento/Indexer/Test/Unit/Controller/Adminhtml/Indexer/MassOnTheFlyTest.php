@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
 
 use Magento\Backend\App\Action\Context;
@@ -106,34 +108,32 @@ class MassOnTheFlyTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, [
-                'getAuthorization',
-                'getSession',
-                'getActionFlag',
-                'getAuth',
-                'getView',
-                'getHelper',
-                'getBackendUrl',
-                'getFormKeyValidator',
-                'getLocaleResolver',
-                'getCanUseBaseUrl',
-                'getRequest',
-                'getResponse',
-                'getObjectManager',
-                'getMessageManager'
-            ]);
+            'getAuthorization',
+            'getSession',
+            'getActionFlag',
+            'getAuth',
+            'getView',
+            'getHelper',
+            'getBackendUrl',
+            'getFormKeyValidator',
+            'getLocaleResolver',
+            'getCanUseBaseUrl',
+            'getRequest',
+            'getResponse',
+            'getObjectManager',
+            'getMessageManager'
+        ]);
 
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
-        $this->view = $this->createPartialMock(
-            ViewInterface::class,
-            [
+        $this->view = $this->getMockBuilder(ViewInterface::class)
+            ->addMethods(['getConfig', 'getTitle'])
+            ->onlyMethods([
                 'loadLayout',
                 'getPage',
-                'getConfig',
-                'getTitle',
                 'renderLayout',
                 'loadLayoutUpdates',
                 'getDefaultLayoutHandle',
@@ -144,17 +144,20 @@ class MassOnTheFlyTest extends TestCase
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
-            ]
-        );
+            ])
+            ->getMock();
 
-        $this->session = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->createPartialMock(
-            ObjectManager::class,
-            ['get']
-        );
+        $this->objectManager = $this->getMockBuilder(ObjectManager::class)
+            ->addMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->request = $this->getMockForAbstractClass(
             RequestInterface::class,
             ['getParam', 'getRequest'],
@@ -173,10 +176,11 @@ class MassOnTheFlyTest extends TestCase
             false
         );
 
-        $this->indexReg = $this->createPartialMock(
-            IndexerRegistry::class,
-            ['get', 'setScheduled']
-        );
+        $this->indexReg = $this->getMockBuilder(IndexerRegistry::class)
+            ->addMethods(['setScheduled'])
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->contextMock->expects($this->any())->method("getObjectManager")->willReturn($this->objectManager);
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
@@ -220,10 +224,10 @@ class MassOnTheFlyTest extends TestCase
 
             if ($exception !== null) {
                 $indexerInterface->expects($this->any())
-                    ->method('setScheduled')->with(false)->will($this->throwException($exception));
+                    ->method('setScheduled')->with(false)->willThrowException($exception);
             } else {
                 $indexerInterface->expects($this->any())
-                    ->method('setScheduled')->with(false)->will($this->returnValue(1));
+                    ->method('setScheduled')->with(false)->willReturn(1);
             }
 
             $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));

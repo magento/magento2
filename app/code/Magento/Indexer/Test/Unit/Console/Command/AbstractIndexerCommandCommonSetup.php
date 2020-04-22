@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -87,15 +89,13 @@ class AbstractIndexerCommandCommonSetup extends TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
-                    array_merge(
-                        $this->getObjectManagerReturnValueMap(),
-                        [
-                            [CollectionFactory::class, $this->collectionFactory],
-                            [IndexerInterfaceFactory::class, $this->indexerFactory],
-                        ]
-                    )
+            ->willReturnMap(
+                array_merge(
+                    $this->getObjectManagerReturnValueMap(),
+                    [
+                        [CollectionFactory::class, $this->collectionFactory],
+                        [IndexerInterfaceFactory::class, $this->indexerFactory],
+                    ]
                 )
             );
     }
@@ -119,7 +119,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
         $this->configLoaderMock->expects($this->once())
             ->method('load')
             ->with(FrontNameResolver::AREA_CODE)
-            ->will($this->returnValue($config));
+            ->willReturn($config);
         $this->objectManager->expects($this->once())
             ->method('configure')
             ->with($config);

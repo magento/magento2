@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -27,7 +29,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, count($optionsList));
+        $this->assertCount(2, $optionsList);
         $this->assertSame('mode', $optionsList[0]->getName());
         $this->assertSame('index', $optionsList[1]->getName());
     }
@@ -156,7 +158,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
             ['indexer_id' => 'id_indexerOne']
         );
         $localizedException = new LocalizedException(__('Some Exception Message'));
-        $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($localizedException));
+        $indexerOne->expects($this->once())->method('setScheduled')->willThrowException($localizedException);
         $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
@@ -173,7 +175,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
             ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
         );
         $exception = new \Exception();
-        $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($exception));
+        $indexerOne->expects($this->once())->method('setScheduled')->willThrowException($exception);
         $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

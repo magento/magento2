@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -25,10 +27,11 @@ class AbstractProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_indexerRegistryMock = $this->createPartialMock(
-            IndexerRegistry::class,
-            ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate']
-        );
+        $this->_indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->addMethods(['isScheduled', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'])
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new AbstractProcessorStub(
             $this->_indexerRegistryMock
         );

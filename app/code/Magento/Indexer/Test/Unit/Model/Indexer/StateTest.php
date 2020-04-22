@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
 use Magento\Framework\Event\ManagerInterface;
@@ -71,7 +73,7 @@ class StateTest extends TestCase
     {
         $this->assertEquals(null, $this->model->getUpdated());
         $this->model->beforeSave();
-        $this->assertTrue(($this->model->getUpdated() != null));
+        $this->assertNotEquals(null, $this->model->getUpdated());
     }
 
     public function testSetStatus()

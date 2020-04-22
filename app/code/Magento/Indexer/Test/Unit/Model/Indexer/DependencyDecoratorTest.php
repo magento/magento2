@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
@@ -137,8 +138,11 @@ class DependencyDecoratorTest extends TestCase
             ['getFields', ['one', 'two']],
             ['getSources', ['one', 'two']],
             ['getHandlers', ['one', 'two']],
-            ['getView', $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock()],
-            ['getState', $this->getMockBuilder(StateInterface::class)->getMockForAbstractClass()],
+            ['getView', $this->getMockBuilder(View::class)
+                ->disableOriginalConstructor()
+                ->getMock()],
+            ['getState', $this->getMockBuilder(StateInterface::class)
+                ->getMockForAbstractClass()],
             ['isScheduled', true],
             ['isValid', false],
             ['isInvalid', true],

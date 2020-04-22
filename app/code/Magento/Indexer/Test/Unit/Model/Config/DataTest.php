@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Config;
 
 use Magento\Framework\Config\CacheInterface;
@@ -73,7 +75,7 @@ class DataTest extends TestCase
     public function testConstructorWithCache()
     {
         $serializedData = 'serialized data';
-        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
+        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->willReturn(true);
         $this->cache->expects($this->once())
             ->method('load')
             ->with($this->cacheId)
@@ -97,28 +99,28 @@ class DataTest extends TestCase
 
     public function testConstructorWithoutCache()
     {
-        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(false));
-        $this->cache->expects($this->once())->method('load')->with($this->cacheId)->will($this->returnValue(false));
+        $this->cache->expects($this->once())->method('test')->with($this->cacheId)->willReturn(false);
+        $this->cache->expects($this->once())->method('load')->with($this->cacheId)->willReturn(false);
 
-        $this->reader->expects($this->once())->method('read')->will($this->returnValue($this->indexers));
+        $this->reader->expects($this->once())->method('read')->willReturn($this->indexers);
 
         $stateExistent = $this->createPartialMock(
             State::class,
             ['getIndexerId', '__wakeup', 'delete']
         );
-        $stateExistent->expects($this->once())->method('getIndexerId')->will($this->returnValue('indexer1'));
+        $stateExistent->expects($this->once())->method('getIndexerId')->willReturn('indexer1');
         $stateExistent->expects($this->never())->method('delete');
 
         $stateNonexistent = $this->createPartialMock(
             State::class,
             ['getIndexerId', '__wakeup', 'delete']
         );
-        $stateNonexistent->expects($this->once())->method('getIndexerId')->will($this->returnValue('indexer2'));
+        $stateNonexistent->expects($this->once())->method('getIndexerId')->willReturn('indexer2');
         $stateNonexistent->expects($this->once())->method('delete');
 
         $states = [$stateExistent, $stateNonexistent];
 
-        $this->stateCollection->expects($this->once())->method('getItems')->will($this->returnValue($states));
+        $this->stateCollection->expects($this->once())->method('getItems')->willReturn($states);
 
         $this->model = new Data(
             $this->reader,
