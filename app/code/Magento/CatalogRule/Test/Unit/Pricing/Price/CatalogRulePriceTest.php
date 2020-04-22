@@ -156,7 +156,7 @@ class CatalogRulePriceTest extends TestCase
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($catalogRulePrice)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
 
         $this->saleableItemMock->expects($this->once())->method('hasData')
             ->with('catalog_rule_price')->willReturn(true);
@@ -170,7 +170,7 @@ class CatalogRulePriceTest extends TestCase
     {
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $result = $this->object->getValue();
         $this->assertFalse($result);
@@ -182,9 +182,9 @@ class CatalogRulePriceTest extends TestCase
         $convertedPrice = 0.0;
 
         $this->saleableItemMock->expects($this->once())->method('hasData')
-                ->with('catalog_rule_price')->willReturn(true);
+            ->with('catalog_rule_price')->willReturn(true);
         $this->saleableItemMock->expects($this->once())->method('getData')
-                    ->with('catalog_rule_price')->willReturn($catalogRulePrice);
+            ->with('catalog_rule_price')->willReturn($catalogRulePrice);
 
         $this->assertEquals($convertedPrice, $this->object->getValue());
     }

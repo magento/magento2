@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Model\Product;
 
@@ -24,8 +25,8 @@ class ActionTest extends TestCase
         $this->productRuleProcessor = $this->getMockBuilder(
             ProductRuleProcessor::class
         )->disableOriginalConstructor()
-        ->setMethods(['reindexList'])
-        ->getMock();
+            ->setMethods(['reindexList'])
+            ->getMock();
 
         $this->action = new Action($this->productRuleProcessor);
     }

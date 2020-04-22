@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
@@ -45,7 +47,7 @@ class JobTest extends TestCase
         };
         $ruleProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid')
-            ->will($this->returnCallback($exceptionCallback));
+            ->willReturnCallback($exceptionCallback);
         $jobModel = new Job($ruleProcessorMock);
         $jobModel->applyAll();
         $this->assertEquals($exceptionMessage, $jobModel->getError());

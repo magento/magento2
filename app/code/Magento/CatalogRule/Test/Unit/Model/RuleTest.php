@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
@@ -94,13 +96,11 @@ class RuleTest extends TestCase
                 'setData'
             ]
         );
-        $this->condition = $this->createPartialMock(
-            Combine::class,
-            [
-                'setRule',
-                'validate'
-            ]
-        );
+        $this->condition = $this->getMockBuilder(Combine::class)
+            ->addMethods(['setRule'])
+            ->onlyMethods(['validate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->websiteModel = $this->createPartialMock(
             Website::class,
             [
@@ -155,22 +155,18 @@ class RuleTest extends TestCase
 
         $serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         return $serializerMock;
@@ -199,25 +195,24 @@ class RuleTest extends TestCase
             'updated_at' => '2014-06-25 14:37:15'
         ];
         $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
-            ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
+            ->willReturn([$this->websiteModel, $this->websiteModel]);
         $this->websiteModel->expects($this->at(0))->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->websiteModel->expects($this->at(2))->method('getId')
-            ->will($this->returnValue('2'));
+            ->willReturn('2');
         $this->websiteModel->expects($this->any())->method('getDefaultStore')
-            ->will($this->returnValue($this->storeModel));
+            ->willReturn($this->storeModel);
         $this->storeModel->expects($this->at(0))->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->storeModel->expects($this->at(1))->method('getId')
-            ->will($this->returnValue('2'));
+            ->willReturn('2');
         $this->combineFactory->expects($this->any())->method('create')
-            ->will($this->returnValue($this->condition));
+            ->willReturn($this->condition);
         $this->condition->expects($this->any())->method('validate')
-            ->will($this->returnValue($validate));
-        $this->condition->expects($this->any())->method('setRule')
-            ->will($this->returnSelf());
+            ->willReturn($validate);
+        $this->condition->expects($this->any())->method('setRule')->willReturnSelf();
         $this->productModel->expects($this->any())->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->rule->callbackValidateProduct($args);
 
@@ -325,7 +320,7 @@ class RuleTest extends TestCase
     {
         $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterDelete();
     }
 
@@ -353,7 +348,7 @@ class RuleTest extends TestCase
         $this->rule->setIsActive(1);
         $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterSave();
     }
 
@@ -375,7 +370,7 @@ class RuleTest extends TestCase
         $this->rule->isObjectNew($isObjectNew);
         $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
-        $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->willReturn($indexer);
 
         foreach ($dataArray as $data) {
             $this->rule->setData($data);

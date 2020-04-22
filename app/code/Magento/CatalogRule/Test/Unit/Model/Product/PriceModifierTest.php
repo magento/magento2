@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
@@ -49,7 +51,7 @@ class PriceModifierTest extends TestCase
      */
     public function testModifyPriceIfPriceExists($resultPrice, $expectedPrice)
     {
-        $this->ruleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->ruleMock));
+        $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($this->ruleMock);
         $this->ruleMock->expects(
             $this->once()
         )->method(
@@ -57,8 +59,8 @@ class PriceModifierTest extends TestCase
         )->with(
             $this->productMock,
             100
-        )->will(
-            $this->returnValue($resultPrice)
+        )->willReturn(
+            $resultPrice
         );
         $this->assertEquals($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
     }

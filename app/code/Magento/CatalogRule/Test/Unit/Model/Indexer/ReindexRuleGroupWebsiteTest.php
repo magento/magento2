@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
@@ -53,8 +54,8 @@ class ReindexRuleGroupWebsiteTest extends TestCase
             ->getMock();
         $this->activeTableSwitcherMock =
             $this->getMockBuilder(ActiveTableSwitcher::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->tableSwapperMock = $this->getMockForAbstractClass(
             IndexerTableSwapperInterface::class
         );
@@ -70,7 +71,8 @@ class ReindexRuleGroupWebsiteTest extends TestCase
     {
         $timeStamp = (int)gmdate('U');
         $insertString = 'insert_string';
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $this->resourceMock->expects($this->at(0))->method('getConnection')->willReturn($connectionMock);
         $this->dateTimeMock->expects($this->once())->method('gmtTimestamp')->willReturn($timeStamp);
 

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
@@ -34,10 +35,11 @@ class CategoryTest extends TestCase
         $this->productRuleProcessor = $this->createMock(
             ProductRuleProcessor::class
         );
-        $this->subject = $this->createPartialMock(
-            Category::class,
-            ['getChangedProductIds', '__wakeUp']
-        );
+        $this->subject = $this->getMockBuilder(Category::class)
+            ->addMethods(['getChangedProductIds'])
+            ->onlyMethods(['__wakeUp'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->plugin = (new ObjectManager($this))->getObject(
             \Magento\CatalogRule\Plugin\Indexer\Category::class,
@@ -51,7 +53,7 @@ class CategoryTest extends TestCase
     {
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->productRuleProcessor->expects($this->never())
             ->method('reindexList');
@@ -65,7 +67,7 @@ class CategoryTest extends TestCase
 
         $this->subject->expects($this->any())
             ->method('getChangedProductIds')
-            ->will($this->returnValue($productIds));
+            ->willReturn($productIds);
 
         $this->productRuleProcessor->expects($this->once())
             ->method('reindexList')
