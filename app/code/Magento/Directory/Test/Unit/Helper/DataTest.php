@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Helper;
 
 use Magento\Directory\Helper\Data;
@@ -79,15 +81,15 @@ class DataTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_regionCollection)
+        )->willReturn(
+            $this->_regionCollection
         );
 
         $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
 
         $this->_store = $this->createMock(Store::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
 
         $currencyFactory = $this->createMock(CurrencyFactory::class);
 
@@ -114,8 +116,8 @@ class DataTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue($countryIterator)
+        )->willReturn(
+            $countryIterator
         );
 
         $regions = [
@@ -137,16 +139,14 @@ class DataTest extends TestCase
             'addCountryFilter'
         )->with(
             ['Country1', 'Country2']
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->_regionCollection->expects($this->once())->method('load');
         $this->_regionCollection->expects(
             $this->once()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue($regionIterator)
+        )->willReturn(
+            $regionIterator
         );
 
         $expectedDataToEncode = [
@@ -163,8 +163,8 @@ class DataTest extends TestCase
             'jsonEncode'
         )->with(
             new IsIdentical($expectedDataToEncode)
-        )->will(
-            $this->returnValue('encoded_json')
+        )->willReturn(
+            'encoded_json'
         );
 
         // Test
@@ -185,8 +185,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             'general/region/state_required'
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
 
         $result = $this->_object->getCountriesWithStatesRequired();
@@ -206,8 +206,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             'general/country/optional_zip_countries'
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
 
         $result = $this->_object->getCountriesWithOptionalZip();
@@ -236,7 +236,7 @@ class DataTest extends TestCase
                 Data::XML_PATH_DEFAULT_COUNTRY,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            )->will($this->returnValue($country));
+            )->willReturn($country);
 
         $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
     }
@@ -247,8 +247,8 @@ class DataTest extends TestCase
             $this->once()
         )->method(
             'isLoaded'
-        )->will(
-            $this->returnValue(0)
+        )->willReturn(
+            0
         );
 
         $store = $this->createMock(Store::class);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model;
 
@@ -16,7 +17,6 @@ use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class PriceCurrencyTest extends TestCase
 {
@@ -81,7 +81,7 @@ class PriceCurrencyTest extends TestCase
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $storeCode, $currency));
     }
@@ -95,18 +95,17 @@ class PriceCurrencyTest extends TestCase
         $currentCurrency = $this->getCurrentCurrencyMock();
         $currentCurrency->expects($this->once())
             ->method('load')
-            ->with($currency)
-            ->will($this->returnSelf());
+            ->with($currency)->willReturnSelf();
 
         $this->currencyFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($currentCurrency));
+            ->willReturn($currentCurrency);
 
         $baseCurrency = $this->getBaseCurrencyMock($amount, $convertedAmount, $currentCurrency);
         $baseCurrency->expects($this->once())
             ->method('getRate')
             ->with($currentCurrency)
-            ->will($this->returnValue(1.2));
+            ->willReturn(1.2);
         $store = $this->getStoreMock($baseCurrency);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $store, $currency));
@@ -123,7 +122,7 @@ class PriceCurrencyTest extends TestCase
         $store = $this->getStoreMock($baseCurrency);
         $store->expects($this->atLeastOnce())
             ->method('getCurrentCurrency')
-            ->will($this->returnValue($currentCurrency));
+            ->willReturn($currentCurrency);
 
         $this->assertEquals($convertedAmount, $this->priceCurrency->convert($amount, $store, $currency));
     }
@@ -140,7 +139,7 @@ class PriceCurrencyTest extends TestCase
         $currency->expects($this->once())
             ->method('formatPrecision')
             ->with($amount, $precision, [], $includeContainer)
-            ->will($this->returnValue($formattedAmount));
+            ->willReturn($formattedAmount);
 
         $this->assertEquals($formattedAmount, $this->priceCurrency->format(
             $amount,
@@ -167,7 +166,7 @@ class PriceCurrencyTest extends TestCase
         $currency->expects($this->once())
             ->method('formatPrecision')
             ->with($convertedAmount, $precision, [], $includeContainer)
-            ->will($this->returnValue($formattedAmount));
+            ->willReturn($formattedAmount);
 
         $this->assertEquals($formattedAmount, $this->priceCurrency->convertAndFormat(
             $amount,
@@ -214,7 +213,7 @@ class PriceCurrencyTest extends TestCase
 
         $store->expects($this->atLeastOnce())
             ->method('getBaseCurrency')
-            ->will($this->returnValue($baseCurrency));
+            ->willReturn($baseCurrency);
 
         return $store;
     }
@@ -234,7 +233,7 @@ class PriceCurrencyTest extends TestCase
         $baseCurrency->expects($this->once())
             ->method('convert')
             ->with($amount, $currency)
-            ->will($this->returnValue($convertedAmount));
+            ->willReturn($convertedAmount);
 
         return $baseCurrency;
     }
@@ -253,7 +252,7 @@ class PriceCurrencyTest extends TestCase
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->with($storeCode)
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->assertEquals(
             $roundedConvertedAmount,

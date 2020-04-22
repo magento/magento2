@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
@@ -51,14 +54,20 @@ class CurrencyInformationAcquirerTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = CurrencyInformationFactory::class;
-        $this->currencyInformationFactory = $this->createPartialMock($className, ['create']);
+        $this->currencyInformationFactory = $this->getMockBuilder(CurrencyInformationFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = ExchangeRateFactory::class;
-        $this->exchangeRateFactory = $this->createPartialMock($className, ['create']);
+        $this->exchangeRateFactory = $this->getMockBuilder(ExchangeRateFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = StoreManager::class;
-        $this->storeManager = $this->createPartialMock($className, ['getStore']);
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getStore'])
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             CurrencyInformationAcquirer::class,
@@ -76,16 +85,19 @@ class CurrencyInformationAcquirerTest extends TestCase
     public function testGetCurrencyInfo()
     {
         /** @var ExchangeRate $exchangeRate */
-        $exchangeRate = $this->createPartialMock(ExchangeRate::class, ['load']);
+        $exchangeRate = $this->getMockBuilder(ExchangeRate::class)
+            ->addMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $exchangeRate->expects($this->any())->method('load')->willReturnSelf();
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
 
         /** @var CurrencyInformation $currencyInformation */
-        $currencyInformation = $this->createPartialMock(
-            CurrencyInformation::class,
-            ['load']
-        );
+        $currencyInformation = $this->getMockBuilder(CurrencyInformation::class)
+            ->addMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $currencyInformation->expects($this->any())->method('load')->willReturnSelf();
         $this->currencyInformationFactory->expects($this->any())->method('create')->willReturn($currencyInformation);
@@ -116,7 +128,7 @@ class CurrencyInformationAcquirerTest extends TestCase
         $this->assertEquals('USD', $result->getDefaultDisplayCurrencyCode());
         $this->assertEquals('$', $result->getDefaultDisplayCurrencySymbol());
         $this->assertEquals(['AUD'], $result->getAvailableCurrencyCodes());
-        $this->assertTrue(is_array($result->getExchangeRates()));
+        $this->assertIsArray($result->getExchangeRates());
         $this->assertEquals([$exchangeRate], $result->getExchangeRates());
         $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
         $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());

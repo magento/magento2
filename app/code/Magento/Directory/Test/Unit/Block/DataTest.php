@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Block;
 
 use Magento\Directory\Block\Data;
@@ -133,7 +135,8 @@ class DataTest extends TestCase
     {
         $this->countryCollectionMock = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Country\Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->countryCollectionFactoryMock = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class

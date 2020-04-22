@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
 use Magento\Directory\Model\Currency\Import\Config;
@@ -48,8 +50,8 @@ class FactoryTest extends TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('Test_Class')
+        )->willReturn(
+            'Test_Class'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -58,8 +60,8 @@ class FactoryTest extends TestCase
         )->with(
             'Test_Class',
             ['argument' => 'value']
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $actualResult = $this->_model->create('test', ['argument' => 'value']);
         $this->assertSame($expectedResult, $actualResult);
@@ -75,8 +77,8 @@ class FactoryTest extends TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->_objectManager->expects($this->never())->method('create');
         $this->_model->create('test');
@@ -94,8 +96,8 @@ class FactoryTest extends TestCase
             'getServiceClass'
         )->with(
             'test'
-        )->will(
-            $this->returnValue('stdClass')
+        )->willReturn(
+            'stdClass'
         );
         $this->_objectManager->expects(
             $this->once()
@@ -103,8 +105,8 @@ class FactoryTest extends TestCase
             'create'
         )->with(
             'stdClass'
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
         $this->_model->create('test');
     }

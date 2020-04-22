@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Config\Source;
 
 use Magento\Directory\Model\Config\Source\Allregion;
@@ -35,7 +37,8 @@ class AllRegionTest extends TestCase
 
         $countryCollectionFactory = $this->getMockBuilder(
             CollectionFactory::class
-        )->setMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->countryCollection = $this->getMockBuilder(
             Collection::class
@@ -51,7 +54,8 @@ class AllRegionTest extends TestCase
 
         $regionCollectionFactory = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(['create', '__wakeup', '__sleep'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create', '__wakeup', '__sleep'])->getMock();
         $this->regionCollection = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getIterator', '__wakeup', '__sleep'])
