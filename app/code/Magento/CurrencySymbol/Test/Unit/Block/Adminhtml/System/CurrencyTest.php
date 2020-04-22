@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
 
 use Magento\Backend\Block\Widget\Button;
@@ -33,14 +35,14 @@ class CurrencyTest extends TestCase
 
     public function testPrepareLayout()
     {
-        $childBlockMock = $this->createPartialMock(
-            BlockInterface::class,
-            ['addChild', 'toHtml']
-        );
+        $childBlockMock = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['addChild'])
+            ->onlyMethods(['toHtml'])
+            ->getMock();
 
         $blockMock = $this->createMock(BlockInterface::class);
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|MockObject */
+        /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(
             LayoutInterface::class,
             [],
@@ -84,7 +86,7 @@ class CurrencyTest extends TestCase
                 ['label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset']
             );
 
-        /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency */
+        /** @var \Magento\CurrencySymbol\Block\Adminhtml\System\Currency $block */
         $block = $this->objectManagerHelper->getObject(
             Currency::class,
             [

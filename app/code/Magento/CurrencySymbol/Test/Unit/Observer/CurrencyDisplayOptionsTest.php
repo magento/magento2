@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Observer;
 
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
@@ -59,10 +61,10 @@ class CurrencyDisplayOptionsTest extends TestCase
 
         $this->mockEventObserver = $this->createPartialMock(Observer::class, ['getEvent']);
 
-        $this->mockEvent = $this->createPartialMock(
-            Event::class,
-            ['getBaseCode', 'getCurrencyOptions']
-        );
+        $this->mockEvent = $this->getMockBuilder(Event::class)
+            ->addMethods(['getBaseCode', 'getCurrencyOptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mockEventObserver->expects($this->any())->method('getEvent')->willReturn($this->mockEvent);
         $this->mockSymbolFactory->expects($this->any())->method('create')->willReturn($this->mockSymbol);

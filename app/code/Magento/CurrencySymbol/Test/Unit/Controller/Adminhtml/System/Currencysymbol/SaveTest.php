@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currencysymbol;
 
 use Magento\Backend\Helper\Data;
@@ -80,16 +82,16 @@ class SaveTest extends TestCase
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->helperMock = $this->createMock(Data::class);
         $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->responseMock = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->filterManager = $this->createPartialMock(
-            FilterManager::class,
-            ['stripTags']
-        );
+        $this->filterManager = $this->getMockBuilder(FilterManager::class)
+            ->addMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->currencySymbolFactory = $this->createMock(CurrencysymbolFactory::class);
 
         $this->action = $objectManager->getObject(

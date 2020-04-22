@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currency;
 
 use Magento\CurrencySymbol\Controller\Adminhtml\System\Currency\SaveRates;
@@ -35,10 +37,10 @@ class SaveRatesTest extends TestCase
 
         $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->responseMock = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
         $this->action = $objectManager->getObject(
             SaveRates::class,
