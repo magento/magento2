@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
 use Magento\CacheInvalidate\Model\PurgeCache;
@@ -45,13 +47,13 @@ class FlushAllCacheObserverTest extends TestCase
      */
     public function testFlushAllCache()
     {
-        $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
             $this->once()
         )->method(
             'getType'
-        )->will(
-            $this->returnValue(Config::VARNISH)
+        )->willReturn(
+            Config::VARNISH
         );
 
         $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');
