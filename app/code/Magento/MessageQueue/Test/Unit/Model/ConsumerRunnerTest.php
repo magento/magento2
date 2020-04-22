@@ -74,7 +74,8 @@ class ConsumerRunnerTest extends TestCase
     {
         $isMaintenanceModeOn = false;
         /** @var ConsumerInterface|MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)->getMock();
+        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
+            ->getMock();
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock
@@ -117,7 +118,8 @@ class ConsumerRunnerTest extends TestCase
         $isMaintenanceModeOn = true;
 
         /** @var ConsumerInterface|MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)->getMock();
+        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
+            ->getMock();
         $consumerMock->expects($this->never())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock

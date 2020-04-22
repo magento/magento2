@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MessageQueue\Test\Unit\Console;
 
@@ -62,9 +63,11 @@ class StartConsumerCommandTest extends TestCase
         $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
             ->getMockForAbstractClass();
         $this->consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,9 +114,11 @@ class StartConsumerCommandTest extends TestCase
         $batchSize = null;
         $consumerName = 'consumer_name';
         $input = $this->getMockBuilder(InputInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $output = $this->getMockBuilder(OutputInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $input->expects($this->once())->method('getArgument')
             ->with(StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
@@ -133,7 +138,8 @@ class StartConsumerCommandTest extends TestCase
             );
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(ConsumerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->consumerFactory->expects($this->exactly($runProcessExpects))
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
@@ -210,6 +216,6 @@ class StartConsumerCommandTest extends TestCase
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
         $this->command->getDefinition()->getOption(StartConsumerCommand::PID_FILE_PATH);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_SINGLE_THREAD);
-        $this->assertContains('To start consumer which will process', $this->command->getHelp());
+        $this->assertStringContainsString('To start consumer which will process', $this->command->getHelp());
     }
 }
