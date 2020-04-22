@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
 
 use Magento\Catalog\Model\Product;
@@ -137,7 +139,8 @@ class CartTest extends TestCase
 
         $this->optionCollection = $this->getMockBuilder(
             \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()

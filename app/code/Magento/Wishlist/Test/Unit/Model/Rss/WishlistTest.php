@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Model\Rss;
 
@@ -112,11 +114,12 @@ class WishlistTest extends TestCase
         );
 
         $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
 
         $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->expects($this->any())->method('getParam')->with('sharing_code')
-            ->will($this->returnValue('somesharingcode'));
+            ->willReturn('somesharingcode');
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -141,10 +144,11 @@ class WishlistTest extends TestCase
         $wishlistId = 1;
         $customerName = 'Customer Name';
         $title = "$customerName's Wishlist";
-        $wishlistModelMock = $this->createPartialMock(
-            \Magento\Wishlist\Model\Wishlist::class,
-            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        );
+        $wishlistModelMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+            ->addMethods(['getSharingCode'])
+            ->onlyMethods(['getId', '__wakeup', 'getCustomerId', 'getItemCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerServiceMock = $this->createMock(CustomerInterface::class);
         $wishlistSharingUrl = 'wishlist/shared/index/1';
         $locale = 'en_US';
@@ -153,9 +157,10 @@ class WishlistTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->setMethods(['getName', '__wakeup', 'load'])
-            ->disableOriginalConstructor()->getMock();
-        $customer->expects($this->once())->method('load')->will($this->returnSelf());
-        $customer->expects($this->once())->method('getName')->will($this->returnValue('Customer Name'));
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customer->expects($this->once())->method('load')->willReturnSelf();
+        $customer->expects($this->once())->method('getName')->willReturn('Customer Name');
 
         $this->customerFactory->expects($this->once())->method('create')->will($this->returnValue($customer));
 
@@ -167,7 +172,7 @@ class WishlistTest extends TestCase
             ->will($this->returnValue($customerServiceMock));
         $wishlistModelMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($wishlistId));
+            ->willReturn($wishlistId);
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($wishlistSharingUrl));
@@ -233,30 +238,27 @@ class WishlistTest extends TestCase
         $wishlistItemsCollection = [
             $wishlistItem,
         ];
-        $productMock = $this->createPartialMock(Product::class, [
-                'getAllowedInRss',
-                'getAllowedPriceInRss',
-                'getDescription',
-                'getShortDescription',
-                'getName',
-                '__wakeup'
-            ]);
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getAllowedInRss', 'getAllowedPriceInRss', 'getDescription', 'getShortDescription'])
+            ->onlyMethods(['getName', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $wishlistModelMock->expects($this->once())
             ->method('getItemCollection')
             ->will($this->returnValue($wishlistItemsCollection));
         $wishlistItem->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($productMock));
+            ->willReturn($productMock);
         $productMock->expects($this->once())
             ->method('getAllowedPriceInRss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $productMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($staticArgs['productName']));
+            ->willReturn($staticArgs['productName']);
         $productMock->expects($this->once())
             ->method('getAllowedInRss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->imageHelperMock->expects($this->once())
             ->method('init')
             ->with($productMock, 'rss_thumbnail')
@@ -268,16 +270,16 @@ class WishlistTest extends TestCase
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
-            ->will($this->returnValue($priceRendererMock));
+            ->willReturn($priceRendererMock);
         $priceRendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($priceHtmlForTest));
+            ->willReturn($priceHtmlForTest);
         $productMock->expects($this->any())
             ->method('getDescription')
-            ->will($this->returnValue($productDescription));
+            ->willReturn($productDescription);
         $productMock->expects($this->any())
             ->method('getShortDescription')
-            ->will($this->returnValue($productShortDescription));
+            ->willReturn($productShortDescription);
         $this->catalogOutputMock->expects($this->any())
             ->method('productAttribute')
             ->will($this->returnArgument(1));
@@ -301,7 +303,8 @@ class WishlistTest extends TestCase
         $customerServiceMock = $this->createMock(CustomerInterface::class);
         $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
             ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $wishlist->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
             ->will($this->returnValue($wishlist));
@@ -321,7 +324,8 @@ class WishlistTest extends TestCase
         $wishlistId = 1;
         $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
             ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $wishlist->expects($this->once())->method('getId')->willReturn($wishlistId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
             ->will($this->returnValue($wishlist));
@@ -337,9 +341,10 @@ class WishlistTest extends TestCase
     {
         $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
             ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $wishlist->expects($this->any())->method('getSharingCode')
-            ->will($this->returnValue('somesharingcode'));
+            ->willReturn('somesharingcode');
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
             ->will($this->returnValue($wishlist));
         $this->assertEquals(false, $this->model->isAuthRequired());

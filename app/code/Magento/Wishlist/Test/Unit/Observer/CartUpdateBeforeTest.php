@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Observer;
 
@@ -125,7 +127,9 @@ class CartUpdateBeforeTest extends TestCase
             ->method('toArray')
             ->willReturn([$itemId => ['qty' => $itemQty, 'wishlist' => true]]);
 
-        $cart = $this->getMockBuilder(Cart::class)->disableOriginalConstructor()->getMock();
+        $cart = $this->getMockBuilder(Cart::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $quote = $this->getMockBuilder(Quote::class)
             ->setMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
             ->disableOriginalConstructor()

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product;
@@ -127,7 +129,7 @@ class DataTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->wishlistItem = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        $this->wishlistItem = $this->getMockBuilder(WishlistItem::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -184,11 +186,11 @@ class DataTest extends TestCase
     {
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
-        /** @var \Magento\Wishlist\Model\Item|MockObject $wishlistItem */
-        $wishlistItem = $this->createPartialMock(
-            \Magento\Wishlist\Model\Item::class,
-            ['getWishlistItemId', 'getProductId']
-        );
+        /** @var WishlistItem|MockObject $wishlistItem */
+        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
+            ->addMethods(['getWishlistItemId', 'getProductId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $wishlistItem
             ->expects($this->once())
             ->method('getWishlistItemId')

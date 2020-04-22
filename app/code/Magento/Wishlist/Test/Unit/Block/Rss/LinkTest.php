@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Block\Rss;
 
@@ -43,20 +45,21 @@ class LinkTest extends TestCase
     protected function setUp(): void
     {
         $wishlist = $this->createPartialMock(Wishlist::class, ['getId']);
-        $wishlist->expects($this->any())->method('getId')->will($this->returnValue(5));
+        $wishlist->expects($this->any())->method('getId')->willReturn(5);
 
         $customer = $this->createMock(CustomerInterface::class);
-        $customer->expects($this->any())->method('getId')->will($this->returnValue(8));
-        $customer->expects($this->any())->method('getEmail')->will($this->returnValue('test@example.com'));
+        $customer->expects($this->any())->method('getId')->willReturn(8);
+        $customer->expects($this->any())->method('getEmail')->willReturn('test@example.com');
 
-        $this->wishlistHelper = $this->createPartialMock(
-            Data::class,
-            ['getWishlist', 'getCustomer', 'urlEncode']
-        );
+        $this->wishlistHelper = $this->getMockBuilder(Data::class)
+            ->addMethods(['urlEncode'])
+            ->onlyMethods(['getWishlist', 'getCustomer'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
 
-        $this->wishlistHelper->expects($this->any())->method('getWishlist')->will($this->returnValue($wishlist));
-        $this->wishlistHelper->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
+        $this->wishlistHelper->expects($this->any())->method('getWishlist')->willReturn($wishlist);
+        $this->wishlistHelper->expects($this->any())->method('getCustomer')->willReturn($customer);
         $this->urlEncoder->expects($this->any())
             ->method('encode')
             ->willReturnCallback(function ($url) {
@@ -81,13 +84,13 @@ class LinkTest extends TestCase
     public function testGetLink()
     {
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
-            ->with($this->equalTo([
+            ->with([
                 'type' => 'wishlist',
                 'data' => 'OCx0ZXN0QGV4YW1wbGUuY29t',
                 '_secure' => false,
                 'wishlist_id' => 5,
-            ]))
-            ->will($this->returnValue('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5'));
+            ])
+            ->willReturn('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5');
         $this->assertEquals('http://url.com/rss/feed/index/type/wishlist/wishlist_id/5', $this->link->getLink());
     }
 
@@ -97,7 +100,7 @@ class LinkTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('isSetFlag')
             ->with('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals(true, $this->link->isRssAllowed());
     }
 }

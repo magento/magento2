@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
@@ -78,10 +80,11 @@ class CollectionTest extends TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $resource = $this->createPartialMock(
-            Item::class,
-            ['getConnection', 'getMainTable', 'getTableName', 'getTable']
-        );
+        $resource = $this->getMockBuilder(Item::class)
+            ->addMethods(['getTableName'])
+            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $resource
             ->expects($this->any())

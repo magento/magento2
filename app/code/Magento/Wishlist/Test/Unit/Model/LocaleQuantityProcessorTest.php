@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Model;
 
 use Magento\Framework\Filter\LocalizedToNormalized;
@@ -30,7 +32,8 @@ class LocaleQuantityProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
+        $this->resolver = $this->getMockBuilder(ResolverInterface::class)
+            ->getMock();
         $this->filter   = $this->getMockBuilder(LocalizedToNormalized::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Observer;
 
@@ -76,7 +78,8 @@ class AddToCartTest extends TestCase
                 'setWishlistPendingMessages',
                 'setNoCartRedirect',
             ]
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
@@ -117,7 +120,8 @@ class AddToCartTest extends TestCase
             ->setMethods(['getRequest', 'getResponse'])
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $request = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();

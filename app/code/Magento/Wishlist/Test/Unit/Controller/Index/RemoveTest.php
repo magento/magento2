@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
@@ -104,7 +106,7 @@ class RemoveTest extends TestCase
             ->getMock();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset(
             $this->context,
@@ -299,7 +301,7 @@ class RemoveTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(Item::class);
         $item
@@ -382,7 +384,7 @@ class RemoveTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(Data::class)
-            ->will($this->returnValue($wishlistHelper));
+            ->willReturn($wishlistHelper);
 
         $item = $this->createMock(Item::class);
         $item

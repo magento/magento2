@@ -121,7 +121,8 @@ class AttributeValueProviderTest extends TestCase
      */
     public function testGetAttributeTextWhenFlatIsEnabled(int $productId, string $attributeCode, string $attributeText)
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('fetchRow')
             ->willReturn([

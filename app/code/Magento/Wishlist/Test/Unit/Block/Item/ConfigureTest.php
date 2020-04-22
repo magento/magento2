@@ -45,10 +45,12 @@ class ConfigureTest extends TestCase
     {
         $this->wishlistDataMock = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock = $this->getMockBuilder(
             Context::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,11 +79,12 @@ class ConfigureTest extends TestCase
         $typeId = 'simple';
         $product = $this->getMockBuilder(
             Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
         $this->registryMock->expects($this->once())
             ->method('registry')
-            ->with($this->equalTo('product'))
+            ->with('product')
             ->willReturn($product);
 
         $this->assertEquals(['productType' => 'escapeHtml' . $typeId], $this->model->getWishlistOptions());
@@ -95,7 +98,7 @@ class ConfigureTest extends TestCase
         )->method(
             'registry'
         )->with(
-            $this->equalTo('product')
+            'product'
         )->willReturn(
             $product
         );
@@ -107,10 +110,10 @@ class ConfigureTest extends TestCase
     {
         $layoutMock = $this->createMock(LayoutInterface::class);
 
-        $blockMock = $this->createPartialMock(
-            AbstractBlock::class,
-            ['setCustomAddToCartUrl']
-        );
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setCustomAddToCartUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
@@ -140,10 +143,10 @@ class ConfigureTest extends TestCase
     {
         $layoutMock = $this->createMock(LayoutInterface::class);
 
-        $blockMock = $this->createPartialMock(
-            AbstractBlock::class,
-            ['setCustomAddToCartUrl']
-        );
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setCustomAddToCartUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Observer;
 
@@ -37,7 +39,7 @@ class CustomerLoginTest extends TestCase
         $event = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var $event \Magento\Framework\Event\Observer */
+        /** @var \Magento\Framework\Event\Observer $event */
 
         $this->helper->expects($this->once())
             ->method('calculate');

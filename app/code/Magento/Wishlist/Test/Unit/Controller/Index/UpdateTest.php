@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Backend\Model\View\Result\Redirect;
@@ -115,7 +117,7 @@ class UpdateTest extends TestCase
             ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-           ->willReturn($this->messageManagerMock);
+            ->willReturn($this->messageManagerMock);
 
         $objectManager = new ObjectManagerHelper($this);
 
