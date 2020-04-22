@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
@@ -37,11 +38,11 @@ class EngineTest extends TestCase
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $resource->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
@@ -66,10 +67,10 @@ class TermDropdownStrategyTest extends TestCase
         $attributeId = 5;
         $alias = 'some_alias';
         $this->aliasResolver->expects($this->once())->method('getAlias')->willReturn($alias);
-        $searchFilter = $this->createPartialMock(
-            FilterInterface::class,
-            ['getField', 'getType', 'getName']
-        );
+        $searchFilter = $this->getMockBuilder(FilterInterface::class)
+            ->addMethods(['getField'])
+            ->onlyMethods(['getType', 'getName'])
+            ->getMockForAbstractClass();
 
         $select = $this->createMock(Select::class);
         $attribute = $this->createMock(Attribute::class);

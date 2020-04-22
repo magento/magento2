@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Scope;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
@@ -78,7 +80,8 @@ class IndexSwitcherTest extends TestCase
 
     public function testSwitchRegularIndex()
     {
-        $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
+        $dimensions = [$this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())
             ->method('getState')
@@ -92,7 +95,8 @@ class IndexSwitcherTest extends TestCase
 
     public function testSwitchIndexWithUnknownState()
     {
-        $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
+        $dimensions = [$this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())
             ->method('getState')
@@ -106,7 +110,8 @@ class IndexSwitcherTest extends TestCase
 
     public function testSwitchTemporaryIndexWhenRegularIndexExist()
     {
-        $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
+        $dimensions = [$this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())
             ->method('getState')
@@ -145,7 +150,8 @@ class IndexSwitcherTest extends TestCase
 
     public function testSwitchTemporaryIndexWhenRegularIndexNotExist()
     {
-        $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
+        $dimensions = [$this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())
             ->method('getState')
@@ -186,7 +192,8 @@ class IndexSwitcherTest extends TestCase
     {
         $this->expectException('Magento\CatalogSearch\Model\Indexer\Scope\IndexTableNotExistException');
         $this->expectExceptionMessage('Temporary table for index catalogsearch_fulltext doesn\'t exist');
-        $dimensions = [$this->getMockBuilder(Dimension::class)->setConstructorArgs(['scope', '1'])];
+        $dimensions = [$this->getMockBuilder(Dimension::class)
+            ->setConstructorArgs(['scope', '1'])];
 
         $this->scopeState->expects($this->once())
             ->method('getState')
