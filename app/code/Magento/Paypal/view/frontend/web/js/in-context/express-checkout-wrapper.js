@@ -37,10 +37,7 @@ define([
         /**
          * Execute logic on Paypal button click
          */
-        onClick: function () {
-            //display loading widget
-            $('body').trigger('processStart');
-        },
+        onClick: function () {},
 
         /**
          * Before payment execute
@@ -63,6 +60,7 @@ define([
          * @return {*}
          */
         afterPayment: function (res, resolve, reject) {
+
             if (res.success) {
                 return resolve(res.token);
             }
@@ -92,6 +90,9 @@ define([
          * @return {jQuery.Deferred}
          */
         beforeOnAuthorize: function (resolve, reject, actions) { //eslint-disable-line no-unused-vars
+            //display loading widget.
+            $('body').trigger('processStart');
+
             return $.Deferred().resolve();
         },
 
