@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Console;
 
@@ -45,6 +46,9 @@ class UnlockAdminAccountCommandTest extends TestCase
         $this->assertEquals(UnlockAdminAccountCommand::COMMAND_ADMIN_ACCOUNT_UNLOCK, $this->command->getName());
         $this->assertEquals(UnlockAdminAccountCommand::COMMAND_DESCRIPTION, $this->command->getDescription());
         $this->command->getDefinition()->getArgument(UnlockAdminAccountCommand::ARGUMENT_ADMIN_USERNAME);
-        $this->assertContains('This command unlocks an admin account by its username', $this->command->getHelp());
+        $this->assertStringContainsString(
+            'This command unlocks an admin account by its username',
+            $this->command->getHelp()
+        );
     }
 }

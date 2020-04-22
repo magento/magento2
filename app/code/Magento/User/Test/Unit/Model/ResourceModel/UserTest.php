@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\ResourceModel;
 
@@ -430,11 +431,11 @@ class UserTest extends TestCase
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->once())
             ->method('getExtra')
-            ->will($this->returnValue(json_encode($extraData)));
+            ->willReturn(json_encode($extraData));
 
         $methodUserMock->expects($this->once())
             ->method('setExtra')
@@ -468,11 +469,11 @@ class UserTest extends TestCase
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->with(json_encode($extraData))
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->exactly(2))
             ->method('getExtra')
-            ->will($this->returnValue(json_encode($extraData)));
+            ->willReturn(json_encode($extraData));
 
         $methodUserMock->expects($this->once())
             ->method('setExtra')
@@ -502,7 +503,7 @@ class UserTest extends TestCase
 
         $methodUserMock->expects($this->exactly(1))
             ->method('getExtra')
-            ->will($this->returnValue($extraData));
+            ->willReturn($extraData);
 
         $methodUserMock->expects($this->never())
             ->method('setExtra');
