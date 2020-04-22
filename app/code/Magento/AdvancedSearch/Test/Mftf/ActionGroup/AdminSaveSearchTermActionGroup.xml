@@ -14,6 +14,5 @@
         </annotations>
         <!-- Click save action and verify success message -->
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveSearchButton"/>
-        <see userInput="You saved the search term." stepKey="assertSaveSearchTermSuccessMessage" />
     </actionGroup>
 </actionGroups>

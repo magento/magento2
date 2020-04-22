@@ -31,5 +31,9 @@
             <argument name="suggestedTerms" value="{{SearchTerms.suggestedTerms}}"/>
         </actionGroup>
         <actionGroup ref="AdminSaveSearchTermActionGroup" stepKey="saveSearchTerm"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSaveSearchTermSuccessMessage">
+            <argument name="message" value="You saved the search term."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
     </test>
 </tests>
