@@ -34,14 +34,18 @@ class FlushAllCacheObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['getType', 'isEnabled'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getType', 'isEnabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->purgeCache = $this->createMock(PurgeCache::class);
         $this->model = new FlushAllCacheObserver(
             $this->configMock,
             $this->purgeCache
         );
         $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->onlyMethods(['getEvent'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getEvent'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**

@@ -59,12 +59,16 @@ class InvalidateVarnishObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['getType', 'isEnabled'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getType', 'isEnabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->purgeCacheMock = $this->createMock(PurgeCache::class);
         $this->tagResolverMock = $this->createMock(Resolver::class);
 
         $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->onlyMethods(['getEvent'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['getEvent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->observerObject = $this->createMock(Store::class);
 
         $objectManager = new ObjectManager($this);
@@ -96,7 +100,9 @@ class InvalidateVarnishObserverTest extends TestCase
         );
 
         $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])->disableOriginalConstructor()->getMock();
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())->method('getObject')->willReturn($this->observerObject);
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->tagResolverMock->expects($this->once())->method('getTags')->with($this->observerObject)
