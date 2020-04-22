@@ -8,50 +8,50 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 return [
     'services' => [CustomerRepositoryInterface::class => [
-            'V1' => [
-                'methods' => [
-                    'getById' => [
-                        'resources' => [
-                            'Magento_Customer::customer_self',
-                            'Magento_Customer::read',
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'getById',
-                        'parameters' => []
+        'V1' => [
+            'methods' => [
+                'getById' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self',
+                        'Magento_Customer::read',
                     ],
-                    'save' => [
-                        'resources' => [
-                            'Magento_Customer::manage'
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'save',
-                        'parameters' => []
+                    'secure' => false,
+                    'realMethod' => 'getById',
+                    'parameters' => []
+                ],
+                'save' => [
+                    'resources' => [
+                        'Magento_Customer::manage'
                     ],
-                    'saveSelf' => [
-                        'resources' => [
-                            'Magento_Customer::customer_self'
-                        ],
-                        'secure' => true,
-                        'realMethod' => 'save',
-                        'parameters' => [
-                            'id' => [
-                                'force' => false,
-                                'value' => null,
-                            ],
+                    'secure' => false,
+                    'realMethod' => 'save',
+                    'parameters' => []
+                ],
+                'saveSelf' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self'
+                    ],
+                    'secure' => true,
+                    'realMethod' => 'save',
+                    'parameters' => [
+                        'id' => [
+                            'force' => false,
+                            'value' => null,
                         ],
                     ],
-                    'deleteById' => [
-                        'resources' => [
-                            'Magento_Customer::manage',
-                            'Magento_Customer::delete',
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'deleteById',
-                        'parameters' => []
+                ],
+                'deleteById' => [
+                    'resources' => [
+                        'Magento_Customer::manage',
+                        'Magento_Customer::delete',
                     ],
+                    'secure' => false,
+                    'realMethod' => 'deleteById',
+                    'parameters' => []
                 ],
             ],
         ],
+    ],
     ],
     'routes' => [
         '/V1/customers/me/session' => [

@@ -57,14 +57,14 @@ class ManagerTest extends TestCase
         )->disableOriginalConstructor()
             ->setMethods(
                 [
-                'findByName',
-                'update',
-                'create',
-                'get',
-                'findByConsumerId',
-                'findActiveIntegrationByConsumerId',
-                'delete',
-                'getSelectedResources'
+                    'findByName',
+                    'update',
+                    'create',
+                    'get',
+                    'findByConsumerId',
+                    'findActiveIntegrationByConsumerId',
+                    'delete',
+                    'getSelectedResources'
                 ]
             )->getMock();
 
@@ -73,9 +73,9 @@ class ManagerTest extends TestCase
         )->disableOriginalConstructor()
             ->setMethods(
                 [
-                'grantPermissions',
-                'grantAllPermissions',
-                'removePermissions'
+                    'grantPermissions',
+                    'grantAllPermissions',
+                    'removePermissions'
                 ]
             )->getMock();
 
