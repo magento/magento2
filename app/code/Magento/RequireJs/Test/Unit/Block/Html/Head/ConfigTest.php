@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\RequireJs\Test\Unit\Block\Html\Head;
 
@@ -88,23 +90,23 @@ class ConfigTest extends TestCase
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsConfigAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsMixinsAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createStaticJsAsset')
-            ->will($this->returnValue($requireJsAsset));
+            ->willReturn($requireJsAsset);
         $this->fileManager
             ->expects($this->once())
             ->method('createBundleJsPool')
-            ->will($this->returnValue([$asset]));
+            ->willReturn([$asset]);
         $this->fileManager
             ->expects($this->once())
             ->method('createMinResolverAsset')
-            ->will($this->returnValue($minResolverAsset));
+            ->willReturn($minResolverAsset);
 
         $layout = $this->createMock(LayoutInterface::class);
 

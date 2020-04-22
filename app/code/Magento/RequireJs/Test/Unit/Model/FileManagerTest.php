@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\RequireJs\Test\Unit\Model;
 
@@ -75,27 +77,27 @@ class FileManagerTest extends TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
-            ->will($this->returnValue('requirejs/file.js'));
+            ->willReturn('requirejs/file.js');
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
         $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
-            ->will($this->returnValue($this->asset));
+            ->willReturn($this->asset);
 
-        $this->appState->expects($this->once())->method('getMode')->will($this->returnValue('anything'));
+        $this->appState->expects($this->once())->method('getMode')->willReturn('anything');
         $this->dir->expects($this->once())
             ->method('isExist')
             ->with('requirejs/file.js')
-            ->will($this->returnValue($exists));
+            ->willReturn($exists);
         if ($exists) {
             $this->configMock->expects($this->never())->method('getConfig');
             $this->dir->expects($this->never())->method('writeFile');
         } else {
             $data = 'requirejs config data';
-            $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+            $this->configMock->expects($this->once())->method('getConfig')->willReturn($data);
             $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         }
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
@@ -113,22 +115,22 @@ class FileManagerTest extends TestCase
     {
         $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
-            ->will($this->returnValue('requirejs/file.js'));
+            ->willReturn('requirejs/file.js');
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
         $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
-            ->will($this->returnValue($this->asset));
+            ->willReturn($this->asset);
 
         $this->appState->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
         $this->dir->expects($this->never())->method('isExist');
         $data = 'requirejs config data';
-        $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+        $this->configMock->expects($this->once())->method('getConfig')->willReturn($data);
         $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
     }
@@ -216,7 +218,7 @@ class FileManagerTest extends TestCase
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
+            ->willReturn($this->dir);
 
         $this->object->createMinResolverAsset();
     }
@@ -227,7 +229,7 @@ class FileManagerTest extends TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getMixinsFileRelativePath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
         $this->assetRepoMock
             ->expects($this->once())
             ->method('createArbitrary')
