@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu\Config;
 
 use Magento\Backend\Model\Menu\Config\SchemaLocator;
@@ -32,8 +34,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Backend'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_model = new SchemaLocator($this->_moduleReaderMock);
     }

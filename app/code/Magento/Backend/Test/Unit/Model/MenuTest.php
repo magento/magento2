@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Model\Menu;
@@ -73,7 +75,9 @@ class MenuTest extends TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()->getMock();
+        $subMenu = $this->getMockBuilder(Menu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -102,7 +106,7 @@ class MenuTest extends TestCase
         $this->assertCount(3, $this->_model);
         $itemsOrdered = [];
         foreach ($this->_model as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
+            /** @var \Magento\Backend\Model\Menu\Item $item */
             $itemsOrdered[] = $item->getId();
         }
         $this->assertEquals(['item1', 'item3', 'item2'], $itemsOrdered);
@@ -154,7 +158,9 @@ class MenuTest extends TestCase
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
 
-        $subMenu = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()->getMock();
+        $subMenu = $this->getMockBuilder(Menu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -162,7 +168,7 @@ class MenuTest extends TestCase
         $this->_model->move('item3', 'item1');
 
         $this->assertCount(2, $this->_model);
-        $this->assertFalse(isset($this->_model[2]), "ttt");
+        $this->assertArrayNotHasKey(2, $this->_model, "ttt");
     }
 
     public function testMoveNonExistentItemThrowsException()
@@ -199,8 +205,10 @@ class MenuTest extends TestCase
 
     public function testRemoveRemovesMenuItemRecursively()
     {
-        $menuMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()->getMock();
-        $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
+        $menuMock = $this->getMockBuilder(Menu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $menuMock->expects($this->once())->method('remove')->with('item2');
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
         $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuMock));
@@ -225,7 +233,7 @@ class MenuTest extends TestCase
         $this->assertEquals($this->_items['item2'], $this->_model[20]);
         $this->_model->reorder('item2', 5);
         $this->assertEquals($this->_items['item2'], $this->_model[5]);
-        $this->assertFalse(isset($this->_model[20]));
+        $this->assertArrayNotHasKey(20, $this->_model);
     }
 
     public function testReorderReordersItemOnItsLevel()
@@ -266,7 +274,11 @@ class MenuTest extends TestCase
 
     public function testGetFirstAvailableReturnsLeafNode()
     {
-        $item = $this->createPartialMock(Item::class, ['getFirstAvailable', 'isAllowed']);
+        $item = $this->getMockBuilder(Item::class)
+            ->addMethods(['getFirstAvailable'])
+            ->onlyMethods(['isAllowed'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
@@ -303,7 +315,7 @@ class MenuTest extends TestCase
         $this->_model->add($this->_items['item2']);
 
         $items = [];
-        /** @var $item \Magento\Backend\Model\Menu\Item */
+        /** @var \Magento\Backend\Model\Menu\Item $item */
         foreach ($this->_model as $item) {
             $items[] = $item->getId();
         }
@@ -354,7 +366,7 @@ class MenuTest extends TestCase
             ]
         );
         $itemMock = $this->createMock(Item::class);
-        $itemMock->expects($this->any())->method('getId')->will($this->returnValue('item1'));
+        $itemMock->expects($this->any())->method('getId')->willReturn('item1');
         $itemMock->expects($this->once())
             ->method('toArray')
             ->willReturn(['arrayData']);

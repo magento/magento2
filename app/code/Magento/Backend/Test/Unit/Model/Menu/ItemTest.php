@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
 use Magento\Backend\Model\Menu;
@@ -119,9 +121,9 @@ class ItemTest extends TestCase
         )->method(
             'getUrl'
         )->with(
-            $this->equalTo('/system/config')
-        )->will(
-            $this->returnValue('Url')
+            '/system/config'
+        )->willReturn(
+            'Url'
         );
         $this->assertEquals('Url', $this->_model->getUrl());
     }
@@ -158,35 +160,35 @@ class ItemTest extends TestCase
 
     public function testIsDisabledReturnsTrueIfModuleOutputIsDisabled()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(false));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(false);
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsTrueIfModuleDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsTrueIfConfigDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
         $this->assertTrue($this->_model->isDisabled());
     }
 
     public function testIsDisabledReturnsFalseIfNoDependenciesFail()
     {
-        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->will($this->returnValue(true));
+        $this->_moduleManager->expects($this->once())->method('isOutputEnabled')->willReturn(true);
 
-        $this->_moduleListMock->expects($this->once())->method('has')->will($this->returnValue(true));
+        $this->_moduleListMock->expects($this->once())->method('has')->willReturn(true);
 
-        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
+        $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
 
         $this->assertFalse($this->_model->isDisabled());
     }
@@ -199,8 +201,8 @@ class ItemTest extends TestCase
             'isAllowed'
         )->with(
             'Magento_Config::config'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->isAllowed());
     }
@@ -213,8 +215,8 @@ class ItemTest extends TestCase
             'isAllowed'
         )->with(
             'Magento_Config::config'
-        )->will(
-            $this->throwException(new LocalizedException(__('Error')))
+        )->willThrowException(
+            new LocalizedException(__('Error'))
         );
         $this->assertFalse($this->_model->isAllowed());
     }
@@ -223,7 +225,7 @@ class ItemTest extends TestCase
     {
         $menuMock = $this->createMock(Menu::class);
 
-        $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
+        $this->_menuFactoryMock->expects($this->once())->method('create')->willReturn($menuMock);
 
         $this->_model->getChildren();
         $this->_model->getChildren();
@@ -237,7 +239,7 @@ class ItemTest extends TestCase
     public function testToArray(array $data, array $expected)
     {
         $menuMock = $this->createMock(Menu::class);
-        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $this->_menuFactoryMock->method('create')->willReturn($menuMock);
         $menuMock->method('toArray')
             ->willReturn($data['sub_menu']);
 

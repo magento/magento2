@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu\Builder;
 
 use Magento\Backend\Model\Menu\Builder\AbstractCommand;
@@ -39,7 +41,7 @@ class AbstractCommandTest extends TestCase
         $command2 = $this->getMockBuilder(Remove::class)
             ->setConstructorArgs([['id' => 1]])
             ->getMock();
-        $command1->expects($this->once())->method('chain')->with($this->equalTo($command2));
+        $command1->expects($this->once())->method('chain')->with($command2);
 
         $this->_model->chain($command1);
         $this->_model->chain($command2);
@@ -67,9 +69,9 @@ class AbstractCommandTest extends TestCase
         )->method(
             'execute'
         )->with(
-            $this->equalTo($itemParams)
-        )->will(
-            $this->returnValue($itemParams)
+            $itemParams
+        )->willReturn(
+            $itemParams
         );
 
         $this->_model->chain($command1);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Translate\Inline;
 
 use Magento\Backend\App\ConfigInterface;
@@ -21,7 +23,7 @@ class ConfigTest extends TestCase
         )->method(
             'isSetFlag'
         )->with(
-            $this->equalTo('dev/translate_inline/active_admin')
+            'dev/translate_inline/active_admin'
         )->willReturn(
             $result
         );

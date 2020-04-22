@@ -57,7 +57,7 @@ class SaveTest extends TestCase
     /** @var MockObject|User */
     protected $_userMock;
 
-    /** @var MockObject|\Magento\Framework\Validator\locale */
+    /** @var MockObject|Locale */
     protected $_validatorMock;
 
     /** @var MockObject|Manager */
@@ -72,7 +72,8 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $this->_requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->setMethods(['getOriginalPathInfo'])
+            ->disableOriginalConstructor()
+            ->setMethods(['getOriginalPathInfo'])
             ->getMock();
         $this->_responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
@@ -136,19 +137,18 @@ class SaveTest extends TestCase
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $contextMock = $this->createPartialMock(
-            Context::class,
-            [
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getFrontController', 'getTranslator'])
+            ->onlyMethods([
                 'getRequest',
                 'getResponse',
                 'getObjectManager',
-                'getFrontController',
                 'getHelper',
                 'getMessageManager',
-                'getTranslator',
                 'getResultFactory'
-            ]
-        );
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManagerMock);
@@ -183,17 +183,17 @@ class SaveTest extends TestCase
 
         $testedMessage = 'You saved the account.';
 
-        $this->_authSessionMock->expects($this->any())->method('getUser')->will($this->returnValue($this->_userMock));
+        $this->_authSessionMock->expects($this->any())->method('getUser')->willReturn($this->_userMock);
 
-        $this->_userMock->expects($this->any())->method('load')->will($this->returnSelf());
+        $this->_userMock->expects($this->any())->method('load')->willReturnSelf();
         $this->_validatorMock->expects(
             $this->once()
         )->method(
             'isValid'
         )->with(
-            $this->equalTo($requestParams['interface_locale'])
-        )->will(
-            $this->returnValue(true)
+            $requestParams['interface_locale']
+        )->willReturn(
+            true
         );
         $this->_managerMock->expects($this->any())->method('switchBackendInterfaceLocale');
 
@@ -202,47 +202,47 @@ class SaveTest extends TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo(Session::class)
-        )->will(
-            $this->returnValue($this->_authSessionMock)
+            Session::class
+        )->willReturn(
+            $this->_authSessionMock
         );
         $this->_objectManagerMock->expects(
             $this->at(1)
         )->method(
             'create'
         )->with(
-            $this->equalTo(User::class)
-        )->will(
-            $this->returnValue($this->_userMock)
+            User::class
+        )->willReturn(
+            $this->_userMock
         );
         $this->_objectManagerMock->expects(
             $this->at(2)
         )->method(
             'get'
         )->with(
-            $this->equalTo(Locale::class)
-        )->will(
-            $this->returnValue($this->_validatorMock)
+            Locale::class
+        )->willReturn(
+            $this->_validatorMock
         );
         $this->_objectManagerMock->expects(
             $this->at(3)
         )->method(
             'get'
         )->with(
-            $this->equalTo(Manager::class)
-        )->will(
-            $this->returnValue($this->_managerMock)
+            Manager::class
+        )->willReturn(
+            $this->_managerMock
         );
 
         $this->_userMock->setUserId($userId);
-        $this->_userMock->expects($this->once())->method('performIdentityCheck')->will($this->returnValue(true));
+        $this->_userMock->expects($this->once())->method('performIdentityCheck')->willReturn(true);
         $this->_userMock->expects($this->once())->method('save');
         $this->_userMock->expects($this->once())->method('validate')->willReturn(true);
         $this->_userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');
 
         $this->_requestMock->setParams($requestParams);
 
-        $this->_messagesMock->expects($this->once())->method('addSuccessMessage')->with($this->equalTo($testedMessage));
+        $this->_messagesMock->expects($this->once())->method('addSuccessMessage')->with($testedMessage);
 
         $this->_controller->execute();
     }

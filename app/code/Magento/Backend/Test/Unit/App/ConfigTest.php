@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App;
 
 use Magento\Backend\App\Config;
@@ -43,11 +45,11 @@ class ConfigTest extends TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo('system'),
-            $this->equalTo('default/' . $path),
+            'system',
+            'default/' . $path,
             $this->isNull()
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $this->assertEquals($expectedValue, $this->model->getValue($path));
     }
@@ -65,10 +67,10 @@ class ConfigTest extends TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo('system'),
-            $this->equalTo('default/' . $configPath)
-        )->will(
-            $this->returnValue($configValue)
+            'system',
+            'default/' . $configPath
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($expectedResult, $this->model->isSetFlag($configPath));
     }
@@ -96,6 +98,9 @@ class ConfigTest extends TestCase
      */
     protected function getConfigDataMock($mockedMethod)
     {
-        return $this->createPartialMock(Data::class, [$mockedMethod]);
+        return $this->getMockBuilder(Data::class)
+            ->addMethods([$mockedMethod])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

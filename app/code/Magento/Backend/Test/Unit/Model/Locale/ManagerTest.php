@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Locale;
 
 use Magento\Backend\App\ConfigInterface;
@@ -48,7 +50,9 @@ class ManagerTest extends TestCase
     {
         $this->_session = $this->createMock(Session::class);
 
-        $this->_authSession = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['getUser']);
+        $this->_authSession = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)->addMethods(['getUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_backendConfig = $this->getMockForAbstractClass(
             ConfigInterface::class,
@@ -59,15 +63,15 @@ class ManagerTest extends TestCase
 
         $userMock = new DataObject();
 
-        $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
+        $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
 
         $this->_translator = $this->getMockBuilder(TranslateInterface::class)
             ->setMethods(['init', 'setLocale'])
             ->getMockForAbstractClass();
 
-        $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
+        $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);
 
-        $this->_translator->expects($this->any())->method('init')->will($this->returnValue(false));
+        $this->_translator->expects($this->any())->method('init')->willReturn(false);
 
         $this->_model = new Manager(
             $this->_session,

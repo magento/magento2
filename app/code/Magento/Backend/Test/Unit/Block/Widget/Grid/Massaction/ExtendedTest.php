@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Block\Widget\Grid\Massaction\Extended
@@ -58,12 +59,13 @@ class ExtendedTest extends TestCase
             Grid::class,
             ['getId', 'getCollection']
         );
-        $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
+        $this->_gridMock->expects($this->any())->method('getId')->willReturn('test_grid');
 
-        $this->_layoutMock = $this->createPartialMock(
-            Layout::class,
-            ['getParentName', 'getBlock', 'helper']
-        );
+        $this->_layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['helper'])
+            ->onlyMethods(['getParentName', 'getBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_layoutMock->expects(
             $this->any()
@@ -71,8 +73,8 @@ class ExtendedTest extends TestCase
             'getParentName'
         )->with(
             'test_grid_massaction'
-        )->will(
-            $this->returnValue('test_grid')
+        )->willReturn(
+            'test_grid'
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -80,8 +82,8 @@ class ExtendedTest extends TestCase
             'getBlock'
         )->with(
             'test_grid'
-        )->will(
-            $this->returnValue($this->_gridMock)
+        )->willReturn(
+            $this->_gridMock
         );
 
         $this->_requestMock = $this->createMock(Http::class);

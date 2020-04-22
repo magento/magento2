@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\App;
 
@@ -24,7 +25,7 @@ class UserConfigTest extends TestCase
         $value = 'value';
         $request = [$key => $value];
         $model = new UserConfig($factoryMock, $responseMock, $request);
-        $factoryMock->expects($this->once())->method('create')->will($this->returnValue($configMock));
+        $factoryMock->expects($this->once())->method('create')->willReturn($configMock);
         $configMock->expects($this->once())->method('setDataByPath')->with($key, $value);
         $configMock->expects($this->once())->method('save');
 

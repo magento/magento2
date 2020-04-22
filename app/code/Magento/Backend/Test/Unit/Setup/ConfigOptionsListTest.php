@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Setup;
 
 use Magento\Backend\Setup\ConfigOptionsList;
@@ -34,10 +36,8 @@ class ConfigOptionsListTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertInternalType('array', $options);
-        foreach ($options as $option) {
-            $this->assertInstanceOf(AbstractConfigOption::class, $option);
-        }
+        $this->assertIsArray($options);
+        $this->assertContainsOnlyInstancesOf(AbstractConfigOption::class, $options);
     }
 
     public function testCreateConfig()
@@ -55,7 +55,7 @@ class ConfigOptionsListTest extends TestCase
             ]
         ];
 
-        $this->assertInternalType('array', $actualConfig);
+        $this->assertIsArray($actualConfig);
         /** @var ConfigData $config */
         foreach ($actualConfig as $i => $config) {
             $this->assertInstanceOf(ConfigData::class, $config);

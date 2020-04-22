@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Model\Menu\Director\Director
@@ -60,11 +61,11 @@ class DirectorTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_commandMock)
+        )->willReturn(
+            $this->_commandMock
         );
 
-        $this->_commandMock->expects($this->any())->method('getId')->will($this->returnValue(true));
+        $this->_commandMock->expects($this->any())->method('getId')->willReturn(true);
         $this->_model = new Director($this->_commandFactoryMock);
     }
 

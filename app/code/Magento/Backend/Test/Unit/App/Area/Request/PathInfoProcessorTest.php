@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Area\Request;
 
 use Magento\Backend\App\Request\PathInfoProcessor;
@@ -55,8 +57,8 @@ class PathInfoProcessorTest extends TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('storeCode')
+        )->willReturn(
+            'storeCode'
         );
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
@@ -67,8 +69,8 @@ class PathInfoProcessorTest extends TestCase
             $this->once()
         )->method(
             'getAreaFrontName'
-        )->will(
-            $this->returnValue('store')
+        )->willReturn(
+            'store'
         );
         $this->_subjectMock->expects(
             $this->once()
@@ -77,8 +79,8 @@ class PathInfoProcessorTest extends TestCase
         )->with(
             $this->_requestMock,
             $this->_pathInfo
-        )->will(
-            $this->returnValue('Expected')
+        )->willReturn(
+            'Expected'
         );
         $this->assertEquals('Expected', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }

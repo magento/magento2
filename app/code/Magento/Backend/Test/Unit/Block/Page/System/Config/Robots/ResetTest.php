@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Block\Page\System\Config\Robots\Reset
@@ -50,7 +51,7 @@ class ResetTest extends TestCase
     public function testGetRobotsDefaultCustomInstructions()
     {
         $expectedInstructions = 'User-agent: *';
-        $this->configMock->expects($this->once())->method('getValue')->will($this->returnValue($expectedInstructions));
+        $this->configMock->expects($this->once())->method('getValue')->willReturn($expectedInstructions);
         $this->assertEquals($expectedInstructions, $this->_resetRobotsBlock->getRobotsDefaultCustomInstructions());
     }
 }

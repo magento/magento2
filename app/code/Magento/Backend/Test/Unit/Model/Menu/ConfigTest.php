@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -63,17 +65,17 @@ class ConfigTest extends TestCase
 
         $this->menuBuilderMock = $this->createMock(Builder::class);
 
-        $menuFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->menuMock));
+        $menuFactoryMock->expects($this->any())->method('create')->willReturn($this->menuMock);
 
-        $this->configReaderMock->expects($this->any())->method('read')->will($this->returnValue([]));
+        $this->configReaderMock->expects($this->any())->method('read')->willReturn([]);
 
         $appState = $this->createPartialMock(State::class, ['getAreaCode']);
         $appState->expects(
             $this->any()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue(FrontNameResolver::AREA_CODE)
+        )->willReturn(
+            FrontNameResolver::AREA_CODE
         );
 
         $this->model = (new ObjectManager($this))->getObject(
@@ -96,9 +98,9 @@ class ConfigTest extends TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
-        )->will(
-            $this->returnValue('menu_cache')
+            \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT
+        )->willReturn(
+            'menu_cache'
         );
 
         $this->menuMock->expects($this->once())->method('unserialize')->with('menu_cache');
@@ -113,19 +115,19 @@ class ConfigTest extends TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT)
-        )->will(
-            $this->returnValue(false)
+            \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT
+        )->willReturn(
+            false
         );
 
-        $this->configReaderMock->expects($this->once())->method('read')->will($this->returnValue([]));
+        $this->configReaderMock->expects($this->once())->method('read')->willReturn([]);
 
         $this->menuBuilderMock->expects(
             $this->exactly(1)
         )->method(
             'getResult'
-        )->will(
-            $this->returnValue($this->menuMock)
+        )->willReturn(
+            $this->menuMock
         );
 
         $this->assertEquals($this->menuMock, $this->model->getMenu());
@@ -143,8 +145,8 @@ class ConfigTest extends TestCase
             $this->exactly(1)
         )->method(
             'getResult'
-        )->will(
-            $this->throwException(new $expectedException())
+        )->willThrowException(
+            new $expectedException()
         );
 
         $this->model->getMenu();
@@ -170,8 +172,8 @@ class ConfigTest extends TestCase
             $this->exactly(1)
         )->method(
             'getResult'
-        )->will(
-            $this->throwException(new \Exception())
+        )->willThrowException(
+            new \Exception()
         );
         try {
             $this->model->getMenu();

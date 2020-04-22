@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
 use Magento\Backend\Model\Widget\Grid\Parser;
@@ -18,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class SubTotalsTest extends TestCase
 {
     /**
-     * @var $_model \Magento\Backend\Model\Widget\Grid\SubTotals
+     * @var SubTotals $_model
      */
     protected $_model;
 
@@ -43,8 +45,8 @@ class SubTotalsTest extends TestCase
             'create'
         )->with(
             ['sub_test1' => 3, 'sub_test2' => 2]
-        )->will(
-            $this->returnValue(new DataObject(['sub_test1' => 3, 'sub_test2' => 2]))
+        )->willReturn(
+            new DataObject(['sub_test1' => 3, 'sub_test2' => 2])
         );
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];

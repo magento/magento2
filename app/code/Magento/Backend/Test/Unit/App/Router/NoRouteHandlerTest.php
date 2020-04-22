@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Router;
 
 use Magento\Backend\App\Router\NoRouteHandler;
@@ -39,7 +41,7 @@ class NoRouteHandlerTest extends TestCase
         $this->_requestMock = $this->createMock(Http::class);
         $this->_routeConfigMock = $this->createMock(ConfigInterface::class);
         $this->_helperMock = $this->createMock(Data::class);
-        $this->_helperMock->expects($this->any())->method('getAreaFrontName')->will($this->returnValue('backend'));
+        $this->_helperMock->expects($this->any())->method('getAreaFrontName')->willReturn('backend');
         $this->_model = new NoRouteHandler($this->_helperMock, $this->_routeConfigMock);
     }
 
@@ -52,12 +54,12 @@ class NoRouteHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getRouteFrontName')
             ->with('adminhtml')
-            ->will($this->returnValue('admin'));
+            ->willReturn('admin');
 
         $this->_requestMock
             ->expects($this->once())
             ->method('getPathInfo')
-            ->will($this->returnValue('backend/admin/custom'));
+            ->willReturn('backend/admin/custom');
 
         $this->_requestMock->expects(
             $this->once()
@@ -65,8 +67,8 @@ class NoRouteHandlerTest extends TestCase
             'setModuleName'
         )->with(
             'admin'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
         $this->_requestMock->expects(
@@ -75,8 +77,8 @@ class NoRouteHandlerTest extends TestCase
             'setControllerName'
         )->with(
             'noroute'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
         $this->_requestMock->expects(
@@ -85,8 +87,8 @@ class NoRouteHandlerTest extends TestCase
             'setActionName'
         )->with(
             'index'
-        )->will(
-            $this->returnValue($this->_requestMock)
+        )->willReturn(
+            $this->_requestMock
         );
 
         $this->assertEquals(true, $this->_model->process($this->_requestMock));
@@ -101,8 +103,8 @@ class NoRouteHandlerTest extends TestCase
             $this->once()
         )->method(
             'getPathInfo'
-        )->will(
-            $this->returnValue('module/controller/action')
+        )->willReturn(
+            'module/controller/action'
         );
 
         $this->_requestMock->expects($this->never())->method('setModuleName');

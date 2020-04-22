@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu\Item;
 
 use Magento\Backend\Model\Menu\Item\Validator;
@@ -78,7 +80,7 @@ class ValidatorTest extends TestCase
             unset($this->_params[$requiredParam]);
             $this->_model->validate($this->_params);
         } catch (\BadMethodCallException $e) {
-            $this->assertContains($requiredParam, $e->getMessage());
+            $this->assertStringContainsString($requiredParam, $e->getMessage());
             throw $e;
         }
     }
@@ -104,7 +106,7 @@ class ValidatorTest extends TestCase
             $this->_params[$param] = $invalidValue;
             $this->_model->validate($this->_params);
         } catch (\InvalidArgumentException $e) {
-            $this->assertContains($param, $e->getMessage());
+            $this->assertStringContainsString($param, $e->getMessage());
             throw $e;
         }
     }

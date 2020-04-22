@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget;
@@ -40,10 +42,10 @@ class ColumnTest extends TestCase
     protected function setUp(): void
     {
         $this->_layoutMock = $this->createMock(Layout::class);
-        $this->_blockMock = $this->createPartialMock(
-            Template::class,
-            ['setColumn', 'getHtml']
-        );
+        $this->_blockMock = $this->getMockBuilder(Template::class)
+            ->addMethods(['setColumn', 'getHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -77,8 +79,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -130,8 +132,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -151,8 +153,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->getFilter();
@@ -170,8 +172,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -180,7 +182,7 @@ class ColumnTest extends TestCase
 
     public function testGetFilterHtmlWhenFilterExist()
     {
-        $this->_blockMock->expects($this->once())->method('getHtml')->will($this->returnValue('test'));
+        $this->_blockMock->expects($this->once())->method('getHtml')->willReturn('test');
 
         $this->_layoutMock->expects(
             $this->once()
@@ -188,8 +190,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');
@@ -207,7 +209,7 @@ class ColumnTest extends TestCase
     {
         $this->_block->setData('renderer', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -215,8 +217,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertNotEmpty($this->_block->getRenderer());
@@ -229,7 +231,7 @@ class ColumnTest extends TestCase
     {
         $this->_block->setData('renderer', false);
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -237,8 +239,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text::class
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -253,7 +255,7 @@ class ColumnTest extends TestCase
         $this->_block->setData('type', 'custom_type');
         $this->_block->setRendererType('custom_type', 'StdClass');
 
-        $this->_blockMock->expects($this->once())->method('setColumn')->will($this->returnSelf());
+        $this->_blockMock->expects($this->once())->method('setColumn')->willReturnSelf();
 
         $this->_layoutMock->expects(
             $this->once()
@@ -261,8 +263,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->assertEquals($this->_blockMock, $this->_block->getRenderer());
@@ -360,8 +362,8 @@ class ColumnTest extends TestCase
             'createBlock'
         )->with(
             'StdClass'
-        )->will(
-            $this->returnValue($this->_blockMock)
+        )->willReturn(
+            $this->_blockMock
         );
 
         $this->_block->setFilter('StdClass');

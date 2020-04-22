@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Model\Session\AdminConfig
@@ -56,17 +57,17 @@ class AdminConfigTest extends TestCase
             Http::class,
             ['getBasePath', 'isSecure', 'getHttpHost']
         );
-        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
+        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->willReturn('/');
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getHttpHost')
-            ->will($this->returnValue('init.host'));
+            ->willReturn('init.host');
         $this->objectManager =  new ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(ValidatorFactory::class)
             ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
         $backendUrl = $this->createMock(Url::class);
-        $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
+        $backendUrl->expects($this->once())->method('getBaseUrl')->willReturn('/');
         $this->backendUrlFactory = $this->createPartialMock(UrlFactory::class, ['create']);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
@@ -74,7 +75,7 @@ class AdminConfigTest extends TestCase
         $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($dirMock));
+            ->willReturn($dirMock);
     }
 
     public function testSetCookiePathNonDefault()
@@ -85,7 +86,7 @@ class AdminConfigTest extends TestCase
 
         $mockFrontNameResolver->expects($this->once())
             ->method('getFrontName')
-            ->will($this->returnValue('backend'));
+            ->willReturn('backend');
 
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()

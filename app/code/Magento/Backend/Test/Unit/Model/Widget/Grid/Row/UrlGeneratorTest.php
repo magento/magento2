@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid\Row;
 
 use Magento\Backend\Model\Url;
@@ -17,16 +19,19 @@ class UrlGeneratorTest extends TestCase
         $itemId = 3;
         $urlPath = 'mng/item/edit';
 
-        $itemMock = $this->createPartialMock(DataObject::class, ['getItemId']);
-        $itemMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
+        $itemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getItemId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemMock->expects($this->once())->method('getItemId')->willReturn($itemId);
 
         $urlModelMock = $this->createMock(Url::class);
         $urlModelMock->expects(
             $this->once()
         )->method(
             'getUrl'
-        )->will(
-            $this->returnValue('http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId)
+        )->willReturn(
+            'http://localhost/' . $urlPath . '/flag/1/item_id/' . $itemId
         );
 
         $model = new UrlGenerator(
@@ -40,8 +45,8 @@ class UrlGeneratorTest extends TestCase
 
         $url = $model->getUrl($itemMock);
 
-        $this->assertContains($urlPath, $url);
-        $this->assertContains('flag/1', $url);
-        $this->assertContains('item_id/' . $itemId, $url);
+        $this->assertStringContainsString($urlPath, $url);
+        $this->assertStringContainsString('flag/1', $url);
+        $this->assertStringContainsString('item_id/' . $itemId, $url);
     }
 }

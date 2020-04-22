@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
 use Magento\Backend\Model\Widget\Grid\AbstractTotals;
@@ -17,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class AbstractTotalsTest extends TestCase
 {
     /**
-     * @var $_model MockObject
+     * @var MockObject $_model
      */
     protected $_model;
 
@@ -53,8 +55,8 @@ class AbstractTotalsTest extends TestCase
             true,
             []
         );
-        $this->_model->expects($this->any())->method('_countSum')->will($this->returnValue(2));
-        $this->_model->expects($this->any())->method('_countAverage')->will($this->returnValue(2));
+        $this->_model->expects($this->any())->method('_countSum')->willReturn(2);
+        $this->_model->expects($this->any())->method('_countAverage')->willReturn(2);
 
         $this->_setUpColumns();
     }
@@ -124,8 +126,8 @@ class AbstractTotalsTest extends TestCase
             $this->any()
         )->method(
             'parseExpression'
-        )->will(
-            $this->returnValueMap($columnsValueMap)
+        )->willReturnMap(
+            $columnsValueMap
         );
 
         $isOperationValueMap = [
@@ -141,8 +143,8 @@ class AbstractTotalsTest extends TestCase
             $this->any()
         )->method(
             'isOperation'
-        )->will(
-            $this->returnValueMap($isOperationValueMap)
+        )->willReturnMap(
+            $isOperationValueMap
         );
     }
 
@@ -178,7 +180,7 @@ class AbstractTotalsTest extends TestCase
             ],
             [[], new DataObject()],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
     }
 
     public function testColumns()

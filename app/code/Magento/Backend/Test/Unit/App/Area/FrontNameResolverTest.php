@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Area;
 
 use Laminas\Uri\Uri;
@@ -56,7 +58,7 @@ class FrontNameResolverTest extends TestCase
         $deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
-            ->will($this->returnValue($this->_defaultFrontName));
+            ->willReturn($this->_defaultFrontName);
         $this->uri = $this->createMock(Uri::class);
 
         $this->request = $this->createMock(Http::class);
@@ -80,8 +82,8 @@ class FrontNameResolverTest extends TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->configMock->expects(
             $this->at(1)
@@ -89,8 +91,8 @@ class FrontNameResolverTest extends TestCase
             'getValue'
         )->with(
             'admin/url/custom_path'
-        )->will(
-            $this->returnValue('expectedValue')
+        )->willReturn(
+            'expectedValue'
         );
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
@@ -103,8 +105,8 @@ class FrontNameResolverTest extends TestCase
             'getValue'
         )->with(
             'admin/url/use_custom_path'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
     }
@@ -121,29 +123,27 @@ class FrontNameResolverTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                [
+                    [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                     [
-                        [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
-                        [
-                            FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $useCustomAdminUrl
-                        ],
-                        [
-                            FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
-                            ScopeInterface::SCOPE_STORE,
-                            null,
-                            $customAdminUrl
-                        ],
-                    ]
-                )
+                        FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $useCustomAdminUrl
+                    ],
+                    [
+                        FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $customAdminUrl
+                    ],
+                ]
             );
 
         $this->request->expects($this->any())
             ->method('getServer')
-            ->will($this->returnValue($host));
+            ->willReturn($host);
 
         $urlParts = [];
         $this->uri->expects($this->once())

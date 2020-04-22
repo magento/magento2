@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 
@@ -32,12 +33,16 @@ class AbstractTestCase extends TestCase
         $resultRawFactoryMock =
             $this->createPartialMock(RawFactory::class, ['create']);
         $layoutFactoryMock = $this->createPartialMock(LayoutFactory::class, ['create']);
-        $layoutMock = $this->createPartialMock(Layout::class, ['createBlock', 'toHtml']);
-        $layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
-        $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->will($this->returnSelf());
-        $layoutMock->expects($this->once())->method('toHtml')->will($this->returnValue($outPut));
-        $resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRawMock));
-        $resultRawMock->expects($this->once())->method('setContents')->with($outPut)->will($this->returnSelf());
+        $layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['toHtml'])
+            ->onlyMethods(['createBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layoutFactoryMock->expects($this->once())->method('create')->willReturn($layoutMock);
+        $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->willReturnSelf();
+        $layoutMock->expects($this->once())->method('toHtml')->willReturn($outPut);
+        $resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRawMock);
+        $resultRawMock->expects($this->once())->method('setContents')->with($outPut)->willReturnSelf();
 
         $controller = $objectManager->getObject(
             $controllerName,

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Backend\Model\Url
@@ -32,15 +33,15 @@ class ExtendedTest extends TestCase
     public function testPrepareLoadedCollection()
     {
         $request = $this->createPartialMock(Http::class, ['has']);
-        $request->expects($this->any())->method('has')->will($this->returnValue(null));
+        $request->expects($this->any())->method('has')->willReturn(null);
 
         $columnSet = $this->createMock(ColumnSet::class);
         $layout = $this->createMock(Layout::class);
-        $layout->expects($this->any())->method('getChildName')->will($this->returnValue('grid.columnSet'));
-        $layout->expects($this->any())->method('getBlock')->will($this->returnValue($columnSet));
+        $layout->expects($this->any())->method('getChildName')->willReturn('grid.columnSet');
+        $layout->expects($this->any())->method('getBlock')->willReturn($columnSet);
 
         $collection = $this->createMock(Collection::class);
-        $collection->expects($this->atLeastOnce())->method('isLoaded')->will($this->returnValue(true));
+        $collection->expects($this->atLeastOnce())->method('isLoaded')->willReturn(true);
         $collection->expects($this->atLeastOnce())->method('clear');
         $collection->expects($this->atLeastOnce())->method('load');
 

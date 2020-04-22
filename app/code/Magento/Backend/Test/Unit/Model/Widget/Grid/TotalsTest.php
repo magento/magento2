@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
 use Magento\Backend\Model\Widget\Grid\Parser;
@@ -18,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class TotalsTest extends TestCase
 {
     /**
-     * @var $_model \Magento\Backend\Model\Widget\Grid\Totals
+     * @var Totals $_model
      */
     protected $_model;
 
@@ -46,7 +48,7 @@ class TotalsTest extends TestCase
             [['test1' => 3, 'test2' => 2], new DataObject(['test1' => 3, 'test2' => 2])],
             [['test4' => 9, 'test5' => 2], new DataObject(['test4' => 9, 'test5' => 2])],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
+        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
 

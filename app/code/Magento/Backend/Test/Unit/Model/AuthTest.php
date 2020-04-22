@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Model\Auth;
@@ -63,7 +65,7 @@ class AuthTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->with(StorageInterface::class)
-            ->will($this->returnValue($this->_credentialStorage));
+            ->willReturn($this->_credentialStorage);
         $exceptionMock = new LocalizedException(
             __(
                 'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -74,7 +76,7 @@ class AuthTest extends TestCase
             ->expects($this->once())
             ->method('login')
             ->with('username', 'password')
-            ->will($this->throwException($exceptionMock));
+            ->willThrowException($exceptionMock);
         $this->_credentialStorage->expects($this->never())->method('getId');
         $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('backend_auth_user_login_failed');
         $this->_model->login('username', 'password');
