@@ -75,7 +75,7 @@ class ReturnProcessorTest extends TestCase
     /** @var  MockObject|StoreInterface */
     private $storeMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->stockManagementMock = $this->getMockBuilder(StockManagementInterface::class)
             ->disableOriginalConstructor()
