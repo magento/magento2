@@ -109,7 +109,8 @@ class ProductsListTest extends TestCase
         $this->collectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
                 ->setMethods(['create'])
-                ->disableOriginalConstructor()->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->visibility = $this->getMockBuilder(Visibility::class)
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
@@ -153,7 +154,8 @@ class ProductsListTest extends TestCase
     public function testGetCacheKeyInfo()
     {
         $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()->setMethods(['getId'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])->getMock();
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
@@ -258,7 +260,8 @@ class ProductsListTest extends TestCase
                 'setLimit',
                 'setTotalLimit',
                 'setCollection',
-            ])->disableOriginalConstructor()->getMock();
+            ])->disableOriginalConstructor()
+            ->getMock();
 
         $pagerBlock->expects($this->once())->method('setUseContainer')->willReturnSelf();
         $pagerBlock->expects($this->once())->method('setShowAmounts')->willReturnSelf();

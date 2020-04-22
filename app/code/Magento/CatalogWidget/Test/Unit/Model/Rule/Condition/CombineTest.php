@@ -84,7 +84,8 @@ class CombineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $condition = $this->getMockBuilder(Combine::class)
-            ->disableOriginalConstructor()->setMethods(['collectValidatedAttributes'])
+            ->disableOriginalConstructor()
+            ->setMethods(['collectValidatedAttributes'])
             ->getMock();
         $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)->willReturnSelf();
 
