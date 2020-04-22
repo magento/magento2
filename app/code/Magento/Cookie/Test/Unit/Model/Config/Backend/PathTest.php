@@ -53,12 +53,11 @@ class PathTest extends TestCase
 
     /**
      * Method is not publicly accessible, so it must be called through parent
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid cookie path
      */
     public function testBeforeSaveException(): void
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Invalid cookie path');
         $invalidCookiePath = 'invalid path';
         $this->validatorMock->expects($this->once())
             ->method('isValid')
