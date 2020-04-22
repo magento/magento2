@@ -18,7 +18,7 @@ use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider as ModelDataProvider;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

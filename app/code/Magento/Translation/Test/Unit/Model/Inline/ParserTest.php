@@ -158,7 +158,7 @@ class ParserTest extends TestCase
 
         $processedContent = $this->model->processResponseBodyString($testContent);
         foreach ($processedAttributes as $attribute) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $attribute,
                 $processedContent,
                 'data-translate attribute not processed correctly'

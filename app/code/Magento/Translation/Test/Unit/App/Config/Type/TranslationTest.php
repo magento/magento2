@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
@@ -25,7 +27,7 @@ class TranslationTest extends TestCase
      */
     private $configType;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->source = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
