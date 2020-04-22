@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Shipping;
 
 use Magento\Checkout\Block\Shipping\Price;
@@ -63,7 +65,7 @@ class PriceTest extends TestCase
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($shippingPrice));
+            ->willReturn($shippingPrice);
 
         $this->priceCurrency->expects($this->once())
             ->method('convertAndFormat')

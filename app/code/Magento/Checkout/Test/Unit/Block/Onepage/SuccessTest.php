@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Onepage;
 
 use Magento\Checkout\Block\Onepage\Success;
@@ -89,17 +91,17 @@ class SuccessTest extends TestCase
                 ),
                 ScopeInterface::SCOPE_STORE
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
             ->getMock();
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        $context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
+        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
         $this->block = $objectManager->getObject(
             Success::class,
@@ -120,8 +122,8 @@ class SuccessTest extends TestCase
             'renderElement'
         )->with(
             'order.success.additional.info'
-        )->will(
-            $this->returnValue('AdditionalInfoHtml')
+        )->willReturn(
+            'AdditionalInfoHtml'
         );
         $this->block->setLayout($layout);
         $this->assertEquals('AdditionalInfoHtml', $this->block->getAdditionalInfoHtml());
@@ -179,8 +181,8 @@ class SuccessTest extends TestCase
     public function testGetContinueUrl()
     {
         $storeMock = $this->createMock(Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn('Expected Result');
 
         $this->assertEquals('Expected Result', $this->block->getContinueUrl());
     }

@@ -165,7 +165,11 @@ class GuestPaymentInformationManagementTest extends TestCase
 
         $this->billingAddressManagementMock->expects($this->never())->method('assign');
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $quoteIdMaskMock = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
+        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
         $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
@@ -188,7 +192,11 @@ class GuestPaymentInformationManagementTest extends TestCase
         $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
 
-        $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
+        $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteIdMaskFactoryMock->method('create')->willReturn($quoteIdMask);
         $quoteIdMask->method('load')->with($cartId, 'masked_id')->willReturnSelf();
         $quoteIdMask->method('getQuoteId')->willReturn($cartId);
@@ -212,7 +220,11 @@ class GuestPaymentInformationManagementTest extends TestCase
         int $cartId,
         MockObject $billingAddressMock
     ) : void {
-        $quoteIdMask = $this->createPartialMock(QuoteIdMask::class, ['getQuoteId', 'load']);
+        $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteIdMaskFactoryMock->method('create')
             ->willReturn($quoteIdMask);
         $quoteIdMask->method('load')
@@ -226,10 +238,11 @@ class GuestPaymentInformationManagementTest extends TestCase
         $quoteBillingAddress = $this->createMock(Address::class);
         $shippingRate = $this->createPartialMock(Rate::class, []);
         $shippingRate->setCarrier('flatrate');
-        $quoteShippingAddress = $this->createPartialMock(
-            Address::class,
-            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
-        );
+        $quoteShippingAddress = $this->getMockBuilder(Address::class)
+            ->addMethods(['setLimitCarrier'])
+            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cartRepositoryMock->method('getActive')
             ->with($cartId)
             ->willReturn($quote);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block;
 
 use Magento\Checkout\Block\Link;
@@ -31,7 +33,7 @@ class LinkTest extends TestCase
         $url = 'http://example.com/';
 
         $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
+        $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
             Context::class,
@@ -48,30 +50,32 @@ class LinkTest extends TestCase
     {
         $helper = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['canOnepageCheckout', 'isModuleOutputEnabled']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['canOnepageCheckout', 'isModuleOutputEnabled']
+            )->getMock();
 
         $moduleManager = $this->getMockBuilder(
             Manager::class
-        )->disableOriginalConstructor()->setMethods(
-            ['isOutputEnabled']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['isOutputEnabled']
+            )->getMock();
 
         /** @var Link $block */
         $block = $this->_objectManagerHelper->getObject(
             Link::class,
             ['moduleManager' => $moduleManager, 'checkoutHelper' => $helper]
         );
-        $helper->expects($this->any())->method('canOnepageCheckout')->will($this->returnValue($canOnepageCheckout));
+        $helper->expects($this->any())->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
         $moduleManager->expects(
             $this->any()
         )->method(
             'isOutputEnabled'
         )->with(
             'Magento_Checkout'
-        )->will(
-            $this->returnValue($isOutputEnabled)
+        )->willReturn(
+            $isOutputEnabled
         );
         $this->assertEquals('', $block->toHtml());
     }

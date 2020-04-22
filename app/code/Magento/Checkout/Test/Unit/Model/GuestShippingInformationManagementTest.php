@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Api\Data\PaymentDetailsInterface;
@@ -58,7 +60,11 @@ class GuestShippingInformationManagementTest extends TestCase
         $quoteId = 100;
         $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
 
-        $quoteIdMaskMock = $this->createPartialMock(QuoteIdMask::class, ['load', 'getQuoteId']);
+        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
 
         $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();

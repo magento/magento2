@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model\Cart;
 
@@ -32,8 +33,10 @@ class CheckoutSummaryConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
+            ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
         $this->model = new CheckoutSummaryConfigProvider($this->urlBuilderMock, $this->scopeConfigMock);
     }
 

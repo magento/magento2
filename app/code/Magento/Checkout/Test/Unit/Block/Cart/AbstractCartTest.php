@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 use Magento\Backend\Block\Template\Context;
@@ -13,6 +15,7 @@ use Magento\Framework\View\Element\RendererList;
 use Magento\Framework\View\Layout;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Sales\Block\Items\AbstractItems;
 use PHPUnit\Framework\TestCase;
 
 class AbstractCartTest extends TestCase
@@ -43,13 +46,13 @@ class AbstractCartTest extends TestCase
         )->with(
             $expectedType,
             AbstractCart::DEFAULT_TYPE
-        )->will(
-            $this->returnValue('rendererObject')
+        )->willReturn(
+            'rendererObject'
         );
 
         $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
 
-        $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
+        $layout->expects($this->once())->method('getChildName')->willReturn('renderer.list');
 
         $layout->expects(
             $this->once()
@@ -57,11 +60,11 @@ class AbstractCartTest extends TestCase
             'getBlock'
         )->with(
             'renderer.list'
-        )->will(
-            $this->returnValue($renderer)
+        )->willReturn(
+            $renderer
         );
 
-        /** @var $block \Magento\Sales\Block\Items\AbstractItems */
+        /** @var AbstractItems $block */
         $block = $this->_objectManager->getObject(
             AbstractCart::class,
             [
@@ -88,9 +91,9 @@ class AbstractCartTest extends TestCase
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Renderer list for block "" is not defined');
         $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
-        $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
+        $layout->expects($this->once())->method('getChildName')->willReturn(null);
 
-        /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
+        /** @var \Magento\Checkout\Block\Cart\AbstractCart $block */
         $block = $this->_objectManager->getObject(
             AbstractCart::class,
             [

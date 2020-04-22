@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller\Account;
 
 use Magento\Checkout\Controller\Account\Create;
@@ -60,7 +62,10 @@ class CreateTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->checkoutSession = $this->createPartialMock(Session::class, ['getLastOrderId']);
+        $this->checkoutSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getLastOrderId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->orderCustomerService = $this->createMock(OrderCustomerManagementInterface::class);
         $this->messageManager = $this->createMock(ManagerInterface::class);
@@ -96,7 +101,7 @@ class CreateTest extends TestCase
         $resultJson = '{"errors": "true", "message": "Customer is already registered"}';
         $this->customerSession->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
@@ -114,13 +119,13 @@ class CreateTest extends TestCase
 
     public function testExecute()
     {
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->will($this->returnValue(100));
+        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->willReturn(100);
         $customer = $this->createMock(CustomerInterface::class);
         $this->orderCustomerService->expects($this->once())
             ->method('create')
             ->with(100)
-            ->will($this->returnValue($customer));
+            ->willReturn($customer);
 
         $resultJson = '{"errors":"false", "message":"A letter with further instructions will be sent to your email."}';
         $this->resultFactory->expects($this->once())

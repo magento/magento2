@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
 use Magento\Catalog\Helper\Image;
@@ -50,7 +52,8 @@ class DefaultItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $checkoutHelper = $this->getMockBuilder(Data::class)
-            ->setMethods(['formatPrice'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['formatPrice'])->disableOriginalConstructor()
+            ->getMock();
         $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
         $this->itemResolver = $this->createMock(ItemResolverInterface::class);
         $this->model = $objectManager->getObject(
@@ -95,7 +98,7 @@ class DefaultItemTest extends TestCase
         $this->itemResolver->expects($this->any())
             ->method('getFinalProduct')
             ->with($item)
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $itemData = $this->model->getItemData($item);
         $this->assertArrayHasKey('options', $itemData);
