@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
@@ -17,7 +19,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -70,7 +72,7 @@ class SensitiveConfigSetFacadeTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()

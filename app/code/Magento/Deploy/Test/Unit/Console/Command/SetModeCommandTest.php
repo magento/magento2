@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
@@ -51,7 +52,7 @@ class SetModeCommandTest extends TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "production mode",
             $tester->getDisplay()
         );
@@ -63,7 +64,7 @@ class SetModeCommandTest extends TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'developer']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "developer mode",
             $tester->getDisplay()
         );
@@ -75,7 +76,7 @@ class SetModeCommandTest extends TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'default']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "default mode",
             $tester->getDisplay()
         );
@@ -87,7 +88,7 @@ class SetModeCommandTest extends TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production', '--skip-compilation' => true]);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "production mode",
             $tester->getDisplay()
         );
@@ -97,7 +98,7 @@ class SetModeCommandTest extends TestCase
     {
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'The mode can\'t be switched to "invalid-mode".',
             $tester->getDisplay()
         );

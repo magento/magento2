@@ -1,15 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;

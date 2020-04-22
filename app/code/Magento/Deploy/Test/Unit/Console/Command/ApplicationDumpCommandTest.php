@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Config\Model\Config\Export\Comment;
@@ -62,7 +64,7 @@ class ApplicationDumpCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()
