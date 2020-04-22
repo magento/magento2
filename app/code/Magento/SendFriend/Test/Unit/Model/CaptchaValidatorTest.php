@@ -76,7 +76,8 @@ class CaptchaValidatorTest extends TestCase
             ->getMockForAbstractClass();
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->captchaMock = $this->createMock(DefaultModel::class);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
 
         $this->model = $objectManager->getObject(
             CaptchaValidator::class,
