@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
@@ -62,7 +64,7 @@ class SessionTest extends TestCase
         );
 
         $actionValidatorMock = $this->createMock(RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         $context = $helper->getObject(
             Context::class,
@@ -89,7 +91,7 @@ class SessionTest extends TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(Session::COOKIE_NAME)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->session->loadByCookieKey(null);
     }
 
@@ -99,17 +101,16 @@ class SessionTest extends TestCase
     public function testAfterDeleteCommit()
     {
         $cookiePath = 'some_path';
-        $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
+        $this->configMock->expects($this->once())->method('getCookiePath')->willReturn($cookiePath);
         $cookieMetadataMock = $this->getMockBuilder(SensitiveCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->with($cookiePath)->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects(
             $this->once()
         )->method(
@@ -132,23 +133,19 @@ class SessionTest extends TestCase
             ->getMock();
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->with($cookiePath)->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setDuration')
-            ->with($duration)
-            ->will($this->returnSelf());
+            ->with($duration)->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setSecure')
-            ->with(false)
-            ->will($this->returnSelf());
+            ->with(false)->willReturnSelf();
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
-            ->with(true)
-            ->will($this->returnSelf());
+            ->with(true)->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
@@ -179,27 +176,23 @@ class SessionTest extends TestCase
             ->getMock();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setPath')
-            ->with($cookiePath)
-            ->will($this->returnSelf());
+            ->with($cookiePath)->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setDuration')
-            ->with($cookieDuration)
-            ->will($this->returnSelf());
+            ->with($cookieDuration)->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setSecure')
-            ->with(false)
-            ->will($this->returnSelf());
+            ->with(false)->willReturnSelf();
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')
-            ->with(true)
-            ->will($this->returnSelf());
+            ->with(true)->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadataMock));
+            ->willReturn($cookieMetadataMock);
         $this->cookieManagerMock->expects($this->exactly($numGetCookieCalls))
             ->method('getCookie')
             ->with(Session::COOKIE_NAME)
-            ->will($this->returnValue($cookieValue));
+            ->willReturn($cookieValue);
         $this->cookieManagerMock->expects($this->exactly($numCalls))
             ->method('setPublicCookie')
             ->with(

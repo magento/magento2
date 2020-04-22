@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -64,19 +65,19 @@ class SynchronizePersistentOnLogoutObserverTest extends TestCase
 
     public function testSynchronizePersistentOnLogoutWhenPersistentDataNotEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(false));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->sessionFactoryMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
 
     public function testSynchronizePersistentOnLogoutWhenPersistentDataIsEnabled()
     {
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('getClearOnLogout')->will($this->returnValue(true));
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->helperMock->expects($this->once())->method('getClearOnLogout')->willReturn(true);
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('removePersistentCookie');
         $this->sessionHelperMock->expects($this->once())->method('setSession')->with(null);
         $this->model->execute($this->observerMock);

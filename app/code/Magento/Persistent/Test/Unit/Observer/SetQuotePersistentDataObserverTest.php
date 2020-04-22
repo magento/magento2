@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -64,12 +65,17 @@ class SetQuotePersistentDataObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $quoteMethods = ['setIsActive', 'setIsPersistent', '__wakeUp'];
-        $eventMethods = ['getQuote', '__wakeUp'];
-        $this->quoteMock = $this->createPartialMock(Quote::class, $quoteMethods);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setIsPersistent'])
+            ->onlyMethods(['setIsActive'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->helperMock = $this->createMock(Data::class);
         $this->sessionHelperMock = $this->createMock(Session::class);
-        $this->eventManagerMock = $this->createPartialMock(Event::class, $eventMethods);
+        $this->eventManagerMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
@@ -83,35 +89,35 @@ class SetQuotePersistentDataObserverTest extends TestCase
 
     public function testExecuteWhenSessionIsNotPersistent()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenQuoteNotExist()
     {
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock->expects($this->once())->method('getQuote');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenSessionIsPersistent()
     {
-        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->will($this->returnValue(true));
+        $this->sessionHelperMock->expects($this->exactly(2))->method('isPersistent')->willReturn(true);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
-        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->willReturn($this->quoteMock);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(true);
+        $this->quoteManagerMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('setIsPersistent')->with(true);
         $this->model->execute($this->observerMock);
     }

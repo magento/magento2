@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Customer\Model\Session;
@@ -42,7 +44,7 @@ class RefreshCustomerDataTest extends TestCase
      */
     private $sessionManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->cookieManager = $this->getMockBuilder(PhpCookieManager::class)
             ->disableOriginalConstructor()

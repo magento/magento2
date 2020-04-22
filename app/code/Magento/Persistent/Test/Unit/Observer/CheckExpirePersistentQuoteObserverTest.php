@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -16,8 +17,8 @@ use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,10 +89,10 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->sessionMock = $this->createMock(Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->persistentHelperMock = $this->createMock(Data::class);
-        $this->observerMock = $this->createPartialMock(
-            Observer::class,
-            ['getControllerAction','__wakeUp']
-        );
+        $this->observerMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getControllerAction'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
@@ -112,9 +113,9 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->quoteRepositoryMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-        ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testExecuteWhenCanNotApplyPersistentData()

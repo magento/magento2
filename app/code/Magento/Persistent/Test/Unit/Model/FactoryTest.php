@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -48,8 +50,8 @@ class FactoryTest extends TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className));
@@ -68,8 +70,8 @@ class FactoryTest extends TestCase
         )->with(
             $className,
             $data
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className, $data));

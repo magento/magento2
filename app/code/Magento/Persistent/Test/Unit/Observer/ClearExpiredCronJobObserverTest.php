@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -72,12 +73,12 @@ class ClearExpiredCronJobObserverTest extends TestCase
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->websiteCollectionMock));
-        $this->websiteCollectionMock->expects($this->once())->method('getAllIds')->will($this->returnValue([1]));
+            ->willReturn($this->websiteCollectionMock);
+        $this->websiteCollectionMock->expects($this->once())->method('getAllIds')->willReturn([1]);
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('deleteExpired')->with(1);
         $this->model->execute($this->scheduleMock);
     }
@@ -87,7 +88,7 @@ class ClearExpiredCronJobObserverTest extends TestCase
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->websiteCollectionMock));
+            ->willReturn($this->websiteCollectionMock);
         $this->websiteCollectionMock->expects($this->once())->method('getAllIds');
         $this->sessionFactoryMock
             ->expects($this->never())

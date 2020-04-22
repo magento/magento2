@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -67,14 +68,17 @@ class ApplyBlockPersistentDataObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $eventMethods = ['getConfigFilePath', 'getBlock', '__wakeUp'];
         $this->sessionMock = $this->createMock(Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->configMock =
             $this->createPartialMock(ConfigFactory::class, ['create']);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->createPartialMock(Event::class, $eventMethods);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getConfigFilePath'])
+            ->onlyMethods(['getBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->blockMock = $this->createMock(AbstractBlock::class);
         $this->persistentConfigMock = $this->createMock(Config::class);
         $this->model = new ApplyBlockPersistentDataObserver(
@@ -87,53 +91,53 @@ class ApplyBlockPersistentDataObserverTest extends TestCase
 
     public function testExecuteWhenSessionNotPersistent()
     {
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteForLoggedInAndPersistentCustomer()
     {
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->observerMock->expects($this->never())->method('getEvent');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenBlockDoesNotExist()
     {
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getBlock')->will($this->returnValue(null));
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getBlock')->willReturn(null);
         $this->eventMock->expects($this->never())->method('getConfigFilePath');
         $this->model->execute($this->observerMock);
     }
 
     public function testExecuteWhenConfigFilePathDoesNotExist()
     {
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->observerMock
             ->expects($this->any())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getBlock')->will($this->returnValue($this->blockMock));
-        $this->eventMock->expects($this->once())->method('getConfigFilePath')->will($this->returnValue(false));
+            ->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getBlock')->willReturn($this->blockMock);
+        $this->eventMock->expects($this->once())->method('getConfigFilePath')->willReturn(false);
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('getPersistentConfigFilePath')
-            ->will($this->returnValue('path1/path2'));
+            ->willReturn('path1/path2');
         $this->configMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->persistentConfigMock));
+            ->willReturn($this->persistentConfigMock);
         $this->persistentConfigMock->expects($this->once())->method('setConfigFilePath')->with('path1/path2');
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('getBlockConfigInfo')
             ->with(get_class($this->blockMock))
-            ->will($this->returnValue(['persistentConfigInfo']));
+            ->willReturn(['persistentConfigInfo']);
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('fireOne')
@@ -143,27 +147,27 @@ class ApplyBlockPersistentDataObserverTest extends TestCase
 
     public function testExecute()
     {
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->observerMock
             ->expects($this->any())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
-        $this->eventMock->expects($this->once())->method('getBlock')->will($this->returnValue($this->blockMock));
-        $this->eventMock->expects($this->once())->method('getConfigFilePath')->will($this->returnValue('path1/path2'));
+            ->willReturn($this->eventMock);
+        $this->eventMock->expects($this->once())->method('getBlock')->willReturn($this->blockMock);
+        $this->eventMock->expects($this->once())->method('getConfigFilePath')->willReturn('path1/path2');
         $this->persistentHelperMock
             ->expects($this->never())
             ->method('getPersistentConfigFilePath');
         $this->configMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->persistentConfigMock));
+            ->willReturn($this->persistentConfigMock);
         $this->persistentConfigMock->expects($this->once())->method('setConfigFilePath')->with('path1/path2');
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('getBlockConfigInfo')
             ->with(get_class($this->blockMock))
-            ->will($this->returnValue(['persistentConfigInfo']));
+            ->willReturn(['persistentConfigInfo']);
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('fireOne')

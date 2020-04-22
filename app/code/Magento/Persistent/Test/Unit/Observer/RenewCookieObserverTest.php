@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -73,8 +74,10 @@ class RenewCookieObserverTest extends TestCase
         $this->sessionFactoryMock =
             $this->createPartialMock(SessionFactory::class, ['create']);
         $this->observerMock = $this->createMock(Observer::class);
-        $eventMethods = ['getRequest', '__wakeUp'];
-        $this->eventManagerMock = $this->createPartialMock(Event::class, $eventMethods);
+        $this->eventManagerMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sessionMock = $this->createMock(\Magento\Persistent\Model\Session::class);
         $this->model = new RenewCookieObserver(
             $this->helperMock,
@@ -90,30 +93,30 @@ class RenewCookieObserverTest extends TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
 
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $this->eventManagerMock
             ->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn($this->requestMock);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->requestMock
             ->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('customer_account_logout'));
-        $this->helperMock->expects($this->once())->method('getLifeTime')->will($this->returnValue(60));
+            ->willReturn('customer_account_logout');
+        $this->helperMock->expects($this->once())->method('getLifeTime')->willReturn(60);
         $this->customerSessionMock
-            ->expects($this->once())->method('getCookiePath')->will($this->returnValue('path/cookie'));
+            ->expects($this->once())->method('getCookiePath')->willReturn('path/cookie');
         $this->sessionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('renewPersistentCookie')->with(60, 'path/cookie');
         $this->model->execute($this->observerMock);
     }
@@ -124,7 +127,7 @@ class RenewCookieObserverTest extends TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperMock->expects($this->never())->method('isEnabled');
 
         $this->observerMock

@@ -77,10 +77,10 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->createPartialMock(Event::class, ['getData']);
-        $this->persistentSessionMock = $this->createPartialMock(
-            \Magento\Persistent\Model\Session::class,
-            ['getCustomerId']
-        );
+        $this->persistentSessionMock = $this->getMockBuilder(\Magento\Persistent\Model\Session::class)
+            ->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerRepositoryMock = $this->createMock(
             CustomerRepositoryInterface::class
         );
@@ -102,13 +102,13 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($this->checkoutSessionMock));
+            ->willReturn($this->checkoutSessionMock);
         $this->sessionHelperMock->expects($this->once())
             ->method('isPersistent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->checkoutSessionMock->expects($this->never())
             ->method('setLoadInactive');
         $this->checkoutSessionMock->expects($this->never())
@@ -126,28 +126,28 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
     {
         $this->observerMock->expects($this->once())
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($this->checkoutSessionMock));
+            ->willReturn($this->checkoutSessionMock);
         $this->sessionHelperMock->expects($this->exactly(2))
             ->method('isPersistent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperMock->expects($this->exactly(2))
             ->method('isShoppingCartPersist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->persistentSessionMock->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue(123));
+            ->willReturn(123);
         $this->sessionHelperMock->expects($this->once())
             ->method('getSession')
-            ->will($this->returnValue($this->persistentSessionMock));
+            ->willReturn($this->persistentSessionMock);
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
-            ->will($this->returnValue(true)); //?
+            ->willReturn(true); //?
         $this->checkoutSessionMock->expects($this->never())
             ->method('setLoadInactive');
         $this->checkoutSessionMock->expects($this->once())

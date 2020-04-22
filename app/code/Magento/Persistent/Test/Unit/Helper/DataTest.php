@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Helper;
 
 use Magento\Framework\Module\Dir\Reader;
@@ -42,8 +44,8 @@ class DataTest extends TestCase
         )->with(
             'etc',
             'Magento_Persistent'
-        )->will(
-            $this->returnValue('path123')
+        )->willReturn(
+            'path123'
         );
         $this->assertEquals('path123/persistent.xml', $this->_helper->getPersistentConfigFilePath());
     }

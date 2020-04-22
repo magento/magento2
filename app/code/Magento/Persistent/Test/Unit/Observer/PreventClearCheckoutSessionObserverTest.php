@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
@@ -60,14 +61,17 @@ class PreventClearCheckoutSessionObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $eventMethods = ['getControllerAction', 'dispatch', '__wakeUp'];
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->helperMock = $this->createMock(Data::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->createPartialMock(Event::class, $eventMethods);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getControllerAction'])
+            ->onlyMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionMock = $this->createMock(Index::class);
-        $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->model = new PreventClearCheckoutSessionObserver(
             $this->sessionHelperMock,
             $this->helperMock,
@@ -80,9 +84,9 @@ class PreventClearCheckoutSessionObserverTest extends TestCase
         $this->eventMock
             ->expects($this->once())
             ->method('getControllerAction')
-            ->will($this->returnValue($this->actionMock));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn($this->actionMock);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->helperMock->expects($this->never())->method('isShoppingCartPersist');
         $this->actionMock->expects($this->once())->method('setClearCheckoutSession')->with(false);
         $this->model->execute($this->observerMock);
@@ -93,10 +97,10 @@ class PreventClearCheckoutSessionObserverTest extends TestCase
         $this->eventMock
             ->expects($this->once())
             ->method('getControllerAction')
-            ->will($this->returnValue($this->actionMock));
-        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
-        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(false));
+            ->willReturn($this->actionMock);
+        $this->sessionHelperMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
+        $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->willReturn(false);
         $this->actionMock->expects($this->once())->method('setClearCheckoutSession')->with(false);
         $this->model->execute($this->observerMock);
     }

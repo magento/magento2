@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
 use Magento\Checkout\Model\DefaultConfigProvider;
@@ -59,7 +61,7 @@ class ConfigProviderPluginTest extends TestCase
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->maskFactoryMock = $this->createPartialMock(
             QuoteIdMaskFactory::class,
-            ['create', '__wakeup']
+            ['create']
         );
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->subjectMock = $this->createMock(DefaultConfigProvider::class);
@@ -114,7 +116,11 @@ class ConfigProviderPluginTest extends TestCase
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
-        $quoteMaskMock = $this->createPartialMock(QuoteIdMask::class, ['load', 'getMaskedId']);
+        $quoteMaskMock = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getMaskedId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->maskFactoryMock->expects($this->once())->method('create')->willReturn($quoteMaskMock);
         $quoteMock = $this->createMock(Quote::class);
 

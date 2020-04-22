@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Block\Header;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -119,7 +121,9 @@ class AdditionalTest extends TestCase
     {
         $customerId = 1;
         /** @var \Magento\Persistent\Model\Session|MockObject $sessionMock */
-        $sessionMock = $this->createPartialMock(\Magento\Persistent\Model\Session::class, ['getCustomerId']);
+        $sessionMock = $this->getMockBuilder(\Magento\Persistent\Model\Session::class)->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $sessionMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
