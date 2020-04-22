@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ProductVideo\Test\Unit\Observer;
 
@@ -23,10 +24,13 @@ class ChangeTemplateObserverTest extends TestCase
     public function testChangeTemplate()
     {
         /** @var MockObject|Observer $observer */
-        $observer = $this->createPartialMock(Observer::class, ['getBlock']);
+        $observer = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /**
-         * @var MockObject|\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
+         * @var MockObject|NewVideo $block
          */
         $block = $this->createMock(NewVideo::class);
         $block->expects($this->once())

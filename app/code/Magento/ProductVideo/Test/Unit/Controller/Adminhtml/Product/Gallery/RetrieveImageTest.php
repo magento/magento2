@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Backend\App\Action\Context;
@@ -122,12 +124,12 @@ class RetrieveImageTest extends TestCase
         $this->storageFileMock = $this->createMock(File::class);
         $this->request = $this->createMock(RequestInterface::class);
         $this->fileDriverMock = $this->createMock(DriverInterface::class);
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $managerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMockForAbstractClass();
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($managerMock);
 
         $this->image = $objectManager->getObject(

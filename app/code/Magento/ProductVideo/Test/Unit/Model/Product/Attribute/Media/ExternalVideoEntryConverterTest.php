@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
@@ -26,12 +27,12 @@ use PHPUnit\Framework\TestCase;
 class ExternalVideoEntryConverterTest extends TestCase
 {
     /**
-     * @var MockObject|\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
+     * @var MockObject|ProductAttributeMediaGalleryEntryInterfaceFactory
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var MockObject|\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
+     * @var MockObject|ProductAttributeMediaGalleryEntryInterface
      */
     protected $mediaGalleryEntryMock;
 
@@ -69,25 +70,25 @@ class ExternalVideoEntryConverterTest extends TestCase
 
         $this->mediaGalleryEntryMock =
             $this->createPartialMock(ProductAttributeMediaGalleryEntryInterface::class, [
-                    'getId',
-                    'setId',
-                    'getMediaType',
-                    'setMediaType',
-                    'getLabel',
-                    'setLabel',
-                    'getPosition',
-                    'setPosition',
-                    'isDisabled',
-                    'setDisabled',
-                    'getTypes',
-                    'setTypes',
-                    'getFile',
-                    'setFile',
-                    'getContent',
-                    'setContent',
-                    'getExtensionAttributes',
-                    'setExtensionAttributes'
-                ]);
+                'getId',
+                'setId',
+                'getMediaType',
+                'setMediaType',
+                'getLabel',
+                'setLabel',
+                'getPosition',
+                'setPosition',
+                'isDisabled',
+                'setDisabled',
+                'getTypes',
+                'setTypes',
+                'getFile',
+                'setFile',
+                'getContent',
+                'setContent',
+                'getExtensionAttributes',
+                'setExtensionAttributes'
+            ]);
 
         $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->mediaGalleryEntryMock
@@ -108,10 +109,11 @@ class ExternalVideoEntryConverterTest extends TestCase
                 ['create']
             );
 
-        $this->mediaGalleryEntryExtensionMock = $this->createPartialMock(
-            ProductAttributeMediaGalleryEntryExtension::class,
-            ['setVideoContent', 'getVideoContent', 'getVideoProvider']
-        );
+        $this->mediaGalleryEntryExtensionMock = $this->getMockBuilder(ProductAttributeMediaGalleryEntryExtension::class)
+            ->addMethods(['getVideoProvider'])
+            ->onlyMethods(['setVideoContent', 'getVideoContent'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mediaGalleryEntryExtensionMock->expects($this->any())->method('setVideoContent')->willReturn(null);
         $this->mediaGalleryEntryExtensionFactoryMock->expects($this->any())->method('create')->willReturn(
@@ -138,7 +140,7 @@ class ExternalVideoEntryConverterTest extends TestCase
 
     public function testConvertTo()
     {
-        /** @var  MockObject|\Magento\Catalog\Model\Product $product */
+        /** @var  MockObject|Product $product */
         $product = $this->createMock(Product::class);
 
         $rowData = [
@@ -168,9 +170,7 @@ class ExternalVideoEntryConverterTest extends TestCase
 
         $product->expects($this->once())->method('getMediaAttributeValues')->willReturn($productImages);
 
-        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->will(
-            $this->returnSelf()
-        );
+        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->willReturnSelf();
 
         $this->modelObject->convertTo($product, $rowData);
     }

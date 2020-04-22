@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductVideo\Test\Unit\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -48,7 +50,7 @@ class MediaTest extends TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_PLAY_IF_BASE)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -64,7 +66,7 @@ class MediaTest extends TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_SHOW_RELATED)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -80,7 +82,7 @@ class MediaTest extends TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_VIDEO_AUTO_RESTART)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -96,7 +98,7 @@ class MediaTest extends TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_YOUTUBE_API_KEY)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
