@@ -35,10 +35,11 @@ class CustomerAddressesFormatterTest extends TestCase
      */
     public function testFormat()
     {
-        $addressMock = $this->createPartialMock(
-            Address::class,
-            ['getName', 'getStreetFull', 'getCity', 'getRegion', 'getPostcode', 'getCountryModel']
-        );
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['getCity', 'getPostcode'])
+            ->onlyMethods(['getName', 'getStreetFull', 'getRegion', 'getCountryModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $countryMock = $this->createMock(Country::class);
 
         $countryMock->expects($this->any())->method('getName')->willReturn('USA');
