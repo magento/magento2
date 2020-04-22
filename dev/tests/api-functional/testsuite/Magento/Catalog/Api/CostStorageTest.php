@@ -10,7 +10,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
- * CostStorage test.
+ * Catalog Cost Storage API test.
  */
 class CostStorageTest extends WebapiAbstract
 {

@@ -14,7 +14,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class AddressMetadataTest
+ * Customer Address Metadata API test
  */
 class AddressMetadataTest extends WebapiAbstract
 {

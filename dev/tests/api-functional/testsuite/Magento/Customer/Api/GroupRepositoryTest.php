@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GroupRepositoryTest
+ * Customer Group Repository API test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -40,7 +40,7 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\groupInterfaceFactory
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
     private $customerGroupFactory;
 
