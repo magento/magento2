@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use Magento\Framework\Api\DataObjectHelper;
@@ -34,9 +36,11 @@ class AbstractStorageTest extends TestCase
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
             AbstractStorage::class,
@@ -57,25 +61,23 @@ class AbstractStorageTest extends TestCase
         $this->storage->expects($this->once())
             ->method('doFindAllByData')
             ->with($data)
-            ->will($this->returnValue($rows));
+            ->willReturn($rows);
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with($urlRewrites[0], $rows[0], UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with($urlRewrites[0], $rows[0], UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($urlRewrites[0]));
+            ->willReturn($urlRewrites[0]);
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with($urlRewrites[1], $rows[1], UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with($urlRewrites[1], $rows[1], UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($urlRewrites[1]));
+            ->willReturn($urlRewrites[1]);
 
         $this->assertEquals($urlRewrites, $this->storage->findAllByData($data));
     }
@@ -87,7 +89,7 @@ class AbstractStorageTest extends TestCase
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->storage->findOneByData($data));
     }
@@ -101,16 +103,15 @@ class AbstractStorageTest extends TestCase
         $this->storage->expects($this->once())
             ->method('doFindOneByData')
             ->with($data)
-            ->will($this->returnValue($row));
+            ->willReturn($row);
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($urlRewrite, $row, UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with($urlRewrite, $row, UrlRewrite::class)->willReturnSelf();
 
         $this->urlRewriteFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($urlRewrite));
+            ->willReturn($urlRewrite);
 
         $this->assertEquals($urlRewrite, $this->storage->findOneByData($data));
     }
@@ -129,9 +130,7 @@ class AbstractStorageTest extends TestCase
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
-            ->will($this->throwException(
-                new UrlAlreadyExistsException(__('Custom storage message'))
-            ));
+            ->willThrowException(new UrlAlreadyExistsException(__('Custom storage message')));
 
         $this->storage->replace([['UrlRewrite1']]);
     }
@@ -143,9 +142,7 @@ class AbstractStorageTest extends TestCase
         $this->storage
             ->expects($this->once())
             ->method('doReplace')
-            ->will($this->throwException(
-                new UrlAlreadyExistsException()
-            ));
+            ->willThrowException(new UrlAlreadyExistsException());
 
         $this->storage->replace([['UrlRewrite1']]);
     }
