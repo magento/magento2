@@ -37,6 +37,7 @@ define([
                          */
                         done: function () {
                             obj.targetElementId = 1;
+                            obj.modalLoaded = true;
                         }
                     };
                 });
@@ -58,8 +59,8 @@ define([
                         }
                     };
                 });
-            obj.openDialog('instance/url', 100, 100, 'title', undefined);
-            obj.openDialog('instance/url', 100, 100, 'title', undefined);
+            obj.openDialog('instance/url/target_element_id/YDW2424/', 100, 100, 'title', undefined);
+            obj.openDialog('instance/target_element_id/Y45GDRg/', 100, 100, 'title', undefined);
             expect($.ajax.calls.count()).toBe(1);
         });
     });
