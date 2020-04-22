@@ -63,7 +63,8 @@ class GaTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock->expects($this->once())
             ->method('getEscaper')
@@ -74,7 +75,8 @@ class GaTest extends TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
 
         $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
@@ -217,7 +219,8 @@ class GaTest extends TestCase
         }
 
         $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
         $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
         $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
