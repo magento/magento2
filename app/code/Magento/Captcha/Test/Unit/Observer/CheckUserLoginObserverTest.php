@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Captcha\Helper\Data;
@@ -64,10 +66,10 @@ class CheckUserLoginObserverTest extends TestCase
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->customerSessionMock = $this->createPartialMock(
-            Session::class,
-            ['setUsername', 'getBeforeAuthUrl']
-        );
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['setUsername', 'getBeforeAuthUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->customerUrlMock = $this->createMock(Url::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
@@ -128,8 +130,8 @@ class CheckUserLoginObserverTest extends TestCase
 
         $response = $this->createMock(Http::class);
         $response->expects($this->once())
-        ->method('setRedirect')
-        ->with($redirectUrl);
+            ->method('setRedirect')
+            ->with($redirectUrl);
 
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $request->expects($this->any())
@@ -138,8 +140,8 @@ class CheckUserLoginObserverTest extends TestCase
             ->willReturn($loginParams);
 
         $controller = $this->createMock(Action::class);
-        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
+        $controller->expects($this->any())->method('getRequest')->willReturn($request);
+        $controller->expects($this->any())->method('getResponse')->willReturn($response);
 
         $this->captchaStringResolverMock->expects($this->once())
             ->method('resolve')

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Helper;
 
 use Magento\Captcha\Helper\Data;
@@ -74,8 +76,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             'customer/captcha/type'
-        )->will(
-            $this->returnValue('zend')
+        )->willReturn(
+            'zend'
         );
 
         $this->factoryMock->expects(
@@ -83,15 +85,13 @@ class DataTest extends TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo('Zend')
-        )->will(
-            $this->returnValue(
-                new DefaultModel(
-                    $this->createMock(SessionManager::class),
-                    $this->createMock(Data::class),
-                    $this->createPartialMock(LogFactory::class, ['create']),
-                    'user_create'
-                )
+            'Zend'
+        )->willReturn(
+            new DefaultModel(
+                $this->createMock(SessionManager::class),
+                $this->createMock(Data::class),
+                $this->createPartialMock(LogFactory::class, ['create']),
+                'user_create'
             )
         );
 
@@ -110,8 +110,8 @@ class DataTest extends TestCase
         )->with(
             'customer/captcha/enable',
             ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue('1')
+        )->willReturn(
+            '1'
         );
 
         $this->helper->getConfig('enable');
@@ -126,11 +126,11 @@ class DataTest extends TestCase
         $libDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with($fontPath)
-            ->will($this->returnValue($expectedFontPath));
+            ->willReturn($expectedFontPath);
         $this->_filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::LIB_INTERNAL)
-            ->will($this->returnValue($libDirMock));
+            ->willReturn($libDirMock);
 
         $configData = ['font_code' => ['label' => 'Label', 'path' => $fontPath]];
 
@@ -141,8 +141,8 @@ class DataTest extends TestCase
         )->with(
             'captcha/fonts',
             'default'
-        )->will(
-            $this->returnValue($configData)
+        )->willReturn(
+            $configData
         );
 
         $fonts = $this->helper->getFonts();
@@ -171,8 +171,8 @@ class DataTest extends TestCase
             'getDirectoryWrite'
         )->with(
             DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($dirWriteMock)
+        )->willReturn(
+            $dirWriteMock
         );
 
         $dirWriteMock->expects(
@@ -181,11 +181,11 @@ class DataTest extends TestCase
             'getAbsolutePath'
         )->with(
             '/captcha/base'
-        )->will(
-            $this->returnValue(TESTS_TEMP_DIR . '/captcha/base')
+        )->willReturn(
+            TESTS_TEMP_DIR . '/captcha/base'
         );
 
-        $this->assertFileNotExists(TESTS_TEMP_DIR . '/captcha');
+        $this->assertFileDoesNotExist(TESTS_TEMP_DIR . '/captcha');
         $result = $this->helper->getImgDir();
         $this->assertStringStartsWith(TESTS_TEMP_DIR, $result);
         $this->assertStringEndsWith('captcha/base/', $result);
@@ -209,7 +209,7 @@ class DataTest extends TestCase
     {
         $website = $this->createPartialMock(Website::class, ['getCode', '__wakeup']);
 
-        $website->expects($this->any())->method('getCode')->will($this->returnValue('base'));
+        $website->expects($this->any())->method('getCode')->willReturn('base');
 
         return $website;
     }
@@ -223,7 +223,7 @@ class DataTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/pub/media/');
 
         return $store;
     }

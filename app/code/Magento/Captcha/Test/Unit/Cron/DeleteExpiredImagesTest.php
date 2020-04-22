@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Cron;
 
 use Magento\Captcha\Cron\DeleteExpiredImages;
@@ -74,8 +76,8 @@ class DeleteExpiredImagesTest extends TestCase
             $this->once()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->_directory)
+        )->willReturn(
+            $this->_directory
         );
 
         $this->_deleteExpiredImages = new DeleteExpiredImages(
@@ -95,8 +97,8 @@ class DeleteExpiredImagesTest extends TestCase
             $this->once()
         )->method(
             'getWebsites'
-        )->will(
-            $this->returnValue(isset($website) ? [$website] : [])
+        )->willReturn(
+            isset($website) ? [$website] : []
         );
         if (isset($website)) {
             $this->_helper->expects(
@@ -104,10 +106,10 @@ class DeleteExpiredImagesTest extends TestCase
             )->method(
                 'getConfig'
             )->with(
-                $this->equalTo('timeout'),
+                'timeout',
                 new IsIdentical($website->getDefaultStore())
-            )->will(
-                $this->returnValue($timeout)
+            )->willReturn(
+                $timeout
             );
         } else {
             $this->_helper->expects($this->never())->method('getConfig');
@@ -117,10 +119,10 @@ class DeleteExpiredImagesTest extends TestCase
         )->method(
             'getConfig'
         )->with(
-            $this->equalTo('timeout'),
+            'timeout',
             new IsNull()
-        )->will(
-            $this->returnValue($timeout)
+        )->willReturn(
+            $timeout
         );
 
         $timesToCall = isset($website) ? 2 : 1;
@@ -128,11 +130,11 @@ class DeleteExpiredImagesTest extends TestCase
             $this->exactly($timesToCall)
         )->method(
             'read'
-        )->will(
-            $this->returnValue([$filename])
+        )->willReturn(
+            [$filename]
         );
-        $this->_directory->expects($this->exactly($timesToCall))->method('isFile')->will($this->returnValue($isFile));
-        $this->_directory->expects($this->any())->method('stat')->will($this->returnValue(['mtime' => $mTime]));
+        $this->_directory->expects($this->exactly($timesToCall))->method('isFile')->willReturn($isFile);
+        $this->_directory->expects($this->any())->method('stat')->willReturn(['mtime' => $mTime]);
 
         $this->_deleteExpiredImages->execute();
     }
@@ -144,7 +146,7 @@ class DeleteExpiredImagesTest extends TestCase
     {
         $website = $this->createPartialMock(Website::class, ['__wakeup', 'getDefaultStore']);
         $store = $this->createPartialMock(Store::class, ['__wakeup']);
-        $website->expects($this->any())->method('getDefaultStore')->will($this->returnValue($store));
+        $website->expects($this->any())->method('getDefaultStore')->willReturn($store);
         $time = time();
         return [
             [null, true, 'test.png', 50, ($time - 60) / 60, true],

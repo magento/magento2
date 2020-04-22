@@ -110,8 +110,8 @@ class DefaultTest extends TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_getStoreStub())
+        )->willReturn(
+            $this->_getStoreStub()
         );
 
         // \Magento\Customer\Model\Session
@@ -120,13 +120,11 @@ class DefaultTest extends TestCase
             $this->any()
         )->method(
             'get'
-        )->will(
-            $this->returnValueMap(
-                [
-                    Data::class => $this->_getHelperStub(),
-                    Session::class => $this->session,
-                ]
-            )
+        )->willReturnMap(
+            [
+                Data::class => $this->_getHelperStub(),
+                Session::class => $this->session,
+            ]
         );
 
         $this->_resLogFactory = $this->createPartialMock(
@@ -137,8 +135,8 @@ class DefaultTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_getResourceModelStub())
+        )->willReturn(
+            $this->_getResourceModelStub()
         );
 
         $this->_object = new DefaultModel(
@@ -268,7 +266,7 @@ class DefaultTest extends TestCase
             ->setMethods(['isLoggedIn', 'getUserCreateWord'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
-        $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
+        $session->expects($this->any())->method('isLoggedIn')->willReturn(false);
 
         $session->setData(
             [
@@ -290,7 +288,8 @@ class DefaultTest extends TestCase
     {
         $helper = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
         )->getMock();
 
@@ -298,20 +297,20 @@ class DefaultTest extends TestCase
             $this->any()
         )->method(
             'getConfig'
-        )->will(
-            $this->returnCallback('Magento\Captcha\Test\Unit\Model\DefaultTest::getConfigNodeStub')
+        )->willReturnCallback(
+            'Magento\Captcha\Test\Unit\Model\DefaultTest::getConfigNodeStub'
         );
 
-        $helper->expects($this->any())->method('getFonts')->will($this->returnValue($this->_fontPath));
+        $helper->expects($this->any())->method('getFonts')->willReturn($this->_fontPath);
 
-        $helper->expects($this->any())->method('_getWebsiteCode')->will($this->returnValue('base'));
+        $helper->expects($this->any())->method('_getWebsiteCode')->willReturn('base');
 
         $helper->expects(
             $this->any()
         )->method(
             'getImgUrl'
-        )->will(
-            $this->returnValue('http://localhost/pub/media/captcha/base/')
+        )->willReturn(
+            'http://localhost/pub/media/captcha/base/'
         );
 
         return $helper;
@@ -330,9 +329,9 @@ class DefaultTest extends TestCase
 
         $resourceModel->expects($this->any())->method('logAttempt');
 
-        $resourceModel->expects($this->any())->method('countAttemptsByRemoteAddress')->will($this->returnValue(0));
+        $resourceModel->expects($this->any())->method('countAttemptsByRemoteAddress')->willReturn(0);
 
-        $resourceModel->expects($this->any())->method('countAttemptsByUserLogin')->will($this->returnValue(3));
+        $resourceModel->expects($this->any())->method('countAttemptsByUserLogin')->willReturn(3);
         return $resourceModel;
     }
 
@@ -361,9 +360,13 @@ class DefaultTest extends TestCase
      */
     protected function _getStoreStub()
     {
-        $store = $this->createPartialMock(Store::class, ['isAdmin', 'getBaseUrl']);
-        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
-        $store->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
+        $store = $this->getMockBuilder(Store::class)
+            ->addMethods(['isAdmin'])
+            ->onlyMethods(['getBaseUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/pub/media/');
+        $store->expects($this->any())->method('isAdmin')->willReturn(false);
         return $store;
     }
 
@@ -405,7 +408,7 @@ class DefaultTest extends TestCase
         $randomMock = $this->createMock(Random::class);
         $randomMock->expects($this->once())
             ->method('getRandomString')
-            ->will($this->returnValue($string));
+            ->willReturn($string);
         $captcha = new DefaultModel(
             $this->session,
             $this->_getHelperStub(),

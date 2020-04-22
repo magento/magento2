@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 
 use Magento\Captcha\Helper\Adminhtml\Data;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data |MockObject
+     * @var Data|MockObject
      */
     protected $_model;
 
@@ -42,7 +44,7 @@ class DataTest extends TestCase
         $directoryMock = $this->createMock(Write::class);
 
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
-        $directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
 
         $this->_model = $objectManagerHelper->getObject($className, $arguments);
     }

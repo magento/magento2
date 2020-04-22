@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Captcha\Helper\Data;
@@ -102,8 +104,8 @@ class CheckForgotpasswordObserverTest extends TestCase
         )->with(
             Data::INPUT_NAME_FIELD_VALUE,
             null
-        )->will(
-            $this->returnValue([$formId => $captchaValue])
+        )->willReturn(
+            [$formId => $captchaValue]
         );
 
         $this->redirect->expects(
@@ -114,22 +116,22 @@ class CheckForgotpasswordObserverTest extends TestCase
             $response,
             $redirectRoutePath,
             []
-        )->will(
-            $this->returnValue($redirectUrl)
+        )->willReturn(
+            $redirectUrl
         );
 
         $controller = $this->createMock(Action::class);
-        $controller->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $controller->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $this->_captcha->expects($this->any())->method('isRequired')->will($this->returnValue(true));
+        $controller->expects($this->any())->method('getRequest')->willReturn($request);
+        $controller->expects($this->any())->method('getResponse')->willReturn($response);
+        $this->_captcha->expects($this->any())->method('isRequired')->willReturn(true);
         $this->_captcha->expects(
             $this->once()
         )->method(
             'isCorrect'
         )->with(
             $captchaValue
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->captchaStringResolver->expects(
@@ -139,8 +141,8 @@ class CheckForgotpasswordObserverTest extends TestCase
         )->with(
             $request,
             $formId
-        )->will(
-            $this->returnValue($captchaValue)
+        )->willReturn(
+            $captchaValue
         );
 
         $this->_helper->expects(
@@ -149,8 +151,8 @@ class CheckForgotpasswordObserverTest extends TestCase
             'getCaptcha'
         )->with(
             $formId
-        )->will(
-            $this->returnValue($this->_captcha)
+        )->willReturn(
+            $this->_captcha
         );
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($warningMessage);
         $this->_actionFlag->expects(
