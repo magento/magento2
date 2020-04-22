@@ -61,7 +61,7 @@ class ReportTest extends TestCase
      */
     private $contextMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

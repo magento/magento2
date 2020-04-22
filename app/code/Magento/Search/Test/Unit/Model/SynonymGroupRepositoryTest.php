@@ -31,7 +31,7 @@ class SynonymGroupRepositoryTest extends TestCase
      */
     private $resourceModel;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->factory = $this->createPartialMock(SynonymGroupFactory::class, ['create']);
         $this->resourceModel = $this->createMock(SynonymGroup::class);

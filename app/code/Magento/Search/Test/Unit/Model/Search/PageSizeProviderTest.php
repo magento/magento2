@@ -24,7 +24,7 @@ class PageSizeProviderTest extends TestCase
      */
     private $pageSizeBySearchEngineMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->pageSizeBySearchEngineMock = $this->getMockBuilder(EngineResolver::class)
             ->disableOriginalConstructor()
