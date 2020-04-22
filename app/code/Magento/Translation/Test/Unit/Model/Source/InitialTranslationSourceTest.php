@@ -64,7 +64,7 @@ class InitialTranslationSourceTest extends TestCase
      */
     private $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->translationFactory = $this->getMockBuilder(TranslateFactory::class)
             ->disableOriginalConstructor()
