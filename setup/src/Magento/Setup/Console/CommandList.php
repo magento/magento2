@@ -7,7 +7,7 @@
 namespace Magento\Setup\Console;
 
 use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class CommandList contains predefined list of commands for Setup.

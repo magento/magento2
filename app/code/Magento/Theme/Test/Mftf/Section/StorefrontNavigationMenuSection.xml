@@ -15,7 +15,6 @@
         <element name="subItemByLevel" type="text" selector="li.{{itemLevel}}.parent ul.{{itemLevel}}" parameterized="true"/>
         <element name="itemActiveState" type="text" selector=".navigation .level0.active>.level-top"/>
         <element name="subItemActiveState" type="text" selector=".navigation .level0 .submenu .active>a"/>
-        <element name="submenuLeftDirection" type="text" selector="ul.{{itemLevel}}.submenu-reverse" parameterized="true"/>
-        <element name="submenuRightDirection" type="text" selector="ul.{{itemLevel}}:not(.submenu-reverse)" parameterized="true"/>
+        <element name="submenu" type="text" selector="ul.{{itemLevel}}" parameterized="true"/>
     </section>
 </sections>

@@ -25,11 +25,6 @@ class StockTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageBuilder;
 
-    /**
-     * @var \Magento\ProductAlert\Block\Product\ImageProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $imageProviderMock;
-
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -39,16 +34,11 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageProviderMock = $this->getMockBuilder(\Magento\ProductAlert\Block\Product\ImageProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_block = $objectManager->getObject(
             \Magento\ProductAlert\Block\Email\Stock::class,
             [
                 'maliciousCode' => $this->_filter,
-                'imageBuilder' => $this->imageBuilder,
-                'imageProvider' => $this->imageProviderMock
+                'imageBuilder' => $this->imageBuilder
             ]
         );
     }
@@ -88,8 +78,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageProviderMock->expects($this->atLeastOnce())->method('getImage')->willReturn($productImageMock);
-
+        $this->imageBuilder->expects($this->atLeastOnce())->method('create')->willReturn($productImageMock);
         $this->assertInstanceOf(
             \Magento\Catalog\Block\Product\Image::class,
             $this->_block->getImage($productMock, $imageId, $attributes)

@@ -9,52 +9,52 @@ namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Catalog\Category;
 class ChooserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Data\Tree\Node|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Tree\Node|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $childNode;
 
     /**
-     * @var \Magento\Framework\Data\Tree\Node|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Tree\Node|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rootNode;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryTree;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $store;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 

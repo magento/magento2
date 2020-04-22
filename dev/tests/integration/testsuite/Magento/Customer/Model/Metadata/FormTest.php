@@ -5,9 +5,11 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @var Form
@@ -17,7 +19,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     protected $_attributes;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /** @var RequestInterface */
     protected $_request;
 
     /** @var array */
@@ -31,7 +33,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var FormFactory $formFactory */
-        $formFactory = $objectManager->create(\Magento\Customer\Model\Metadata\FormFactory::class);
+        $formFactory = $objectManager->create(FormFactory::class);
         $this->_form = $formFactory->create('customer_address', 'customer_address_edit');
 
         $this->_attributes = [
@@ -70,7 +72,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'region_id' => 12,
             'region' => 'California',
         ];
-        $this->_request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
+        $this->_request = $objectManager->get(RequestInterface::class);
         $this->_request->setParams($requestData);
 
         $this->_expected = array_merge($this->_attributes, $requestData);
@@ -105,10 +107,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'suffix',
             'company',
             'street',
-            'city',
             'country_id',
             'region',
             'region_id',
+            'city',
             'postcode',
             'telephone',
             'fax',

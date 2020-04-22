@@ -10,6 +10,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea frontend
+ *
+ * @deprecated since ShipmentSender is deprecated
+ * @see \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
  */
 class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 {
