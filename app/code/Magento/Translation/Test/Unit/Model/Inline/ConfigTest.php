@@ -35,7 +35,8 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->helperMock = $this->createPartialMock(Data::class, ['isDevAllowed']);
+        $this->helperMock = $this->getMockBuilder(Data::class)
+            ->onlyMethods(['isDevAllowed'])->disableOriginalConstructor()->getMock();
         $this->model = new Config(
             $this->scopeConfigMock,
             $this->helperMock
