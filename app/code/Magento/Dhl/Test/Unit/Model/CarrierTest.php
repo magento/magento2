@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Dhl\Test\Unit\Model;
 
@@ -32,7 +33,7 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -494,7 +495,7 @@ class CarrierTest extends TestCase
      *
      * @return ElementFactory|MockObject
      */
-    private function getXmlFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getXmlFactory(): MockObject
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
@@ -520,7 +521,7 @@ class CarrierTest extends TestCase
      *
      * @return ResultFactory|MockObject
      */
-    private function getRateFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getRateFactory(): MockObject
     {
         $rateFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -541,7 +542,7 @@ class CarrierTest extends TestCase
      *
      * @return MethodFactory|MockObject
      */
-    private function getRateMethodFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getRateMethodFactory(): MockObject
     {
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
@@ -570,7 +571,7 @@ class CarrierTest extends TestCase
      *
      * @return MockObject
      */
-    private function getConfigReader(): \PHPUnit\Framework\MockObject\MockObject
+    private function getConfigReader(): MockObject
     {
         $configReader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
@@ -586,7 +587,7 @@ class CarrierTest extends TestCase
      *
      * @return MockObject
      */
-    private function getReadFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getReadFactory(): MockObject
     {
         $modulesDirectory = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
@@ -606,7 +607,7 @@ class CarrierTest extends TestCase
      *
      * @return MockObject
      */
-    private function getStoreManager(): \PHPUnit\Framework\MockObject\MockObject
+    private function getStoreManager(): MockObject
     {
         $storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
@@ -649,7 +650,7 @@ class CarrierTest extends TestCase
      *
      * @return MockObject
      */
-    private function getHttpClientFactory(): \PHPUnit\Framework\MockObject\MockObject
+    private function getHttpClientFactory(): MockObject
     {
         $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
             ->disableOriginalConstructor()
