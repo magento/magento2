@@ -48,21 +48,36 @@ spec:
       initContainers:
         - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          #command: ["/bin/sh", "-c", "/tmp/start.sh"]
+          command: ["/bin/sh", "-c", "/tmp/start.sh"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
+          resources:
+            requests:
+              cpu: "250m"
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
             - containerPort: 80
               name: apache
+          resources:
+            requests:
+              cpu: "250m"
+            #limits:
+            #  memory: "128Mi"
+            #  cpu: "500m"
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
+          resources:
+            requests:
+              cpu: "250m"
+            #limits:
+            #  memory: "128Mi"
+            #  cpu: "500m"
           ports:
             - containerPort: 9000
               name: php
