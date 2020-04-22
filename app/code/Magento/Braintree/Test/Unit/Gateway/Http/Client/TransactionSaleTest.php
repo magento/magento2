@@ -115,7 +115,7 @@ class TransactionSaleTest extends TestCase
 
         $actualResult = $this->model->placeRequest($this->getTransferObjectMock());
 
-        $this->assertTrue(is_object($actualResult['object']));
+        $this->assertIsObject($actualResult['object']);
         $this->assertEquals(['object' => $response], $actualResult);
     }
 

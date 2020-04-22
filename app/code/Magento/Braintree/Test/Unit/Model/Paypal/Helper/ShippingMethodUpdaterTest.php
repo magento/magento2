@@ -145,9 +145,9 @@ class ShippingMethodUpdaterTest extends TestCase
     private function getBillingAddressMock(MockObject $quoteMock)
     {
         $billingAddressMock = $this->getMockBuilder(Address::class)
-                ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $quoteMock->expects(self::any())
             ->method('getBillingAddress')

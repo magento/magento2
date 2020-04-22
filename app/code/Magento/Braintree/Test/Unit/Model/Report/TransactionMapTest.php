@@ -85,7 +85,7 @@ class TransactionMapTest extends TestCase
         /** @var AttributeValue[] $result */
         $result = $map->getCustomAttributes();
 
-        $this->assertEquals($fieldsQty, count($result));
+        $this->assertCount($fieldsQty, $result);
         $this->assertInstanceOf(AttributeValue::class, $result[1]);
         $this->assertEquals($transaction['id'], $result[0]->getValue());
         $this->assertEquals($transaction['paypalDetails']->paymentId, $result[4]->getValue());

@@ -101,7 +101,7 @@ class TransactionsCollectionTest extends TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
@@ -130,7 +130,7 @@ class TransactionsCollectionTest extends TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(0, count($items));
+        $this->assertCount(0, $items);
     }
 
     /**
@@ -161,7 +161,7 @@ class TransactionsCollectionTest extends TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        $this->assertCount(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
@@ -193,7 +193,7 @@ class TransactionsCollectionTest extends TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        $this->assertCount(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 

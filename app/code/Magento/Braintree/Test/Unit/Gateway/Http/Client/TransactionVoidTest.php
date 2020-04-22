@@ -118,7 +118,7 @@ class TransactionVoidTest extends TestCase
 
         $actualResult = $this->client->placeRequest($this->getTransferObjectMock());
 
-        $this->assertTrue(is_object($actualResult['object']));
+        $this->assertIsObject($actualResult['object']);
         $this->assertEquals(['object' => $response], $actualResult);
     }
 
