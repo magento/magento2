@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Type\Plugin;
 
@@ -56,10 +57,10 @@ class MultishippingTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('giftmessage')
-            ->will($this->returnValue('Expected Value'));
+            ->willReturn('Expected Value');
         $subjectMock = $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
         $quoteMock = $this->createMock(Quote::class);
-        $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $subjectMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $this->messageMock->expects($this->once())->method('add')->with('Expected Value', $quoteMock);
 
         $this->plugin->beforeSetShippingMethods($subjectMock, $methods);

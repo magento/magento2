@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
@@ -82,29 +83,22 @@ class ItemRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->messageFactoryMock = $this->createPartialMock(
-            MessageFactory::class,
-            [
-                'create',
-                '__wakeup'
-            ]
-        );
+        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageMock = $this->createMock(Message::class);
-        $this->quoteItemMock = $this->createPartialMock(
-            Item::class,
-            [
-                'getGiftMessageId',
-                '__wakeup'
-            ]
-        );
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'getGiftMessageId',
-                'getItemById',
-                '__wakeup',
-            ]
-        );
+        $this->quoteItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getGiftMessageId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getGiftMessageId'])
+            ->onlyMethods(['getItemById', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->giftMessageManagerMock =
             $this->createMock(GiftMessageManager::class);
@@ -121,7 +115,7 @@ class ItemRepositoryTest extends TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($this->cartId)
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
     }
 
     public function testGetWithNoSuchEntityException()
@@ -135,7 +129,7 @@ class ItemRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->itemRepository->get($this->cartId, $itemId);
     }
@@ -148,8 +142,8 @@ class ItemRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->will($this->returnValue($this->quoteItemMock));
-        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+            ->willReturn($this->quoteItemMock);
+        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
 
         $this->assertNull($this->itemRepository->get($this->cartId, $itemId));
     }
@@ -162,15 +156,15 @@ class ItemRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->will($this->returnValue($this->quoteItemMock));
-        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->will($this->returnValue($messageId));
+            ->willReturn($this->quoteItemMock);
+        $this->quoteItemMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->messageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->messageMock));
+            ->willReturn($this->messageMock);
         $this->messageMock->expects($this->once())
             ->method('load')
             ->with($messageId)
-            ->will($this->returnValue($this->messageMock));
+            ->willReturn($this->messageMock);
 
         $this->assertEquals($this->messageMock, $this->itemRepository->get($this->cartId, $itemId));
     }
@@ -180,7 +174,7 @@ class ItemRepositoryTest extends TestCase
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $itemId = 1;
 
-        $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
+        $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->willReturn(null);
         $this->itemRepository->save($this->cartId, $this->messageMock, $itemId);
 
         $this->expectExceptionMessage(
@@ -194,12 +188,16 @@ class ItemRepositoryTest extends TestCase
         $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
         $itemId = 1;
 
-        $quoteItem = $this->createPartialMock(Item::class, ['getIsVirtual', '__wakeup']);
+        $quoteItem = $this->getMockBuilder(Item::class)
+            ->addMethods(['getIsVirtual'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->will($this->returnValue($quoteItem));
-        $quoteItem->expects($this->once())->method('getIsVirtual')->will($this->returnValue(1));
+            ->willReturn($quoteItem);
+        $quoteItem->expects($this->once())->method('getIsVirtual')->willReturn(1);
 
         $this->itemRepository->save($this->cartId, $this->messageMock, $itemId);
     }
@@ -208,21 +206,25 @@ class ItemRepositoryTest extends TestCase
     {
         $itemId = 1;
 
-        $quoteItem = $this->createPartialMock(Item::class, ['getIsVirtual', '__wakeup']);
+        $quoteItem = $this->getMockBuilder(Item::class)
+            ->addMethods(['getIsVirtual'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
-            ->will($this->returnValue($quoteItem));
-        $quoteItem->expects($this->once())->method('getIsVirtual')->will($this->returnValue(0));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+            ->willReturn($quoteItem);
+        $quoteItem->expects($this->once())->method('getIsVirtual')->willReturn(0);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->helperMock->expects($this->once())
             ->method('isMessagesAllowed')
             ->with('items', $this->quoteMock, $this->storeMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->giftMessageManagerMock->expects($this->once())
             ->method('setMessage')
             ->with($this->quoteMock, 'quote_item', $this->messageMock, $itemId)
-            ->will($this->returnValue($this->giftMessageManagerMock));
+            ->willReturn($this->giftMessageManagerMock);
         $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->itemRepository->save($this->cartId, $this->messageMock, $itemId));

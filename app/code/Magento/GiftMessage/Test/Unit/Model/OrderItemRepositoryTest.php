@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
@@ -499,7 +500,7 @@ class OrderItemRepositoryTest extends TestCase
             ->with($message);
         $this->giftMessageSaveModelMock->expects($this->once())
             ->method('saveAllInOrder')
-            ->will($this->throwException($excep));
+            ->willThrowException($excep);
 
         try {
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);

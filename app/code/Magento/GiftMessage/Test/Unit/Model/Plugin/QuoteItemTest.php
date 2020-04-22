@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
 use Magento\GiftMessage\Helper\Message;
@@ -46,23 +48,26 @@ class QuoteItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->createPartialMock(
-            Item::class,
-            ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup']
-        );
-        $this->quoteItemMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['getGiftMessageId', 'getStoreId', '__wakeup']
-        );
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['setGiftMessageId', 'setGiftMessageAvailable'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+            ->addMethods(['getGiftMessageId', 'getStoreId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $orderItems = $this->orderItemMock;
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
         $this->subjectMock = $this->createMock(ToOrderItem::class);
-        $this->helperMock = $this->createPartialMock(
-            Message::class,
-            ['setGiftMessageId', 'isMessagesAllowed']
-        );
+        $this->helperMock = $this->getMockBuilder(Message::class)
+            ->addMethods(['setGiftMessageId'])
+            ->onlyMethods(['isMessagesAllowed'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new QuoteItemPlugin($this->helperMock);
     }
 
@@ -72,13 +77,13 @@ class QuoteItemTest extends TestCase
         $giftMessageId = 1;
         $isMessageAvailable = true;
 
-        $this->quoteItemMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->quoteItemMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
         $this->quoteItemMock->expects(
             $this->any()
         )->method(
             'getGiftMessageId'
-        )->will(
-            $this->returnValue($giftMessageId)
+        )->willReturn(
+            $giftMessageId
         );
 
         $this->helperMock->expects(
@@ -89,11 +94,13 @@ class QuoteItemTest extends TestCase
             'item',
             $this->quoteItemMock,
             $storeId
-        )->will(
-            $this->returnValue($isMessageAvailable)
+        )->willReturn(
+            $isMessageAvailable
         );
-        $this->orderItemMock->expects($this->once())->method('setGiftMessageId')->with($giftMessageId);
-        $this->orderItemMock->expects($this->once())->method('setGiftMessageAvailable')->with($isMessageAvailable);
+        $this->orderItemMock->expects($this->once())
+            ->method('setGiftMessageId')->with($giftMessageId);
+        $this->orderItemMock->expects($this->once())
+            ->method('setGiftMessageAvailable')->with($isMessageAvailable);
 
         $this->assertSame(
             $this->orderItemMock,

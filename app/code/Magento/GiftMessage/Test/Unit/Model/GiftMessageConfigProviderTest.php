@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
@@ -119,10 +121,11 @@ class GiftMessageConfigProviderTest extends TestCase
             Store::class,
             ['getBaseUrl', 'getCode']
         );
-        $quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId']
-        );
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getQuoteCurrencyCode'])
+            ->onlyMethods(['getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
 
         $this->scopeConfigMock->expects($this->atLeastOnce())->method('isSetFlag')->willReturnMap(

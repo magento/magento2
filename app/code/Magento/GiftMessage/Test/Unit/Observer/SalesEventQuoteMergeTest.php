@@ -40,12 +40,18 @@ class SalesEventQuoteMergeTest extends TestCase
      */
     public function testExecute($giftMessageId): void
     {
-        $sourceQuoteMock = $this->createPartialMock(Quote::class, ['getGiftMessageId']);
+        $sourceQuoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $sourceQuoteMock->expects($this->once())
             ->method('getGiftMessageId')
             ->willReturn($giftMessageId);
 
-        $targetQuoteMock = $this->createPartialMock(Quote::class, ['setGiftMessageId']);
+        $targetQuoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         if ($giftMessageId) {
             $targetQuoteMock->expects($this->once())
