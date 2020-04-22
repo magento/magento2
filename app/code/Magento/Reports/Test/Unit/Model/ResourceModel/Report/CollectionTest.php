@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report;
 
@@ -49,7 +50,7 @@ class CollectionTest extends TestCase
         $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
         $this->timezoneMock->method('formatDate')
-            ->will($this->returnCallback([$this, 'formatDate']));
+            ->willReturnCallback([$this, 'formatDate']);
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
@@ -120,10 +121,10 @@ class CollectionTest extends TestCase
         foreach ($reports as $report) {
             $this->assertInstanceOf(DataObject::class, $report);
             $reportData = $report->getData();
-            $this->assertTrue(empty($reportData['children']));
+            $this->assertEmpty($reportData['children']);
             $this->assertTrue($reportData['is_empty']);
         }
-        $this->assertEquals($size, count($reports));
+        $this->assertCount($size, $reports);
     }
 
     /**

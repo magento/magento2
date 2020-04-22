@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
@@ -80,14 +82,18 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerVisitorMock = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $reportEventFactory = $this->getMockBuilder(EventFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
         $this->reportEventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $reportEventFactory->expects($this->any())
             ->method('create')
@@ -96,7 +102,8 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
         /** @var StoreManagerInterface|MockObject $storeManager */
         $storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $storeManager->expects($this->any())
             ->method('getStore')

@@ -119,7 +119,10 @@ class CollectionTest extends TestCase
         $context->expects($this->atLeastOnce())->method('getResource')->willReturn($this->resourceMock);
         $context->expects($this->atLeastOnce())->method('getEavConfig')->willReturn($eavConfig);
 
-        $defaultAttributes = $this->createPartialMock(DefaultAttributes::class, ['_getDefaultAttributes']);
+        $defaultAttributes = $this->getMockBuilder(DefaultAttributes::class)
+            ->addMethods(['_getDefaultAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock = $this->objectManager->getObject(
             ResourceProduct::class,
             ['context' => $context, 'defaultAttributes' => $defaultAttributes]
@@ -228,14 +231,10 @@ class CollectionTest extends TestCase
             \Magento\Reports\Model\ResourceModel\Event\Type\Collection::class,
             ['resource' => $abstractResourceMock]
         );
-        $eventTypeMock = $this->createPartialMock(
-            \Magento\Reports\Model\Event\Type::class,
-            [
-                'getEventName',
-                'getId',
-                'getCollection',
-            ]
-        );
+        $eventTypeMock = $this->getMockBuilder(\Magento\Reports\Model\Event\Type::class)->addMethods(['getEventName'])
+            ->onlyMethods(['getId', 'getCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $eventTypesCollection->addItem($eventTypeMock);
 

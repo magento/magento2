@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
@@ -193,13 +194,11 @@ class ViewedTest extends AbstractControllerTest
         $this->objectManagerMock
             ->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [LoggerInterface::class, $logMock],
-                        [\Magento\Backend\Model\Auth\Session::class, $sessionMock]
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [LoggerInterface::class, $logMock],
+                    [\Magento\Backend\Model\Auth\Session::class, $sessionMock]
+                ]
             );
 
         $this->messageManagerMock

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Product;
 
@@ -133,7 +134,8 @@ class ViewedTest extends TestCase
         $this->selectMock->expects($this->any())->method('insertFromSelect')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('__toString')->willReturn('string');
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->any())->method('query')->willReturn($this->zendDbMock);
 
@@ -141,12 +143,10 @@ class ViewedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->resourceMock->expects($this->any())->method('getTableName')->will(
-            $this->returnCallback(
-                function ($arg) {
-                    return $arg;
-                }
-            )
+        $this->resourceMock->expects($this->any())->method('getTableName')->willReturnCallback(
+            function ($arg) {
+                return $arg;
+            }
         );
 
         $this->contextMock = $this->getMockBuilder(Context::class)

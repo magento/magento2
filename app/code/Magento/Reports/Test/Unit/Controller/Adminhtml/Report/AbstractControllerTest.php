@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report;
 
@@ -119,14 +120,12 @@ abstract class AbstractControllerTest extends TestCase
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->layoutMock->expects($this->any())->method('getBlock')->will(
-            $this->returnValueMap(
-                [
-                    ['breadcrumbs', $this->breadcrumbsBlockMock],
-                    ['menu', $this->menuBlockMock],
-                    ['store_switcher', $this->switcherBlockMock]
-                ]
-            )
+        $this->layoutMock->expects($this->any())->method('getBlock')->willReturnMap(
+            [
+                ['breadcrumbs', $this->breadcrumbsBlockMock],
+                ['menu', $this->menuBlockMock],
+                ['store_switcher', $this->switcherBlockMock]
+            ]
         );
         $this->layoutMock->expects($this->any())->method('getChildBlock')->willReturn($this->abstractBlockMock);
     }

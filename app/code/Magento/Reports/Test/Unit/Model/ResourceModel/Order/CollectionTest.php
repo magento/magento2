@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Order;
 
@@ -302,7 +303,7 @@ class CollectionTest extends TestCase
             ->willReturn(1);
 
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
-        $this->assertEquals(3, count($result));
+        $this->assertCount(3, $result);
     }
 
     /**
@@ -310,8 +311,8 @@ class CollectionTest extends TestCase
      */
     public function testGetDateRangeWithReturnObject()
     {
-        $this->assertEquals(2, count($this->collection->getDateRange('7d', '', '', true)));
-        $this->assertEquals(3, count($this->collection->getDateRange('7d', '', '', false)));
+        $this->assertCount(2, $this->collection->getDateRange('7d', '', '', true));
+        $this->assertCount(3, $this->collection->getDateRange('7d', '', '', false));
     }
 
     /**
