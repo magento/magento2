@@ -51,7 +51,7 @@ class UrlBuilderTest extends TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/config/active', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertEquals('', $this->urlBuilder->getUrl());
     }
 
@@ -59,10 +59,10 @@ class UrlBuilderTest extends TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
             ->with('rss/config/active', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->urlInterface->expects($this->once())->method('getUrl')
             ->with('rss/feed/index', ['type' => 'rss_feed'])
-            ->will($this->returnValue('http://magento.com/rss/feed/index/type/rss_feed'));
+            ->willReturn('http://magento.com/rss/feed/index/type/rss_feed');
         $this->assertEquals(
             'http://magento.com/rss/feed/index/type/rss_feed',
             $this->urlBuilder->getUrl(['type' => 'rss_feed'])

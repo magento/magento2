@@ -35,32 +35,32 @@ class BackendAuthenticationTest extends TestCase
 
         /** @var Http|MockObject $request */
         $request = $this->createMock(Http::class);
-        $request->expects($this->atLeastOnce())->method('getControllerName')->will($this->returnValue('feed'));
-        $request->expects($this->atLeastOnce())->method('getActionName')->will($this->returnValue('index'));
-        $request->expects($this->once())->method('getParam')->with('type')->will($this->returnValue('notifystock'));
+        $request->expects($this->atLeastOnce())->method('getControllerName')->willReturn('feed');
+        $request->expects($this->atLeastOnce())->method('getActionName')->willReturn('index');
+        $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
         /** @var StorageInterface|MockObject $session */
         $session = $this->createMock(StorageInterface::class);
-        $session->expects($this->at(0))->method('isLoggedIn')->will($this->returnValue(false));
-        $session->expects($this->at(1))->method('isLoggedIn')->will($this->returnValue(true));
+        $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
+        $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
 
         $username = 'admin';
         $password = '123123qa';
         $auth = $this->createMock(Auth::class);
-        $auth->expects($this->once())->method('getAuthStorage')->will($this->returnValue($session));
+        $auth->expects($this->once())->method('getAuthStorage')->willReturn($session);
         $auth->expects($this->once())->method('login')->with($username, $password);
 
         /** @var Authentication|MockObject $httpAuthentication */
         $httpAuthentication = $this->createMock(Authentication::class);
         $httpAuthentication->expects($this->once())->method('getCredentials')
-            ->will($this->returnValue([$username, $password]));
+            ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
         $authorization = $this->createMock(AuthorizationInterface::class);
         $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $aclResources = [
             'feed' => 'Magento_Rss::rss',

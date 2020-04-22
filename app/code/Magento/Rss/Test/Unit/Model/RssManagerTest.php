@@ -46,7 +46,7 @@ class RssManagerTest extends TestCase
     public function testGetProvider()
     {
         $dataProvider = $this->createMock(DataProviderInterface::class);
-        $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($dataProvider));
+        $this->objectManager->expects($this->once())->method('get')->willReturn($dataProvider);
 
         $this->assertInstanceOf(
             DataProviderInterface::class,
