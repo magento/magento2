@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
+use Magento\CheckoutAgreements\Model\Agreement as AgreementModel;
 use Magento\CheckoutAgreements\Model\AgreementFactory;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
@@ -101,9 +104,11 @@ class CheckoutAgreementsRepositoryTest extends TestCase
             AgreementFactory::class,
             ['create']
         );
-        $methods = ['addData', 'getData', 'setStores', 'getAgreementId', 'getId'];
-        $this->agreementMock =
-            $this->createPartialMock(\Magento\CheckoutAgreements\Model\Agreement::class, $methods);
+        $this->agreementMock = $this->getMockBuilder(AgreementModel::class)
+            ->addMethods(['setStores'])
+            ->onlyMethods(['addData', 'getData', 'getAgreementId', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->extensionAttributesJoinProcessorMock = $this->createPartialMock(
             JoinProcessor::class,
@@ -136,7 +141,7 @@ class CheckoutAgreementsRepositoryTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->factoryMock->expects($this->never())->method('create');
         $this->assertEmpty($this->model->getList());
     }
@@ -146,7 +151,7 @@ class CheckoutAgreementsRepositoryTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())

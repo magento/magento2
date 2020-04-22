@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
@@ -90,7 +91,10 @@ class ValidationTest extends TestCase
         $this->subjectMock = $this->createMock(PaymentInformationManagementInterface::class);
         $this->paymentMock = $this->createMock(PaymentInterface::class);
         $this->addressMock = $this->createMock(AddressInterface::class);
-        $this->quoteMock = $this->createPartialMock(Quote::class, ['getIsMultiShipping']);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getIsMultiShipping'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->extensionAttributesMock = $this->createPartialMock(
             PaymentExtension::class,
