@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Test Webapi module exception.
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit;
 
 use Magento\Framework\Webapi\Exception;

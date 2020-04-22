@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
@@ -37,7 +38,7 @@ class GuestUserContextTest extends TestCase
 
     public function testGetUserId()
     {
-        $this->assertNull($this->guestUserContext->getUserId());
+        $this->assertSame(0, $this->guestUserContext->getUserId());
     }
 
     public function testGetUserType()

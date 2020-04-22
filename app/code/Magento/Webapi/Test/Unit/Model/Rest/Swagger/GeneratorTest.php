@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
 
@@ -65,7 +66,8 @@ class GeneratorTest extends TestCase
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
             ServiceMetadata::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
 
@@ -74,25 +76,27 @@ class GeneratorTest extends TestCase
             SwaggerFactory::class
         )->setMethods(
             ['create']
-        )->disableOriginalConstructor()->getMock();
-        $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
         $this->cacheMock = $this->getMockBuilder(Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        $this->cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessorMock->expects($this->any())
             ->method('getOperationName')
-            ->will($this->returnValue(self::OPERATION_NAME));
+            ->willReturn(self::OPERATION_NAME);
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
             ServiceTypeListInterface::class
-        )->disableOriginalConstructor()->setMethods(['getDataTypes'])
+        )->disableOriginalConstructor()
+            ->setMethods(['getDataTypes'])
             ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
             ->method('getDataTypes')
@@ -100,11 +104,12 @@ class GeneratorTest extends TestCase
 
         $storeMock = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $storeMock->expects($this->any())
             ->method('getCode')
-            ->will($this->returnValue('store_code'));
+            ->willReturn('store_code');
 
         /** @var Authorization|MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(Authorization::class)
@@ -458,7 +463,7 @@ class GeneratorTest extends TestCase
 
         $this->typeProcessorMock
             ->method('getTypeData')
-            ->will($this->returnCallback($getTypeData));
+            ->willReturnCallback($getTypeData);
 
         $method = new \ReflectionMethod($this->generator, 'generateDefinition');
         $method->setAccessible(true);

@@ -57,38 +57,42 @@ class GeneratorTest extends TestCase
     {
         $this->serviceMetadata = $this->getMockBuilder(
             ServiceMetadata::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $_wsdlMock = $this->getMockBuilder(
             Wsdl::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'addSchemaTypeSection',
-                'addService',
-                'addPortType',
-                'addBinding',
-                'addSoapBinding',
-                'addElement',
-                'addComplexType',
-                'addMessage',
-                'addPortOperation',
-                'addBindingOperation',
-                'addSoapOperation',
-                'toXML',
-            ]
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addSchemaTypeSection',
+                    'addService',
+                    'addPortType',
+                    'addBinding',
+                    'addSoapBinding',
+                    'addElement',
+                    'addComplexType',
+                    'addMessage',
+                    'addPortOperation',
+                    'addBindingOperation',
+                    'addSoapOperation',
+                    'toXML',
+                ]
+            )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
             WsdlFactory::class
         )->setMethods(
             ['create']
-        )->disableOriginalConstructor()->getMock();
-        $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_wsdlFactoryMock->expects($this->any())->method('create')->willReturn($_wsdlMock);
 
         $this->_cacheMock = $this->getMockBuilder(
             Webapi::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
-        $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_cacheMock->expects($this->any())->method('load')->willReturn(false);
+        $this->_cacheMock->expects($this->any())->method('save')->willReturn(true);
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
 

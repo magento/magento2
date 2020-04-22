@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model\Soap;
 
 use Magento\Framework\App\RequestInterface;
@@ -54,18 +56,20 @@ class FaultTest extends TestCase
         );
         $this->_soapServerMock = $this->getMockBuilder(
             Server::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_soapServerMock->expects($this->any())->method('generateUri')->will($this->returnValue(self::WSDL_URL));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_soapServerMock->expects($this->any())->method('generateUri')->willReturn(self::WSDL_URL);
 
         $this->_localeResolverMock = $this->getMockBuilder(
             Resolver::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_localeResolverMock->expects(
             $this->any()
         )->method(
             'getLocale'
-        )->will(
-            $this->returnValue('en_US')
+        )->willReturn(
+            'en_US'
         );
 
         $this->_appStateMock = $this->createMock(State::class);
@@ -89,7 +93,7 @@ class FaultTest extends TestCase
 
     public function testToXmlDeveloperModeOff()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('production'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('production');
         $wsdlUrl = urlencode(self::WSDL_URL);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -131,9 +135,9 @@ XML;
 
     public function testToXmlDeveloperModeOn()
     {
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         $actualXml = $this->_soapFault->toXml();
-        $this->assertContains('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
+        $this->assertStringContainsString('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }
 
     /**
