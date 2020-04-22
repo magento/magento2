@@ -57,7 +57,7 @@ class SaveTest extends TestCase
     /** @var MockObject|User */
     protected $_userMock;
 
-    /** @var MockObject|\Magento\Framework\Validator\locale */
+    /** @var MockObject|\Magento\Framework\Validator\Locale */
     protected $_validatorMock;
 
     /** @var MockObject|Manager */
