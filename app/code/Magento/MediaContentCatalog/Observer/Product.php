@@ -12,6 +12,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -39,16 +40,24 @@ class Product implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $processor
+     * @param ResourceConnection $resourceConnection
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $processor,
+        ResourceConnection $resourceConnection,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->resourceConnection = $resourceConnection;
         $this->processor = $processor;
         $this->fields = $fields;
     }
@@ -64,10 +73,6 @@ class Product implements ObserverInterface
 
         if ($model instanceof CatalogProduct) {
             foreach ($this->fields as $field) {
-                if (!$model->dataHasChangedFor($field)) {
-                    continue;
-                }
-
                 $this->processor->execute(
                     $this->contentIdentityFactory->create(
                         [
@@ -76,9 +81,35 @@ class Product implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    (string) $model->getData($field)
+                    implode(PHP_EOL, $this->getContent(
+                        $model->getAttributes()[$field],
+                        (int)$model->getEntityId())
+                    )
                 );
             }
         }
+    }
+
+    /**
+     * @param $attribute
+     * @param int $entityId
+     * @return array
+     */
+    private function getContent($attribute, int $entityId): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        /** @var  $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+        $select = $connection->select()->from(
+            $attribute->getBackendTable(),
+            'value'
+        )->where(
+            'attribute_id = ?',
+            (int) $attribute->getId()
+        )->where(
+            'entity_id = ?',
+            $entityId
+        )->distinct(true);
+        return $connection->fetchCol($select);
     }
 }
