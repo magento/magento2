@@ -18,7 +18,7 @@
         <element name="itemSubtotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-subtotal .price" parameterized="true"/>
         <element name="itemTaxAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-tax-amount .price" parameterized="true"/>
         <element name="itemTaxPercent" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-tax-percent" parameterized="true"/>
-        <element name="itemDiscountAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
+        <element name="itemDiscountAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-discount .price" parameterized="true"/>
         <element name="itemTotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
 
         <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
@@ -35,7 +35,7 @@
         <element name="subtotalColumn" type="text" selector=".edit-order-table .col-subtotal .price"/>
         <element name="taxAmountColumn" type="text" selector=".edit-order-table .col-tax-amount .price"/>
         <element name="taxPercentColumn" type="text" selector=".edit-order-table .col-tax-percent"/>
-        <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discont .price"/>
+        <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discount .price"/>
         <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
     </section>
 </sections>

@@ -18,7 +18,7 @@
         <element name="itemQtyToRefund" type="input" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-refund .qty-input" parameterized="true"/>
         <element name="itemSubtotal" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-subtotal .price" parameterized="true"/>
         <element name="itemTaxAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-tax-amount .price" parameterized="true"/>
-        <element name="itemDiscountAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
+        <element name="itemDiscountAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-discount .price" parameterized="true"/>
         <element name="itemTotal" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
         <element name="updateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button']" timeout="30"/>
         <element name="disabledUpdateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button'].disabled" timeout="30"/>
