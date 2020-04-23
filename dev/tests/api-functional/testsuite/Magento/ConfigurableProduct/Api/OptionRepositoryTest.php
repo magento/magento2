@@ -94,7 +94,9 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     public function testGetUndefinedProduct()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $productSku = 'product_not_exist';
         $this->getList($productSku);
@@ -111,7 +113,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         try {
             $this->get($productSku, $attributeId);
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'

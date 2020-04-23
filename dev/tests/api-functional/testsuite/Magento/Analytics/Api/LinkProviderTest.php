@@ -67,7 +67,7 @@ class LinkProviderTest extends WebapiAbstract
             try {
                 $this->_webApiCall($serviceInfo);
             } catch (\Exception $e) {
-                $this->assertContains(
+                $this->assertStringContainsString(
                     'Operation allowed only in HTTPS',
                     $e->getMessage()
                 );
