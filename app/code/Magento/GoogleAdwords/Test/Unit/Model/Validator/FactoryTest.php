@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @SuppressWarnings(PHPMD.LongVariable)
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -98,16 +100,16 @@ class FactoryTest extends TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createColorValidator($currentColor));
@@ -144,16 +146,16 @@ class FactoryTest extends TestCase
                     ],
                 ]
             ]
-        )->will(
-            $this->returnValue($this->_vbMock)
+        )->willReturn(
+            $this->_vbMock
         );
 
         $this->_vbMock->expects(
             $this->once()
         )->method(
             'createValidator'
-        )->will(
-            $this->returnValue($this->_validatorMock)
+        )->willReturn(
+            $this->_validatorMock
         );
 
         $this->assertEquals($this->_validatorMock, $this->_factory->createConversionIdValidator($conversionId));

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleAdwords\Test\Unit\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -67,15 +69,13 @@ class DataTest extends TestCase
             'isSetFlag'
         )->with(
             Data::XML_PATH_ACTIVE
-        )->will(
-            $this->returnValue($isActive)
+        )->willReturn(
+            $isActive
         );
-        $this->_scopeConfigMock->expects($this->any())->method('getValue')->with($this->isType('string'))->will(
-            $this->returnCallback(
-                function () use ($returnConfigValue) {
-                    return $returnConfigValue;
-                }
-            )
+        $this->_scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+            function () use ($returnConfigValue) {
+                return $returnConfigValue;
+            }
         );
 
         $this->assertEquals($returnValue, $this->_helper->isGoogleAdwordsActive());
@@ -91,8 +91,8 @@ class DataTest extends TestCase
         )->with(
             Data::XML_PATH_LANGUAGES,
             'default'
-        )->will(
-            $this->returnValue($languages)
+        )->willReturn(
+            $languages
         );
         $this->assertEquals($languages, $this->_helper->getLanguageCodes());
     }
@@ -125,8 +125,8 @@ class DataTest extends TestCase
         )->with(
             Data::XML_PATH_LANGUAGE_CONVERT,
             'default'
-        )->will(
-            $this->returnValue($convertArray)
+        )->willReturn(
+            $convertArray
         );
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
@@ -147,8 +147,8 @@ class DataTest extends TestCase
         )->with(
             Data::XML_PATH_CONVERSION_IMG_SRC,
             'default'
-        )->will(
-            $this->returnValue($imgSrc)
+        )->willReturn(
+            $imgSrc
         );
         $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
     }
@@ -162,8 +162,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CONVERSION_JS_SRC
-        )->will(
-            $this->returnValue($jsSrc)
+        )->willReturn(
+            $jsSrc
         );
         $this->assertEquals($jsSrc, $this->_helper->getConversionJsSrc());
     }
@@ -198,8 +198,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             $xmlPath
-        )->will(
-            $this->returnValue($returnValue)
+        )->willReturn(
+            $returnValue
         );
 
         $this->assertEquals($returnValue, $this->_helper->{$method}());
@@ -221,8 +221,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CONVERSION_VALUE_TYPE
-        )->will(
-            $this->returnValue(Data::CONVERSION_VALUE_TYPE_DYNAMIC)
+        )->willReturn(
+            Data::CONVERSION_VALUE_TYPE_DYNAMIC
         );
         $this->_registryMock->expects(
             $this->once()
@@ -230,8 +230,8 @@ class DataTest extends TestCase
             'registry'
         )->with(
             Data::CONVERSION_VALUE_REGISTRY_NAME
-        )->will(
-            $this->returnValue($returnValue)
+        )->willReturn(
+            $returnValue
         );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
@@ -247,8 +247,8 @@ class DataTest extends TestCase
             'registry'
         )->with(
             Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME
-        )->will(
-            $this->returnValue($returnValueCurrency)
+        )->willReturn(
+            $returnValueCurrency
         );
 
         $this->assertEquals($returnValueCurrency, $this->_helper->getConversionValueCurrency());
@@ -275,8 +275,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CONVERSION_VALUE_TYPE
-        )->will(
-            $this->returnValue(Data::CONVERSION_VALUE_TYPE_CONSTANT)
+        )->willReturn(
+            Data::CONVERSION_VALUE_TYPE_CONSTANT
         );
         $this->_registryMock->expects($this->never())->method('registry');
         $this->_scopeConfigMock->expects(
@@ -285,8 +285,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CONVERSION_VALUE
-        )->will(
-            $this->returnValue($conversionValueConst)
+        )->willReturn(
+            $conversionValueConst
         );
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
