@@ -1,31 +1,46 @@
 <?php
+declare(strict_types=1);
 /**
  * Test class for \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-class BundleTest extends \PHPUnit\Framework\TestCase
+use Magento\Bundle\Api\Data\LinkInterfaceFactory;
+use Magento\Bundle\Api\Data\OptionInterfaceFactory;
+use Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Request\Http;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class BundleTest extends TestCase
 {
     /**
-     * @var \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
+     * @var Bundle
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
@@ -46,42 +61,44 @@ class BundleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $methods = [
-            'getCompositeReadonly',
-            'setBundleOptionsData',
-            'setBundleSelectionsData',
-            'getPriceType',
-            'setCanSaveCustomOptions',
-            'getProductOptions',
-            'setOptions',
-            'setCanSaveBundleSelections',
-            '__wakeup',
-            'getOptionsReadonly',
-            'getBundleOptionsData',
-            'getExtensionAttributes',
-            'setExtensionAttributes',
-        ];
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
-        $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
+        $this->requestMock = $this->createMock(Http::class);
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(
+                [
+                    'getCompositeReadonly',
+                    'setBundleOptionsData',
+                    'setBundleSelectionsData',
+                    'getPriceType',
+                    'setCanSaveCustomOptions',
+                    'getProductOptions',
+                    'setCanSaveBundleSelections',
+                    'getOptionsReadonly',
+                    'getBundleOptionsData'
+                ]
+            )
+            ->onlyMethods(['setOptions', '__wakeup', 'getExtensionAttributes', 'setExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $linkInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
+        $optionInterfaceFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $linkInterfaceFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customOptionFactory = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
-        )->disableOriginalConstructor()->getMock();
+            ProductCustomOptionInterfaceFactory::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->createMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
+            Helper::class
         );
-        $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
+        $this->model = new Bundle(
             $this->requestMock,
             $optionInterfaceFactory,
             $linkInterfaceFactory,
@@ -133,7 +150,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())
             ->method('getBundleOptionsData')
             ->willReturn(['option_1' => ['delete' => 1]]);
-        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
@@ -174,7 +191,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ['affect_bundle_product_selections', null, false],
         ];
         $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
-        $extentionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extentionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();

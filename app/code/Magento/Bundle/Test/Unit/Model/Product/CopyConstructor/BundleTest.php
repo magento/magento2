@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 
 use Magento\Bundle\Api\Data\BundleOptionInterface;
@@ -12,8 +14,10 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BundleTest extends \PHPUnit\Framework\TestCase
+class BundleTest extends TestCase
 {
     /**
      * @var Bundle
@@ -46,7 +50,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildPositive()
     {
-        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $product */
+        /** @var Product|MockObject $product */
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,7 +101,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->method('getBundleProductOptions')
             ->willReturn($bundleOptions);
 
-        /** @var Product|\PHPUnit\Framework\MockObject\MockObject $duplicate */
+        /** @var Product|MockObject $duplicate */
         $duplicate = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
