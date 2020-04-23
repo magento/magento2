@@ -332,7 +332,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $controller = $this->_objectManager->create(\Magento\Checkout\Controller\Cart\Add::class, [$quote]);
         $controller->execute();
 
-        $this->assertContains(json_encode([]), $this->getResponse()->getBody());
+        $this->assertStringContainsString(json_encode([]), $this->getResponse()->getBody());
         $items = $quote->getItems()->getItems();
         $this->assertIsArray($items, 'Quote doesn\'t have any items');
         $this->assertCount(1, $items, 'Expected quote items not equal to 1');
@@ -381,7 +381,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 'You added Simple Product to your shopping cart.'
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
@@ -415,7 +415,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals('[]', $this->getResponse()->getBody());
 
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 "\n" . 'You added Simple Product to your ' .
                 '<a href="http://localhost/index.php/checkout/cart/">shopping cart</a>.'
             ),

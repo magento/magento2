@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Checkout\Model\Type\Onepage;
@@ -270,7 +271,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-        $this->assertContains($prefix, $billingAddress->getFirstname());
+        $this->assertStringContainsString($prefix, $billingAddress->getFirstname());
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
@@ -279,7 +280,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($shippingAddress->getMiddlename());
         $this->assertNull($shippingAddress->getSuffix());
         $this->assertTrue($shippingAddress->getShouldIgnoreValidation());
-        $this->assertContains('exported', $shippingAddress->getFirstname());
+        $this->assertStringContainsString('exported', $shippingAddress->getFirstname());
         $paymentAdditionalInformation = $quote->getPayment()->getAdditionalInformation();
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD, $paymentAdditionalInformation);
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $paymentAdditionalInformation);
@@ -504,7 +505,9 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     public function testPaymentValidationWithAllowedSpecificCountryNegative(): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('You can\'t use the payment type you selected to make payments to the billing country.');
+        $this->expectExceptionMessage(
+            'You can\'t use the payment type you selected to make payments to the billing country.'
+        );
 
         $quote = $this->getFixtureQuote();
         $this->prepareCheckoutModel($quote);
@@ -526,7 +529,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
                 $item = [$item];
             }
 
-            $this->assertEquals($item, $address->$methodName(), 'The "'. $key . '" does not match.');
+            $this->assertEquals($item, $address->$methodName(), 'The "' . $key . '" does not match.');
         }
     }
 
@@ -540,9 +543,9 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->checkoutModel = $this->objectManager->create(
             Checkout::class,
             [
-                'params'         => ['quote' => $quote, 'config' => $this->paypalConfig],
+                'params' => ['quote' => $quote, 'config' => $this->paypalConfig],
                 'apiTypeFactory' => $this->apiTypeFactory,
-                'paypalInfo'     => $this->paypalInfo
+                'paypalInfo' => $this->paypalInfo
             ]
         );
 
@@ -570,28 +573,28 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'shipping' => [
-                'email'      => 'customer@example.com',
-                'firstname'  => 'John',
-                'lastname'   => 'Doe',
-                'country'    => 'US',
-                'region'     => 'Colorado',
-                'region_id'  => '13',
-                'city'       => 'Denver',
-                'street'     => '66 Pearl St',
-                'postcode'   => '80203',
-                'telephone'  => '555-555-555',
+                'email' => 'customer@example.com',
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'country' => 'US',
+                'region' => 'Colorado',
+                'region_id' => '13',
+                'city' => 'Denver',
+                'street' => '66 Pearl St',
+                'postcode' => '80203',
+                'telephone' => '555-555-555',
             ],
             'billing' => [
-                'email'      => 'customer@example.com',
-                'firstname'  => 'Jane',
-                'lastname'   => 'Doe',
-                'country'    => 'US',
-                'region'     => 'Texas',
-                'region_id'  => '13',
-                'city'       => 'Austin',
-                'street'     => '1100 Congress Ave',
-                'postcode'   => '78701',
-                'telephone'  => '555-555-555'
+                'email' => 'customer@example.com',
+                'firstname' => 'Jane',
+                'lastname' => 'Doe',
+                'country' => 'US',
+                'region' => 'Texas',
+                'region_id' => '13',
+                'city' => 'Austin',
+                'street' => '1100 Congress Ave',
+                'postcode' => '78701',
+                'telephone' => '555-555-555'
             ]
         ];
     }
@@ -719,8 +722,8 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      * Adds countryFactory to a mock.
      *
      * @param \PHPUnit\Framework\MockObject\MockObject $api
-     * @throws \ReflectionException
      * @return void
+     * @throws \ReflectionException
      */
     private function addCountryFactory(\PHPUnit\Framework\MockObject\MockObject $api): void
     {

@@ -31,8 +31,8 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     public function testGetAbsolutePath()
     {
         $dir = $this->getDirectoryInstance('foo');
-        $this->assertContains('_files/foo', $dir->getAbsolutePath());
-        $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
+        $this->assertStringContainsString('_files/foo', $dir->getAbsolutePath());
+        $this->assertStringContainsString('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
     public function testGetAbsolutePathOutside()

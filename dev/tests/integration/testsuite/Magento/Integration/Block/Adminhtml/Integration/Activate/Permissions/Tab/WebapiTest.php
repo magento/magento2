@@ -43,7 +43,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
             IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION,
             $this->getFixtureIntegration()->getData()
         );
-        $this->assertContains($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
+        $this->assertStringContainsString($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
     }
 
     public function testGetResourcesTreeJson()
@@ -53,7 +53,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
             IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION,
             $this->getFixtureIntegration()->getData()
         );
-        $this->assertContains($expectedResult, $this->createApiTabBlock()->getResourcesTreeJson());
+        $this->assertStringContainsString($expectedResult, $this->createApiTabBlock()->getResourcesTreeJson());
     }
 
     public function testCanShowTabNegative()

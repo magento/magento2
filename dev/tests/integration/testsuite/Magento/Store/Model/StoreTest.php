@@ -6,15 +6,15 @@
 
 namespace Magento\Store\Model;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Laminas\Stdlib\Parameters;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -305,10 +305,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         $this->model
             ->expects($this->any())->method('getUrl')
-            ->willReturn('http://localhost/index.php?' .SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345');
+            ->willReturn('http://localhost/index.php?' . SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345');
         $this->request->setParams([SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345']);
         $this->request->setQueryValue(SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345');
-        $this->assertContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345', $this->model->getCurrentUrl());
+        $this->assertStringContainsString(
+            SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345',
+            $this->model->getCurrentUrl()
+        );
 
         /** @var \Magento\Store\Model\Store $secondStore */
         $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');

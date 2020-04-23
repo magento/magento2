@@ -38,6 +38,6 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             ['\u003A', '\u002F'],
             $url->getUrl(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE . '/ajax/translate')
         );
-        $this->assertContains($expected, $body);
+        $this->assertStringContainsString($expected, $body);
     }
 }

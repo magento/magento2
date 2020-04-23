@@ -35,8 +35,8 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->_block->toHtml();
 
-        $this->assertContains('<form id="import-form"', $html);
+        $this->assertStringContainsString('<form id="import-form"', $html);
 
-        $this->assertContains('<form id="export_form"', $html);
+        $this->assertStringContainsString('<form id="export_form"', $html);
     }
 }

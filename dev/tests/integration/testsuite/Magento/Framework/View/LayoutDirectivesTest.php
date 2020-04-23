@@ -10,6 +10,9 @@ namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -56,6 +59,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
         );
         $layout->loadString($xml->asXml());
         $layout->generateElements();
+
         return $layout;
     }
 
@@ -147,9 +151,12 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testLayoutUrlArgumentsDirective()
     {
         $layout = $this->_getLayoutModel('arguments_url_type.xml');
-        $this->assertContains('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
-        $this->assertContains('customer/account/logout', $layout->getBlock('block_with_url_args')->getTwo());
-        $this->assertContains('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
+        $this->assertStringContainsString('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
+        $this->assertStringContainsString(
+            'customer/account/logout',
+            $layout->getBlock('block_with_url_args')->getTwo()
+        );
+        $this->assertStringContainsString('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
     }
 
     public function testLayoutObjectArgumentUpdatersDirective()

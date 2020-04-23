@@ -46,6 +46,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $block->setTemplate('Magento_Sales::order/create/billing/method/form.phtml');
 
         $html = $block->toHtml();
-        $this->assertContains('mage.apply()', $html);
+        $this->assertStringContainsString('mage.apply()', $html);
     }
 }

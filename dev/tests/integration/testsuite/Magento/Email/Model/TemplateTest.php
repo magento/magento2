@@ -168,7 +168,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setId($templateId);
 
-        $this->assertContains($expectedOutput, $this->model->processTemplate());
+        $this->assertStringContainsString($expectedOutput, $this->model->processTemplate());
     }
 
     /**
@@ -228,8 +228,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @param string $area
      * @param int $templateType
      * @param string $templateText
-     * @param string $assertContains
-     * @param string $assertNotContains
+     * @param string $assertStringContainsString
+     * @param string $assertStringNotContainsString
      * @param string $storeConfigPath
      * @param bool $mockAdminTheme
      */
@@ -237,8 +237,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $area,
         $templateType,
         $templateText,
-        $assertContains,
-        $assertNotContains = null,
+        $assertStringContainsString,
+        $assertStringNotContainsString = null,
         $storeConfigPath = null,
         $mockAdminTheme = false
     ) {
@@ -259,7 +259,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $templateData = [
                 'template_code' => 'some_unique_code',
                 'template_type' => $templateType,
-                'template_text' => $assertContains,
+                'template_text' => $assertStringContainsString,
             ];
             $template->setData($templateData);
             $template->save();
@@ -269,9 +269,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                 ->setValue($storeConfigPath, $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
         }
 
-        $this->assertContains($assertContains, $this->model->getProcessedTemplate());
-        if ($assertNotContains) {
-            $this->assertNotContains($assertNotContains, $this->model->getProcessedTemplate());
+        $this->assertStringContainsString($assertStringContainsString, $this->model->getProcessedTemplate());
+        if ($assertStringNotContainsString) {
+            $this->assertStringNotContainsString($assertStringNotContainsString, $this->model->getProcessedTemplate());
         }
     }
 
@@ -477,10 +477,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $processedTemplate = $this->model->getProcessedTemplate();
 
         foreach ($unexpectedOutputs as $unexpectedOutput) {
-            $this->assertNotContains($unexpectedOutput, $processedTemplate);
+            $this->assertStringNotContainsString($unexpectedOutput, $processedTemplate);
         }
 
-        $this->assertContains($expectedOutput, $processedTemplate);
+        $this->assertStringContainsString($expectedOutput, $processedTemplate);
     }
 
     /**
@@ -814,7 +814,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockModel();
         $this->model->setId('customer_create_account_email_template');
-        $this->assertContains('<body', $this->model->processTemplate());
+        $this->assertStringContainsString('<body', $this->model->processTemplate());
     }
 
     public function testGetSubject()

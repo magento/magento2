@@ -351,7 +351,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
             '123123q'
         );
         $this->_model->save();
-        $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
+        $this->assertStringNotContainsString(
+            '123123q',
+            $this->_model->getPassword(),
+            'Password is expected to be hashed'
+        );
         $this->assertMatchesRegularExpression(
             $pattern,
             $this->_model->getPassword(),

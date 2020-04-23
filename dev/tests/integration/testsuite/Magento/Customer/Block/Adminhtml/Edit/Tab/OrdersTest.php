@@ -10,7 +10,7 @@ use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class OrdersTest
+ * Test for \Magento\Customer\Block\Adminhtml\Edit\Tab\Orders
  *
  * @magentoAppArea adminhtml
  */
@@ -72,7 +72,7 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
     public function testGetRowUrl()
     {
         $row = new \Magento\Framework\DataObject(['id' => 1]);
-        $this->assertContains('sales/order/view/order_id/1', $this->block->getRowUrl($row));
+        $this->assertStringContainsString('sales/order/view/order_id/1', $this->block->getRowUrl($row));
     }
 
     /**
@@ -80,7 +80,7 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGridUrl()
     {
-        $this->assertContains('customer/index/orders', $this->block->getGridUrl());
+        $this->assertStringContainsString('customer/index/orders', $this->block->getGridUrl());
     }
 
     /**
@@ -88,7 +88,7 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->escaper->escapeHtml("We couldn't find any records."),
             $this->block->toHtml()
         );

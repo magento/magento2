@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 /**
@@ -33,7 +34,10 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
-        $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            '<option value="cms_page_link" selected="selected">',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testBlocksAction()

@@ -993,7 +993,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
-        if (is_array($row)) {
+        if (is_array($row) && !empty($row)) {
             $object->addData($row);
             $this->loadAttributesForObject($attributes, $object);
 

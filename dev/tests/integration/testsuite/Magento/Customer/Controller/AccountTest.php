@@ -70,7 +70,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -129,7 +129,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Session $customer */
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
-        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertStringNotContainsString($token, $response->getHeader('Location')->getFieldValue());
         $this->assertCustomerConfirmationEquals(1, null);
     }
 
@@ -184,19 +184,22 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertStringContainsString(
+            'customer/account/forgotpassword',
+            $response->getHeader('Location')->getFieldValue()
+        );
         $this->assertCustomerConfirmationEquals(1, 'confirmation');
     }
 
     /**
-     * @param int         $customerId
+     * @param int $customerId
      * @param string|null $confirmation
      */
     private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-                             ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
+            ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
         $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
@@ -399,14 +402,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $expectedString = <<<EXPECTED_HTML
 <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
                    title="Change&#x20;Password"
                  class="checkbox" />
 EXPECTED_HTML;
-        $this->assertContains($expectedString, $body);
+        $this->assertStringContainsString($expectedString, $body);
     }
 
     /**
@@ -420,14 +423,14 @@ EXPECTED_HTML;
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
         $expectedString = <<<EXPECTED_HTML
 <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
                    title="Change&#x20;Password"
                  checked="checked" class="checkbox" />
 EXPECTED_HTML;
-        $this->assertContains($expectedString, $body);
+        $this->assertStringContainsString($expectedString, $body);
     }
 
     /**
@@ -497,14 +500,14 @@ EXPECTED_HTML;
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                    'firstname'        => 'John',
-                    'lastname'         => 'Doe',
-                    'email'            => 'johndoe@email.com',
-                    'change_password'  => 1,
-                    'change_email'     => 1,
+                    'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'johndoe@email.com',
+                    'change_password' => 1,
+                    'change_email' => 1,
                     'current_password' => 'password',
-                    'password'         => 'new-Password1',
+                    'password' => 'new-Password1',
                     'password_confirmation' => 'new-Password1',
                 ]
             );
@@ -712,7 +715,7 @@ EXPECTED_HTML;
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
 
-        $this->assertContains('To: ' . $nameEmail, $rawMessage);
+        $this->assertStringContainsString('To: ' . $nameEmail, $rawMessage);
 
         $content = $messageBodyPart->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
