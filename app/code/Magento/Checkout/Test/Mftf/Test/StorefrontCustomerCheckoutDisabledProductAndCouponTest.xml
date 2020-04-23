@@ -85,7 +85,7 @@
         </actionGroup>
 
         <!-- Check cart -->
-        <click selector="{{StorefrontMinicartSection.show}}" stepKey="clickMiniCart2"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
     </test>
 </tests>
