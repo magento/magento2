@@ -6,6 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
+use Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\State;
 
@@ -85,6 +86,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $variationPricesMock;
 
     /**
+     * @var GetEnabledOptionsProducts|\PHPUnit\Framework\MockObject\MockBuilder
+     */
+    private $enabledOptionsProducts;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp()
@@ -156,7 +162,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->variationPricesMock = $this->createMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
-
+        $this->enabledOptionsProducts = $this->getMockBuilder(GetEnabledOptionsProducts::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->block = new \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable(
             $this->context,
             $this->arrayUtils,
@@ -169,7 +177,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             [],
             $this->localeFormat,
             $this->customerSession,
-            $this->variationPricesMock
+            $this->variationPricesMock,
+            $this->enabledOptionsProducts
         );
     }
 
@@ -219,7 +228,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                 ],
                 'USD',
                 null,
-            ]
+            ],
         ];
     }
 
@@ -275,7 +284,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->enabledOptionsProducts->expects($this->any())->method('execute')->willReturn([$productMock]);
         $productTypeMock = $this->getProductTypeMock($productMock);
 
         $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
@@ -379,8 +388,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                     'msrpPrice' => [
-                        'amount' => null    ,
-                    ]
+                        'amount' => null,
+                    ],
                 ],
             ],
             'priceFormat' => [],

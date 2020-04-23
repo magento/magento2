@@ -3,24 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
+
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$website = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
+
 /** @var $website \Magento\Store\Model\Website */
 if (!$website->load('test', 'code')->getId()) {
-    $website->setData(['code' => 'test', 'name' => 'Test Website', 'default_group_id' => '1', 'is_default' => '0']);
+    $website->setData(['code' => 'test', 'name' => 'Test Website', 'is_default' => '0']);
     $website->save();
 }
 $websiteId = $website->getId();
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$store = Bootstrap::getObjectManager()->create(Store::class);
 if (!$store->load('fixture_second_store', 'code')->getId()) {
-    $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        \Magento\Store\Model\StoreManagerInterface::class
-    )->getWebsite()->getDefaultGroupId();
     $store->setCode(
         'fixture_second_store'
     )->setWebsiteId(
         $websiteId
-    )->setGroupId(
-        $groupId
     )->setName(
         'Fixture Second Store'
     )->setSortOrder(
@@ -31,17 +34,26 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
     $store->save();
 }
 
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$storeGroup = Bootstrap::getObjectManager()->create(Group::class);
+$storeGroup->setCode('fixture_second_store_group');
+$storeGroup->setWebsiteId($websiteId);
+$storeGroup->setName('Fixture Second Store Group');
+$storeGroup->setDefaultStoreId($store->getId());
+$storeGroup->save();
+
+$website->setDefaultGroupId($storeGroup->getId());
+$website->save();
+$store->setGroupId($storeGroup->getId());
+$store->save();
+
+$store = Bootstrap::getObjectManager()->create(Store::class);
 if (!$store->load('fixture_third_store', 'code')->getId()) {
-    $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        \Magento\Store\Model\StoreManagerInterface::class
-    )->getWebsite()->getDefaultGroupId();
     $store->setCode(
         'fixture_third_store'
     )->setWebsiteId(
         $websiteId
     )->setGroupId(
-        $groupId
+        $storeGroup->getId()
     )->setName(
         'Fixture Third Store'
     )->setSortOrder(
@@ -53,7 +65,5 @@ if (!$store->load('fixture_third_store', 'code')->getId()) {
 }
 
 /* Refresh CatalogSearch index */
-/** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
-$indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
-$indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
+$indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+$indexerRegistry->get(Fulltext::INDEXER_ID)->reindexAll();

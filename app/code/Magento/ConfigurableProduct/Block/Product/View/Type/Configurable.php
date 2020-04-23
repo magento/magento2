@@ -5,9 +5,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
@@ -83,7 +83,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     private $variationPrices;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts|mixed|null
+     * @var \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts|null
      */
     private $enabledOptionsProducts;
 
@@ -100,6 +100,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Format|null $localeFormat
      * @param Session|null $customerSession
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+     * @param \Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts|null $enabledOptionsProducts
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -291,7 +292,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         foreach ($this->getAllowProducts() as $product) {
             $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
-            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPriceModel = $priceInfo->getPrice('tier_price');
             $tierPricesList = $tierPriceModel->getTierPriceList();
             foreach ($tierPricesList as $tierPrice) {
                 $tierPrices[] = [
@@ -326,7 +327,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                             $product->getMsrp()
                         ),
                     ],
-                 ];
+                ];
         }
         return $prices;
     }
@@ -334,9 +335,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated 100.2.0 Will be removed in major release
      * @param float $price
      * @return string
+     * @deprecated 100.2.0 Will be removed in major release
      */
     protected function _registerJsPrice($price)
     {

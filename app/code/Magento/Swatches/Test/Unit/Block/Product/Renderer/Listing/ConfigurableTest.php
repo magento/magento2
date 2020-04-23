@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer\Listing;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts;
+use Magento\Framework\Locale\Format;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
+use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,11 +59,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject */
     private $imageUrlBuilder;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $variationPricesMock;
+
+    /**
+     * @var GetEnabledOptionsProducts|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $enabledOptionsProducts;
 
     public function setUp()
     {
@@ -83,31 +91,41 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->variationPricesMock = $this->createMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
-
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->configurable = $objectManagerHelper->getObject(
-            \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::class,
-            [
-                'scopeConfig' => $this->scopeConfig,
-                'imageHelper' => $this->imageHelper,
-                'imageUrlBuilder' => $this->imageUrlBuilder,
-                'arrayUtils' => $this->arrayUtils,
-                'jsonEncoder' => $this->jsonEncoder,
-                'helper' => $this->helper,
-                'swatchHelper' => $this->swatchHelper,
-                'swatchMediaHelper' => $this->swatchMediaHelper,
-                'catalogProduct' => $this->catalogProduct,
-                'currentCustomer' => $this->currentCustomer,
-                'priceCurrency' => $this->priceCurrency,
-                'configurableAttributeData' => $this->configurableAttributeData,
-                'data' => [],
-                'variationPrices' => $this->variationPricesMock
-            ]
-        );
+        $context = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $format = $this->getMockBuilder(Format::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->enabledOptionsProducts = $this->getMockBuilder(GetEnabledOptionsProducts::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configurable = $this->getMockBuilder(\Magento\Swatches\Block\Product\Renderer\Listing\Configurable::class)
+            ->setConstructorArgs(
+                [
+                    'context' => $context,
+                    'arrayUtils' => $this->arrayUtils,
+                    'jsonEncoder' => $this->jsonEncoder,
+                    'helper' => $this->helper,
+                    'catalogProduct' => $this->catalogProduct,
+                    'currentCustomer' => $this->currentCustomer,
+                    'priceCurrency' => $this->priceCurrency,
+                    'configurableAttributeData' => $this->configurableAttributeData,
+                    'swatchHelper' => $this->swatchHelper,
+                    'swatchMediaHelper' => $this->swatchMediaHelper,
+                    'data' => [],
+                    'swatchAttributesProvider' => $swatchAttributesProvider,
+                    'localeFormat' => $format,
+                    'variationPrices' => $this->variationPricesMock,
+                ]
+            )->setMethods(['getAllowProducts'])->getMock();
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchConfigWithoutSwatches()
     {
@@ -154,13 +172,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $products = [
             1 => 'testA',
-            3 => 'testB'
+            3 => 'testB',
         ];
         $expected =
             [
                 'type' => null,
                 'value' => 'hello',
-                'label' => $products[3]
+                'label' => $products[3],
             ];
         $this->prepareGetJsonSwatchConfig();
         $this->configurable->setProduct($this->product);
@@ -187,19 +205,14 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $product1 = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product1->expects($this->any())->method('isSaleable')->willReturn(true);
-        $product1->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product1->expects($this->any())->method('getData')->with('code')->willReturn(1);
 
         $product2 = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product2->expects($this->any())->method('isSaleable')->willReturn(true);
-        $product2->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product2->expects($this->any())->method('getData')->with('code')->willReturn(3);
 
         $simpleProducts = [$product1, $product2];
-        $configurableType = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
-        $configurableType->expects($this->atLeastOnce())->method('getUsedProducts')->with($this->product, null)
-            ->willReturn($simpleProducts);
-        $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
+        $this->configurable->expects($this->atLeastOnce())->method('getAllowProducts')->willReturn($simpleProducts);
 
         $productAttribute1 = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
         $productAttribute1->expects($this->any())->method('getId')->willReturn(1);

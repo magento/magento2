@@ -16,6 +16,9 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 use Magento\Framework\Exception\LocalizedException;
 use Zend_Db_Select_Exception;
 
+/**
+ * Retrieve configurable options service.
+ */
 class GetEnabledOptionsProducts
 {
     /**
@@ -59,29 +62,33 @@ class GetEnabledOptionsProducts
     }
 
     /**
+     * Retrieve enabled configurable options.
+     *
      * @param ProductInterface $product
      * @return ProductInterface[]
      * @throws LocalizedException
      * @throws Zend_Db_Select_Exception
      */
-    public function execute(ProductInterface $product) : array
+    public function execute(ProductInterface $product): array
     {
         $collection = $this->productCollectionFactory->create();
         $collection->setFlag('product_children', true);
         $collection->setProductFilter($product);
+        if (null !== $this->configurable->getStoreFilter($product)) {
+            $collection->addStoreFilter($this->configurable->getStoreFilter($product));
+        }
 
         $collection->getSelect()->joinInner(
-            ['pw' => $collection->getConnection()->getTableName('catalog_product_website')],
-            'pw.product_id = e.entity_id',
-            ['pw.website_id']
-        );
-        $collection->getSelect()->joinInner(
             ['cwd' => $collection->getConnection()->getTableName('catalog_product_index_website')],
-            'pw.website_id = cwd.website_id',
+            'product_website.website_id = cwd.website_id',
             []
         );
 
-        $this->joinAttributeProcessor->process($collection->getSelect(), 'status', Status::STATUS_ENABLED);
+        $this->joinAttributeProcessor->process(
+            $collection->getSelect(),
+            ProductInterface::STATUS,
+            Status::STATUS_ENABLED
+        );
         $collection->addAttributeToSelect($this->getAttributesForCollection($product));
         $collection->addFilterByRequiredOptions();
         $collection->setStoreId($product->getStoreId());
@@ -95,7 +102,7 @@ class GetEnabledOptionsProducts
      * @param ProductInterface $product
      * @return array
      */
-    private function getAttributesForCollection(ProductInterface $product) : array
+    private function getAttributesForCollection(ProductInterface $product): array
     {
         $requiredAttributes = [
             'name',
@@ -105,11 +112,11 @@ class GetEnabledOptionsProducts
             'thumbnail',
             'status',
             'visibility',
-            'media_gallery'
+            'media_gallery',
         ];
 
         $usedAttributes = array_map(
-            function($attr) {
+            function ($attr) {
                 return $attr->getAttributeCode();
             },
             $this->configurable->getUsedProductAttributes($product)
