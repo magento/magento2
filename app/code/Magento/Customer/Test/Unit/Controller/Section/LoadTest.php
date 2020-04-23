@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Controller\Section;
 
 use Magento\Customer\Controller\Section\Load;
 use Magento\Customer\CustomerData\SectionPoolInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -59,6 +60,7 @@ class LoadTest extends TestCase
         $this->resultJsonMock = $this->createMock(Json::class);
 
         $this->loadAction = new Load(
+            $this->createMock(Context::class),
             $this->requestMock,
             $this->resultJsonFactoryMock,
             $this->sectionPoolMock,
