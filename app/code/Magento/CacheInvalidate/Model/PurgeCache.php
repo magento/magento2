@@ -6,6 +6,9 @@
 namespace Magento\CacheInvalidate\Model;
 
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\PageCache\Model\Cache\Server;
+use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Uri\Uri;
 
 /**
  * Invalidate external HTTP cache(s) based on tag pattern
@@ -15,12 +18,12 @@ class PurgeCache
     const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
 
     /**
-     * @var \Magento\PageCache\Model\Cache\Server
+     * @var Server
      */
     protected $cacheServer;
 
     /**
-     * @var \Magento\CacheInvalidate\Model\SocketFactory
+     * @var SocketFactory
      */
     protected $socketAdapterFactory;
 
@@ -39,26 +42,26 @@ class PurgeCache
      *
      * @var int
      */
-    private $requestSize;
+    private $maxHeaderSize;
 
     /**
      * Constructor
      *
-     * @param \Magento\PageCache\Model\Cache\Server $cacheServer
-     * @param \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory
+     * @param Server $cacheServer
+     * @param SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
      * @param int $maxHeaderSize
      */
     public function __construct(
-        \Magento\PageCache\Model\Cache\Server $cacheServer,
-        \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory,
+        Server $cacheServer,
+        SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger,
         int $maxHeaderSize = 7680
     ) {
         $this->cacheServer = $cacheServer;
         $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
-        $this->requestSize = $maxHeaderSize;
+        $this->maxHeaderSize = $maxHeaderSize;
     }
 
     /**
@@ -94,13 +97,13 @@ class PurgeCache
      * @param array $tags
      * @return \Generator
      */
-    private function chunkTags($tags)
+    private function chunkTags(array $tags): \Generator
     {
         $currentBatchSize = 0;
         $formattedTagsChunk = [];
         foreach ($tags as $formattedTag) {
             // Check if (currentBatchSize + length of next tag + number of pipe delimiters) would exceed header size.
-            if ($currentBatchSize + strlen($formattedTag) + count($formattedTagsChunk) > $this->requestSize) {
+            if ($currentBatchSize + strlen($formattedTag) + count($formattedTagsChunk) > $this->maxHeaderSize) {
                 yield implode('|', $formattedTagsChunk);
                 $formattedTagsChunk = [];
                 $currentBatchSize = 0;
@@ -117,12 +120,12 @@ class PurgeCache
     /**
      * Send curl purge request to servers to invalidate cache by tags pattern
      *
-     * @param \Laminas\Http\Client\Adapter\Socket $socketAdapter
-     * @param \Laminas\Uri\Uri[] $servers
+     * @param Socket $socketAdapter
+     * @param Uri[] $servers
      * @param string $formattedTagsChunk
      * @return bool Return true if successful; otherwise return false
      */
-    private function sendPurgeRequestToServers($socketAdapter, $servers, $formattedTagsChunk)
+    private function sendPurgeRequestToServers(Socket $socketAdapter, array $servers, string $formattedTagsChunk): bool
     {
         $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $formattedTagsChunk];
         $unresponsiveServerError = [];
