@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
@@ -59,25 +60,25 @@ class GroupTest extends TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->_element->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->_user = $this->createMock(User::class);
         $this->_authSession = $this->createMock(Session::class);
         $this->_authSession->expects($this->any())
             ->method('__call')
             ->with('getUser')
-            ->will($this->returnValue($this->_user));
+            ->willReturn($this->_user);
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
             ['authSession' => $this->_authSession]
@@ -95,7 +96,7 @@ class GroupTest extends TestCase
         $this->_user->setExtra(['configState' => []]);
         $this->_element->setGroup(isset($expanded) ? ['expanded' => $expanded] : []);
         $html = $this->_model->render($this->_element);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<input id="' . $this->_element->getHtmlId() . '-state" name="config_state['
             . $this->_element->getId() . ']" type="hidden" value="' . $expected . '" />',
             $html

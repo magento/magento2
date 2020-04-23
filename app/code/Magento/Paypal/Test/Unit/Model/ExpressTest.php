@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Checkout\Model\Session;
@@ -24,7 +26,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -91,10 +93,10 @@ class ExpressTest extends TestCase
     protected function setUp(): void
     {
         $this->errorCodes[] = self::$authorizationExpiredCode;
-        $this->checkoutSession = $this->createPartialMock(
-            Session::class,
-            ['getPaypalTransactionData', 'setPaypalTransactionData']
-        );
+        $this->checkoutSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getPaypalTransactionData', 'setPaypalTransactionData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->transactionBuilder = $this->getMockForAbstractClass(
             BuilderInterface::class,
             [],
@@ -102,17 +104,11 @@ class ExpressTest extends TestCase
             false,
             false
         );
-        $this->nvp = $this->createPartialMock(
-            Nvp::class,
-            [
-                'setProcessableErrors',
-                'setAmount',
-                'setCurrencyCode',
-                'setTransactionId',
-                'callDoAuthorization',
-                'setData',
-            ]
-        );
+        $this->nvp = $this->getMockBuilder(Nvp::class)
+            ->addMethods(['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId'])
+            ->onlyMethods(['callDoAuthorization', 'setData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->pro = $this->createPartialMock(
             Pro::class,
             ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']

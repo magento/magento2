@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Bml;
 
@@ -43,14 +44,14 @@ class ShortcutTest extends TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['create'])
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $configMock = $this->getMockBuilder(Config::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['setMethod'])
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['setMethod'])
+            ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
 
         $this->shortcut = $this->objectManagerHelper->getObject(
@@ -90,7 +91,7 @@ class ShortcutTest extends TestCase
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
-            ->with($paymentMethodCode, $isInCatalog)->will($this->returnValue(false));
+            ->with($paymentMethodCode, $isInCatalog)->willReturn(false);
 
         $this->assertEmpty($this->shortcut->toHtml());
     }
@@ -101,14 +102,15 @@ class ShortcutTest extends TestCase
         $paymentMethodCode = '';
         $bmlMethodCode = '';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
-        $expressMethod = $this->getMockBuilder(Express::class)->disableOriginalConstructor()
+        $expressMethod = $this->getMockBuilder(Express::class)
+            ->disableOriginalConstructor()
             ->setMethods([])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
-            ->with($paymentMethodCode, $isInCatalog)->will($this->returnValue(true));
+            ->with($paymentMethodCode, $isInCatalog)->willReturn(true);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($bmlMethodCode)
-            ->will($this->returnValue($expressMethod));
-        $expressMethod->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+            ->willReturn($expressMethod);
+        $expressMethod->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $this->assertEmpty($this->shortcut->toHtml());
     }
@@ -120,10 +122,12 @@ class ShortcutTest extends TestCase
         $bmlMethodCode = '';
         $hash = 'hash';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
-        $expressMethod = $this->getMockBuilder(Express::class)->disableOriginalConstructor()
+        $expressMethod = $this->getMockBuilder(Express::class)
+            ->disableOriginalConstructor()
             ->setMethods([])->getMock();
         $expectedData = [
             'is_in_catalog_product' => $isInCatalog,
+            'module_name' => 'Magento_Paypal',
             'shortcut_html_id' => $hash,
             'checkout_url' => null,
             'image_url' => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppcredit-logo-medium.png',
@@ -135,14 +139,14 @@ class ShortcutTest extends TestCase
         ];
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
-            ->with($paymentMethodCode, $isInCatalog)->will($this->returnValue(true));
+            ->with($paymentMethodCode, $isInCatalog)->willReturn(true);
         $this->paymentHelperMock->expects($this->once())->method('getMethodInstance')->with($bmlMethodCode)
-            ->will($this->returnValue($expressMethod));
-        $expressMethod->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
+            ->willReturn($expressMethod);
+        $expressMethod->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->randomMock->expects($this->once())->method('getUniqueHash')->with('ec_shortcut_bml_')
-            ->will($this->returnValue($hash));
+            ->willReturn($hash);
 
         $this->assertEmpty($this->shortcut->toHtml());
-        $this->assertContains($expectedData, $this->shortcut->getData());
+        $this->assertEquals($expectedData, $this->shortcut->getData());
     }
 }

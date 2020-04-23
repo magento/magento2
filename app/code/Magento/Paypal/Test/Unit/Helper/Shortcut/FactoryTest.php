@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
@@ -40,10 +41,11 @@ class FactoryTest extends TestCase
 
     public function testCreateDefault()
     {
-        $instance = $this->getMockBuilder(ValidatorInterface::class)->getMock();
+        $instance = $this->getMockBuilder(ValidatorInterface::class)
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::DEFAULT_VALIDATOR)
-            ->will($this->returnValue($instance));
+            ->willReturn($instance);
 
         $this->assertInstanceOf(
             ValidatorInterface::class,
@@ -53,12 +55,14 @@ class FactoryTest extends TestCase
 
     public function testCreateCheckout()
     {
-        $checkoutMock = $this->getMockBuilder(Session::class)->disableOriginalConstructor()
+        $checkoutMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $instance = $this->getMockBuilder(ValidatorInterface::class)->getMock();
+        $instance = $this->getMockBuilder(ValidatorInterface::class)
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::CHECKOUT_VALIDATOR)
-            ->will($this->returnValue($instance));
+            ->willReturn($instance);
 
         $this->assertInstanceOf(
             ValidatorInterface::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -59,24 +61,24 @@ class ViewTest extends TestCase
         );
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(2))
             ->method('addFieldToFilter')
             ->with('status', ['in' => $visibleStatuses])
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(3))
             ->method('setOrder')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
 
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($visibleStatuses));
+            ->willReturn($visibleStatuses);
 
         $this->block->getRelatedOrders();
     }

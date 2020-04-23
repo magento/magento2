@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Billing;
 
 use Magento\Framework\App\CacheInterface;
@@ -117,7 +119,8 @@ class AgreementsTest extends TestCase
         $this->context->expects($this->once())->method('getCache')->willReturn($this->cache);
         $this->agreementCollection = $this->getMockBuilder(
             CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->helper = $this->createMock(Data::class);
         $objectManager = new ObjectManager($this);
 
@@ -177,7 +180,10 @@ class AgreementsTest extends TestCase
     public function testGetItemValueEditUrl()
     {
         $this->escaper->expects($this->once())->method('escapeHtml');
-        $item = $this->createPartialMock(Agreement::class, ['getAgreementId']);
+        $item = $this->getMockBuilder(Agreement::class)
+            ->addMethods(['getAgreementId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->once())->method('getAgreementId')->willReturn(1);
         $this->urlBuilder
             ->expects($this->once())
@@ -189,7 +195,10 @@ class AgreementsTest extends TestCase
     public function testGetItemPaymentMethodLabel()
     {
         $this->escaper->expects($this->once())->method('escapeHtml')->with('label', null);
-        $item = $this->createPartialMock(Agreement::class, ['getAgreementLabel']);
+        $item = $this->getMockBuilder(Agreement::class)
+            ->addMethods(['getAgreementLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->once())->method('getAgreementLabel')->willReturn('label');
         $this->block->getItemValue($item, 'payment_method_label');
     }

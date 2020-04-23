@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
 
 use Magento\Backend\Model\Url;
@@ -58,13 +60,13 @@ class CountryTest extends TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->_jsHelper = $this->createMock(Js::class);
         $this->_url = $this->createMock(Url::class);
@@ -85,7 +87,7 @@ class CountryTest extends TestCase
     {
         $this->_request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
+            ->willReturnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
                 if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
                     return $requestCountry;
                 }
@@ -93,7 +95,7 @@ class CountryTest extends TestCase
                     return $requestDefaultCountry;
                 }
                 return $param;
-            }));
+            });
         $this->_element->setInherit($inherit);
         $this->_element->setCanUseDefaultValue($canUseDefault);
         $constraints = [

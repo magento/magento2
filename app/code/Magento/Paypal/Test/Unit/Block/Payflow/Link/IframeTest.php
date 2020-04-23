@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Payflow\Link;
 
 use Magento\Checkout\Model\Session;
@@ -74,7 +76,10 @@ class IframeTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['getQuote']);
+        $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
+            ->addMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->hssHelperMock = $this->createMock(Hss::class);
         $this->paymentDataMock = $this->createMock(Data::class);
         $this->quoteMock = $this->createPartialMock(Quote::class, ['getPayment', '__wakeup']);
@@ -84,13 +89,13 @@ class IframeTest extends TestCase
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getPayment')
-            ->will($this->returnValue($this->paymentMock));
+            ->willReturn($this->paymentMock);
         $this->hssHelperMock->expects($this->any())
             ->method('getHssMethods')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
     }
 
     /**

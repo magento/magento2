@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
 
 use Magento\Framework\Config\FileResolverInterface;
@@ -68,7 +70,7 @@ class ReaderTest extends TestCase
 
         $this->fileResolver->expects($this->once())
             ->method('get')
-            ->with($this->equalTo($expected))
+            ->with($expected)
             ->willReturn($xml);
 
         $this->reader = new Reader(
@@ -99,7 +101,7 @@ class ReaderTest extends TestCase
             ->willReturn([]);
         $this->fileResolver->expects($this->at(1))
             ->method('get')
-            ->with($this->equalTo($expected))
+            ->with($expected)
             ->willReturn($xml);
 
         $this->reader = new Reader(

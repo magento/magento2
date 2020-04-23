@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Controller\Ipn;
 
@@ -77,9 +78,9 @@ class IndexTest extends TestCase
 
     public function testIndexActionException()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $exception = new \Exception();
-        $this->requestMock->expects($this->once())->method('getPostValue')->will($this->throwException($exception));
+        $this->requestMock->expects($this->once())->method('getPostValue')->willThrowException($exception);
         $this->loggerMock->expects($this->once())->method('critical')->with($this->identicalTo($exception));
         $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->model->execute();
@@ -87,7 +88,7 @@ class IndexTest extends TestCase
 
     public function testIndexAction()
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
         $incrementId = 'incrementId';
         $data = [
             'invoice' => $incrementId,

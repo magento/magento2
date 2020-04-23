@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\CustomerData;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -50,8 +52,7 @@ class BillingAgreementTest extends TestCase
         $this->escaperMock = $helper->getObject(Escaper::class);
         $this->paypalConfig
             ->expects($this->once())
-            ->method('setMethod')
-            ->will($this->returnSelf());
+            ->method('setMethod')->willReturnSelf();
 
         $this->paypalConfig->expects($this->once())
             ->method('setMethod')
@@ -60,7 +61,7 @@ class BillingAgreementTest extends TestCase
         $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->paypalConfig));
+            ->willReturn($this->paypalConfig);
 
         $customerId = 20;
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);

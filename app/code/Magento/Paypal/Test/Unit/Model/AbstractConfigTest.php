@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -48,7 +50,7 @@ class AbstractConfigTest extends TestCase
 
     public function testSetMethodInstance()
     {
-        /** @var $methodInterfaceMock MethodInterface */
+        /** @var MethodInterface $methodInterfaceMock */
         $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
@@ -63,7 +65,7 @@ class AbstractConfigTest extends TestCase
      */
     public function setMethodDataProvider()
     {
-        /** @var $methodInterfaceMock MethodInterface */
+        /** @var MethodInterface $methodInterfaceMock */
         $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInterfaceMock->expects($this->once())

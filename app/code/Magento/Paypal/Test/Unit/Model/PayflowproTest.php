@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -24,7 +26,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,7 +95,7 @@ class PayflowproTest extends TestCase
         $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $clientFactory->method('create')->will($this->returnValue($client));
+        $clientFactory->method('create')->willReturn($client);
 
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
@@ -166,9 +168,13 @@ class PayflowproTest extends TestCase
             ->willReturn($response);
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
-            ->will($this->returnValue('BNCODE'));
-        $payment = $this->createPartialMock(Info::class, ['setTransactionId', '__wakeup']);
-        $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
+            ->willReturn('BNCODE');
+        $payment = $this->getMockBuilder(Info::class)
+            ->addMethods(['setTransactionId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $payment->expects($this->once())->method('setTransactionId')->willReturnSelf();
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
 

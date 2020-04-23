@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Observer;
 
@@ -94,8 +95,8 @@ class RestrictAdminBillingAgreementUsageObserverTest extends TestCase
             'isAllowed'
         )->with(
             'Magento_Paypal::use'
-        )->will(
-            $this->returnValue($isAllowed)
+        )->willReturn(
+            $isAllowed
         );
         $result = new DataObject();
         $result->setData('is_available', true);

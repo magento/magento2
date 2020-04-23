@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
 use Magento\Checkout\Block\Onepage\Success;
@@ -16,12 +18,11 @@ use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
 use Magento\Paypal\Model\Config;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -92,7 +93,7 @@ class ReturnUrlTest extends TestCase
     private $objectManager;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentFailuresInterface|MockObject
      */
     private $paymentFailures;
 

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Multiselect;
 
@@ -78,15 +79,13 @@ class DisabledFundingOptionsTest extends TestCase
     ) {
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
-                    function ($param) use ($requestCountry) {
-                        if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
-                            return $requestCountry;
-                        }
-                        return $param;
+            ->willReturnCallback(
+                function ($param) use ($requestCountry) {
+                    if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
+                        return $requestCountry;
                     }
-                )
+                    return $param;
+                }
             );
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
@@ -100,7 +99,7 @@ class DisabledFundingOptionsTest extends TestCase
         $this->model->render($this->element);
         $payPalCreditOption = [
             'value' => 'CREDIT',
-            'label' => __('PayPal Credit')
+            'label' => __('PayPal Credit')->getText()
         ];
         $elementValues = $this->element->getValues();
         if ($shouldContainPaypalCredit) {
@@ -133,15 +132,15 @@ class DisabledFundingOptionsTest extends TestCase
         return [
             [
                 'value' => 'CREDIT',
-                'label' => __('PayPal Credit')
+                'label' => __('PayPal Credit')->getText()
             ],
             [
                 'value' => 'CARD',
-                'label' => __('PayPal Guest Checkout Credit Card Icons')
+                'label' => __('PayPal Guest Checkout Credit Card Icons')->getText()
             ],
             [
                 'value' => 'ELV',
-                'label' => __('Elektronisches Lastschriftverfahren - German ELV')
+                'label' => __('Elektronisches Lastschriftverfahren - German ELV')->getText()
             ]
         ];
     }

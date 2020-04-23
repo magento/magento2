@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
 use Magento\Framework\Data\Form;
@@ -73,7 +75,7 @@ class AbstractEnableTest extends TestCase
      */
     public function testGetUiId()
     {
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
     }
 
     /**
@@ -102,6 +104,6 @@ class AbstractEnableTest extends TestCase
             ->method('getFieldNameSuffix')
             ->willReturn('');
 
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
     }
 }

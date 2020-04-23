@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
 use Magento\Config\Model\Config;
@@ -57,19 +59,19 @@ class PaymentTest extends TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
+            ->willReturn('name');
         $this->_element->expects($this->any())
             ->method('getElements')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->_element->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('id'));
+            ->willReturn('id');
         $this->_backendConfig = $this->createMock(Config::class);
         $this->_model = $helper->getObject(
             Payment::class,
@@ -86,11 +88,11 @@ class PaymentTest extends TestCase
         $this->_element->setGroup($groupConfig);
         $this->_backendConfig->expects($this->any())
             ->method('getConfigDataValue')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [[self::CONFIG_PATH_ACTIVE, null, null, '1'], [self::CONFIG_PATH_NOT_ACTIVE, null, null, '0']]
-            ));
+            );
         $html = $this->_model->render($this->_element);
-        $this->assertContains($expected, $html);
+        $this->assertStringContainsString($expected, $html);
     }
 
     /**

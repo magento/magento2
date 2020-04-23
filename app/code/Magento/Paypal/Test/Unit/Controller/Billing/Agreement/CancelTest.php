@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Billing\Agreement;
 
 use Magento\Customer\Model\Session;
@@ -59,21 +61,22 @@ class CancelTest extends TestCase
     {
         $this->_session = $this->createMock(Session::class);
 
-        $this->_agreement = $this->createPartialMock(
-            BillingAgreement::class,
-            ['load', 'getId', 'getCustomerId', 'getReferenceId', 'canCancel', 'cancel', '__wakeup']
-        );
-        $this->_agreement->expects($this->once())->method('load')->with(15)->will($this->returnSelf());
-        $this->_agreement->expects($this->once())->method('getId')->will($this->returnValue(15));
-        $this->_agreement->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_agreement = $this->getMockBuilder(BillingAgreement::class)
+            ->addMethods(['getCustomerId', 'getReferenceId'])
+            ->onlyMethods(['load', 'getId', 'canCancel', 'cancel', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_agreement->expects($this->once())->method('load')->with(15)->willReturnSelf();
+        $this->_agreement->expects($this->once())->method('getId')->willReturn(15);
+        $this->_agreement->expects($this->once())->method('getCustomerId')->willReturn(871);
 
         $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
             'get'
-        )->will(
-            $this->returnValueMap([[Session::class, $this->_session]])
+        )->willReturnMap(
+            [[Session::class, $this->_session]]
         );
         $this->_objectManager->expects(
             $this->once()
@@ -81,12 +84,12 @@ class CancelTest extends TestCase
             'create'
         )->with(
             BillingAgreement::class
-        )->will(
-            $this->returnValue($this->_agreement)
+        )->willReturn(
+            $this->_agreement
         );
 
         $this->_request = $this->createMock(RequestInterface::class);
-        $this->_request->expects($this->once())->method('getParam')->with('agreement')->will($this->returnValue(15));
+        $this->_request->expects($this->once())->method('getParam')->with('agreement')->willReturn(15);
 
         $response = $this->createMock(ResponseInterface::class);
 
@@ -95,11 +98,11 @@ class CancelTest extends TestCase
         $this->_messageManager = $this->createMock(ManagerInterface::class);
 
         $context = $this->createMock(Context::class);
-        $context->expects($this->any())->method('getObjectManager')->will($this->returnValue($this->_objectManager));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
-        $context->expects($this->any())->method('getResponse')->will($this->returnValue($response));
-        $context->expects($this->any())->method('getRedirect')->will($this->returnValue($redirect));
-        $context->expects($this->any())->method('getMessageManager')->will($this->returnValue($this->_messageManager));
+        $context->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->_request);
+        $context->expects($this->any())->method('getResponse')->willReturn($response);
+        $context->expects($this->any())->method('getRedirect')->willReturn($redirect);
+        $context->expects($this->any())->method('getMessageManager')->willReturn($this->_messageManager);
 
         $this->_registry = $this->createMock(Registry::class);
 
@@ -111,12 +114,12 @@ class CancelTest extends TestCase
 
     public function testExecuteActionSuccess()
     {
-        $this->_agreement->expects($this->once())->method('getReferenceId')->will($this->returnValue('r15'));
-        $this->_agreement->expects($this->once())->method('canCancel')->will($this->returnValue(true));
+        $this->_agreement->expects($this->once())->method('getReferenceId')->willReturn('r15');
+        $this->_agreement->expects($this->once())->method('canCancel')->willReturn(true);
         $this->_agreement->expects($this->once())->method('cancel');
 
         $noticeMessage = 'The billing agreement "r15" has been canceled.';
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(871);
         $this->_messageManager->expects($this->once())->method('addNoticeMessage')->with($noticeMessage);
         $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
@@ -138,7 +141,7 @@ class CancelTest extends TestCase
         $this->_agreement->expects($this->never())->method('cancel');
 
         $errorMessage = 'Please specify the correct billing agreement ID and try again.';
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(938));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(938);
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
 
         $this->_registry->expects($this->never())->method('register');
@@ -148,10 +151,10 @@ class CancelTest extends TestCase
 
     public function testExecuteAgreementStatusDoesNotAllowToCancel()
     {
-        $this->_agreement->expects($this->once())->method('canCancel')->will($this->returnValue(false));
+        $this->_agreement->expects($this->once())->method('canCancel')->willReturn(false);
         $this->_agreement->expects($this->never())->method('cancel');
 
-        $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
+        $this->_session->expects($this->once())->method('getCustomerId')->willReturn(871);
         $this->_messageManager->expects($this->never())->method('addNoticeMessage');
         $this->_messageManager->expects($this->never())->method('addErrorMessage');
 

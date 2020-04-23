@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -172,7 +174,7 @@ class PayflowConfigTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
-            ->will($this->returnValue('US'));
+            ->willReturn('US');
 
         $i = 0;
         foreach ($expectsMethods as $method => $isActive) {

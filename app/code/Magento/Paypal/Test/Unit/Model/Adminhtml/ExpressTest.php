@@ -69,10 +69,11 @@ class ExpressTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->nvp = $this->createPartialMock(
-            Nvp::class,
-            ['getData','setProcessableErrors', 'callDoAuthorization']
-        );
+        $this->nvp = $this->getMockBuilder(Nvp::class)
+            ->addMethods(['setProcessableErrors'])
+            ->onlyMethods(['getData', 'callDoAuthorization'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->nvp->method('getData')->willReturn([]);
         $this->nvp->method('setProcessableErrors')->willReturnSelf();
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Observer;
 
 use Magento\Checkout\Model\Session;
@@ -77,8 +79,8 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
             '__call'
         )->with(
             'getBillingAgreementData'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->never())->method('create');
@@ -93,7 +95,7 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
     public function testAddBillingAgreementToSession($isValid)
     {
         $agreement = $this->createMock(Agreement::class);
-        $agreement->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
+        $agreement->expects($this->once())->method('isValid')->willReturn($isValid);
         $comment = $this->getMockForAbstractClass(
             AbstractModel::class,
             [],
@@ -115,8 +117,8 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
             ) : __(
                 'We can\'t create a billing agreement for this order.'
             )
-        )->will(
-            $this->returnValue($comment)
+        )->willReturn(
+            $comment
         );
         if ($isValid) {
             $agreement->expects(
@@ -125,8 +127,8 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
                 '__call'
             )->with(
                 'getReferenceId'
-            )->will(
-                $this->returnValue('agreement reference id')
+            )->willReturn(
+                'agreement reference id'
             );
             $agreement->expects($this->once())->method('addOrderRelation')->with($order);
             $order->expects(new MethodInvokedAtIndex(0))->method('addRelatedObject')->with($agreement);
@@ -157,21 +159,21 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
             '__call'
         )->with(
             'getBillingAgreementData'
-        )->will(
-            $this->returnValue('not empty')
+        )->willReturn(
+            'not empty'
         );
-        $payment->expects($this->once())->method('getOrder')->will($this->returnValue($order));
+        $payment->expects($this->once())->method('getOrder')->willReturn($order);
         $agreement->expects(
             $this->once()
         )->method(
             'importOrderPayment'
         )->with(
             $payment
-        )->will(
-            $this->returnValue($agreement)
+        )->willReturn(
+            $agreement
         );
         $this->_event->setPayment($payment);
-        $this->_agreementFactory->expects($this->once())->method('create')->will($this->returnValue($agreement));
+        $this->_agreementFactory->expects($this->once())->method('create')->willReturn($agreement);
         $this->_model->execute($this->_observer);
     }
 

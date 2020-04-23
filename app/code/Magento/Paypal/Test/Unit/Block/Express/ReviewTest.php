@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
@@ -59,10 +60,10 @@ class ReviewTest extends TestCase
             ->with(
                 $this->stringContains('advanced/modules_disable_output/'),
                 ScopeInterface::SCOPE_STORE
-            )->will($this->returnValue(false));
+            )->willReturn(false);
 
         $urlBuilder = $this->createMock(UrlInterface::class);
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $context = $this->createPartialMock(
             Context::class,
@@ -72,12 +73,12 @@ class ReviewTest extends TestCase
         $this->request = $this->createMock(Http::class);
         $this->assetRepo = $this->createMock(Repository::class);
 
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->any())->method('getAssetRepository')->will($this->returnValue($this->assetRepo));
-        $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
+        $context->expects($this->any())->method('getLayout')->willReturn($layout);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->any())->method('getAssetRepository')->willReturn($this->assetRepo);
+        $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
 
         $this->model = $helper->getObject(Review::class, ['context' => $context]);
     }
@@ -88,13 +89,18 @@ class ReviewTest extends TestCase
      */
     public function testGetViewFileUrl($isSecure)
     {
-        $this->request->expects($this->once())->method('isSecure')->will($this->returnValue($isSecure));
+        $this->request->expects($this->once())->method('isSecure')->willReturn($isSecure);
         $this->assetRepo->expects($this->once())
             ->method('getUrlWithParams')
-            ->with('some file', $this->callback(function ($value) use ($isSecure) {
-                return isset($value['_secure']) && $value['_secure'] === $isSecure;
-            }))
-            ->will($this->returnValue('result url'));
+            ->with(
+                'some file',
+                $this->callback(
+                    function ($value) use ($isSecure) {
+                        return isset($value['_secure']) && $value['_secure'] === $isSecure;
+                    }
+                )
+            )
+            ->willReturn('result url');
         $this->assertEquals('result url', $this->model->getViewFileUrl('some file'));
     }
 
@@ -109,7 +115,7 @@ class ReviewTest extends TestCase
     public function testBeforeToHtmlWhenQuoteIsNotVirtual()
     {
         $quote = $this->_getQuoteMock();
-        $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(false));
+        $quote->expects($this->any())->method('getIsVirtual')->willReturn(false);
         $quote->setMayEditShippingMethod('MayEditShippingMethod');
 
         $shippingRate = new DataObject(['code' => 'Rate 1']);
@@ -137,15 +143,18 @@ class ReviewTest extends TestCase
         $this->assertSame($shippingRate, $this->model->getCurrentShippingRate());
         $this->assertNotNull($this->model->getCanEditShippingAddress());
         $this->assertEquals($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
-        $this->assertContains('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString(
+            'paypal/express/saveShippingMethod',
+            $this->model->getShippingMethodSubmitUrl()
+        );
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     public function testBeforeToHtmlWhenQuoteIsVirtual()
     {
         $quote = $this->_getQuoteMock();
-        $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(true));
+        $quote->expects($this->any())->method('getIsVirtual')->willReturn(true);
         $this->model->setQuote($quote);
         $this->model->toHtml();
         $this->assertEquals(
@@ -153,8 +162,8 @@ class ReviewTest extends TestCase
             $quote->getPayment()->getMethodInstance()->getTitle()
         );
         $this->assertFalse($this->model->getShippingRateRequired());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     /**
@@ -166,17 +175,17 @@ class ReviewTest extends TestCase
     {
         $methodInstance = new DataObject(['title' => 'Payment Method']);
         $payment = $this->createMock(Payment::class);
-        $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
+        $payment->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
         $quote = $this->createMock(Quote::class);
-        $quote->expects($this->any())->method('getPayment')->will($this->returnValue($payment));
+        $quote->expects($this->any())->method('getPayment')->willReturn($payment);
         $quote->setPayment($payment);
 
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShippingMethod', 'getGroupedAllShippingRates', '__wakeup'])
             ->getMock();
-        $quote->expects($this->any())->method('getShippingAddress')->will($this->returnValue($address));
+        $quote->expects($this->any())->method('getShippingAddress')->willReturn($address);
 
         return $quote;
     }

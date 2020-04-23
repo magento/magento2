@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Express;
 
@@ -68,11 +69,26 @@ class CheckoutTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->customerMock = $this->createMock(Customer::class);
-        $this->quoteMock = $this->createPartialMock(Quote::class, [
-                'getId', 'assignCustomer', 'assignCustomerWithAddressChange', 'getBillingAddress',
-                'getShippingAddress', 'isVirtual', 'addCustomerAddress', 'collectTotals', '__wakeup',
-                'save', 'getCustomerData', 'getIsVirtual', 'getExtensionAttributes'
-            ]);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCustomerData'])
+            ->onlyMethods(
+                [
+                    'getId',
+                    'assignCustomer',
+                    'assignCustomerWithAddressChange',
+                    'getBillingAddress',
+                    'getShippingAddress',
+                    'isVirtual',
+                    'addCustomerAddress',
+                    'collectTotals',
+                    '__wakeup',
+                    'save',
+                    'getIsVirtual',
+                    'getExtensionAttributes'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerAccountManagementMock = $this->createMock(AccountManagement::class);
         $this->objectCopyServiceMock = $this->getMockBuilder(Copy::class)
             ->disableOriginalConstructor()

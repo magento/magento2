@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Helper;
 
 use Magento\Config\Model\Config;
@@ -119,7 +121,7 @@ class BackendTest extends TestCase
         $this->configurationCountryCodePrepareConfig($config);
         $this->directoryHelperMock->expects($this->once())
             ->method('getDefaultCountry')
-            ->will($this->returnValue($default));
+            ->willReturn($default);
         $this->configurationCountryCodeAssertResult($default);
     }
 

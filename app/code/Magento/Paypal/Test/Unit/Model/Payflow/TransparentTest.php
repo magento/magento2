@@ -28,7 +28,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -78,7 +78,7 @@ class TransparentTest extends TestCase
      */
     private $order;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->initPayment();
 
@@ -133,7 +133,7 @@ class TransparentTest extends TestCase
 
         $this->payPalPayflowGateway->expects($this->once())
             ->method('postRequest')
-            ->with($this->equalTo($validAuthorizeRequest));
+            ->with($validAuthorizeRequest);
 
         $this->subject->authorize($this->payment, 10);
     }

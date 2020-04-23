@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Paypal\Model\Pro
@@ -52,7 +53,7 @@ class ProTest extends TestCase
                 'apiFactory' => $apiFactory
             ]
         );
-        /** @var $pro \Magento\Paypal\Model\Pro */
+        /** @var \Magento\Paypal\Model\Pro $pro */
         $this->pro = $this->getMockBuilder(Pro::class)
             ->setMethods(['_isPaymentReviewRequired'])
             ->setConstructorArgs($args)
@@ -77,17 +78,18 @@ class ProTest extends TestCase
         );
         $payment = $this->getMockBuilder(
             Info::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getAdditionalInformation', '__wakeup']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getAdditionalInformation', '__wakeup']
+            )->getMock();
         $payment->expects(
             $this->once()
         )->method(
             'getAdditionalInformation'
         )->with(
-            $this->equalTo(\Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL)
-        )->will(
-            $this->returnValue($pendingReason)
+            \Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL
+        )->willReturn(
+            $pendingReason
         );
 
         $this->assertEquals($expected, $this->pro->canReviewPayment($payment));

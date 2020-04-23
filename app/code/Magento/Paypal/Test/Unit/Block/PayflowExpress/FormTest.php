@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\PayflowExpress;
 
 use Magento\Framework\Locale\ResolverInterface;
@@ -32,28 +34,25 @@ class FormTest extends TestCase
         $this->_paypalConfig = $this->createMock(Config::class);
         $this->_paypalConfig
             ->expects($this->once())
-            ->method('setMethod')
-            ->will($this->returnSelf());
+            ->method('setMethod')->willReturnSelf();
 
         $paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
         $paypalConfigFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_paypalConfig));
+            ->willReturn($this->_paypalConfig);
 
         $mark = $this->createMock(Template::class);
         $mark->expects($this->once())
-            ->method('setTemplate')
-            ->will($this->returnSelf());
+            ->method('setTemplate')->willReturnSelf();
         $mark->expects($this->any())
-            ->method('__call')
-            ->will($this->returnSelf());
+            ->method('__call')->willReturnSelf();
         $layout = $this->getMockForAbstractClass(
             LayoutInterface::class
         );
         $layout->expects($this->once())
             ->method('createBlock')
             ->with(Template::class)
-            ->will($this->returnValue($mark));
+            ->willReturn($mark);
 
         $localeResolver = $this->createMock(ResolverInterface::class);
 

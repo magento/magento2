@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Billing\Agreement;
 
 use Magento\Framework\Registry;
@@ -53,11 +55,11 @@ class OrdersUpdaterTest extends TestCase
             'registry'
         )->with(
             'current_billing_agreement'
-        )->will(
-            $this->returnValue($agreement)
+        )->willReturn(
+            $agreement
         );
 
-        $agreement->expects($this->once())->method('getId')->will($this->returnValue('agreement id'));
+        $agreement->expects($this->once())->method('getId')->willReturn('agreement id');
         $this->_agreementResource->expects(
             $this->once()
         )->method(
@@ -79,8 +81,8 @@ class OrdersUpdaterTest extends TestCase
             'registry'
         )->with(
             'current_billing_agreement'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
         $this->_model->update('any argument');

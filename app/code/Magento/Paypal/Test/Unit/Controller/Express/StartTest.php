@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Model\Express\Checkout;
@@ -22,7 +24,7 @@ class StartTest extends ExpressTest
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with('bml')
-            ->will($this->returnValue($buttonParam));
+            ->willReturn($buttonParam);
         $this->checkout->expects($this->once())
             ->method('setIsBml')
             ->with((bool)$buttonParam);
@@ -30,10 +32,10 @@ class StartTest extends ExpressTest
         $this->request->expects($this->at(2))
             ->method('getParam')
             ->with(Checkout::PAYMENT_INFO_BUTTON)
-            ->will($this->returnValue($buttonParam));
+            ->willReturn($buttonParam);
         $this->customerData->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->checkout->expects($this->once())
             ->method('start')
             ->with($this->anything(), $this->anything(), (bool)$buttonParam);

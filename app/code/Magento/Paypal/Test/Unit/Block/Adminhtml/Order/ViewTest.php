@@ -13,7 +13,7 @@ use Magento\Paypal\Block\Adminhtml\Order\View;
 use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -60,7 +62,8 @@ class DataTest extends TestCase
 
         $this->paymentMethodInstanceFactory = $this->getMockBuilder(
             InstanceFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -71,7 +74,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
-        $this->configMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
+        $this->configMock->expects($this->any())->method('setMethod')->willReturnSelf();
 
         $objectManager = new ObjectManager($this);
         $this->_helper = $objectManager->getObject(
@@ -122,7 +125,8 @@ class DataTest extends TestCase
     {
         $quoteMock = $this->getMockBuilder(
             Quote::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $methodMock = $this->getMockBuilder(
             PaymentMethodInterface::class
@@ -130,18 +134,21 @@ class DataTest extends TestCase
 
         $agreementMethodInstanceMock = $this->getMockBuilder(
             Agreement::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $agreementMethodInstanceMock->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
 
         $abstractMethodInstanceMock = $this->getMockBuilder(
             Cc::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $adapterMethodInstanceMock = $this->getMockBuilder(
             Adapter::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         return [
             [
