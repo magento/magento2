@@ -9,9 +9,16 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormConfigureProductSection">
-        <element name="optionSelect" type="select" selector="//div[contains(@class,'product-options')]/div/div/select[../../label[text() = '{{option}}']]" parameterized="true"/>
+        <element name="configure" type="button" selector="//a[@product_id='{{productId}}']" parameterized="true"/>
+        <element name="optionSelect" type="select" selector="//div[contains(@class,'product-options')]//select[//label[text() = '{{option}}']]" parameterized="true"/>
+        <element name="optionSelectNew" type="select" selector="//label[text()='{{option1}}']/following-sibling::div/select" parameterized="true"/>
         <element name="quantity" type="input" selector="#product_composite_configure_input_qty"/>
         <element name="ok" type="button" selector=".modal-header .page-actions button[data-role='action']" timeout="30"/>
+        <element name="associatedProducts" type="block" selector="._show #catalog_product_composite_configure_fields_configurable"/>
+        <element name="bundleItems" type="block" selector="._show #catalog_product_composite_configure_fields_bundle"/>
+        <element name="bundleSelect" type="select" selector="//label/span[text()='{{bundleOption}}']/../following-sibling::div/select" parameterized="true"/>
+        <element name="downloadableInformation" type="block" selector="._show #catalog_product_composite_configure_fields_downloadable"/>
+        <element name="checkLinkDownloadableProduct" type="checkbox" selector="//label[contains(text(),'{{link}}')]/preceding-sibling::input" parameterized="true"/>
         <element name="selectOption" type="select" selector="//form[@id='product_composite_configure_form']//select"/>
     </section>
 </sections>

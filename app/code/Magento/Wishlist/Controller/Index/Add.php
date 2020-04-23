@@ -7,15 +7,18 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Wish list Add controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Wishlist\Controller\AbstractIndex
+class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -138,6 +141,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
                     'referer' => $referer
                 ]
             );
+            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())

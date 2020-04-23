@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -37,6 +39,6 @@ class ClassesScannerTest extends \PHPUnit\Framework\TestCase
         $pathToScan = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/app/code/Magento/SomeModule');
         $actual = $this->model->getList($pathToScan);
         $this->assertTrue(is_array($actual));
-        $this->assertCount(5, $actual);
+        $this->assertCount(6, $actual);
     }
 }

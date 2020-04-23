@@ -81,13 +81,17 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $queueFactory->expects($this->any())->method('create')->will($this->returnValue($this->queue));
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $escaper = $this->objectManager->getObject(\Magento\Framework\Escaper::class);
+        $context->expects($this->once())->method('getEscaper')->willReturn($escaper);
+
         $this->preview = $this->objectManager->getObject(
             \Magento\Newsletter\Block\Adminhtml\Queue\Preview::class,
             [
                 'context' => $context,
                 'templateFactory' => $templateFactory,
                 'subscriberFactory' => $subscriberFactory,
-                'queueFactory' => $queueFactory,
+                'queueFactory' => $queueFactory
             ]
         );
     }
@@ -103,12 +107,14 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlWithId()
     {
-        $this->request->expects($this->any())->method('getParam')->will($this->returnValueMap(
-            [
-                ['id', null, 1],
-                ['store_id', null, 0]
-            ]
-        ));
+        $this->request->expects($this->any())->method('getParam')->will(
+            $this->returnValueMap(
+                [
+                    ['id', null, 1],
+                    ['store_id', null, 0]
+                ]
+            )
+        );
         $this->queue->expects($this->once())->method('load')->will($this->returnSelf());
         $this->template->expects($this->any())->method('isPlain')->will($this->returnValue(true));
         /** @var \Magento\Store\Model\Store $store */

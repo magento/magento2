@@ -39,7 +39,7 @@ class DescriptionParagraphGenerator
      */
     public function generate()
     {
-        $sentencesCount = random_int(
+        $sentencesCount = mt_rand(
             $this->paragraphConfig['sentences']['count-min'],
             $this->paragraphConfig['sentences']['count-max']
         );

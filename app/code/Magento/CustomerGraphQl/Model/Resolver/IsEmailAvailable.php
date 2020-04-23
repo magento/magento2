@@ -52,7 +52,7 @@ class IsEmailAvailable implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['email']) || empty($args['email'])) {
+        if (empty($args['email'])) {
             throw new GraphQlInputException(__('Email must be specified'));
         }
 

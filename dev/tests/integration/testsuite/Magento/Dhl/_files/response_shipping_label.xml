@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<root>
+    <AirwayBillNumber>1111</AirwayBillNumber>
+    <LabelImage>
+        <OutputImage>OutputImageContent</OutputImage>
+    </LabelImage>
+    <City>Nürnberg</City>
+</root>

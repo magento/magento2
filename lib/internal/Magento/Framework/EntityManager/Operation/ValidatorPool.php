@@ -24,6 +24,11 @@ class ValidatorPool
     protected $validators;
 
     /**
+     * @var array
+     */
+    private $actions;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param array $extensionActions
      */
@@ -36,6 +41,8 @@ class ValidatorPool
     }
 
     /**
+     * Get list of validators
+     *
      * @param string $entityType
      * @param string $actionName
      * @return object[]

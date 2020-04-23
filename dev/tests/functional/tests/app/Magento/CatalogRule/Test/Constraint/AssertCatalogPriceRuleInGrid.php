@@ -19,7 +19,7 @@ class AssertCatalogPriceRuleInGrid extends AbstractConstraint
      * Fields used to filter rows in the grid.
      * @var array
      */
-    protected $fieldsToFilter = ['name', 'is_active'];
+    protected $fieldsToFilter = ['name'];
 
     /**
      * Assert that data in grid on Catalog Price Rules page according to fixture

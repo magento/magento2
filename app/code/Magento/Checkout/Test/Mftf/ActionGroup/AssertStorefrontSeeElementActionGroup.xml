@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontSeeElementActionGroup">
+        <annotations>
+            <description>Scrolls to the provided Selector. Validates that the provided Selector is present.</description>
+        </annotations>
         <arguments>
             <argument name="selector" type="string"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <scrollTo selector="{{selector}}" stepKey="scrollToElement"/>
         <seeElement selector="{{selector}}" stepKey="assertElement"/>

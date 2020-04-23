@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\Usps\Api;
 
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\DataObject;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\AsyncClient\Response;
+use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -21,9 +20,9 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Api\GuestShipmentEstimationInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -41,7 +40,7 @@ class GuestCouponManagementTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ZendClient|MockObject
+     * @var AsyncClientInterfaceMock
      */
     private $httpClient;
 
@@ -52,25 +51,7 @@ class GuestCouponManagementTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->management = $this->objectManager->get(GuestCouponManagementInterface::class);
-        $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->httpClient = $this->getMockBuilder(ZendClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $clientFactory->method('create')
-            ->willReturn($this->httpClient);
-
-        $this->objectManager->addSharedInstance($clientFactory, ZendClientFactory::class);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        $this->objectManager->removeSharedInstance(ZendClientFactory::class);
+        $this->httpClient = $this->objectManager->get(AsyncClientInterface::class);
     }
 
     /**
@@ -87,9 +68,13 @@ class GuestCouponManagementTest extends TestCase
         $couponCode = 'IMPHBR852R61';
         $cartId = $this->createGuestCart();
 
-        $request = new DataObject(['body' => file_get_contents(__DIR__ . '/../Fixtures/rates_response.xml')]);
-        $this->httpClient->method('request')
-            ->willReturn($request);
+        //phpcs:disable
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . '/../Fixtures/rates_response.xml'))
+            ]
+        );
+        //phpcs:enable
 
         self::assertTrue($this->management->set($cartId, $couponCode));
 

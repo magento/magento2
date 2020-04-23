@@ -14,19 +14,19 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="title" type="translatableType" />
-                <xs:element name="description" type="translatableType" />
-                <xs:element name="saveHandler" type="saveHandlerType" />
-                <xs:element name="structure" type="structureType" />
+                <xs:element name="title" type="translatableType"/>
+                <xs:element name="description" type="translatableType"/>
+                <xs:element name="saveHandler" type="saveHandlerType"/>
+                <xs:element name="structure" type="structureType"/>
                 <xs:group ref="fieldset"/>
             </xs:choice>
             <xs:group ref="dependencies"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:string" use="required" />
-        <xs:attribute name="primary" type="nameType" use="optional" />
-        <xs:attribute name="view_id" type="viewIdType" use="optional" />
-        <xs:attribute name="class" type="classType" use="optional" />
-        <xs:attribute name="shared_index" type="xs:string" use="optional" />
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="primary" type="nameType"/>
+        <xs:attribute name="view_id" type="viewIdType"/>
+        <xs:attribute name="class" type="classType"/>
+        <xs:attribute name="shared_index" type="xs:string"/>
     </xs:complexType>
 
     <xs:group name="fieldset">
@@ -48,7 +48,7 @@
     <xs:complexType name="translatableType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="translate" use="optional" fixed="true" type="xs:boolean"/>
+                <xs:attribute name="translate" fixed="true" type="xs:boolean"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -60,18 +60,18 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="classType">
         <xs:annotation>
             <xs:documentation>
-                Class name can contain only [a-zA-Z\].
+                Class name can contain only [a-zA-Z|\\]+[a-zA-Z0-9\\]+.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+" />
+            <xs:pattern value="[a-zA-Z|\\]+[a-zA-Z0-9\\]+"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -82,7 +82,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -93,7 +93,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -104,7 +104,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -115,7 +115,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -126,8 +126,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="name" type="nameType" use="required"/>
-        <xs:attribute name="handler" type="classType" use="optional"/>
-        <xs:attribute name="origin" type="originType" use="optional"/>
+        <xs:attribute name="handler" type="classType"/>
+        <xs:attribute name="origin" type="originType"/>
     </xs:complexType>
 
     <xs:complexType name="fieldsetType" mixed="true">
@@ -137,11 +137,11 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element type="referenceType" name="reference" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="field" type="fieldType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="source" type="classType" use="optional"/>
-        <xs:attribute name="provider" type="classType" use="optional"/>
+        <xs:attribute name="source" type="classType"/>
+        <xs:attribute name="provider" type="classType"/>
         <xs:attribute name="name" type="nameType" use="required"/>
     </xs:complexType>
 
@@ -149,9 +149,9 @@
         <xs:complexContent>
             <xs:extension base="fieldTypeAbstract">
                 <xs:choice>
-                    <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
+                    <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1"/>
                 </xs:choice>
-                <xs:attribute type="dataType" name="dataType" use="optional" />
+                <xs:attribute type="dataType" name="dataType"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -190,20 +190,20 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attribute name="fieldset" type="nameType" use="required"/>
-        <xs:attribute name="from" type="fromType" use="optional"/>
-        <xs:attribute name="to" type="toType" use="optional"/>
+        <xs:attribute name="from" type="fromType"/>
+        <xs:attribute name="to" type="toType"/>
     </xs:complexType>
 
     <xs:simpleType name="dataType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="int" />
-            <xs:enumeration value="float" />
-            <xs:enumeration value="varchar" />
-            <xs:enumeration value="text" />
-            <xs:enumeration value="mediumtext" />
-            <xs:enumeration value="timestamp" />
-            <xs:enumeration value="datetime" />
-            <xs:enumeration value="date" />
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="varchar"/>
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="mediumtext"/>
+            <xs:enumeration value="timestamp"/>
+            <xs:enumeration value="datetime"/>
+            <xs:enumeration value="date"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -226,8 +226,8 @@
                     Indexer Id must be unique.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath="indexer" />
-            <xs:field xpath="@id" />
+            <xs:selector xpath="indexer"/>
+            <xs:field xpath="@id"/>
         </xs:unique>
         <xs:unique name="uniqueViewId">
             <xs:annotation>
@@ -235,8 +235,8 @@
                     Indexer Id must be unique.
                 </xs:documentation>
             </xs:annotation>
-            <xs:selector xpath="indexer" />
-            <xs:field xpath="@view_id" />
+            <xs:selector xpath="indexer"/>
+            <xs:field xpath="@view_id"/>
         </xs:unique>
     </xs:element>
     <xs:complexType name="configType">
@@ -266,8 +266,8 @@
                             Related indexer id must be unique.
                         </xs:documentation>
                     </xs:annotation>
-                    <xs:selector xpath="indexer" />
-                    <xs:field xpath="@id" />
+                    <xs:selector xpath="indexer"/>
+                    <xs:field xpath="@id"/>
                 </xs:unique>
             </xs:element>
         </xs:choice>
@@ -287,7 +287,7 @@
                             Indexer dependency that represents another indexer.
                         </xs:documentation>
                     </xs:annotation>
-                    <xs:attribute name="id" type="xs:string" use="required" />
+                    <xs:attribute name="id" type="xs:string" use="required"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>

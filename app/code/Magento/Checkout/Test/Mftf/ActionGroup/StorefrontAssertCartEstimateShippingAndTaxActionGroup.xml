@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Estimate Shipping and Tax Data in Cart -->
     <actionGroup name="StorefrontAssertCartEstimateShippingAndTaxActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer details (Country, State and Zip Code) are present and correct in the 'Estimate Shipping and Tax' section on the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="customerData" defaultValue="Simple_US_CA_Customer_For_Shipment"/>
         </arguments>
+        
         <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="{{customerData.country}}" stepKey="assertCountryFieldInCartEstimateShippingAndTaxSection"/>
         <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="{{customerData.region}}" stepKey="assertStateProvinceInCartEstimateShippingAndTaxSection"/>
         <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{customerData.postcode}}" stepKey="assertZipPostalCodeInCartEstimateShippingAndTaxSection"/>

@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Dashboard;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Module\Manager;
+use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 
 /**
  * Adminhtml dashboard sales statistics bar
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sales extends \Magento\Backend\Block\Dashboard\Bar
+class Sales extends Bar
 {
     /**
      * @var string
@@ -18,20 +25,20 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
     protected $_template = 'Magento_Backend::dashboard/salebar.phtml';
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var Manager
      */
     protected $_moduleManager;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param Context $context
+     * @param CollectionFactory $collectionFactory
+     * @param Manager $moduleManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        Context $context,
+        CollectionFactory $collectionFactory,
+        Manager $moduleManager,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;

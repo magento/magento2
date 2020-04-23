@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model;
 
+use Magento\Checkout\Helper\Data;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Smart button config
+ * Smart button configuration.
  */
 class SmartButtonConfig
 {
@@ -35,20 +38,28 @@ class SmartButtonConfig
     private $allowedFunding;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @param array $defaultStyles
      * @param array $allowedFunding
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
+        ScopeConfigInterface $scopeConfig,
         $defaultStyles = [],
         $allowedFunding = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
+        $this->scopeConfig = $scopeConfig;
         $this->defaultStyles = $defaultStyles;
         $this->allowedFunding = $allowedFunding;
     }
@@ -61,6 +72,10 @@ class SmartButtonConfig
      */
     public function getConfig(string $page): array
     {
+        $isGuestCheckoutAllowed = $this->scopeConfig->isSetFlag(
+            Data::XML_PATH_GUEST_CHECKOUT,
+            ScopeInterface::SCOPE_STORE
+        );
         return [
             'merchantId' => $this->config->getValue('merchant_id'),
             'environment' => ((int)$this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
@@ -68,7 +83,8 @@ class SmartButtonConfig
             'allowedFunding' => $this->getAllowedFunding($page),
             'disallowedFunding' => $this->getDisallowedFunding(),
             'styles' => $this->getButtonStyles($page),
-            'isVisibleOnProductPage'  => (int)$this->config->getValue('visible_on_product')
+            'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
+            'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed
         ];
     }
 
@@ -80,7 +96,14 @@ class SmartButtonConfig
     private function getDisallowedFunding(): array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
-        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
+        $result = $disallowedFunding ? explode(',', $disallowedFunding) : [];
+
+        // PayPal Guest Checkout Credit Card Icons only available when Guest Checkout option is enabled
+        if ($this->isPaypalGuestCheckoutAllowed() === false && !in_array('CARD', $result)) {
+            array_push($result, 'CARD');
+        }
+
+        return $result;
     }
 
     /**
@@ -151,5 +174,15 @@ class SmartButtonConfig
         }
 
         return $styles;
+    }
+
+    /**
+     * Returns if is allowed PayPal Guest Checkout.
+     *
+     * @return bool
+     */
+    private function isPaypalGuestCheckoutAllowed(): bool
+    {
+        return $this->config->getValue('solution_type') === Config::EC_SOLUTION_TYPE_SOLE;
     }
 }

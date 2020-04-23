@@ -40,3 +40,11 @@ $cart->save();
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
 $objectManager->removeSharedInstance(\Magento\Checkout\Model\Session::class);
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+    ->create();
+$quoteIdMask->setQuoteId($cart->getQuote()->getId());
+$quoteIdMask->setDataChanges(true);
+$quoteIdMask->save();

@@ -16,7 +16,7 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
     protected $_observerFactoryMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_observerMock;
 

@@ -37,42 +37,42 @@
         data-th="<?= $block->escapeHtmlAttr($attributes['option_label']) ?>"
     <?php endif; ?>>
     <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
-        <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+        <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>">
             <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         </td>
     <?php else : ?>
-        <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
+        <td class="col value" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= $block->escapeHtml($_item->getSku()) ?></td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+    <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>"><?= $block->escapeHtml($_item->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
             <?= $block->getItemPriceHtml($_item) ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Quantity')) ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Quantity')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
-            <?= $block->escapeHtml($_item->getQty()*1) ?>
+            <?= (float)$_item->getQty() * 1 ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+    <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
             <?= $block->getItemRowTotalHtml($_item) ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col discount" data-th="<?= $block->escapeHtml(__('Discount Amount')) ?>">
+    <td class="col discount" data-th="<?= $block->escapeHtmlAttr(__('Discount Amount')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
-            <?= $block->escapeHtml($block->getOrder()->formatPrice(-$_item->getDiscountAmount())) ?>
+            <?= $block->escapeHtml($block->getOrder()->formatPrice(-$_item->getDiscountAmount()), ['span']) ?>
         <?php else : ?>
             &nbsp;
         <?php endif; ?>
     </td>
-    <td class="col rowtotal" data-th="<?= $block->escapeHtml(__('Row Total')) ?>">
+    <td class="col rowtotal" data-th="<?= $block->escapeHtmlAttr(__('Row Total')) ?>">
         <?php if ($block->canShowPriceInfo($_item)) : ?>
             <?= $block->getItemRowTotalAfterDiscountHtml($_item) ?>
         <?php else : ?>

@@ -107,7 +107,7 @@ class Actions extends Block
      *
      * @var string
      */
-    protected $orderInvoiceCreditMemo = '#capture';
+    protected $orderInvoiceCreditMemo = '#credit-memo';
 
     /**
      * 'Refund' button.

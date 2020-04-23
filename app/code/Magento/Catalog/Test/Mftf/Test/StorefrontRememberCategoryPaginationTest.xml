@@ -32,13 +32,13 @@
             <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
         </before>
 
-        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="GoToStorefrontCategory1Page">
+        <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="GoToStorefrontCategory1Page">
             <argument name="category" value="$$defaultCategory1.custom_attributes[url_key]$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategory1PageParameters">
+        <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory1PageParameters">
             <argument name="category" value="$$defaultCategory1$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>
@@ -47,7 +47,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.name$$)}}" stepKey="navigateToCategory2Page"/>
         <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
 
-        <actionGroup ref="VerifyCategoryPageParameters" stepKey="verifyCategory2PageParameters">
+        <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory2PageParameters">
             <argument name="category" value="$$defaultCategory2$$"/>
             <argument name="mode" value="grid"/>
             <argument name="numOfProductsPerPage" value="12"/>

@@ -29,6 +29,8 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
+ * Paypal transparent test class
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransparentTest extends \PHPUnit\Framework\TestCase
@@ -194,7 +196,9 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken'])
+            ->setMethods(
+                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+            )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -288,12 +292,17 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $paymentExtensionAttributes  = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
+            ->setMethods(
+                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+            )
+            ->getMockForAbstractClass();
         $this->payment->method('getOrder')->willReturn($this->order);
         $this->payment->method('setTransactionId')->willReturnSelf();
         $this->payment->method('setIsTransactionClosed')->willReturnSelf();
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
+        $this->payment->method('getExtensionAttributes')->willReturn($paymentExtensionAttributes);
 
         return $this->payment;
     }

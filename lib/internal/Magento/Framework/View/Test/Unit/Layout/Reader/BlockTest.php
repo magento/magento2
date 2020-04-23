@@ -114,11 +114,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([
-                'actions' => [
-                    ['someMethod', [], 'action_config_path', 'scope'],
-                ],
-            ]);
+            ->willReturn(
+                [
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                ]
+            );
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -266,11 +268,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([
-                'actions' => [
-                    ['someMethod', [], 'action_config_path', 'scope'],
-                ],
-            ]);
+            ->willReturn(
+                [
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                ]
+            );
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(

@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Assert customer info in customers grid row -->
     <actionGroup name="AdminAssertAddressInCustomersAddressGrid">
+        <annotations>
+            <description>Validates that the provided Customer Address is present in the Customer Address grid on the Customer creation/edit page. Under the 'Addresses' section.</description>
+        </annotations>
         <arguments>
             <argument name="text" type="string"/>
         </arguments>
+        
         <see selector="{{AdminCustomerAddressesGridSection.rowsInGrid}}" userInput="{{text}}"  stepKey="seeTextInGrid"/>
     </actionGroup>
 </actionGroups>

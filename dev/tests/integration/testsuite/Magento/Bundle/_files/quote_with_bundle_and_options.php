@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . 'product_with_multiple_options.php';
+require __DIR__ . '/product_with_multiple_options.php';
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -48,6 +48,14 @@ $cart = Bootstrap::getObjectManager()->create(\Magento\Checkout\Model\Cart::clas
 $cart->addProduct($product, $requestInfo);
 $cart->getQuote()->setReservedOrderId('test_cart_with_bundle_and_options');
 $cart->save();
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+    ->create();
+$quoteIdMask->setQuoteId($cart->getQuote()->getId());
+$quoteIdMask->setDataChanges(true);
+$quoteIdMask->save();
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = Bootstrap::getObjectManager();

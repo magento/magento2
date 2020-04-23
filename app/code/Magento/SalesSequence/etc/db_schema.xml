@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="sales_sequence_profile" resource="sales" engine="innodb" comment="sales_sequence_profile" onCreate="skip-migration">
         <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Id"/>
+                comment="ID"/>
         <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Meta_id"/>
         <column xsi:type="varchar" name="prefix" nullable="true" length="32" comment="Prefix"/>
@@ -37,10 +37,10 @@
     </table>
     <table name="sales_sequence_meta" resource="sales" engine="innodb" comment="sales_sequence_meta" onCreate="skip-migration">
         <column xsi:type="int" name="meta_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Id"/>
+                comment="ID"/>
         <column xsi:type="varchar" name="entity_type" nullable="false" length="32" comment="Prefix"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="sequence_table" nullable="false" length="64" comment="table for sequence"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="meta_id"/>

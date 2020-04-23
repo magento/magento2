@@ -27,6 +27,8 @@
         <column xsi:type="varchar" name="orig_template_code" nullable="true" length="200"
                 comment="Original Template Code"/>
         <column xsi:type="text" name="orig_template_variables" nullable="true" comment="Original Template Variables"/>
+        <column xsi:type="boolean" name="is_legacy" nullable="false"
+                default="false" comment="Should the template render in legacy mode"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="template_id"/>
         </constraint>

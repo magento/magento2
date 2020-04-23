@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditGroupedProductSettingsTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create/Edit grouped product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a grouped product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a grouped product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3243"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create a Website -->
+            <createData entity="customWebsite" stepKey="createWebsite"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete grouped product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="GroupedProduct"/>
+            </actionGroup>
+
+            <!-- Delete Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
+                <argument name="websiteName" value="$createWebsite.website[name]$"/>
+            </actionGroup>
+
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create new grouped product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createGroupedProduct">
+            <argument name="productType" value="grouped"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <!-- Add simple product to the Group -->
+        <actionGroup ref="AdminAssignProductToGroupActionGroup" stepKey="addFirstSimpleToGroup">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Set product in created Website -->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings"/>
+
+        <!-- Save grouped product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
+
+        <!-- Open created simple product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openSimpleProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Set Gift Options settings for the simple product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save simple product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveBtn"/>
+
+        <!-- Open grouped product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{GroupedProduct.sku}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsLeft}}" stepKey="seeDesignChanges"/>
+
+        <!-- Fill product quantity -->
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="fillFieldQtyInput"/>
+
+        <!-- Assert Gift Option product settings is present -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage6">
+            <argument name="productName" value="GroupedProduct.name"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <actionGroup ref="StorefrontAssertGiftMessageFieldsActionGroup" stepKey="assertGiftMessageFieldsArePresent"/>
+
+        <!-- Open created grouped product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForCreatedProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="ApiGroupedProduct.name"/>
+        </actionGroup>
+
+        <!-- Assert product is assigned to websites -->
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit product in Websites -->
+        <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="uncheckProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
+            <argument name="designSettings" value="simpleLumaDesignTwoColumnsRight"/>
+        </actionGroup>
+
+        <!-- Save grouped product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+
+        <!-- Open created simple product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveSimpleProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{ApiGroupedProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "right bar is present at the  product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsRight}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings  -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+    </test>
+</tests>

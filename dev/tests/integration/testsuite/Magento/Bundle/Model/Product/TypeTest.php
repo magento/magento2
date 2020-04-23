@@ -49,19 +49,20 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @covers \Magento\Indexer\Model\Indexer::reindexAll
      * @covers \Magento\Bundle\Model\Product\Type::getSearchableData
      * @magentoDbIsolation disabled
      */
-    public function testPrepareProductIndexForBundleProduct()
+    public function testGetSearchableData()
     {
-        $this->indexer->reindexAll();
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Model\Product $bundleProduct */
+        $bundleProduct = $productRepository->get('bundle-product');
+        $bundleType = $bundleProduct->getTypeInstance();
+        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
+        $searchableData = $bundleType->getSearchableData($bundleProduct);
 
-        $select = $this->connectionMock->select()->from($this->resource->getTableName('catalogsearch_fulltext_scope1'))
-            ->where('`data_index` LIKE ?', '%' . 'Bundle Product Items' . '%');
-
-        $result = $this->connectionMock->fetchAll($select);
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $searchableData);
+        $this->assertEquals('Bundle Product Items', $searchableData[0]);
     }
 
     /**

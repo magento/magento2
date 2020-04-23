@@ -22,14 +22,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     private $auth;
 
     /**
-     * @var Session
+     * @var \Magento\Backend\Model\Auth\Session
      */
     private $authSession;
-
-    /**
-     * @var SessionFactory
-     */
-    private $authSessionFactory;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -43,8 +38,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
-        $this->authSession = $this->objectManager->create(Session::class);
-        $this->authSessionFactory = $this->objectManager->get(SessionFactory::class);
+        $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
         $this->auth->setAuthStorage($this->authSession);
         $this->auth->logout();
     }
@@ -72,24 +66,5 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function loginDataProvider()
     {
         return [[false], [true]];
-    }
-
-    /**
-     * Check that persisting user data is working.
-     */
-    public function testStorage()
-    {
-        $this->auth->login(TestHelper::ADMIN_NAME, TestHelper::ADMIN_PASSWORD);
-        $user = $this->authSession->getUser();
-        $acl = $this->authSession->getAcl();
-        /** @var Session $session */
-        $session = $this->authSessionFactory->create();
-        $persistedUser = $session->getUser();
-        $persistedAcl = $session->getAcl();
-
-        $this->assertEquals($user->getData(), $persistedUser->getData());
-        $this->assertEquals($user->getAclRole(), $persistedUser->getAclRole());
-        $this->assertEquals($acl->getRoles(), $persistedAcl->getRoles());
-        $this->assertEquals($acl->getResources(), $persistedAcl->getResources());
     }
 }

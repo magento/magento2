@@ -6,7 +6,7 @@
 
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
- * Index name resolver
+ * Index name resolver for Elasticsearch
  * @api
  * @since 100.1.0
  */
@@ -150,7 +150,7 @@ class IndexNameResolver
             $alias = $this->client->getAlias($namespace);
             $indices = array_keys($alias);
             foreach ($indices as $index) {
-                if (strpos($index, $indexPattern) === 0) {
+                if (strpos($index, (string) $indexPattern) === 0) {
                     $storeIndex = $index;
                     break;
                 }

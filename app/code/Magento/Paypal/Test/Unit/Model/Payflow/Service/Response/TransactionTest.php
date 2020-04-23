@@ -49,6 +49,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSavePaymentInQuote()
     {
+        $cartId = 12;
         /** @var Transaction $transactionService */
         $transactionService = (new ObjectManager($this))->getObject(
             Transaction::class,
@@ -57,7 +58,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $transactionService->savePaymentInQuote(new DataObject);
+        $transactionService->savePaymentInQuote(new DataObject, $cartId);
     }
 
     /**

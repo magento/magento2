@@ -96,7 +96,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     {
         $this->customerCollection->setPageSize($this->batchSize);
         $lastPage = $this->customerCollection->getLastPageNumber();
-        $pageNumber = 0;
+        $pageNumber = 1;
         do {
             $this->customerCollection->clear();
             $this->customerCollection->setCurPage($pageNumber);

@@ -151,7 +151,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'queue_message_status.status IN (?)',
                 [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
             )->where('queue.name = ?', $queueName)
-            ->order('queue_message_status.updated_at ASC');
+            ->order(['queue_message_status.updated_at ASC', 'queue_message_status.id ASC']);
 
         if ($limit) {
             $select->limit($limit);

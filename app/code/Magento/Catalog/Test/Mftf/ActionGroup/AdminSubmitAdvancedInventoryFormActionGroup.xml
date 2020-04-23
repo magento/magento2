@@ -6,10 +6,15 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Click done button;
          You must already be on the product form > Advanced Inventory -->
     <actionGroup name="AdminSubmitAdvancedInventoryFormActionGroup">
+        <annotations>
+            <description>Clicks on Done on the Admin Product creation/edit page on the 'Advanced Inventory' panel.</description>
+        </annotations>
+
         <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
     </actionGroup>
 </actionGroups>

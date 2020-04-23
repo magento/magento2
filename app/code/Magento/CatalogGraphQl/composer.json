@@ -3,13 +3,14 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/module-eav": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
+        "magento/module-catalog-search": "*",
         "magento/framework": "*"
     },
     "suggest": {

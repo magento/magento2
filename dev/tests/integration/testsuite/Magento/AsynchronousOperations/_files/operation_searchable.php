@@ -52,7 +52,22 @@ $operations = [
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
     ],
-
+    [
+        'bulk_uuid' => 'bulk-uuid-searchable-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_OPEN,
+        'error_code' => null,
+        'result_message' => '',
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-searchable-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_OPEN,
+        'error_code' => null,
+        'result_message' => '',
+    ]
 ];
 
 $bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`, `start_time`)"

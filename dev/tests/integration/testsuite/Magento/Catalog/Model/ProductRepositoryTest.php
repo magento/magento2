@@ -7,14 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\Framework\Acl\Builder;
 
 /**
  * Provide tests for ProductRepository model.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,22 +34,45 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
+     * @var ProductLayoutUpdateManager
+     */
+    private $layoutManager;
 
     /**
      * Sets up common objects
      */
     protected function setUp()
     {
-        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->productFactory = Bootstrap::getObjectManager()->get(ProductFactory::class);
+        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
+    }
 
-        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
+    /**
+     * Create new subject instance.
+     *
+     * @return ProductRepositoryInterface
+     */
+    private function createRepo(): ProductRepositoryInterface
+    {
+        return Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -116,10 +147,15 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $path = $mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
         $absolutePath = $mediaDirectory->getAbsolutePath() . $path;
-        $product->addImageToMediaGallery($absolutePath, [
+        $product->addImageToMediaGallery(
+            $absolutePath,
+            [
             'image',
             'small_image',
-        ], false, false);
+            ],
+            false,
+            false
+        );
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()
@@ -137,5 +173,64 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('image', $images[0]['media_type']);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+    }
+
+    /**
+     * Test Product Repository can change(update) "sku" for given product.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     * @magentoAppArea adminhtml
+     */
+    public function testUpdateProductSku()
+    {
+        $newSku = 'simple-edited';
+        $productId = $this->productResource->getIdBySku('simple');
+        $initialProduct = $this->productFactory->create();
+        $this->productResource->load($initialProduct, $productId);
+
+        $initialProduct->setSku($newSku);
+        $this->productRepository->save($initialProduct);
+
+        $updatedProduct = $this->productFactory->create();
+        $this->productResource->load($updatedProduct, $productId);
+        self::assertSame($newSku, $updatedProduct->getSku());
+
+        //clean up.
+        $this->productRepository->delete($updatedProduct);
+    }
+
+    /**
+     * Test that custom layout file attribute is saved.
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testCustomLayout(): void
+    {
+        //New valid value
+        $repo = $this->createRepo();
+        $product = $repo->get('simple');
+        $newFile = 'test';
+        $this->layoutManager->setFakeFiles((int)$product->getId(), [$newFile]);
+        $product->setCustomAttribute('custom_layout_update_file', $newFile);
+        $repo->save($product);
+        $repo = $this->createRepo();
+        $product = $repo->get('simple');
+        $this->assertEquals($newFile, $product->getCustomAttribute('custom_layout_update_file')->getValue());
+
+        //Setting non-existent value
+        $newFile = 'does not exist';
+        $product->setCustomAttribute('custom_layout_update_file', $newFile);
+        $caughtException = false;
+        try {
+            $repo->save($product);
+        } catch (LocalizedException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
     }
 }

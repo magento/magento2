@@ -11,6 +11,9 @@
         <data key="code">default</data>
         <data key="is_active">1</data>
     </entity>
+    <entity name="DefaultAllStoreView" type="store">
+        <data key="name">All Store Views</data>
+    </entity>
     <entity name="customStore" type="store">
         <!--data key="group_id">customStoreGroup.id</data-->
         <data key="name" unique="suffix">store</data>
@@ -179,6 +182,25 @@
         <data key="group_id">1</data>
         <data key="name" unique="suffix">DE_</data>
         <data key="code" unique="suffix">de_</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
+
+    <!-- Store views from file "prepared-for-sample-data.csv"-->
+    <entity name="secondStoreView" type="store">
+        <data key="name">second_storeview</data>
+        <data key="code">second_storeview</data>
+    </entity>
+    <entity name="thirdStoreView" type="store">
+        <data key="name">third_store_view</data>
+        <data key="code">third_store_view</data>
+    </entity>
+    <entity name="storeViewChinese" type="store">
+        <data key="group_id">1</data>
+        <data key="name">Chinese</data>
+        <data key="code">chinese</data>
         <data key="is_active">1</data>
         <data key="store_id">null</data>
         <data key="store_type">store</data>

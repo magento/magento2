@@ -117,13 +117,15 @@
                         <field id="use_proxy">1</field>
                     </depends>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>paypal/wpp/proxy_port</config_path>
                     <attribute type="shared">1</attribute>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
             </group>
             <field id="enable_express_checkout" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
@@ -348,6 +350,7 @@
                 <depends>
                     <field id="payment_action">Order</field>
                 </depends>
+                <validate>validate-zero-or-greater validate-digits</validate>
             </field>
             <field id="order_valid_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
                 <label>Order Valid Period (days)</label>
@@ -357,6 +360,7 @@
                 <depends>
                     <field id="payment_action">Order</field>
                 </depends>
+                <validate>validate-zero-or-greater validate-digits</validate>
             </field>
             <field id="child_authorization_number" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1">
                 <label>Number of Child Authorizations</label>

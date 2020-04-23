@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -108,7 +109,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Product object customization (not stored in DB)
      *
-     * @var array
+     * @var OptionInterface[]
      */
     protected $_customOptions = [];
 
@@ -175,7 +176,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -369,7 +370,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
      * @param Product\Type $catalogProductType
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param ResourceModel\Product $resource
      * @param ResourceModel\Product\Collection $resourceCollection
@@ -410,7 +411,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\ResourceModel\Product $resource,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
@@ -460,6 +461,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
+        $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->filterCustomAttribute = $filterCustomAttribute
+            ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
         parent::__construct(
             $context,
             $registry,
@@ -470,9 +474,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $resourceCollection,
             $data
         );
-        $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
-        $this->filterCustomAttribute = $filterCustomAttribute
-            ?? ObjectManager::getInstance()->get(FilterProductCustomAttribute::class);
     }
 
     /**
@@ -485,6 +486,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_init(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Get resource instance
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
@@ -497,6 +499,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return parent::_getResource();
     }
+    // phpcs:enable
 
     /**
      * Get a list of custom attribute codes that belongs to product attribute set.
@@ -722,9 +725,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryId()
     {
+        if ($this->hasData('category_id')) {
+            return $this->getData('category_id');
+        }
         $category = $this->_registry->registry('current_category');
-        if ($category && in_array($category->getId(), $this->getCategoryIds())) {
-            return $category->getId();
+        $categoryId = $category ? $category->getId() : null;
+        if ($categoryId && in_array($categoryId, $this->getCategoryIds())) {
+            $this->setData('category_id', $categoryId);
+            return $categoryId;
         }
         return false;
     }
@@ -818,13 +826,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                if ($this->_storeManager->isSingleStoreMode()) {
+                if (!$this->isObjectNew() && $this->_storeManager->isSingleStoreMode()) {
                     $websiteIds = array_keys($websiteIds);
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                    $storeIds = array_merge($storeIds, $websiteStores);
+                    $storeIds[] = $websiteStores;
                 }
+            }
+            if ($storeIds) {
+                $storeIds = array_merge(...$storeIds);
             }
             $this->setStoreIds($storeIds);
         }
@@ -1167,7 +1178,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return array|double*
+     * @return array|double
+     *
      * @deprecated
      * @see getFormattedPrice()
      */
@@ -1265,12 +1277,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getRelatedProducts()
     {
         if (!$this->hasRelatedProducts()) {
-            $products = [];
-            $collection = $this->getRelatedProductCollection();
-            foreach ($collection as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasRelatedProducts()) {
+                $this->setRelatedProducts([]);
             }
-            $this->setRelatedProducts($products);
         }
         return $this->getData('related_products');
     }
@@ -1327,12 +1338,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getUpSellProducts()
     {
         if (!$this->hasUpSellProducts()) {
-            $products = [];
-            foreach ($this->getUpSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasUpSellProducts()) {
+                $this->setUpSellProducts([]);
             }
-            $this->setUpSellProducts($products);
         }
+
         return $this->getData('up_sell_products');
     }
 
@@ -1388,12 +1400,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCrossSellProducts()
     {
         if (!$this->hasCrossSellProducts()) {
-            $products = [];
-            foreach ($this->getCrossSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasCrossSellProducts()) {
+                $this->setCrossSellProducts([]);
             }
-            $this->setCrossSellProducts($products);
         }
+
         return $this->getData('cross_sell_products');
     }
 
@@ -1449,7 +1462,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if ($this->_links === null) {
-            $this->_links = $this->getLinkRepository()->getList($this);
+            if ($this->getSku() && $this->getId()) {
+                $this->_links = $this->getLinkRepository()->getList($this);
+            } else {
+                $this->_links = [];
+            }
         }
         return $this->_links;
     }
@@ -2051,7 +2068,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Sets custom options for the product
      *
-     * @param array $options Array of options
+     * @param OptionInterface[] $options Array of options
      * @return void
      */
     public function setCustomOptions(array $options)
@@ -2062,7 +2079,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get all custom options of the product
      *
-     * @return array
+     * @return OptionInterface[]
      */
     public function getCustomOptions()
     {
@@ -2073,14 +2090,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get product custom option info
      *
      * @param   string $code
-     * @return  array
+     * @return  OptionInterface|null
      */
     public function getCustomOption($code)
     {
-        if (isset($this->_customOptions[$code])) {
-            return $this->_customOptions[$code];
-        }
-        return null;
+        return $this->_customOptions[$code] ?? null;
     }
 
     /**
@@ -2090,11 +2104,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function hasCustomOptions()
     {
-        if (count($this->_customOptions)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool)count($this->_customOptions);
     }
 
     /**
@@ -2149,6 +2159,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCacheIdTags()
     {
+        // phpstan:ignore
         $tags = parent::getCacheIdTags();
         $affectedCategoryIds = $this->getAffectedCategoryIds();
         if (!$affectedCategoryIds) {
@@ -2329,6 +2340,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getImage()
     {
         $this->getTypeInstance()->setImageFromChildProduct($this);
+        // phpstan:ignore
         return parent::getImage();
     }
 
@@ -2398,7 +2410,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
      */
-    public function __toArray()
+    public function __toArray() //phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     {
         $data = $this->_data;
         $hasToArray = function ($model) {

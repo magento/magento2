@@ -5,11 +5,16 @@
  * See COPYING.txt for license details.
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertProductSkuOnProductPageActionGroup">
+        <annotations>
+            <description>Validate that the provided Product Sku is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="productSku" type="string"/>
         </arguments>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{productSku}}" stepKey="seeProductSku" />
+
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{productSku}}" stepKey="seeProductSku"/>
     </actionGroup>
 </actionGroups>

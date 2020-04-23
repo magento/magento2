@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillShippingZipForm">
+        <annotations>
+            <description>Fills in the provided Address details (Country, State and Zip Code) in the 'Estimate Shipping and Tax' section of the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="address"/>
         </arguments>
+        
         <conditionalClick stepKey="openShippingDetails" selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.country}}" time="30" stepKey="waitForCountryFieldAppears"/>

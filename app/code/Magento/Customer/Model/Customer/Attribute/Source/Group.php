@@ -48,6 +48,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements 
     {
         if (!$this->_options) {
             $groups = $this->_groupManagement->getLoggedInGroups();
+
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
         }
 

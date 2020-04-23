@@ -11,11 +11,15 @@ use Magento\Catalog\Ui\Component\Product\MassAction;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * MassAction test for Component Product
+ */
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $contextMock;
 
@@ -25,7 +29,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
@@ -103,7 +107,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'first_action',
                     'label' => 'First Action',
-                    'url' => '/module/controller/firstAction'
+                    'url' => '/module/controller/firstAction',
                 ],
             ],
             [
@@ -122,7 +126,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/secondSubAction2'
                         ],
-                    ]
+                    ],
                 ],
             ],
             [
@@ -141,7 +145,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/disable'
                         ],
-                    ]
+                    ],
                 ],
             ],
             [
@@ -160,7 +164,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/disable'
                         ],
-                    ]
+                    ],
                 ],
                 false,
                 false
@@ -170,7 +174,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/delete'
+                    'url' => '/module/controller/delete',
                 ],
             ],
             [
@@ -178,7 +182,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/delete'
+                    'url' => '/module/controller/delete',
                 ],
                 false,
                 false
@@ -188,7 +192,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/attributes'
+                    'url' => '/module/controller/attributes',
                 ],
             ],
             [
@@ -196,7 +200,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/attributes'
+                    'url' => '/module/controller/attributes',
                 ],
                 false,
                 false

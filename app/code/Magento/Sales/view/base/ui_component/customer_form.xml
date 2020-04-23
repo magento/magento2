@@ -9,4 +9,7 @@
     <htmlContent name="orders_content">
         <block acl="Magento_Sales::actions_view" class="Magento\Sales\Block\Adminhtml\CustomerOrdersTab" name="orders" />
     </htmlContent>
+    <htmlContent name="cart_content">
+        <block acl="Magento_Cart::manage" class="Magento\Sales\Block\Adminhtml\ShoppingCartsTab" name="cart"/>
+    </htmlContent>
 </form>

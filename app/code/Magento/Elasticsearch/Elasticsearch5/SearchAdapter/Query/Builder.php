@@ -49,7 +49,7 @@ class Builder
     /**
      * @var Sort
      */
-    protected $sortBuilder;
+    private $sortBuilder;
 
     /**
      * @param Config $clientConfig
@@ -63,7 +63,7 @@ class Builder
         SearchIndexNameResolver $searchIndexNameResolver,
         AggregationBuilder $aggregationBuilder,
         ScopeResolverInterface $scopeResolver,
-        Sort $sortBuilder = null
+        ?Sort $sortBuilder = null
     ) {
         $this->clientConfig = $clientConfig;
         $this->searchIndexNameResolver = $searchIndexNameResolver;

@@ -63,6 +63,7 @@
                 <required>true</required>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>string</dataType>
                 <label translate="true">Attribute Label</label>
@@ -101,6 +102,7 @@
                         <item name="textarea" xsi:type="string">textarea</item>
                         <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
+                        <item name="datetime" xsi:type="string">datetime</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
                         <item name="select" xsi:type="string">select</item>
@@ -287,6 +289,7 @@
                         <item name="textarea" xsi:type="string">textarea</item>
                         <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
+                        <item name="datetime" xsi:type="string">datetime</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
                         <item name="select" xsi:type="string">select</item>
@@ -376,6 +379,29 @@
                 <dataScope>default_value_date</dataScope>
             </settings>
         </field>
+        <field name="default_value_datetime" component="Magento_Catalog/js/components/visible-on-option/date" sortOrder="35" formElement="date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="datetime" xsi:type="string">datetime</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Default Value</label>
+                <dataScope>default_value_datetime</dataScope>
+            </settings>
+            <formElements>
+                <date>
+                    <settings>
+                        <options>
+                            <option name="showsTime" xsi:type="boolean">true</option>
+                        </options>
+                    </settings>
+                </date>
+            </formElements>
+        </field>
         <field name="is_unique" component="Magento_Catalog/js/components/visible-on-option/yesno" sortOrder="40" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -412,6 +438,7 @@
                         <item name="textarea" xsi:type="string">textarea</item>
                         <item name="texteditor" xsi:type="string">texteditor</item>
                         <item name="date" xsi:type="string">date</item>
+                        <item name="datetime" xsi:type="string">date</item>
                         <item name="boolean" xsi:type="string">boolean</item>
                         <item name="multiselect" xsi:type="string">multiselect</item>
                         <item name="select" xsi:type="string">select</item>

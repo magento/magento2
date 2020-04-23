@@ -25,11 +25,14 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function loadByPhraseDataProvider()
+    public function loadByPhraseDataProvider(): array
     {
         return [
             [
                 'ELIZABETH', []
+            ],
+            [
+                '-+<(ELIZABETH)>*~', []
             ],
             [
                 'ENGLISH', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
@@ -42,6 +45,9 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'Monarch', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
+            ],
+            [
+                '-+<(Monarch)>*~', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
                 'MONARCH English', [
@@ -64,6 +70,15 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
             [
                 'query_value+@', []
             ],
+            [
+                '<', []
+            ],
+            [
+                '>', []
+            ],
+            [
+                '<english>', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
+            ],
         ];
     }
 
@@ -72,7 +87,7 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedResult
      * @dataProvider loadByPhraseDataProvider
      */
-    public function testLoadByPhrase($phrase, $expectedResult)
+    public function testLoadByPhrase(string $phrase, array $expectedResult)
     {
         $data = $this->model->loadByPhrase($phrase)->getData();
 

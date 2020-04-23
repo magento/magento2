@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateUserRoleActionGroup">
+        <arguments>
+            <argument name="role" type="entity"/>
+        </arguments>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForPageScrollToTop" time="15"/>
+        <click selector="{{AdminNewUserFormSection.userRoleTab}}" stepKey="openUserRoleTab"/>
+        <waitForPageLoad stepKey="waitForUserRoleTabOpened" />
+        <click selector="{{AdminNewUserFormSection.resetFilter}}" stepKey="resetGridFilter"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
+        <fillField selector="{{AdminNewUserFormSection.roleFilterField}}" userInput="{{role.name}}" stepKey="fillRoleFilterField"/>
+        <click selector="{{AdminNewUserFormSection.search}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForFiltersApplied"/>
+        <checkOption selector="{{AdminNewUserFormSection.roleRadiobutton(role.name)}}" stepKey="assignRole"/>
+    </actionGroup>
+</actionGroups>

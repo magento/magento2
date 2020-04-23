@@ -78,6 +78,11 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     private $poisonPillCompare;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * Set up.
      *
      * @return void
@@ -95,6 +100,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()->getMock();
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->poisonPillCompare = $this->getMockBuilder(PoisonPillCompareInterface::class)
@@ -104,7 +110,8 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         //Hard dependency used because CallbackInvoker invokes closure logic defined inside of Customer class.
         $this->callbackInvoker = new \Magento\Framework\MessageQueue\CallbackInvoker(
             $this->poisonPillRead,
-            $this->poisonPillCompare
+            $this->poisonPillCompare,
+            $this->deploymentConfig
         );
         $this->consumer = $objectManager->getObject(
             \Magento\Framework\MessageQueue\Consumer::class,

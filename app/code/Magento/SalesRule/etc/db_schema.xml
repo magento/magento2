@@ -58,7 +58,7 @@
     </table>
     <table name="salesrule_coupon" resource="default" engine="innodb" comment="Salesrule Coupon">
         <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Coupon Id"/>
+                comment="Coupon ID"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
         <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
@@ -94,9 +94,9 @@
     </table>
     <table name="salesrule_coupon_usage" resource="default" engine="innodb" comment="Salesrule Coupon Usage">
         <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Coupon Id"/>
+                comment="Coupon ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Times Used"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -115,11 +115,11 @@
     </table>
     <table name="salesrule_customer" resource="default" engine="innodb" comment="Salesrule Customer">
         <column xsi:type="int" name="rule_customer_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Rule Customer Id"/>
+                comment="Rule Customer ID"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Rule ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Customer Id"/>
+                default="0" comment="Customer ID"/>
         <column xsi:type="smallint" name="times_used" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Times Used"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -141,11 +141,11 @@
     </table>
     <table name="salesrule_label" resource="default" engine="innodb" comment="Salesrule Label">
         <column xsi:type="int" name="label_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Label Id"/>
+                comment="Label ID"/>
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="label_id"/>
@@ -166,11 +166,11 @@
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Customer Group Id"/>
+                comment="Customer Group ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="website_id"/>
@@ -200,10 +200,10 @@
         </index>
     </table>
     <table name="salesrule_coupon_aggregated" resource="sales" engine="innodb" comment="Coupon Aggregated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" nullable="false" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
@@ -242,10 +242,10 @@
     </table>
     <table name="salesrule_coupon_aggregated_updated" resource="sales" engine="innodb"
            comment="Salesrule Coupon Aggregated Updated">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" nullable="false" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
@@ -284,10 +284,10 @@
     </table>
     <table name="salesrule_coupon_aggregated_order" resource="default" engine="innodb"
            comment="Coupon Aggregated Order">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="date" name="period" nullable="false" comment="Period"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
         <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
         <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
@@ -322,7 +322,7 @@
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="website_id"/>
@@ -341,7 +341,7 @@
         <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Customer Group Id"/>
+                comment="Customer Group ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
             <column name="customer_group_id"/>

@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 /**
  * Create value-object \Magento\Framework\Phrase
+ *
  * @SuppressWarnings(PHPMD.ShortMethodName)
+ * phpcs:disable Squiz.Functions.GlobalFunction
+ * @param array $argc
  * @return \Magento\Framework\Phrase
  */
-function __()
+function __(...$argc)
 {
-    $argc = func_get_args();
-
     $text = array_shift($argc);
     if (!empty($argc) && is_array($argc[0])) {
         $argc = $argc[0];

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Catalog\Block\Product\AbstractProduct.
  *
@@ -17,7 +19,7 @@ namespace Magento\Catalog\Block\Product;
  * the classes they were introduced for.
  *
  * @deprecated 101.1.0
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD)
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
@@ -124,6 +126,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param ImageBuilder $imageBuilder
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -164,7 +167,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         ReviewRendererInterface $reviewRenderer,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->imageHelper = $imageHelper;
         $this->imageBuilder = $imageBuilder;
@@ -203,11 +207,14 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $storeManager,
             $pageConfig,
             $resolver,
-            $validator
+            $validator,
+            $lockQuery
         );
     }
 
     /**
+     * Get Stock registry.
+     *
      * @return \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     public function getStockRegistry()
@@ -216,6 +223,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get cart helper.
+     *
      * @return \Magento\Checkout\Helper\Cart
      */
     public function getCartHelper()
@@ -224,6 +233,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get catalog config.
+     *
      * @return \Magento\Catalog\Model\Config
      */
     public function getCatalogConfig()
@@ -232,6 +243,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get catalog helper.
+     *
      * @return \Magento\Catalog\Helper\Data
      */
     public function getCatalogHelper()
@@ -240,6 +253,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get compare product.
+     *
      * @return \Magento\Catalog\Helper\Product\Compare
      */
     public function getCompareProduct()
@@ -248,6 +263,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get image helper.
+     *
      * @return \Magento\Catalog\Helper\Image
      */
     public function getImageHelper()
@@ -256,6 +273,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get image builder.
+     *
      * @return \Magento\Catalog\Block\Product\ImageBuilder
      */
     public function getImageBuilder()
@@ -264,6 +283,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     *  Get math random.
+     *
      * @return \Magento\Framework\Math\Random
      */
     public function getMathRandom()
@@ -272,6 +293,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get registry.
+     *
      * @return \Magento\Framework\Registry
      */
     public function getRegistry()
@@ -280,6 +303,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get tax data.
+     *
      * @return \Magento\Tax\Helper\Data
      */
     public function getTaxData()
@@ -288,6 +313,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get wishlist helper.
+     *
      * @return \Magento\Wishlist\Helper\Data
      */
     public function getWishlistHelper()
@@ -296,6 +323,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
+     * Get review renderer.
+     *
      * @return \Magento\Catalog\Block\Product\ReviewRendererInterface
      */
     public function getReviewRenderer()

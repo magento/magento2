@@ -111,6 +111,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for processContent method (empty content)
+     *
+     * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
+     * @expectedExceptionMessageRegExp (Compilation from source: LESS file is empty: test-path)
      */
     public function testProcessContentEmpty()
     {

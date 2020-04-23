@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Customer\Recent $block */
 ?>
-<?php if ($block->getReviews() && count($block->getReviews())): ?>
+<?php if ($block->getReviews() && count($block->getReviews())) : ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
         <strong><?= $block->escapeHtml(__('My Recent Reviews')) ?></strong>
@@ -16,11 +14,11 @@
     </div>
     <div class="block-content">
         <ol class="items">
-        <?php foreach ($block->getReviews() as $_review): ?>
+        <?php foreach ($block->getReviews() as $_review) : ?>
             <li class="item">
                 <strong class="product-name"><a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>"><?= $block->escapeHtml($_review->getName()) ?></a></strong>
-                <?php if ($_review->getSum()): ?>
-                <?php $rating = $_review->getSum() / $_review->getCount() ?>
+                <?php if ($_review->getSum()) : ?>
+                    <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
                          <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
                          <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">

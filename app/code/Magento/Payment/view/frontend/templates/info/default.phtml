@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
@@ -15,11 +13,11 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
 ?>
 <dl class="payment-method">
     <dt class="title"><?= /* @noEscape */ $title ?></dt>
-<?php if ($specificInfo):?>
+<?php if ($specificInfo) : ?>
     <dd class="content">
         <table class="data table">
             <caption class="table-caption"><?= /* @noEscape */ $title ?></caption>
-            <?php foreach ($specificInfo as $label => $value):?>
+            <?php foreach ($specificInfo as $label => $value) : ?>
                 <tr>
                     <th scope="row"><?= $block->escapeHtml($label) ?></th>
                     <td>

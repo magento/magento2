@@ -155,6 +155,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
             } else {
                 $responseContent['redirectUrl'] = $this->urlBuilder->getUrl('paypal/express/review');
                 $this->_checkoutSession->setQuoteId($quote->getId());
+                $this->_getSession()->setQuoteId($quote->getId());
             }
         } catch (ApiProcessableException $e) {
             $responseContent['success'] = false;

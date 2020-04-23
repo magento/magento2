@@ -4,23 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @see \Magento\Checkout\Block\Cart\Totals
  */
 ?>
-<?php if ($block->getTotals()): ?>
+<?php if ($block->getTotals()) : ?>
     <?php $_colspan = 3; ?>
-    <?= /* @escapeNotVerified */ $block->renderTotals(null, $_colspan) ?>
-    <?= /* @escapeNotVerified */ $block->renderTotals('footer', $_colspan) ?>
-    <?php if ($block->needDisplayBaseGrandtotal()):?>
+    <?= /* @noEscape */ $block->renderTotals(null, $_colspan) ?>
+    <?= /* @noEscape */ $block->renderTotals('footer', $_colspan) ?>
+    <?php if ($block->needDisplayBaseGrandtotal()) : ?>
     <tr class="totals charge">
-        <th class="mark" colspan="<?= /* @escapeNotVerified */ $_colspan ?>" scope="row">
-            <?= /* @escapeNotVerified */ __('Your credit card will be charged for') ?>
+        <th class="mark" colspan="<?= /* @noEscape */ $_colspan ?>" scope="row">
+            <?= $block->escapeHtml(__('Your credit card will be charged for')) ?>
         </th>
         <td class="amount" data-th="<?= $block->escapeHtml(__('Your credit card will be charged for')) ?>">
-            <?= /* @escapeNotVerified */ $block->displayBaseGrandtotal() ?>
+            <?= /* @noEscape */ $block->displayBaseGrandtotal() ?>
         </td>
     </tr>
     <?php endif?>

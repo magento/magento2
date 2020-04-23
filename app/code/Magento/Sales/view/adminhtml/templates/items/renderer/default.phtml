@@ -4,21 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
-
-<?= /* @escapeNotVerified */ $block->getItem()->getName() ?>
-<div><strong><?= /* @escapeNotVerified */ __('SKU') ?>:</strong> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))) ?></div>
-<?php if ($block->getOrderOptions()): ?>
+<?= $block->escapeHtml($block->getItem()->getName()) ?>
+<div><strong><?= $block->escapeHtml(__('SKU')) ?>:</strong> <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($block->escapeHtml($block->getItem()->getSku()))) ?></div>
+<?php if ($block->getOrderOptions()) : ?>
     <ul class="item-options">
-    <?php foreach ($block->getOrderOptions() as $option): ?>
-        <li><strong><?= /* @escapeNotVerified */ $option['label'] ?>:</strong><br />
-        <?php if (is_array($option['value'])): ?>
-        <?php foreach ($option['value'] as $item): ?>
-            <?= $block->getValueHtml($item) ?><br />
-            <?php endforeach; ?>
-        <?php else: ?>
+    <?php foreach ($block->getOrderOptions() as $option) : ?>
+        <li><strong><?= $block->escapeHtml($option['label']) ?>:</strong><br />
+        <?php if (is_array($option['value'])) : ?>
+            <?php foreach ($option['value'] as $item) : ?>
+                <?= $block->getValueHtml($item) ?><br />
+                <?php endforeach; ?>
+            <?php else : ?>
             <?= $block->escapeHtml($option['value']) ?>
         <?php endif; ?>
         </li>

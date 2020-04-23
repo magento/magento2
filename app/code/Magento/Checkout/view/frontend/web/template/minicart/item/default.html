@@ -44,7 +44,10 @@
                             <!-- ko if: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
-                            <!-- ko ifnot: Array.isArray(option.value) -->
+                            <!-- ko if: (!Array.isArray(option.value) && option.option_type == 'file') -->
+                                <span data-bind="html: option.value"></span>
+                            <!-- /ko -->
+                            <!-- ko if: (!Array.isArray(option.value) && option.option_type != 'file') -->
                                 <span data-bind="text: option.value"></span>
                             <!-- /ko -->
                         </dd>

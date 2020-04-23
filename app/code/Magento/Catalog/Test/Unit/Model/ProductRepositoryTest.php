@@ -42,12 +42,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class ProductRepositoryTest
- * @package Magento\Catalog\Test\Unit\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -527,12 +525,14 @@ class ProductRepositoryTest extends TestCase
         for ($i = 1; $i <= $productsCount; $i++) {
             $productMock = $this->getMockBuilder(Product::class)
                 ->disableOriginalConstructor()
-                ->setMethods([
+                ->setMethods(
+                    [
                     'getId',
                     'getSku',
                     'load',
                     'setData',
-                ])
+                    ]
+                )
                 ->getMock();
             $productMock->expects($this->once())->method('load');
             $productMock->expects($this->atLeastOnce())->method('getId')->willReturn($i);
@@ -679,7 +679,7 @@ class ProductRepositoryTest extends TestCase
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
-        $this->product->expects($this->once())->method('getId')->willReturn(null);
+        $this->product->expects($this->exactly(2))->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
@@ -703,7 +703,7 @@ class ProductRepositoryTest extends TestCase
         $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(['error1', 'error2']);
-        $this->product->expects($this->never())->method('getId');
+        $this->product->expects($this->once())->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverter
             ->expects($this->once())
             ->method('toNestedArray')
@@ -1340,11 +1340,13 @@ class ProductRepositoryTest extends TestCase
             ->willReturn($storeMock);
         $this->storeManager->expects($this->once())
             ->method('getWebsites')
-            ->willReturn([
+            ->willReturn(
+                [
                 1 => ['first'],
                 2 => ['second'],
                 3 => ['third']
-            ]);
+                ]
+            );
         $this->product->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
         $this->product->method('getSku')->willReturn('simple');
 

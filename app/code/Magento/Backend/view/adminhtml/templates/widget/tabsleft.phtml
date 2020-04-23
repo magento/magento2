@@ -3,21 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<dl id="dl-<?= /* @escapeNotVerified */ $id ?>" class="accordion">
-<?php foreach ($sections as $sectionId => $section): ?>
-    <dt id="dt-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>">
-        <strong><?= /* @escapeNotVerified */ $section['title'] ?></strong>
+<dl id="dl-<?= /* @noEscape */ $id ?>" class="accordion">
+<?php foreach ($sections as $sectionId => $section) : ?>
+    <dt id="dt-<?= /* @noEscape */ $id ?>-<?= /* @noEscape */ $sectionId ?>">
+        <strong><?= $block->escapeHtml($section['title']) ?></strong>
     </dt>
-    <dd id="dd-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $section['id'] ?>" class="section-menu <?= !empty($section['active']) ? 'open' : '' ?>">
+    <dd id="dd-<?= /* @noEscape */ $id ?>-<?= /* @noEscape */ $section['id'] ?>" class="section-menu <?= !empty($section['active']) ? 'open' : '' ?>">
         <ul>
-        <?php foreach ($section['children'] as $menuId => $menuItem): ?>
-            <li id="li-<?= /* @escapeNotVerified */ $id ?>-<?= /* @escapeNotVerified */ $sectionId ?>-<?= /* @escapeNotVerified */ $menuId ?>">
-                <a href="#" title="<?= /* @escapeNotVerified */ $menuItem['title'] ?>">
-                    <span><?= /* @escapeNotVerified */ $menuItem['label'] ?></span>
+        <?php foreach ($section['children'] as $menuId => $menuItem) : ?>
+            <li id="li-<?= /* @noEscape */ $id ?>-<?= /* @noEscape */ $sectionId ?>-<?= /* @noEscape */ $menuId ?>">
+                <a href="#" title="<?= $block->escapeHtmlAttr($menuItem['title']) ?>">
+                    <span><?= $block->escapeHtml($menuItem['label']) ?></span>
                 </a>
             </li>
         <?php endforeach ?>

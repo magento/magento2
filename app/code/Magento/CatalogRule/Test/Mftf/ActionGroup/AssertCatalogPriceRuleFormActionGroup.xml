@@ -9,15 +9,18 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCatalogPriceRuleFormActionGroup">
+        <annotations>
+            <description>Validates that the provided Catalog Rule, Status, Websites and Customer Group details are present and correct on a Admin Catalog Price Rule creation/edit page.</description>
+        </annotations>
         <arguments>
-            <argument name="catalogRule" defaultValue="inactiveCatalogRule"  />
+            <argument name="catalogRule" defaultValue="inactiveCatalogRule" />
             <argument name="status"  type="string" defaultValue=""/>
             <argument name="websites" type="string"/>
             <argument name="customerGroup" type="string"/>
         </arguments>
+
         <seeInField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <seeInField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
-        <seeOptionIsSelected selector="{{AdminNewCatalogPriceRule.status}}" userInput="{{status}}" stepKey="selectStatus"/>
         <see stepKey="seeWebSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{websites}}"/>
         <seeOptionIsSelected selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
         <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab"/>

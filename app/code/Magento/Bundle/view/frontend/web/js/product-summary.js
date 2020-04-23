@@ -9,7 +9,7 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Bundle/js/price-bundle'
 ], function ($, mageTemplate) {
     'use strict';

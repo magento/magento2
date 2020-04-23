@@ -118,7 +118,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('customer_id'))
             ->will($this->returnValue($customerId));
         $this->authenticationMock->expects($this->once())->method('unlock')->with($customerId);
-        $this->messageManagerMock->expects($this->once())->method('addSuccess');
+        $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
         $this->redirectMock->expects($this->once())
             ->method('setPath')
             ->with($this->equalTo('customer/index/edit'))
@@ -141,7 +141,7 @@ class UnlockTest extends \PHPUnit\Framework\TestCase
             ->method('unlock')
             ->with($customerId)
             ->willThrowException(new \Exception($phrase));
-        $this->messageManagerMock->expects($this->once())->method('addError');
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
         $this->controller->execute();
     }
 }

@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Sales Order PDF abstract model
@@ -15,6 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 abstract class AbstractPdf extends \Magento\Framework\DataObject
@@ -123,6 +125,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private $pageSettings;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -134,6 +141,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
+     * @param Database $fileStorageDatabase
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -147,7 +155,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        array $data = []
+        array $data = [],
+        Database $fileStorageDatabase = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -160,6 +169,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->fileStorageDatabase = $fileStorageDatabase ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
         parent::__construct($data);
     }
 
@@ -254,6 +265,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         );
         if ($image) {
             $imagePath = '/sales/store/logo/' . $image;
+            if ($this->fileStorageDatabase->checkDbUsage() &&
+                !$this->_mediaDirectory->isFile($imagePath)
+            ) {
+                $this->fileStorageDatabase->saveFileToFilesystem($imagePath);
+            }
             if ($this->_mediaDirectory->isFile($imagePath)) {
                 $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top = 830;

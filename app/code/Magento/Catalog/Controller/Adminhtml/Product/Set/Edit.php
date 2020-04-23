@@ -6,45 +6,63 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\Registry;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Set;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpGetActionInterface
+/**
+ * Edit attribute set controller.
+ */
+class Edit extends Set implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @var AttributeSetRepositoryInterface
+     */
+    private $attributeSetRepository;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     * @param AttributeSetRepositoryInterface $attributeSetRepository
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        Context $context,
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        AttributeSetRepositoryInterface $attributeSetRepository = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->resultPageFactory = $resultPageFactory;
+        $this->attributeSetRepository = $attributeSetRepository ?:
+            ObjectManager::getInstance()->get(AttributeSetRepositoryInterface::class);
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @inheritdoc
      */
     public function execute()
     {
         $this->_setTypeId();
-        $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
-            ->load($this->getRequest()->getParam('id'));
-
+        $attributeSet = $this->attributeSetRepository->get($this->getRequest()->getParam('id'));
         if (!$attributeSet->getId()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
         }
-
         $this->_coreRegistry->register('current_attribute_set', $attributeSet);
 
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
         $resultPage->getConfig()->getTitle()->prepend(__('Attribute Sets'));

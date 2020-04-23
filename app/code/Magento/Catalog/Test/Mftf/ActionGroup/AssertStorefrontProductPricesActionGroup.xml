@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontProductPricesActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Price and Final Product Price are present on the Storefront Product page.</description>
+        </annotations>
         <arguments>
             <argument name="productPrice" type="string"/>
             <argument name="productFinalPrice" type="string"/>
         </arguments>
+
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount" userInput="{{productPrice}}"/>
         <see selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="productFinalPriceAmount" userInput="{{productFinalPrice}}"/>

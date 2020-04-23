@@ -253,7 +253,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getNodesUrl()
     {
-        return $this->getUrl('catalog/category/jsonTree');
+        return $this->getUrl('catalog/category/tree');
     }
 
     /**
@@ -407,6 +407,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function buildNodeName($node)
     {
         $result = $this->escapeHtml($node->getName());
+        $result .= ' (ID: ' . $node->getId() . ')';
         if ($this->_withProductCount) {
             $result .= ' (' . $node->getProductCount() . ')';
         }

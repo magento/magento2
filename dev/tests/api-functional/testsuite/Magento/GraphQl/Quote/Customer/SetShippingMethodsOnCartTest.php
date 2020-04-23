@@ -39,6 +39,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -64,7 +65,17 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertCount(1, $response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
 
         $shippingAddress = current($response['setShippingMethodsOnCart']['cart']['shipping_addresses']);
+        $availableShippingMethods = $shippingAddress['available_shipping_methods'];
+
         self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+        self::assertArrayHasKey('available_shipping_methods', $shippingAddress);
+
+        self::assertCount(2, $availableShippingMethods);
+        self::assertEquals('freeshipping', $availableShippingMethods[0]['carrier_code']);
+        self::assertEquals($carrierCode, $availableShippingMethods[1]['carrier_code']);
+
+        self::assertEquals($availableShippingMethods[0]['amount']['value'], 0);
+        self::assertEquals($availableShippingMethods[1]['amount']['value'], 10);
 
         self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
         self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['carrier_code']);
@@ -85,19 +96,13 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(10, $amount['value']);
         self::assertArrayHasKey('currency', $amount);
         self::assertEquals('USD', $amount['currency']);
-
-        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
-        $baseAmount = $shippingAddress['selected_shipping_method']['base_amount'];
-
-        self::assertArrayHasKey('value', $baseAmount);
-        self::assertEquals(10, $baseAmount['value']);
-        self::assertArrayHasKey('currency', $baseAmount);
-        self::assertEquals('USD', $baseAmount['currency']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -152,7 +157,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   {$input}     
+   {$input}
   }) {
     cart {
       shipping_addresses {
@@ -175,26 +180,9 @@ QUERY;
     public function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
-            'missed_cart_id' => [
-                'shipping_methods: [{
-                    carrier_code: "flatrate"
-                    method_code: "flatrate"
-                }]',
-                'Required parameter "cart_id" is missing'
-            ],
-            'missed_shipping_methods' => [
-                'cart_id: "cart_id_value"',
-                'Required parameter "shipping_methods" is missing'
-            ],
             'shipping_methods_are_empty' => [
                 'cart_id: "cart_id_value" shipping_methods: []',
                 'Required parameter "shipping_methods" is missing'
-            ],
-            'missed_carrier_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    method_code: "flatrate"
-                }]',
-                'Field ShippingMethodInput.carrier_code of required type String! was not provided.'
             ],
             'empty_carrier_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -209,12 +197,6 @@ QUERY;
                     method_code: "flatrate"
                 }]',
                 'Carrier with such method not found: wrong-carrier-code, flatrate'
-            ],
-            'missed_method_code' => [
-                'cart_id: "cart_id_value", shipping_methods: [{
-                    carrier_code: "flatrate"
-                }]',
-                'Required parameter "method_code" is missing.'
             ],
             'empty_method_code' => [
                 'cart_id: "cart_id_value", shipping_methods: [{
@@ -249,7 +231,9 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -264,7 +248,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   cart_id: "{$maskedQuoteId}", 
+   cart_id: "{$maskedQuoteId}",
    shipping_methods: [
         {
             carrier_code: "flatrate"
@@ -356,9 +340,9 @@ QUERY;
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
@@ -375,10 +359,12 @@ mutation {
             value
             currency
           }
-          base_amount {
+        }
+        available_shipping_methods {
+          amount{
             value
-            currency
           }
+          carrier_code
         }
       }
     }

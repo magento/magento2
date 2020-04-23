@@ -6,7 +6,7 @@
 namespace Magento\Tax\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
@@ -31,7 +31,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
@@ -65,7 +65,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCustomerAddress'])
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,7 +77,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isCatalogPriceDisplayAffectedByTax'])
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
             ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()

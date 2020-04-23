@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSelectOptionDateTimeActionGroup">
+        <annotations>
+            <description>Selects the provided Month, Day, Year, Hour, Minute and Part of Day for the provided Product Option on a Storefront product page.</description>
+        </annotations>
         <arguments>
             <argument name="optionTitle" defaultValue="ProductOptionDateTime"/>
             <argument name="month" type="string"/>
@@ -17,6 +21,7 @@
             <argument name="minute" type="string"/>
             <argument name="dayPart" type="string"/>
         </arguments>
+
         <selectOption selector="{{StorefrontProductInfoMainSection.customOptionMonth(optionTitle.title)}}" userInput="{{month}}" stepKey="selectMonthForOptionDate"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.customOptionDay(optionTitle.title)}}" userInput="{{day}}" stepKey="selectDayForOptionDate"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.customOptionYear(optionTitle.title)}}" userInput="{{year}}" stepKey="selectYearForOptionDate"/>

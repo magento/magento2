@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\User\Model\ResourceModel;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
@@ -11,6 +13,7 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
 
@@ -208,27 +211,23 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($parentId > 0) {
             /** @var \Magento\Authorization\Model\Role $parentRole */
             $parentRole = $this->_roleFactory->create()->load($parentId);
-        } else {
-            $role = new \Magento\Framework\DataObject();
-            $role->setTreeLevel(0);
-        }
+            if ($parentRole->getId()) {
+                $data = new \Magento\Framework\DataObject(
+                    [
+                        'parent_id' => $parentRole->getId(),
+                        'tree_level' => $parentRole->getTreeLevel() + 1,
+                        'sort_order' => 0,
+                        'role_type' => RoleUser::ROLE_TYPE,
+                        'user_id' => $user->getId(),
+                        'user_type' => UserContextInterface::USER_TYPE_ADMIN,
+                        'role_name' => $user->getFirstName(),
+                    ]
+                );
 
-        if ($parentRole->getId()) {
-            $data = new \Magento\Framework\DataObject(
-                [
-                    'parent_id' => $parentRole->getId(),
-                    'tree_level' => $parentRole->getTreeLevel() + 1,
-                    'sort_order' => 0,
-                    'role_type' => RoleUser::ROLE_TYPE,
-                    'user_id' => $user->getId(),
-                    'user_type' => UserContextInterface::USER_TYPE_ADMIN,
-                    'role_name' => $user->getFirstName(),
-                ]
-            );
-
-            $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
-            $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
-            $this->aclDataCache->clean();
+                $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
+                $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
+                $this->aclDataCache->clean();
+            }
         }
     }
 
@@ -251,14 +250,17 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $user
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
+        $uid = $user->getId();
+        if (!$uid) {
+            return false;
+        }
+
         $this->_beforeDelete($user);
         $connection = $this->getConnection();
-
-        $uid = $user->getId();
         $connection->beginTransaction();
         try {
             $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
@@ -266,14 +268,15 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getTable('authorization_role'),
                 ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            throw $e;
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             $connection->rollBack();
+
             return false;
         }
+
         $connection->commit();
         $this->_afterDelete($user);
+
         return true;
     }
 
@@ -476,7 +479,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $users = $role->getRoleUsers();
         $rowsCount = 0;
 
-        if (sizeof($users) > 0) {
+        if (count($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
             $rowsCount = $connection->update($this->getTable('admin_user'), $bind, $where);
@@ -618,6 +621,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Get latest password for specified user id
+     *
      * Possible false positive when password was changed several times with different lifetime configuration
      *
      * @param int $userId

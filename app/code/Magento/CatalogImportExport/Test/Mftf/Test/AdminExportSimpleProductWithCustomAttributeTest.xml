@@ -18,9 +18,6 @@
             <testCaseId value="MC-14007"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-15934"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create simple product with custom attribute set -->
@@ -36,8 +33,7 @@
             <magentoCLI command="cron:run" stepKey="runCron2"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete product creations -->
@@ -45,12 +41,8 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to export page -->
@@ -58,15 +50,23 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Export created below products -->
-        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
         <magentoCLI command="cron:run" stepKey="runCron4"/>
 
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+
         <!-- Download product -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
-            <argument name="rowIndex" value="0"/>
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$grabNameFile}"/>
+        </actionGroup>
+
     </test>
 </tests>

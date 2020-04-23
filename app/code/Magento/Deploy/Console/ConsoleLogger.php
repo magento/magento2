@@ -271,7 +271,7 @@ class ConsoleLogger extends AbstractLogger
         return "{$title}{$titlePad}"
         . "{$count}{$countPad}"
         . "{$this->renderBar($output, $process)} "
-        . "{$percent}%{$percentPad}"
+        . "{$percent}{$percentPad}"
         . "{$process['elapsed']}   ";
     }
 

@@ -53,23 +53,24 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->objectManagerProviderMock->expects($this->any())
+        $this->objectManagerProviderMock
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $this->statusMock = $this->createMock(\Magento\Framework\Module\Status::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache::class);
         $this->cleanupFilesMock = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
         $this->fullModuleListMock = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
         $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->generatedFiles = $this->createMock(\Magento\Framework\Code\GeneratedFiles::class);
-        $objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\Module\Status::class, $this->statusMock],
-                [\Magento\Framework\App\Cache::class, $this->cacheMock],
-                [\Magento\Framework\App\State\CleanupFiles::class, $this->cleanupFilesMock],
-                [\Magento\Framework\Module\FullModuleList::class, $this->fullModuleListMock],
-            ]));
+        $objectManager->method('get')
+                    ->willReturnMap(
+                        [
+                            [\Magento\Framework\Module\Status::class, $this->statusMock],
+                            [\Magento\Framework\App\Cache::class, $this->cacheMock],
+                            [\Magento\Framework\App\State\CleanupFiles::class, $this->cleanupFilesMock],
+                            [\Magento\Framework\Module\FullModuleList::class, $this->fullModuleListMock],
+                        ]
+                    );
     }
 
     /**
@@ -189,7 +190,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
         if ($isEnable) {
             $this->deploymentConfigMock->expects($this->once())
                 ->method('isAvailable')
-                ->willReturn(['Magento_Module1']);
+                ->willReturn(true);
         } else {
             $this->deploymentConfigMock->expects($this->never())
                 ->method('isAvailable');

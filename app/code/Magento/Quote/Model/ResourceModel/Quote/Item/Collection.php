@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\ResourceModel\Quote\Item as ResourceQuoteItem;
@@ -256,8 +257,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         foreach ($this as $item) {
             /** @var ProductInterface $product */
             $product = $productCollection->getItemById($item->getProductId());
+            try {
+                /** @var QuoteItem $item */
+                $parentItem = $item->getParentItem();
+                $parentProduct = $parentItem ? $parentItem->getProduct() : null;
+            } catch (NoSuchEntityException $exception) {
+                $parentItem = null;
+                $parentProduct = null;
+                $this->_logger->error($exception);
+            }
             $qtyOptions = [];
-            if ($product && $this->isValidProduct($product)) {
+            if ($this->isValidProduct($product) && (!$parentItem || $this->isValidProduct($parentProduct))) {
                 $product->setCustomOptions([]);
                 $optionProductIds = $this->getOptionProductIds($item, $product, $productCollection);
                 foreach ($optionProductIds as $optionProductId) {
@@ -276,7 +286,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             }
         }
         if ($this->recollectQuote && $this->_quote) {
-            $this->_quote->collectTotals();
+            $this->_quote->setTotalsCollectedFlag(false);
         }
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
@@ -327,7 +337,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      * @param ProductInterface $product
      * @return bool
      */
-    private function isValidProduct(ProductInterface $product): bool
+    private function isValidProduct(?ProductInterface $product): bool
     {
         $result = ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED);
 

@@ -8,14 +8,14 @@ define([
     'jquery',
     'underscore',
     'Magento_Braintree/js/view/payment/method-renderer/paypal',
-    'Magento_Checkout/js/action/set-payment-information',
+    'Magento_Checkout/js/action/set-payment-information-extended',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/model/full-screen-loader'
 ], function (
     $,
     _,
     Component,
-    setPaymentInformationAction,
+    setPaymentInformationExtended,
     additionalValidators,
     fullScreenLoader
 ) {
@@ -131,9 +131,10 @@ define([
         placeOrder: function () {
             fullScreenLoader.startLoader();
             $.when(
-                setPaymentInformationAction(
+                setPaymentInformationExtended(
                     this.messageContainer,
-                    this.getData()
+                    this.getData(),
+                    true
                 )
             ).done(this.done.bind(this))
                 .fail(this.fail.bind(this));

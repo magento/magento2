@@ -4,31 +4,37 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php /** @var  $block \Magento\Sales\Block\Order\View*/?>
 <div class="order-details-items ordered">
     <?php $_order = $block->getOrder() ?>
 
     <div class="order-title">
-        <strong><?= /* @escapeNotVerified */ __('Items Ordered') ?></strong>
-        <?php if ($_order->getTracksCollection()->count()) : ?>
+        <strong><?= $block->escapeHtml(__('Items Ordered')) ?></strong>
+        <?php if (!empty($_order->getTracksCollection()->getItems())) : ?>
             <?= $block->getChildHtml('tracking-info-link') ?>
         <?php endif; ?>
     </div>
 
     <?= $block->getChildHtml('order_items') ?>
 
-    <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order) && $_order->getGiftMessageId()): ?>
+    <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order', $_order)
+        && $_order->getGiftMessageId()
+    ) : ?>
     <div class="block block-order-details-gift-message">
-        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Gift Message for This Order') ?></strong></div>
-        <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_order); ?>
+        <div class="block-title"><strong><?= $block->escapeHtml(__('Gift Message for This Order')) ?></strong></div>
+        <?php
+        $_giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($_order);
+        ?>
         <div class="block-content">
             <dl class="item-options">
-                <dt class="item-sender"><strong class="label"><?= /* @escapeNotVerified */ __('From') ?></strong><?= $block->escapeHtml($_giftMessage->getSender()) ?></dt>
-                <dt class="item-recipient"><strong class="label"><?= /* @escapeNotVerified */ __('To') ?></strong><?= $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                <dd class="item-message"><?= /* @escapeNotVerified */ $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
+                <dt class="item-sender"><strong class="label"><?= $block->escapeHtml(__('From')) ?></strong><?= $block->escapeHtml($_giftMessage->getSender()) ?></dt>
+                <dt class="item-recipient"><strong class="label"><?= $block->escapeHtml(__('To')) ?></strong><?= $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                <dd class="item-message">
+                    <?= /* @noEscape */
+                    $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($_order) ?>
+                </dd>
             </dl>
         </div>
     </div>
@@ -36,8 +42,8 @@
 
     <div class="actions-toolbar">
         <div class="secondary">
-            <a class="action back" href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>">
-                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
             </a>
         </div>
     </div>

@@ -9,7 +9,6 @@ namespace Magento\GraphQlCache\Controller\Catalog;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\App\Request\Http;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
@@ -20,28 +19,11 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  */
 class DeepNestedCategoriesAndProductsTest extends AbstractGraphqlCacheTest
 {
-    /** @var \Magento\GraphQl\Controller\GraphQl */
-    private $graphql;
-
-    /** @var Http */
-    private $request;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->get(Http::class);
-    }
-
     /**
      * Test cache tags and debug header for deep nested queries involving category and products
      *
      * @magentoCache all enabled
      * @magentoDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
-     *
      */
     public function testDispatchForCacheHeadersOnDeepNestedQueries(): void
     {
@@ -87,15 +69,18 @@ QUERY;
 
         $productIdsFromCategory = $category->getProductCollection()->getAllIds();
         foreach ($productIdsFromCategory as $productId) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $resolvedCategoryIds = array_merge(
                 $resolvedCategoryIds,
                 $productRepository->getById($productId)->getCategoryIds()
             );
         }
 
+        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
         $resolvedCategoryIds = array_merge($resolvedCategoryIds, [$baseCategoryId]);
         foreach ($resolvedCategoryIds as $categoryId) {
             $category = $categoryRepository->get($categoryId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $productIdsFromCategory= array_merge(
                 $productIdsFromCategory,
                 $category->getProductCollection()->getAllIds()
@@ -106,16 +91,15 @@ QUERY;
         $uniqueCategoryIds = array_unique($resolvedCategoryIds);
         $expectedCacheTags = ['cat_c', 'cat_p', 'FPC'];
         foreach ($uniqueProductIds as $uniqueProductId) {
-            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_p_'.$uniqueProductId]);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_p_' . $uniqueProductId]);
         }
         foreach ($uniqueCategoryIds as $uniqueCategoryId) {
-            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_'.$uniqueCategoryId]);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_' . $uniqueCategoryId]);
         }
 
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphql->dispatch($this->request);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $this->assertEmpty(

@@ -42,7 +42,7 @@ class Select extends \Zend_Db_Select
     const STRAIGHT_JOIN = 'straightjoin';
 
     /**
-     * Sql straight join
+     * Straight join SQL directive.
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
@@ -91,6 +91,12 @@ class Select extends \Zend_Db_Select
      * $select->where('id = :id');
      * </code>
      *
+     * You may also construct IN statements:
+     *
+     * <code>
+     * $select->where('entity_id IN (?)', ['1', '2', '3']);
+     * </code>
+     *
      * Note that it is more correct to use named bindings in your
      * queries for values other than strings. When you use named
      * bindings, don't forget to pass the values when actually
@@ -101,7 +107,7 @@ class Select extends \Zend_Db_Select
      * </code>
      *
      * @param string $cond The WHERE condition.
-     * @param string $value OPTIONAL A single value to quote into the condition.
+     * @param string|array|null $value OPTIONAL An optional single or array value to quote into the condition.
      * @param string|int|null $type OPTIONAL The type of the given value
      * @return \Magento\Framework\DB\Select
      */
@@ -434,7 +440,7 @@ class Select extends \Zend_Db_Select
             }
         }
 
-        return parent::_tableCols($correlationName, $cols, $afterCorrelationName);
+        parent::_tableCols($correlationName, $cols, $afterCorrelationName);
     }
 
     /**
@@ -513,14 +519,9 @@ class Select extends \Zend_Db_Select
      *
      * @return string[]
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -537,14 +538,9 @@ class Select extends \Zend_Db_Select
      *
      * @return void
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();
         $this->selectRenderer = $objectManager->get(\Magento\Framework\DB\Select\SelectRenderer::class);

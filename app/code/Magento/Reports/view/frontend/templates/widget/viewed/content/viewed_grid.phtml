@@ -9,10 +9,6 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
- */
-
-/**
  * @var $block \Magento\Reports\Block\Product\Viewed
  */
 ?>
@@ -80,7 +76,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                             </button>
                                                         <?php else : ?>
                                                             <?php
-                                                                $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+                                                                $postDataHelper = $this->helper(\Magento\Framework\Data\Helper\PostHelper::class);
                                                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                             ?>
                                                             <button class="action tocart primary"
@@ -100,7 +96,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                             <?php endif; ?>
                                             <?php if ($showWishlist || $showCompare) : ?>
                                                 <div class="actions-secondary" data-role="add-to-links">
-                                                    <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist) : ?>
+                                                    <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) : ?>
                                                         <a href="#"
                                                            class="action towishlist" data-action="add-to-wishlist"
                                                            data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>'
@@ -109,7 +105,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                                                         </a>
                                                     <?php endif; ?>
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare) : ?>
-                                                        <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                                                        <?php $compareHelper = $this->helper(\Magento\Catalog\Helper\Product\Compare::class);?>
                                                         <a href="#" class="action tocompare"
                                                            data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
                                                            title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">

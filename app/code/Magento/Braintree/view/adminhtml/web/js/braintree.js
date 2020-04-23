@@ -295,10 +295,11 @@ define([
 
             self.$selector.validate().form();
             self.$selector.trigger('afterValidate.beforeSubmit');
-            $('body').trigger('processStop');
 
             // validate parent form
             if (self.$selector.validate().errorList.length) {
+                $('body').trigger('processStop');
+
                 return false;
             }
 
@@ -308,6 +309,7 @@ define([
 
             self.hostedFieldsInstance.tokenize(function (err, payload) {
                 if (err) {
+                    $('body').trigger('processStop');
                     self.error($t('Some payment input fields are invalid.'));
 
                     return false;

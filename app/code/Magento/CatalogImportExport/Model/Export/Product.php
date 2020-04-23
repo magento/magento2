@@ -5,12 +5,13 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
-use Magento\ImportExport\Model\Import;
-use \Magento\Store\Model\Store;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Catalog\Model\Product as ProductEntity;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
+use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 
 /**
  * Export entity product model
@@ -21,6 +22,8 @@ use Magento\Catalog\Model\Product as ProductEntity;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
@@ -348,6 +351,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var string
      */
     private $productEntityLinkField;
+    /**
+     * @var ProductFilterInterface
+     */
+    private $filter;
 
     /**
      * Product constructor.
@@ -369,6 +376,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param ProductEntity\LinkTypeProvider $linkTypeProvider
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
+     * @param ProductFilterInterface $filter
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -388,7 +396,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
-        array $dateAttrCodes = []
+        array $dateAttrCodes = [],
+        ?ProductFilterInterface $filter = null
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -404,6 +413,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
+        $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -444,8 +454,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($pathSize > 1) {
                 $path = [];
                 for ($i = 1; $i < $pathSize; $i++) {
-                    $name = $collection->getItemById($structure[$i])->getName();
-                    $path[] = $this->quoteCategoryDelimiter($name);
+                    $childCategory = $collection->getItemById($structure[$i]);
+                    if ($childCategory) {
+                        $name = $childCategory->getName();
+                        $path[] = $this->quoteCategoryDelimiter($name);
+                    }
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
                 if ($pathSize > 2) {
@@ -481,7 +494,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_indexValueAttributes = array_merge(
                     $this->_indexValueAttributes,
                     $model->getIndexValueAttributes()
@@ -523,7 +538,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
-        
+
         $productEntityJoinField = $this->getProductEntityLinkField();
 
         $select = $this->_connection->select()->from(
@@ -673,8 +688,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Update data row with information about categories. Return true, if data row was updated
      *
-     * @param array &$dataRow
-     * @param array &$rowCategories
+     * @param array $dataRow
+     * @param array $rowCategories
      * @param int $productId
      * @return bool
      */
@@ -708,6 +723,21 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Return non-system attributes
+
+     * @return array
+     */
+    private function getNonSystemAttributes(): array
+    {
+        $attrKeys = [];
+        foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
+            $attrKeys[] = $attribute->getAttributeCode();
+        }
+
+        return array_diff($this->_getExportMainAttrCodes(), $this->_customHeadersMapping($attrKeys));
+    }
+
+    /**
      * Set headers columns
      *
      * @param array $customOptionsData
@@ -719,6 +749,18 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function setHeaderColumns($customOptionsData, $stockItemRows)
     {
+        $exportAttributes = (
+            array_key_exists("skip_attr", $this->_parameters) && count($this->_parameters["skip_attr"])
+        ) ?
+            array_intersect(
+                $this->_getExportMainAttrCodes(),
+                array_merge(
+                    $this->_customHeadersMapping($this->_getExportAttrCodes()),
+                    $this->getNonSystemAttributes()
+                )
+            ) :
+            $this->_getExportMainAttrCodes();
+
         if (!$this->_headerColumns) {
             $this->_headerColumns = array_merge(
                 [
@@ -729,7 +771,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_CATEGORY,
                     self::COL_PRODUCT_WEBSITES,
                 ],
-                $this->_getExportMainAttrCodes(),
+                $exportAttributes,
                 [self::COL_ADDITIONAL_ATTRIBUTES],
                 reset($stockItemRows) ? array_keys(end($stockItemRows)) : [],
                 [
@@ -787,9 +829,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 case 'g':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'm':
                     $memoryLimit *= 1024;
                     // fall-through intentional
+                    // no break
                 case 'k':
                     $memoryLimit *= 1024;
                     break;
@@ -840,6 +884,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function export()
     {
         //Execution time may be very long
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
 
         $writer = $this->getWriter();
@@ -880,12 +925,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $exportFilter = !empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]) ?
             $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP] : [];
 
-        if (isset($exportFilter['category_ids'])
-            && trim($exportFilter['category_ids'])
-            && $collection instanceof \Magento\Catalog\Model\ResourceModel\Product\Collection
-        ) {
-            $collection->addCategoriesFilter(['in' => explode(',', $exportFilter['category_ids'])]);
-        }
+        $collection = $this->filter->filter($collection, $exportFilter);
 
         return parent::_prepareEntityCollection($collection);
     }
@@ -919,6 +959,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($rawData as $productId => $productData) {
                 foreach ($productData as $storeId => $dataRow) {
                     if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
                     $this->appendMultirowData($dataRow, $multirawData);
@@ -945,7 +986,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $collection = $this->_getEntityCollection();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $collection->setOrder('entity_id', 'asc');
-            $this->_prepareEntityCollection($collection);
             $collection->setStoreId($storeId);
             $collection->load();
             foreach ($collection as $itemId => $item) {
@@ -963,6 +1003,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function collectRawData()
     {
@@ -1057,6 +1098,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         return $data;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Wrap values with double quotes if "Fields Enclosure" option is enabled
@@ -1324,7 +1366,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $dataRow[self::COL_SKU] = $sku;
         $dataRow[self::COL_ATTR_SET] = $attributeSet;
         $dataRow[self::COL_TYPE] = $type;
-        
+
         return $dataRow;
     }
 

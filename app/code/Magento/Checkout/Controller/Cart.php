@@ -98,8 +98,8 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
          */
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore();
-        $unsecure = strpos($url, $store->getBaseUrl()) === 0;
-        $secure = strpos($url, $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
+        $unsecure = strpos($url, (string) $store->getBaseUrl()) === 0;
+        $secure = strpos($url, (string) $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
         return $unsecure || $secure;
     }
 

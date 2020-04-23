@@ -14,5 +14,8 @@
         <var key="customer_password" entityType="customer" entityKey="password"/>
         <data key="shareInfo_emails">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
         <data key="shareInfo_message">Sharing message.</data>
+        <data key="default_email_text_length_limit">255</data>
+        <data key="min_email_text_length_limit">1</data>
+        <data key="max_email_text_length_limit">10000</data>
     </entity>
 </entities>

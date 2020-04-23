@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
+use Magento\Catalog\Model\Category;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
@@ -14,6 +15,9 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
  */
 class CategoriesIdentity implements IdentityInterface
 {
+    /** @var string */
+    private $cacheTag = Category::CACHE_TAG;
+
     /**
      * Get category IDs from resolved data
      *
@@ -23,9 +27,13 @@ class CategoriesIdentity implements IdentityInterface
     public function getIdentities(array $resolvedData): array
     {
         $ids = [];
-        if (!empty($resolvedData)) {
-            foreach ($resolvedData as $category) {
-                $ids[] = $category['id'];
+        $resolvedCategories = $resolvedData['items'] ?? $resolvedData;
+        if (!empty($resolvedCategories)) {
+            foreach ($resolvedCategories as $category) {
+                $ids[] = sprintf('%s_%s', $this->cacheTag, $category['id']);
+            }
+            if (!empty($ids)) {
+                array_unshift($ids, $this->cacheTag);
             }
         }
         return $ids;

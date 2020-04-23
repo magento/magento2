@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontElementVisibleActionGroup">
+        <annotations>
+            <description>Validates that the provided Selector contains the provided Value on a Storefront page.</description>
+        </annotations>
         <arguments>
             <argument name="selector" type="string"/>
             <argument name="userInput" type="string"/>
         </arguments>
+        
         <see selector="{{selector}}" userInput="{{userInput}}" stepKey="assertElement"/>
     </actionGroup>
 </actionGroups>

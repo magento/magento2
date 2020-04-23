@@ -64,45 +64,12 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * Test for lockProcess method
-     *
-     * @param string $method
-     *
-     * @dataProvider dataProviderTestLockProcess
-     */
-    public function testLockProcess($method)
-    {
-        $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
-        $this->filesystemMock->expects(self::once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn($this->$method());
-
-        $this->lockerProcess->lockProcess(self::LOCK_NAME);
-    }
-
     public function testNotLockProcessInProductionMode()
     {
         $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesystemMock->expects($this->never())->method('getDirectoryWrite');
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
-    }
-
-    /**
-     * Test for unlockProcess method
-     */
-    public function testUnlockProcess()
-    {
-        $this->stateMock->expects(self::exactly(2))->method('getMode')->willReturn(State::MODE_DEVELOPER);
-        $this->filesystemMock->expects(self::once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn($this->getTmpDirectoryMockFalse(1));
-
-        $this->lockerProcess->lockProcess(self::LOCK_NAME);
-        $this->lockerProcess->unlockProcess();
     }
 
     public function testNotUnlockProcessInProductionMode()
@@ -112,17 +79,6 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
         $this->lockerProcess->unlockProcess();
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestLockProcess()
-    {
-        return [
-            ['method' => 'getTmpDirectoryMockTrue'],
-            ['method' => 'getTmpDirectoryMockFalse']
-        ];
     }
 
     /**

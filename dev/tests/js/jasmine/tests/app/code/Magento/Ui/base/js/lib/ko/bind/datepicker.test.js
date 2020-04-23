@@ -53,5 +53,23 @@ define([
 
             expect(todayDate).toEqual(result);
         });
+
+        it('update picked date\'s value after update observable value', function () {
+            var date = '06/21/2019',
+                inputFormat = 'M/d/yy',
+                expectedDate;
+
+            expectedDate = moment(date, utils.convertToMomentFormat(inputFormat)).toDate();
+            observable(date);
+
+            expect(expectedDate.valueOf()).toEqual(element.datepicker('getDate').valueOf());
+        });
+
+        it('clear picked date\'s value after clear observable value', function () {
+            element.datepicker('setTimezoneDate').blur().trigger('change');
+            observable('');
+
+            expect(null).toEqual(element.datepicker('getDate'));
+        });
     });
 });

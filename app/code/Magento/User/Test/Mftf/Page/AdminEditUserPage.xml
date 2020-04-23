@@ -6,6 +6,13 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+
+<!--
+    Please do no use current Page because it has link to new user page.
+    Use AdminUserEditPage it has parameterized url where you can specicy User Id.
+    We do not update this page to maintain backward compatibility.
+-->
+
     <page name="AdminEditUserPage" url="admin/user/new" area="admin" module="Magento_User">
         <section name="AdminEditUserSection"/>
         <section name="AdminEditUserRoleSection"/>

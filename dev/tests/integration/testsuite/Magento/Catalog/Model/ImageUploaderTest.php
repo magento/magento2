@@ -47,8 +47,8 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->imageUploader = $this->objectManager->create(
             \Magento\Catalog\Model\ImageUploader::class,
             [
-                'baseTmpPath' => $this->mediaDirectory->getRelativePath('tmp'),
-                'basePath' => __DIR__,
+                'baseTmpPath' => 'catalog/tmp/category',
+                'basePath' => 'catalog/category',
                 'allowedExtensions' => ['jpg', 'jpeg', 'gif', 'png'],
                 'allowedMimeTypes' => ['image/jpg', 'image/jpeg', 'image/gif', 'image/png']
             ]
@@ -77,6 +77,24 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
         $this->imageUploader->saveFileToTmpDir('image');
         $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR. $fileName;
         $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
+    }
+
+    /**
+     * Test that method rename files when move it with the same name into base directory.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_image.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_tmp_category_image.php
+     */
+    public function testMoveFileFromTmp(): void
+    {
+        $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
+
+        $this->assertFileNotExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+
+        $this->imageUploader->moveFileFromTmp('magento_small_image.jpg');
+
+        $this->assertFileExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
     }
 
     /**

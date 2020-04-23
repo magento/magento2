@@ -15,13 +15,11 @@
             <testCaseId value="MC-14718"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <!--Create Grouped product with three simple product -->
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2">
                 <field key="price">100.00</field>
@@ -66,7 +64,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Product1 items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">
@@ -103,8 +101,7 @@
         </actionGroup>
 
         <!-- Assert product1 details in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simple3.name$$"/>
             <argument name="productPrice" value="$300.00"/>

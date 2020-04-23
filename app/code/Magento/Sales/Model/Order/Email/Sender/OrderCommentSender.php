@@ -61,6 +61,8 @@ class OrderCommentSender extends NotifySender
      */
     public function send(Order $order, $notify = true, $comment = '')
     {
+        $this->identityContainer->setStore($order->getStore());
+
         $transport = [
             'order' => $order,
             'comment' => $comment,
@@ -68,6 +70,10 @@ class OrderCommentSender extends NotifySender
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+            'order_data' => [
+                'customer_name' => $order->getCustomerName(),
+                'frontend_status_label' => $order->getFrontendStatusLabel()
+            ]
         ];
         $transportObject = new DataObject($transport);
 

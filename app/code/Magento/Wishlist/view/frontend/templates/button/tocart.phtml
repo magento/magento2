@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
 ?>
 
-<?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
+<?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()) : ?>
     <button type="button" data-role="all-tocart" title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
         <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
     </button>

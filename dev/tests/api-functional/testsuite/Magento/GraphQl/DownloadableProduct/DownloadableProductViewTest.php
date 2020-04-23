@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for downloadable product.
+ */
 class DownloadableProductViewTest extends GraphQlAbstract
 {
     /**
@@ -53,24 +56,16 @@ class DownloadableProductViewTest extends GraphQlAbstract
             links_purchased_separately
             
             downloadable_product_links{
-              id
               sample_url
-              sample_type
-              
-              is_shareable
-              number_of_downloads
               sort_order
               title
-              link_type
-              
               price              
             }
             downloadable_product_samples{
               title
               sort_order
               sort_order
-              sample_type
-              sample_file
+              sample_url
             }
            }
        }
@@ -82,8 +77,6 @@ QUERY;
         $config = ObjectManager::getInstance()->get(\Magento\Config\Model\ResourceModel\Config::class);
         $config->saveConfig(
             \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
-            0,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
         $response = $this->graphQlQuery($query);
@@ -143,22 +136,15 @@ QUERY;
             links_purchased_separately
 
             downloadable_product_links{
-              id
               sample_url
-              sample_type
-              is_shareable
-              number_of_downloads
               sort_order
               title
-              link_type
               price
             }
             downloadable_product_samples{
               title
               sort_order
-              sort_order
-              sample_type
-              sample_file
+              sample_url
             }
            }
        }
@@ -197,12 +183,8 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['items'][0]['downloadable_product_links'][0],
             [
-                'id' => $downloadableProductLink->getId(),
-                'is_shareable' => false,
-                'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),
                 'title' => $downloadableProductLink->getTitle(),
-                'link_type' => strtoupper($downloadableProductLink->getLinkType()),
                 'price' => $downloadableProductLink->getPrice()
             ]
         );
@@ -221,18 +203,12 @@ QUERY;
         /** @var LinkInterface $downloadableProductLinks */
         $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
         $downloadableProductLink = $downloadableProductLinks[1];
-
+        $this->assertNotEmpty('sample_url', $actualResponse['downloadable_product_links'][1]);
         $this->assertResponseFields(
             $actualResponse['downloadable_product_links'][1],
             [
-                'id' => $downloadableProductLink->getId(),
-                'sample_url' => $downloadableProductLink->getSampleUrl(),
-                'sample_type' => strtoupper($downloadableProductLink->getSampleType()),
-                'is_shareable' => false,
-                'number_of_downloads' => $downloadableProductLink->getNumberOfDownloads(),
                 'sort_order' => $downloadableProductLink->getSortOrder(),
                 'title' => $downloadableProductLink->getTitle(),
-                'link_type' => strtoupper($downloadableProductLink->getLinkType()),
                 'price' => $downloadableProductLink->getPrice()
             ]
         );
@@ -251,13 +227,12 @@ QUERY;
         /** @var SampleInterface $downloadableProductSamples */
         $downloadableProductSamples = $product->getExtensionAttributes()->getDownloadableProductSamples();
         $downloadableProductSample = $downloadableProductSamples[0];
+        $this->assertNotEmpty('sample_url', $actualResponse['downloadable_product_samples'][0]);
         $this->assertResponseFields(
             $actualResponse['downloadable_product_samples'][0],
             [
                 'title' => $downloadableProductSample->getTitle(),
-                'sort_order' =>$downloadableProductSample->getSortOrder(),
-                'sample_type' => strtoupper($downloadableProductSample->getSampleType()),
-                'sample_file' => $downloadableProductSample->getSampleFile()
+                'sort_order' => $downloadableProductSample->getSortOrder()
             ]
         );
     }

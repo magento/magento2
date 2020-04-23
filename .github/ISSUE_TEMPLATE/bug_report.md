@@ -11,7 +11,7 @@ Fields marked with (*) are required. Please don't remove the template.
 
 ### Preconditions (*)
 <!---
-Provide the exact Magento version (example: 2.2.5) and any important information on the environment where bug is reproducible.
+Provide the exact Magento version (example: 2.3.2) and any important information on the environment where bug is reproducible.
 -->
 1.
 2.

@@ -63,7 +63,7 @@
         </td>
         <td class="col-qty">
             <?php if ($block->canShowPriceInfo($_item)) : ?>
-                <?= $block->escapeHtml($_item->getQty()*1) ?>
+                <?= (float)$_item->getQty() * 1 ?>
             <?php else : ?>
                 &nbsp;
             <?php endif; ?>

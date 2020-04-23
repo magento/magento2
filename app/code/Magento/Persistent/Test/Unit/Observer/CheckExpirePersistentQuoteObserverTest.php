@@ -6,6 +6,8 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -64,6 +66,11 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
     private $quoteMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|CartRepositoryInterface
+     */
+    private $quoteRepositoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -82,6 +89,7 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getRequestUri', 'getServer'])
             ->getMockForAbstractClass();
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->model = new \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver(
             $this->sessionMock,
@@ -90,7 +98,8 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             $this->eventManagerMock,
             $this->customerSessionMock,
             $this->checkoutSessionMock,
-            $this->requestMock
+            $this->requestMock,
+            $this->quoteRepositoryMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
         ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
@@ -111,12 +120,19 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWhenPersistentIsNotEnabled()
     {
+        $quoteId = 'quote_id_1';
+
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
             ->willReturn(true);
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->persistentHelperMock->expects($this->exactly(2))->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuoteId')->willReturn($quoteId);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with($quoteId)
+            ->willThrowException(new NoSuchEntityException());
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->model->execute($this->observerMock);
     }
@@ -144,8 +160,13 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->method('canProcess')
             ->with($this->observerMock)
             ->willReturn(true);
-        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(true);
-        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
+        $this->persistentHelperMock->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->atLeastOnce())
+            ->method('isShoppingCartPersist')
+            ->willReturn(true);
+        $this->sessionMock->expects($this->atLeastOnce())->method('isPersistent')->willReturn(false);
         $this->checkoutSessionMock
             ->method('getQuote')
             ->willReturn($this->quoteMock);

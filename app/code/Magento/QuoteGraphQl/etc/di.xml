@@ -13,6 +13,7 @@
                 <item name="simple" xsi:type="string">SimpleCartItem</item>
                 <item name="virtual" xsi:type="string">VirtualCartItem</item>
                 <item name="configurable" xsi:type="string">ConfigurableCartItem</item>
+                <item name="downloadable" xsi:type="string">DownloadableCartItem</item>
             </argument>
         </arguments>
     </type>

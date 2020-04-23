@@ -46,8 +46,8 @@
             </table>
         <?php endif; ?>
     </td>
-    <td class="item-qty"><?= $block->escapeHtml($_item->getQtyOrdered() * 1) ?></td>
+    <td class="item-qty"><?= (float)$_item->getQtyOrdered() * 1 ?></td>
     <td class="item-price">
-        <?= $block->escapeHtml($block->getItemPrice($_item)) ?>
+        <?= /* @noEscape */ $block->getItemPrice($_item) ?>
     </td>
 </tr>

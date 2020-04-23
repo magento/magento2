@@ -165,7 +165,10 @@ class Preprocessor implements PreprocessorInterface
                 $this->customerSession->getCustomerGroupId()
             );
         } elseif ($filter->getField() === 'category_ids') {
-            return 'category_ids_index.category_id = ' . (int) $filter->getValue();
+            return $this->connection->quoteInto(
+                'category_ids_index.category_id in (?)',
+                $filter->getValue()
+            );
         } elseif ($attribute->isStatic()) {
             $alias = $this->aliasResolver->getAlias($filter);
             $resultQuery = str_replace(
@@ -198,8 +201,9 @@ class Preprocessor implements PreprocessorInterface
                 )
                 ->joinLeft(
                     ['current_store' => $table],
-                    'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
-                    . $currentStoreId,
+                    "current_store.{$linkIdField} = main_table.{$linkIdField} AND "
+                        . "current_store.attribute_id = main_table.attribute_id AND current_store.store_id = "
+                        . $currentStoreId,
                     null
                 )
                 ->columns([$filter->getField() => $ifNullCondition])

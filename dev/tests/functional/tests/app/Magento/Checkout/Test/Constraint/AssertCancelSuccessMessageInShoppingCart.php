@@ -8,6 +8,7 @@ namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Assert that success message about canceled order is present and correct.
@@ -23,10 +24,18 @@ class AssertCancelSuccessMessageInShoppingCart extends AbstractConstraint
      * Assert that success message about canceled order is present and correct.
      *
      * @param CheckoutCart $checkoutCart
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart)
+    public function processAssert(CheckoutCart $checkoutCart, BrowserInterface $browser)
     {
+        $path = $checkoutCart::MCA;
+        $browser->waitUntil(
+            function () use ($browser, $path) {
+                return $_ENV['app_frontend_url'] . $path . '/' === $browser->getUrl() . 'index/' ? true : null;
+            }
+        );
+
         $actualMessage = $checkoutCart->getMessagesBlock()->getSuccessMessage();
         \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,

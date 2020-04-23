@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifyProductTypeOrder">
+        <annotations>
+            <description>Clicks on the 'Add Product' toggle. Validates that the Simple/Virtual Products are listed in the correct order.</description>
+        </annotations>
+        
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <waitForPageLoad stepKey="waitForLoad"/>
         <seeElement stepKey="seeSimpleInOrder" selector="{{AdminProductDropdownOrderSection.simpleProduct}}"/>

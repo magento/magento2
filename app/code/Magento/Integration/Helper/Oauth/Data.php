@@ -116,22 +116,22 @@ class Data
     /**
      * Get customer token lifetime from config.
      *
-     * @return int hours
+     * @return float hours
      */
     public function getCustomerTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
-        return $hours > 0 ? $hours : 0;
+        $hours = $this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
+        return is_numeric($hours) && $hours > 0 ? $hours : 0;
     }
 
     /**
      * Get customer token lifetime from config.
      *
-     * @return int hours
+     * @return float hours
      */
     public function getAdminTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
-        return $hours > 0 ? $hours : 0;
+        $hours = $this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
+        return is_numeric($hours) && $hours > 0 ? $hours : 0;
     }
 }

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -83,9 +85,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $request->setParam('price', '10-20');
         $this->_model->setCurrencyRate(10);
-        
+
         $this->_model->apply($request);
-        
+
         $filters = $this->_model->getLayer()->getState()->getFilters();
         $this->assertArrayHasKey(0, $filters);
         $this->assertEquals(

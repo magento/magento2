@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model;
 
 use Magento\Framework\Phrase;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\ImageDirectoryBaseProvider;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
@@ -21,7 +23,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Config
+     * @var Import\Config
      */
     protected $_importConfig;
 
@@ -65,13 +67,35 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->_importConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\ImportExport\Model\Import\Config::class
+        $this->_importConfig = Bootstrap::getObjectManager()->create(
+            Import\Config::class
         );
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        /** @var ImageDirectoryBaseProvider $provider */
+        $provider = Bootstrap::getObjectManager()->get(ImageDirectoryBaseProvider::class);
+        $this->_model = Bootstrap::getObjectManager()->create(
             Import::class,
-            ['importConfig' => $this->_importConfig]
+            [
+                'importConfig' => $this->_importConfig
+            ]
         );
+        $this->_model->setData('images_base_directory', $provider->getDirectory());
+    }
+
+    /**
+     * Test validation of images directory against provided base directory.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Images file directory is outside required directory
+     * @return void
+     */
+    public function testImagesDirBase(): void
+    {
+        $this->_model->setData(
+            Import::FIELD_NAME_VALIDATION_STRATEGY,
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+        );
+        $this->_model->setData(Import::FIELD_NAME_IMG_FILE_DIR, '../_files');
+        $this->_model->importSource();
     }
 
     /**
@@ -80,7 +104,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     public function testImportSource()
     {
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
-        $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $customersCollection = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
 
@@ -134,9 +158,20 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_model->validateSource($source);
     }
 
-    public function testGetEntity()
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Entity is unknown
+     */
+    public function testGetUnknownEntity()
     {
         $entityName = 'entity_name';
+        $this->_model->setEntity($entityName);
+        $this->assertSame($entityName, $this->_model->getEntity());
+    }
+
+    public function testGetEntity()
+    {
+        $entityName = 'catalog_product';
         $this->_model->setEntity($entityName);
         $this->assertSame($entityName, $this->_model->getEntity());
     }

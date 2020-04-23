@@ -6,7 +6,7 @@ define([
     'jquery',
     'Magento_Catalog/js/price-utils',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/dropdown',
     'mage/template'
 ], function ($, priceUtils, _) {
@@ -299,8 +299,9 @@ define([
          * @param {Event} event
          * @param {mixed} priceIndex
          * @param {Object} prices
+         * @param {Object|undefined} $priceBox
          */
-        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices) {
+        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices, $priceBox) {
 
             var defaultMsrp,
                 defaultPrice,
@@ -322,18 +323,20 @@ define([
                 finalPrice = prices[priceIndex].finalPrice.amount;
 
                 if (msrpPrice === null || msrpPrice <= finalPrice) {
-                    this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice));
+                    this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice), $priceBox);
                 } else {
                     this.updateMsrpPrice(
                         priceUtils.formatPrice(finalPrice),
                         priceUtils.formatPrice(msrpPrice),
-                        false);
+                        false,
+                        $priceBox);
                 }
             } else {
                 this.updateMsrpPrice(
                     priceUtils.formatPrice(defaultPrice),
                     priceUtils.formatPrice(defaultMsrp),
-                    true);
+                    true,
+                    $priceBox);
             }
         },
 
@@ -343,25 +346,29 @@ define([
          * @param {String} finalPrice
          * @param {String} msrpPrice
          * @param {Boolean} useDefaultPrice
+         * @param {Object|undefined} $priceBox
          */
-        updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
+        updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice, $priceBox) {
             var options = this.tierOptions || this.options;
 
-            $(this.options.fallbackPriceContainer).hide();
-            $(this.options.displayPriceContainer).show();
-            $(this.options.mapInfoLinks).show();
+            $(this.options.fallbackPriceContainer, $priceBox).hide();
+            $(this.options.displayPriceContainer, $priceBox).show();
+            $(this.options.mapInfoLinks, $priceBox).show();
 
             if (useDefaultPrice || !this.wasOpened) {
-                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
-                $(this.options.displayPriceElement).html(msrpPrice);
+                if (this.$popup) {
+                    this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+                    this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                }
+
+                $(this.options.displayPriceElement, $priceBox).html(msrpPrice);
                 this.wasOpened = true;
             }
 
             if (!useDefaultPrice) {
                 this.$popup.find(this.options.msrpPriceElement).html(msrpPrice);
                 this.$popup.find(this.options.priceElement).html(finalPrice);
-                $(this.options.displayPriceElement).html(msrpPrice);
+                $(this.options.displayPriceElement, $priceBox).html(msrpPrice);
             }
         },
 
@@ -369,12 +376,13 @@ define([
          * Display non MAP price for irrelevant products
          *
          * @param {String} price
+         * @param {Object|undefined} $priceBox
          */
-        updateNonMsrpPrice: function (price) {
-            $(this.options.fallbackPriceElement).html(price);
-            $(this.options.displayPriceContainer).hide();
-            $(this.options.mapInfoLinks).hide();
-            $(this.options.fallbackPriceContainer).show();
+        updateNonMsrpPrice: function (price, $priceBox) {
+            $(this.options.fallbackPriceElement, $priceBox).html(price);
+            $(this.options.displayPriceContainer, $priceBox).hide();
+            $(this.options.mapInfoLinks, $priceBox).hide();
+            $(this.options.fallbackPriceContainer, $priceBox).show();
         },
 
         /**

@@ -11,6 +11,7 @@ namespace Magento\Theme\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Ui\Component\Listing\Column\ViewAction;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ViewActionTest contains unit tests for \Magento\Theme\Ui\Component\Listing\Column\ViewAction class
@@ -25,7 +26,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
@@ -99,20 +100,50 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                ['name' => 'itemName', 'config' => []],
-                [['itemName' => '', 'entity_id' => 1]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'entity_id' => 1]],
+                [
+                    'name' => 'itemName',
+                    'config' => []
+                ],
+                [
+                    ['itemName' => '', 'entity_id' => 1]
+                ],
+                [
+                    [
+                        'itemName' => [
+                            'view' => [
+                                'href' => 'url',
+                                'label' => __('View'),
+                            ]
+                        ],
+                        'entity_id' => 1
+                    ]
+                ],
                 '#',
                 ['id' => 1]
             ],
             [
-                ['name' => 'itemName', 'config' => [
-                    'viewUrlPath' => 'url_path',
-                    'urlEntityParamName' => 'theme_id',
-                    'indexField' => 'theme_id']
+                [
+                    'name' => 'itemName',
+                    'config' => [
+                        'viewUrlPath' => 'url_path',
+                        'urlEntityParamName' => 'theme_id',
+                        'indexField' => 'theme_id'
+                    ]
                 ],
-                [['itemName' => '', 'theme_id' => 2]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'theme_id' => 2]],
+                [
+                    ['itemName' => '', 'theme_id' => 2]
+                ],
+                [
+                    [
+                        'itemName' => [
+                            'view' => [
+                                'href' => 'url',
+                                'label' => __('View'),
+                            ]
+                        ],
+                        'theme_id' => 2
+                    ]
+                ],
                 'url_path',
                 ['theme_id' => 2]
             ]

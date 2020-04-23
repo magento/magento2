@@ -207,6 +207,10 @@
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>int</dataType>
+                <tooltip>
+                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <description>What is this?</description>
+                </tooltip>
                 <label translate="true">Store View</label>
                 <dataScope>store_id</dataScope>
             </settings>
@@ -245,6 +249,7 @@
         </field>
         <field name="layout_update_xml" formElement="textarea">
             <argument name="data" xsi:type="array">
+                <item name="disabled" xsi:type="boolean">true</item>
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>
                 </item>
@@ -253,6 +258,26 @@
                 <dataType>text</dataType>
                 <label translate="true">Layout Update XML</label>
                 <dataScope>layout_update_xml</dataScope>
+            </settings>
+        </field>
+        <field name="custom_layout_update_select" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Custom Layout Update</label>
+                <tooltip>
+                    <description translate="true">
+                        List of layout files with an update handle "selectable"
+                        matching *PageIdentifier*_*UpdateID*.
+                        &lt;br/&gt;
+                        See Magento documentation for more information
+                    </description>
+                </tooltip>
+                <dataScope>layout_update_selected</dataScope>
             </settings>
         </field>
     </fieldset>

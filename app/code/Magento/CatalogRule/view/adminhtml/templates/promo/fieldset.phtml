@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**@var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $block */
 ?>
 <?php $_element = $block->getElement() ?>
 <?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
 <div class="rule-tree">
-    <fieldset id="<?= /* @escapeNotVerified */ $_jsObjectName ?>" <?= /* @escapeNotVerified */ $_element->serialize(['class']) ?> class="fieldset">
-        <legend class="legend"><span><?= /* @escapeNotVerified */ $_element->getLegend() ?></span></legend>
+    <fieldset id="<?= $block->escapeHtmlAttr($_jsObjectName) ?>" <?= /* @noEscape */ $_element->serialize(['class']) ?> class="fieldset">
+        <legend class="legend"><span><?= $block->escapeHtml($_element->getLegend()) ?></span></legend>
         <br>
-    <?php if ($_element->getComment()): ?>
+    <?php if ($_element->getComment()) : ?>
         <div class="messages">
             <div class="message message-notice"><?= $block->escapeHtml($_element->getComment()) ?></div>
         </div>
@@ -30,9 +28,9 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?= /* @escapeNotVerified */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @escapeNotVerified */ $_jsObjectName ?>', '<?= /* @escapeNotVerified */ $block->getNewChildUrl() ?>');
-<?php if ($_element->getReadonly()): ?>
-    <?= $_element->getHtmlId() ?>.setReadonly(true);
+window.<?= /* @noEscape */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @noEscape */ $_jsObjectName ?>', '<?= /* @noEscape */ $block->getNewChildUrl() ?>');
+<?php if ($_element->getReadonly()) : ?>
+    <?= /* @noEscape */ $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>
 
 });

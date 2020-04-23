@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Checkout\Model\Type\Onepage;
+use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\Type\Factory;
@@ -17,8 +18,6 @@ use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class CheckoutTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckoutTest extends \PHPUnit\Framework\TestCase
@@ -278,7 +277,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue((bool)$shippingAddress->getSameAsBilling());
         $this->assertNull($shippingAddress->getPrefix());
         $this->assertNull($shippingAddress->getMiddlename());
-        $this->assertNull($shippingAddress->getLastname());
         $this->assertNull($shippingAddress->getSuffix());
         $this->assertTrue($shippingAddress->getShouldIgnoreValidation());
         $this->assertContains('exported', $shippingAddress->getFirstname());
@@ -635,10 +633,6 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['call', 'getExportedShippingAddress', 'getExportedBillingAddress'])
             ->getMock();
 
-        $api->expects($this->any())
-            ->method('call')
-            ->will($this->returnValue([]));
-
         $apiTypeFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($api));
@@ -652,6 +646,14 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $api->expects($this->any())
             ->method('getExportedShippingAddress')
             ->will($this->returnValue($exportedShippingAddress));
+
+        $this->addCountryFactory($api);
+        $data = [
+            'COUNTRYCODE' => $quote->getShippingAddress()->getCountryId(),
+            'STATE' => 'unknown'
+        ];
+        $api->method('call')
+            ->willReturn($data);
 
         $paypalInfo->expects($this->once())
             ->method('importToPayment')
@@ -710,5 +712,20 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $quoteCollection = $this->objectManager->create(Collection::class);
 
         return $quoteCollection->getLastItem();
+    }
+
+    /**
+     * Adds countryFactory to a mock.
+     *
+     * @param \PHPUnit\Framework\MockObject\MockObject $api
+     * @throws \ReflectionException
+     * @return void
+     */
+    private function addCountryFactory(\PHPUnit\Framework\MockObject\MockObject $api): void
+    {
+        $reflection = new \ReflectionClass($api);
+        $property = $reflection->getProperty('_countryFactory');
+        $property->setAccessible(true);
+        $property->setValue($api, $this->objectManager->get(CountryFactory::class));
     }
 }

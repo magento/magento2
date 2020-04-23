@@ -8,14 +8,15 @@ namespace Magento\Ui\Test\Unit\Component;
 use Magento\Ui\Component\MassAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class MassActionTest
+ * Class MassAction test for Component
  */
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
@@ -104,7 +105,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'first_action',
                     'label' => 'First Action',
-                    'url' => '/module/controller/firstAction'
+                    'url' => '/module/controller/firstAction',
                 ],
             ],
             [
@@ -123,7 +124,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/secondSubAction2'
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

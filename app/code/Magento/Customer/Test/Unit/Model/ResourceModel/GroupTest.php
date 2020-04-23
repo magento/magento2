@@ -127,7 +127,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $dbAdapter->expects($this->any())->method('describeTable')->willReturn([]);
+        $dbAdapter->expects($this->any())->method('describeTable')->willReturn(['customer_group_id' => []]);
         $dbAdapter->expects($this->any())->method('update')->willReturnSelf();
         $dbAdapter->expects($this->once())->method('lastInsertId')->willReturn($expectedId);
         $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)

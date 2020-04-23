@@ -3,35 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
-/**
- * \Magento\Sales\Block\Adminhtml\Order\Create\Coupons
- *
- */
+/* @var \Magento\Sales\Block\Adminhtml\Order\Create\Coupons $block */
 ?>
-
 <div class="admin__field field-apply-coupon-code">
-    <label class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Apply Coupon Code') ?></span></label>
+    <label class="admin__field-label"><span><?= $block->escapeHtml(__('Apply Coupon Code')) ?></span></label>
     <div class="admin__field-control">
+        <?php if (!$block->getCouponCode()) : ?>
         <input type="text" class="admin__control-text" id="coupons:code" value="" name="coupon_code" />
-        <?= $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
-        <?php if ($block->getCouponCode()): ?>
+            <?= $block->getButtonHtml(__('Apply'), 'order.handleOnclickCoupon($F(\'coupons:code\'))') ?>
+        <?php endif; ?>
+        <?php if ($block->getCouponCode()) : ?>
         <p class="added-coupon-code">
             <span><?= $block->escapeHtml($block->getCouponCode()) ?></span>
-            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?= /* @escapeNotVerified */ __('Remove Coupon Code') ?>"
-               class="action-remove"><span><?= /* @escapeNotVerified */ __('Remove') ?></span></a>
+            <a href="#" onclick="order.applyCoupon(''); return false;" title="<?= $block->escapeHtmlAttr(__('Remove Coupon Code')) ?>"
+               class="action-remove"><span><?= $block->escapeHtml(__('Remove')) ?></span></a>
         </p>
         <?php endif; ?>
         <script>
-            require(["Magento_Sales/order/create/form"], function(){
-
-                order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-                order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-
+            require([
+                "jquery",
+                'Magento_Ui/js/modal/alert',
+                'mage/translate',
+                "Magento_Sales/order/create/form"
+            ], function($, alert) {
+                order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()) : ?>false<?php else : ?>true<?php endif; ?>);
+                order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()) : ?>false<?php else : ?>true<?php endif; ?>);
+                order.handleOnclickCoupon = function (code) {
+                    if (!code) {
+                        alert({
+                            content: $.mage.__('Please enter a coupon code!')
+                        });
+                    } else {
+                        order.applyCoupon(code);
+                    }
+                };
             });
         </script>
     </div>

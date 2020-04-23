@@ -10,9 +10,9 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontQuickSearchResultsSection">
         <element name="searchTextBox" type="text" selector="#search"/>
-        <element name="searchTextBoxButton" type="button" selector="button[class='action search']"/>
+        <element name="searchTextBoxButton" type="button" selector="button[class='action search']" timeout="30"/>
         <element name="allResults" type="block" selector=".column.main"/>
-        <element name="productLink" type="select" selector="a[class='product-item-link']"/>
+        <element name="productLink" type="select" selector="a[class='product-item-link']" timeout="30"/>
         <element name="productByIndex" type="button" selector=".product-items li:nth-child({{var}}) .product-item-info" parameterized="true"/>
         <element name="productByName" type="button" selector="//div[contains(@class, 'product-item-info') and .//*[contains(., '{{var}}')]]" parameterized="true"/>
         <element name="addToCartBtn" type="button" selector="//button[contains(@class, 'tocart')]"/>

@@ -45,7 +45,10 @@ class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
     {
@@ -61,7 +64,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -89,7 +92,10 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
      *
      * @expectedException Exception
      * @expectedExceptionMessage Purchase order number is a required field.
@@ -106,7 +112,7 @@ mutation {
       payment_method: {
           code: "$methodCode"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -142,7 +148,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code

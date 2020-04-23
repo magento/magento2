@@ -58,7 +58,7 @@
                 <input type="text"
                        class="input-text admin__control-text"
                        name="shipment[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]"
-                       value="<?= $block->escapeHtmlAttr($_item->getQty()*1) ?>" />
+                       value="<?= (float)$_item->getQty() * 1 ?>" />
             <?php else : ?>
                 &nbsp;
             <?php endif; ?>

@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest" summary="Create Cms Page" ticketId="MAGETWO-25580">
         <variation name="CreateCmsPageEntityTestVariation1" summary="Create CMS Content Page" ticketId="MAGETWO-12399">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1, mftf_migrated:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -20,7 +20,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2" summary="Create page for default store view">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -31,7 +31,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4" summary="Create disabled page">
-            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="tag" xsi:type="string">severity:S3, mftf_migrated:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
@@ -42,7 +42,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation5" summary="Block Cache Exploit" ticketId="MAGETWO-48017">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">severity:S2, mftf_migrated:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
@@ -55,7 +55,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation6" summary="Create CMS page with single store mode" ticketId="MAGETWO-59654">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="configData" xsi:type="string">enable_single_store_mode</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>

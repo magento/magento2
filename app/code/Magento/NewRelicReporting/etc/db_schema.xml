@@ -22,7 +22,7 @@
     </table>
     <table name="reporting_module_status" resource="default" engine="innodb" comment="Module Status Table">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Module Id"/>
+                comment="Module ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Module Name"/>
         <column xsi:type="varchar" name="active" nullable="true" length="255" comment="Module Active Status"/>
         <column xsi:type="varchar" name="setup_version" nullable="true" length="255" comment="Module Version"/>

@@ -33,17 +33,17 @@
     <?php endif; ?>
     <tr id="order-item-row-<?= $block->escapeHtmlAttr($_item->getId()) ?>" class="<?php if ($_item->getParentItem()) : ?>item-options-container<?php else : ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()) : ?> data-th="<?= $block->escapeHtmlAttr($attributes['option_label']) ?>"<?php endif; ?>>
         <?php if (!$_item->getParentItem()) : ?>
-            <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+            <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>">
                 <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
             </td>
         <?php else : ?>
-            <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
+            <td class="col value" data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
         <?php endif; ?>
-        <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= $block->escapeHtml($_item->getSku()) ?></td>
-        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>">
+        <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>"><?= $block->escapeHtml($_item->getSku()) ?></td>
+        <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty Shipped')) ?>">
             <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())) : ?>
                 <?php if (isset($shipItems[$_item->getId()])) : ?>
-                    <?= $block->escapeHtml($shipItems[$_item->getId()]->getQty()*1) ?>
+                    <?= (float)$shipItems[$_item->getId()]->getQty() * 1 ?>
                 <?php elseif ($_item->getIsVirtual()) : ?>
                     <?= $block->escapeHtml(__('N/A')) ?>
                 <?php else : ?>

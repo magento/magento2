@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="OpenEditProductOnBackendActionGroup">
+        <annotations>
+            <description>Click on Edit for the provided Product SKU.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
+
         <click selector="{{AdminProductGridSection.productRowBySku(product.sku)}}" stepKey="clickOnProductRow"/>
         <waitForPageLoad time="30" stepKey="waitForProductPageLoad"/>
         <seeInField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeProductSkuOnEditProductPage"/>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- 20 products created and category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
@@ -113,7 +113,7 @@
 
             <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login to Storefront as Customer -->
@@ -125,7 +125,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
-        <selectOption userInput="30" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
+        <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
         <waitForPageLoad stepKey="waitForLoadProducts"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 

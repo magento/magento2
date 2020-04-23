@@ -6,6 +6,7 @@
 namespace Magento\Review\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Model\Review;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -109,7 +110,7 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->storeModelMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId']);
         $this->reviewMock = $this->createPartialMock(
             \Magento\Review\Model\Review::class,
-            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate']
+            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate', 'getEntityIdByCode']
         );
         $this->reviewFactoryMock = $this->createPartialMock(\Magento\Review\Model\ReviewFactory::class, ['create']);
         $this->ratingMock = $this->createPartialMock(
@@ -174,6 +175,10 @@ class PostTest extends \PHPUnit\Framework\TestCase
         $this->reviewMock->expects($this->once())
             ->method('aggregate')
             ->willReturn($this->reviewMock);
+        $this->reviewMock->expects($this->once())
+            ->method('getEntityIdByCode')
+            ->with(Review::ENTITY_PRODUCT_CODE)
+            ->willReturn(1);
         $this->ratingMock->expects($this->once())
             ->method('setRatingId')
             ->willReturnSelf();
