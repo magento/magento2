@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Setup\DataInstaller;
@@ -13,8 +15,9 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
+ * Add Bulgaria States
+ * 
  * Class AddDataForBulgaria
- * @package Magento\Directory\Setup\Patch
  */
 class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
 {
@@ -43,7 +46,7 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -95,7 +98,7 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -105,7 +108,7 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -113,7 +116,7 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
