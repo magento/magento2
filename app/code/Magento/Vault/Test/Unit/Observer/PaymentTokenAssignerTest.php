@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -35,7 +37,7 @@ class PaymentTokenAssignerTest extends TestCase
      */
     private $observer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
         $this->observer = new PaymentTokenAssigner($this->paymentTokenManagement);

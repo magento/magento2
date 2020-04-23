@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\Filter;
@@ -460,13 +463,8 @@ class PaymentTokenManagementTest extends TestCase
         $customerFilter = $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
         $visibilityFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
         $isActiveFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
+        $expiresAtFilter = $this->createExpectedFilter(PaymentTokenInterface::EXPIRES_AT, '2015-01-01 00:00:00', 3);
 
-        // express at expectations
-        $expiresAtFilter = $this->createExpectedFilter(
-            PaymentTokenInterface::EXPIRES_AT,
-            '2015-01-01 00:00:00',
-            3
-        );
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
@@ -486,7 +484,6 @@ class PaymentTokenManagementTest extends TestCase
 
         $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->withConsecutive($customerFilter, $visibilityFilter, $isActiveFilter, $expiresAtFilter)
             ->willReturnSelf();
 
         $this->searchCriteriaBuilder->expects(self::once())

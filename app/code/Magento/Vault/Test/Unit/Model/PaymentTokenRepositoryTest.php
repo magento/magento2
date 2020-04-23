@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -151,8 +153,6 @@ class PaymentTokenRepositoryTest extends TestCase
             ->getMock();
     }
 
-    /**
-     */
     public function testRepositoryGetList()
     {
         $this->collectionMock->expects($this->once())
@@ -177,8 +177,6 @@ class PaymentTokenRepositoryTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testRepositoryGetById()
     {
         $this->paymentTokenFactoryMock->expects($this->once())
@@ -191,8 +189,6 @@ class PaymentTokenRepositoryTest extends TestCase
         $this->assertSame($this->paymentTokenMock, $this->repositoryModel->getById(10));
     }
 
-    /**
-     */
     public function testRepositoryDelete()
     {
         $this->paymentTokenFactoryMock->expects($this->exactly(2))
@@ -209,8 +205,6 @@ class PaymentTokenRepositoryTest extends TestCase
         $this->assertFalse($this->paymentTokenMock->getIsActive());
     }
 
-    /**
-     */
     public function testRepositorySave()
     {
         $this->resourceModelMock->expects($this->once())

@@ -50,7 +50,7 @@ class VaultTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->vaultProvider = $this->createMock(MethodInterface::class);
