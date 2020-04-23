@@ -11,6 +11,7 @@
                 + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
                 + ' data-price-type=""' + ' class="price-wrapper ">'
                 + '<span class="price">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                + '<span class="price"> excl. tax ' + priceUtils.formatPrice(item.excl_tax_price, currencyFormat) + '</span>
                 + '</span>'
             + '</span>'; %>
         <li class="item">

@@ -61,6 +61,10 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @var CustomerGroupRetrieverInterface
      */
     private $customerGroupRetriever;
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param Product $saleableItem
@@ -78,7 +82,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
         GroupManagementInterface $groupManagement,
-        CustomerGroupRetrieverInterface $customerGroupRetriever = null
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $quantity = (float)$quantity ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
@@ -91,6 +96,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         } else {
             $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();
         }
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -157,6 +163,9 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                     /* convert string value to float */
                     $priceData['price_qty'] = $priceData['price_qty'] * 1;
                     $priceData['price'] = $this->applyAdjustment($priceData['price']);
+                    if ($this->scopeConfig->getValue('tax/display/type') == 3) {
+                        $priceData['excl_tax_price'] = $this->applyAdjustment($priceData['excl_tax_price'], true);
+                    }
                 }
             );
         }
