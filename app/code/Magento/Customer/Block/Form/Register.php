@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Block\Form;
 
+use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\ObjectManager;
 use Magento\Newsletter\Model\Config;
@@ -52,6 +53,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
      * @param Config $newsLetterConfig
+     * @param Address|null $addressHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -66,8 +68,11 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = [],
-        Config $newsLetterConfig = null
+        Config $newsLetterConfig = null,
+        Address $addressHelper = null
     ) {
+        $data['addressHelper'] = $addressHelper ?: ObjectManager::getInstance()->get(Address::class);
+        $data['directoryHelper'] = $directoryHelper;
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
