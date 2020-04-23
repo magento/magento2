@@ -61,7 +61,10 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('displayPriceExcludingTax')
             ->willReturn($displayPriceExcludingTax);
 
-        $eventObject=$this->createPartialMock(Event::class, ['getResponseObject']);
+        $eventObject=$this->getMockBuilder(Event::class)
+            ->addMethods(['getResponseObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventObject->expects($this->any())
             ->method('getResponseObject')
             ->willReturn($frameworkObject);

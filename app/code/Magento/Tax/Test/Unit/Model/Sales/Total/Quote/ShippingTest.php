@@ -147,16 +147,20 @@ class ShippingTest extends TestCase
     private function getMockObject($className, array $objectState)
     {
         $getterValueMap = [];
-        $methods = ['__wakeup'];
+        $methods = [];
         foreach ($objectState as $key => $value) {
             $getterName = 'get' . str_replace('_', '', ucwords($key, '_'));
             $getterValueMap[$getterName] = $value;
             $methods[] = $getterName;
         }
 
-        $mock = $this->createPartialMock($className, $methods);
+        $mock = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->addMethods(array_diff($methods, get_class_methods($className)))
+            ->onlyMethods(get_class_methods($className))
+            ->getMock();
         foreach ($getterValueMap as $getterName => $value) {
-            $mock->expects($this->any())->method($getterName)->will($this->returnValue($value));
+            $mock->expects($this->any())->method($getterName)->willReturn($value);
         }
 
         return $mock;

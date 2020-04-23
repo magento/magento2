@@ -59,10 +59,11 @@ class AdjustmentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            Context::class,
-            ['getEventManager', 'getStoreConfig', 'getScopeConfig']
-        );
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getStoreConfig'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceCurrencyMock = $this->createMock(PriceCurrency::class);
         $this->taxHelperMock = $this->createMock(Data::class);
 
@@ -74,10 +75,10 @@ class AdjustmentTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -112,7 +113,7 @@ class AdjustmentTest extends TestCase
         $shouldDisplayBothPrices = true;
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue($shouldDisplayBothPrices));
+            ->willReturn($shouldDisplayBothPrices);
         $this->assertEquals($shouldDisplayBothPrices, $this->model->displayBothPrices());
     }
 
@@ -146,7 +147,7 @@ class AdjustmentTest extends TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmountExclTax();
@@ -186,8 +187,8 @@ class AdjustmentTest extends TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
-            ->with($this->anything(), $this->equalTo($includeContainer))
-            ->will($this->returnValue($expectedPrice));
+            ->with($this->anything(), $includeContainer)
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmount($includeContainer);
@@ -267,7 +268,7 @@ class AdjustmentTest extends TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceIncludingTax();
 
@@ -283,7 +284,7 @@ class AdjustmentTest extends TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceExcludingTax();
 
@@ -304,17 +305,17 @@ class AdjustmentTest extends TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setDisplayValue')
             ->with($displayValue);
         $amountRender->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
 
         $this->model->render($amountRender, $arguments);
     }
@@ -324,25 +325,24 @@ class AdjustmentTest extends TestCase
         $arguments = [];
         $this->model->setZone(Render::ZONE_ITEM_VIEW);
 
-        $amountRender = $this->createPartialMock(Amount::class, [
-                'setPriceDisplayLabel',
-                'setPriceWrapperCss',
-                'setPriceId',
-                'getSaleableItem'
-            ]);
+        $amountRender = $this->getMockBuilder(Amount::class)
+            ->addMethods(['setPriceDisplayLabel', 'setPriceWrapperCss', 'setPriceId'])
+            ->onlyMethods(['getSaleableItem'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product = $this->getMockForAbstractClass(SaleableInterface::class);
         $product->expects($this->once())
             ->method('getId');
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setPriceDisplayLabel');
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $amountRender->expects($this->once())
             ->method('setPriceId');
         $amountRender->expects($this->once())

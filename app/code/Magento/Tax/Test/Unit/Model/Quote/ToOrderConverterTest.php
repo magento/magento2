@@ -234,12 +234,12 @@ class ToOrderConverterTest extends TestCase
                             'item_type' => 'product',
                             'associated_item_id' => null,
                             'rates' => [
-                                    [
-                                        'percent' => 6,
-                                        'code' => 'IL',
-                                        'title' => 'IL',
-                                    ],
+                                [
+                                    'percent' => 6,
+                                    'code' => 'IL',
+                                    'title' => 'IL',
                                 ],
+                            ],
                         ],
                     ],
                     'shipping' => [
@@ -260,11 +260,11 @@ class ToOrderConverterTest extends TestCase
                 ],
                 'item_applied_taxes_expected' => [
                     'sequence-1' => [
-                            'item_id' => 146,
-                            'type' => 'product',
-                            'associated_item_id' => null,
-                            'applied_taxes' => [
-                                [
+                        'item_id' => 146,
+                        'type' => 'product',
+                        'associated_item_id' => null,
+                        'applied_taxes' => [
+                            [
                                 'amount' => 0.06,
                                 'item_id' => 146,
                                 'item_type' => 'product',
@@ -278,8 +278,8 @@ class ToOrderConverterTest extends TestCase
                                         ]
                                     ],
                                 ],
-                                ]
-                            ],
+                            ]
+                        ],
                     ],
                     'shipping' => [
                         'item_id' => 146,

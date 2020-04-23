@@ -18,19 +18,21 @@ class ProductTest extends TestCase
     {
         $collectionClassName = AbstractCollection::class;
         $collectionMock = $this->getMockBuilder($collectionClassName)
-            ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()
+            ->getMock();
         $collectionMock->expects($this->once())->method('addAttributeToFilter')
-            ->with($this->equalTo('tax_class_id'), $this->equalTo(1))->willReturnSelf();
+            ->with('tax_class_id', 1)->willReturnSelf();
         $collectionMock->expects($this->once())->method('getSize')
             ->willReturn(1);
 
         $productMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getCollection', '__wakeup', 'getEntityId'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock->expects($this->once())->method('getCollection')->willReturn($collectionMock);
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var $model \Magento\Tax\Model\TaxClass\Type\Product */
+        /** @var \Magento\Tax\Model\TaxClass\Type\Product $model */
         $model = $objectManagerHelper->getObject(
             \Magento\Tax\Model\TaxClass\Type\Product::class,
             ['modelProduct' => $productMock, 'data' => ['id' => 1]]

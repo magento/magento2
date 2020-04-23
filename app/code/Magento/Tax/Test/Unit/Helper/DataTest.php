@@ -129,7 +129,7 @@ class DataTest extends TestCase
         ];
         $this->priceCurrencyMock->expects($this->exactly(2))
             ->method('round')
-            ->will($this->returnValueMap($roundValues));
+            ->willReturnMap($roundValues);
 
         $appliedTaxes = [$orderDetailsItem];
 
@@ -185,41 +185,41 @@ class DataTest extends TestCase
                 )->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
-                    ->will($this->returnValue($appliedTaxData['amount']));
+                    ->willReturn($appliedTaxData['amount']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getBaseAmount')
-                    ->will($this->returnValue($appliedTaxData['base_amount']));
+                    ->willReturn($appliedTaxData['base_amount']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getCode')
-                    ->will($this->returnValue($appliedTaxData['code']));
+                    ->willReturn($appliedTaxData['code']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getTitle')
-                    ->will($this->returnValue($appliedTaxData['title']));
+                    ->willReturn($appliedTaxData['title']);
                 $appliedTaxesMock->expects($this->any())
                     ->method('getPercent')
-                    ->will($this->returnValue($appliedTaxData['percent']));
+                    ->willReturn($appliedTaxData['percent']);
                 $appliedTaxesMocks[] = $appliedTaxesMock;
             }
             $orderTaxDetailsItemMock = $this->getMockBuilder(OrderTaxDetailsItemInterface::class)
                 ->getMock();
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getItemId')
-                ->will($this->returnValue($itemId));
+                ->willReturn($itemId);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getAssociatedItemId')
-                ->will($this->returnValue($associatedItemId));
+                ->willReturn($associatedItemId);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getType')
-                ->will($this->returnValue($itemType));
+                ->willReturn($itemType);
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getAppliedTaxes')
-                ->will($this->returnValue($appliedTaxesMocks));
+                ->willReturn($appliedTaxesMocks);
 
             $itemMocks[] = $orderTaxDetailsItemMock;
         }
         $orderTaxItemDetailsMock->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue($itemMocks));
+            ->willReturn($itemMocks);
 
         return $orderTaxItemDetailsMock;
     }
@@ -248,7 +248,7 @@ class DataTest extends TestCase
         $this->orderTaxManagementMock->expects($this->any())
             ->method('getOrderTaxDetails')
             ->with($orderId)
-            ->will($this->returnValue($orderTaxDetailsMock));
+            ->willReturn($orderTaxDetailsMock);
 
         $invoiceShippingTaxAmount =
             isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
@@ -269,12 +269,10 @@ class DataTest extends TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will(
-                $this->returnCallback(
-                    function ($arg) {
-                        return round($arg, 2);
-                    }
-                )
+            ->willReturnCallback(
+                function ($arg) {
+                    return round($arg, 2);
+                }
             );
 
         $result = $this->helper->getCalculatedTaxes($source);
@@ -299,21 +297,21 @@ class DataTest extends TestCase
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
-                            'items' => [
-                                'itemTax1' => [
-                                    'item_id' => 1,
-                                    'applied_taxes' => [
-                                        [
-                                            'amount' => 5.0,
-                                            'base_amount' => 5.0,
-                                            'code' => 'US-CA',
-                                            'title' => 'US-CA-Sales-Tax',
-                                            'percent' => 20.0,
-                                        ],
+                        'items' => [
+                            'itemTax1' => [
+                                'item_id' => 1,
+                                'applied_taxes' => [
+                                    [
+                                        'amount' => 5.0,
+                                        'base_amount' => 5.0,
+                                        'code' => 'US-CA',
+                                        'title' => 'US-CA-Sales-Tax',
+                                        'percent' => 20.0,
                                     ],
                                 ],
                             ],
                         ],
+                    ],
                 ],
                 'invoice' => [
                     'invoice_items' => [
@@ -356,34 +354,34 @@ class DataTest extends TestCase
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
-                            'items' => [
-                                'itemTax1' => [
-                                    'item_id' => 1,
-                                    'applied_taxes' => [
-                                        [
-                                            'amount' => 5.0,
-                                            'base_amount' => 5.0,
-                                            'code' => 'US-CA',
-                                            'title' => 'US-CA-Sales-Tax',
-                                            'percent' => 20.0,
-                                        ],
+                        'items' => [
+                            'itemTax1' => [
+                                'item_id' => 1,
+                                'applied_taxes' => [
+                                    [
+                                        'amount' => 5.0,
+                                        'base_amount' => 5.0,
+                                        'code' => 'US-CA',
+                                        'title' => 'US-CA-Sales-Tax',
+                                        'percent' => 20.0,
                                     ],
                                 ],
-                                'weeeTax1' => [
-                                    'associated_item_id' => 1,
-                                    'type' => 'weee',
-                                    'applied_taxes' => [
-                                        [
-                                            'amount' => 3.0,
-                                            'base_amount' => 3.0,
-                                            'code' => 'US-CA',
-                                            'title' => 'US-CA-Sales-Tax',
-                                            'percent' => 20.0,
-                                        ],
+                            ],
+                            'weeeTax1' => [
+                                'associated_item_id' => 1,
+                                'type' => 'weee',
+                                'applied_taxes' => [
+                                    [
+                                        'amount' => 3.0,
+                                        'base_amount' => 3.0,
+                                        'code' => 'US-CA',
+                                        'title' => 'US-CA-Sales-Tax',
+                                        'percent' => 20.0,
                                     ],
                                 ],
                             ],
                         ],
+                    ],
                 ],
                 'invoice' => [
                     'invoice_items' => [

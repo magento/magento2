@@ -115,7 +115,7 @@ class GetterSetterTest extends TestCase
                     'Percent' => 1.0,
                     'Amount' => 1.0,
                     'Rates' => [AppliedTaxRate::class
-                        ],
+                    ],
                     'ExtensionAttributes' => AppliedTaxExtension::class
                 ]
             ],
@@ -140,9 +140,9 @@ class GetterSetterTest extends TestCase
             [Details::class,
                 [
                     'AppliedTaxes' => [Tax::class
-                        ],
+                    ],
                     'Items' => [Item::class
-                        ],
+                    ],
                     'ExtensionAttributes' => OrderTaxDetailsExtension::class
                 ]
             ],
@@ -152,7 +152,7 @@ class GetterSetterTest extends TestCase
                     'ItemId' => 1,
                     'AssociatedItemId' => 1,
                     'AppliedTaxes' => [Tax::class
-                        ],
+                    ],
                     'ExtensionAttributes' => OrderTaxDetailsItemExtension::class
                 ]
             ],
@@ -163,7 +163,7 @@ class GetterSetterTest extends TestCase
                     'CustomerTaxClassKey' => Key::class,
                     'CustomerId' => 1,
                     'Items' => [Item::class
-                        ],
+                    ],
                     'CustomerTaxClassId' => 1,
                     'ExtensionAttributes' => QuoteDetailsExtension::class
                 ]
@@ -205,9 +205,9 @@ class GetterSetterTest extends TestCase
                     'TaxAmount' => 1.0,
                     'DiscountTaxCompensationAmount' => 1.0,
                     'AppliedTaxes' => [AppliedTax::class
-                        ],
+                    ],
                     'Items' => [\Magento\Tax\Model\TaxDetails\ItemDetails::class
-                        ],
+                    ],
                     'ExtensionAttributes' => TaxDetailsExtension::class
                 ]
             ],
@@ -225,7 +225,7 @@ class GetterSetterTest extends TestCase
                     'DiscountAmount' => 1.0,
                     'DiscountTaxCompensationAmount' => 1.0,
                     'AppliedTaxes' => [AppliedTax::class
-                        ],
+                    ],
                     'AssociatedItemCode' => 1,
                     'ExtensionAttributes' => TaxDetailsItemExtension::class
                 ]
@@ -243,7 +243,7 @@ class GetterSetterTest extends TestCase
                     'Rate' => 1.0,
                     'Code' => 'code',
                     'Titles' => [Title::class
-                        ],
+                    ],
                     'ExtensionAttributes' => TaxRateExtension::class
                 ]
             ],

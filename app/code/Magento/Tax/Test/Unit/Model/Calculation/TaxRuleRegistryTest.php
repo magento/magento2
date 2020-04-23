@@ -59,7 +59,7 @@ class TaxRuleRegistryTest extends TestCase
         $this->taxRuleModelMock->expects($this->any())
             ->method('load')
             ->with(self::TAX_RULE_ID)
-            ->will($this->returnValue($this->taxRuleModelMock));
+            ->willReturn($this->taxRuleModelMock);
 
         $this->taxRuleModelMock->expects($this->any())
             ->method('getId')
@@ -67,7 +67,7 @@ class TaxRuleRegistryTest extends TestCase
 
         $this->taxRuleModelFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->taxRuleModelMock));
+            ->willReturn($this->taxRuleModelMock);
         $this->taxRuleRegistry->registerTaxRule($this->taxRuleModelMock);
         $expected = $this->taxRuleRegistry->retrieveTaxRule(self::TAX_RULE_ID);
         $this->assertEquals($this->taxRuleModelMock, $expected);

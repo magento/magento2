@@ -45,7 +45,7 @@ class TaxClassTest extends TestCase
         $resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['beginTransaction', '_construct', 'getIdFieldName', 'addCommitCallback', 'commit',
-                          'save', '__wakeup', ])
+                'save', '__wakeup', ])
             ->getMock();
         $resourceMock
             ->expects($this->any())

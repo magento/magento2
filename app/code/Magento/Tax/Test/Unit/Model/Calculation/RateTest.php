@@ -32,17 +32,12 @@ class RateTest extends TestCase
     protected function setUp(): void
     {
         $this->objectHelper = new ObjectManager($this);
-        $this->resourceMock = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'beginTransaction',
-                'rollBack'
-            ]
-        );
-        $this->resourceMock->expects($this->any())->method('beginTransaction')->will($this->returnSelf());
+        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName'])
+            ->onlyMethods(['getConnection', 'beginTransaction', 'rollBack'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->resourceMock->expects($this->any())->method('beginTransaction')->willReturnSelf();
     }
 
     /**

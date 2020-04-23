@@ -68,7 +68,7 @@ class RendererTest extends TestCase
         $flag = false;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayPriceInclTax')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayPriceInclTax());
     }
@@ -78,7 +78,7 @@ class RendererTest extends TestCase
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayPriceExclTax')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayPriceExclTax());
     }
@@ -88,7 +88,7 @@ class RendererTest extends TestCase
         $flag = true;
         $this->itemPriceRenderer->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue($flag));
+            ->willReturn($flag);
 
         $this->assertEquals($flag, $this->renderer->displayBothPrices());
     }
@@ -102,7 +102,7 @@ class RendererTest extends TestCase
         $this->defaultColumnRenderer->expects($this->once())
             ->method('displayPrices')
             ->with($basePrice, $price)
-            ->will($this->returnValue($display));
+            ->willReturn($display);
 
         $this->assertEquals($display, $this->renderer->displayPrices($basePrice, $price));
     }
@@ -115,7 +115,7 @@ class RendererTest extends TestCase
         $this->itemPriceRenderer->expects($this->once())
             ->method('formatPrice')
             ->with($price)
-            ->will($this->returnValue($display));
+            ->willReturn($display);
 
         $this->assertEquals($display, $this->renderer->formatPrice($price));
     }
@@ -130,7 +130,7 @@ class RendererTest extends TestCase
         $this->itemPriceRenderer->expects($this->once())
             ->method('getTotalAmount')
             ->with($itemMock)
-            ->will($this->returnValue($totalAmount));
+            ->willReturn($totalAmount);
 
         $this->assertEquals($totalAmount, $this->renderer->getTotalAmount($itemMock));
     }

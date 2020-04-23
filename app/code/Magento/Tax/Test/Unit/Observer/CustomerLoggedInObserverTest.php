@@ -78,7 +78,8 @@ class CustomerLoggedInObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getCustomerAddress', 'getData'
+                    'getCustomerAddress',
+                    'getData'
                 ]
             )
             ->getMock();
@@ -91,7 +92,10 @@ class CustomerLoggedInObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'setCustomerTaxClassId', 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
+                    'setCustomerTaxClassId',
+                    'setDefaultTaxBillingAddress',
+                    'setDefaultTaxShippingAddress',
+                    'setWebsiteId'
                 ]
             )
             ->getMock();

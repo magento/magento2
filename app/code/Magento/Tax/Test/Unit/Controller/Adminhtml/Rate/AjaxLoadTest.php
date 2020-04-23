@@ -64,15 +64,15 @@ class AjaxLoadTest extends TestCase
     {
         $taxRateId=1;
         $returnArray=[
-        'tax_calculation_rate_id' => null,
-                    'tax_country_id' => 'US',
-                    'tax_region_id' => 2,
-                    'tax_postcode' => null,
-                    'code' => 'Tax Rate Code',
-                    'rate' => 7.5,
-                    'zip_is_range'=> 0,
-                    'title[1]' => 'texas',
-                ];
+            'tax_calculation_rate_id' => null,
+            'tax_country_id' => 'US',
+            'tax_region_id' => 2,
+            'tax_postcode' => null,
+            'code' => 'Tax Rate Code',
+            'rate' => 7.5,
+            'zip_is_range'=> 0,
+            'title[1]' => 'texas',
+        ];
         $objectManager = new ObjectManager($this);
         $rateTitles = [$objectManager->getObject(
             Title::class,
@@ -83,13 +83,13 @@ class AjaxLoadTest extends TestCase
             Rate::class,
             [
                 'data' => [
-                        'tax_country_id' => 'US',
-                        'tax_region_id' => 2,
-                        'tax_postcode' => null,
-                        'rate' => 7.5,
-                        'code' => 'Tax Rate Code',
-                        'titles' => $rateTitles,
-                    ],
+                    'tax_country_id' => 'US',
+                    'tax_region_id' => 2,
+                    'tax_postcode' => null,
+                    'rate' => 7.5,
+                    'code' => 'Tax Rate Code',
+                    'titles' => $rateTitles,
+                ],
             ]
         );
 

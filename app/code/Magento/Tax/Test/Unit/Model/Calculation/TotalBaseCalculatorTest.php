@@ -20,7 +20,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(3))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(true);
 
         $this->assertSame(
@@ -34,7 +34,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(3))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(true);
 
         $this->assertSame(
@@ -48,7 +48,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(2))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(false);
 
         $this->assertSame(

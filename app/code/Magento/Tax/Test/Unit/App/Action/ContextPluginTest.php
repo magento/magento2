@@ -109,8 +109,8 @@ class ContextPluginTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
-                'getWebsiteId', 'isLoggedIn'
+                    'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
+                    'getWebsiteId', 'isLoggedIn'
                 ]
             )
             ->getMock();

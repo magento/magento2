@@ -108,7 +108,7 @@ class ConverterTest extends TestCase
 
         $this->assertArrayHasKey('title[1]', $this->converter->createArrayFromServiceObject($taxRateMock, true));
         $this->assertArrayHasKey('title', $this->converter->createArrayFromServiceObject($taxRateMock));
-        $this->assertTrue(is_array($this->converter->createArrayFromServiceObject($taxRateMock)));
+        $this->assertIsArray($this->converter->createArrayFromServiceObject($taxRateMock));
     }
 
     public function testPopulateTaxRateData()

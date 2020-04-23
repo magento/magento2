@@ -58,7 +58,7 @@ class RateRegistryTest extends TestCase
     {
         $this->rateModelMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::TAX_RATE_ID));
+            ->willReturn(self::TAX_RATE_ID);
         $this->rateRegistry->registerTaxRate($this->rateModelMock);
         $this->assertEquals($this->rateModelMock, $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID));
     }
@@ -68,13 +68,13 @@ class RateRegistryTest extends TestCase
         $this->rateModelMock->expects($this->once())
             ->method('load')
             ->with(self::TAX_RATE_ID)
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
         $this->rateModelMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(self::TAX_RATE_ID));
+            ->willReturn(self::TAX_RATE_ID);
         $this->rateModelFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
 
         $actual = $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
         $this->assertEquals($this->rateModelMock, $actual);
@@ -89,13 +89,13 @@ class RateRegistryTest extends TestCase
         $this->rateModelMock->expects($this->once())
             ->method('load')
             ->with(self::TAX_RATE_ID)
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
         $this->rateModelMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->rateModelFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
         $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
     }
 
@@ -104,7 +104,7 @@ class RateRegistryTest extends TestCase
         $this->rateModelMock->expects($this->any())
             ->method('load')
             ->with(self::TAX_RATE_ID)
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
 
         // The second time this is called, want it to return null indicating a new object
         $this->rateModelMock->expects($this->any())
@@ -113,7 +113,7 @@ class RateRegistryTest extends TestCase
 
         $this->rateModelFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->rateModelMock));
+            ->willReturn($this->rateModelMock);
 
         $actual = $this->rateRegistry->retrieveTaxRate(self::TAX_RATE_ID);
         $this->assertEquals($this->rateModelMock, $actual);

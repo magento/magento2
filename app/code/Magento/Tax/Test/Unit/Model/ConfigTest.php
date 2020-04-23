@@ -67,10 +67,10 @@ class ConfigTest extends TestCase
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->at(0))
             ->method('getValue')
-            ->will($this->returnValue($applyTaxAfterDiscount));
+            ->willReturn($applyTaxAfterDiscount);
         $scopeConfigMock->expects($this->at(1))
             ->method('getValue')
-            ->will($this->returnValue($discountTaxIncl));
+            ->willReturn($discountTaxIncl);
 
         /** @var Config */
         $model = new Config($scopeConfigMock);
@@ -105,7 +105,7 @@ class ConfigTest extends TestCase
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($path, ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
 
         /** @var Config */
         $model = new Config($scopeConfigMock);

@@ -123,10 +123,12 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             ->getMock();
 
         $this->mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->disableOriginalConstructor()->setMethods(['getExtensionAttributes', 'getUnitPrice'])
+            ->disableOriginalConstructor()
+            ->setMethods(['getExtensionAttributes', 'getUnitPrice'])
             ->getMockForAbstractClass();
         $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
-            ->disableOriginalConstructor()->setMethods(['getPriceForTaxCalculation'])
+            ->disableOriginalConstructor()
+            ->setMethods(['getPriceForTaxCalculation'])
             ->getMockForAbstractClass();
         $this->mockItem->expects($this->any())->method('getExtensionAttributes')
             ->willReturn($this->quoteDetailsItemExtension);
@@ -144,9 +146,10 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
         $this->appliedTaxRateDataObjectFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->appliedTaxRate);
-        $this->mockAppliedTax = $this->getMockBuilder(AppliedTaxInterface::class)->getMock();
+        $this->mockAppliedTax = $this->getMockBuilder(AppliedTaxInterface::class)
+            ->getMock();
 
-        $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->will($this->returnValue('taxKey'));
+        $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->willReturn('taxKey');
         $this->addressRateRequest = new DataObject();
     }
 
@@ -299,15 +302,15 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
                 $mockObject->expects(
                     $valueMap[self::ONCE] == true ? $this->once() : $this->atLeastOnce()
                 )->method($valueMap[self::MOCK_METHOD_NAME])->with($valueMap[self::WITH_ARGUMENT])
-                    ->will(
-                        $this->returnValue($valueMap[self::MOCK_VALUE])
+                    ->willReturn(
+                        $valueMap[self::MOCK_VALUE]
                     );
             } else {
                 $mockObject->expects(
                     $valueMap[self::ONCE] == true ? $this->once() : $this->atLeastOnce()
                 )->method($valueMap[self::MOCK_METHOD_NAME])->withAnyParameters()
-                    ->will(
-                        $this->returnValue($valueMap[self::MOCK_VALUE])
+                    ->willReturn(
+                        $valueMap[self::MOCK_VALUE]
                     );
             }
         }

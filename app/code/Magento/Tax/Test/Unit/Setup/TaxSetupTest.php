@@ -33,7 +33,7 @@ class TaxSetupTest extends TestCase
 
         $salesSetup = $this->createMock(SalesSetup::class);
         $salesSetupFactory = $this->createPartialMock(SalesSetupFactory::class, ['create']);
-        $salesSetupFactory->expects($this->any())->method('create')->will($this->returnValue($salesSetup));
+        $salesSetupFactory->expects($this->any())->method('create')->willReturn($salesSetup);
 
         $helper = new ObjectManager($this);
         $this->taxSetup = $helper->getObject(
@@ -54,8 +54,8 @@ class TaxSetupTest extends TestCase
             'filter'
         )->with(
             'taxable'
-        )->will(
-            $this->returnValue($refundable)
+        )->willReturn(
+            $refundable
         );
         $this->assertEquals($refundable, $this->taxSetup->getTaxableItems());
     }

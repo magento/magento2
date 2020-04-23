@@ -201,10 +201,11 @@ class RepositoryTest extends TestCase
         $taxClassOne = $this->createMock(TaxClassInterface::class);
         $taxClassTwo = $this->createMock(TaxClassInterface::class);
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
-        $collection = $this->createPartialMock(
-            Collection::class,
-            ['setItems', 'getSize', 'getItems']
-        );
+        $collection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['setItems'])
+            ->onlyMethods(['getSize', 'getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')

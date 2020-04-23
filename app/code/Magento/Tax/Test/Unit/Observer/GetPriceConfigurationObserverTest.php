@@ -69,11 +69,11 @@ class GetPriceConfigurationObserverTest extends TestCase
         $className = Data::class;
         $this->taxData = $this->createMock($className);
 
-        $observerObject=$this->createMock(Observer::class);
+        $observerObject = $this->createMock(Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
-            ->will($this->returnValue($configObj));
+            ->willReturn($configObj);
 
         $baseAmount = $this->createPartialMock(
             Base::class,
@@ -82,15 +82,15 @@ class GetPriceConfigurationObserverTest extends TestCase
 
         $baseAmount->expects($this->any())
             ->method('hasAdjustment')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $baseAmount->expects($this->any())
             ->method('getBaseAmount')
-            ->will($this->returnValue(33.5));
+            ->willReturn(33.5);
 
         $baseAmount->expects($this->any())
             ->method('getAdjustmentAmount')
-            ->will($this->returnValue(1.5));
+            ->willReturn(1.5);
 
         $priceInfo = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
 
@@ -98,66 +98,67 @@ class GetPriceConfigurationObserverTest extends TestCase
 
         $basePrice->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $priceInfo->expects($this->any())
             ->method('getPrice')
-            ->will($this->returnValue($basePrice));
+            ->willReturn($basePrice);
 
         $prod1 = $this->createPartialMock(Product::class, ['getId', 'getPriceInfo']);
         $prod2 = $this->createMock(Product::class);
 
         $prod1->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $prod1->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         $optionCollection =
             $this->createPartialMock(Collection::class, ['getItems']);
 
         $optionCollection->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue([$prod1, $prod2]));
+            ->willReturn([$prod1, $prod2]);
 
         $productInstance =
-            $this->createPartialMock(
-                Type::class,
-                ['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds']
-            );
+            $this->getMockBuilder(Type::class)
+                ->addMethods(['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
-        $product = $this->createPartialMock(
-            \Magento\Bundle\Model\Product\Type::class,
-            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection', 'getId']
-        );
+        $product = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
+            ->addMethods(['getTypeInstance', 'getTypeId', 'getStoreId', 'getId'])
+            ->onlyMethods(['getSelectionsCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
+            ->willReturn($productInstance);
         $product->expects($this->any())
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
         $product->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
-            ->will($this->returnValue($optionCollection));
+            ->willReturn($optionCollection);
 
         $productInstance->expects($this->any())
             ->method('getOptionsIds')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->taxData->expects($this->any())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -186,16 +187,16 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 35.50],
-                                    'basePrice' => ['amount' => 30.50],
-                                ],
+                                'finalPrice' => ['amount' => 35.50],
+                                'basePrice' => ['amount' => 30.50],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
-                                    'basePrice' => ['amount' => 300.50],
-                                ],
+                                'finalPrice' => ['amount' => 333.50],
+                                'basePrice' => ['amount' => 300.50],
+                            ],
                         ],
                     ],
                 ],
@@ -204,17 +205,17 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 35.50],
-                                    'basePrice' => ['amount' => 35],
-                                    'oldPrice' => ['amount' => 35],
-                                ],
+                                'finalPrice' => ['amount' => 35.50],
+                                'basePrice' => ['amount' => 35],
+                                'oldPrice' => ['amount' => 35],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
-                                    'basePrice' => ['amount' => 300.50],
-                                ],
+                                'finalPrice' => ['amount' => 333.50],
+                                'basePrice' => ['amount' => 300.50],
+                            ],
                         ],
                     ],
                 ],

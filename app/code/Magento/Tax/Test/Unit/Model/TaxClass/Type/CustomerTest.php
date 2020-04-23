@@ -64,7 +64,7 @@ class CustomerTest extends TestCase
             ->with($expectedSearchCriteria)
             ->willReturn($searchResultsMock);
 
-        /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
+        /** @var Customer $model */
         $model = $objectManagerHelper->getObject(
             Customer::class,
             [

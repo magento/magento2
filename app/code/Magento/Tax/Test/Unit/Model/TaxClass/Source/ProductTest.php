@@ -91,14 +91,14 @@ class ProductTest extends TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttrMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->product->setAttribute($abstractAttrMock);
 
         $flatColumns = $this->product->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');

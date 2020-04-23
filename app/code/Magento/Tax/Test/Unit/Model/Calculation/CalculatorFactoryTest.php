@@ -54,14 +54,16 @@ class CalculatorFactoryTest extends TestCase
         $customerId,
         $expectedInstanceType
     ) {
-        $instanceMock = $this->getMockBuilder($expectedInstanceType)->disableOriginalConstructor()->getMock();
+        $instanceMock = $this->getMockBuilder($expectedInstanceType)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with($expectedInstanceType, ['storeId' => $storeId])
-            ->will($this->returnValue($instanceMock));
+            ->willReturn($instanceMock);
 
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(

@@ -21,7 +21,7 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
         $this->initMocks(true);
         $this->initRowBaseCalculator();
         $this->rowBaseCalculator->expects($this->atLeastOnce())
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
 
         $this->assertSame(
             $this->taxDetailsItem,

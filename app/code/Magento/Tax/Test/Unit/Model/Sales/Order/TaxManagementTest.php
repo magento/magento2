@@ -57,17 +57,17 @@ class TaxManagementTest extends TestCase
     {
         $this->orderMock = $this->createPartialMock(Order::class, ['load']);
 
-        $methods = ['create'];
-        $orderFactoryMock = $this->createPartialMock(OrderFactory::class, $methods);
+        $orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
         $orderFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
-        $className = Item::class;
-        $this->taxItemResourceMock = $this->createPartialMock($className, ['getTaxItemsByOrderId']);
+        $this->taxItemResourceMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getTaxItemsByOrderId'])
+            ->getMock();
 
-        $className = ItemFactory::class;
-        $taxItemFactoryMock = $this->createPartialMock($className, $methods, []);
+        $taxItemFactoryMock = $this->createPartialMock(ItemFactory::class, ['create']);
         $taxItemFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->taxItemResourceMock);
@@ -75,24 +75,27 @@ class TaxManagementTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->appliedTaxDataObject = $objectManager->getObject(Tax::class);
 
-        $className = OrderTaxDetailsAppliedTaxInterfaceFactory::class;
-        $appliedTaxDataObjectFactoryMock = $this->createPartialMock($className, $methods);
+        $appliedTaxDataObjectFactoryMock = $this->createPartialMock(
+            OrderTaxDetailsAppliedTaxInterfaceFactory::class,
+            ['create']
+        );
         $appliedTaxDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->appliedTaxDataObject);
 
         $itemDataObject = $objectManager->getObject(\Magento\Sales\Model\Order\Tax\Item::class);
 
-        $className = OrderTaxDetailsItemInterfaceFactory::class;
-        $itemDataObjectFactoryMock = $this->createPartialMock($className, $methods);
+        $itemDataObjectFactoryMock = $this->createPartialMock(OrderTaxDetailsItemInterfaceFactory::class, ['create']);
         $itemDataObjectFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($itemDataObject);
 
         $this->orderTaxDetailsDataObject = $objectManager->getObject(Details::class);
 
-        $className = OrderTaxDetailsInterfaceFactory::class;
-        $orderTaxDetailsDataObjectFactoryMock = $this->createPartialMock($className, $methods);
+        $orderTaxDetailsDataObjectFactoryMock = $this->createPartialMock(
+            OrderTaxDetailsInterfaceFactory::class,
+            ['create']
+        );
         $orderTaxDetailsDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->orderTaxDetailsDataObject);
@@ -120,12 +123,11 @@ class TaxManagementTest extends TestCase
         $orderId = 1;
         $this->orderMock->expects($this->once())
             ->method('load')
-            ->with($orderId)
-            ->will($this->returnSelf());
+            ->with($orderId)->willReturnSelf();
         $this->taxItemResourceMock->expects($this->once())
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
-            ->will($this->returnValue($orderItemAppliedTaxes));
+            ->willReturn($orderItemAppliedTaxes);
 
         $this->assertEquals($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
 

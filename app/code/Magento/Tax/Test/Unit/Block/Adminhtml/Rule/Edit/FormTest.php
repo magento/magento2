@@ -141,7 +141,7 @@ class FormTest extends TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('tax/rule/ajaxLoadRates/')
-            ->will($this->returnValue('some_url'));
+            ->willReturn('some_url');
 
         $this->assertEquals('some_url', $this->form->getTaxRatesPageUrl());
     }

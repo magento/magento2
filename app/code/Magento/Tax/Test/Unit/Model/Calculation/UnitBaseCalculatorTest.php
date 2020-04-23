@@ -76,9 +76,9 @@ class UnitBaseCalculatorTest extends TestCase
         $this->taxDetailsItem = $objectManager->getObject(ItemDetails::class);
         $this->taxDetailsItemDataObjectFactoryMock =
             $this->getMockBuilder(TaxDetailsItemInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->taxDetailsItemDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->taxDetailsItem);
@@ -135,27 +135,27 @@ class UnitBaseCalculatorTest extends TestCase
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->atLeastOnce())
             ->method('getIsTaxIncluded')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockConfig->expects($this->atLeastOnce())
             ->method('crossBorderTradeEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->mockConfig->expects($this->atLeastOnce())
             ->method('applyTaxAfterDiscount')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getRate')
             ->with($this->addressRateRequest)
-            ->will($this->returnValue(self::RATE));
+            ->willReturn(self::RATE);
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getStoreRate')
             ->with($this->addressRateRequest, self::STORE_ID)
-            ->will($this->returnValue(self::STORE_RATE));
+            ->willReturn(self::STORE_RATE);
         $this->mockCalculationTool->expects($this->atLeastOnce())
             ->method('getAppliedRates')
             ->withAnyParameters()
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
@@ -175,20 +175,20 @@ class UnitBaseCalculatorTest extends TestCase
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
             ->method('getIsTaxIncluded')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mockConfig->expects($this->once())
             ->method('applyTaxAfterDiscount')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->mockCalculationTool->expects($this->once())
             ->method('getRate')
             ->with($this->addressRateRequest)
-            ->will($this->returnValue(self::RATE));
+            ->willReturn(self::RATE);
         $this->mockCalculationTool->expects($this->once())
             ->method('getAppliedRates')
             ->withAnyParameters()
-            ->will($this->returnValue([['id' => 0, 'percent' => 0, 'rates' => []]]));
+            ->willReturn([['id' => 0, 'percent' => 0, 'rates' => []]]);
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
         $this->assertEquals(self::CODE, $this->taxDetailsItem->getCode());
@@ -201,22 +201,22 @@ class UnitBaseCalculatorTest extends TestCase
      */
     protected function getMockItem()
     {
-        /** @var $mockItem MockObject */
+        /** @var MockObject $mockItem */
         $mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mockItem->expects($this->atLeastOnce())
             ->method('getDiscountAmount')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $mockItem->expects($this->atLeastOnce())
             ->method('getCode')
-            ->will($this->returnValue(self::CODE));
+            ->willReturn(self::CODE);
         $mockItem->expects($this->atLeastOnce())
             ->method('getType')
-            ->will($this->returnValue(self::TYPE));
+            ->willReturn(self::TYPE);
         $mockItem->expects($this->atLeastOnce())
             ->method('getUnitPrice')
-            ->will($this->returnValue(self::UNIT_PRICE));
+            ->willReturn(self::UNIT_PRICE);
 
         return $mockItem;
     }

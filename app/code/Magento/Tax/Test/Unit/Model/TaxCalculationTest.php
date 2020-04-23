@@ -123,11 +123,17 @@ class TaxCalculationTest extends TestCase
         $storeId = 3;
         $rate = 0.5;
 
-        $storeMock = $this->createPartialMock(Store::class, ['getStoreId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $rateRequestMock = $this->createPartialMock(DataObject::class, ['setProductClassId']);
+        $rateRequestMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['setProductClassId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->calculationTool->expects($this->once())
             ->method('getRateRequest')
             ->with(null, null, null, $storeId, $customerId)
@@ -152,11 +158,17 @@ class TaxCalculationTest extends TestCase
         $storeId = 3;
         $rate = 0.5;
 
-        $storeMock = $this->createPartialMock(Store::class, ['getStoreId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $rateRequestMock = $this->createPartialMock(DataObject::class, ['setProductClassId']);
+        $rateRequestMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['setProductClassId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->calculationTool->expects($this->once())
             ->method('getDefaultRateRequest')
             ->with($storeId, $customerId)
@@ -179,7 +191,10 @@ class TaxCalculationTest extends TestCase
         $storeId = 3;
         $quoteDetailsMock = $this->createMock(QuoteDetailsInterface::class);
 
-        $storeMock = $this->createPartialMock(Store::class, ['getStoreId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
@@ -222,7 +237,10 @@ class TaxCalculationTest extends TestCase
 
         $quoteDetailsMock = $this->createMock(QuoteDetailsInterface::class);
 
-        $storeMock = $this->createPartialMock(Store::class, ['getStoreId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 

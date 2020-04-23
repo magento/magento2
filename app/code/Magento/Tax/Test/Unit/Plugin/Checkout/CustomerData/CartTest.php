@@ -70,15 +70,15 @@ class CartTest extends TestCase
     public function testAfterGetSectionData()
     {
         $input = ['items' => [
-                [
-                    'item_id' => 1,
-                    'product_price' => ''
-                ],
-                [
-                    'item_id' => 2,
-                    'product_price' => ''
-                ],
-            ]
+            [
+                'item_id' => 1,
+                'product_price' => ''
+            ],
+            [
+                'item_id' => 2,
+                'product_price' => ''
+            ],
+        ]
         ];
 
         $this->checkoutHelper->method('formatPrice')
@@ -106,8 +106,8 @@ class CartTest extends TestCase
         self::assertArrayHasKey('subtotal_incl_tax', $result);
         self::assertArrayHasKey('subtotal_excl_tax', $result);
         self::assertArrayHasKey('items', $result);
-        self::assertTrue(is_array($result['items']));
-        self::assertEquals(2, count($result['items']));
+        self::assertIsArray($result['items']);
+        self::assertCount(2, $result['items']);
         self::assertEquals(1, $result['items'][0]['product_price']);
         self::assertEquals(1, $result['items'][1]['product_price']);
     }
