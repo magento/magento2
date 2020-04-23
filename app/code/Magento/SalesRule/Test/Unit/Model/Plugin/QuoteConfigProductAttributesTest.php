@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 
@@ -46,12 +47,10 @@ class QuoteConfigProductAttributesTest extends TestCase
 
         $this->ruleResource->expects($this->once())
             ->method('getActiveAttributes')
-            ->will(
-                $this->returnValue(
-                    [
-                        ['attribute_code' => $attributeCode, 'enabled' => true],
-                    ]
-                )
+            ->willReturn(
+                [
+                    ['attribute_code' => $attributeCode, 'enabled' => true],
+                ]
             );
 
         $this->assertEquals($expected, $this->plugin->afterGetProductAttributes($subject, []));

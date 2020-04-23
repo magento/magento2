@@ -64,17 +64,21 @@ class CouponCodeValidationTest extends TestCase
         $this->codeLimitManagerMock = $this->createMock(CodeLimitManagerInterface::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->setMethods(['getItems'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->setMethods(['addFilter', 'create'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getCouponCode', 'setCouponCode', 'getId']
-        );
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCouponCode', 'setCouponCode'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->couponCodeValidation = new CouponCodeValidation(
             $this->codeLimitManagerMock,

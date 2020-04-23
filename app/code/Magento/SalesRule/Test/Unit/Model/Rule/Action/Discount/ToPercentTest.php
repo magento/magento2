@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -38,15 +40,17 @@ class ToPercentTest extends TestCase
 
         $this->validator = $this->getMockBuilder(
             Validator::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice', '__wakeup']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
+            )->getMock();
 
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['create']
+            )->getMock();
 
         $this->model = $helper->getObject(
             ToPercent::class,
@@ -74,32 +78,34 @@ class ToPercentTest extends TestCase
     ) {
         $discountData = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
+            )->getMock();
 
-        $this->discountDataFactory->expects($this->once())->method('create')->will($this->returnValue($discountData));
+        $this->discountDataFactory->expects($this->once())->method('create')->willReturn($discountData);
 
         $rule = $this->getMockBuilder(
             Rule::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getDiscountAmount', 'getDiscountQty', '__wakeup']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getDiscountAmount', 'getDiscountQty']
+            )->getMock();
 
         $item = $this->getMockBuilder(
             AbstractItem::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getDiscountAmount',
-                'getBaseDiscountAmount',
-                'getDiscountPercent',
-                'setDiscountPercent',
-                '__wakeup',
-                'getQuote',
-                'getAddress',
-                'getOptionByCode',
-            ]
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getDiscountAmount',
+                    'getBaseDiscountAmount',
+                    'getDiscountPercent',
+                    'setDiscountPercent',
+                    'getQuote',
+                    'getAddress',
+                    'getOptionByCode',
+                ]
+            )->getMock();
 
         $this->validator->expects(
             $this->atLeastOnce()
@@ -107,8 +113,8 @@ class ToPercentTest extends TestCase
             'getItemPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['price'])
+        )->willReturn(
+            $validItemData['price']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -116,8 +122,8 @@ class ToPercentTest extends TestCase
             'getItemBasePrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['basePrice'])
+        )->willReturn(
+            $validItemData['basePrice']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -125,8 +131,8 @@ class ToPercentTest extends TestCase
             'getItemOriginalPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['originalPrice'])
+        )->willReturn(
+            $validItemData['originalPrice']
         );
         $this->validator->expects(
             $this->atLeastOnce()
@@ -134,46 +140,46 @@ class ToPercentTest extends TestCase
             'getItemBaseOriginalPrice'
         )->with(
             $item
-        )->will(
-            $this->returnValue($validItemData['baseOriginalPrice'])
+        )->willReturn(
+            $validItemData['baseOriginalPrice']
         );
 
         $rule->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountAmount'
-        )->will(
-            $this->returnValue($ruleData['discountAmount'])
+        )->willReturn(
+            $ruleData['discountAmount']
         );
         $rule->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountQty'
-        )->will(
-            $this->returnValue($ruleData['discountQty'])
+        )->willReturn(
+            $ruleData['discountQty']
         );
 
         $item->expects(
             $this->atLeastOnce()
         )->method(
             'getDiscountAmount'
-        )->will(
-            $this->returnValue($itemData['discountAmount'])
+        )->willReturn(
+            $itemData['discountAmount']
         );
         $item->expects(
             $this->atLeastOnce()
         )->method(
             'getBaseDiscountAmount'
-        )->will(
-            $this->returnValue($itemData['baseDiscountAmount'])
+        )->willReturn(
+            $itemData['baseDiscountAmount']
         );
         if (!$ruleData['discountQty'] || $ruleData['discountQty'] > $qty) {
             $item->expects(
                 $this->atLeastOnce()
             )->method(
                 'getDiscountPercent'
-            )->will(
-                $this->returnValue($itemData['discountPercent'])
+            )->willReturn(
+                $itemData['discountPercent']
             );
             $item->expects($this->atLeastOnce())->method('setDiscountPercent')->with($expectedRuleDiscountQty);
         }

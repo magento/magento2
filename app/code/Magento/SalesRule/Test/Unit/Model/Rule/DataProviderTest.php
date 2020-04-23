@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Rule;
 
 use Magento\Framework\Registry;
@@ -89,15 +91,11 @@ class DataProviderTest extends TestCase
         $ruleId = 42;
         $ruleData = ['name' => 'Sales Price Rule'];
 
-        $ruleMock = $this->createPartialMock(Rule::class, [
-                'getDiscountAmount',
-                'setDiscountAmount',
-                'getDiscountQty',
-                'setDiscountQty',
-                'load',
-                'getId',
-                'getData'
-            ]);
+        $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getDiscountAmount', 'setDiscountAmount', 'getDiscountQty', 'setDiscountQty'])
+            ->onlyMethods(['load', 'getId', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$ruleMock]);
 
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);

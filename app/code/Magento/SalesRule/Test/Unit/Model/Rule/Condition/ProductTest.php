@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Condition;
 
@@ -138,9 +139,15 @@ class ProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->format = new Format(
-            $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()
+            $this->getMockBuilder(ScopeResolverInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder(ResolverInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder(CurrencyFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         $this->model = new SalesRuleProduct(

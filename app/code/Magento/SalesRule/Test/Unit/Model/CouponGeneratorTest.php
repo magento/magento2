@@ -49,7 +49,8 @@ class CouponGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->generationSpecFactoryMock = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->couponManagementServiceMock = $this->createMock(CouponManagementService::class);
         $this->generationSpecMock = $this->createMock(CouponGenerationSpecInterface::class);
         $this->couponGenerator = new CouponGenerator(

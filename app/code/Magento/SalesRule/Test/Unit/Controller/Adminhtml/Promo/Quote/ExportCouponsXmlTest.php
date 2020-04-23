@@ -69,7 +69,10 @@ class ExportCouponsXmlTest extends TestCase
 
         $resultLayoutMock = $this->createMock(Layout::class);
         $layoutMock = $this->createMock(LayoutInterface::class);
-        $contentMock = $this->createPartialMock(AbstractBlock::class, ['getExcelFile']);
+        $contentMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['getExcelFile'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

@@ -58,44 +58,45 @@ class ShippingDiscountTest extends TestCase
                 [
                     'reset',
                     'processShippingAmount',
-                    '__wakeup',
                 ]
             )
             ->getMock();
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->totalMock = $this->createPartialMock(
-            Total::class,
-            [
-                'getDiscountAmount',
-                'getDiscountDescription',
-                'addTotalAmount',
-                'addBaseTotalAmount',
-                'setShippingDiscountAmount',
-                'setBaseShippingDiscountAmount',
-                'getSubtotal',
-                'setSubtotalWithDiscount',
-                'setBaseSubtotalWithDiscount',
-                'getBaseSubtotal',
-                'getBaseDiscountAmount',
-                'setDiscountDescription'
-            ]
-        );
+        $this->totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                [
+                    'getDiscountAmount',
+                    'getDiscountDescription',
+                    'setShippingDiscountAmount',
+                    'setBaseShippingDiscountAmount',
+                    'getSubtotal',
+                    'setSubtotalWithDiscount',
+                    'setBaseSubtotalWithDiscount',
+                    'getBaseSubtotal',
+                    'getBaseDiscountAmount',
+                    'setDiscountDescription'
+                ]
+            )
+            ->onlyMethods(['addTotalAmount', 'addBaseTotalAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->addressMock = $this->createPartialMock(
-            Address::class,
-            [
-                'getQuote',
-                'getShippingAmount',
-                'getShippingDiscountAmount',
-                'getBaseShippingDiscountAmount',
-                'setShippingDiscountAmount',
-                'setBaseShippingDiscountAmount',
-                'getDiscountDescription',
-                'setDiscountAmount',
-                'setBaseDiscountAmount',
-                '__wakeup'
-            ]
-        );
+        $this->addressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(
+                [
+                    'getShippingAmount',
+                    'getShippingDiscountAmount',
+                    'getBaseShippingDiscountAmount',
+                    'setShippingDiscountAmount',
+                    'setBaseShippingDiscountAmount',
+                    'getDiscountDescription',
+                    'setDiscountAmount',
+                    'setBaseDiscountAmount'
+                ]
+            )
+            ->onlyMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $shipping = $this->createMock(ShippingInterface::class);
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);

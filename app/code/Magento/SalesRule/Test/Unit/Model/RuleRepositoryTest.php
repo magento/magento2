@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
@@ -77,23 +80,26 @@ class RuleRepositoryTest extends TestCase
     {
         $this->ruleFactory = $this->createPartialMock(RuleFactory::class, ['create']);
 
-        $className = ToDataModel::class;
-        $this->toDataModelConverter = $this->createMock($className);
+        $this->toDataModelConverter = $this->createMock(ToDataModel::class);
 
-        $className = ToModel::class;
-        $this->toModelConverter = $this->createMock($className);
+        $this->toModelConverter = $this->createMock(ToModel::class);
 
-        $className = RuleSearchResultInterfaceFactory::class;
-        $this->searchResultFactory = $this->createPartialMock($className, ['create']);
+        $this->searchResultFactory = $this->getMockBuilder(RuleSearchResultInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = RuleSearchResultInterface::class;
-        $this->searchResultsMock = $this->createMock($className);
+        $this->searchResultsMock = $this->createMock(RuleSearchResultInterface::class);
 
-        $className = CollectionFactory::class;
-        $this->collectionFactory = $this->createPartialMock($className, ['create']);
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = JoinProcessor::class;
-        $this->extensionAttributesJoinProcessorMock = $this->createPartialMock($className, ['process']);
+        $this->extensionAttributesJoinProcessorMock = $this->getMockBuilder(JoinProcessor::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['process'])
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->collectionProcessor = $this->createMock(

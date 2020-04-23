@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Rss;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -48,16 +50,16 @@ class DiscountsTest extends TestCase
     public function testGetDiscountCollection()
     {
         $ruleCollection = $this->createPartialMock(Collection::class, [
-                'addWebsiteGroupDateFilter',
-                'addFieldToFilter',
-                'setOrder',
-                'load'
-            ]);
-        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($ruleCollection));
-        $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('addFieldToFilter')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('setOrder')->will($this->returnSelf());
-        $ruleCollection->expects($this->once())->method('load')->will($this->returnSelf());
+            'addWebsiteGroupDateFilter',
+            'addFieldToFilter',
+            'setOrder',
+            'load'
+        ]);
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($ruleCollection);
+        $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('addFieldToFilter')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('setOrder')->willReturnSelf();
+        $ruleCollection->expects($this->once())->method('load')->willReturnSelf();
         $this->assertEquals($ruleCollection, $this->discounts->getDiscountCollection(1, 1));
     }
 }

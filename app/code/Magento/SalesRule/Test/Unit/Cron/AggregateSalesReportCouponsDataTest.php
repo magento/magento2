@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Cron;
 
 use Magento\Cron\Model\Schedule;
@@ -66,7 +68,7 @@ class AggregateSalesReportCouponsDataTest extends TestCase
             ->with(0);
         $this->localeDate->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $this->reportRule->expects($this->once())
             ->method('aggregate')
             ->with($data);

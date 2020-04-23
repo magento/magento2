@@ -69,7 +69,10 @@ class ExportCouponsCsvTest extends TestCase
 
         $resultLayoutMock = $this->createMock(Layout::class);
         $layoutMock = $this->createMock(LayoutInterface::class);
-        $contentMock = $this->createPartialMock(AbstractBlock::class, ['getCsvFile']);
+        $contentMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['getCsvFile'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

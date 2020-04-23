@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
@@ -121,7 +123,10 @@ class CouponRepositoryTest extends TestCase
     public function testSave()
     {
         $id = 1;
-        $coupon = $this->createPartialMock(\Magento\SalesRule\Model\Coupon::class, ['load', 'getCouponId', 'getById']);
+        $coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)->addMethods(['getById'])
+            ->onlyMethods(['load', 'getCouponId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $coupon->expects($this->any())->method('load')->with($id)->willReturnSelf();
         $coupon->expects($this->any())->method('getCouponId')->willReturn($id);
         $this->couponFactory->expects($this->once())->method('create')->willReturn($coupon);
@@ -129,7 +134,11 @@ class CouponRepositoryTest extends TestCase
         /**
          * @var Rule $rule
          */
-        $rule = $this->createPartialMock(Rule::class, ['load', 'getRuleId']);
+        $rule = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getRuleId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn($id);
@@ -159,7 +168,11 @@ class CouponRepositoryTest extends TestCase
         /**
          * @var Rule $rule
          */
-        $rule = $this->createPartialMock(Rule::class, ['load', 'getRuleId']);
+        $rule = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getRuleId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $rule->expects($this->any())->method('load')->willReturnSelf();
         $rule->expects($this->any())->method('getRuleId')->willReturn($id);

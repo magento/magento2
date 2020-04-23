@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
@@ -90,14 +91,14 @@ class CollectionTest extends TestCase
 
         $this->connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->reportResource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->reportResource->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue('test_main_table'));
+            ->willReturn('test_main_table');
 
         $this->ruleFactory = $this->createPartialMock(
             RuleFactory::class,
@@ -123,7 +124,7 @@ class CollectionTest extends TestCase
     {
         $this->selectMock->expects($this->once())
             ->method('group')
-            ->with($this->equalTo([null, 'coupon_code']));
+            ->with([null, 'coupon_code']);
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
 
@@ -131,7 +132,7 @@ class CollectionTest extends TestCase
     {
         $this->selectMock->expects($this->once())
             ->method('group')
-            ->with($this->equalTo(null));
+            ->with(null);
 
         $this->object->setIsSubTotals(true);
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
@@ -151,11 +152,11 @@ class CollectionTest extends TestCase
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())
             ->method('getUniqRulesNamesList')
-            ->will($this->returnValue($rulesList));
+            ->willReturn($rulesList);
 
         $this->ruleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($ruleMock));
+            ->willReturn($ruleMock);
 
         $ruleFilter = [1,2,3];
         $this->object->addRuleFilter($ruleFilter);
@@ -167,28 +168,28 @@ class CollectionTest extends TestCase
         $rulesList = [1 => 'test rule 1', 10 => 'test rule 10', 30 => 'test rule 30'];
         $this->connection->expects($this->at(1))
             ->method('quoteInto')
-            ->with($this->equalTo('rule_name = ?'), $this->equalTo($rulesList[1]))
-            ->will($this->returnValue('test_1'));
+            ->with('rule_name = ?', $rulesList[1])
+            ->willReturn('test_1');
         $this->connection->expects($this->at(2))
             ->method('quoteInto')
-            ->with($this->equalTo('rule_name = ?'), $this->equalTo($rulesList[30]))
-            ->will($this->returnValue('test_2'));
+            ->with('rule_name = ?', $rulesList[30])
+            ->willReturn('test_2');
 
         $this->selectMock->expects($this->at(3))
             ->method('where')
-            ->with($this->equalTo(implode([
+            ->with(implode([
                 'test_1',
                 'test_2',
-            ], ' OR ')));
+            ], ' OR '));
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())
             ->method('getUniqRulesNamesList')
-            ->will($this->returnValue($rulesList));
+            ->willReturn($rulesList);
 
         $this->ruleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($ruleMock));
+            ->willReturn($ruleMock);
 
         $ruleFilter = [1,2,30];
         $this->object->addRuleFilter($ruleFilter);

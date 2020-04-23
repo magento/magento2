@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Catalog\Helper\Data;
@@ -94,7 +96,7 @@ class ValidatorTest extends TestCase
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
-            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', '__wakeup']
+            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription']
         );
 
         $this->addressMock = $this->getMockBuilder(Address::class)
@@ -111,10 +113,11 @@ class ValidatorTest extends TestCase
             ->getMock();
 
         /** @var AbstractItem|MockObject $item */
-        $this->item = $this->createPartialMock(
-            Item::class,
-            ['__wakeup', 'getAddress', 'getParentItemId']
-        );
+        $this->item = $this->getMockBuilder(Item::class)
+            ->addMethods(['getParentItemId'])
+            ->onlyMethods(['getAddress'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->item->expects($this->any())
             ->method('getAddress')
             ->willReturn($this->addressMock);
@@ -171,15 +174,15 @@ class ValidatorTest extends TestCase
         $fixturePath = __DIR__ . '/_files/';
         $itemDownloadable = $this->createPartialMock(
             Item::class,
-            ['getAddress', '__wakeup']
+            ['getAddress']
         );
-        $itemDownloadable->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
+        $itemDownloadable->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
-        $itemSimple = $this->createPartialMock(Item::class, ['getAddress', '__wakeup']);
-        $itemSimple->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
+        $itemSimple = $this->createPartialMock(Item::class, ['getAddress']);
+        $itemSimple->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
 
-        /** @var $quote Quote */
-        $quote = $this->createPartialMock(Quote::class, ['getStoreId', '__wakeup']);
+        /** @var Quote $quote */
+        $quote = $this->createPartialMock(Quote::class, ['getStoreId']);
         $quote->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $itemData = include $fixturePath . 'quote_item_downloadable.php';
@@ -202,7 +205,11 @@ class ValidatorTest extends TestCase
         );
         $item = $this->getQuoteItemMock();
         $rule = $this->createMock(Rule::class);
-        $actionsCollection = $this->createPartialMock(\Magento\Rule\Model\Action\Collection::class, ['validate']);
+        $actionsCollection = $this->getMockBuilder(\Magento\Rule\Model\Action\Collection::class)->addMethods(
+            ['validate']
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $actionsCollection->expects($this->any())
             ->method('validate')
             ->with($item)
@@ -292,12 +299,12 @@ class ValidatorTest extends TestCase
         $this->rulesApplier->expects($this->once())
             ->method('applyRules')
             ->with(
-                $this->equalTo($this->item),
-                $this->equalTo($this->ruleCollection),
+                $this->item,
+                $this->ruleCollection,
                 $this->anything(),
                 $this->anything()
             )
-            ->will($this->returnValue($expectedRuleIds));
+            ->willReturn($expectedRuleIds);
         $this->rulesApplier->expects($this->once())
             ->method('setAppliedRuleIds')
             ->with(
@@ -346,10 +353,11 @@ class ValidatorTest extends TestCase
 
     public function testInitTotalsCanApplyDiscount()
     {
-        $rule = $this->createPartialMock(
-            Rule::class,
-            ['getSimpleAction', 'getActions', 'getId']
-        );
+        $rule = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getSimpleAction'])
+            ->onlyMethods(['getActions', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item1 = $this->getMockForAbstractClass(
             AbstractItem::class,
             [],
@@ -405,7 +413,11 @@ class ValidatorTest extends TestCase
         $this->utility->expects($this->once())->method('getItemQty')->willReturn(1);
         $this->utility->expects($this->any())->method('canProcessRule')->willReturn(true);
 
-        $actionsCollection = $this->createPartialMock(\Magento\Rule\Model\Action\Collection::class, ['validate']);
+        $actionsCollection = $this->getMockBuilder(\Magento\Rule\Model\Action\Collection::class)->addMethods(
+            ['validate']
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $actionsCollection->expects($this->at(0))->method('validate')->with($item1)->willReturn(true);
         $actionsCollection->expects($this->at(1))->method('validate')->with($item2)->willReturn(true);
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
@@ -444,20 +456,18 @@ class ValidatorTest extends TestCase
     {
         $this->ruleCollection->expects($this->any())
             ->method('addFieldToFilter')
-            ->with('is_active', 1)
-            ->will($this->returnSelf());
+            ->with('is_active', 1)->willReturnSelf();
         $this->ruleCollection->expects($this->any())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
 
         $ruleCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $ruleCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($ruleCollection));
+            ->willReturn($ruleCollection);
         return $ruleCollectionFactoryMock;
     }
 

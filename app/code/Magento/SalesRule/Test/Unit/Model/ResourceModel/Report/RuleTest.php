@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
 use Magento\Framework\App\ResourceConnection;
@@ -63,28 +65,28 @@ class RuleTest extends TestCase
         )->with(
             self::TABLE_NAME,
             $this->isInstanceOf('Zend_Db_Expr')
-        )->will(
-            $this->returnValue($select)
+        )->willReturn(
+            $select
         );
 
         $connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'fetchAll']
         );
-        $connectionMock->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connectionMock->expects($this->once())->method('select')->willReturn($select);
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchAll'
         )->with(
             $select
-        )->will(
-            $this->returnCallback([$this, 'fetchAllCallback'])
+        )->willReturnCallback(
+            [$this, 'fetchAllCallback']
         );
 
         $resourceMock = $this->createMock(ResourceConnection::class);
-        $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
+        $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $resourceMock->expects($this->once())->method('getTableName')->willReturn(self::TABLE_NAME);
 
         $flagFactory = $this->createMock(FlagFactory::class);
         $createdatFactoryMock = $this->createPartialMock(
@@ -124,8 +126,8 @@ class RuleTest extends TestCase
     {
         $whereParts = $select->getPart(Select::WHERE);
         $this->assertCount(2, $whereParts);
-        $this->assertContains("rule_name IS NOT NULL", $whereParts[0]);
-        $this->assertContains("rule_name <> ''", $whereParts[1]);
+        $this->assertStringContainsString("rule_name IS NOT NULL", $whereParts[0]);
+        $this->assertStringContainsString("rule_name <> ''", $whereParts[1]);
 
         $orderParts = $select->getPart(Select::ORDER);
         $this->assertCount(1, $orderParts);

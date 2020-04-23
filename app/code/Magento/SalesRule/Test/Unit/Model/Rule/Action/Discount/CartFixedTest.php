@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
 use Magento\Framework\DataObject;
@@ -17,7 +19,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -79,20 +81,16 @@ class CartFixedTest extends TestCase
         $this->item = $this->createMock(AbstractItem::class);
         $this->data = $this->createPartialMock(Data::class, []);
 
-        $this->quote = $this->createPartialMock(
-            Quote::class,
-            [
-                'getStore',
-                'getCartFixedRules',
-                'setCartFixedRules',
-            ]
+        $this->quote = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCartFixedRules', 'setCartFixedRules'])
+            ->onlyMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->address = $this->createMock(
+            Address::class
         );
-        $this->address = $this->createPartialMock(
-            Address::class,
-            ['__wakeup']
-        );
-        $this->item->expects($this->any())->method('getQuote')->will($this->returnValue($this->quote));
-        $this->item->expects($this->any())->method('getAddress')->will($this->returnValue($this->address));
+        $this->item->expects($this->any())->method('getQuote')->willReturn($this->quote);
+        $this->item->expects($this->any())->method('getAddress')->willReturn($this->address);
 
         $this->validator = $this->createMock(Validator::class);
         /** @var DataFactory|MockObject $dataFactory */
@@ -100,7 +98,7 @@ class CartFixedTest extends TestCase
             DataFactory::class,
             ['create']
         );
-        $dataFactory->expects($this->any())->method('create')->will($this->returnValue($this->data));
+        $dataFactory->expects($this->any())->method('create')->willReturn($this->data);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
         $deltaPriceRound = $this->getMockBuilder(DeltaPriceRound::class)
@@ -122,11 +120,11 @@ class CartFixedTest extends TestCase
     {
         $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
-        $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
+        $this->quote->expects($this->any())->method('getCartFixedRules')->willReturn([]);
         $store = $this->createMock(Store::class);
-        $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->will($this->returnArgument(0));
-        $this->priceCurrency->expects($this->atLeastOnce())->method('round')->will($this->returnArgument(0));
-        $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->willReturnArgument(0);
+        $this->priceCurrency->expects($this->atLeastOnce())->method('round')->willReturnArgument(0);
+        $this->quote->expects($this->any())->method('getStore')->willReturn($store);
 
         /** validators data */
         $this->validator->expects(
@@ -135,8 +133,8 @@ class CartFixedTest extends TestCase
             'getItemPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -144,8 +142,8 @@ class CartFixedTest extends TestCase
             'getItemBasePrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -153,8 +151,8 @@ class CartFixedTest extends TestCase
             'getItemOriginalPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
         $this->validator->expects(
             $this->once()
@@ -162,8 +160,8 @@ class CartFixedTest extends TestCase
             'getItemBaseOriginalPrice'
         )->with(
             $this->item
-        )->will(
-            $this->returnValue(100)
+        )->willReturn(
+            100
         );
 
         $this->quote->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);
