@@ -93,7 +93,7 @@ class DiRule implements RuleInterface
                         continue;
                     }
                     $dependenciesInfo[] = [
-                        'module' => $referenceModule,
+                        'modules' => [$referenceModule],
                         'type' => $type,
                         'source' => $matches['class'],
                     ];
