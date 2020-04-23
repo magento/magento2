@@ -66,6 +66,7 @@ class InterfaceValidator
                 );
             }
 
+            $pluginMethodParameters = $this->getMethodParameters($pluginMethod);
             $subject = array_shift($pluginMethodParameters);
             if ($subject['type'] === null
                 || !$this->_argumentsReader->isCompatibleType($subject['type'], $interceptedType)) {
@@ -79,7 +80,6 @@ class InterfaceValidator
 
             $originMethod = $type->getMethod($originMethodName);
             $originMethodParameters = $this->getMethodParameters($originMethod);
-            $pluginMethodParameters = $this->getMethodParameters($pluginMethod);
             $methodType = $this->getMethodType($pluginMethod->getName());
 
             if (self::METHOD_AFTER === $methodType && count($pluginMethodParameters) > 1) {
