@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Test\Unit\Model\Export;
 
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
@@ -204,7 +206,7 @@ class CustomerTest extends TestCase
      */
     public function testExportItem()
     {
-        /** @var $writer \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter */
+        /** @var AbstractAdapter $writer */
         $writer = $this->getMockForAbstractClass(
             AbstractAdapter::class,
             [],

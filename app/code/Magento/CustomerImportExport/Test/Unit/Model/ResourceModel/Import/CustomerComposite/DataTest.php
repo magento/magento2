@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data
@@ -12,6 +13,7 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Cust
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Pdo\Mysql;
 use Magento\Framework\Json\DecoderInterface;
@@ -50,26 +52,27 @@ class DataTest extends TestCase
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator($bunchData))
+        )->willReturn(
+            new \ArrayIterator($bunchData)
         );
 
         /** @var $selectMock \Magento\Framework\DB\Select */
         $selectMock = $this->createPartialMock(Select::class, ['from', 'order']);
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('order')->willReturnSelf();
 
-        /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
-        $connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'from', 'order', 'query']
-        );
+        /** @var AdapterInterface $connectionMock */
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->addMethods(['from', 'order'])
+            ->onlyMethods(['select', 'query'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->createMock(ResourceConnection::class);
-        $resourceModelMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
+        $resourceModelMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
 
         $data = ['resource' => $resourceModelMock, 'entity_type' => $entityType];
 

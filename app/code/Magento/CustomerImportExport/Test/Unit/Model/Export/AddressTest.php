@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Test\Unit\Model\Export;
 
 use Magento\Customer\Model\AddressFactory;
@@ -98,8 +100,8 @@ class AddressTest extends TestCase
             $this->once()
         )->method(
             'getWebsites'
-        )->will(
-            $this->returnCallback([$this, 'getWebsites'])
+        )->willReturnCallback(
+            [$this, 'getWebsites']
         );
 
         $this->_objectManager = new ObjectManager($this);
@@ -134,7 +136,7 @@ class AddressTest extends TestCase
 
         $entityFactory = $this->createMock(EntityFactory::class);
 
-        /** @var $attributeCollection \Magento\Framework\Data\Collection|\PHPUnit\Framework\TestCase */
+        /** @var Collection|TestCase $attributeCollection */
         $attributeCollection = $this->getMockBuilder(Collection::class)
             ->setMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
@@ -165,13 +167,15 @@ class AddressTest extends TestCase
             $attributeCollection->addItem($attribute);
         }
 
-        $byPagesIterator = $this->createPartialMock(\stdClass::class, ['iterate']);
+        $byPagesIterator = $this->getMockBuilder(\stdClass::class)->addMethods(['iterate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $byPagesIterator->expects(
             $this->once()
         )->method(
             'iterate'
-        )->will(
-            $this->returnCallback([$this, 'iterate'])
+        )->willReturnCallback(
+            [$this, 'iterate']
         );
 
         $customerCollection = $this->getMockBuilder(AbstractDb::class)
@@ -179,9 +183,12 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $customerEntity = $this->createPartialMock(\stdClass::class, ['filterEntityCollection', 'setParameters']);
-        $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())->method('setParameters')->will($this->returnSelf());
+        $customerEntity = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['filterEntityCollection', 'setParameters'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerEntity->expects($this->any())->method('filterEntityCollection')->willReturnArgument(0);
+        $customerEntity->expects($this->any())->method('setParameters')->willReturnSelf();
 
         $data = [
             'translator' => $translator,
@@ -233,7 +240,7 @@ class AddressTest extends TestCase
     public function iterate(AbstractDb $collection, $pageSize, array $callbacks)
     {
         $resource = $this->createPartialMock(Customer::class, ['getIdFieldName']);
-        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
+        $resource->expects($this->any())->method('getIdFieldName')->willReturn('id');
         $arguments = [
             'data' => $this->_customerData,
             'resource' => $resource,
@@ -272,8 +279,8 @@ class AddressTest extends TestCase
             $this->once()
         )->method(
             'writeRow'
-        )->will(
-            $this->returnCallback([$this, 'validateWriteRow'])
+        )->willReturnCallback(
+            [$this, 'validateWriteRow']
         );
 
         $this->_model->setWriter($writer);

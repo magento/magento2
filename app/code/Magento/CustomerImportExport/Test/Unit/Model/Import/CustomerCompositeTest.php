@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
@@ -126,11 +127,14 @@ class CustomerCompositeTest extends TestCase
     protected function setUp(): void
     {
         $translateInline = $this->createMock(InlineInterface::class);
-        $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
+        $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
         $context =
-            $this->createPartialMock(Context::class, ['getTranslateInline']);
-        $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
+            $this->getMockBuilder(Context::class)
+                ->addMethods(['getTranslateInline'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $context->expects($this->any())->method('getTranslateInline')->willReturn($translateInline);
 
         $this->_string = new StringUtils();
 
@@ -153,8 +157,8 @@ class CustomerCompositeTest extends TestCase
             ['init']
         );
 
-        $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
-        $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+        $this->error->expects($this->any())->method('init')->willReturn(true);
 
         $this->errorAggregator = $this->getMockBuilder(
             ProcessingErrorAggregator::class
@@ -206,10 +210,9 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _getModelMockForPrepareRowForDb()
     {
-        $customerStorage = $this->createPartialMock(
-            'stdClass',
-            ['getCustomerId', 'prepareCustomers', 'addCustomer']
-        );
+        $customerStorage = $this->getMockBuilder('stdClass')
+            ->addMethods(['getCustomerId', 'prepareCustomers', 'addCustomer'])
+            ->getMock();
         $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(1);
         $customerEntity = $this->_getCustomerEntityMock();
         $customerEntity->expects($this->any())->method('validateRow')->willReturn(true);
@@ -226,7 +229,9 @@ class CustomerCompositeTest extends TestCase
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
 
-        $dataSourceMock = $this->createPartialMock(\stdClass::class, ['cleanBunches', 'saveBunch']);
+        $dataSourceMock = $this->getMockBuilder(\stdClass::class)->addMethods(['cleanBunches', 'saveBunch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $dataSourceMock->expects($this->any())
             ->method('saveBunch')
             ->willReturnCallback([$this, 'verifyPrepareRowForDbData']);
@@ -366,7 +371,9 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturn($validationReturn);
 
-        $customerStorage = $this->createPartialMock(\stdClass::class, ['getCustomerId']);
+        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
@@ -402,7 +409,9 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturnCallback([$this, 'validateAddressRowParams']);
 
-        $customerStorage = $this->createPartialMock(\stdClass::class, ['getCustomerId']);
+        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
@@ -578,7 +587,7 @@ class CustomerCompositeTest extends TestCase
         $directoryMock = $this->createMock(Write::class);
         $directoryMock->expects($this->any())
             ->method('openFile')
-            ->will($this->returnValue(new Read($pathToCsvFile, new File())));
+            ->willReturn(new Read($pathToCsvFile, new File()));
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\CustomerImportExport\Model\Import\AbstractCustomer
@@ -103,7 +104,7 @@ class AbstractCustomerTest extends AbstractImportTestCase
 
         $modelMock->expects($this->any())
             ->method('_getCustomerCollection')
-            ->will($this->returnValue($customerCollection));
+            ->willReturn($customerCollection);
 
         return $modelMock;
     }
@@ -200,16 +201,14 @@ class AbstractCustomerTest extends AbstractImportTestCase
         // _validateRowForUpdate should be called only once
         $this->_model->expects($this->once())->method('_validateRowForUpdate');
 
-        $this->assertAttributeEquals(0, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(0, $this->_model->getProcessedEntitiesCount());
 
         // update action
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
         $this->_clearValidatedRows();
 
-        $this->assertAttributeEquals([], '_validatedRows', $this->_model);
         $this->assertTrue($this->_model->validateRow([], 1));
-        $this->assertAttributeEquals([1 => true], '_validatedRows', $this->_model);
-        $this->assertAttributeEquals(1, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(1, $this->_model->getProcessedEntitiesCount());
         $this->assertTrue($this->_model->validateRow([], 1));
     }
 
@@ -222,10 +221,8 @@ class AbstractCustomerTest extends AbstractImportTestCase
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);
         $this->_clearValidatedRows();
 
-        $this->assertAttributeEquals([], '_validatedRows', $this->_model);
         $this->assertTrue($this->_model->validateRow([], 2));
-        $this->assertAttributeEquals([2 => true], '_validatedRows', $this->_model);
-        $this->assertAttributeEquals(1, '_processedEntitiesCount', $this->_model);
+        $this->assertEquals(1, $this->_model->getProcessedEntitiesCount());
         $this->assertTrue($this->_model->validateRow([], 2));
     }
 

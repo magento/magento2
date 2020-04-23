@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
@@ -159,15 +160,15 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getWebsites'])
             ->getMock();
-        $this->_storeManager->expects($this->any())
+        $this->_storeManager
             ->method('getWebsites')
-            ->will($this->returnCallback([$this, 'getWebsites']));
+            ->willReturnCallback([$this, 'getWebsites']);
         $this->countryWithWebsites = $this
             ->getMockBuilder(CountryWithWebsites::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->countryWithWebsites
-            ->expects($this->any())
+
             ->method('getAllOptions')
             ->willReturn([]);
         $this->_model = $this->_getModelMock();
@@ -192,7 +193,9 @@ class AddressTest extends TestCase
      */
     protected function _getModelDependencies()
     {
-        $dataSourceModel = $this->createPartialMock(\stdClass::class, ['getNextBunch']);
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
         $customerStorage = $this->_createCustomerStorageMock();
@@ -264,8 +267,8 @@ class AddressTest extends TestCase
                 true,
                 ['_construct', 'getBackend', 'getTable']
             );
-            $attribute->expects($this->any())->method('getBackend')->will($this->returnSelf());
-            $attribute->expects($this->any())->method('getTable')->will($this->returnValue($attributeData['table']));
+            $attribute->method('getBackend')->willReturnSelf();
+            $attribute->method('getTable')->willReturn($attributeData['table']);
             $attributeCollection->addItem($attribute);
         }
         return $attributeCollection;
@@ -280,7 +283,7 @@ class AddressTest extends TestCase
     {
         /** @var $customerStorage Storage|MockObject */
         $customerStorage = $this->createMock(Storage::class);
-        $customerStorage->expects($this->any())
+        $customerStorage
             ->method('getCustomerId')
             ->willReturnCallback(
                 function ($email, $websiteId) {
@@ -295,7 +298,7 @@ class AddressTest extends TestCase
                     return false;
                 }
             );
-        $customerStorage->expects($this->any())->method('prepareCustomers');
+        $customerStorage->method('prepareCustomers');
 
         return $customerStorage;
     }
@@ -307,9 +310,12 @@ class AddressTest extends TestCase
      */
     protected function _createCustomerEntityMock()
     {
-        $customerEntity = $this->createPartialMock(\stdClass::class, ['filterEntityCollection', 'setParameters']);
-        $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())->method('setParameters')->will($this->returnSelf());
+        $customerEntity = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['filterEntityCollection', 'setParameters'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerEntity->method('filterEntityCollection')->willReturnArgument(0);
+        $customerEntity->method('setParameters')->willReturnSelf();
         return $customerEntity;
     }
 
@@ -525,11 +531,7 @@ class AddressTest extends TestCase
     public function testGetDefaultAddressAttributeMapping()
     {
         $attributeMapping = $this->_model->getDefaultAddressAttributeMapping();
-        $this->assertInternalType(
-            'array',
-            $attributeMapping,
-            'Default address attribute mapping must be an array.'
-        );
+        $this->assertIsArray($attributeMapping, 'Default address attribute mapping must be an array.');
         $this->assertArrayHasKey(
             Address::COLUMN_DEFAULT_BILLING,
             $attributeMapping,
