@@ -16,7 +16,7 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
  * Class AddDataForBulgaria
  * @package Magento\Directory\Setup\Patch
  */
-class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
+class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -29,7 +29,7 @@ class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
     private $dataInstallerFactory;
 
     /**
-     * AddDataForCroatia constructor.
+     * AddDataForBulgaria constructor.
      *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
@@ -51,16 +51,16 @@ class AddDataForCroatia implements DataPatchInterface, PatchVersionInterface
         $dataInstaller = $this->dataInstallerFactory->create();
         $dataInstaller->addCountryRegions(
             $this->moduleDataSetup->getConnection(),
-            $this->getDataForCroatia()
+            $this->getDataForBulgaria()
         );
     }
 
     /**
-     * Croatian states data.
+     * Bulgarian states data.
      *
      * @return array
      */
-    private function getDataForCroatia()
+    private function getDataForBulgaria()
     {
         return [
             ['BG', 'BG-01', 'Blagoevgrad'],
