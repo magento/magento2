@@ -73,6 +73,9 @@ class Category implements ObserverInterface
 
         if ($model instanceof CatalogCategory) {
             foreach ($this->fields as $field) {
+                if (!$model->dataHasChangedFor($field)) {
+                    continue;
+                }
                 $this->updateContentAssetLinks->execute(
                     $this->contentIdentityFactory->create(
                         [
