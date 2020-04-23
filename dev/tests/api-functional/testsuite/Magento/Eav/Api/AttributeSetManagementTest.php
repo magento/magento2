@@ -190,7 +190,7 @@ class AttributeSetManagementTest extends WebapiAbstract
             $this->_webApiCall($this->createServiceInfo, $arguments);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

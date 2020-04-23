@@ -46,7 +46,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']);
     }
 
     /**
@@ -102,7 +102,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']);
     }
 
     /**
