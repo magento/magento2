@@ -101,7 +101,9 @@ class DownloadableTest extends AbstractImportTestCase
         //connection and sql query results
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
-            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'])
+            ->onlyMethods(
+                ['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc']
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->select = $this->createMock(Select::class);
