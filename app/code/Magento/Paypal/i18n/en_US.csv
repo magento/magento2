@@ -738,3 +738,5 @@ User,User
 "PayPal Guest Checkout Credit Card Icons","PayPal Guest Checkout Credit Card Icons"
 "Elektronisches Lastschriftverfahren - German ELV","Elektronisches Lastschriftverfahren - German ELV"
 "Please enter at least 0 and at most 65535","Please enter at least 0 and at most 65535"
+"Order is suspended as an account verification transaction is suspected to be fraudulent.","Order is suspended as an account verification transaction is suspected to be fraudulent."
+"Payment can't be accepted since transaction was rejected by merchant.","Payment can't be accepted since transaction was rejected by merchant."

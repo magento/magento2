@@ -21,7 +21,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerProvider;
 
     /**
-     * @var \Zend\ServiceManager\ServiceManager
+     * @var \Laminas\ServiceManager\ServiceManager
      */
     private $serviceManager;
 
@@ -33,7 +33,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             $this->createPartialMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get']);
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->serviceManager = $this->createPartialMock(\Zend\ServiceManager\ServiceManager::class, ['get']);
+        $this->serviceManager = $this->createPartialMock(\Laminas\ServiceManager\ServiceManager::class, ['get']);
     }
 
     /**
@@ -91,7 +91,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         /** @var $controller Session */
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
         $viewModel = $controller->unloginAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
     }
 
     /**
@@ -116,6 +116,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnValue($sessionMock));
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
-        $this->assertEquals(new \Zend\View\Model\JsonModel(['success' => true]), $controller->prolongAction());
+        $this->assertEquals(new \Laminas\View\Model\JsonModel(['success' => true]), $controller->prolongAction());
     }
 }

@@ -11,28 +11,27 @@ use Magento\AdminAnalytics\Model\Viewer\Log;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\CacheInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CanViewNotificationTest
- */
-class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
+class CanViewNotificationTest extends TestCase
 {
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Logger|MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductMetadataInterface|MockObject */
     private $productMetadataMock;
 
-    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Log|MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var  $cacheStorageMock MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
