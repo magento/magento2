@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
 use Magento\CatalogInventory\Model\Config\Backend\Managestock;
@@ -23,7 +25,8 @@ class ManagestockTest extends TestCase
     {
         $this->stockIndexerProcessor = $this->getMockBuilder(
             Processor::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->model = (new ObjectManager($this))->getObject(
             Managestock::class,
             [

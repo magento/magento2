@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
 use Magento\CatalogInventory\Model\Configuration;
@@ -52,7 +54,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new ObjectManager($this))->getObject(
             UpdateItemsStockUponConfigChangeObserver::class,
@@ -71,10 +73,10 @@ class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
 
         $this->event->expects($this->once())
             ->method('getWebsite')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $this->event->expects($this->once())
             ->method('getChangedPaths')
-            ->will($this->returnValue([Configuration::XML_PATH_MANAGE_STOCK]));
+            ->willReturn([Configuration::XML_PATH_MANAGE_STOCK]);
 
         $this->observer->execute($this->eventObserver);
     }

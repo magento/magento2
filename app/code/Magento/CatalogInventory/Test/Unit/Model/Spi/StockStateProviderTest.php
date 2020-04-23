@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
 
 use Magento\Catalog\Model\Product;
@@ -120,8 +122,7 @@ class StockStateProviderTest extends TestCase
         $this->mathDivision = $this->createPartialMock(Division::class, ['getExactDivision']);
 
         $this->localeFormat = $this->getMockForAbstractClass(
-            FormatInterface::class,
-            ['getNumber']
+            FormatInterface::class
         );
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
@@ -452,7 +453,6 @@ class StockStateProviderTest extends TestCase
         $qty = 1;
         $qtyIncrements = 5;
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->disableOriginalConstructor()
             ->setMethods($this->stockItemMethods)
             ->getMockForAbstractClass();
         $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);

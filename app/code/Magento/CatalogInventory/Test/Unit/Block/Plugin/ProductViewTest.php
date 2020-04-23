@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Block\Plugin;
 
 use Magento\Catalog\Block\Product\View;
@@ -57,10 +59,10 @@ class ProductViewTest extends TestCase
     {
         $result = [
             'validate-item-quantity' => [
-                    'minAllowed' => 0.5,
-                    'maxAllowed' => 5.0,
-                    'qtyIncrements' => 3.0
-                ]
+                'minAllowed' => 0.5,
+                'maxAllowed' => 5.0,
+                'qtyIncrements' => 3.0
+            ]
         ];
         $validators = [];
         $productViewBlock = $this->getMockBuilder(View::class)

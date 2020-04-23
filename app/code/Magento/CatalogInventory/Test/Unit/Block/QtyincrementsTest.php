@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Block;
 
 use Magento\Catalog\Model\Product;
@@ -74,14 +76,14 @@ class QtyincrementsTest extends TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $store = $this->createPartialMock(Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn(0);
-        $product->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $product->expects($this->any())->method('getStore')->willReturn($store);
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $this->assertEquals($productTags, $this->block->getIdentities());
     }
 
@@ -96,19 +98,19 @@ class QtyincrementsTest extends TestCase
     {
         $this->stockItem->expects($this->once())
             ->method('getQtyIncrements')
-            ->will($this->returnValue($qtyInc));
+            ->willReturn($qtyInc);
 
         $product = $this->createMock(Product::class);
-        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->once())->method('isSaleable')->will($this->returnValue($isSaleable));
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $product->expects($this->once())->method('isSaleable')->willReturn($isSaleable);
         $store = $this->createPartialMock(Store::class, ['getWebsiteId', '__wakeup']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn(0);
-        $product->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $product->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->registryMock->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->assertSame($result, $this->block->getProductQtyIncrements());
         // test lazy load

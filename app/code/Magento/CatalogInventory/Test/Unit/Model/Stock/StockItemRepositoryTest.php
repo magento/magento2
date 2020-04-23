@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
@@ -196,7 +197,8 @@ class StockItemRepositoryTest extends TestCase
 
         $productCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();

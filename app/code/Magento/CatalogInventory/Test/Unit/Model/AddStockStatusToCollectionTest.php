@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -59,8 +61,7 @@ class AddStockStatusToCollectionTest extends TestCase
 
         $this->stockHelper->expects($this->once())
             ->method('addIsInStockFilterToCollection')
-            ->with($productCollection)
-            ->will($this->returnSelf());
+            ->with($productCollection)->willReturnSelf();
 
         $this->plugin->beforeLoad($productCollection);
     }

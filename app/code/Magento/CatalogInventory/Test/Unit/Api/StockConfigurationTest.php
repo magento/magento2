@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Api;
 
@@ -93,7 +94,7 @@ class StockConfigurationTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isShowOutOfStock());
     }
 
@@ -107,7 +108,7 @@ class StockConfigurationTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isAutoReturnEnabled());
     }
 
@@ -121,7 +122,7 @@ class StockConfigurationTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isDisplayProductStockStatus());
     }
 }

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
@@ -6,6 +6,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 

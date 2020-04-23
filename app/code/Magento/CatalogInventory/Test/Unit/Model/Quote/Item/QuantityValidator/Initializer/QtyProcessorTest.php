@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
 use Magento\Catalog\Model\Product;
@@ -76,8 +78,6 @@ class QtyProcessorTest extends TestCase
         $this->assertEquals($qty, $this->qtyProcessor->getRowQty($qty));
     }
 
-    /**
-     */
     public function testGetQtyForCheckNoParentItem()
     {
         $qty = 1;

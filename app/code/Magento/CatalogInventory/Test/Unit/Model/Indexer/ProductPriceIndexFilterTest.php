@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer;
 
@@ -86,9 +87,7 @@ class ProductPriceIndexFilterTest extends TestCase
         $this->generator->expects($this->once())
             ->method('generate')
             ->willReturnCallback(
-                
-                    $this->getBatchIteratorCallback($selectMock, 5)
-                
+                $this->getBatchIteratorCallback($selectMock, 5)
             );
 
         $fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetchAll']);

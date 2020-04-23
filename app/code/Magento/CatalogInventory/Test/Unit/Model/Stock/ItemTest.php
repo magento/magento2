@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use Magento\Catalog\Model\Product;
@@ -106,8 +109,7 @@ class ItemTest extends TestCase
         $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
         $this->storeManager = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            ['getStore']
+            StoreManagerInterface::class
         );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
@@ -168,27 +170,24 @@ class ItemTest extends TestCase
 
     public function testSetProduct()
     {
-        $product = $this->createPartialMock(Product::class, [
-                'getId',
-                'getName',
-                'getStoreId',
-                'getTypeId',
-                'dataHasChangedFor',
-                'getIsChangedWebsites',
-                '__wakeup']);
+        $product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getIsChangedWebsites'])
+            ->onlyMethods(['getId', 'getName', 'getStoreId', 'getTypeId', 'dataHasChangedFor', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productId = 2;
         $productName = 'Some Name';
         $storeId = 3;
         $typeId = 'simple';
         $status = 1;
         $isChangedWebsites = false;
-        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->once())->method('getName')->will($this->returnValue($productName));
-        $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $product->expects($this->once())->method('getTypeId')->will($this->returnValue($typeId));
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $product->expects($this->once())->method('getName')->willReturn($productName);
+        $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
         $product->expects($this->once())->method('dataHasChangedFor')
-            ->with($this->equalTo('status'))->will($this->returnValue($status));
-        $product->expects($this->once())->method('getIsChangedWebsites')->will($this->returnValue($isChangedWebsites));
+            ->with('status')->willReturn($status);
+        $product->expects($this->once())->method('getIsChangedWebsites')->willReturn($isChangedWebsites);
 
         $this->assertSame($this->item, $this->item->setProduct($product));
         $this->assertSame(
@@ -254,7 +253,7 @@ class ItemTest extends TestCase
         $setValue = 8;
         $this->customerSession->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue($groupId));
+            ->willReturn($groupId);
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
         $property->setAccessible(true);
@@ -291,8 +290,8 @@ class ItemTest extends TestCase
         if ($useConfigMinSaleQty) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getMinSaleQty')
-                ->with($this->storeId, $this->equalTo($groupId))
-                ->will($this->returnValue($minSaleQty));
+                ->with($this->storeId, $groupId)
+                ->willReturn($minSaleQty);
         } else {
             $this->setDataArrayValue('min_sale_qty', $minSaleQty);
         }
@@ -343,7 +342,7 @@ class ItemTest extends TestCase
         if ($useConfigMinQty) {
             $this->stockConfiguration->expects($this->any())
                 ->method('getMinQty')
-                ->will($this->returnValue($minQty));
+                ->willReturn($minQty);
         } else {
             $this->setDataArrayValue('min_qty', $minQty);
         }

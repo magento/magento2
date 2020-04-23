@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
 use Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver;
@@ -64,7 +66,7 @@ class CheckoutAllSubmitAfterObserverTest extends TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new ObjectManager($this))->getObject(
             CheckoutAllSubmitAfterObserver::class,
@@ -77,14 +79,17 @@ class CheckoutAllSubmitAfterObserverTest extends TestCase
 
     public function testCheckoutAllSubmitAfter()
     {
-        $quote = $this->createPartialMock(Quote::class, ['getInventoryProcessed']);
+        $quote = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getInventoryProcessed'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quote->expects($this->once())
             ->method('getInventoryProcessed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->event->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->subtractQuoteInventoryObserver->expects($this->once())
             ->method('execute')

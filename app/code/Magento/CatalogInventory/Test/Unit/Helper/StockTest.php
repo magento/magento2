@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product;
@@ -70,9 +72,9 @@ class StockTest extends TestCase
             ->getMock();
         $this->statusFactoryMock =
             $this->getMockBuilder(StatusFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $this->stockConfiguration = $this->getMockBuilder(
             StockConfigurationInterface::class
         )->getMock();
@@ -137,8 +139,8 @@ class StockTest extends TestCase
             ->willReturn($status);
         $productCollectionMock =
             $this->getMockBuilder(AbstractCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $productCollectionMock->expects($this->any())
             ->method('getItemById')
             ->with($productId)
@@ -169,7 +171,8 @@ class StockTest extends TestCase
     {
         $collectionMock = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $collectionMock->expects($this->any())
             ->method('joinField');
         $this->scopeConfigMock->expects($this->any())

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
 
 use Magento\CatalogInventory\Api\Data\StockInterface;
@@ -130,19 +132,19 @@ class StockRegistryProviderTest extends TestCase
 
         $this->stock = $this->getMockForAbstractClass(
             StockInterface::class,
-            ['__wakeup', 'getStockId'],
+            ['getStockId'],
             '',
             false
         );
         $this->stockItem = $this->getMockForAbstractClass(
             StockItemInterface::class,
-            ['__wakeup', 'getItemId'],
+            ['getItemId'],
             '',
             false
         );
         $this->stockStatus = $this->getMockForAbstractClass(
             StockStatusInterface::class,
-            ['__wakeup', 'getProductId'],
+            ['getProductId'],
             '',
             false
         );
@@ -223,7 +225,6 @@ class StockRegistryProviderTest extends TestCase
                 'stockItemFactory' => $this->stockItemFactory,
                 'stockStatusRepository' => $this->stockStatusRepository,
                 'stockStatusFactory' => $this->stockStatusFactory,
-
                 'stockCriteriaFactory' => $this->stockCriteriaFactory,
                 'stockItemCriteriaFactory' => $this->stockItemCriteriaFactory,
                 'stockStatusCriteriaFactory' => $this->stockStatusCriteriaFactory,
@@ -241,10 +242,11 @@ class StockRegistryProviderTest extends TestCase
     {
         $this->stockCriteriaFactory->expects($this->once())->method('create')->willReturn($this->stockCriteria);
         $this->stockCriteria->expects($this->once())->method('setScopeFilter')->willReturn(null);
-        $stockCollection = $this->createPartialMock(
-            Collection::class,
-            ['getFirstItem', '__wakeup', 'getItems']
-        );
+        $stockCollection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['getFirstItem'])
+            ->onlyMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $stockCollection->expects($this->once())->method('getItems')->willReturn([$this->stock]);
         $this->stockRepository->expects($this->once())->method('getList')->willReturn($stockCollection);
         $this->stock->expects($this->once())->method('getStockId')->willReturn(true);
@@ -255,10 +257,12 @@ class StockRegistryProviderTest extends TestCase
     {
         $this->stockItemCriteriaFactory->expects($this->once())->method('create')->willReturn($this->stockItemCriteria);
         $this->stockItemCriteria->expects($this->once())->method('setProductsFilter')->willReturn(null);
-        $stockItemCollection = $this->createPartialMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class,
-            ['getFirstItem', '__wakeup', 'getItems']
-        );
+        $stockItemCollection = $this->getMockBuilder(
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class
+        )->addMethods(['getFirstItem'])
+            ->onlyMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $stockItemCollection->expects($this->once())->method('getItems')->willReturn([$this->stockItem]);
         $this->stockItemRepository->expects($this->once())->method('getList')->willReturn($stockItemCollection);
         $this->stockItem->expects($this->once())->method('getItemId')->willReturn(true);
@@ -275,10 +279,12 @@ class StockRegistryProviderTest extends TestCase
             ->willReturn($this->stockStatusCriteria);
         $this->stockStatusCriteria->expects($this->once())->method('setScopeFilter')->willReturn(null);
         $this->stockStatusCriteria->expects($this->once())->method('setProductsFilter')->willReturn(null);
-        $stockStatusCollection = $this->createPartialMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection::class,
-            ['getFirstItem', '__wakeup', 'getItems']
-        );
+        $stockStatusCollection = $this->getMockBuilder(
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection::class
+        )->addMethods(['getFirstItem'])
+            ->onlyMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $stockStatusCollection->expects($this->once())->method('getItems')->willReturn([$this->stockStatus]);
         $this->stockStatusRepository->expects($this->once())->method('getList')->willReturn($stockStatusCollection);
         $this->stockStatus->expects($this->once())->method('getProductId')->willReturn($this->productId);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
@@ -33,8 +35,12 @@ class StockStatusBaseSelectProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
-        $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Block\Adminhtml\Form\Field;
 
 use Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock;
@@ -53,10 +55,11 @@ class StockTest extends TestCase
         $this->_collectionFactoryMock = $this->createMock(
             CollectionFactory::class
         );
-        $this->_qtyMock = $this->createPartialMock(
-            Text::class,
-            ['setForm', 'setValue', 'setName']
-        );
+        $this->_qtyMock = $this->getMockBuilder(Text::class)
+            ->addMethods(['setValue', 'setName'])
+            ->onlyMethods(['setForm'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_factoryTextMock = $this->createMock(TextFactory::class);
 
         $objectManagerHelper = new ObjectManager($this);
@@ -96,7 +99,7 @@ class StockTest extends TestCase
     public function testSetValue()
     {
         $value = ['qty' => 1, 'is_in_stock' => 0];
-        $this->_qtyMock->expects($this->once())->method('setValue')->with($this->equalTo(1));
+        $this->_qtyMock->expects($this->once())->method('setValue')->with(1);
 
         $this->_block->setValue($value);
     }

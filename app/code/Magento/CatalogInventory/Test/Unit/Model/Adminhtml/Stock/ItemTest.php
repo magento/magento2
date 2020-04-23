@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
 
 use Magento\CatalogInventory\Model\Adminhtml\Stock\Item;
@@ -25,10 +27,11 @@ class ItemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $resourceMock = $this->createPartialMock(
-            AbstractResource::class,
-            ['_construct', 'getConnection', 'getIdFieldName']
-        );
+        $resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $objectHelper = new ObjectManager($this);
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
@@ -41,11 +44,11 @@ class ItemTest extends TestCase
 
         $allGroup->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(32000));
+            ->willReturn(32000);
 
         $groupManagement->expects($this->any())
             ->method('getAllCustomersGroup')
-            ->will($this->returnValue($allGroup));
+            ->willReturn($allGroup);
 
         $this->_model = $objectHelper->getObject(
             Item::class,

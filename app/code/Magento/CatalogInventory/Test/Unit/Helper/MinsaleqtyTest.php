@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Helper;
 
@@ -41,8 +42,8 @@ class MinsaleqtyTest extends TestCase
         $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
-            ->with($this->equalTo('_'))
-            ->will($this->returnValue('unique_hash'));
+            ->with('_')
+            ->willReturn('unique_hash');
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->setMethods(['getAllCustomersGroup'])
@@ -54,11 +55,11 @@ class MinsaleqtyTest extends TestCase
 
         $allGroup->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(32000));
+            ->willReturn(32000);
 
         $groupManagement->expects($this->any())
             ->method('getAllCustomersGroup')
-            ->will($this->returnValue($allGroup));
+            ->willReturn($allGroup);
 
         $this->serializerMock = $this->createMock(Json::class);
 
@@ -86,11 +87,11 @@ class MinsaleqtyTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(Configuration::XML_PATH_MIN_SALE_QTY),
-                $this->equalTo(ScopeInterface::SCOPE_STORE),
-                $this->equalTo($store)
+                Configuration::XML_PATH_MIN_SALE_QTY,
+                ScopeInterface::SCOPE_STORE,
+                $store
             )
-            ->will($this->returnValue($minSaleQty));
+            ->willReturn($minSaleQty);
 
         $this->serializerMock->expects($this->exactly($minSaleQtyDecoded ? 1 : 0))
             ->method('unserialize')

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
@@ -6,6 +6,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
@@ -41,15 +42,15 @@ class FullTest extends TestCase
 
         $resourceMock->expects($this->any())
             ->method('getTableName')
-            ->will($this->throwException(new \Exception($exceptionMessage)));
+            ->willThrowException(new \Exception($exceptionMessage));
 
         $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(
             Full::class,
             [
-               'resource' => $resourceMock,
-               'indexerFactory' => $indexerFactoryMock,
-               'catalogProductType' => $productTypeMock,
+                'resource' => $resourceMock,
+                'indexerFactory' => $indexerFactoryMock,
+                'catalogProductType' => $productTypeMock,
             ]
         );
 

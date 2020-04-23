@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Api;
 
 use Magento\CatalogInventory\Api\Data\StockInterface;
@@ -99,13 +101,13 @@ class StockStateTest extends TestCase
         );
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStock')
-            ->will($this->returnValue($this->stock));
+            ->willReturn($this->stock);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockStatus')
-            ->will($this->returnValue($this->stockStatus));
+            ->willReturn($this->stockStatus);
 
         $this->stockState = $this->objectManagerHelper->getObject(
             StockState::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
@@ -52,7 +54,7 @@ class AddInventoryDataObserverTest extends TestCase
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
-            ->will($this->returnValue($this->event));
+            ->willReturn($this->event);
 
         $this->observer = (new ObjectManager($this))->getObject(
             AddInventoryDataObserver::class,
@@ -70,12 +72,11 @@ class AddInventoryDataObserverTest extends TestCase
 
         $this->event->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->stockHelper->expects($this->once())
             ->method('assignStatusToProduct')
-            ->with($product)
-            ->will($this->returnSelf());
+            ->with($product)->willReturnSelf();
 
         $this->observer->execute($this->eventObserver);
     }

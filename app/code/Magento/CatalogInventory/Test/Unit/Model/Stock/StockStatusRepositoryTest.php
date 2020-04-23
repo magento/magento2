@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
@@ -73,8 +75,8 @@ class StockStatusRepositoryTest extends TestCase
             ->getMock();
         $this->stockStatusResourceMock =
             $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->stockStatusFactoryMock = $this->getMockBuilder(
             StatusFactory::class
         )

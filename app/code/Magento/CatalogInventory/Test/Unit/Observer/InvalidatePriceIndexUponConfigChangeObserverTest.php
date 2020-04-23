@@ -50,7 +50,7 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->priceIndexProcessorMock = $this->createMock(Processor::class);

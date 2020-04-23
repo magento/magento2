@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Link;
@@ -47,7 +49,7 @@ class ProductLinksTest extends TestCase
     public function testAfterGetProductCollectionShow($status, $callCount)
     {
         list($collectionMock, $subjectMock) = $this->buildMocks();
-        $this->configMock->expects($this->once())->method('isShowOutOfStock')->will($this->returnValue($status));
+        $this->configMock->expects($this->once())->method('isShowOutOfStock')->willReturn($status);
         $this->stockHelperMock
             ->expects($this->exactly($callCount))
             ->method('addInStockFilterToCollection')

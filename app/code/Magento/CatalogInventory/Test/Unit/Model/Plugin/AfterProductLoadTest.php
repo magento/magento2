@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
@@ -79,7 +80,7 @@ class AfterProductLoadTest extends TestCase
             ->willReturnSelf();
         $this->productMock->expects(($this->once()))
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
     }
 
     public function testAfterLoad()

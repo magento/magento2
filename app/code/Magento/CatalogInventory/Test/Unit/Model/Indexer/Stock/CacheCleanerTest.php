@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock;
 
@@ -63,19 +64,28 @@ class CacheCleanerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->setMethods(['getStockThresholdQty'])->getMockForAbstractClass();
-        $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)->disableOriginalConstructor()->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata', 'getLinkField'])->disableOriginalConstructor()->getMock();
-        $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+            ->setMethods(['getMetadata', 'getLinkField'])->disableOriginalConstructor()
+            ->getMock();
+        $this->selectMock = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->unit = (new ObjectManager($this))->getObject(
             CacheCleaner::class,

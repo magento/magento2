@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
@@ -6,6 +6,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Plugin;
 
@@ -48,11 +49,11 @@ class StoreGroupTest extends TestCase
         );
         $objectMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($data['object_id']));
+            ->willReturn($data['object_id']);
         $objectMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('website_id')
-            ->will($this->returnValue($data['has_website_id_changed']));
+            ->willReturn($data['has_website_id_changed']);
 
         $this->_indexerMock->expects($this->once())
             ->method('markIndexerAsInvalid');

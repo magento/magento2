@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Api;
 
 use Magento\Catalog\Model\Product;
@@ -82,7 +84,7 @@ class StockRegistryTest extends TestCase
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->product));
+            ->willReturn($this->product);
 
         $this->stock = $this->getMockForAbstractClass(
             StockInterface::class,
@@ -109,13 +111,13 @@ class StockRegistryTest extends TestCase
         );
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStock')
-            ->will($this->returnValue($this->stock));
+            ->willReturn($this->stock);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
         $this->stockRegistryProvider->expects($this->any())
             ->method('getStockStatus')
-            ->will($this->returnValue($this->stockStatus));
+            ->willReturn($this->stockStatus);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
             StockItemRepositoryInterface::class,
@@ -125,7 +127,7 @@ class StockRegistryTest extends TestCase
         );
         $this->stockItemRepository->expects($this->any())
             ->method('save')
-            ->will($this->returnValue($this->stockItem));
+            ->willReturn($this->stockItem);
 
         $this->stockRegistry = $this->objectManagerHelper->getObject(
             StockRegistry::class,
