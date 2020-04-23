@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,100 +6,116 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
+use Magento\CatalogImportExport\Model\Import\Uploader;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Driver\Http;
+use Magento\Framework\Filesystem\Driver\Https;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\Math\Random;
+use Magento\MediaStorage\Helper\File\Storage;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class UploaderTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UploaderTest extends \PHPUnit\Framework\TestCase
+class UploaderTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
+     * @var Database|MockObject
      */
     protected $coreFileStorageDb;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit\Framework\MockObject\MockObject
+     * @var Storage|MockObject
      */
     protected $coreFileStorage;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterFactory|MockObject
      */
     protected $imageFactory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|\PHPUnit\Framework\MockObject\MockObject
+     * @var NotProtectedExtension|MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadFactory|MockObject
      */
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit\Framework\MockObject\MockObject
+     * @var Write|MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
+     * @var Random|MockObject
      */
     private $random;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Uploader|MockObject
      */
     protected $uploader;
 
     protected function setUp(): void
     {
-        $this->coreFileStorageDb = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
+        $this->coreFileStorageDb = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreFileStorage = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage::class)
+        $this->coreFileStorage = $this->getMockBuilder(Storage::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageFactory = $this->getMockBuilder(\Magento\Framework\Image\AdapterFactory::class)
+        $this->imageFactory = $this->getMockBuilder(AdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->validator = $this->getMockBuilder(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class
-        )->disableOriginalConstructor()->getMock();
+            NotProtectedExtension::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\File\ReadFactory::class)
+        $this->readFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Writer::class)
+        $this->directoryMock = $this->getMockBuilder(Write::class)
             ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
         $this->filesystem->expects($this->any())
-                        ->method('getDirectoryWrite')
-                        ->willReturn($this->directoryMock);
+            ->method('getDirectoryWrite')
+            ->willReturn($this->directoryMock);
 
-        $this->random = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
+        $this->random = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRandomString'])
             ->getMock();
 
-        $this->uploader = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+        $this->uploader = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
                     $this->coreFileStorageDb,
@@ -122,7 +138,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      * @param $expectedHost
      * @param $expectedFileName
      * @param $checkAllowedExtension
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
     {
@@ -144,7 +160,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->with($tmpDir . '/' . $expectedFileName);
 
         // Create adjusted reader which does not validate path.
-        $readMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Read::class)
+        $readMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
             ->setMethods(['readAll'])
             ->getMock();
@@ -206,13 +222,17 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
-        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
-        $driverMock = $this->createPartialMock($expectedDriverPool, ['readAll', 'isExists']);
+        $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
+        $driverMock = $this->getMockBuilder($expectedDriverPool)
+            ->disableOriginalConstructor()
+            ->addMethods(['readAll'])
+            ->onlyMethods(['isExists'])
+            ->getMock();
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverMock->expects($this->any())->method('readAll')->willReturn(null);
         $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
 
-        $readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\File\ReadFactory::class)
+        $readFactory = $this->getMockBuilder(ReadFactory::class)
             ->setConstructorArgs(
                 [
                     $driverPool,
@@ -225,7 +245,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             ->with($expectedHost, $expectedScheme)
             ->willReturn($driverMock);
 
-        $uploaderMock = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+        $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
                     $this->coreFileStorageDb,
@@ -251,14 +271,14 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             [
                 '$fileUrl'              => 'http://test_uploader_file',
                 '$expectedHost'         => 'test_uploader_file',
-                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Http::class,
-                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTP,
+                '$expectedDriverPool'   => Http::class,
+                '$expectedScheme'       => DriverPool::HTTP,
             ],
             [
                 '$fileUrl'              => 'https://!:^&`;file',
                 '$expectedHost'         => '!:^&`;file',
-                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Https::class,
-                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTPS,
+                '$expectedDriverPool'   => Https::class,
+                '$expectedScheme'       => DriverPool::HTTPS,
             ],
         ];
     }
