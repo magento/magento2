@@ -1822,7 +1822,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @return float|null
      */
-    public function getTotalDueCancelLabel() {
+    public function getTotalDueCancelLabel()
+    {
         $itemCancel = true;
         foreach ($this->getAllItems() as $item) {
             if ($item->getQtyCanceled() > 0) {
