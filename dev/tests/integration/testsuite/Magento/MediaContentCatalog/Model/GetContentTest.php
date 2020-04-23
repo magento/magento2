@@ -51,4 +51,19 @@ class GetContentTest extends TestCase
         );
 
     }
+
+    /**
+     * Test for get content from entities in different store views
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_multiwebsite_different_description.php
+     */
+    public function testProductTwoWebsites(): void
+    {
+        $product = $this->productRepository->get('simple-on-two-websites-different-description');
+        $this->assertEquals(
+            '<p>Product base description</p>' . PHP_EOL . '<p>Product second description</p>',
+            $this->getContent->execute((int) $product->getEntityId(), $product->getAttributes()['description'])
+        );
+
+    }
 }
