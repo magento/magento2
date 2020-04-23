@@ -23,11 +23,11 @@ define([
 
             this.customer = customerData.get('customer');
             this.loginAsCustomer = customerData.get('loggedAsCustomer');
-            this.isVisible(this.loginAsCustomer().admin_user_id);
+            this.isVisible(this.loginAsCustomer().adminUserId);
 
             this.notificationText = $.mage.__('You are connected as <strong>%1</strong> on %2')
                 .replace('%1', this.customer().fullname)
-                .replace('%2', this.loginAsCustomer().website_name);
+                .replace('%2', this.loginAsCustomer().websiteName);
         },
 
         /** @inheritdoc */
