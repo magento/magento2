@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Block\Adminhtml;
 
 use Magento\Backend\Block\Template\Context;
@@ -84,28 +86,30 @@ class TemplateTest extends TestCase
 
     public function testAddButton()
     {
-        $this->template->addButton('1', ['title' => 'My Button']);
+        $this->template->addButton('myButton', ['title' => 'My Button']);
         $buttons = $this->buttonList->getItems()[0];
-        $this->assertContains('1', array_keys($buttons));
+        $this->assertArrayHasKey('myButton', $buttons);
     }
 
     public function testUpdateButton()
     {
-        $this->testAddButton();
+        $this->template->addButton('myButton', ['title' => 'My Button']);
+
         $this->buttonMock->expects($this->once())
             ->method('setData')
             ->with('title', 'Updated Button')
             ->willReturnSelf();
-        $result = $this->template->updateButton('1', 'title', 'Updated Button');
+        $result = $this->template->updateButton('myButton', 'title', 'Updated Button');
         $this->assertSame($this->template, $result);
     }
 
     public function testRemoveButton()
     {
-        $this->testAddButton();
-        $this->template->removeButton('1');
+        $this->template->addButton('myButton', ['title' => 'My Button']);
+
+        $this->template->removeButton('myButton');
         $buttons = $this->buttonList->getItems()[0];
-        $this->assertNotContains('1', array_keys($buttons));
+        $this->assertArrayNotHasKey('myButton', $buttons);
     }
 
     public function testGetCreateUrl()

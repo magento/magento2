@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 use Magento\Catalog\Model\Attribute\Config\Converter as AttributeConverter;
@@ -72,8 +74,8 @@ class ReaderTest extends TestCase
         )->with(
             'etc',
             'Magento_Email'
-        )->will(
-            $this->returnValue('stub')
+        )->willReturn(
+            'stub'
         );
         $schemaLocator = new SchemaLocator($moduleReader);
 
@@ -99,8 +101,8 @@ class ReaderTest extends TestCase
         )->with(
             'email_templates.xml',
             'scope'
-        )->will(
-            $this->returnValue($fileIterator)
+        )->willReturn(
+            $fileIterator
         );
 
         $this->_model = new Reader(
@@ -117,15 +119,15 @@ class ReaderTest extends TestCase
             $this->at(0)
         )->method(
             'readAll'
-        )->will(
-            $this->returnValue(file_get_contents($this->_paths[0]))
+        )->willReturn(
+            file_get_contents($this->_paths[0])
         );
         $this->read->expects(
             $this->at(1)
         )->method(
             'readAll'
-        )->will(
-            $this->returnValue(file_get_contents($this->_paths[1]))
+        )->willReturn(
+            file_get_contents($this->_paths[1])
         );
         $this->_moduleDirResolver->expects(
             $this->at(0)
@@ -133,8 +135,8 @@ class ReaderTest extends TestCase
             'getModuleName'
         )->with(
             __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml'
-        )->will(
-            $this->returnValue('Fixture_ModuleOne')
+        )->willReturn(
+            'Fixture_ModuleOne'
         );
         $this->_moduleDirResolver->expects(
             $this->at(1)
@@ -142,8 +144,8 @@ class ReaderTest extends TestCase
             'getModuleName'
         )->with(
             __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml'
-        )->will(
-            $this->returnValue('Fixture_ModuleTwo')
+        )->willReturn(
+            'Fixture_ModuleTwo'
         );
         $constraint = function (\DOMDocument $actual) {
             try {
@@ -163,8 +165,8 @@ class ReaderTest extends TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));
@@ -174,7 +176,7 @@ class ReaderTest extends TestCase
     {
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Unable to determine a module');
-        $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->will($this->returnValue(null));
+        $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->willReturn(null);
         $this->_converter->expects($this->never())->method('convert');
         $this->_model->read('scope');
     }

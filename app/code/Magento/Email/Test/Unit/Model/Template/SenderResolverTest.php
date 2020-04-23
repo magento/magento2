@@ -30,7 +30,7 @@ class SenderResolverTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -57,26 +57,26 @@ class SenderResolverTest extends TestCase
         $this->scopeConfig->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap([
-               [
-                   'trans_email/ident_' . $sender . '/name',
-                   ScopeInterface::SCOPE_STORE,
-                   $scopeId,
-                   'Test Name'
-               ],
-               [
-                   'trans_email/ident_' . $sender . '/email',
-                   ScopeInterface::SCOPE_STORE,
-                   $scopeId,
-                   'test@email.com'
-               ]
+                [
+                    'trans_email/ident_' . $sender . '/name',
+                    ScopeInterface::SCOPE_STORE,
+                    $scopeId,
+                    'Test Name'
+                ],
+                [
+                    'trans_email/ident_' . $sender . '/email',
+                    ScopeInterface::SCOPE_STORE,
+                    $scopeId,
+                    'test@email.com'
+                ]
             ]);
 
         $result = $this->senderResolver->resolve($sender);
 
-        $this->assertTrue(isset($result['name']));
+        $this->assertArrayHasKey('name', $result);
         $this->assertEquals('Test Name', $result['name']);
 
-        $this->assertTrue(isset($result['email']));
+        $this->assertArrayHasKey('email', $result);
         $this->assertEquals('test@email.com', $result['email']);
     }
 

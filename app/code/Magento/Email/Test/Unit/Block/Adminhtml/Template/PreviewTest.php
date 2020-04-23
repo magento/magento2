@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
@@ -76,7 +77,6 @@ class PreviewTest extends TestCase
                 [
                     'setDesignConfig',
                     'getDesignConfig',
-                    '__wakeup',
                     'getProcessedTemplate',
                     'getAppState',
                     'revertDesign'
@@ -98,7 +98,7 @@ class PreviewTest extends TestCase
 
         $this->template->expects($this->once())
             ->method('getProcessedTemplate')
-            ->with($this->equalTo([]))
+            ->with([])
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->template->method('getDesignConfig')
@@ -112,7 +112,7 @@ class PreviewTest extends TestCase
         $eventManage = $this->createMock(ManagerInterface::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $design = $this->createMock(DesignInterface::class);
-        $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
+        $store = $this->createPartialMock(Store::class, ['getId']);
 
         $store->expects($this->any())
             ->method('getId')
@@ -180,7 +180,7 @@ class PreviewTest extends TestCase
             ->method('getDefaultStoreView');
         $this->maliciousCode->expects($this->once())
             ->method('filter')
-            ->with($this->equalTo($requestParamMap[1][2]))
+            ->with($requestParamMap[1][2])
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->assertEquals(self::MALICIOUS_TEXT, $this->preview->toHtml());

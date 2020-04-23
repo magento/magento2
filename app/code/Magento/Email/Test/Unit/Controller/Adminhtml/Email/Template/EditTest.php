@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
 
 use Magento\Backend\App\Action\Context;
@@ -152,11 +154,10 @@ class EditTest extends TestCase
                 ]
             );
         $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->method('getMenuModel')->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);

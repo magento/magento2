@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column;
@@ -65,6 +67,6 @@ class ActionTest extends TestCase
         $this->action->setColumn($this->columnMock);
         $row = new DataObject();
         $row->setId(1);
-        $this->assertContains('admin__control-select', $this->action->render($row));
+        $this->assertStringContainsString('admin__control-select', $this->action->render($row));
     }
 }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Backend\Helper\Data;
@@ -63,7 +65,10 @@ class EditTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $layoutMock = $this->createPartialMock(Layout::class, ['helper']);
+        $layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['helper'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $helperMock = $this->createMock(Data::class);
         $menuConfigMock = $this->createMock(Config::class);
         $menuMock = $this->getMockBuilder(Menu::class)
@@ -74,10 +79,11 @@ class EditTest extends TestCase
         $this->_configStructureMock = $this->createMock(Structure::class);
         $this->_emailConfigMock = $this->createMock(\Magento\Email\Model\Template\Config::class);
 
-        $this->filesystemMock = $this->createPartialMock(
-            Filesystem::class,
-            ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead']
-        );
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->addMethods(['getFilesystem', 'getPath'])
+            ->onlyMethods(['getDirectoryRead'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $viewFilesystem = $this->getMockBuilder(FilesystemView::class)
             ->setMethods(['getTemplateFileName'])
@@ -87,8 +93,8 @@ class EditTest extends TestCase
             $this->any()
         )->method(
             'getTemplateFileName'
-        )->will(
-            $this->returnValue(DirectoryList::ROOT . '/custom/filename.phtml')
+        )->willReturn(
+            DirectoryList::ROOT . '/custom/filename.phtml'
         );
 
         $params = [
@@ -105,12 +111,12 @@ class EditTest extends TestCase
             $params
         );
 
-        $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
-        $menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($menuMock));
-        $menuMock->expects($this->any())->method('get')->will($this->returnValue($menuItemMock));
-        $menuItemMock->expects($this->any())->method('getTitle')->will($this->returnValue('Title'));
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
+        $menuConfigMock->expects($this->any())->method('getMenu')->willReturn($menuMock);
+        $menuMock->expects($this->any())->method('get')->willReturn($menuItemMock);
+        $menuItemMock->expects($this->any())->method('getTitle')->willReturn('Title');
 
-        $layoutMock->expects($this->any())->method('helper')->will($this->returnValue($helperMock));
+        $layoutMock->expects($this->any())->method('helper')->willReturn($helperMock);
 
         $this->_block = $objectManager->getObject(Edit::class, $arguments);
     }
@@ -149,25 +155,25 @@ class EditTest extends TestCase
             [['section1', 'group1', 'group2', 'field1'], $filedMock],
             [['section1', 'group1', 'group2', 'group3', 'field1'], $filedMock],
         ];
-        $sectionMock->expects($this->any())->method('getLabel')->will($this->returnValue('Section_1_Label'));
-        $groupMock1->expects($this->any())->method('getLabel')->will($this->returnValue('Group_1_Label'));
-        $groupMock2->expects($this->any())->method('getLabel')->will($this->returnValue('Group_2_Label'));
-        $groupMock3->expects($this->any())->method('getLabel')->will($this->returnValue('Group_3_Label'));
-        $filedMock->expects($this->any())->method('getLabel')->will($this->returnValue('Field_1_Label'));
+        $sectionMock->expects($this->any())->method('getLabel')->willReturn('Section_1_Label');
+        $groupMock1->expects($this->any())->method('getLabel')->willReturn('Group_1_Label');
+        $groupMock2->expects($this->any())->method('getLabel')->willReturn('Group_2_Label');
+        $groupMock3->expects($this->any())->method('getLabel')->willReturn('Group_3_Label');
+        $filedMock->expects($this->any())->method('getLabel')->willReturn('Field_1_Label');
 
         $this->_configStructureMock->expects($this->any())
             ->method('getElement')
             ->with('section1')
-            ->will($this->returnValue($sectionMock));
+            ->willReturn($sectionMock);
 
         $this->_configStructureMock->expects($this->any())
             ->method('getElementByPathParts')
-            ->will($this->returnValueMap($map));
+            ->willReturnMap($map);
 
         $templateMock = $this->createMock(BackendTemplate::class);
         $templateMock->expects($this->once())
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
-            ->will($this->returnValue($this->_fixtureConfigPath));
+            ->willReturn($this->_fixtureConfigPath);
 
         $this->_block->setEmailTemplate($templateMock);
 
@@ -207,30 +213,28 @@ class EditTest extends TestCase
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($directoryMock));
+            ->willReturn($directoryMock);
 
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->will($this->returnValue(
+            ->willReturn([
                 [
-                    [
-                        'value' => 'template_b2',
-                        'label' => 'Template B2',
-                        'group' => 'Fixture_ModuleB',
-                    ],
-                    [
-                        'value' => 'template_a',
-                        'label' => 'Template A',
-                        'group' => 'Fixture_ModuleA',
-                    ],
-                    [
-                        'value' => 'template_b1',
-                        'label' => 'Template B1',
-                        'group' => 'Fixture_ModuleB',
-                    ],
-                ]
-            ));
+                    'value' => 'template_b2',
+                    'label' => 'Template B2',
+                    'group' => 'Fixture_ModuleB',
+                ],
+                [
+                    'value' => 'template_a',
+                    'label' => 'Template A',
+                    'group' => 'Fixture_ModuleA',
+                ],
+                [
+                    'value' => 'template_b1',
+                    'label' => 'Template B1',
+                    'group' => 'Fixture_ModuleB',
+                ],
+            ]);
 
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');

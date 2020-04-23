@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 use Magento\Email\Model\Template\Config\FileIterator;
@@ -76,14 +78,14 @@ class FileIteratorTest extends TestCase
             $this->moduleDirResolverMock->expects($this->at($index))
                 ->method('getModuleName')
                 ->with($filePath)
-                ->will($this->returnValue($moduleName));
+                ->willReturn($moduleName);
             $this->fileReadFactory->expects($this->at($dirIndex))
                 ->method('create')
                 ->with($filePath)
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($dirIndex++))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
@@ -101,7 +103,7 @@ class FileIteratorTest extends TestCase
         $this->moduleDirResolverMock->expects($this->at(0))
             ->method('getModuleName')
             ->with($filePath)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->fileReadFactory->expects($this->never())->method('create');
         $this->fileRead->expects($this->never())->method('readAll');
 

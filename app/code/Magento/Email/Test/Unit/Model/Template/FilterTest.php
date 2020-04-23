@@ -221,17 +221,17 @@ class FilterTest extends TestCase
 
         $this->directiveProcessors = [
             'depend' => $this->getMockBuilder(DependDirective::class)
-                    ->disableOriginalConstructor()
-                    ->getMock(),
+                ->disableOriginalConstructor()
+                ->getMock(),
             'if' => $this->getMockBuilder(IfDirective::class)
-                    ->disableOriginalConstructor()
-                    ->getMock(),
+                ->disableOriginalConstructor()
+                ->getMock(),
             'template' => $this->getMockBuilder(TemplateDirective::class)
-                    ->disableOriginalConstructor()
-                    ->getMock(),
+                ->disableOriginalConstructor()
+                ->getMock(),
             'legacy' => $this->getMockBuilder(LegacyDirective::class)
-                    ->disableOriginalConstructor()
-                    ->getMock(),
+                ->disableOriginalConstructor()
+                ->getMock(),
         ];
     }
 
@@ -294,7 +294,7 @@ class FilterTest extends TestCase
 
         $filter->expects($this->exactly(count($expectedResults)))
             ->method('getCssFilesContent')
-            ->will($this->returnValue($css));
+            ->willReturn($css);
 
         $designParams = [
             'area' => Area::AREA_FRONTEND,
@@ -304,7 +304,7 @@ class FilterTest extends TestCase
         $filter->setDesignParams($designParams);
 
         foreach ($expectedResults as $expectedResult) {
-            $this->assertContains($expectedResult, $filter->applyInlineCss($html));
+            $this->assertStringContainsString($expectedResult, $filter->applyInlineCss($html));
         }
     }
 

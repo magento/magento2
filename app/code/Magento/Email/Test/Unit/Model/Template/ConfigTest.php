@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template;
 
 use Magento\Email\Model\Template\Config;
@@ -64,8 +66,8 @@ class ConfigTest extends TestCase
             $this->any()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php')
+        )->willReturn(
+            require __DIR__ . '/Config/_files/email_templates_merged.php'
         );
         $this->_moduleReader = $this->createPartialMock(Reader::class, ['getModuleDir']);
         $this->viewFileSystem = $this->createPartialMock(
@@ -254,8 +256,8 @@ class ConfigTest extends TestCase
             'one.html',
             $this->designParams,
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
@@ -278,8 +280,8 @@ class ConfigTest extends TestCase
                 'module' => $this->designParams['module'],
             ],
             'Fixture_ModuleOne'
-        )->will(
-            $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
+        )->willReturn(
+            '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
         $actualResult = $this->model->getTemplateFilename('template_one');
@@ -349,8 +351,8 @@ class ConfigTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'get'
-        )->will(
-            $this->returnValue(['fixture' => $fixtureFields])
+        )->willReturn(
+            ['fixture' => $fixtureFields]
         );
         $model = new Config(
             $dataStorage,

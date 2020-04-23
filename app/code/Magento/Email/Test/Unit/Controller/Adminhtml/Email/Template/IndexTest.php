@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
 
 use Magento\Backend\App\Action\Context;
@@ -145,13 +147,12 @@ class IndexTest extends TestCase
         $this->layoutMock->expects($this->at(0))
             ->method('getBlock')
             ->with('menu')
-            ->will($this->returnValue($this->menuBlockMock));
+            ->willReturn($this->menuBlockMock);
         $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->method('getMenuModel')->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
             ->method('getParentItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->viewMock->expects($this->once())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -167,7 +168,7 @@ class IndexTest extends TestCase
         $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with('breadcrumbs')
-            ->will($this->returnValue($this->breadcrumbsBlockMock));
+            ->willReturn($this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();
@@ -187,7 +188,7 @@ class IndexTest extends TestCase
             ->getMock();
         $indexController->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $indexController->expects($this->once())
             ->method('_forward')
             ->with('grid');

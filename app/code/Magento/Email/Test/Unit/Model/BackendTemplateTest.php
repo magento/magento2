@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for Magento\Email\Model\BackendTemplate.
@@ -96,7 +97,8 @@ class BackendTemplateTest extends TestCase
 
         ObjectManager::setInstance($objectManagerMock);
 
-        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
 
         $this->model = $helper->getObject(
             BackendTemplate::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 use Magento\Email\Model\Template\Config\SchemaLocator;
@@ -32,8 +34,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Email'
-        )->will(
-            $this->returnValue('fixture_dir')
+        )->willReturn(
+            'fixture_dir'
         );
         $this->_model = new SchemaLocator($this->_moduleReader);
     }

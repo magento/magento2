@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Email\Model\AbstractTemplate.
@@ -101,13 +102,13 @@ class AbstractTemplateTest extends TestCase
             ->getMock();
         $this->store->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('frontendName'));
+            ->willReturn('frontendName');
         $this->store->expects($this->any())
             ->method('getFrontendName')
-            ->will($this->returnValue('storeId'));
+            ->willReturn('storeId');
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -178,16 +179,16 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate = $this->getMockBuilder(Filter::class)
             ->setMethods(
                 [
-                'setUseSessionInUrl',
-                'setPlainTemplateMode',
-                'setIsChildTemplate',
-                'setDesignParams',
-                'setVariables',
-                'setStoreId',
-                'filter',
-                'getStoreId',
-                'getInlineCssFiles',
-                'setStrictMode',
+                    'setUseSessionInUrl',
+                    'setPlainTemplateMode',
+                    'setIsChildTemplate',
+                    'setDesignParams',
+                    'setVariables',
+                    'setStoreId',
+                    'filter',
+                    'getStoreId',
+                    'getInlineCssFiles',
+                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
@@ -195,24 +196,19 @@ class AbstractTemplateTest extends TestCase
 
         $filterTemplate->expects($this->never())
             ->method('setUseSessionInUrl')
-            ->with(false)
-            ->will($this->returnSelf());
+            ->with(false)->willReturnSelf();
         $filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
-            ->with($templateType === TemplateTypesInterface::TYPE_TEXT)
-            ->will($this->returnSelf());
+            ->with($templateType === TemplateTypesInterface::TYPE_TEXT)->willReturnSelf();
         $filterTemplate->expects($this->once())
-            ->method('setIsChildTemplate')
-            ->will($this->returnSelf());
+            ->method('setIsChildTemplate')->willReturnSelf();
         $filterTemplate->expects($this->once())
-            ->method('setDesignParams')
-            ->will($this->returnSelf());
+            ->method('setDesignParams')->willReturnSelf();
         $filterTemplate->expects($this->any())
-            ->method('setStoreId')
-            ->will($this->returnSelf());
+            ->method('setStoreId')->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $filterTemplate->expects($this->exactly(2))
             ->method('setStrictMode')
             ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
@@ -222,10 +218,10 @@ class AbstractTemplateTest extends TestCase
 
         $model = $this->getModelMock(
             [
-            'getDesignParams',
-            'applyDesignConfig',
-            'getTemplateText',
-            'isPlain',
+                'getDesignParams',
+                'applyDesignConfig',
+                'getTemplateText',
+                'isPlain',
             ]
         );
         $filterTemplate->expects($this->any())
@@ -242,21 +238,21 @@ class AbstractTemplateTest extends TestCase
         ];
         $model->expects($this->any())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
 
         $model->expects($this->atLeastOnce())
             ->method('isPlain')
-            ->will($this->returnValue($templateType === TemplateTypesInterface::TYPE_TEXT));
+            ->willReturn($templateType === TemplateTypesInterface::TYPE_TEXT);
 
         $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
             ->method('getTemplateText')
-            ->will($this->returnValue($preparedTemplateText));
+            ->willReturn($preparedTemplateText);
 
         $filterTemplate->expects($this->once())
             ->method('filter')
             ->with($preparedTemplateText)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
     }
@@ -267,35 +263,31 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate = $this->getMockBuilder(Filter::class)
             ->setMethods(
                 [
-                'setPlainTemplateMode',
-                'setIsChildTemplate',
-                'setDesignParams',
-                'setVariables',
-                'setStoreId',
-                'filter',
-                'getStoreId',
-                'getInlineCssFiles',
-                'setStrictMode',
+                    'setPlainTemplateMode',
+                    'setIsChildTemplate',
+                    'setDesignParams',
+                    'setVariables',
+                    'setStoreId',
+                    'filter',
+                    'getStoreId',
+                    'getInlineCssFiles',
+                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
 
         $filterTemplate->expects($this->once())
-            ->method('setPlainTemplateMode')
-            ->will($this->returnSelf());
+            ->method('setPlainTemplateMode')->willReturnSelf();
         $filterTemplate->expects($this->once())
-            ->method('setIsChildTemplate')
-            ->will($this->returnSelf());
+            ->method('setIsChildTemplate')->willReturnSelf();
         $filterTemplate->expects($this->once())
-            ->method('setDesignParams')
-            ->will($this->returnSelf());
+            ->method('setDesignParams')->willReturnSelf();
         $filterTemplate->expects($this->any())
-            ->method('setStoreId')
-            ->will($this->returnSelf());
+            ->method('setStoreId')->willReturnSelf();
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $filterTemplate->expects($this->exactly(2))
             ->method('setStrictMode')
             ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
@@ -303,10 +295,10 @@ class AbstractTemplateTest extends TestCase
 
         $model = $this->getModelMock(
             [
-            'getDesignParams',
-            'applyDesignConfig',
-            'getTemplateText',
-            'isPlain',
+                'getDesignParams',
+                'applyDesignConfig',
+                'getTemplateText',
+                'isPlain',
             ]
         );
 
@@ -317,14 +309,14 @@ class AbstractTemplateTest extends TestCase
         ];
         $model->expects($this->any())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType(TemplateTypesInterface::TYPE_TEXT);
         $model->setTemplateId('abc');
 
         $filterTemplate->expects($this->once())
             ->method('filter')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $model->getProcessedTemplate([]);
     }
 
@@ -384,10 +376,10 @@ class AbstractTemplateTest extends TestCase
         ];
         $model->expects($this->once())
             ->method('getDesignParams')
-            ->will($this->returnValue($designParams));
+            ->willReturn($designParams);
         $this->assetRepo->method('getUrlWithParams')
             ->with(AbstractTemplate::DEFAULT_LOGO_FILE_ID, $designParams)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $this->assertEquals($value, $model->getDefaultEmailLogo());
     }
 
