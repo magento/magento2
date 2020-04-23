@@ -88,7 +88,7 @@ class Storage
             return $result;
         }
 
-        $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($target);
+        $relativePath = $this->getMediaDirectoryRelativePath($target);
         if (!$relativePath) {
             return $result;
         }
@@ -120,13 +120,22 @@ class Storage
         }
 
         try {
-            $mediaDirectoryRead = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            $relativePath = $mediaDirectoryRead->getRelativePath($path);
-            $this->deleteMediaAssetByDirectoryPath->execute($relativePath);
+            $this->deleteMediaAssetByDirectoryPath->execute($this->getMediaDirectoryRelativePath($path));
         } catch (ValidatorException $exception) {
             $this->logger->critical($exception);
         }
 
         return $result;
+    }
+
+    /**
+     * Get path relative to media directory
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getMediaDirectoryRelativePath(string $path): string
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
     }
 }
