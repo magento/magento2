@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Model;
 
 use Magento\Framework\App\Cache\StateInterface;
@@ -68,61 +70,59 @@ class ConfigTest extends TestCase
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($modulesDirectoryMock)
+        )->willReturn(
+            $modulesDirectoryMock
         );
         $modulesDirectoryMock->expects(
             $this->any()
         )->method(
             'readFile'
-        )->will(
-            $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
+        )->willReturn(
+            file_get_contents(__DIR__ . '/_files/test.vcl')
         );
         $this->coreConfigMock->expects(
             $this->any()
         )->method(
             'getValue'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            [
                 [
-                    [
-                        Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        'example.com',
-                    ],
-                    [
-                        Config::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        '8080'
-                    ],
-                    [
-                        Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        '127.0.0.1, 192.168.0.1,127.0.0.2'
-                    ],
-                    [
-                        Config::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        'serializedConfig'
-                    ],
-                    [
-                        Request::XML_PATH_OFFLOADER_HEADER,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        'X_Forwarded_Proto: https'
-                    ],
-                    [
-                        Config::XML_VARNISH_PAGECACHE_GRACE_PERIOD,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null,
-                        120
-                    ],
-                ]
-            )
+                    Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    'example.com',
+                ],
+                [
+                    Config::XML_VARNISH_PAGECACHE_BACKEND_PORT,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    '8080'
+                ],
+                [
+                    Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    '127.0.0.1, 192.168.0.1,127.0.0.2'
+                ],
+                [
+                    Config::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
+                    ScopeInterface::SCOPE_STORE,
+                    null,
+                    'serializedConfig'
+                ],
+                [
+                    Request::XML_PATH_OFFLOADER_HEADER,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    'X_Forwarded_Proto: https'
+                ],
+                [
+                    Config::XML_VARNISH_PAGECACHE_GRACE_PERIOD,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    120
+                ],
+            ]
         );
 
         $this->moduleReader = $this->createMock(Reader::class);
@@ -135,7 +135,7 @@ class ConfigTest extends TestCase
             ->getMock();
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
-            ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
+            ->willReturn(file_get_contents(__DIR__ . '/_files/test.vcl'));
         /** @var MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(VclGeneratorFactory::class)
             ->disableOriginalConstructor()
@@ -152,7 +152,7 @@ class ConfigTest extends TestCase
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
             ->with($expectedParams)
-            ->will($this->returnValue(new VclGenerator(
+            ->willReturn(new VclGenerator(
                 $vclTemplateLocator,
                 'example.com',
                 '8080',
@@ -160,7 +160,7 @@ class ConfigTest extends TestCase
                 120,
                 'X_Forwarded_Proto: https',
                 [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
-            )));
+            ));
         $this->config = $objectManager->getObject(
             Config::class,
             [
@@ -201,11 +201,11 @@ class ConfigTest extends TestCase
         $this->cacheState->expects($this->at(0))
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->cacheState->expects($this->at(1))
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertTrue($this->config->isEnabled());
         $this->assertFalse($this->config->isEnabled());
     }

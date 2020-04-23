@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
@@ -30,7 +32,7 @@ class DepersonalizeCheckerTest extends TestCase
      */
     private $cacheConfigMock;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->requestMock = $this->createMock(Http::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);

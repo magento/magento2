@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\App\FrontController;
 
@@ -99,20 +100,20 @@ class BuiltinPluginTest extends TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue(Config::BUILT_IN));
+            ->willReturn(Config::BUILT_IN);
         $this->configMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->versionMock
             ->expects($this->once())
             ->method('process');
         $this->kernelMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stateMock->expects($this->any())
             ->method('getMode')
-            ->will($this->returnValue($state));
+            ->willReturn($state);
         if ($state == State::MODE_DEVELOPER) {
             $this->responseMock->expects($this->at(1))
                 ->method('setHeader')
@@ -128,7 +129,7 @@ class BuiltinPluginTest extends TestCase
             ->expects($this->once())
             ->method('getHeader')
             ->with('Cache-Control')
-            ->will($this->returnValue($header));
+            ->willReturn($header);
         $this->kernelMock
             ->expects($this->once())
             ->method('process')
@@ -147,20 +148,20 @@ class BuiltinPluginTest extends TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue(Config::BUILT_IN));
+            ->willReturn(Config::BUILT_IN);
         $this->configMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->versionMock
             ->expects($this->once())
             ->method('process');
         $this->kernelMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->stateMock->expects($this->any())
             ->method('getMode')
-            ->will($this->returnValue($state));
+            ->willReturn($state);
 
         $result = $this->createMock(ResultInterface::class);
         $result->expects($this->never())->method('setHeader');
@@ -182,21 +183,21 @@ class BuiltinPluginTest extends TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue(Config::BUILT_IN));
+            ->willReturn(Config::BUILT_IN);
         $this->configMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->versionMock
             ->expects($this->once())
             ->method('process');
         $this->kernelMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
 
         $this->stateMock->expects($this->any())
             ->method('getMode')
-            ->will($this->returnValue($state));
+            ->willReturn($state);
         if ($state == State::MODE_DEVELOPER) {
             $this->responseMock->expects($this->once())
                 ->method('setHeader')
@@ -219,16 +220,16 @@ class BuiltinPluginTest extends TestCase
         $this->configMock
             ->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configMock->expects($this->any())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->versionMock
             ->expects($this->once())
             ->method('process');
         $this->stateMock->expects($this->any())
             ->method('getMode')
-            ->will($this->returnValue($state));
+            ->willReturn($state);
         $this->responseMock->expects($this->never())
             ->method('setHeader');
         $this->assertSame(

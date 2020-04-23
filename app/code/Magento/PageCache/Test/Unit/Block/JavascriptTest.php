@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Block;
 
 use Magento\Framework\App\RequestInterface;
@@ -57,21 +60,27 @@ class JavascriptTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->createPartialMock(RequestInterface::class, [
-                'getRouteName',
-                'getControllerName',
-                'getModuleName',
-                'getActionName',
-                'getRequestUri',
-                'getParam',
-                'setParams',
-                'getParams',
-                'setModuleName',
-                'isSecure',
-                'setActionName',
-                'setRequestUri',
-                'getCookie'
-            ]);
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->onlyMethods(
+                [
+                    'getModuleName',
+                    'getActionName',
+                    'getParam',
+                    'setParams',
+                    'getParams',
+                    'setModuleName',
+                    'isSecure',
+                    'setActionName',
+                    'getCookie'
+                ]
+            )->addMethods(
+                [
+                    'getControllerName',
+                    'getRequestUri',
+                    'setRequestUri',
+                    'getRouteName'
+                ]
+            )->getMockForAbstractClass();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -137,7 +146,7 @@ class JavascriptTest extends TestCase
         $this->layoutUpdateMock->expects($this->once())
             ->method('getHandles')
             ->willReturn($handles);
-        $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
+        $this->assertMatchesRegularExpression($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
     /**
@@ -203,7 +212,7 @@ class JavascriptTest extends TestCase
         $this->layoutUpdateMock->expects($this->once())
             ->method('getHandles')
             ->willReturn($handles);
-        $this->assertRegExp($expectedResult, $this->blockJavascript->getScriptOptions());
+        $this->assertMatchesRegularExpression($expectedResult, $this->blockJavascript->getScriptOptions());
     }
 
     /**

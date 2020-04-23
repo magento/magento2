@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
@@ -74,7 +75,8 @@ class RenderTest extends TestCase
     protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutProcessorMock = $this->getMockForAbstractClass(
             ProcessorInterface::class
@@ -84,24 +86,28 @@ class RenderTest extends TestCase
         );
 
         $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock = $this->getMockBuilder(
             Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->viewMock = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutMock->expects($this->any())
             ->method('getUpdate')
-            ->will($this->returnValue($this->layoutProcessorMock));
+            ->willReturn($this->layoutProcessorMock);
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
         $this->translateInline = $this->createMock(InlineInterface::class);
 
@@ -120,9 +126,9 @@ class RenderTest extends TestCase
 
     public function testExecuteNotAjax()
     {
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(false));
-        $this->requestMock->expects($this->once())->method('setActionName')->will($this->returnValue('noroute'));
-        $this->requestMock->expects($this->once())->method('setDispatched')->will($this->returnValue(false));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('setActionName')->willReturn('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->willReturn(false);
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
@@ -133,15 +139,15 @@ class RenderTest extends TestCase
      */
     public function testExecuteNoParams()
     {
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
         $this->requestMock->expects($this->at(10))
             ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo(''))
-            ->will($this->returnValue(''));
+            ->with('blocks', '')
+            ->willReturn('');
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(''));
+            ->with('handles', '')
+            ->willReturn('');
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
@@ -158,55 +164,55 @@ class RenderTest extends TestCase
             StubBlock::class,
             ['toHtml']
         );
-        $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block1']));
+        $blockInstance1->expects($this->once())->method('toHtml')->willReturn($expectedData['block1']);
 
         $blockInstance2 = $this->createPartialMock(
             StubBlock::class,
             ['toHtml']
         );
-        $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
+        $blockInstance2->expects($this->once())->method('toHtml')->willReturn($expectedData['block2']);
 
-        $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
 
         $this->requestMock->expects($this->at(1))
             ->method('getRouteName')
-            ->will($this->returnValue('magento_pagecache'));
+            ->willReturn('magento_pagecache');
         $this->requestMock->expects($this->at(2))
             ->method('getControllerName')
-            ->will($this->returnValue('block'));
+            ->willReturn('block');
         $this->requestMock->expects($this->at(3))
             ->method('getActionName')
-            ->will($this->returnValue('render'));
+            ->willReturn('render');
         $this->requestMock->expects($this->at(4))
             ->method('getRequestUri')
-            ->will($this->returnValue('uri'));
+            ->willReturn('uri');
         $this->requestMock->expects($this->at(5))
             ->method('getParam')
-            ->with($this->equalTo('originalRequest'))
-            ->will($this->returnValue($originalRequest));
+            ->with('originalRequest')
+            ->willReturn($originalRequest);
 
         $this->requestMock->expects($this->at(10))
             ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo(''))
-            ->will($this->returnValue(json_encode($blocks)));
+            ->with('blocks', '')
+            ->willReturn(json_encode($blocks));
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(base64_encode(json_encode($handles))));
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+            ->with('handles', '')
+            ->willReturn(base64_encode(json_encode($handles)));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($handles);
+        $this->viewMock->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
         $this->layoutMock->expects($this->never())
             ->method('getUpdate');
         $this->layoutCacheKeyMock->expects($this->atLeastOnce())
             ->method('addCacheKeys');
         $this->layoutMock->expects($this->at(0))
             ->method('getBlock')
-            ->with($this->equalTo($blocks[0]))
-            ->will($this->returnValue($blockInstance1));
+            ->with($blocks[0])
+            ->willReturn($blockInstance1);
         $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
-            ->with($this->equalTo($blocks[1]))
-            ->will($this->returnValue($blockInstance2));
+            ->with($blocks[1])
+            ->willReturn($blockInstance2);
 
         $this->translateInline->expects($this->once())
             ->method('processResponseBody')
@@ -215,7 +221,7 @@ class RenderTest extends TestCase
 
         $this->responseMock->expects($this->once())
             ->method('appendBody')
-            ->with($this->equalTo(json_encode($expectedData)));
+            ->with(json_encode($expectedData));
 
         $this->action->execute();
     }

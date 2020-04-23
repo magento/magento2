@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\PageCache\Controller\Adminhtml/PageCache
@@ -63,27 +64,33 @@ class ExportVarnishConfigTest extends TestCase
     {
         $this->fileFactoryMock = $this->getMockBuilder(
             FileFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->configMock = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $contextMock = $this->getMockBuilder(
             Context::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock = $this->getMockBuilder(
             Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->viewMock = $this->getMockBuilder(
             View::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
         $this->action = new ExportVarnishConfig(
             $contextMock,
@@ -98,19 +105,20 @@ class ExportVarnishConfigTest extends TestCase
         $filename = 'varnish.vcl';
         $responseMock = $this->getMockBuilder(
             ResponseInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->configMock->expects($this->once())->method('getVclFile')->will($this->returnValue($fileContent));
+        $this->configMock->expects($this->once())->method('getVclFile')->willReturn($fileContent);
         $this->fileFactoryMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            $this->equalTo($filename),
-            $this->equalTo($fileContent),
-            $this->equalTo(DirectoryList::VAR_DIR)
-        )->will(
-            $this->returnValue($responseMock)
+            $filename,
+            $fileContent,
+            DirectoryList::VAR_DIR
+        )->willReturn(
+            $responseMock
         );
 
         $result = $this->action->execute();

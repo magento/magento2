@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\App\Cache\TypeList;
@@ -26,7 +28,7 @@ class InvalidateCacheTest extends TestCase
     protected $_typeListMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|MockObject
+     * @var Observer|MockObject
      */
     protected $observerMock;
 
@@ -52,10 +54,10 @@ class InvalidateCacheTest extends TestCase
      */
     public function testExecute($cacheState)
     {
-        $this->_configMock->expects($this->once())->method('isEnabled')->will($this->returnValue($cacheState));
+        $this->_configMock->expects($this->once())->method('isEnabled')->willReturn($cacheState);
 
         if ($cacheState) {
-            $this->_typeListMock->expects($this->once())->method('invalidate')->with($this->equalTo('full_page'));
+            $this->_typeListMock->expects($this->once())->method('invalidate')->with('full_page');
         }
 
         $this->_model->execute($this->observerMock);
