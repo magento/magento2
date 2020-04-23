@@ -3,9 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout\Link;
 
-class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layout\AbstractTestCase
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Widget\Model\ResourceModel\Layout\Link\Collection;
+use Magento\Widget\Test\Unit\Model\ResourceModel\Layout\AbstractTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
+
+class CollectionTest extends AbstractTestCase
 {
     /**
      * Name of test table
@@ -20,19 +32,19 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
     protected $_tableAlias = 'update';
 
     /**
-     * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Widget\Model\ResourceModel\Layout\Link\Collection
+     * @param Select $select
+     * @return Collection
      */
-    protected function _getCollection(\Magento\Framework\DB\Select $select)
+    protected function _getCollection(Select $select)
     {
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
 
-        return new \Magento\Widget\Model\ResourceModel\Layout\Link\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class),
-            $this->createMock(\Psr\Log\LoggerInterface::class),
-            $this->getMockForAbstractClass(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class),
+        return new Collection(
+            $this->createMock(EntityFactory::class),
+            $this->createMock(LoggerInterface::class),
+            $this->getMockForAbstractClass(FetchStrategyInterface::class),
             $eventManager,
-            $this->createPartialMock(\Magento\Framework\Stdlib\DateTime::class, []),
+            $this->createPartialMock(DateTime::class, []),
             null,
             $this->_getResource($select)
         );
@@ -44,7 +56,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
      */
     public function testAddTemporaryFilter($flag)
     {
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->setConstructorArgs(['where'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -52,7 +64,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
+        /** @var MockObject $connection */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()
@@ -84,7 +96,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
      */
     public function testJoinWithUpdate()
     {
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $select->expects(
             $this->once()
         )->method(

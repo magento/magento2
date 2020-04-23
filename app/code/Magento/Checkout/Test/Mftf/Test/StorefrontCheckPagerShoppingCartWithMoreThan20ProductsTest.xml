@@ -131,7 +131,7 @@
             <deleteData createDataKey="simpleProduct20" stepKey="deleteCartItem20"/>
             <deleteData createDataKey="simpleProduct21" stepKey="deleteCartItem21"/>
         </after>
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
         <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerText">
             <argument name="text" value="Items 1 to 20 of 21 total"/>
         </actionGroup>

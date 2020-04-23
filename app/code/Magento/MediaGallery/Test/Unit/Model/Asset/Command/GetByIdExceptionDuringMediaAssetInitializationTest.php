@@ -24,9 +24,19 @@ use Psr\Log\LoggerInterface;
  */
 class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
 {
-    private const MEDIA_ASSET_STUB_ID = 1;
-
-    private const MEDIA_ASSET_DATA = ['id' => 1];
+    private const MEDIA_ASSET_STUB_ID = 45;
+    private const MEDIA_ASSET_DATA = [
+        'id' => 45,
+        'path' => 'img.jpg',
+        'title' => 'Img',
+        'source' => 'Adobe Stock',
+        'content_type' => 'image/jpeg',
+        'width' => 420,
+        'height' => 240,
+        'size' => 12877,
+        'created_at' => '2020',
+        'updated_at' => '2020'
+    ];
 
     /**
      * @var GetById|MockObject
@@ -47,11 +57,6 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
      * @var Select|MockObject
      */
     private $selectStub;
-
-    /**
-     * @var Statement|MockObject
-     */
-    private $statementMock;
 
     /**
      * @var LoggerInterface|MockObject
@@ -82,8 +87,6 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
         $this->selectStub->method('from')->willReturnSelf();
         $this->selectStub->method('where')->willReturnSelf();
         $this->adapter->method('select')->willReturn($this->selectStub);
-
-        $this->statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
     }
 
     /**
@@ -91,10 +94,14 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
      */
     public function testErrorDuringMediaAssetInitializationException(): void
     {
-        $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
-        $this->adapter->method('query')->willReturn($this->statementMock);
+        $statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $statementMock->method('fetch')
+            ->willReturn(self::MEDIA_ASSET_DATA);
+        $this->adapter->method('query')->willReturn($statementMock);
 
-        $this->assetFactory->expects($this->once())->method('create')->willThrowException(new \Exception());
+        $this->assetFactory->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception());
 
         $this->expectException(IntegrationException::class);
         $this->logger->expects($this->any())

@@ -24,9 +24,19 @@ use Psr\Log\LoggerInterface;
  */
 class GetByIdExceptionOnGetDataTest extends TestCase
 {
-    private const MEDIA_ASSET_STUB_ID = 1;
-
-    private const MEDIA_ASSET_DATA = ['id' => 1];
+    private const MEDIA_ASSET_STUB_ID = 45;
+    private const MEDIA_ASSET_DATA = [
+        'id' => 45,
+        'path' => 'img.jpg',
+        'title' => 'Img',
+        'source' => 'Adobe Stock',
+        'content_type' => 'image/jpeg',
+        'width' => 420,
+        'height' => 240,
+        'size' => 12877,
+        'created_at' => '2020',
+        'updated_at' => '2020'
+    ];
 
     /**
      * @var GetById|MockObject
