@@ -70,14 +70,14 @@ class SearchDataTest extends TestCase
             ->getMock();
         $this->block = $this->getMockBuilder(SearchData::class)
             ->setConstructorArgs(
-            [
-                $this->contextMock,
-                $this->dataProvider,
-                $this->queryFactoryMock,
-                'Test Title',
-                [],
-            ]
-        )
+                [
+                    $this->contextMock,
+                    $this->dataProvider,
+                    $this->queryFactoryMock,
+                    'Test Title',
+                    [],
+                ]
+            )
             ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
     }
