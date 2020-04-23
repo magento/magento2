@@ -73,8 +73,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Should not see the discount yet because we have only 1 item in our cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
-        <waitForPageLoad stepKey="waitForCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
@@ -87,8 +86,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!-- Now we should see the discount because we have more than 1 item -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage2"/>
-        <waitForPageLoad stepKey="waitForCartPage2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage2"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$246.00" stepKey="seeSubtotal2"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$1.00" stepKey="seeDiscountTotal"/>
