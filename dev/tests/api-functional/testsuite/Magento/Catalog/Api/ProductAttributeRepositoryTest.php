@@ -362,7 +362,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             $this->_webApiCall($serviceInfo, ['attributeCode' => $attributeCode]);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

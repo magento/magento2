@@ -372,7 +372,7 @@ class AccountManagementTest extends WebapiAbstract
             }
             $this->fail("Expected exception to be thrown.");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception message does not match"
