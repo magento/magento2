@@ -72,7 +72,7 @@
         <!-- 3. Go to storefront and click on cart button on the top -->
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForReload"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.show}}" stepKey="showMiniCart"/>
 
         <!-- Small cart popup appeared. -->
         <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="seePopUpAppeared"/>
@@ -339,7 +339,7 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showCart"/>
+        <click selector="{{StorefrontMinicartSection.show}}" stepKey="showCart"/>
 
         <!-- Small cart popup appeared. -->
         <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="waitPopUpAppeared"/>
@@ -438,7 +438,7 @@
         <magentoCLI command="cache:flush" stepKey="flushCache3"/>
         <reloadPage stepKey="reloadProductPage"/>
         <waitForPageLoad stepKey="waitForReloadPage"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="showMiniCartPopup"/>
+        <click selector="{{StorefrontMinicartSection.show}}" stepKey="showMiniCartPopup"/>
         <waitForElementVisible selector="{{StorefrontMinicartSection.blockMiniCart}}" stepKey="waitForPopUpAppeared"/>
 
         <actionGroup ref="AdminTranslateElementActionGroup" stepKey="revertTranslateProceedToCheckout">
