@@ -37,10 +37,12 @@ class Validator implements ValidatorInterface
     public function validate(array $searchConfig = []): array
     {
         $errors = [];
-        $searchEngine = $searchConfig['engine'] ?? null;
+        $searchEngine = $searchConfig['search-engine'] ?? null;
         try {
             $client = $this->clientResolver->create($searchEngine);
-            $client->testConnection();
+            if (!$client->testConnection()) {
+                $errors[] = 'Elasticsearch connection validation failed';
+            }
         } catch (\Exception $e) {
             $errors[] = 'Elasticsearch connection validation failed: ' . $e->getMessage();
         }

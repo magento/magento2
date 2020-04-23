@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Setup;
 
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use Magento\Search\Setup\InstallConfigInterface;
@@ -32,22 +31,14 @@ class InstallConfig implements InstallConfigInterface
     private $configWriter;
 
     /**
-     * @var ReinitableConfigInterface
-     */
-    private $reinitableConfig;
-
-    /**
      * @param WriterInterface $configWriter
-     * @param ReinitableConfigInterface $reinitableConfig
      * @param array $searchConfigMapping
      */
     public function __construct(
         WriterInterface $configWriter,
-        ReinitableConfigInterface $reinitableConfig,
         array $searchConfigMapping = []
     ) {
         $this->configWriter = $configWriter;
-        $this->reinitableConfig = $reinitableConfig;
         $this->searchConfigMapping = array_merge($this->searchConfigMapping, $searchConfigMapping);
     }
 
@@ -63,6 +54,5 @@ class InstallConfig implements InstallConfigInterface
             $configKey = $this->searchConfigMapping[$inputKey];
             $this->configWriter->save(self::CATALOG_SEARCH . $configKey, $inputValue);
         }
-        $this->reinitableConfig->reinit();
     }
 }

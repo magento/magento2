@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Search\Setup;
 
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
@@ -47,9 +48,14 @@ class CompositeInstallConfig implements InstallConfigInterface
             $searchEngine = $this->scopeConfig->getValue('catalog/search/engine');
         }
 
-        if (isset($this->installConfigList[$searchEngine])) {
+        if (isset($this->installConfigList[$searchEngine]) && !empty($inputOptions)) {
             $installConfig = $this->installConfigList[$searchEngine];
             $installConfig->configure($inputOptions);
+
+            //Clean config so new configuration is loaded
+            if ($this->scopeConfig instanceof Config) {
+                $this->scopeConfig->clean();
+            }
         }
     }
 }

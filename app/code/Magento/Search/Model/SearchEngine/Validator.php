@@ -44,7 +44,6 @@ class Validator implements ValidatorInterface
         $this->engineBlacklist = array_merge($this->engineBlacklist, $engineBlacklist);
     }
 
-
     /**
      * @inheritDoc
      */
@@ -52,8 +51,8 @@ class Validator implements ValidatorInterface
     {
         $errors = [];
 
-        $currentEngine = isset($searchConfig['engine'])
-            ? $searchConfig['engine']
+        $currentEngine = isset($searchConfig['search-engine'])
+            ? $searchConfig['search-engine']
             : $this->scopeConfig->getValue('catalog/search/engine');
 
         if (in_array($currentEngine, $this->engineBlacklist)) {

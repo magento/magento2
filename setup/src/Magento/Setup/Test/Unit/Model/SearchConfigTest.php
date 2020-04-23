@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Search\Setup\InstallConfigInterface;
+use Magento\Search\Model\SearchEngine\Validator;
+use Magento\Search\Setup\CompositeInstallConfig;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,14 +28,23 @@ class SearchConfigTest extends TestCase
     private $searchConfigOptionsList;
 
     /**
-     * @var InstallConfigInterface|MockObject
+     * @var CompositeInstallConfig|MockObject
      */
     private $installConfigMock;
 
+    /**
+     * @var Validator|MockObject
+     */
+    private $searchEngineValidatorMock;
+
     protected function setUp()
     {
-        $this->installConfigMock = $this->getMockBuilder(InstallConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->installConfigMock = $this->getMockBuilder(CompositeInstallConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchEngineValidatorMock = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->searchConfigOptionsList = $objectManager->getObject(SearchConfigOptionsList::class);
@@ -42,7 +52,8 @@ class SearchConfigTest extends TestCase
             SearchConfig::class,
             [
                 'searchConfigOptionsList' => $this->searchConfigOptionsList,
-                'installConfig' => $this->installConfigMock
+                'installConfig' => $this->installConfigMock,
+                'searchValidator' =>$this->searchEngineValidatorMock
             ]
         );
     }
@@ -55,6 +66,7 @@ class SearchConfigTest extends TestCase
     public function testSaveConfiguration(array $installInput, array $searchInput)
     {
         $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
+        $this->searchEngineValidatorMock->expects($this->once())->method('validate')->with($searchInput)->willReturn([]);
 
         $this->searchConfig->saveConfiguration($installInput);
     }
@@ -71,6 +83,25 @@ class SearchConfigTest extends TestCase
         $installInput['search-engine'] = 'other-engine';
         $searchInput['search-engine'] = 'other-engine';
         $this->installConfigMock->expects($this->never())->method('configure');
+
+        $this->searchConfig->saveConfiguration($installInput);
+    }
+
+    /**
+     * @param array $installInput
+     * @param array $searchInput
+     * @dataProvider installInputDataProvider
+     * @expectedExceptionMessage Could not connect to host
+     * @expectedException \Magento\Framework\Validation\ValidationException
+     */
+    public function testSaveConfigurationValidationFail(array $installInput, array $searchInput)
+    {
+        $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
+        $this->searchEngineValidatorMock
+            ->expects($this->once())
+            ->method('validate')
+            ->with($searchInput)
+            ->willReturn(['Could not connect to host']);
 
         $this->searchConfig->saveConfiguration($installInput);
     }

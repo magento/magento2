@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Search\Model\SearchEngine\Validator as SearchEngineValidator;
@@ -30,11 +29,6 @@ class SearchConfig
     private $installConfig;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var SearchEngineValidator
      */
     private $searchValidator;
@@ -42,18 +36,15 @@ class SearchConfig
     /**
      * @param SearchConfigOptionsList $searchConfigOptionsList
      * @param InstallConfig $installConfig
-     * @param ScopeConfigInterface $scopeConfig
      * @param SearchEngineValidator $searchValidator
      */
     public function __construct(
         SearchConfigOptionsList $searchConfigOptionsList,
         InstallConfig $installConfig,
-        ScopeConfigInterface $scopeConfig,
         SearchEngineValidator $searchValidator
     ) {
         $this->searchConfigOptionsList = $searchConfigOptionsList;
         $this->installConfig = $installConfig;
-        $this->scopeConfig = $scopeConfig;
         $this->searchValidator = $searchValidator;
     }
 
@@ -75,7 +66,7 @@ class SearchConfig
         } catch (\Exception $e) {
             throw new SetupException($e->getMessage());
         }
-        $this->validateSearchEngine();
+        $this->validateSearchEngine($searchConfigOptions);
     }
 
     /**
