@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type\Grouped;
 
 use Magento\Catalog\Model\Product;
@@ -47,8 +49,8 @@ class PriceTest extends TestCase
             $this->any()
         )->method(
             'getCalculatedFinalPrice'
-        )->will(
-            $this->returnValue($finalPrice)
+        )->willReturn(
+            $finalPrice
         );
 
         $this->productMock->expects($this->never())->method('hasCustomOptions');
@@ -78,12 +80,12 @@ class PriceTest extends TestCase
             $this->any()
         )->method(
             'getCalculatedFinalPrice'
-        )->will(
-            $this->returnValue($rawFinalPrice)
+        )->willReturn(
+            $rawFinalPrice
         );
 
         //mock for parent::getFinal price call
-        $this->productMock->expects($this->any())->method('getPrice')->will($this->returnValue($rawFinalPrice));
+        $this->productMock->expects($this->any())->method('getPrice')->willReturn($rawFinalPrice);
 
         $this->productMock->expects(
             $this->at($rawPriceCheckStep)
@@ -91,8 +93,8 @@ class PriceTest extends TestCase
             'setFinalPrice'
         )->with(
             $rawFinalPrice
-        )->will(
-            $this->returnValue($this->productMock)
+        )->willReturn(
+            $this->productMock
         );
 
         $this->productMock->expects($this->at($expectedPriceCall))->method('setFinalPrice')->with($expectedFinalPrice);
@@ -103,12 +105,12 @@ class PriceTest extends TestCase
             'getData'
         )->with(
             'final_price'
-        )->will(
-            $this->returnValue($rawFinalPrice)
+        )->willReturn(
+            $rawFinalPrice
         );
 
         //test method
-        $this->productMock->expects($this->once())->method('hasCustomOptions')->will($this->returnValue(true));
+        $this->productMock->expects($this->once())->method('hasCustomOptions')->willReturn(true);
 
         $productTypeMock = $this->createMock(Grouped::class);
 
@@ -116,11 +118,11 @@ class PriceTest extends TestCase
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($productTypeMock)
+        )->willReturn(
+            $productTypeMock
         );
 
-        $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue('store1'));
+        $this->productMock->expects($this->any())->method('getStore')->willReturn('store1');
 
         $productTypeMock->expects(
             $this->once()
@@ -129,8 +131,8 @@ class PriceTest extends TestCase
         )->with(
             'store1',
             $this->productMock
-        )->will(
-            $this->returnValue($productTypeMock)
+        )->willReturn(
+            $productTypeMock
         );
 
         $productTypeMock->expects(
@@ -139,11 +141,11 @@ class PriceTest extends TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue($associatedProducts)
+        )->willReturn(
+            $associatedProducts
         );
 
-        $this->productMock->expects($this->any())->method('getCustomOption')->will($this->returnValueMap($options));
+        $this->productMock->expects($this->any())->method('getCustomOption')->willReturnMap($options);
 
         $this->assertEquals($rawFinalPrice, $this->finalPriceModel->getFinalPrice(1, $this->productMock));
     }
@@ -155,9 +157,13 @@ class PriceTest extends TestCase
      */
     public function getFinalPriceDataProvider()
     {
-        $optionMock = $this->createPartialMock(Option::class, ['getValue', '__wakeup']);
+        $optionMock = $this->getMockBuilder(Option::class)
+            ->addMethods(['getValue'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /* quantity of options */
-        $optionMock->expects($this->any())->method('getValue')->will($this->returnValue(5));
+        $optionMock->expects($this->any())->method('getValue')->willReturn(5);
 
         return [
             'custom_option_null' => [
@@ -191,11 +197,11 @@ class PriceTest extends TestCase
             ['getId', 'getFinalPrice', '__wakeup']
         );
         /* price for option taking into account quantity discounts */
-        $childProductMock->expects($this->any())->method('getFinalPrice')->with(5)->will($this->returnValue(5));
+        $childProductMock->expects($this->any())->method('getFinalPrice')->with(5)->willReturn(5);
 
         for ($i = 0; $i <= 2; $i++) {
             $childProduct = clone $childProductMock;
-            $childProduct->expects($this->once())->method('getId')->will($this->returnValue($i));
+            $childProduct->expects($this->once())->method('getId')->willReturn($i);
             $associatedProducts[] = $childProduct;
         }
 

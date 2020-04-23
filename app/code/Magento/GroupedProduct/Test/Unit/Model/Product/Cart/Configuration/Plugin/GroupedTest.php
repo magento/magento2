@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Cart\Configuration\Plugin;
 
 use Magento\Catalog\Model\Product;
@@ -50,8 +52,8 @@ class GroupedTest extends TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
+        )->willReturn(
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
         $this->assertEquals(
             true,
@@ -67,7 +69,7 @@ class GroupedTest extends TestCase
     public function testAroundIsProductConfiguredWhenProductIsNotGrouped()
     {
         $config = ['super_group' => 'product'];
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('product'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('product');
         $this->assertEquals(
             'Expected',
             $this->groupedPlugin->aroundIsProductConfigured(

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Model\Product\Type;
@@ -38,7 +40,7 @@ class PluginTest extends TestCase
 
     public function testAfterGetOptionArray()
     {
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will($this->returnValue(false));
+        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->willReturn(false);
         $this->assertEquals(
             [],
             $this->object->afterGetOptionArray($this->subjectMock, ['grouped' => 'test'])

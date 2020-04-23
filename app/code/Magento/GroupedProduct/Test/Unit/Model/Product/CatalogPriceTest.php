@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
@@ -55,14 +57,20 @@ class CatalogPriceTest extends TestCase
     {
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
-        $productMethods = ['getWebsiteId', 'getCustomerGroupId', '__wakeup', 'getTypeInstance', 'setTaxClassId'];
-        $this->productMock = $this->createPartialMock(Product::class, $productMethods);
-        $methods = ['setWebsiteId', 'isSalable', '__wakeup', 'setCustomerGroupId', 'getTaxClassId'];
-        $this->associatedProductMock = $this->createPartialMock(Product::class, $methods);
-        $this->priceModelMock = $this->createPartialMock(
-            Price::class,
-            ['getTotalPrices']
-        );
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getWebsiteId', 'getCustomerGroupId', 'setTaxClassId'])
+            ->onlyMethods(['__wakeup', 'getTypeInstance'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->associatedProductMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setWebsiteId', 'setCustomerGroupId', 'getTaxClassId'])
+            ->onlyMethods(['isSalable', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->priceModelMock = $this->getMockBuilder(Price::class)
+            ->addMethods(['getTotalPrices'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productTypeMock = $this->createMock(Grouped::class);
 
         $this->catalogPrice = new CatalogPrice(
@@ -77,8 +85,8 @@ class CatalogPriceTest extends TestCase
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->productTypeMock)
+        )->willReturn(
+            $this->productTypeMock
         );
         $this->productTypeMock->expects(
             $this->once()
@@ -86,8 +94,8 @@ class CatalogPriceTest extends TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
@@ -100,8 +108,8 @@ class CatalogPriceTest extends TestCase
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->productTypeMock)
+        )->willReturn(
+            $this->productTypeMock
         );
         $this->productTypeMock->expects(
             $this->once()
@@ -109,17 +117,17 @@ class CatalogPriceTest extends TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$this->associatedProductMock])
+        )->willReturn(
+            [$this->associatedProductMock]
         );
-        $this->productMock->expects($this->once())->method('getWebsiteId')->will($this->returnValue('website_id'));
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('group_id'));
+        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
         $this->associatedProductMock->expects(
             $this->once()
         )->method(
             'setWebsiteId'
-        )->will(
-            $this->returnValue($this->associatedProductMock)
+        )->willReturn(
+            $this->associatedProductMock
         );
         $this->associatedProductMock->expects(
             $this->once()
@@ -127,10 +135,10 @@ class CatalogPriceTest extends TestCase
             'setCustomerGroupId'
         )->with(
             'group_id'
-        )->will(
-            $this->returnValue($this->associatedProductMock)
+        )->willReturn(
+            $this->associatedProductMock
         );
-        $this->associatedProductMock->expects($this->once())->method('isSalable')->will($this->returnValue(false));
+        $this->associatedProductMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productMock->expects($this->never())->method('setTaxClassId');
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
@@ -148,8 +156,8 @@ class CatalogPriceTest extends TestCase
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->productTypeMock)
+        )->willReturn(
+            $this->productTypeMock
         );
         $this->productTypeMock->expects(
             $this->once()
@@ -157,17 +165,17 @@ class CatalogPriceTest extends TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$this->associatedProductMock])
+        )->willReturn(
+            [$this->associatedProductMock]
         );
-        $this->productMock->expects($this->once())->method('getWebsiteId')->will($this->returnValue('website_id'));
-        $this->productMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('group_id'));
+        $this->productMock->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $this->productMock->expects($this->once())->method('getCustomerGroupId')->willReturn('group_id');
         $this->associatedProductMock->expects(
             $this->once()
         )->method(
             'setWebsiteId'
-        )->will(
-            $this->returnValue($this->associatedProductMock)
+        )->willReturn(
+            $this->associatedProductMock
         );
         $this->associatedProductMock->expects(
             $this->once()
@@ -175,25 +183,25 @@ class CatalogPriceTest extends TestCase
             'setCustomerGroupId'
         )->with(
             'group_id'
-        )->will(
-            $this->returnValue($this->associatedProductMock)
+        )->willReturn(
+            $this->associatedProductMock
         );
-        $this->associatedProductMock->expects($this->once())->method('isSalable')->will($this->returnValue(true));
+        $this->associatedProductMock->expects($this->once())->method('isSalable')->willReturn(true);
         $this->commonPriceMock->expects(
             $this->exactly(2)
         )->method(
             'getCatalogPrice'
         )->with(
             $this->associatedProductMock
-        )->will(
-            $this->returnValue(15)
+        )->willReturn(
+            15
         );
         $this->associatedProductMock->expects(
             $this->once()
         )->method(
             'getTaxClassId'
-        )->will(
-            $this->returnValue('tax_class')
+        )->willReturn(
+            'tax_class'
         );
         $this->productMock->expects($this->once())->method('setTaxClassId')->with('tax_class');
 

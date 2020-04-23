@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Initialization\Helper\ProductLinks\Plugin;
 
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
@@ -52,18 +54,11 @@ class GroupedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->createPartialMock(
-            Product::class,
-            [
-                'getGroupedReadonly',
-                '__wakeup',
-                'getTypeId',
-                'getSku',
-                'getProductLinks',
-                'setProductLinks',
-                'setGroupedLinkData'
-            ]
-        );
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getGroupedReadonly', 'setGroupedLinkData'])
+            ->onlyMethods(['__wakeup', 'getTypeId', 'getSku', 'getProductLinks', 'setProductLinks'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->createMock(
             ProductLinks::class
         );
@@ -92,7 +87,7 @@ class GroupedTest extends TestCase
      */
     public function testBeforeInitializeLinksRequestDoesNotHaveGrouped($productType)
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($productType));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($productType);
         $this->productMock->expects($this->never())->method('getGroupedReadonly');
         $this->productMock->expects($this->never())->method('setGroupedLinkData');
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, []);
@@ -115,20 +110,21 @@ class GroupedTest extends TestCase
      */
     public function testBeforeInitializeLinksRequestHasGrouped($linksData)
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(Grouped::TYPE_CODE));
-        $this->productMock->expects($this->once())->method('getGroupedReadonly')->will($this->returnValue(false));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);
+        $this->productMock->expects($this->once())->method('getGroupedReadonly')->willReturn(false);
         $this->productMock->expects($this->once())->method('setProductLinks')->with($this->arrayHasKey(0));
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
         $this->productMock->expects($this->once())->method('getSku')->willReturn('sku');
-        $linkedProduct = $this->createPartialMock(
-            Product::class,
-            ['getGroupedReadonly', '__wakeup', 'getTypeId', 'getSku', 'getProductLinks', 'setProductLinks']
-        );
+        $linkedProduct = $this->getMockBuilder(Product::class)
+            ->addMethods(['getGroupedReadonly'])
+            ->onlyMethods(['__wakeup', 'getTypeId', 'getSku', 'getProductLinks', 'setProductLinks'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $extensionAttributes = $this->getMockBuilder(ProductLinkExtensionInterface::class)
             ->setMethods(['setQty', 'getQty'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $linkedProduct->expects($this->once())->method('getTypeId')->will($this->returnValue(Grouped::TYPE_CODE));
+        $linkedProduct->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);
         $linkedProduct->expects($this->once())->method('getSku')->willReturn('sku');
         $productLink = $this->getMockBuilder(ProductLinkInterface::class)
             ->disableOriginalConstructor()
@@ -162,8 +158,8 @@ class GroupedTest extends TestCase
 
     public function testBeforeInitializeLinksProductIsReadonly()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(Grouped::TYPE_CODE));
-        $this->productMock->expects($this->once())->method('getGroupedReadonly')->will($this->returnValue(true));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);
+        $this->productMock->expects($this->once())->method('getGroupedReadonly')->willReturn(true);
         $this->productMock->expects($this->never())->method('setGroupedLinkData');
         $this->model->beforeInitializeLinks($this->subjectMock, $this->productMock, ['associated' => 'value']);
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Catalog\Model\Product;
@@ -42,7 +44,10 @@ class SidebarTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->createPartialMock(DataObject::class, ['getProduct']);
+        $this->itemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productMock = $this->createMock(Product::class);
         $this->subjectMock = $this->createMock(
             AbstractSidebar::class
@@ -55,13 +60,13 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(Grouped::TYPE_CODE)
+        )->willReturn(
+            Grouped::TYPE_CODE
         );
         $this->assertEquals(
             '',
@@ -71,8 +76,8 @@ class SidebarTest extends TestCase
 
     public function testAroundGetItemQtyWhenProductNotGrouped()
     {
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('one'));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('one');
         $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock);
     }
 
