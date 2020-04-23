@@ -17,5 +17,5 @@
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     "display:none",
-    '#'. $block->escapeHtmlAttr($block->getNameInLayout())
+    '#'. $block->escapeJs($block->getNameInLayout())
 ) ?>

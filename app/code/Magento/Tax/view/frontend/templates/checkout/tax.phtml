@@ -13,10 +13,11 @@
 <?php
     $_value = $block->getTotal()->getValue();
     $_style = $block->escapeHtmlAttr($block->getTotal()->getStyle());
-    $jsonHelper = $block->getData('jsonHelper');
+    /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+    $checkoutHelper = $block->getData('checkoutHelper');
     $attributes = 'class="totals-tax"';
 
-if ($jsonHelper->displayFullSummary() && $_value != 0) {
+if ($checkoutHelper->displayFullSummary() && $_value != 0) {
     $attributes = 'class="totals-tax-summary" data-mage-init=\'{"toggleAdvanced": {"selectorsToggleClass": "shown",
      "baseToggleClass": "expanded", "toggleContainers": ".totals-tax-details"}}\'';
 }
@@ -24,20 +25,20 @@ if ($jsonHelper->displayFullSummary() && $_value != 0) {
 
 <tr <?= /* @noEscape */ $attributes ?>>
     <th class="mark" colspan="<?= (int) $block->getColspan() ?>" scope="row">
-        <?php if ($jsonHelper->displayFullSummary()): ?>
+        <?php if ($checkoutHelper->displayFullSummary()): ?>
             <span class="detailed"><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></span>
         <?php else: ?>
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php endif; ?>
     </th>
     <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-        <?= /* @noEscape */ $jsonHelper->formatPrice($_value) ?>
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($_value) ?>
     </td>
 </tr>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax th.mark') ?>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax td.amount') ?>
 
-<?php if ($jsonHelper->displayFullSummary() && $_value != 0): ?>
+<?php if ($checkoutHelper->displayFullSummary() && $_value != 0): ?>
     <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) { continue; } ?>
         <?php $percent = $info['percent']; ?>
@@ -57,7 +58,7 @@ if ($jsonHelper->displayFullSummary() && $_value != 0) {
                     <td class="amount" rowspan="<?= count($rates) ?>"
                        data-th="<?= $block->escapeHtmlAttr($rate['title']) ?>
                         <?php if ($rate['percent'] !== null): ?>(<?= (float) $rate['percent'] ?>%)<?php endif; ?>">
-                        <?= /* @noEscape */ $jsonHelper->formatPrice($amount) ?>
+                        <?= /* @noEscape */ $checkoutHelper->formatPrice($amount) ?>
                     </td>
                 <?php endif; ?>
             </tr>

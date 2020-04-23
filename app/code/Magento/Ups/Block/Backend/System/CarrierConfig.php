@@ -37,16 +37,18 @@ class CarrierConfig extends Template
      * @param \Magento\Ups\Helper\Config $carrierConfig
      * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         TemplateContext $context,
         ConfigHelper $carrierConfig,
         Website $websiteModel,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->carrierConfig = $carrierConfig;
         $this->_websiteModel = $websiteModel;
-        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 

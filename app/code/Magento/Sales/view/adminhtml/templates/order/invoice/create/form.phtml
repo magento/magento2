@@ -12,7 +12,10 @@
 <form id="edit_form" class="order-invoice-edit" method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
     <?= $block->getBlockHtml('formkey') ?>
     <?php $_order = $block->getInvoice()->getOrder() ?>
-    <?php $taxHelper = $block->getData('taxHelper') ?>
+    <?php
+    /** @var \Magento\Tax\Helper\Data $taxHelper */
+    $taxHelper = $block->getData('taxHelper');
+    ?>
     <?= $block->getChildHtml('order_info') ?>
 
     <section class="admin__page-section">

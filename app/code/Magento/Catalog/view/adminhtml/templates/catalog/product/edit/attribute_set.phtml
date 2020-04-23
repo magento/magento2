@@ -24,17 +24,18 @@
 </button>
 <% } %>
 </script>
-<?php $jsonHelper = $block->getData('jsonHelper');
+<?php /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 $selectorOptions = /* @noEscape */ $jsonHelper->jsonEncode($block->getSelectorOptions());
 $scriptString = <<<script
     require(["jquery","mage/mage","mage/backend/suggest"],function ($) {
-        var $suggest = $('#product-template-suggest');
-        $suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').on('click.toggleDropdown', function () {
+        var \$suggest = $('#product-template-suggest');
+        \$suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').on('click.toggleDropdown', function () {
             if ($(this).hasClass('active')) {
-                $suggest.click();
+                \$suggest.click();
             }
         });
-        $suggest
+        \$suggest
             .mage('suggest', {$selectorOptions})
             .on('suggestselect', function (e, ui) {
                 if (ui.item.id) {

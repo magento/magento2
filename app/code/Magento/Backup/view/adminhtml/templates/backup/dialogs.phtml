@@ -14,10 +14,9 @@
 <p><?= $block->escapeHtml(__('Are you sure you want to continue?')) ?></p>
 </script>
 <script type="text/x-magento-template" id="backup-options-template">
-    <div class="backup-messages">
+    <div class="backup-messages no-display">
         <div class="messages"></div>
     </div>
-    <?=/* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'div.backup-messages') ?>
     <div class="messages">
         <div class="message message-warning">
             <?= $block->escapeHtml(__('This may take a few moments.')) ?>
@@ -61,7 +60,8 @@
                 </div>
             </div>
 
-            <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container">
+            <div class="admin__field field maintenance-checkbox-container no-display"
+                 id="exclude-media-checkbox-container">
                 <label for="exclude_media" class="admin__field-label">
                     <span><?= $block->escapeHtml(__('Exclude')) ?></span>
                 </label>
@@ -78,16 +78,14 @@
                     </div>
                 </div>
             </div>
-            <?=/* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#exclude-media-checkbox-container') ?>
         </fieldset>
     </form>
 </script>
 
 <script type="text/x-magento-template" id="rollback-request-password-template">
-    <div class="backup-messages">
+    <div class="backup-messages no-display">
         <div class="messages"></div>
     </div>
-    <?=/* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'div.backup-messages') ?>
     <div class="messages">
         <div class="message message-warning">
             <?= $block->escapeHtml(__('Please enter the password to confirm rollback.')) ?><br>
@@ -137,7 +135,7 @@
                 </div>
             </div>
         </fieldset>
-        <div class="entry-edit" id="ftp-credentials-container">
+        <div class="entry-edit no-display" id="ftp-credentials-container">
             <fieldset class="admin__fieldset">
                 <legend class="admin__legend legend">
                     <span><?= $block->escapeHtml(__('FTP credentials')) ?></span>
@@ -202,8 +200,6 @@ require([
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#use-ftp-checkbox-row') ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#ftp-credentials-container') ?>
 <?=/* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     'backup.toggleFtpCredentialsForm(event)',

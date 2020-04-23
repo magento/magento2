@@ -56,20 +56,28 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_jsonEncoder;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_fieldFactory = $fieldFactory;
         parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -134,12 +142,11 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
             $params .= ', ' .  $this->_jsonEncoder->encode($this->_configOptions);
         }
 
-        $secureHtmlRenderer = ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         $scriptString = 'require([\'mage/adminhtml/form\'], function(){
     new FormElementDependenceController(' . $params . ');
 });';
 
-        return /* @noEscape */ $secureHtmlRenderer->renderTag('script', [], $scriptString, false);
+        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**

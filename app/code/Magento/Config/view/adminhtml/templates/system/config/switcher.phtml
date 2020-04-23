@@ -18,8 +18,8 @@
                 <?php else: ?>
                     <optgroup label="<?= $block->escapeHtmlAttr($_option['label']) ?>">
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                            $block->escapeHtmlAttr($_option['style']),
-                            "optgroup[label='" . $block->escapeHtmlAttr($_option['label']) . "']"
+                            $_option['style'],
+                            "optgroup[label='" . $block->escapeJs($_option['label']) . "']"
                         ) ?>
                 <?php endif; ?>
                 <?php continue ?>
@@ -30,8 +30,8 @@
                   <?= $block->escapeHtml($_option['label']) ?>
               </option>
               <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                  $block->escapeHtmlAttr($_option['style']),
-                  "optgroup[url='" . $block->escapeUrl($_option['url']) . "']"
+                  $_option['style'],
+                  "optgroup[url='" . $block->escapeJs($_option['url']) . "']"
               ) ?>
         <?php endforeach ?>
         </select>

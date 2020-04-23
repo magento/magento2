@@ -52,7 +52,7 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
         $html .= /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
         $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
             'onclick',
-            "toggleValueElements(this, this.parentNode);",
+            "toggleValueElements($('#' . $htmlId), $('#' . $htmlId).parentNode);",
             '#' . $htmlId
         );
 

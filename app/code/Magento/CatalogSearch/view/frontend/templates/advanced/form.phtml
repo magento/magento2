@@ -12,8 +12,10 @@
  */
 ?>
 
-<?php $jsonHelper = $block->getData('jsonHelper'); ?>
-<?php $maxQueryLength = $jsonHelper->getMaxQueryLength();?>
+<?php
+/** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+$catalogSearchHelper = $block->getData('catalogSearchHelper'); ?>
+<?php $maxQueryLength = $catalogSearchHelper->getMaxQueryLength();?>
 <form class="form search advanced" action="<?= $block->escapeUrl($block->getSearchPostUrl()) ?>" method="get"
       id="form-validate">
 <fieldset class="fieldset">

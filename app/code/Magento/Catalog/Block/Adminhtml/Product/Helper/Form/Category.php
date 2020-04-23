@@ -141,6 +141,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
                 'id' => 'add_category_button',
                 'label' => $newCategoryCaption,
                 'title' => $newCategoryCaption,
+                'onclick' => 'jQuery("#new-category").modal("openModal")',
                 'disabled' => $this->getDisabled(),
             ]
         );
@@ -153,14 +154,8 @@ HTML;
         });
 script;
 
-        return $return .
-            /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false) .
-            $button->toHtml() .
-            /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                'jQuery("#new-category").modal("openModal")',
-                '#add_category_button'
-            );
+        return $return . $button->toHtml() .
+            /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**

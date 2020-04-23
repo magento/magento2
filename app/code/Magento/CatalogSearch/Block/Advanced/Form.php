@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\CatalogSearch\Helper\Data;
+use Magento\CatalogSearch\Helper\Data as CatalogSearchHelper;
 
 /**
  * Advanced search form
@@ -44,16 +44,19 @@ class Form extends Template
      * @param Advanced $catalogSearchAdvanced
      * @param CurrencyFactory $currencyFactory
      * @param array $data
+     * @param CatalogSearchHelper|null $catalogSearchHelper
      */
     public function __construct(
         Context $context,
         Advanced $catalogSearchAdvanced,
         CurrencyFactory $currencyFactory,
-        array $data = []
+        array $data = [],
+        ?CatalogSearchHelper $catalogSearchHelper = null
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_currencyFactory = $currencyFactory;
-        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
+        $data['catalogSearchHelper'] = $catalogSearchHelper ??
+            ObjectManager::getInstance()->get(CatalogSearchHelper::class);
         parent::__construct($context, $data);
     }
 

@@ -76,12 +76,13 @@ script;
     <div class="admin__field-control control" id="<?= /* @noEscape */ $_fileName ?>">
         <?php if ($_fileExists):?>
             <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
-            <a href="javascript:void(0)" class="label">
+            <a href="#" class="label">
                 <?= $block->escapeHtml(__('Change')) ?>
             </a>&nbsp;
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onclick',
-                "opFile" . /* @noEscape */ $_rand . ".toggleFileChange($(this).next('.input-box'))",
+                "event.preventDefault(); opFile" . /* @noEscape */ $_rand .
+                ".toggleFileChange($(this).next('.input-box'))",
                 '#' . /* @noEscape */ $_fileName . ' a'
             ); ?>
             <?php if (!$_option->getIsRequire()):?>

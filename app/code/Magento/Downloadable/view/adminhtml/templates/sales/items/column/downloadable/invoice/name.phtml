@@ -8,7 +8,9 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
-<?php $catalogHelper = $block->getData('catalogHelper');
+<?php
+/** @var \Magento\Catalog\Helper\Data  $catalogHelper */
+$catalogHelper = $block->getData('catalogHelper');
 if ($_item = $block->getItem()): ?>
     <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
     <div><strong><?= $block->escapeHtml(__('SKU')) ?>:</strong>

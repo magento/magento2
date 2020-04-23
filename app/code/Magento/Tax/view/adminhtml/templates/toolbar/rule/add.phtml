@@ -12,7 +12,7 @@
     </button>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "window.location.href='" . $block->escapeUrl($createUrl) . "'",
+        "window.location.href='" . $block->escapeJs($createUrl) . "'",
         'button#addNewClass'
     ) ?>
 </div>

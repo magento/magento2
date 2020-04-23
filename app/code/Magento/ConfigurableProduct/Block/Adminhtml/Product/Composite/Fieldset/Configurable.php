@@ -7,7 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
-use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
@@ -37,6 +37,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param Format|null $localeFormat
      * @param Session|null $customerSession
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+     * @param ProductHelper|null $productHelper
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -50,9 +51,10 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         array $data = [],
         Format $localeFormat = null,
         Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ?ProductHelper $productHelper = null
     ) {
-        $data['productHelper'] = ObjectManager::getInstance()->get(Product::class);
+        $data['productHelper'] = $productHelper ?? ObjectManager::getInstance()->get(ProductHelper::class);
         parent::__construct(
             $context,
             $arrayUtils,

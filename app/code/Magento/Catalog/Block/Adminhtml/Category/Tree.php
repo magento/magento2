@@ -12,7 +12,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 
@@ -53,11 +52,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $secureRenderer;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
@@ -67,7 +61,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
-     * @param Random|null $random
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -78,15 +71,13 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Backend\Model\Auth\Session $backendSession,
         array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null,
-        ?Random $random = null
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_resourceHelper = $resourceHelper;
         $this->_backendSession = $backendSession;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
         $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
-        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**

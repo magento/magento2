@@ -42,7 +42,7 @@
         </div>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display:none',
-            '#' . $block->escapeHtmlAttr($block->getTabId($_tab))
+            '#' . $block->escapeJs($block->getTabId($_tab))
         ); ?>
     </li>
     <?php endforeach; ?>

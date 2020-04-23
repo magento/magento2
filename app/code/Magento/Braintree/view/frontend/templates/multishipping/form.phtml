@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Csp\Api\InlineUtilInterface $csp */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $scriptString = <<<script
     require([
@@ -29,5 +29,5 @@
     })
 script;
 ?>
-<?= /* @noEscape */ $csp->renderTag('script', [], $scriptString) ?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString) ?>
 <!-- ko template: getTemplate() --><!-- /ko -->

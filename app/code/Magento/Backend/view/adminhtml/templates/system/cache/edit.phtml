@@ -63,6 +63,9 @@ script;
                                     id="<?= $block->escapeHtmlAttr($_button['name']) ?>"
                                     type="button"
                                     class="scalable
+                                <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif;?>"
+                                ><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span>
+                                </button>
                                 <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
@@ -70,9 +73,6 @@ script;
                                         '#' . $block->escapeHtmlAttr($_button['name'])
                                     ) ?>
                                 <?php endif; ?>
-                                <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif;?>"
-                                ><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span>
-                                </button>
                                 <?php if (isset($_button['comment'])): ?> <br />
                                     <small><?= $block->escapeHtml($_button['comment']) ?></small>
                                 <?php endif; ?>

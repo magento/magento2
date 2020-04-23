@@ -34,14 +34,19 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                             <span><?= $block->escapeHtml($_vote->getRatingCode()) ?></span>
                         </span>
                         <div class="rating-result"
-                             id="rating-result_<?= 'a'?>"
+                             id="review_<?= /* @noEscape */ $_review->getReviewId()
+                                ?>_vote_<?= /* @noEscape */ $_vote->getVoteId() ?>"
                              title="<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
                             <meta itemprop="worstRating" content = "1"/>
                             <meta itemprop="bestRating" content = "100"/>
-                            <span style="width:<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                            <span>
                                 <span itemprop="ratingValue"><?= $block->escapeHtml($_vote->getPercent()) ?>%</span>
                             </span>
                         </div>
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            'width:' . $_vote->getPercent() . '%',
+                            'div#review_' . $_review->getReviewId() . '_vote_' . $_vote->getVoteId() . ' span'
+                        ) ?>
                     </div>
                     <?php endforeach; ?>
                     </div>

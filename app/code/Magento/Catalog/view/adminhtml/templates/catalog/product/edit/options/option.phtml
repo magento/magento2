@@ -95,12 +95,14 @@
                             <label for="field-option-req">
                                 <?= $block->escapeHtml(__('Required')) ?>
                             </label>
-                            <span><?= $block->getRequireSelectHtml() ?></span>
+                            <span id="span_<?= /* @noEscape */ $block->getFieldId() ?>">
+                                <?= $block->getRequireSelectHtml() ?>
+                            </span>
                         </div>
                     </div>
                     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                         "display:none",
-                        "input#" . /* @noEscape */ $block->getFieldId() ."_<%- data.id %>_required"
+                        "span_#" . /* @noEscape */ $block->getFieldId()
                     ) ?>
                 </fieldset>
             </fieldset>
@@ -113,7 +115,9 @@
 <?php if (!$block->isReadonly()):?>
 <div><input type="hidden" name="affect_product_custom_options" value="1"/></div>
 <?php endif; ?>
-<?php $jsonHelper = $block->getData('jsonHelper');
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 
 $customOptions = /* @noEscape */ $jsonHelper->jsonEncode(
     [

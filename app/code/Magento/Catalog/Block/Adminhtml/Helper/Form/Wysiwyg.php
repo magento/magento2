@@ -12,7 +12,6 @@
 namespace Magento\Catalog\Block\Adminhtml\Helper\Form;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
@@ -52,11 +51,6 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
     protected $secureRenderer;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
@@ -66,7 +60,6 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
      * @param \Magento\Backend\Helper\Data $backendData
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
-     * @param Random|null $random
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
@@ -77,18 +70,14 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Backend\Helper\Data $backendData,
         array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null,
-        ?Random $random = null
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_layout = $layout;
         $this->_moduleManager = $moduleManager;
         $this->_backendData = $backendData;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
-        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
-        $random = $random ?? ObjectManager::getInstance()->get(Random::class);
-        $this->secureRenderer = $secureRenderer;
-        $this->random = $random;
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -103,18 +92,19 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
 
         $html = parent::getAfterElementHtml();
         if ($this->getIsWysiwygEnabled()) {
-            $buttonId = 'wysiwyg_action_button_' . $this->random->getRandomString(32);
             $disabled = $this->getDisabled() || $this->getReadonly();
             $html .= $this->_layout->createBlock(
                 \Magento\Backend\Block\Widget\Button::class,
                 '',
                 [
                     'data' => [
-                        'id' => $buttonId,
                         'label' => __('WYSIWYG Editor'),
                         'type' => 'button',
                         'disabled' => $disabled,
                         'class' => 'action-wysiwyg',
+                        'onclick' => 'catalogWysiwygEditor.open(\'' . $this->_backendData->getUrl(
+                            'catalog/product/wysiwyg'
+                        ) . '\', \'' . $this->getHtmlId() . '\')',
                     ]
                 ]
             )->toHtml();
@@ -143,13 +133,6 @@ jQuery('#{$this->getHtmlId()}')
 });
 HTML;
             $html .= /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
-            $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                'catalogWysiwygEditor.open(\'' . $this->_backendData->getUrl(
-                    'catalog/product/wysiwyg'
-                ) . '\', \'' . $this->getHtmlId() . '\')',
-                $buttonId
-            );
         }
 
         return $html;

@@ -75,12 +75,12 @@
                 <?php if ($block->getTabIsHidden($_tab)): ?>
                     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                         'display:none',
-                        'li.admin__page-nav-item#' . $block->escapeHtmlAttr($block->getTabId($_tab))
+                        'li.admin__page-nav-item#' . $block->escapeJs($block->getTabId($_tab))
                     ); ?>
                 <?php endif; ?>
                 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                     'display:none',
-                    'div#' . $block->escapeHtmlAttr($block->getTabId($_tab)) . '_content'
+                    'div#' . $block->escapeJs($block->getTabId($_tab)) . '_content'
                 ); ?>
             </li>
         <?php endforeach; ?>

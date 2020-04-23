@@ -26,6 +26,8 @@ $fieldClass .= ($entity && $entity->getIsUserDefined()) ? ' user-defined type-' 
 
 $fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) . '" '
     . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
+
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 ?>
 
@@ -65,7 +67,7 @@ $jsonHelper = $block->getData('jsonHelper');
                             value="<?= $block->escapeHtmlAttr($block->getAttributeCode()) ?>"/>
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
-                        "toggleValueElements(this, this.parentNode);",
+                        $elementToggleCode,
                         "#" . $element->getHtmlId() . "_default"
                     ) ?>
                     <span class="use-default-label"><?= $block->escapeHtml(__('Use Default Value')) ?></span>

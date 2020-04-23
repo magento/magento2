@@ -21,7 +21,8 @@ $element = $block->getElement();
 
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
-<?php $jsonHelper = $block->getData('jsonHelper'); ?>
+<?php /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper'); ?>
 <div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container"
      data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
      data-apply-to="<?= $block->escapeHtml(

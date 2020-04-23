@@ -16,6 +16,7 @@
  */
 ?>
 <?php
+/** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
 $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
 $scriptString = <<<script

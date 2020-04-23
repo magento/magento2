@@ -30,11 +30,13 @@ if ($option): ?>
                value=""
                checked="checked"
         />
-        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-            'onclick',
-            $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()',
-            "options_" . $block->escapeHtmlAttr($option->getId())
-        ) ?>
+        <?php if (!$block->getSkipJsReloadPrice()): ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                'opConfig.reloadPrice()',
+                "options_" . $block->escapeJs($option->getId())
+            ) ?>
+        <?php endif; ?>
         <label class="label admin__field-label" for="options_<?= $block->escapeHtmlAttr($option->getId()) ?>">
                         <span>
                             <?= $block->escapeHtml(__('None'))  ?>

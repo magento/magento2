@@ -8,10 +8,12 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Adminhtml tier price item renderer
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Tier extends Group\AbstractGroup
 {
@@ -30,6 +32,7 @@ class Tier extends Group\AbstractGroup
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -40,9 +43,10 @@ class Tier extends Group\AbstractGroup
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
-        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct(
             $context,
             $groupRepository,

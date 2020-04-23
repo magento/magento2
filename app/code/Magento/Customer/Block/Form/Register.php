@@ -53,6 +53,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
      * @param Config $newsLetterConfig
+     * @param AddressHelper|null $addressHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -67,13 +68,14 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = [],
-        Config $newsLetterConfig = null
+        Config $newsLetterConfig = null,
+        ?AddressHelper $addressHelper = null
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         $this->newsLetterConfig = $newsLetterConfig ?: ObjectManager::getInstance()->get(Config::class);
-        $data['addressHelper'] = ObjectManager::getInstance()->get(AddressHelper::class);
+        $data['addressHelper'] = $addressHelper ?? ObjectManager::getInstance()->get(AddressHelper::class);
         parent::__construct(
             $context,
             $directoryHelper,

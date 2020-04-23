@@ -90,7 +90,9 @@ script;
 
 </tbody></table>
 
-<?php $jsonHelper = $block->getData('jsonHelper');
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 
 $scriptString = <<<script
 require([

@@ -22,7 +22,7 @@ $viewModel = $block->getViewModel();
         <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"/>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display:none',
-            '#chart_' . $escaper->escapeHtmlAttr($block->getData('html_id')) . '_period'
+            '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period'
         ) ?>
         <div class="dashboard-diagram-nodata">
             <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>

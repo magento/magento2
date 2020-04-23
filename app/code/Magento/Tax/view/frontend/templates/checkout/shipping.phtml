@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-
 /**
  * @var $block \Magento\Tax\Block\Checkout\Shipping
  * @see \Magento\Tax\Block\Checkout\Shipping
@@ -16,7 +14,8 @@
     <?php
         $style = $block->escapeHtmlAttr($block->getStyle());
         $colspan = (int) $block->getColspan();
-        $jsonHelper = $block->getData('jsonHelper');
+        /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+        $checkoutHelper = $block->getData('checkoutHelper');
     ?>
     <?php if ($block->displayBoth()): ?>
     <tr class="totals shipping excl">
@@ -25,7 +24,7 @@
         </th>
 
         <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getExcludeTaxLabel()) ?>">
-            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingExcludeTax()) ?>
+            <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
     <tr class="totals shipping incl">
@@ -33,7 +32,7 @@
             <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
         </th>
         <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getIncludeTaxLabel()) ?>">
-            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingIncludeTax()) ?>
+            <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
     <?php elseif ($block->displayIncludeTax()): ?>
@@ -42,7 +41,7 @@
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         </th>
         <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingIncludeTax()) ?>
+            <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
     <?php else: ?>
@@ -51,7 +50,7 @@
             <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         </th>
         <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-            <?= /* @noEscape */ $jsonHelper->formatPrice($block->getShippingExcludeTax()) ?>
+            <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
     <?php endif; ?>

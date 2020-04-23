@@ -8,7 +8,7 @@
 ?>
 <p class="switcher"><label for="store_switcher"><?= $block->escapeHtml(__('View Statistics For:')) ?></label>
 <?= $block->getHintHtml() ?>
-<select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
+<select name="store_switcher" id="store_switcher" class="left-col-block">
     <option value=""><?= $block->escapeHtml(__('All Websites')) ?></option>
     <?php foreach ($block->getWebsiteCollection() as $_website): ?>
         <?php $showWebsite = false; ?>
@@ -40,6 +40,11 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
 </select>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onchange',
+    "return switchStore($('select#store_switcher');",
+    'select#store_switcher'
+) ?>
 </p>
 <?php $scriptString = <<<script
     require([

@@ -23,7 +23,7 @@
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
 </span>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-    'width:' . $escaper->escapeHtmlAttr($block->getWidth()) . 'px;',
+    'width:' . (int)$escaper->escapeHtmlAttr($block->getWidth()) . 'px;',
     'span.product-image-container'
 ) ?>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(

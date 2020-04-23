@@ -44,7 +44,7 @@ $captcha = $block->getCaptchaModel();
 </div>
 
 <?php
-$url = $block->escapeJs($block->escapeUrl($block->getRefreshUrl()));
+$url = $block->escapeJs($block->getRefreshUrl());
 $formId = $block->escapeJs($block->escapeHtml($block->getFormId()));
 $scriptString = <<<script
 

@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-?>
-<?php
+
 /**
  * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
  */
@@ -17,7 +15,10 @@
 <?php $items = $block->getChildren($_item); ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
-<?php $helper = $block->getData('jsonHelper') ?>
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $helper */
+$helper = $block->getData('jsonHelper');
+?>
 
 <?php $_prevOptionId = '' ?>
 

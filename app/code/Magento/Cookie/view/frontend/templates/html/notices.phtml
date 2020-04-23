@@ -7,7 +7,9 @@
 /** @var \Magento\Cookie\Block\Html\Notices $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php $cookieHelper = $block->getData('cookieHelper');
+<?php
+/** @var \Magento\Cookie\Helper\Cookie $cookieHelper */
+$cookieHelper = $block->getData('cookieHelper');
 if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
     <div role="alertdialog"
          tabindex="-1"

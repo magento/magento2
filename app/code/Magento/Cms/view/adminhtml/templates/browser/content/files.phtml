@@ -22,8 +22,8 @@ $_height = $block->getImagesHeight();
     >
         <p class="nm" id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>_nm">
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-            'height:' . $block->escapeHtmlAttr($_height) . 'px;',
-            '#' . $block->escapeHtmlAttr($block->getFileId($file)) . '_nm'
+            'height:' . $block->escapeJs($_height) . 'px;',
+            '#' . $block->escapeJs($block->getFileId($file)) . '_nm'
         ) ?>
         <?php if ($block->getFileThumbUrl($file)): ?>
             <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>"

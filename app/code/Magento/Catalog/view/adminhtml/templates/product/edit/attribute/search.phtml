@@ -34,6 +34,7 @@
 </script>
 
 <?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 $selectorOptions = /* @noEscape */ $jsonHelper->jsonEncode($block->getSelectorOptions());
 $scriptString = <<<script

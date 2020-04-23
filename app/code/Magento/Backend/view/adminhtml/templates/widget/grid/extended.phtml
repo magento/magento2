@@ -116,7 +116,7 @@ $numColumns = count($block->getColumns());
                                 'onclick',
                                 /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                 /* @noEscape */ ($_curPage - 1) . '\');return false;',
-                                'button.action-previous'
+                                '. admin__data-grid-pager button.action-previous'
                             ) ?>
                         <?php else: ?>
                             <button type="button" class="action-previous disabled">
@@ -150,7 +150,7 @@ $numColumns = count($block->getColumns());
                                 'onclick',
                                 /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                 /* @noEscape */ ($_curPage + 1) . '\');return false;',
-                                'button.action-next'
+                                '. admin__data-grid-pager button.action-next'
                             ) ?>
                         <?php else: ?>
                             <button type="button" class="action-next disabled">
@@ -285,7 +285,9 @@ $numColumns = count($block->getColumns());
 
     </div>
 </div>
-    <?php $jsonHelper = $block->getData('jsonHelper');
+    <?php
+    /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+    $jsonHelper = $block->getData('jsonHelper');
     if ($block->canDisplayContainer()):
         $scriptString = <<<script
     var deps = [];

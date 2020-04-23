@@ -17,7 +17,8 @@ use Magento\Framework\App\Action\Action;
 ?>
 <?php
 $_productCollection = $block->getLoadedProductCollection();
-$_helper = $block->getData('jsonHelper');
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
 ?>
 <?php if (!$_productCollection->count()):?>
     <div class="message info empty">

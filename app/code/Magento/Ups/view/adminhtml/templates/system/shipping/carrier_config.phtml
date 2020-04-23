@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-
 /** @var $upsModel \Magento\Ups\Helper\Config */
 /** @var $block \Magento\Ups\Block\Backend\System\CarrierConfig */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
@@ -17,7 +15,7 @@ $defShipArr = $upsCarrierConfig->getCode('method');
 $sectionCode = $block->getRequest()->getParam('section');
 $websiteCode = $block->getRequest()->getParam('website');
 $storeCode = $block->getRequest()->getParam('store');
-
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 
 if (!$storeCode && $websiteCode) {

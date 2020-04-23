@@ -7,7 +7,7 @@ namespace Magento\Checkout\Block\Total;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\ConfigInterface;
-use Magento\Checkout\Helper\Data;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
 
 /**
  * Default Total Row Renderer
@@ -31,6 +31,7 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
      * @param ConfigInterface $salesConfig
      * @param array $layoutProcessors
      * @param array $data
+     * @param CheckoutHelper $checkoutHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -38,9 +39,10 @@ class DefaultTotal extends \Magento\Checkout\Block\Cart\Totals
         \Magento\Checkout\Model\Session $checkoutSession,
         ConfigInterface $salesConfig,
         array $layoutProcessors = [],
-        array $data = []
+        array $data = [],
+        ?CheckoutHelper $checkoutHelper = null
     ) {
-        $data['jsonHelper'] = ObjectManager::getInstance()->get(Data::class);
+        $data['checkoutHelper'] = $checkoutHelper ?? ObjectManager::getInstance()->get(CheckoutHelper::class);
         parent::__construct(
             $context,
             $customerSession,

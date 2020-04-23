@@ -134,7 +134,9 @@
 
 <?= $block->getSelectionHtml() ?>
 
-<?php $helper = $block->getData('jsonHelper');
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $helper */
+$helper = $block->getData('jsonHelper');
 $scriptString = <<<script
 require([
     'jquery',
@@ -193,14 +195,14 @@ $scriptString .= <<<script
 
         //set selected type
         if (data.type) {
-            $A($(this.idLabel + '_'+data.index+'_type').options).each(function(option){
+            \$A($(this.idLabel + '_'+data.index+'_type').options).each(function(option){
                 if (option.value==data.type) option.selected = true;
             });
         }
 
         //set selected is_require
         if (data.required) {
-            $A($(this.idLabel + '_'+data.index+'_required').options).each(function(option){
+            \$A($(this.idLabel + '_'+data.index+'_required').options).each(function(option){
                 if (option.value==data.required) option.selected = true;
             });
         }
@@ -240,7 +242,7 @@ $scriptString .= <<<script
         parts = element.id.split('_');
         i = parts[2];
         if (element.value == 'multi' || element.value == 'checkbox') {
-            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            inputs = \$A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
             inputs.each(
                 function(elem){
                     //elem.type = "checkbox";
@@ -250,7 +252,7 @@ $scriptString .= <<<script
             /**
              * Hide not needed elements (user defined qty select box)
              */
-            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs = \$A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
             inputs.each(
                 function(elem){
                     elem.hide();
@@ -258,7 +260,7 @@ $scriptString .= <<<script
             );
 
         } else {
-            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            inputs = \$A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
             have = false;
             for (j=0; j< inputs.length; j++) {
                 //inputs[j].type = "radio";
@@ -273,7 +275,7 @@ $scriptString .= <<<script
             /**
              * Show user defined select box
              */
-            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs = \$A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
             inputs.each(
                 function(elem){
                     elem.show();
@@ -283,7 +285,7 @@ $scriptString .= <<<script
     },
 
     priceTypeFixed : function() {
-        inputs = $A($$('.price-type-box'));
+        inputs = \$A($$('.price-type-box'));
         inputs.each(
             function(elem){
                 elem.show();
@@ -292,7 +294,7 @@ $scriptString .= <<<script
     },
 
     priceTypeDynamic : function() {
-        inputs = $A($$('.price-type-box'));
+        inputs = \$A($$('.price-type-box'));
         inputs.each(
             function(elem){
                 elem.hide();
@@ -316,7 +318,7 @@ foreach ($block->getOptions() as $_option) {
         }
     }
 }
-?>
+
 $scriptString .= <<<script
 function togglePriceType() {
     bOption['priceType' + ($('price_type').value == '1' ? 'Fixed' : 'Dynamic')]();

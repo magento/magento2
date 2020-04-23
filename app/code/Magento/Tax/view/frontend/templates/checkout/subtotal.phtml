@@ -13,7 +13,8 @@
 <?php
 $style = $block->escapeHtmlAttr($block->getStyle());
 $colspan = (int) $block->getColspan();
-$jsonHelper = $block->getData('jsonHelper');
+/** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+$checkoutHelper = $block->getData('checkoutHelper');
 ?>
 <?php if ($block->displayBoth()): ?>
 <tr class="totals sub excl">
@@ -21,7 +22,7 @@ $jsonHelper = $block->getData('jsonHelper');
         <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </th>
     <tdclass="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
-        <?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="totals sub incl">
@@ -29,7 +30,7 @@ $jsonHelper = $block->getData('jsonHelper');
         <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
     </th>
     <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
-        <?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotal()->getValueInclTax()) ?>
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else: ?>
@@ -38,7 +39,7 @@ $jsonHelper = $block->getData('jsonHelper');
         <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </th>
     <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-        <?= /* @noEscape */ $jsonHelper->formatPrice($block->getTotal()->getValue()) ?>
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
 <?php endif; ?>

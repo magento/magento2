@@ -88,6 +88,9 @@ $ccType = $block->getInfoData('cc_type');
     <input type="hidden" id="<?= /* @noEscape */ $code ?>_payment_method_nonce"
            name="payment[payment_method_nonce]"/>
     <input type="submit" name="Submit">
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display;none', 'input[name=\'Submit\']') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        'display;none',
+        '#payment_form_' . /* @noEscape */ $code . ' input[name=\'Submit\']'
+    ) ?>
 </fieldset>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display;none', 'payment_form_' . /* @noEscape */ $code) ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display;none', '#payment_form_' . /* @noEscape */ $code) ?>

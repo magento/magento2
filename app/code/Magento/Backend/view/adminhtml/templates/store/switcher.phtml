@@ -17,7 +17,7 @@
                <?= /* @noEscape */ $block->getUiId() ?> />
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onchange',
-            'switchScope(this);',
+            "switchScope($('#store_switcher'));",
             '#store_switcher'
         ) ?>
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"

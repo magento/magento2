@@ -7,6 +7,11 @@
 /** @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
+
+<?php
+/** Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+?>
 <div class="tree-panel" >
     <div class="categories-side-col">
         <div class="tree-actions">
@@ -26,7 +31,7 @@
         </div>
     </div>
     <div data-role="tree" data-mage-init='<?= $block->escapeHtml(
-        $block->getData('jsonHelper')->jsonEncode($block->getTreeWidgetOptions())
+        $jsonHelper->jsonEncode($block->getTreeWidgetOptions())
     ) ?>'>
     </div>
 </div>

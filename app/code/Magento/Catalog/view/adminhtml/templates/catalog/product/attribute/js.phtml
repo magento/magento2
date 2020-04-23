@@ -9,7 +9,9 @@ use Magento\Catalog\Helper\Data;
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
-<?php $jsonHelper = $block->getData('jsonHelper');
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 $scriptString = <<<script
 require([
     "jquery",
@@ -288,7 +290,7 @@ function setRowVisibility(id, isVisible)
 
 function updateRequriedOptions()
 {
-    if ($F('frontend_input')=='select' && $F('is_required')==1) {
+    if (\$F('frontend_input')=='select' && \$F('is_required')==1) {
         $('option-count-check').addClassName('required-options-count');
     } else {
         $('option-count-check').removeClassName('required-options-count');

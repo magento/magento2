@@ -8,6 +8,10 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
     <div class="steps-wizard-info">
@@ -70,7 +74,7 @@
                 <div data-role="gallery"
                      class="gallery"
                      data-images="[]"
-                     data-types="<?= $block->escapeHtml($block->getData('jsonHelper')->jsonEncode(
+                     data-types="<?= $block->escapeHtmlAttr($jsonHelper->jsonEncode(
                          $block->getImageTypes()
                      )) ?>">
                     <div class="image image-placeholder">
@@ -321,8 +325,8 @@
                         <div data-role="gallery"
                              class="gallery"
                              data-images="[]"
-                             data-types="<?= $block->escapeHtml(
-                                 $block->getData('jsonHelper')->jsonEncode($block->getImageTypes())
+                             data-types="<?= $block->escapeHtmlAttr(
+                                 $jsonHelper->jsonEncode($block->getImageTypes())
                              ) ?>">
                             <div class="image image-placeholder">
                                 <div data-role="uploader" class="uploader">
@@ -492,7 +496,7 @@
                                                                        data-role="type-selector"
                                                                        type="checkbox"
                                                                 // @codingStandardsIgnoreLine
-                                                                value="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                                value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
                                                                 />
                                                                 <?= $block->escapeHtml($attribute->getFrontendLabel())?>
                                                             </label>

@@ -44,7 +44,7 @@
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
                         "toggleUseDefault('" . $escapedCode . "','" . $escapedSymbol . "')",
-                        'custom_currency_symbol_inherit' . $block->escapeHtmlAttr($code)
+                        '#custom_currency_symbol_inherit' . $block->escapeJs($code)
                     ) ?>
                 </div>
             </div>

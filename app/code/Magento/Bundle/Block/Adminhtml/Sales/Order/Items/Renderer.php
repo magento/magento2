@@ -32,6 +32,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -39,10 +40,11 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 

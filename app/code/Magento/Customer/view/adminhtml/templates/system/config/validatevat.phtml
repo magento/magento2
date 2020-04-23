@@ -11,7 +11,7 @@
 <?php
  $merchantCountryField = $block->escapeJs($block->getMerchantCountryField());
  $merchantVatNumberField = $block->escapeJs($block->getMerchantVatNumberField());
- $ajaxUrl = $block->escapeJs($block->escapeUrl($block->getAjaxUrl()));
+ $ajaxUrl = $block->escapeJs($block->getAjaxUrl());
  $errorMessage = $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.')));
 
  $scriptString = <<<script
@@ -65,15 +65,8 @@ script;
     </button>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderTag('style', [], '#validation_result {margin-bottom: 10px;}', false); ?>
-
-<?php
- $htmlId = /* @noEscape */ $block->getHtmlId();
- $scriptString =<<<script
-require(['jquery'], function($) {
-    $('#{$htmlId}').on('click', function() {
-        javascript:validateVat(); return false;
-        });
-    });
-script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onclick',
+    'javascript:validateVat(); return false;',
+    '#' . $htmlId
+); ?>
