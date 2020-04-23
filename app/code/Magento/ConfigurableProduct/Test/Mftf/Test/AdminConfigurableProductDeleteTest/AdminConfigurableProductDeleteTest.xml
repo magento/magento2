@@ -80,7 +80,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
 
         <!-- go to admin and delete -->
-        <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="wait2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>

@@ -316,15 +316,19 @@ script
 
         // Button to media images insertion window
         if ($this->getConfig('add_images')) {
+            $htmlId = $this->getHtmlId();
+            $url = $this->getConfig('files_browser_window_url')
+                . 'target_element_id/'
+                . $htmlId
+                . '/'
+                . (null !== $this->getConfig('store_id')
+                    ? 'store/' . $this->getConfig('store_id') . '/"'
+                    : '');
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Image...'),
-                    'onclick' => "MediabrowserUtility.openDialog('"
-                        . $this->getConfig('files_browser_window_url')
-                        . "target_element_id/" . $this->getHtmlId() . "/"
-                        . (null !== $this->getConfig('store_id') ? 'store/'
-                            . $this->getConfig('store_id') . '/' : '')
-                        . "')",
+                    'onclick' => 'MediabrowserUtility.openDialog(\'' . $url
+                        . '\', null, null, null, { \'targetElementId\': \'' . $htmlId . '\' })',
                     'class' => 'action-add-image plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
