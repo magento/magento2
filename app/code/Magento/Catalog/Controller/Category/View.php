@@ -15,6 +15,8 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
@@ -40,7 +42,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class View implements HttpGetActionInterface, HttpPostActionInterface
+class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Core registry
@@ -141,6 +143,11 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
     private $redirect;
 
     /**
+     * @var Context
+     */
+    private $context;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
      * @param RequestInterface $request
@@ -163,6 +170,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
      * @param RedirectInterface $redirect
      */
     public function __construct(
+        Context $context,
         RequestInterface $request,
         ResponseInterface $response,
         Session $catalogSession,
@@ -182,6 +190,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         RedirectFactory $redirectFactory,
         RedirectInterface $redirect
     ) {
+        parent::__construct($context);
         $this->request = $request;
         $this->response = $response;
         $this->_catalogSession = $catalogSession;
@@ -200,6 +209,7 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
         $this->eventManager = $eventManager;
         $this->redirectFactory = $redirectFactory;
         $this->redirect = $redirect;
+        $this->context = $context;
     }
 
     /**
