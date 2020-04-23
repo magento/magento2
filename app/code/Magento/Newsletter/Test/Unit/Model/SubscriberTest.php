@@ -29,7 +29,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test Subscriber model functionality
+ * @covers \Magento\Newsletter\Model\Subscriber
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -23,38 +23,39 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ * @covers \Magento\Newsletter\Block\Adminhtml\Template\Preview
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreviewTest extends TestCase
 {
     /** @var Preview */
-    protected $preview;
+    private $preview;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
-    /** @var \Magento\Newsletter\Model\Template|MockObject */
-    protected $template;
+    /** @var Template|MockObject */
+    private $templateMock;
 
     /** @var SubscriberFactory|MockObject */
-    protected $subscriberFactory;
+    private $subscriberFactoryMock;
 
     /** @var State|MockObject */
-    protected $appState;
+    private $appStateMock;
 
     /** @var StoreManagerInterface|MockObject */
-    protected $storeManager;
+    private $storeManagerMock;
 
     /** @var RequestInterface|MockObject */
-    protected $request;
+    private $requestMock;
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->appState = $this->createMock(State::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->template = $this->createPartialMock(
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->appStateMock = $this->createMock(State::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->templateMock = $this->createPartialMock(
             Template::class,
             [
                 'setTemplateType',
@@ -68,8 +69,8 @@ class PreviewTest extends TestCase
             ]
         );
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
-        $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
-        $this->subscriberFactory = $this->createPartialMock(
+        $templateFactory->expects($this->once())->method('create')->willReturn($this->templateMock);
+        $this->subscriberFactoryMock = $this->createPartialMock(
             SubscriberFactory::class,
             ['create']
         );
@@ -81,11 +82,11 @@ class PreviewTest extends TestCase
         $this->preview = $this->objectManagerHelper->getObject(
             Preview::class,
             [
-                'appState' => $this->appState,
-                'storeManager' => $this->storeManager,
-                'request' => $this->request,
+                'appState' => $this->appStateMock,
+                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
                 'templateFactory' => $templateFactory,
-                'subscriberFactory' => $this->subscriberFactory,
+                'subscriberFactory' => $this->subscriberFactoryMock,
                 'escaper' => $escaper
             ]
         );
@@ -93,20 +94,20 @@ class PreviewTest extends TestCase
 
     public function testToHtml()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 1],
                 ['store', null, 1]
             ]
         );
 
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
                 Template::DEFAULT_DESIGN_AREA,
-                [$this->template, 'getProcessedTemplate'],
+                [$this->templateMock, 'getProcessedTemplate'],
                 [['subscriber' => null]]
             )
             ->willReturn('Processed Template');
@@ -116,7 +117,7 @@ class PreviewTest extends TestCase
 
     public function testToHtmlForNewTemplate()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['type', null, TemplateTypesInterface::TYPE_TEXT],
                 ['text', null, 'Processed Template'],
@@ -124,26 +125,26 @@ class PreviewTest extends TestCase
             ]
         );
 
-        $this->template->expects($this->once())->method('setTemplateType')->with(TemplateTypesInterface::TYPE_TEXT)
+        $this->templateMock->expects($this->once())->method('setTemplateType')->with(TemplateTypesInterface::TYPE_TEXT)
             ->willReturnSelf();
-        $this->template->expects($this->once())->method('setTemplateText')->with('Processed Template')
+        $this->templateMock->expects($this->once())->method('setTemplateText')->with('Processed Template')
             ->willReturnSelf();
-        $this->template->expects($this->once())->method('setTemplateStyles')->with('.class-name{color:red;}')
+        $this->templateMock->expects($this->once())->method('setTemplateStyles')->with('.class-name{color:red;}')
             ->willReturnSelf();
-        $this->template->expects($this->atLeastOnce())->method('isPlain')->willReturn(true);
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
+        $this->templateMock->expects($this->atLeastOnce())->method('isPlain')->willReturn(true);
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
         $store = $this->createMock(Store::class);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(1);
 
-        $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
 
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
                 Template::DEFAULT_DESIGN_AREA,
                 [
-                    $this->template,
+                    $this->templateMock,
                     'getProcessedTemplate'
                 ],
                 [
@@ -159,7 +160,7 @@ class PreviewTest extends TestCase
 
     public function testToHtmlWithSubscriber()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 2],
                 ['store', null, 1],
@@ -168,16 +169,16 @@ class PreviewTest extends TestCase
         );
         $subscriber = $this->createMock(Subscriber::class);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
-        $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
+        $this->subscriberFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
 
-        $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
-        $this->template->expects($this->atLeastOnce())->method('revertDesign');
+        $this->templateMock->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
+        $this->templateMock->expects($this->atLeastOnce())->method('revertDesign');
 
-        $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
+        $this->appStateMock->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
                 Template::DEFAULT_DESIGN_AREA,
                 [
-                    $this->template,
+                    $this->templateMock,
                     'getProcessedTemplate'
                 ],
                 [
