@@ -9,6 +9,8 @@ namespace Magento\LoginAsCustomer\Block\Adminhtml;
 
 /**
  * Login as customer log
+ *
+ * @api
  */
 class Login extends \Magento\Backend\Block\Widget\Grid\Container
 {

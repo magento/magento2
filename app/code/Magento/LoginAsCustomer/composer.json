@@ -4,11 +4,21 @@
     "require": {
         "magento/framework": "*",
         "magento/module-backend": "*",
-        "magento/module-sales": "*",
+        "magento/module-checkout": "*",
         "magento/module-customer": "*",
-        "magento/module-checkout": "*"
+        "magento/module-sales": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*",
+        "magento/module-user": "*"
+    },
+    "suggest": {
+        "magento/module-page-cache": "*"
     },
     "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "version": "2.2.1",
     "autoload": {
         "files": [ "registration.php" ],

@@ -22,7 +22,7 @@ define([
             this._super();
 
             this.customer = customerData.get('customer');
-            this.loginAsCustomer = customerData.get('logged_as_customer');
+            this.loginAsCustomer = customerData.get('loggedAsCustomer');
             this.isVisible(this.loginAsCustomer().admin_user_id);
 
             this.notificationText = $.mage.__('You are connected as <strong>%1</strong> on %2')

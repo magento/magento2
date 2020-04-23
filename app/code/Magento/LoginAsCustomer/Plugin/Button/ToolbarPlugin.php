@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Plugin\Button;
 
-use \Magento\LoginAsCustomerAdvanced\Controller\Adminhtml\Order\Login as LoginController;
-use \Magento\Backend\Block\Widget\Button\Toolbar\Interceptor;
-use \Magento\Framework\View\Element\AbstractBlock;
-use \Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\Toolbar;
+use Magento\Framework\View\Element\AbstractBlock;
 
 /**
- * Class ToolbarPlugin
- * @package Magento\LoginAsCustomerAdvanced\Plugin\Button
+ * Plugin for \Magento\Backend\Block\Widget\Button\Toolbar.
  */
 class ToolbarPlugin
 {
@@ -42,12 +40,15 @@ class ToolbarPlugin
     }
 
     /**
-     * @param \Magento\Backend\Block\Widget\Button\Toolbar\Interceptor $subject
+     * Add Login As Customer button.
+     *
+     * @param \Magento\Backend\Block\Widget\Button\Toolbar $subject
      * @param \Magento\Framework\View\Element\AbstractBlock $context
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePushButtons(
-        Interceptor $subject,
+        Toolbar $subject,
         AbstractBlock $context,
         ButtonList $buttonList
     ):void {
@@ -71,7 +72,11 @@ class ToolbarPlugin
                     ]);
                     $buttonList->add(
                         'guest_to_customer',
-                        ['label' => __('Login As Customer'), 'onclick' => 'window.open(\'' . $buttonUrl . '\')', 'class' => 'reset'],
+                        [
+                            'label' => __('Login As Customer'),
+                            'onclick' => 'window.open(\'' . $buttonUrl . '\')',
+                            'class' => 'reset'
+                        ],
                         -1
                     );
                 }
