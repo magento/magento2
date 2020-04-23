@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
@@ -47,8 +49,8 @@ class IntegrationTest extends TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnValue($this->selectMock));
-        $this->selectMock->expects($this->any())->method('where')->will($this->returnValue($this->selectMock));
+        $this->selectMock->expects($this->any())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->any())->method('where')->willReturn($this->selectMock);
 
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);

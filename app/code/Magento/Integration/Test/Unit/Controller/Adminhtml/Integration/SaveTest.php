@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
@@ -59,9 +60,9 @@ class SaveTest extends IntegrationTest
         $this->_integrationSvcMock->expects($this->any())
             ->method('get')
             ->with(self::INTEGRATION_ID)
-            ->will($this->throwException(new LocalizedException(__($exceptionMessage))));
+            ->willThrowException(new LocalizedException(__($exceptionMessage)));
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -78,15 +79,15 @@ class SaveTest extends IntegrationTest
             'get'
         )->with(
             self::INTEGRATION_ID
-        )->will(
-            $this->throwException(new IntegrationException(__($exceptionMessage)))
+        )->willThrowException(
+            new IntegrationException(__($exceptionMessage))
         );
 
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
             ->willReturnArgument(0);
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -160,8 +161,8 @@ class SaveTest extends IntegrationTest
             'create'
         )->with(
             $this->anything()
-        )->will(
-            $this->throwException(new IntegrationException(__($exceptionMessage)))
+        )->willThrowException(
+            new IntegrationException(__($exceptionMessage))
         );
         $this->_integrationSvcMock->expects(
             $this->any()
@@ -210,7 +211,7 @@ class SaveTest extends IntegrationTest
             ->willReturnArgument(0);
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -240,7 +241,7 @@ class SaveTest extends IntegrationTest
         $this->_userMock->expects($this->any())
             ->method('performIdentityCheck')
             ->with($passwordString)
-            ->will($this->throwException(new UserLockedException(__($exceptionMessage))));
+            ->willThrowException(new UserLockedException(__($exceptionMessage)));
 
         $this->_authMock->expects($this->once())
             ->method('logout');
@@ -279,10 +280,10 @@ class SaveTest extends IntegrationTest
         $this->_userMock->expects($this->any())
             ->method('performIdentityCheck')
             ->with($passwordString)
-            ->will($this->throwException(new AuthenticationException(__($exceptionMessage))));
+            ->willThrowException(new AuthenticationException(__($exceptionMessage)));
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

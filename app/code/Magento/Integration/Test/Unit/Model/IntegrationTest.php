@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -58,7 +60,7 @@ class IntegrationTest extends TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->resourceMock = $this->getMockForAbstractClass(
             AbstractResource::class,
@@ -100,7 +102,7 @@ class IntegrationTest extends TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectActiveIntegrationByConsumerId')
             ->with($consumerId)
-            ->will($this->returnValue($integrationData));
+            ->willReturn($integrationData);
 
         $this->integrationModel->loadActiveIntegrationByConsumerId($consumerId);
         $this->assertEquals($integrationData, $this->integrationModel->getData());

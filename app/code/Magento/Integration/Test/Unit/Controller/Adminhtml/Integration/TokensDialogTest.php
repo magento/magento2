@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
@@ -21,15 +22,13 @@ class TokensDialogTest extends IntegrationTest
         )->method(
             'getParam'
         )->willReturnMap(
-            
+            [
                 [
-                    [
-                        Integration::PARAM_INTEGRATION_ID,
-                        null,
-                        self::INTEGRATION_ID
-                    ],[Integration::PARAM_REAUTHORIZE, 0, 0],
-                ]
-            
+                    Integration::PARAM_INTEGRATION_ID,
+                    null,
+                    self::INTEGRATION_ID
+                ],[Integration::PARAM_REAUTHORIZE, 0, 0],
+            ]
         );
 
         $this->_integrationSvcMock->expects(
@@ -37,7 +36,7 @@ class TokensDialogTest extends IntegrationTest
         )->method(
             'get'
         )->with(
-            $this->equalTo(self::INTEGRATION_ID)
+            self::INTEGRATION_ID
         )->willReturn(
             $this->_getIntegrationModelMock()
         );

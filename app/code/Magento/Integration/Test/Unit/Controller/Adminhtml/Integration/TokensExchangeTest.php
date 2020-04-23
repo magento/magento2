@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Controller\Adminhtml\Integration;
@@ -32,7 +34,7 @@ class TokensExchangeTest extends IntegrationTest
 
         $this->_integrationSvcMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->with(self::INTEGRATION_ID)
             ->willReturn($this->_getIntegrationModelMock());
 
         $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');

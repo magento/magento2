@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\Oauth;
 
@@ -65,7 +66,7 @@ class NonceTest extends TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->oauthDataMock = $this->createMock(Data::class);
         $this->resourceMock = $this->getMockForAbstractClass(
@@ -91,16 +92,16 @@ class NonceTest extends TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->oauthDataMock->expects($this->once())
             ->method('getCleanupExpirationPeriod')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $this->resourceMock->expects($this->once())
             ->method('deleteOldEntries')
             ->with(30)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
@@ -109,7 +110,7 @@ class NonceTest extends TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->oauthDataMock->expects($this->never())
             ->method('getCleanupExpirationPeriod');
@@ -129,7 +130,7 @@ class NonceTest extends TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectByCompositeKey')
             ->with($nonce, $consumerId)
-            ->will($this->returnValue($expectedData));
+            ->willReturn($expectedData);
         $this->nonceModel->loadByCompositeKey($nonce, $consumerId);
 
         $this->assertEquals($expectedData, $this->nonceModel->getData());

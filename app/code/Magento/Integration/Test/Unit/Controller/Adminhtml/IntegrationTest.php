@@ -159,7 +159,8 @@ abstract class IntegrationTest extends TestCase
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(
             ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
@@ -176,40 +177,49 @@ abstract class IntegrationTest extends TestCase
 
         $this->_translateModelMock = $this->getMockBuilder(
             TranslateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_integrationSvcMock = $this->getMockBuilder(
             IntegrationServiceInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_oauthSvcMock = $this->getMockBuilder(
             OauthServiceInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_authMock = $this->getMockBuilder(Auth::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'logout'])
             ->getMock();
         $this->_requestMock = $this->getMockBuilder(
             Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_responseMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->_configScopeMock = $this->getMockBuilder(
             ScopeInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_integrationHelperMock = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_messageManager = $this->getMockBuilder(
             \Magento\Framework\Message\ManagerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_escaper = $this->getMockBuilder(
             Escaper::class
         )->setMethods(
             ['escapeHtml']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -240,28 +250,32 @@ abstract class IntegrationTest extends TestCase
             ->getMockForAbstractClass();
         $this->_layoutMergeMock = $this->getMockBuilder(
             Merge::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_layoutMock->expects(
             $this->any()
         )->method(
             'getUpdate'
-        )->will(
-            $this->returnValue($this->_layoutMergeMock)
+        )->willReturn(
+            $this->_layoutMergeMock
         );
         $testElement = new Element('<test>test</test>');
-        $this->_layoutMock->expects($this->any())->method('getNode')->will($this->returnValue($testElement));
+        $this->_layoutMock->expects($this->any())->method('getNode')->willReturn($testElement);
         // for _setActiveMenu
-        $this->_viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->_layoutMock));
-        $blockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()->getMock();
+        $this->_viewMock->expects($this->any())->method('getLayout')->willReturn($this->_layoutMock);
+        $blockMock = $this->getMockBuilder(Menu::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
             ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
-        $menuMock->expects($this->any())->method('getParentItems')->will($this->returnValue([]));
-        $blockMock->expects($this->any())->method('getMenuModel')->will($this->returnValue($menuMock));
-        $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
-        $this->_layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
+        $loggerMock->expects($this->any())->method('critical')->willReturnSelf();
+        $menuMock->expects($this->any())->method('getParentItems')->willReturn([]);
+        $blockMock->expects($this->any())->method('getMenuModel')->willReturn($menuMock);
+        $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->willReturn($blockMock);
+        $this->_layoutMock->expects($this->any())->method('getBlock')->willReturn($blockMock);
         $this->_viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -286,8 +300,8 @@ abstract class IntegrationTest extends TestCase
             $this->any()
         )->method(
             'getUser'
-        )->will(
-            $this->returnValue($this->_userMock)
+        )->willReturn(
+            $this->_userMock
         );
 
         $this->_userMock->expects($this->any())
@@ -319,15 +333,15 @@ abstract class IntegrationTest extends TestCase
 
         $integrationCollection =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addUnsecureUrlsFilter', 'getSize'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['addUnsecureUrlsFilter', 'getSize'])
+                ->getMock();
         $integrationCollection->expects($this->any())
             ->method('addUnsecureUrlsFilter')
-            ->will($this->returnValue($integrationCollection));
+            ->willReturn($integrationCollection);
         $integrationCollection->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $subControllerParams = [
             'context' => $this->_backendActionCtxMock,
@@ -366,7 +380,7 @@ abstract class IntegrationTest extends TestCase
             [TranslateInterface::class, $this->_translateModelMock],
             [ScopeInterface::class, $this->_configScopeMock],
         ];
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $this->_objectManagerMock->expects($this->any())->method('get')->willReturnMap($map);
     }
 
     /**
@@ -395,18 +409,20 @@ abstract class IntegrationTest extends TestCase
      */
     protected function _getIntegrationModelMock()
     {
-        $integrationModelMock = $this->createPartialMock(
-            \Magento\Integration\Model\Integration::class,
-            ['save', '__wakeup', 'setStatus', 'getData']
-        );
+        $integrationModelMock = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)->addMethods(
+            ['setStatus']
+        )
+            ->onlyMethods(['save', '__wakeup', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $integrationModelMock->expects($this->any())->method('setStatus')->will($this->returnSelf());
+        $integrationModelMock->expects($this->any())->method('setStatus')->willReturnSelf();
         $integrationModelMock->expects(
             $this->any()
         )->method(
             'getData'
-        )->will(
-            $this->returnValue($this->_getSampleIntegrationData())
+        )->willReturn(
+            $this->_getSampleIntegrationData()
         );
 
         return $integrationModelMock;

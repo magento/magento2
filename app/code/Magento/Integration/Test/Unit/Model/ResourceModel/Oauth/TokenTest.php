@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 use Magento\Framework\App\ResourceConnection;
@@ -54,10 +56,11 @@ class TokenTest extends TestCase
 
     public function testCleanOldAuthorizedTokensExcept()
     {
-        $tokenMock = $this->createPartialMock(
-            \Magento\Integration\Model\Oauth\Token::class,
-            ['getId', 'getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId']
-        );
+        $tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+            ->addMethods(['getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $tokenMock->expects($this->any())->method('getId')->willReturn(1);
         $tokenMock->expects($this->once())->method('getAuthorized')->willReturn(true);
         $tokenMock->expects($this->any())->method('getCustomerId')->willReturn(1);
@@ -76,8 +79,8 @@ class TokenTest extends TestCase
     public function testSelectTokenByType()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->tokenResource->selectTokenByType(5, 'nonce');
@@ -86,8 +89,8 @@ class TokenTest extends TestCase
     public function testSelectTokenByConsumerIdAndUserType()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->tokenResource->selectTokenByConsumerIdAndUserType(5, 'nonce');
@@ -96,8 +99,8 @@ class TokenTest extends TestCase
     public function testSelectTokenByAdminId()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->tokenResource->selectTokenByAdminId(5);
@@ -106,8 +109,8 @@ class TokenTest extends TestCase
     public function testSelectTokenByCustomerId()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->tokenResource->selectTokenByCustomerId(5);

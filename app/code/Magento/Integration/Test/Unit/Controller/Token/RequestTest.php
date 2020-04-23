@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Token;
 
@@ -66,18 +67,22 @@ class RequestTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createPartialMock(RequestInterface::class, [
-                'getMethod',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'setParams',
-                'getParams',
-                'getCookie',
-                'isSecure'
-            ]);
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->addMethods(['getMethod'])
+            ->onlyMethods(
+                [
+                    'getModuleName',
+                    'setModuleName',
+                    'getActionName',
+                    'setActionName',
+                    'getParam',
+                    'setParams',
+                    'getParams',
+                    'getCookie',
+                    'isSecure'
+                ]
+            )
+            ->getMock();
         $this->response = $this->createMock(Response::class);
         /** @var ObjectManagerInterface|MockObject */
         $objectManager = $this->createMock(ObjectManagerInterface::class);
@@ -88,7 +93,7 @@ class RequestTest extends TestCase
         $update = $this->createMock(ProcessorInterface::class);
         /** @var Layout|MockObject */
         $layout = $this->createMock(Layout::class);
-        $layout->expects($this->any())->method('getUpdate')->will($this->returnValue($update));
+        $layout->expects($this->any())->method('getUpdate')->willReturn($update);
 
         /** @var Config */
         $pageConfig = $this->createMock(Config::class);
@@ -99,27 +104,27 @@ class RequestTest extends TestCase
             Page::class,
             ['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout']
         );
-        $page->expects($this->any())->method('getConfig')->will($this->returnValue($pageConfig));
-        $page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
-        $page->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
+        $page->expects($this->any())->method('getConfig')->willReturn($pageConfig);
+        $page->expects($this->any())->method('addPageLayoutHandles')->willReturnSelf();
+        $page->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ViewInterface|MockObject */
         $view = $this->createMock(ViewInterface::class);
-        $view->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
+        $view->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ResultFactory|MockObject */
         $resultFactory = $this->createMock(ResultFactory::class);
-        $resultFactory->expects($this->any())->method('create')->will($this->returnValue($page));
+        $resultFactory->expects($this->any())->method('create')->willReturn($page);
 
         $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->context->expects($this->any())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->any())->method('getObjectManager')
-            ->will($this->returnValue($objectManager));
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($view));
+            ->willReturn($objectManager);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $this->context->expects($this->any())->method('getView')->willReturn($view);
         $this->context->expects($this->any())->method('getResultFactory')
-            ->will($this->returnValue($resultFactory));
+            ->willReturn($resultFactory);
 
         $this->helperMock = $this->createMock(Request::class);
         $this->frameworkOauthSvcMock = $this->createMock(OauthInterface::class);

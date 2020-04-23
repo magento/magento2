@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Oauth;
 
@@ -77,7 +78,8 @@ class OauthTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(Consumer::class)
-            ->disableOriginalConstructor()->setMethods(
+            ->disableOriginalConstructor()
+            ->setMethods(
                 [
                     'getCreatedAt',
                     'loadByKey',
@@ -94,14 +96,15 @@ class OauthTest extends TestCase
             ->getMock();
         $this->_consumerFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->_consumerMock));
+            ->willReturn($this->_consumerMock);
         $this->_nonceFactory = $this->getMockBuilder(NonceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -123,7 +126,7 @@ class OauthTest extends TestCase
                 ]
             )
             ->getMock();
-        $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+        $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
         $this->_oauthHelperMock = $this->getMockBuilder(Oauth::class)
             ->setConstructorArgs([new Random()])
             ->getMock();
@@ -160,7 +163,7 @@ class OauthTest extends TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->_consumerFactory);
         unset($this->_nonceFactory);
@@ -331,26 +334,27 @@ class OauthTest extends TestCase
     {
         $nonceMock = $this->getMockBuilder(
             Nonce::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'loadByCompositeKey',
-                'getNonce',
-                'getTimestamp',
-                'setNonce',
-                'setConsumerId',
-                'setTimestamp',
-                'save',
-                '__wakeup',
-            ]
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'loadByCompositeKey',
+                    'getNonce',
+                    'getTimestamp',
+                    'setNonce',
+                    'setConsumerId',
+                    'setTimestamp',
+                    'save',
+                    '__wakeup',
+                ]
+            )->getMock();
 
-        $nonceMock->expects($this->any())->method('getNonce')->will($this->returnValue($isUsed));
-        $nonceMock->expects($this->any())->method('loadByCompositeKey')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('getTimestamp')->will($this->returnValue($timestamp));
-        $nonceMock->expects($this->any())->method('setNonce')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('setConsumerId')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('setTimestamp')->will($this->returnSelf());
-        $nonceMock->expects($this->any())->method('save')->will($this->returnSelf());
+        $nonceMock->expects($this->any())->method('getNonce')->willReturn($isUsed);
+        $nonceMock->expects($this->any())->method('loadByCompositeKey')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('getTimestamp')->willReturn($timestamp);
+        $nonceMock->expects($this->any())->method('setNonce')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('setConsumerId')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('setTimestamp')->willReturnSelf();
+        $nonceMock->expects($this->any())->method('save')->willReturnSelf();
         $this->_nonceFactory->expects($this->any())->method('create')->will($this->returnValue($nonceMock));
     }
 

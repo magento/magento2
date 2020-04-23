@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
@@ -53,10 +54,10 @@ class NameTest extends TestCase
             Context::class,
             ['getEscaper', 'getUrlBuilder']
         );
-        $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
+        $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->nameRenderer = $this->objectManagerHelper->getObject(

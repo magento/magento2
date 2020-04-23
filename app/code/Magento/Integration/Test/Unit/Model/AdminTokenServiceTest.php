@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model;
 
@@ -48,7 +49,7 @@ class AdminTokenServiceTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_tokenFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+        $this->_tokenFactoryMock->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
         $this->_userModelMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
@@ -60,21 +61,24 @@ class AdminTokenServiceTest extends TestCase
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
+            )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
-        )->setMethods(['create'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
 
         $this->validatorHelperMock = $this->getMockBuilder(
             CredentialsValidator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_tokenService = new AdminTokenService(
             $this->_tokenFactoryMock,
@@ -104,7 +108,7 @@ class AdminTokenServiceTest extends TestCase
             ->will($this->returnValue(1));
         $this->_tokenMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
 
         $this->assertTrue($this->_tokenService->revokeAdminAccessToken($adminId));
     }
@@ -117,7 +121,7 @@ class AdminTokenServiceTest extends TestCase
             ->will($this->returnValue($this->_tokenModelCollectionMock));
         $this->_tokenMock->expects($this->never())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
         $this->_tokenService->revokeAdminAccessToken(null);
     }
 
@@ -140,7 +144,7 @@ class AdminTokenServiceTest extends TestCase
 
         $this->_tokenMock->expects($this->once())
             ->method('delete')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
         $this->_tokenService->revokeAdminAccessToken($adminId);
     }
 }

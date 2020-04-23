@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth\Token;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -39,7 +41,7 @@ class CollectionTest extends TestCase
             ->getMock();
         $connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
 
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
@@ -47,7 +49,7 @@ class CollectionTest extends TestCase
             ->getMockForAbstractClass();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model;
 
@@ -49,7 +50,7 @@ class CustomerTokenServiceTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_tokenFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+        $this->_tokenFactoryMock->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
         $this->_accountManagementMock = $this
             ->getMockBuilder(AccountManagementInterface::class)
@@ -62,21 +63,32 @@ class CustomerTokenServiceTest extends TestCase
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator', '_fetchAll']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addFilterByCustomerId',
+                    'getSize',
+                    '__wakeup',
+                    '_beforeLoad',
+                    '_afterLoad',
+                    'getIterator',
+                    '_fetchAll'
+                ]
+            )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
-        )->setMethods(['create'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
 
         $this->validatorHelperMock = $this->getMockBuilder(
             CredentialsValidator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->manager = $this->createMock(ManagerInterface::class);
 
@@ -108,7 +120,7 @@ class CustomerTokenServiceTest extends TestCase
             ->will($this->returnValue(1));
         $this->_tokenMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
 
         $this->assertTrue($this->_tokenService->revokeCustomerAccessToken($customerId));
     }
@@ -123,7 +135,7 @@ class CustomerTokenServiceTest extends TestCase
             ->will($this->returnValue($this->_tokenModelCollectionMock));
         $this->_tokenMock->expects($this->never())
             ->method('delete')
-            ->will($this->returnValue($this->_tokenMock));
+            ->willReturn($this->_tokenMock);
         $this->_tokenService->revokeCustomerAccessToken(null);
     }
 
@@ -146,7 +158,7 @@ class CustomerTokenServiceTest extends TestCase
 
         $this->_tokenMock->expects($this->once())
             ->method('delete')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
         $this->_tokenService->revokeCustomerAccessToken($customerId);
     }
 }

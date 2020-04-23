@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 use Magento\Framework\App\ResourceConnection;
@@ -57,8 +59,8 @@ class NonceTest extends TestCase
     public function testSelectByCompositeKey()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchRow');
         $this->nonceResource->selectByCompositeKey('nonce', 5);

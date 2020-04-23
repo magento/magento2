@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -21,7 +23,8 @@ class DataTest extends TestCase
     {
         $this->_scopeConfigMock = $this->getMockBuilder(
             ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_dataHelper = new Data($this->_scopeConfigMock);
     }

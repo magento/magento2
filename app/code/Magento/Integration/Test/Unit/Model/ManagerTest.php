@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
@@ -43,18 +45,19 @@ class ManagerTest extends TestCase
     {
         $this->integrationServiceMock = $this->getMockBuilder(
             IntegrationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'findByName',
-                'update',
-                'create',
-                'get',
-                'findByConsumerId',
-                'findActiveIntegrationByConsumerId',
-                'delete',
-                'getSelectedResources'
-            ]
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'findByName',
+                    'update',
+                    'create',
+                    'get',
+                    'findByConsumerId',
+                    'findActiveIntegrationByConsumerId',
+                    'delete',
+                    'getSelectedResources'
+                ]
+            )->getMock();
 
         $this->aclRetriever = $this->getMockBuilder(AclRetriever::class)
             ->disableOriginalConstructor()
@@ -77,7 +80,7 @@ class ManagerTest extends TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->integrationServiceMock);
         unset($this->integrationManager);

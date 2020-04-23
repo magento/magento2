@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
@@ -62,7 +64,7 @@ class IntegrationConfigTest extends TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->will($this->returnValue($serializedIntegrations));
+            ->willReturn($serializedIntegrations);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedIntegrations)
@@ -78,10 +80,10 @@ class IntegrationConfigTest extends TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('load')
             ->with(IntegrationConfig::CACHE_ID)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configReaderMock->expects($this->once())
             ->method('read')
-            ->will($this->returnValue($integrations));
+            ->willReturn($integrations);
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($integrations)
@@ -89,7 +91,7 @@ class IntegrationConfigTest extends TestCase
         $this->configCacheTypeMock->expects($this->once())
             ->method('save')
             ->with($serializedIntegrations, IntegrationConfig::CACHE_ID, [TypeIntegration::CACHE_TAG])
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
 use Magento\Framework\HTTP\ZendClient;
@@ -66,7 +68,8 @@ class ConsumerTest extends TestCase
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_consumerFactory->expects(
             $this->any()
         )->method(
@@ -77,18 +80,22 @@ class ConsumerTest extends TestCase
 
         $this->_tokenFactory = $this->getMockBuilder(
             TokenFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
         $this->_storeManagerMock = $this->getMockBuilder(
             StoreManagerInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_storeMock = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -99,19 +106,23 @@ class ConsumerTest extends TestCase
 
         $this->_dataHelper = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $oauthHelperMock = $this->getMockBuilder(
             Oauth::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $tokenProviderMock = $this->getMockBuilder(
             Provider::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_httpClientMock = $this->getMockBuilder(
             ZendClient::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_loggerMock = $this->getMockBuilder(
             LoggerInterface::class
         )->getMock();
@@ -171,7 +182,6 @@ class ConsumerTest extends TestCase
         )->with(
             $this->equalTo($consumerId)
         )->willReturnSelf(
-            
         );
 
         $dateHelperMock = $this->getMockBuilder(DateTime::class)
@@ -192,7 +202,6 @@ class ConsumerTest extends TestCase
         )->with(
             'http://www.magento.com'
         )->willReturnSelf(
-            
         );
         $this->_httpClientMock->expects($this->once())->method('setParameterPost')->willReturnSelf();
         $this->_tokenMock->expects(
@@ -202,7 +211,6 @@ class ConsumerTest extends TestCase
         )->with(
             $consumerId
         )->willReturnSelf(
-            
         );
         $this->_tokenMock->expects($this->any())->method('getVerifier')->willReturn($oauthVerifier);
         $this->_dataHelper->expects($this->once())->method('getConsumerPostMaxRedirects')->willReturn(5);

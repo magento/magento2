@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\Oauth;
 
 use Laminas\Validator\Uri as LaminasUriValidator;
@@ -90,7 +92,7 @@ class ConsumerTest extends TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
 
         $this->registryMock = $this->createMock(Registry::class);
 
@@ -104,12 +106,14 @@ class ConsumerTest extends TestCase
         );
         $this->oauthDataMock->expects($this->any())
             ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
+            ->willReturn(Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT);
 
-        $this->resourceMock = $this->createPartialMock(
-            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,
-            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
-        );
+        $this->resourceMock = $this->getMockBuilder(
+            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class
+        )->addMethods(['selectByCompositeKey', 'deleteOldEntries'])
+            ->onlyMethods(['getIdFieldName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->consumerModel = new Consumer(
             $this->contextMock,
@@ -202,7 +206,7 @@ class ConsumerTest extends TestCase
         $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
-        $this->consumerModel->setUpdatedAt(time());
+        $this->consumerModel->setUpdatedAt((string)time());
         $this->assertTrue($this->consumerModel->isValidForTokenExchange());
     }
 
@@ -218,7 +222,7 @@ class ConsumerTest extends TestCase
         $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
-        $this->consumerModel->setUpdatedAt(time());
+        $this->consumerModel->setUpdatedAt((string)time());
         $this->assertFalse($this->consumerModel->isValidForTokenExchange());
     }
 }

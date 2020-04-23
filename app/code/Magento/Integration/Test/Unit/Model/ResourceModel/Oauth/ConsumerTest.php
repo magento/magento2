@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 
 use Magento\Framework\App\ResourceConnection;
@@ -42,10 +44,11 @@ class ConsumerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->consumerMock = $this->createPartialMock(
-            Consumer::class,
-            ['setUpdatedAt', 'getId']
-        );
+        $this->consumerMock = $this->getMockBuilder(Consumer::class)
+            ->addMethods(['setUpdatedAt'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->connectionMock = $this->createMock(Mysql::class);
 
@@ -72,10 +75,10 @@ class ConsumerTest extends TestCase
     public function testGetTimeInSecondsSinceCreation()
     {
         $selectMock = $this->createMock(Select::class);
-        $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('reset')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('columns')->will($this->returnValue($selectMock));
-        $selectMock->expects($this->any())->method('where')->will($this->returnValue($selectMock));
+        $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('reset')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('columns')->willReturn($selectMock);
+        $selectMock->expects($this->any())->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne');
         $this->consumerResource->getTimeInSecondsSinceCreation(1);
