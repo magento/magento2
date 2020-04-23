@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\TotalMinMax;
+use Magento\Payment\Model\Checks\TotalMinMax;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\TestCase;
 
-class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
+class TotalMinMaxTest extends TestCase
 {
     /**
      * Payment min total value
@@ -28,7 +32,7 @@ class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
     public function testIsApplicable($baseGrandTotal, $expectation)
     {
         $paymentMethod = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
+            MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->at(0))->method('getConfigData')->with(
             TotalMinMax::MIN_ORDER_TOTAL
@@ -37,7 +41,7 @@ class TotalMinMaxTest extends \PHPUnit\Framework\TestCase
             TotalMinMax::MAX_ORDER_TOTAL
         )->willReturn(self::PAYMENT_MAX_TOTAL);
 
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods(
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
             ['getBaseGrandTotal', '__wakeup']
         )->getMock();
         $quote->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotal);
