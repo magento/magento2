@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Framework\App\ResourceConnection;
@@ -67,16 +70,21 @@ class ItemTest extends TestCase
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->quoteItemMock = $this->createMock(QuoteItem::class);
-        $this->connectionMock = $this->createPartialMock(Mysql::class, [
-                'describeTable',
-                'insert',
-                'lastInsertId',
-                'beginTransaction',
-                'rollback',
-                'commit',
-                'quoteInto',
-                'update'
-            ]);
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(
+                [
+                    'rollback',
+                    'describeTable',
+                    'insert',
+                    'lastInsertId',
+                    'beginTransaction',
+                    'commit',
+                    'quoteInto',
+                    'update'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
         );

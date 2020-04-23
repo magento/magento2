@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
@@ -92,10 +93,10 @@ class BillingAddressManagementTest extends TestCase
     {
         $quoteMock = $this->createMock(Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
-            ->with('cartId')->will($this->returnValue($quoteMock));
+            ->with('cartId')->willReturn($quoteMock);
 
         $addressMock = $this->createMock(Address::class);
-        $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
+        $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
 
         $this->assertEquals($addressMock, $this->model->get('cartId'));
     }

@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
@@ -71,10 +72,11 @@ class GuestCartManagementTest extends TestCase
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->quoteIdMaskMock = $this->createPartialMock(
-            QuoteIdMask::class,
-            ['getQuoteId', 'getMaskedId', 'load', 'save', 'setQuoteId']
-        );
+        $this->quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId', 'getMaskedId', 'setQuoteId'])
+            ->onlyMethods(['load', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 

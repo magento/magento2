@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -87,32 +89,34 @@ class ShippingTest extends TestCase
         );
 
         $this->quote = $this->createMock(Quote::class);
-        $this->total = $this->createPartialMock(Total::class, [
-                'setShippingAmount',
-                'setBaseShippingAmount',
-                'setBaseTotalAmount',
-                'setTotalAmount',
-                'setShippingDescription',
-            ]);
+        $this->total = $this->getMockBuilder(Total::class)
+            ->addMethods(['setShippingAmount', 'setBaseShippingAmount', 'setShippingDescription'])
+            ->onlyMethods(['setBaseTotalAmount', 'setTotalAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shippingAssignment = $this->getMockForAbstractClass(
             ShippingAssignmentInterface::class,
             [],
             '',
             false
         );
-        $this->address = $this->createPartialMock(Address::class, [
-                'setWeight',
-                'setFreeMethodWeight',
-                'getWeight',
-                'getFreeMethodWeight',
-                'setFreeShipping',
-                'setItemQty',
-                'collectShippingRates',
-                'getAllShippingRates',
-                'setShippingDescription',
-                'getShippingDescription',
-                'getFreeShipping',
-            ]);
+        $this->address = $this->getMockBuilder(Address::class)
+            ->addMethods(
+                [
+                    'setWeight',
+                    'setFreeMethodWeight',
+                    'getWeight',
+                    'getFreeMethodWeight',
+                    'setFreeShipping',
+                    'setItemQty',
+                    'setShippingDescription',
+                    'getShippingDescription',
+                    'getFreeShipping'
+                ]
+            )
+            ->onlyMethods(['collectShippingRates', 'getAllShippingRates'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shipping = $this->getMockForAbstractClass(
             ShippingInterface::class,
             [],
@@ -137,10 +141,10 @@ class ShippingTest extends TestCase
                 'setRowWeight',
             ]
         );
-        $this->rate = $this->createPartialMock(
-            Rate::class,
-            ['getPrice', 'getCode', 'getCarrierTitle', 'getMethodTitle']
-        );
+        $this->rate = $this->getMockBuilder(Rate::class)
+            ->addMethods(['getPrice', 'getCode', 'getCarrierTitle', 'getMethodTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->store = $this->createMock(Store::class);
     }
 
@@ -158,10 +162,10 @@ class ShippingTest extends TestCase
         ];
 
         $quoteMock = $this->createMock(Quote::class);
-        $totalMock = $this->createPartialMock(
-            Total::class,
-            ['getShippingAmount', 'getShippingDescription']
-        );
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['getShippingAmount', 'getShippingDescription'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $totalMock->expects($this->once())->method('getShippingAmount')->willReturn($shippingAmount);
         $totalMock->expects($this->once())->method('getShippingDescription')->willReturn($shippingDescription);

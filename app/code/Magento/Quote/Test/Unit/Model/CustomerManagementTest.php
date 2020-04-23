@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -103,10 +105,11 @@ class CustomerManagementTest extends TestCase
             true,
             []
         );
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash']
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getPasswordHash'])
+            ->onlyMethods(['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteAddressMock = $this->createMock(Address::class);
         $this->customerMock = $this->getMockForAbstractClass(
             CustomerInterface::class,

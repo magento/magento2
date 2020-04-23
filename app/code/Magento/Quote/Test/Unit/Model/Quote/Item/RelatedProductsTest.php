@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
@@ -39,10 +41,11 @@ class RelatedProductsTest extends TestCase
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
         $quoteItemMock = $this->createMock(Item::class);
-        $itemOptionMock = $this->createPartialMock(
-            Option::class,
-            ['getValue', 'getProductId', '__wakeup']
-        );
+        $itemOptionMock = $this->getMockBuilder(Option::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['getValue', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $quoteItemMock->expects(
             $this->once()

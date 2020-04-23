@@ -99,19 +99,20 @@ class CartTotalRepositoryTest extends TestCase
                 'create'
             ]
         );
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'isVirtual',
-                'getShippingAddress',
-                'getBillingAddress',
-                'getAllVisibleItems',
-                'getBaseCurrencyCode',
-                'getQuoteCurrencyCode',
-                'getItemsQty',
-                'collectTotals'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getBaseCurrencyCode', 'getQuoteCurrencyCode'])
+            ->onlyMethods(
+                [
+                    'isVirtual',
+                    'getShippingAddress',
+                    'getBillingAddress',
+                    'getAllVisibleItems',
+                    'getItemsQty',
+                    'collectTotals'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
@@ -124,7 +125,8 @@ class CartTotalRepositoryTest extends TestCase
         );
         $this->dataObjectHelperMock = $this->getMockBuilder(
             DataObjectHelper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->converterMock = $this->createMock(
             ItemConverter::class
         );

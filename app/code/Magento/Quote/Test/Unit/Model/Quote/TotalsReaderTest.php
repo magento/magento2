@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
@@ -67,7 +68,11 @@ class TotalsReaderTest extends TestCase
         $total = [];
         $storeId = 1;
         $testedTotalMock =
-            $this->createPartialMock(Total::class, ['setData', 'getCode']);
+            $this->getMockBuilder(Total::class)
+                ->addMethods(['getCode'])
+                ->onlyMethods(['setData'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $expected = ['my_total_type' => $testedTotalMock];
         $data = ['code' => 'my_total_type'];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -118,9 +123,17 @@ class TotalsReaderTest extends TestCase
         $total = [];
         $storeId = 1;
         $firstTotalMock =
-            $this->createPartialMock(Total::class, ['setData', 'getCode']);
+            $this->getMockBuilder(Total::class)
+                ->addMethods(['getCode'])
+                ->onlyMethods(['setData'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $secondTotalMock =
-            $this->createPartialMock(Total::class, ['setData', 'getCode']);
+            $this->getMockBuilder(Total::class)
+                ->addMethods(['getCode'])
+                ->onlyMethods(['setData'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $expected = ['first_total_type' => $firstTotalMock, 'second_total_type' => $secondTotalMock];
         $data = [['code' => 'first_total_type'], ['code' => 'second_total_type']];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -152,7 +165,11 @@ class TotalsReaderTest extends TestCase
         $total = [];
         $storeId = 1;
         $testedTotalMock =
-            $this->createPartialMock(Total::class, ['setData', 'getCode']);
+            $this->getMockBuilder(Total::class)
+                ->addMethods(['getCode'])
+                ->onlyMethods(['setData'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $expected = ['my_total_type' => $testedTotalMock];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);

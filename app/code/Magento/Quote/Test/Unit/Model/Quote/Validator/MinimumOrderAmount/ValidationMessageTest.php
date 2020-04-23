@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -75,7 +77,7 @@ class ValidationMessageTest extends TestCase
         $this->priceHelperMock->expects($this->once())
             ->method('currency')
             ->with($minimumAmount, true, false)
-            ->will($this->returnValue($minimumAmountCurrency));
+            ->willReturn($minimumAmountCurrency);
 
         $this->assertEquals(__('Minimum order amount is %1', $minimumAmountCurrency), $this->model->getMessage());
     }
@@ -89,7 +91,7 @@ class ValidationMessageTest extends TestCase
 
         $message = $this->model->getMessage();
 
-        $this->assertEquals(Phrase::class, get_class($message));
+        $this->assertInstanceOf(Phrase::class, $message);
         $this->assertEquals($configMessage, $message->__toString());
     }
 }

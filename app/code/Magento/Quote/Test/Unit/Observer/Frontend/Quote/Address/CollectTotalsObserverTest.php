@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
@@ -125,25 +126,28 @@ class CollectTotalsObserverTest extends TestCase
         );
         $this->customerAddressMock = $this->createMock(Address::class);
         $this->customerVatMock = $this->createMock(Vat::class);
-        $this->customerDataFactoryMock = $this->createPartialMock(
-            CustomerInterfaceFactory::class,
-            ['mergeDataObjectWithArray', 'create']
-        );
+        $this->customerDataFactoryMock = $this->getMockBuilder(CustomerInterfaceFactory::class)
+            ->addMethods(['mergeDataObjectWithArray'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->vatValidatorMock = $this->createMock(VatValidator::class);
-        $this->observerMock = $this->createPartialMock(
-            Observer::class,
-            ['getShippingAssignment', 'getQuote']
-        );
+        $this->observerMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getShippingAssignment', 'getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->quoteAddressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['getCountryId', 'getVatId', 'getQuote', 'setPrevQuoteCustomerGroupId', '__wakeup']
-        );
+        $this->quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->addMethods(['setPrevQuoteCustomerGroupId'])
+            ->onlyMethods(['getCountryId', 'getVatId', 'getQuote', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['setCustomerGroupId', 'getCustomerGroupId', 'getCustomer', '__wakeup', 'setCustomer']
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setCustomerGroupId'])
+            ->onlyMethods(['getCustomerGroupId', 'getCustomer', '__wakeup', 'setCustomer'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->groupManagementMock = $this->getMockForAbstractClass(
             GroupManagementInterface::class,
@@ -180,14 +184,14 @@ class CollectTotalsObserverTest extends TestCase
         $this->observerMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($this->customerMock));
+            ->willReturn($this->customerMock);
 
         $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
+        $this->customerMock->expects($this->any())->method('getStoreId')->willReturn($this->storeId);
 
         $this->model = new CollectTotalsObserver(
             $this->customerAddressMock,
@@ -205,7 +209,7 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->model->execute($this->observerMock);
     }
 
@@ -216,18 +220,18 @@ class CollectTotalsObserverTest extends TestCase
     {
         $this->groupManagementMock->expects($this->once())
             ->method('getNotLoggedInGroup')
-            ->will($this->returnValue($this->groupInterfaceMock));
+            ->willReturn($this->groupInterfaceMock);
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue(null));
+            ->method('getId')->willReturn(null);
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
-        $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue('vatId'));
+            ->willReturn('customerCountryCode');
+        $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn('vatId');
 
         $this->customerVatMock->expects(
             $this->once()
@@ -235,11 +239,11 @@ class CollectTotalsObserverTest extends TestCase
             'isCountryInEU'
         )->with(
             'customerCountryCode'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
-        $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->customerMock->expects($this->once())->method('getId')->willReturn(null);
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->never())->method('setPrevQuoteCustomerGroupId');
@@ -255,22 +259,22 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
-        $this->quoteAddressMock->expects($this->once())->method('getVatId')->will($this->returnValue(null));
+            ->willReturn('customerCountryCode');
+        $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn(null);
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
-        $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
+            ->willReturn('customerGroupId');
+        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
         $this->groupManagementMock->expects($this->once())
             ->method('getDefaultGroup')
-            ->will($this->returnValue($this->groupInterfaceMock));
+            ->willReturn($this->groupInterfaceMock);
         $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->will($this->returnValue('defaultCustomerGroupId'));
+            ->method('getId')->willReturn('defaultCustomerGroupId');
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
@@ -291,14 +295,14 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue('customerCountryCode'));
+            ->willReturn('customerCountryCode');
         $this->quoteAddressMock->expects($this->once())
             ->method('getVatId')
-            ->will($this->returnValue('vatID'));
+            ->willReturn('vatID');
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -307,18 +311,18 @@ class CollectTotalsObserverTest extends TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
 
         $validationResult = ['some' => 'result'];
         $this->vatValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue($validationResult));
+            ->willReturn($validationResult);
 
         $this->customerVatMock->expects($this->once())
             ->method('getCustomerGroupIdBasedOnVatNumber')
             ->with('customerCountryCode', $validationResult, $this->storeId)
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
@@ -360,7 +364,7 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -396,14 +400,14 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->quoteAddressMock->expects($this->once())
             ->method('getVatId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->customerVatMock->expects($this->once())
             ->method('isCountryInEU')
@@ -412,12 +416,12 @@ class CollectTotalsObserverTest extends TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
         $validationResult = ['some' => 'result'];
         $this->customerVatMock->expects($this->once())
             ->method('getCustomerGroupIdBasedOnVatNumber')
             ->with($customerCountryCode, $validationResult, $this->storeId)
-            ->will($this->returnValue('customerGroupId'));
+            ->willReturn('customerGroupId');
         $this->customerSession->expects($this->once())
             ->method("setCustomerGroupId")
             ->with('customerGroupId');
@@ -425,7 +429,7 @@ class CollectTotalsObserverTest extends TestCase
         $this->vatValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->quoteAddressMock, $this->storeId)
-            ->will($this->returnValue($validationResult));
+            ->willReturn($validationResult);
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())

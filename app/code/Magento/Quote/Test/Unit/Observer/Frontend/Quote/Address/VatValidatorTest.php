@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
 use Magento\Customer\Helper\Address;
@@ -64,19 +66,21 @@ class VatValidatorTest extends TestCase
 
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
-                'getCountryId',
-                'getVatId',
-                'getValidatedCountryCode',
-                'getValidatedVatNumber',
-                'getVatIsValid',
-                'getVatRequestId',
-                'getVatRequestDate',
-                'getVatRequestSuccess',
-                'getAddressType',
-                'save',
-                '__wakeup'
-            ]);
+        $this->quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->addMethods(
+                [
+                    'getValidatedCountryCode',
+                    'getValidatedVatNumber',
+                    'getVatIsValid',
+                    'getVatRequestId',
+                    'getVatRequestDate',
+                    'getVatRequestSuccess',
+                    'getAddressType'
+                ]
+            )
+            ->onlyMethods(['getCountryId', 'getVatId', 'save', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->testData = [
             'is_valid' => true,
@@ -89,32 +93,32 @@ class VatValidatorTest extends TestCase
             $this->any()
         )->method(
             'getVatIsValid'
-        )->will(
-            $this->returnValue($this->testData['is_valid'])
+        )->willReturn(
+            $this->testData['is_valid']
         );
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getVatRequestId'
-        )->will(
-            $this->returnValue($this->testData['request_identifier'])
+        )->willReturn(
+            $this->testData['request_identifier']
         );
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getVatRequestDate'
-        )->will(
-            $this->returnValue($this->testData['request_date'])
+        )->willReturn(
+            $this->testData['request_date']
         );
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getVatRequestSuccess'
-        )->will(
-            $this->returnValue($this->testData['request_success'])
+        )->willReturn(
+            $this->testData['request_success']
         );
-        $this->quoteAddressMock->expects($this->any())->method('getCountryId')->will($this->returnValue('en'));
-        $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('testVatID'));
+        $this->quoteAddressMock->expects($this->any())->method('getCountryId')->willReturn('en');
+        $this->quoteAddressMock->expects($this->any())->method('getVatId')->willReturn('testVatID');
 
         $this->validationResult = new DataObject($this->testData);
 
@@ -134,24 +138,24 @@ class VatValidatorTest extends TestCase
             'hasValidateOnEachTransaction'
         )->with(
             $this->storeMock
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedCountryCode'
-        )->will(
-            $this->returnValue('en')
+        )->willReturn(
+            'en'
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedVatNumber'
-        )->will(
-            $this->returnValue('testVatID')
+        )->willReturn(
+            'testVatID'
         );
 
         $this->quoteAddressMock->expects($this->never())->method('save');
@@ -173,8 +177,8 @@ class VatValidatorTest extends TestCase
             'testVatID',
             'merchantCountryCode',
             'merchantVatNumber'
-        )->will(
-            $this->returnValue($this->validationResult)
+        )->willReturn(
+            $this->validationResult
         );
 
         $this->customerAddressMock->expects(
@@ -183,24 +187,24 @@ class VatValidatorTest extends TestCase
             'hasValidateOnEachTransaction'
         )->with(
             $this->storeMock
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedCountryCode'
-        )->will(
-            $this->returnValue('en')
+        )->willReturn(
+            'en'
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedVatNumber'
-        )->will(
-            $this->returnValue('testVatID')
+        )->willReturn(
+            'testVatID'
         );
 
         $this->quoteAddressMock->expects($this->once())->method('save');
@@ -222,8 +226,8 @@ class VatValidatorTest extends TestCase
             'testVatID',
             'merchantCountryCode',
             'merchantVatNumber'
-        )->will(
-            $this->returnValue($this->validationResult)
+        )->willReturn(
+            $this->validationResult
         );
 
         $this->customerAddressMock->expects(
@@ -232,19 +236,19 @@ class VatValidatorTest extends TestCase
             'hasValidateOnEachTransaction'
         )->with(
             $this->storeMock
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedCountryCode'
-        )->will(
-            $this->returnValue('someCountryCode')
+        )->willReturn(
+            'someCountryCode'
         );
 
-        $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('testVatID'));
+        $this->quoteAddressMock->expects($this->any())->method('getVatId')->willReturn('testVatID');
 
         $this->quoteAddressMock->expects($this->once())->method('save');
 
@@ -265,8 +269,8 @@ class VatValidatorTest extends TestCase
             'testVatID',
             'merchantCountryCode',
             'merchantVatNumber'
-        )->will(
-            $this->returnValue($this->validationResult)
+        )->willReturn(
+            $this->validationResult
         );
 
         $this->customerAddressMock->expects(
@@ -275,19 +279,19 @@ class VatValidatorTest extends TestCase
             'hasValidateOnEachTransaction'
         )->with(
             $this->storeMock
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getValidatedCountryCode'
-        )->will(
-            $this->returnValue('en')
+        )->willReturn(
+            'en'
         );
 
-        $this->quoteAddressMock->expects($this->any())->method('getVatId')->will($this->returnValue('someVatID'));
+        $this->quoteAddressMock->expects($this->any())->method('getVatId')->willReturn('someVatID');
 
         $this->quoteAddressMock->expects($this->once())->method('save');
 
@@ -303,24 +307,24 @@ class VatValidatorTest extends TestCase
             $this->any()
         )->method(
             'isVatValidationEnabled'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->customerAddressMock->expects(
             $this->any()
         )->method(
             'getTaxCalculationAddressType'
-        )->will(
-            $this->returnValue(AbstractAddress::TYPE_BILLING)
+        )->willReturn(
+            AbstractAddress::TYPE_BILLING
         );
 
         $this->quoteAddressMock->expects(
             $this->any()
         )->method(
             'getAddressType'
-        )->will(
-            $this->returnValue(AbstractAddress::TYPE_SHIPPING)
+        )->willReturn(
+            AbstractAddress::TYPE_SHIPPING
         );
 
         $result = $this->model->isEnabled($this->quoteAddressMock, $this->storeMock);
@@ -333,8 +337,8 @@ class VatValidatorTest extends TestCase
             $this->any()
         )->method(
             'isVatValidationEnabled'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $result = $this->model->isEnabled($this->quoteAddressMock, $this->storeMock);
         $this->assertTrue($result);

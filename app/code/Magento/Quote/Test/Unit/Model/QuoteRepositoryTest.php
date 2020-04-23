@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -24,8 +26,8 @@ use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCountMatch;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatch;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -108,23 +110,23 @@ class QuoteRepositoryTest extends TestCase
 
         $this->cartFactoryMock = $this->createPartialMock(CartInterfaceFactory::class, ['create']);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'load',
-                'loadByIdWithoutStore',
-                'loadByCustomer',
-                'getIsActive',
-                'getId',
-                '__wakeup',
-                'setSharedStoreIds',
-                'save',
-                'delete',
-                'getCustomerId',
-                'getStoreId',
-                'getData'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setSharedStoreIds', 'getCustomerId'])
+            ->onlyMethods(
+                [
+                    'load',
+                    'loadByIdWithoutStore',
+                    'loadByCustomer',
+                    'getIsActive',
+                    'getId',
+                    'save',
+                    'delete',
+                    'getStoreId',
+                    'getData'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->searchResultsDataFactory = $this->createPartialMock(
             CartSearchResultsInterfaceFactory::class,
@@ -466,10 +468,11 @@ class QuoteRepositoryTest extends TestCase
     public function testSave()
     {
         $cartId = 100;
-        $quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getId', 'getCustomerId', 'getStoreId', 'hasData', 'setData']
-        );
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['getId', 'getStoreId', 'hasData', 'setData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quoteMock->expects($this->exactly(3))->method('getId')->willReturn($cartId);
         $quoteMock->expects($this->once())->method('getCustomerId')->willReturn(2);
         $quoteMock->expects($this->once())->method('getStoreId')->willReturn(5);

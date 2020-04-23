@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote\Item;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
@@ -75,11 +77,11 @@ class CollectionTest extends TestCase
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(AbstractDb::class);
-        $this->resourceMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connectionMock)
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+            $this->connectionMock
         );
 
         $objectManager = new ObjectManager($this);

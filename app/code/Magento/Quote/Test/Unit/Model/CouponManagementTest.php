@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
@@ -48,20 +49,16 @@ class CouponManagementTest extends TestCase
     {
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->storeMock = $this->createMock(Store::class);
-        $this->quoteMock = $this->createPartialMock(Quote::class, [
-                'getItemsCount',
-                'setCouponCode',
-                'collectTotals',
-                'save',
-                'getShippingAddress',
-                'getCouponCode',
-                'getStoreId',
-                '__wakeup'
-            ]);
-        $this->quoteAddressMock = $this->createPartialMock(Address::class, [
-                'setCollectShippingRates',
-                '__wakeup'
-            ]);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setCouponCode', 'getCouponCode'])
+            ->onlyMethods(['getItemsCount', 'collectTotals', 'save', 'getShippingAddress', 'getStoreId', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteAddressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['setCollectShippingRates'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->couponManagement = new CouponManagement(
             $this->quoteRepositoryMock
         );
@@ -72,13 +69,17 @@ class CouponManagementTest extends TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = $this->createPartialMock(Quote::class, ['getCouponCode', '__wakeup']);
-        $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCouponCode'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $quoteMock->expects($this->any())->method('getCouponCode')->willReturn($couponCode);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
 
         $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }
@@ -90,8 +91,8 @@ class CouponManagementTest extends TestCase
         $cartId = 33;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
 
         $this->couponManagement->set($cartId, 'coupon_code');
     }
@@ -103,19 +104,19 @@ class CouponManagementTest extends TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
         $exceptionMessage = "The coupon code couldn't be applied. Verify the coupon code and try again.";
         $exception = new CouldNotDeleteException(__($exceptionMessage));
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -131,19 +132,19 @@ class CouponManagementTest extends TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue('invalidCoupon'));
+        $this->quoteMock->expects($this->once())->method('getCouponCode')->willReturn('invalidCoupon');
 
         $this->couponManagement->set($cartId, $couponCode);
     }
@@ -153,19 +154,19 @@ class CouponManagementTest extends TestCase
         $cartId = 33;
         $couponCode = '153a-ABC';
 
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($this->returnValue(1));
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue($couponCode));
+        $this->quoteMock->expects($this->once())->method('getCouponCode')->willReturn($couponCode);
 
         $this->assertTrue($this->couponManagement->set($cartId, $couponCode));
     }
@@ -177,8 +178,8 @@ class CouponManagementTest extends TestCase
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(0);
         $this->quoteMock->expects($this->never())->method('getShippingAddress');
 
         $this->couponManagement->remove($cartId);
@@ -191,16 +192,16 @@ class CouponManagementTest extends TestCase
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with('');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $exceptionMessage = "The coupon code couldn't be deleted. Verify the coupon code and try again.";
         $exception = new CouldNotSaveException(__($exceptionMessage));
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -216,16 +217,16 @@ class CouponManagementTest extends TestCase
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with('');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue('123_ABC'));
+        $this->quoteMock->expects($this->once())->method('getCouponCode')->willReturn('123_ABC');
 
         $this->couponManagement->remove($cartId);
     }
@@ -235,16 +236,16 @@ class CouponManagementTest extends TestCase
         $cartId = 65;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(12));
+            ->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(12);
         $this->quoteMock->expects($this->once())
-            ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
+            ->method('getShippingAddress')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with('');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue(''));
+        $this->quoteMock->expects($this->once())->method('getCouponCode')->willReturn('');
 
         $this->assertTrue($this->couponManagement->remove($cartId));
     }

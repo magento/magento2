@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Framework\App\ResourceConnection;
@@ -12,6 +14,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address as QuoteAddressModel;
 use Magento\Quote\Model\ResourceModel\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +32,7 @@ class QuoteAddressTest extends TestCase
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address|MockObject
+     * @var QuoteAddressModel|MockObject
      */
     protected $addressMock;
 
@@ -58,10 +61,11 @@ class QuoteAddressTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
-        );
+        $this->addressMock = $this->getMockBuilder(QuoteAddressModel::class)
+            ->addMethods(['getOrderId', 'getOrder'])
+            ->onlyMethods(['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteMock = $this->createPartialMock(Quote::class, ['__wakeup', 'getId']);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
@@ -72,16 +76,16 @@ class QuoteAddressTest extends TestCase
             RelationComposite::class
         );
         $this->appResourceMock->expects($this->any())
-                              ->method('getConnection')
-                              ->will($this->returnValue($this->connectionMock));
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
         $objectManager = new ObjectManager($this);
         $this->connectionMock->expects($this->any())
-                          ->method('describeTable')
-                          ->will($this->returnValue([]));
+            ->method('describeTable')
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
-                          ->method('insert');
+            ->method('insert');
         $this->connectionMock->expects($this->any())
-                          ->method('lastInsertId');
+            ->method('lastInsertId');
         $this->addressResource = $objectManager->getObject(
             Address::class,
             [
@@ -95,15 +99,15 @@ class QuoteAddressTest extends TestCase
     public function testSave()
     {
         $this->entitySnapshotMock->expects($this->once())
-                                 ->method('isModified')
-                                 ->with($this->addressMock)
-                                 ->willReturn(true);
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
         $this->entitySnapshotMock->expects($this->once())
-                                 ->method('registerSnapshot')
-                                 ->with($this->addressMock);
+            ->method('registerSnapshot')
+            ->with($this->addressMock);
         $this->relationCompositeMock->expects($this->once())
-                                 ->method('processRelations')
-                                 ->with($this->addressMock);
+            ->method('processRelations')
+            ->with($this->addressMock);
         $this->addressResource->save($this->addressMock);
     }
 }

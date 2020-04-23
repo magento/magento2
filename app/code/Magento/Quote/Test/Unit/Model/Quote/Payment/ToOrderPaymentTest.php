@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
@@ -47,10 +48,11 @@ class ToOrderPaymentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMock = $this->createPartialMock(
-            Payment::class,
-            ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation']
-        );
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
+            ->addMethods(['getCcNumber', 'getCcCid'])
+            ->onlyMethods(['getMethodInstance', 'getAdditionalInformation'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectCopyMock = $this->createMock(Copy::class);
         $this->orderPaymentRepositoryMock = $this->getMockForAbstractClass(
             OrderPaymentRepositoryInterface::class,

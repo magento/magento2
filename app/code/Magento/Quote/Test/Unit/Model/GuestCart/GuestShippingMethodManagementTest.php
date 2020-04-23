@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
@@ -14,7 +15,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\GuestCart\GuestShippingMethodManagement;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\ShippingMethodManagement;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GuestShippingMethodManagementTest extends TestCase
@@ -25,12 +26,12 @@ class GuestShippingMethodManagementTest extends TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $shippingMethodManagementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $quoteIdMaskFactoryMock;
 
@@ -92,7 +93,7 @@ class GuestShippingMethodManagementTest extends TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('set')
             ->with($this->cartId, $carrierCode, $methodCode)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->set($this->maskedCartId, $carrierCode, $methodCode));
     }
@@ -103,7 +104,7 @@ class GuestShippingMethodManagementTest extends TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('getList')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->getList($this->maskedCartId));
     }
@@ -114,7 +115,7 @@ class GuestShippingMethodManagementTest extends TestCase
         $this->shippingMethodManagementMock->expects($this->once())
             ->method('get')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->get($this->maskedCartId));
     }

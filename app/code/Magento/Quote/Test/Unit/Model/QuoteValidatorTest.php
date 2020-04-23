@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
@@ -52,28 +53,29 @@ class QuoteValidatorTest extends TestCase
             $this->orderAmountValidationMessage
         );
 
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'getShippingAddress',
-                'getBillingAddress',
-                'getPayment',
-                'getHasError',
-                'setHasError',
-                'addMessage',
-                'isVirtual',
-                'validateMinimumAmount',
-                'getIsMultiShipping',
-                '__wakeup'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getHasError', 'getIsMultiShipping'])
+            ->onlyMethods(
+                [
+                    'getShippingAddress',
+                    'getBillingAddress',
+                    'getPayment',
+                    'setHasError',
+                    'addMessage',
+                    'isVirtual',
+                    'validateMinimumAmount',
+                    '__wakeup'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testCheckQuoteAmountExistingError()
     {
         $this->quoteMock->expects($this->once())
             ->method('getHasError')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->quoteMock->expects($this->never())
             ->method('setHasError');

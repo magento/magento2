@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
 use Magento\Framework\Model\AbstractModel;
@@ -27,12 +29,17 @@ class RelationTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->modelMock = $this->createPartialMock(AbstractModel::class, [
-                'getItemsCollection',
-                'getShippingRatesCollection',
-                'itemsCollectionWasSet',
-                'shippingRatesCollectionWasSet'
-            ]);
+        $this->modelMock = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(
+                [
+                    'getItemsCollection',
+                    'getShippingRatesCollection',
+                    'itemsCollectionWasSet',
+                    'shippingRatesCollectionWasSet'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->relation = $objectManager->getObject(Relation::class, []);
     }
 

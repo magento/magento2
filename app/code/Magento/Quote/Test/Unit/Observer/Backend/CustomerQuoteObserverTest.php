@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Observer\Backend;
 
@@ -67,7 +68,7 @@ class CustomerQuoteObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
         $objectManager = new ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
             CustomerQuoteObserver::class,
@@ -86,19 +87,19 @@ class CustomerQuoteObserverTest extends TestCase
             ->getMock();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $origCustomerDataObjectMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $origCustomerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObjectMock));
+            ->willReturn($customerDataObjectMock);
         $this->eventMock->expects($this->any())
             ->method('getOrigCustomerDataObject')
-            ->will($this->returnValue($origCustomerDataObjectMock));
+            ->willReturn($origCustomerDataObjectMock);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
             ->willThrowException(new NoSuchEntityException());
@@ -115,30 +116,30 @@ class CustomerQuoteObserverTest extends TestCase
     {
         $this->configMock->expects($this->once())
             ->method('isWebsiteScope')
-            ->will($this->returnValue($isWebsiteScope));
+            ->willReturn($isWebsiteScope);
         $customerDataObjectMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $customerDataObjectMock->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         if ($isWebsiteScope) {
             $websites = $websites[0];
             $this->storeManagerMock->expects($this->once())
                 ->method('getWebsite')
                 ->with(2)
-                ->will($this->returnValue($websites));
+                ->willReturn($websites);
         } else {
             $this->storeManagerMock->expects($this->once())
                 ->method('getWebsites')
-                ->will($this->returnValue($websites));
+                ->willReturn($websites);
         }
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObjectMock));
+            ->willReturn($customerDataObjectMock);
         /** @var MockObject|Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
             Quote::class
@@ -150,11 +151,12 @@ class CustomerQuoteObserverTest extends TestCase
                 'collectTotals',
                 '__wakeup',
             ]
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $websiteCount = count($websites);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
-            ->will($this->returnValue($quoteMock));
+            ->willReturn($quoteMock);
         $quoteMock->expects($this->exactly($websiteCount))
             ->method('setWebsite');
         $quoteMock->expects($this->exactly($websiteCount))

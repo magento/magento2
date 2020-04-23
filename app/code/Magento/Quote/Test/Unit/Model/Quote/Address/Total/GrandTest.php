@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface as PriceRounder;
@@ -58,17 +60,11 @@ class GrandTest extends TestCase
         $this->priceRounder->expects($this->at(0))->method('roundPrice')->willReturn($grandTotal + 2);
         $this->priceRounder->expects($this->at(1))->method('roundPrice')->willReturn($grandTotalBase + 2);
 
-        $totalMock = $this->createPartialMock(
-            Total::class,
-            [
-                'getAllTotalAmounts',
-                'getAllBaseTotalAmounts',
-                'setGrandTotal',
-                'setBaseGrandTotal',
-                'getGrandTotal',
-                'getBaseGrandTotal'
-            ]
-        );
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['setGrandTotal', 'setBaseGrandTotal', 'getGrandTotal', 'getBaseGrandTotal'])
+            ->onlyMethods(['getAllTotalAmounts', 'getAllBaseTotalAmounts'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
         $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
         $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);

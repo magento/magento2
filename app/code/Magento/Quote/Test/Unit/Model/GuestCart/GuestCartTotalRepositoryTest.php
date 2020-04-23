@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -82,7 +84,7 @@ class GuestCartTotalRepositoryTest extends TestCase
         $this->cartTotalRepository->expects($this->once())
             ->method('get')
             ->with($this->cartId)
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
         $this->assertSame($retValue, $this->model->get($this->maskedCartId));
     }
 }
