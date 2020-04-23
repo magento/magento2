@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model;
 
@@ -66,14 +67,15 @@ class AdminSessionsManagerTest extends TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->authSessionMock = $this->createPartialMock(
-            Session::class,
-            ['isActive', 'getStatus', 'getUser', 'getId', 'getSessionId', 'getUpdatedAt']
-        );
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['isActive', 'getStatus', 'getUser', 'getId', 'getUpdatedAt'])
+            ->onlyMethods(['getSessionId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->adminSessionInfoCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -98,17 +100,11 @@ class AdminSessionsManagerTest extends TestCase
             ['create']
         );
 
-        $this->currentSessionMock = $this->createPartialMock(AdminSessionInfo::class, [
-                'isActive',
-                'getStatus',
-                'load',
-                'setData',
-                'setIsOtherSessionsTerminated',
-                'save',
-                'getUserId',
-                'getSessionId',
-                'getUpdatedAt'
-            ]);
+        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
+            ->addMethods(['isActive', 'getStatus', 'getUserId', 'getSessionId', 'getUpdatedAt'])
+            ->onlyMethods(['load', 'setData', 'setIsOtherSessionsTerminated', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()

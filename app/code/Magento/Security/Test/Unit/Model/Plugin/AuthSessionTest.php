@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
 use Magento\Backend\Model\Auth\Session;
@@ -56,7 +58,7 @@ class AuthSessionTest extends TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -76,15 +78,17 @@ class AuthSessionTest extends TestCase
 
         $this->securityCookieMock = $this->createPartialMock(SecurityCookie::class, ['setLogoutReasonCookie']);
 
-        $this->authSessionMock = $this->createPartialMock(
-            Session::class,
-            ['destroy', 'getUser']
-        );
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getUser'])
+            ->onlyMethods(['destroy'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->currentSessionMock = $this->createPartialMock(
-            AdminSessionInfo::class,
-            ['isLoggedInStatus', 'getStatus', 'isActive']
-        );
+        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
+            ->addMethods(['getStatus', 'isActive'])
+            ->onlyMethods(['isLoggedInStatus'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             UserExpirationManager::class,

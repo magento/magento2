@@ -63,7 +63,7 @@ class AfterAdminUserSaveTest extends TestCase
      */
     private $userExpirationMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -80,8 +80,15 @@ class AfterAdminUserSaveTest extends TestCase
             ]
         );
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->eventMock = $this->createPartialMock(Event::class, ['getObject']);
-        $this->userMock = $this->createPartialMock(User::class, ['getId', 'getExpiresAt']);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->userMock = $this->getMockBuilder(User::class)
+            ->addMethods(['getExpiresAt'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->userExpirationMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpiration::class,
             ['getId', 'getExpiresAt', 'setId', 'setExpiresAt']

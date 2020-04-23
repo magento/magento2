@@ -51,11 +51,10 @@ class ValidatorTest extends TestCase
     public function testWithInvalidDate()
     {
         $expireDate = 'invalid_date';
-
-        static::assertFalse($this->validator->isValid($expireDate));
-        static::assertContains(
+        $this->assertFalse($this->validator->isValid($expireDate));
+        $this->assertStringContainsString(
             '"Expiration date" is not a valid date.',
-            $this->validator->getMessages()
+            (string)current($this->validator->getMessages())
         );
     }
 
@@ -75,10 +74,10 @@ class ValidatorTest extends TestCase
         $this->dateTimeMock->expects(static::once())->method('gmtTimestamp')->willReturn($currentDate);
         $this->timezoneMock->expects(static::once())->method('date')->willReturn($expireDate);
         $dateObject->expects(static::once())->method('getTimestamp')->willReturn($expireDate->getTimestamp());
-        static::assertFalse($this->validator->isValid($expireDate->format('Y-m-d H:i:s')));
-        static::assertContains(
+        $this->assertFalse($this->validator->isValid($expireDate->format('Y-m-d H:i:s')));
+        $this->assertStringContainsString(
             '"Expiration date" must be later than the current date.',
-            $this->validator->getMessages()
+            (string)current($this->validator->getMessages())
         );
     }
 

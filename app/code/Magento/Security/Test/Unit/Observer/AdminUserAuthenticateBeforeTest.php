@@ -86,7 +86,10 @@ class AdminUserAuthenticateBeforeTest extends TestCase
             ]
         );
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->eventMock = $this->createPartialMock(Event::class, ['getUsername']);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getUsername'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->userExpirationMock = $this->createPartialMock(
             UserExpirationInterface::class,
             [
@@ -120,8 +123,7 @@ class AdminUserAuthenticateBeforeTest extends TestCase
         $this->userMock->expects(static::exactly(3))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
             ->method('deactivateExpiredUsersById')
-            ->with([$adminUserId])
-            ->willReturn(null);
+            ->with([$adminUserId]);
         $this->observer->execute($this->eventObserverMock);
     }
 
