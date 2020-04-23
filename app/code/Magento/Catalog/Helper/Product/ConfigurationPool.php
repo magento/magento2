@@ -40,7 +40,10 @@ class ConfigurationPool
     }
 
     /**
+     * Get instance by class name
+     *
      * @param string $className
+     *
      * @return \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
      * @throws \LogicException
      */
@@ -63,7 +66,10 @@ class ConfigurationPool
     }
 
     /**
+     * Get product instance by type
+     *
      * @param string $productType
+     *
      * @return Configuration\ConfigurationInterface
      */
     public function getByProductType($productType)

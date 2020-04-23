@@ -13,8 +13,6 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class ProductList
- *
  * @api
  * @since 100.0.2
  */
@@ -52,10 +50,10 @@ class ProductList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ?Registry $coreRegistry = null
+        Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);
+        $this->coreRegistry = $coreRegistry ?: ObjectManager::getInstance()->get(Registry::class);
     }
 
     /**
