@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Grouped;
 
@@ -49,11 +51,11 @@ class LinksTest extends TestCase
         $this->resource
             ->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $this->import = $this->createMock(Import::class);
         $this->importFactory = $this->createPartialMock(ImportFactory::class, ['create']);
-        $this->importFactory->expects($this->any())->method('create')->will($this->returnValue($this->import));
+        $this->importFactory->expects($this->any())->method('create')->willReturn($this->import);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->links = $this->objectManagerHelper->getObject(
@@ -109,8 +111,8 @@ class LinksTest extends TestCase
         $this->processBehaviorGetter('append');
         $select = $this->createMock(Select::class);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchAll')->with($select)->will($this->returnValue([]));
         $this->connection->expects($this->once())->method('fetchPairs')->with($select)->will(
             $this->returnValue([])
@@ -157,13 +159,13 @@ class LinksTest extends TestCase
     {
         $select = $this->createMock(Select::class);
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($select));
-        $select->expects($this->once())->method('from')->will($this->returnSelf());
-        $select->expects($this->once())->method('where')->will($this->returnSelf());
+        $select->expects($this->once())->method('from')->willReturnSelf();
+        $select->expects($this->once())->method('where')->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchAll')->with($select)->will(
             $this->returnValue($dbAttributes)
         );
-        $this->link->expects($this->any())->method('getAttributeTypeTable')->will(
-            $this->returnValue('table_name')
+        $this->link->expects($this->any())->method('getAttributeTypeTable')->willReturn(
+            'table_name'
         );
     }
 
@@ -186,7 +188,7 @@ class LinksTest extends TestCase
     protected function processBehaviorGetter($behavior)
     {
         $dataSource = $this->createMock(Data::class);
-        $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
-        $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
+        $dataSource->expects($this->once())->method('getBehavior')->willReturn($behavior);
+        $this->import->expects($this->once())->method('getDataSourceModel')->willReturn($dataSource);
     }
 }
