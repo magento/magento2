@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
+namespace Magento\MediaGallery\Test\Unit\Model\ResourceModel\Keyword;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -15,9 +15,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Test for SaveAssetLinks
- */
 class SaveAssetLinksTest extends TestCase
 {
     /**
