@@ -6,8 +6,11 @@
 namespace Magento\Framework\Oauth\Helper;
 
 use Magento\Framework\App\RequestInterface;
-use Zend\Uri\UriFactory;
+use Laminas\Uri\UriFactory;
 
+/**
+ * Request helper
+ */
 class Request
 {
     /**#@+
@@ -110,7 +113,7 @@ class Request
     /**
      * Retrieve protocol parameters from query string
      *
-     * @param array &$protocolParams
+     * @param array $protocolParams
      * @param array $queryString
      * @return void
      */
