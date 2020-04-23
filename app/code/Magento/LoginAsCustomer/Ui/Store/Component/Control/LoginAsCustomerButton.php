@@ -5,16 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Block\Adminhtml\Store;
+namespace Magento\LoginAsCustomer\Ui\Store\Component\Control;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Class SaveButton
+ * Class LoginAsCustomerButton
  */
-class SaveButton implements ButtonProviderInterface
+class LoginAsCustomerButton implements ButtonProviderInterface
 {
     /**
+     * Get button data
+     *
      * @return array
      */
     public function getButtonData(): array

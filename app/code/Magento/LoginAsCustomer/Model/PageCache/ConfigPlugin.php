@@ -49,7 +49,7 @@ class ConfigPlugin
     {
         if ($result) {
             $disable = $this->_scopeConfig->getValue(
-                'mfloginascustomer/general/disable_page_cache',
+                'loginascustomer/general/disable_page_cache',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $adminId = $this->_customerSession->getLoggedAsCustomerAdmindId();

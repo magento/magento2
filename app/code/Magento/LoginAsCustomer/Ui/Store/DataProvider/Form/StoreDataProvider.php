@@ -4,11 +4,15 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
-namespace Magento\LoginAsCustomer\Ui\DataProvider\Store\Form;
+
+namespace Magento\LoginAsCustomer\Ui\Store\DataProvider\Form;
 
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
+/**
+ * Class StoreDataProvider
+ */
 class StoreDataProvider extends AbstractDataProvider
 {
     /**

@@ -9,7 +9,8 @@
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <settings>
         <buttons>
-            <button name="login_as_customer" class="Magento\LoginAsCustomer\Block\Adminhtml\Customer\Edit\Login"/>
+            <button name="login_as_customer"
+                    class="\Magento\LoginAsCustomer\Ui\Customer\Component\Control\LoginAsCustomerButton"/>
         </buttons>
     </settings>
 </form>

@@ -15,7 +15,8 @@
     </argument>
     <settings>
         <buttons>
-            <button name="save" class="Magento\LoginAsCustomer\Block\Adminhtml\Store\SaveButton"/>
+            <button name="login_as_customer"
+                    class="Magento\LoginAsCustomer\Ui\Store\Component\Control\LoginAsCustomerButton"/>
         </buttons>
         <dataScope>data</dataScope>
         <deps>
@@ -26,7 +27,7 @@
         <settings>
             <submitUrl path="loginascustomer/login/login"/>
         </settings>
-        <dataProvider class="Magento\LoginAsCustomer\Ui\DataProvider\Store\Form\StoreDataProvider"
+        <dataProvider class="Magento\LoginAsCustomer\Ui\Store\DataProvider\Form\StoreDataProvider"
                       name="manual_store_form_data_source">
             <settings>
                 <requestFieldName>entity_id</requestFieldName>

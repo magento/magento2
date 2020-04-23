@@ -19,15 +19,15 @@ class Config
     /**
      * Extension config path
      */
-    private const XML_PATH_EXTENSION_ENABLED     = 'mfloginascustomer/general/enabled';
-    private const XML_PATH_KEY                   = 'mfloginascustomer/general/key';
-    private const STORE_VIEW_TO_LOGIN_IN         = 'mfloginascustomer/general/store_view_login';
+    private const XML_PATH_EXTENSION_ENABLED = 'loginascustomer/general/enabled';
+    private const STORE_VIEW_TO_LOGIN_IN = 'loginascustomer/general/store_view_login';
 
     /**
      * @var ScopeConfigInterface
      */
 
     private $scopeConfig;
+
     /**
      * @var \Magento\Framework\App\ProductMetadataInterface
      */
@@ -64,7 +64,7 @@ class Config
     /**
      * @return bool
      */
-    public function isEnabled():bool
+    public function isEnabled(): bool
     {
         return (bool)$this->getConfig(
             self::XML_PATH_EXTENSION_ENABLED

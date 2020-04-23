@@ -82,7 +82,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      *
      * @return ResultInterface
      */
-    public function execute():ResultInterface
+    public function execute(): ResultInterface
     {
         $request = $this->getRequest();
         $customerId = (int) $request->getParam('customer_id');
@@ -94,7 +94,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if (!$this->config->isEnabled()) {
-            $this->messageManager->addErrorMessage(__('Login As Customer is disabled, to enable the extension please navigate to Stores > Configuration > Customers > Login As Customer.'));
+            $this->messageManager->addErrorMessage(__('Login As Customer is disabled.'));
             return $resultRedirect->setPath('customer/index/index');
         }
 
