@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 
 use Magento\Cms\Model\Page;
@@ -35,11 +37,14 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
     {
         $this->_codeMock = $this->createMock(Code::class);
         $page = $this->createMock(Page::class);
-        $page->expects($this->once())->method('getId')->will($this->returnValue(3));
-        $event = $this->createPartialMock(Event::class, ['getObject']);
-        $event->expects($this->once())->method('getObject')->will($this->returnValue($page));
+        $page->expects($this->once())->method('getId')->willReturn(3);
+        $event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getObject')->willReturn($page);
         $this->_eventObserverMock = $this->createMock(Observer::class);
-        $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
+        $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
@@ -62,7 +67,7 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
             Code::ENTITY_TYPE_PAGE,
             $storeId
         );
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue(2));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn(2);
         $this->_codeMock->expects($this->once())->method('delete');
 
         $this->_model->execute($this->_eventObserverMock);
@@ -82,7 +87,7 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends TestCase
             Code::ENTITY_TYPE_PAGE,
             $storeId
         );
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue(0));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn(0);
         $this->_codeMock->expects($this->never())->method('delete');
 
         $this->_model->execute($this->_eventObserverMock);

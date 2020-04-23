@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
 use Magento\Framework\App\Helper\Context;
@@ -37,15 +39,16 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
-            ['setFieldNameSuffix', 'addFieldset']
-        );
+        $this->_formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
+            ->addMethods(['setFieldNameSuffix'])
+            ->onlyMethods(['addFieldset'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_fieldsetMock = $this->createMock(Fieldset::class);
-        $this->_experimentCodeMock = $this->createPartialMock(
-            Code::class,
-            ['getExperimentScript', 'getCodeId', '__wakeup']
-        );
+        $this->_experimentCodeMock = $this->getMockBuilder(Code::class)
+            ->addMethods(['getExperimentScript', 'getCodeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $context = $this->createMock(Context::class);
         $data = ['context' => $context];
         $objectManagerHelper = new ObjectManager($this);
@@ -60,15 +63,15 @@ class FormTest extends TestCase
             $this->once()
         )->method(
             'getExperimentScript'
-        )->will(
-            $this->returnValue($experimentCode)
+        )->willReturn(
+            $experimentCode
         );
         $this->_experimentCodeMock->expects(
             $this->once()
         )->method(
             'getCodeId'
-        )->will(
-            $this->returnValue($experimentCodeId)
+        )->willReturn(
+            $experimentCodeId
         );
         $this->_prepareFormMock($experimentCode, $experimentCodeId);
 
@@ -97,8 +100,8 @@ class FormTest extends TestCase
         )->with(
             'googleoptimizer_fields',
             ['legend' => 'Google Analytics Content Experiments Code']
-        )->will(
-            $this->returnValue($this->_fieldsetMock)
+        )->willReturn(
+            $this->_fieldsetMock
         );
 
         $this->_fieldsetMock->expects(

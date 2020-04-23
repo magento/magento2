@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
 use Magento\Framework\Registry;
@@ -42,15 +44,15 @@ class CategoryTest extends TestCase
     {
         $categoryTags = ['catalog_category_1'];
         $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
+        $category->expects($this->once())->method('getIdentities')->willReturn($categoryTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_category'
-        )->will(
-            $this->returnValue($category)
+        )->willReturn(
+            $category
         );
         $this->assertEquals($categoryTags, $this->block->getIdentities());
     }

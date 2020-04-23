@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
 
 use Magento\Catalog\Model\Product;
@@ -37,13 +39,16 @@ class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
         $storeId = 0;
 
         $this->_codeMock = $this->createMock(Code::class);
-        $event = $this->createPartialMock(Event::class, ['getProduct']);
+        $event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_eventObserverMock = $this->createMock(Observer::class);
-        $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
+        $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
         $product = $this->createPartialMock(Product::class, ['getId', 'getStoreId', '__wakeup']);
-        $product->expects($this->once())->method('getId')->will($this->returnValue($entityId));
-        $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $event->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $product->expects($this->once())->method('getId')->willReturn($entityId);
+        $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $event->expects($this->once())->method('getProduct')->willReturn($product);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
@@ -66,7 +71,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
             Code::ENTITY_TYPE_PRODUCT,
             $storeId
         );
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue(2));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn(2);
         $this->_codeMock->expects($this->once())->method('delete');
 
         $this->_model->execute($this->_eventObserverMock);
@@ -86,7 +91,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
             Code::ENTITY_TYPE_PRODUCT,
             $storeId
         );
-        $this->_codeMock->expects($this->once())->method('getId')->will($this->returnValue(0));
+        $this->_codeMock->expects($this->once())->method('getId')->willReturn(0);
         $this->_codeMock->expects($this->never())->method('delete');
 
         $this->_model->execute($this->_eventObserverMock);

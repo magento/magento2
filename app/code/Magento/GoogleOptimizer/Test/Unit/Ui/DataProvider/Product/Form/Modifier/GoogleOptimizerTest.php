@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -16,7 +18,7 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Textarea;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -122,10 +124,10 @@ class GoogleOptimizerTest extends TestCase
         $this->canShowPanel(true);
 
         /** @var \Magento\GoogleOptimizer\Model\Code|MockObject $codeModelMock */
-        $codeModelMock = $this->createPartialMock(
-            \Magento\GoogleOptimizer\Model\Code::class,
-            ['getExperimentScript', 'getCodeId']
-        );
+        $codeModelMock = $this->getMockBuilder(\Magento\GoogleOptimizer\Model\Code::class)
+            ->addMethods(['getExperimentScript', 'getCodeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $codeModelMock->expects($this->exactly($expectedCalls))
             ->method('getExperimentScript')
             ->willReturn($experimentScript);

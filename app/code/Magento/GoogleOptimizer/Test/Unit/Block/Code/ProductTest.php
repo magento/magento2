@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
 use Magento\Framework\Registry;
@@ -42,15 +44,15 @@ class ProductTest extends TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
             'current_product'
-        )->will(
-            $this->returnValue($product)
+        )->willReturn(
+            $product
         );
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

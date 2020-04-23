@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Model\Plugin\Catalog\Product\Category;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
@@ -34,7 +36,8 @@ class DataProviderTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->helper = $this->getMockBuilder(Data::class)
             ->setMethods(['isGoogleExperimentActive'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subject = $this->createMock(
             NewCategoryDataProvider::class
         );
