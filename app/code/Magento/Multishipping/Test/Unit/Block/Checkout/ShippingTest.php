@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -70,9 +71,9 @@ class ShippingTest extends TestCase
     public function testGetAddresses()
     {
         $quoteMock = $this->createMock(Quote::class);
-        $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->multiShippingMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())
-            ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
+            ->method('getAllShippingAddresses')->willReturn(['expected array']);
         $this->assertEquals(['expected array'], $this->model->getAddresses());
     }
 
@@ -80,10 +81,10 @@ class ShippingTest extends TestCase
     {
         $addressMock = $this->createPartialMock(
             Address::class,
-            ['getShippingMethod', '__wakeup']
+            ['getShippingMethod']
         );
         $addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('expected shipping method'));
+            ->method('getShippingMethod')->willReturn('expected shipping method');
         $this->assertEquals('expected shipping method', $this->model->getAddressShippingMethod($addressMock));
     }
 
@@ -91,11 +92,11 @@ class ShippingTest extends TestCase
     {
         $addressMock = $this->createPartialMock(
             Address::class,
-            ['getGroupedAllShippingRates', '__wakeup']
+            ['getGroupedAllShippingRates']
         );
 
         $addressMock->expects($this->once())
-            ->method('getGroupedAllShippingRates')->will($this->returnValue(['expected array']));
+            ->method('getGroupedAllShippingRates')->willReturn(['expected array']);
         $this->assertEquals(['expected array'], $this->model->getShippingRates($addressMock));
     }
 
@@ -106,7 +107,7 @@ class ShippingTest extends TestCase
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
             'carriers/' . $carrierCode . '/title',
             ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue($name));
+        )->willReturn($name);
 
         $this->assertEquals($name, $this->model->getCarrierName($carrierCode));
     }
@@ -117,23 +118,23 @@ class ShippingTest extends TestCase
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
             'carriers/' . $carrierCode . '/title',
             ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue(null));
+        )->willReturn(null);
 
         $this->assertEquals($carrierCode, $this->model->getCarrierName($carrierCode));
     }
 
     public function testGetShippingPrice()
     {
-        $addressMock = $this->createPartialMock(Address::class, ['getQuote', '__wakeup']);
+        $addressMock = $this->createPartialMock(Address::class, ['getQuote']);
         $quoteMock = $this->createMock(Quote::class);
         $storeMock = $this->createMock(Store::class);
         $price = 100;
         $flag = true;
         $shippingPrice = 11.11;
         $this->taxHelperMock->expects($this->once())
-            ->method('getShippingPrice')->with($price, $flag, $addressMock)->will($this->returnValue($shippingPrice));
-        $addressMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $quoteMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+            ->method('getShippingPrice')->with($price, $flag, $addressMock)->willReturn($shippingPrice);
+        $addressMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndFormat')

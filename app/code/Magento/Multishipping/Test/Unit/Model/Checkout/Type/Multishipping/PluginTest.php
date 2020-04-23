@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 
 use Magento\Checkout\Model\Cart;
@@ -31,10 +33,10 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checkoutSessionMock = $this->createPartialMock(
-            Session::class,
-            ['getCheckoutState', 'setCheckoutState']
-        );
+        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCheckoutState', 'setCheckoutState'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cartMock = $this->createMock(Cart::class);
         $this->model = new Plugin($this->checkoutSessionMock);
     }

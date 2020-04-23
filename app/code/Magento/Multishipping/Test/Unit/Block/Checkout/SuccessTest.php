@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -39,37 +40,37 @@ class SuccessTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sessionMock = $this->createPartialMock(
-            SessionManagerInterface::class,
-            [
-                'getOrderIds',
-                'start',
-                'writeClose',
-                'isSessionExists',
-                'getSessionId',
-                'getName',
-                'setName',
-                'destroy',
-                'clearStorage',
-                'getCookieDomain',
-                'getCookiePath',
-                'getCookieLifetime',
-                'setSessionId',
-                'regenerateId',
-                'expireSessionCookie',
-                'getSessionIdForHost',
-                'isValidForHost',
-                'isValidForPath',
-                '__wakeup'
-            ]
-        );
+        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
+            ->addMethods(['getOrderIds'])
+            ->onlyMethods(
+                [
+                    'start',
+                    'writeClose',
+                    'isSessionExists',
+                    'getSessionId',
+                    'getName',
+                    'setName',
+                    'destroy',
+                    'clearStorage',
+                    'getCookieDomain',
+                    'getCookiePath',
+                    'getCookieLifetime',
+                    'setSessionId',
+                    'regenerateId',
+                    'expireSessionCookie',
+                    'getSessionIdForHost',
+                    'isValidForHost',
+                    'isValidForPath'
+                ]
+            )
+            ->getMock();
         $this->contextMock = $this->createMock(Context::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
-        $this->contextMock->expects($this->once())->method('getSession')->will($this->returnValue($this->sessionMock));
+        $this->contextMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);
         $this->contextMock->expects($this->once())
-            ->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
+            ->method('getStoreManager')->willReturn($this->storeManagerMock);
         $this->model = $objectManager->getObject(
             Success::class,
             [
@@ -103,8 +104,8 @@ class SuccessTest extends TestCase
     public function testGetContinueUrl()
     {
         $storeMock = $this->createMock(Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getBaseUrl')->willReturn('Expected Result');
 
         $this->assertEquals('Expected Result', $this->model->getContinueUrl());
     }

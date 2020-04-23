@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Model\Cart\Controller;
 
 use Magento\Checkout\Controller\Cart;
@@ -57,12 +59,12 @@ class CartPluginTest extends TestCase
         $addressId = 100;
         $customerAddressId = 200;
         $quoteMock = $this->createPartialMock(Quote::class, [
-                'isMultipleShippingAddresses',
-                'getAllShippingAddresses',
-                'removeAddress',
-                'getShippingAddress',
-                'getCustomer'
-            ]);
+            'isMultipleShippingAddresses',
+            'getAllShippingAddresses',
+            'removeAddress',
+            'getShippingAddress',
+            'getCustomer'
+        ]);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
         $addressMock = $this->createMock(Address::class);

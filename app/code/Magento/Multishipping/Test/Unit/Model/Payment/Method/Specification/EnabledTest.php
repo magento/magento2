@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Model\Payment\Method\Specification;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -52,8 +54,8 @@ class EnabledTest extends TestCase
             $this->once()
         )->method(
             'getMethodsInfo'
-        )->will(
-            $this->returnValue($methodsInfo)
+        )->willReturn(
+            $methodsInfo
         );
 
         $configSpecification = $this->objectManager->getObject(

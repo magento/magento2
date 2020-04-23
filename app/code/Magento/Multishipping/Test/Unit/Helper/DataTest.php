@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Helper;
 
 use Magento\Checkout\Model\Session;
@@ -69,8 +71,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
-        )->will(
-            $this->returnValue($maximumQty)
+        )->willReturn(
+            $maximumQty
         );
 
         $this->assertEquals($maximumQty, $this->helper->getMaximumQty());
@@ -103,24 +105,24 @@ class DataTest extends TestCase
             'isSetFlag'
         )->with(
             Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE
-        )->will(
-            $this->returnValue($isMultiShipping)
+        )->willReturn(
+            $isMultiShipping
         );
         $this->checkoutSessionMock->expects(
             $this->once()
         )->method(
             'getQuote'
-        )->will(
-            $this->returnValue($this->quoteMock)
+        )->willReturn(
+            $this->quoteMock
         );
-        $this->quoteMock->expects($this->once())->method('hasItems')->will($this->returnValue($quoteHasItems));
+        $this->quoteMock->expects($this->once())->method('hasItems')->willReturn($quoteHasItems);
 
         $this->quoteMock->expects(
             $this->any()
         )->method(
             'hasItemsWithDecimalQty'
-        )->will(
-            $this->returnValue($hasItemsWithDecimalQty)
+        )->willReturn(
+            $hasItemsWithDecimalQty
         );
         $this->quoteMock->expects(
             $this->any()
@@ -128,22 +130,22 @@ class DataTest extends TestCase
             'validateMinimumAmount'
         )->with(
             true
-        )->will(
-            $this->returnValue($validateMinimumAmount)
+        )->willReturn(
+            $validateMinimumAmount
         );
         $this->quoteMock->expects(
             $this->any()
         )->method(
             'getItemsSummaryQty'
-        )->will(
-            $this->returnValue($itemsSummaryQty)
+        )->willReturn(
+            $itemsSummaryQty
         );
         $this->quoteMock->expects(
             $this->any()
         )->method(
             'getItemVirtualQty'
-        )->will(
-            $this->returnValue($itemVirtualQty)
+        )->willReturn(
+            $itemVirtualQty
         );
         $this->scopeConfigMock->expects(
             $this->any()
@@ -151,8 +153,8 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
-        )->will(
-            $this->returnValue($maximumQty)
+        )->willReturn(
+            $maximumQty
         );
 
         $this->assertEquals($result, $this->helper->isMultishippingCheckoutAvailable());

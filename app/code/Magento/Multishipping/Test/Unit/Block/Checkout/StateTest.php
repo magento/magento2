@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -40,7 +41,7 @@ class StateTest extends TestCase
     public function testGetSteps()
     {
         $this->mShippingStateMock->expects($this->once())
-            ->method('getSteps')->will($this->returnValue(['expected array']));
+            ->method('getSteps')->willReturn(['expected array']);
 
         $this->assertEquals(['expected array'], $this->model->getSteps());
     }

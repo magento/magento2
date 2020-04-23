@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Model\Cart;
 
@@ -72,28 +73,19 @@ class CartTotalRepositoryPluginTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->quoteTotalsMock = $this->createPartialMock(
-            QuoteTotals::class,
-            [
-                'getStore',
-                'getShippingAddress',
-                'getIsMultiShipping'
-            ]
-        );
-        $this->shippingAddressMock = $this->createPartialMock(
-            QuoteAddress::class,
-            [
-                'getShippingMethod',
-                'getShippingRateByCode',
-                'getShippingAmount'
-            ]
-        );
-        $this->shippingRateMock = $this->createPartialMock(
-            QuoteAddressRate::class,
-            [
-                'getPrice'
-            ]
-        );
+        $this->quoteTotalsMock = $this->getMockBuilder(QuoteTotals::class)
+            ->addMethods(['getStore', 'getShippingAddress', 'getIsMultiShipping'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingAddressMock = $this->getMockBuilder(QuoteAddress::class)
+            ->addMethods(['getShippingAmount'])
+            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingRateMock = $this->getMockBuilder(QuoteAddressRate::class)
+            ->addMethods(['getPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();

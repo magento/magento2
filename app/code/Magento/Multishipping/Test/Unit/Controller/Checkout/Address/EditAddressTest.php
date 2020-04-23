@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Controller\Checkout\Address;
 
@@ -96,14 +97,17 @@ class EditAddressTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $contextMock->expects($this->atLeastOnce())
             ->method('getResponse')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-        $methods = ['setTitle', 'getTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl', '__wakeUp'];
         $this->addressFormMock =
-            $this->createPartialMock(Edit::class, $methods);
+            $this->getMockBuilder(Edit::class)
+                ->addMethods(['setTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl'])
+                ->onlyMethods(['getTitle'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->urlMock = $this->createMock(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
@@ -131,7 +135,10 @@ class EditAddressTest extends TestCase
             ->method('setTitle')
             ->with('Edit Address')
             ->willReturnSelf();
-        $helperMock = $this->createPartialMock(Data::class, ['__']);
+        $helperMock = $this->getMockBuilder(Data::class)
+            ->addMethods(['__'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $helperMock->expects($this->any())->method('__')->willReturn('Edit Address');
         $valueMap = [
             ['*/*/selectBilling', null, 'success/url'],

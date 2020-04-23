@@ -43,13 +43,14 @@ class DisableMultishippingModeTest extends TestCase
     protected function setUp(): void
     {
         $this->cartMock = $this->createMock(Cart::class);
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['__wakeUp', 'setIsMultiShipping', 'getIsMultiShipping', 'getExtensionAttributes']
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setIsMultiShipping', 'getIsMultiShipping'])
+            ->onlyMethods(['__wakeUp', 'getExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cartMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->object = new DisableMultishippingMode($this->cartMock);
     }
 

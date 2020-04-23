@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
@@ -70,14 +71,11 @@ class OverviewTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->addressMock = $this->createPartialMock(Address::class, [
-                'getShippingMethod',
-                'getShippingRateByCode',
-                'getAllVisibleItems',
-                'getTotals',
-                'getAddressType',
-                '__wakeup'
-            ]);
+        $this->addressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['getAddressType'])
+            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode', 'getAllVisibleItems', 'getTotals'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->priceCurrencyMock =
             $this->createMock(PriceCurrencyInterface::class);
@@ -103,7 +101,7 @@ class OverviewTest extends TestCase
     {
         $rateMock = $this->createMock(Rate::class);
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -115,7 +113,7 @@ class OverviewTest extends TestCase
     public function testGetShippingRateByCodeWithEmptyRate()
     {
         $this->addressMock->expects($this->once())
-            ->method('getShippingMethod')->will($this->returnValue('shipping method'));
+            ->method('getShippingMethod')->willReturn('shipping method');
         $this->addressMock->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('shipping method')
@@ -132,10 +130,10 @@ class OverviewTest extends TestCase
 
     public function testGetShippingAddressTotals()
     {
-        $totalMock = $this->createPartialMock(
-            Total::class,
-            ['getCode', 'setTitle', '__wakeup']
-        );
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['getCode', 'setTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn(Address::TYPE_BILLING);
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
@@ -146,10 +144,10 @@ class OverviewTest extends TestCase
 
     public function testGetShippingAddressTotalsWithNotBillingAddress()
     {
-        $totalMock = $this->createPartialMock(
-            Total::class,
-            ['getCode', 'setTitle', '__wakeup']
-        );
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['getCode', 'setTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn('not billing');
         $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
@@ -164,11 +162,10 @@ class OverviewTest extends TestCase
      */
     protected function getTotalsMock($address)
     {
-        $totalMock = $this->createPartialMock(Total::class, [
-                'getCode',
-                'setTitle',
-                '__wakeup'
-            ]);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['getCode', 'setTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $totalsAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address\Total::class);
         $this->checkoutMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->totalsCollectorMock
