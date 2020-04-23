@@ -62,33 +62,34 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
 
         $this->observerMock = $this->getMockBuilder(
             Observer::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNotNewState()
     {
         $this->_prepareEventMockWithMethods(['getState']);
-        $this->eventMock->expects($this->once())->method('getState')->will($this->returnValue('NotNewState'));
+        $this->eventMock->expects($this->once())->method('getState')->willReturn('NotNewState');
         $this->updateOrderStatusForPaymentMethodsObserver->execute($this->observerMock);
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNewState()
     {
         $this->_prepareEventMockWithMethods(['getState', 'getStatus']);
-        $this->eventMock->expects($this->once())->method('getState')->will(
-            $this->returnValue(Order::STATE_NEW)
+        $this->eventMock->expects($this->once())->method('getState')->willReturn(
+            Order::STATE_NEW
         );
-        $this->eventMock->expects($this->once())->method('getStatus')->will(
-            $this->returnValue(self::ORDER_STATUS)
+        $this->eventMock->expects($this->once())->method('getStatus')->willReturn(
+            self::ORDER_STATUS
         );
 
         $defaultStatus = 'defaultStatus';
         $this->orderConfigMock->expects($this->once())->method('getStateDefaultStatus')->with(
             Order::STATE_NEW
-        )->will($this->returnValue($defaultStatus));
+        )->willReturn($defaultStatus);
 
-        $this->paymentConfigMock->expects($this->once())->method('getActiveMethods')->will(
-            $this->returnValue($this->_getPreparedActiveMethods())
+        $this->paymentConfigMock->expects($this->once())->method('getActiveMethods')->willReturn(
+            $this->_getPreparedActiveMethods()
         );
 
         $this->coreResourceConfigMock->expects($this->once())->method('saveConfig')->with(
@@ -109,8 +110,9 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
     {
         $this->eventMock = $this->getMockBuilder(
             Event::class
-        )->disableOriginalConstructor()->setMethods($methodsList)->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        )->disableOriginalConstructor()
+            ->setMethods($methodsList)->getMock();
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
     /**
@@ -123,18 +125,18 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
         $method1 = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();
-        $method1->expects($this->once())->method('getConfigData')->with('order_status')->will(
-            $this->returnValue(self::ORDER_STATUS)
+        $method1->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
+            self::ORDER_STATUS
         );
-        $method1->expects($this->once())->method('getCode')->will(
-            $this->returnValue(self::METHOD_CODE)
+        $method1->expects($this->once())->method('getCode')->willReturn(
+            self::METHOD_CODE
         );
 
         $method2 = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();
-        $method2->expects($this->once())->method('getConfigData')->with('order_status')->will(
-            $this->returnValue('not_a_status')
+        $method2->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
+            'not_a_status'
         );
 
         return [$method1, $method2];

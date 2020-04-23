@@ -31,7 +31,7 @@ class CartTest extends TestCase
         $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->_salesModelMock = $this->createMock(SalesModelInterface::class);
         $factoryMock = $this->createMock(Factory::class);
-        $factoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_salesModelMock));
+        $factoryMock->expects($this->once())->method('create')->willReturn($this->_salesModelMock);
 
         $this->_model = new Cart($factoryMock, $this->_eventManagerMock, null);
     }
@@ -41,7 +41,7 @@ class CartTest extends TestCase
      */
     public function testGetSalesModel()
     {
-        $this->assertTrue($this->_salesModelMock === $this->_model->getSalesModel());
+        $this->assertSame($this->_model->getSalesModel(), $this->_salesModelMock);
     }
 
     /**
@@ -53,8 +53,8 @@ class CartTest extends TestCase
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue($this->_getSalesModelItems())
+        )->willReturn(
+            $this->_getSalesModelItems()
         );
         $this->_model->getAllItems();
         $this->_model->addCustomItem('test', 10, 10.5, 'some_id');
@@ -258,20 +258,20 @@ class CartTest extends TestCase
         )->method(
             'dispatch'
         )->with(
-            $this->equalTo('payment_cart_collect_items_and_amounts'),
-            $this->equalTo(['cart' => $this->_model])
+            'payment_cart_collect_items_and_amounts',
+            ['cart' => $this->_model]
         );
 
         $this->_salesModelMock->expects(
             $this->once()
         )->method(
             'getAllItems'
-        )->will(
-            $this->returnValue($salesModelItems)
+        )->willReturn(
+            $salesModelItems
         );
 
         foreach ($salesModelAmounts as $key => $value) {
-            $this->_salesModelMock->expects($this->once())->method('get' . $key)->will($this->returnValue($value));
+            $this->_salesModelMock->expects($this->once())->method('get' . $key)->willReturn($value);
         }
 
         return $this->_model->getAmounts();

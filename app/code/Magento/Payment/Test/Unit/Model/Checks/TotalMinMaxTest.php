@@ -33,7 +33,8 @@ class TotalMinMaxTest extends TestCase
     {
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $paymentMethod->expects($this->at(0))->method('getConfigData')->with(
             TotalMinMax::MIN_ORDER_TOTAL
         )->willReturn(self::PAYMENT_MIN_TOTAL);
@@ -41,9 +42,11 @@ class TotalMinMaxTest extends TestCase
             TotalMinMax::MAX_ORDER_TOTAL
         )->willReturn(self::PAYMENT_MAX_TOTAL);
 
-        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
-            ['getBaseGrandTotal', '__wakeup']
-        )->getMock();
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getBaseGrandTotal', '__wakeup']
+            )->getMock();
         $quote->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotal);
 
         $model = new TotalMinMax();

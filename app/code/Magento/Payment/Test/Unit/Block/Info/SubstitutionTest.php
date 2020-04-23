@@ -50,21 +50,24 @@ class SubstitutionTest extends TestCase
 
         $this->layout = $this->getMockBuilder(
             LayoutInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
 
         $eventManager = $this->getMockBuilder(
             ManagerInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
 
         $scopeConfig = $this->getMockBuilder(
             ScopeConfigInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
         $scopeConfig->expects(
             $this->any()
         )->method(
@@ -74,43 +77,36 @@ class SubstitutionTest extends TestCase
                 'advanced/modules_disable_output/'
             ),
             ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue(
-                false
-            )
+        )->willReturn(
+            false
         );
 
         $context = $this->getMockBuilder(
             Context::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getLayout', 'getEventManager', 'getScopeConfig']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getLayout', 'getEventManager', 'getScopeConfig']
+            )->getMock();
         $context->expects(
             $this->any()
         )->method(
             'getLayout'
-        )->will(
-            $this->returnValue(
-                $this->layout
-            )
+        )->willReturn(
+            $this->layout
         );
         $context->expects(
             $this->any()
         )->method(
             'getEventManager'
-        )->will(
-            $this->returnValue(
-                $eventManager
-            )
+        )->willReturn(
+            $eventManager
         );
         $context->expects(
             $this->any()
         )->method(
             'getScopeConfig'
-        )->will(
-            $this->returnValue(
-                $scopeConfig
-            )
+        )->willReturn(
+            $scopeConfig
         );
 
         $this->block = $this->objectManager->getObject(
@@ -128,25 +124,27 @@ class SubstitutionTest extends TestCase
     {
         $abstractBlock = $this->getMockBuilder(
             AbstractBlock::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
         $childAbstractBlock = clone($abstractBlock);
 
-        $abstractBlock->expects($this->any())->method('getParentBlock')->will($this->returnValue($childAbstractBlock));
+        $abstractBlock->expects($this->any())->method('getParentBlock')->willReturn($childAbstractBlock);
 
-        $this->layout->expects($this->any())->method('getParentName')->will($this->returnValue('parentName'));
-        $this->layout->expects($this->any())->method('getBlock')->will($this->returnValue($abstractBlock));
+        $this->layout->expects($this->any())->method('getParentName')->willReturn('parentName');
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($abstractBlock);
 
         $infoMock = $this->getMockBuilder(
             Info::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
         $methodMock = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();
-        $infoMock->expects($this->once())->method('getMethodInstance')->will($this->returnValue($methodMock));
+        $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $this->block->setInfo($infoMock);
 
         $fakeBlock = new \StdClass();
@@ -158,7 +156,7 @@ class SubstitutionTest extends TestCase
             Template::class,
             '',
             ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
-        )->will($this->returnValue($fakeBlock));
+        )->willReturn($fakeBlock);
 
         $childAbstractBlock->expects(
             $this->any()

@@ -36,7 +36,7 @@ class TypeListTest extends TestCase
             ->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true)
-            ->will($this->returnValue(['group data']));
+            ->willReturn(['group data']);
         $this->assertEquals(['group data'], $this->typesArrayModel->toOptionArray());
     }
 }

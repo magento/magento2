@@ -30,7 +30,8 @@ class AllmethodsTest extends TestCase
     {
         $this->_paymentData = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
 
         $this->_model = new Allmethods($this->_paymentData);
     }
@@ -41,7 +42,7 @@ class AllmethodsTest extends TestCase
         $this->_paymentData->expects($this->once())
             ->method('getPaymentMethodList')
             ->with(true, true, true)
-            ->will($this->returnValue($expectedArray));
+            ->willReturn($expectedArray);
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

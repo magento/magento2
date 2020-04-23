@@ -30,7 +30,8 @@ class CctypeTest extends TestCase
     {
         $this->_paymentConfig = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
 
         $this->_model = new Cctype($this->_paymentConfig);
     }
@@ -41,7 +42,7 @@ class CctypeTest extends TestCase
         $expectedArray = [
             ['value' => 'code', 'label' => 'name'],
         ];
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will($this->returnValue($cctypesArray));
+        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->willReturn($cctypesArray);
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }
 }

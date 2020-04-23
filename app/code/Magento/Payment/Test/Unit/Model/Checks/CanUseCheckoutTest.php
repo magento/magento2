@@ -30,12 +30,15 @@ class CanUseCheckoutTest extends TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseCheckout')->willReturn(
             $expectation
         );

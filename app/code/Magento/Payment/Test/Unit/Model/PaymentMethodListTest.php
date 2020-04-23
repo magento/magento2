@@ -43,7 +43,7 @@ class PaymentMethodListTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->methodFactoryMock = $this->getMockBuilder(PaymentMethodInterfaceFactory::class)
             ->setMethods(['create'])

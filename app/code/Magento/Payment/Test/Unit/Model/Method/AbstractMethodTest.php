@@ -94,7 +94,7 @@ class AbstractMethodTest extends TestCase
         $debugData = ['masked' => '123'];
         $this->loggerMock->expects($this->once())
             ->method('debug')
-            ->with($this->equalTo($debugData));
+            ->with($debugData);
 
         $this->payment->debugData($debugData);
     }
@@ -122,7 +122,7 @@ class AbstractMethodTest extends TestCase
         $this->eventManagerMock->expects($result ? $this->once() : $this->never())
             ->method('dispatch')
             ->with(
-                $this->equalTo('payment_method_is_active'),
+                'payment_method_is_active',
                 $this->countOf(3)
             );
 

@@ -46,7 +46,7 @@ class CcTest extends TestCase
         $context = $this->createPartialMock(Context::class, ['getLocaleDate']);
         $context->expects($this->any())
             ->method('getLocaleDate')
-            ->will($this->returnValue($this->localeDate));
+            ->willReturn($this->localeDate);
         $this->model = $this->objectManager->getObject(
             Cc::class,
             [
@@ -63,11 +63,14 @@ class CcTest extends TestCase
     {
         $this->paymentConfig->expects($this->any())
             ->method('getCcTypes')
-            ->will($this->returnValue($configCcTypes));
-        $paymentInfo = $this->createPartialMock(Info::class, ['getCcType']);
+            ->willReturn($configCcTypes);
+        $paymentInfo = $this->getMockBuilder(Info::class)
+            ->addMethods(['getCcType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $paymentInfo->expects($this->any())
             ->method('getCcType')
-            ->will($this->returnValue($ccType));
+            ->willReturn($ccType);
         $this->model->setData('info', $paymentInfo);
         $this->assertEquals($expected, $this->model->getCcTypeName());
     }
@@ -89,13 +92,16 @@ class CcTest extends TestCase
      */
     public function testHasCcExpDate($ccExpMonth, $ccExpYear, $expected)
     {
-        $paymentInfo = $this->createPartialMock(Info::class, ['getCcExpMonth', 'getCcExpYear']);
+        $paymentInfo = $this->getMockBuilder(Info::class)
+            ->addMethods(['getCcExpMonth', 'getCcExpYear'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
-            ->will($this->returnValue($ccExpMonth));
+            ->willReturn($ccExpMonth);
         $paymentInfo->expects($this->any())
             ->method('getCcExpYear')
-            ->will($this->returnValue($ccExpYear));
+            ->willReturn($ccExpYear);
         $this->model->setData('info', $paymentInfo);
         $this->assertEquals($expected, $this->model->hasCcExpDate());
     }
@@ -117,10 +123,13 @@ class CcTest extends TestCase
      */
     public function testGetCcExpMonth($ccExpMonth, $expected)
     {
-        $paymentInfo = $this->createPartialMock(Info::class, ['getCcExpMonth']);
+        $paymentInfo = $this->getMockBuilder(Info::class)
+            ->addMethods(['getCcExpMonth'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
-            ->will($this->returnValue($ccExpMonth));
+            ->willReturn($ccExpMonth);
         $this->model->setData('info', $paymentInfo);
         $this->assertEquals($expected, $this->model->getCcExpMonth());
     }
@@ -141,7 +150,10 @@ class CcTest extends TestCase
      */
     public function testGetCcExpDate($ccExpMonth, $ccExpYear)
     {
-        $paymentInfo = $this->createPartialMock(Info::class, ['getCcExpMonth', 'getCcExpYear']);
+        $paymentInfo = $this->getMockBuilder(Info::class)
+            ->addMethods(['getCcExpMonth', 'getCcExpYear'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $paymentInfo
             ->expects($this->any())
             ->method('getCcExpMonth')

@@ -18,7 +18,6 @@ use Magento\Payment\Model\Info;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\MethodInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -72,10 +71,8 @@ class DataTest extends TestCase
             $this->once()
         )->method(
             'getValue'
-        )->will(
-            $this->returnValue(
-                $class
-            )
+        )->willReturn(
+            $class
         );
         $this->methodFactory->expects(
             $this->any()
@@ -83,10 +80,8 @@ class DataTest extends TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue(
-                $methodInstance
-            )
+        )->willReturn(
+            $methodInstance
         );
 
         $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
@@ -112,66 +107,65 @@ class DataTest extends TestCase
     {
         $this->initialConfig->expects($this->once())
             ->method('getData')
-            ->will(
-                $this->returnValue(
-                    [
-                        Data::XML_PATH_PAYMENT_METHODS => [
-                            $methodA['code'] => $methodA['data'],
-                            $methodB['code'] => $methodB['data'],
-                            'empty' => [],
+            ->willReturn(
+                [
+                    Data::XML_PATH_PAYMENT_METHODS => [
+                        $methodA['code'] => $methodA['data'],
+                        $methodB['code'] => $methodB['data'],
+                        'empty' => [],
 
-                        ]
                     ]
-                )
+                ]
             );
 
         $this->scopeConfig->expects(new MethodInvokedAtIndex(0))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code']))
-            ->will($this->returnValue(AbstractMethod::class));
+            ->willReturn(AbstractMethod::class);
         $this->scopeConfig->expects(new MethodInvokedAtIndex(1))
             ->method('getValue')
             ->with(
                 sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodB['code'])
             )
-            ->will($this->returnValue(AbstractMethod::class));
+            ->willReturn(AbstractMethod::class);
         $this->scopeConfig->expects(new MethodInvokedAtIndex(2))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, 'empty'))
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $methodInstanceMockA = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $methodInstanceMockA->expects($this->any())
             ->method('getConfigData')
             ->with('sort_order', null)
-            ->will($this->returnValue($methodA['data']['sort_order']));
+            ->willReturn($methodA['data']['sort_order']);
 
         $methodInstanceMockB = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $methodInstanceMockB->expects($this->any())
             ->method('getConfigData')
             ->with('sort_order', null)
-            ->will($this->returnValue($methodB['data']['sort_order']));
+            ->willReturn($methodB['data']['sort_order']);
 
         $this->methodFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($methodInstanceMockA));
+            ->willReturn($methodInstanceMockA);
 
         $this->methodFactory->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($methodInstanceMockB));
+            ->willReturn($methodInstanceMockB);
 
         $sortedMethods = $this->helper->getStoreMethods();
-        $this->assertTrue(
+
+        $this->assertGreaterThan(
+            array_shift($sortedMethods)->getConfigData('sort_order'),
             array_shift($sortedMethods)->getConfigData('sort_order')
-            < array_shift($sortedMethods)->getConfigData('sort_order')
         );
     }
 

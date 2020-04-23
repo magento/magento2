@@ -27,23 +27,26 @@ class SpecificationFactoryTest extends TestCase
     {
         $this->_compositeFactory = $this->getMockBuilder(
             CompositeFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
     }
 
     public function testCreate()
     {
         $specification = $this->getMockBuilder(
             SpecificationInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $specificationMapping = [self::SPECIFICATION_KEY => $specification];
 
         $expectedComposite = $this->getMockBuilder(
             Composite::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]
-        )->will($this->returnValue($expectedComposite));
+        )->willReturn($expectedComposite);
 
         $this->assertEquals($expectedComposite, $modelFactory->create([self::SPECIFICATION_KEY]));
     }

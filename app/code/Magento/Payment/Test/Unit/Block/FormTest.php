@@ -49,12 +49,14 @@ class FormTest extends TestCase
             StoreManager::class
         )->setMethods(
             ['getStore']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
         )->setMethods(
             ['dispatch']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_escaper = $helper->getObject(Escaper::class);
         $context = $helper->getObject(
             Context::class,
@@ -80,7 +82,7 @@ class FormTest extends TestCase
         $method = $this->createMock(MethodInterface::class);
         $method->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('method_code'));
+            ->willReturn('method_code');
         $this->_object->setData('method', $method);
         $this->assertEquals('method_code', $this->_object->getMethodCode());
     }
@@ -97,13 +99,13 @@ class FormTest extends TestCase
         $methodInstance->expects($this->any())
             ->method('getData')
             ->with($field)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
         $method = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();
         $method->expects($this->any())
             ->method('getInfoInstance')
-            ->will($this->returnValue($methodInstance));
+            ->willReturn($methodInstance);
         $this->_object->setData('method', $method);
         $this->assertEquals($expected, $this->_object->getInfoData($field));
     }

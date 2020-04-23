@@ -21,16 +21,20 @@ class CompositeTest extends TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        $quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
 
         $specification = $this->getMockBuilder(
             SpecificationInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->willReturn(
             $expectation
         );

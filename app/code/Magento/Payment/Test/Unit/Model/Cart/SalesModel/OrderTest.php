@@ -48,8 +48,8 @@ class OrderTest extends TestCase
         )->with(
             'any key',
             'any args'
-        )->will(
-            $this->returnValue('some value')
+        )->willReturn(
+            'some value'
         );
         $this->assertEquals('some value', $this->_model->getDataUsingMethod('any key', 'any args'));
     }
@@ -101,7 +101,7 @@ class OrderTest extends TestCase
                 ]
             ),
         ];
-        $this->_orderMock->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
+        $this->_orderMock->expects($this->once())->method('getAllItems')->willReturn($items);
         $this->assertEquals($expected, $this->_model->getAllItems());
     }
 }

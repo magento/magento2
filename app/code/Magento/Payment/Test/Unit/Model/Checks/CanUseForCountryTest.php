@@ -42,16 +42,19 @@ class CanUseForCountryTest extends TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quoteMock = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
 
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
-        )->will($this->returnValue($expectation));
+        )->willReturn($expectation);
         $this->countryProvider->expects($this->once())->method('getCountry')->willReturn(self::EXPECTED_COUNTRY_ID);
 
         $this->assertEquals($expectation, $this->_model->isApplicable($paymentMethod, $quoteMock));

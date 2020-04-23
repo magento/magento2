@@ -35,17 +35,13 @@ class FactoryTest extends TestCase
      */
     public function testCreate($salesModelClass, $expectedType)
     {
-        $salesModel = $this->createPartialMock($salesModelClass, ['__wakeup']);
-        $this->_objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            $expectedType,
-            ['salesModel' => $salesModel]
-        )->will(
-            $this->returnValue('some value')
-        );
+        $salesModel = $this->getMockBuilder($salesModelClass)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with($expectedType, ['salesModel' => $salesModel])
+            ->willReturn('some value');
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }
 

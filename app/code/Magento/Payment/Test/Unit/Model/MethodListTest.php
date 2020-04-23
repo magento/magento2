@@ -62,7 +62,8 @@ class MethodListTest extends TestCase
 
         $this->paymentMethodInstanceFactory = $this->getMockBuilder(
             InstanceFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->specificationFactoryMock = $this->createMock(SpecificationFactory::class);
 
@@ -95,10 +96,10 @@ class MethodListTest extends TestCase
     {
         $storeId = 1;
         $quoteMock = $this->createMock(Quote::class);
-        $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $quoteMock->expects($this->atLeastOnce())
             ->method('getPayment')
-            ->will($this->returnValue($this->createMock(Payment::class)));
+            ->willReturn($this->createMock(Payment::class));
 
         $methodInstanceMock = $this->createMock(AbstractMethod::class);
         $methodInstanceMock->expects($this->once())
@@ -109,21 +110,21 @@ class MethodListTest extends TestCase
         $compositeMock->expects($this->atLeastOnce())
             ->method('isApplicable')
             ->with($methodInstanceMock, $quoteMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->specificationFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-        ->with(
-            array_merge(
-                [
-                   AbstractMethod::CHECK_USE_CHECKOUT,
-                   AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                   AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                   AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
-                ],
-                $this->additionalChecks
-            )
-        )->will($this->returnValue($compositeMock));
+            ->with(
+                array_merge(
+                    [
+                        AbstractMethod::CHECK_USE_CHECKOUT,
+                        AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                        AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                        AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
+                    ],
+                    $this->additionalChecks
+                )
+            )->willReturn($compositeMock);
 
         $methodMock = $this->getMockForAbstractClass(PaymentMethodInterface::class);
         $this->paymentMethodList->expects($this->once())
@@ -135,8 +136,7 @@ class MethodListTest extends TestCase
 
         $methodInstanceMock->expects($this->atLeastOnce())
             ->method('setInfoInstance')
-            ->with($this->createMock(Payment::class))
-            ->will($this->returnSelf());
+            ->with($this->createMock(Payment::class))->willReturnSelf();
 
         $this->assertEquals([$methodInstanceMock], $this->methodList->getAvailableMethods($quoteMock));
     }

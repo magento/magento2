@@ -81,7 +81,7 @@ class QuoteAdapterTest extends TestCase
     {
         $this->quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getBillingAddress());
+        $this->assertNull($this->model->getBillingAddress());
     }
 
     public function testGetBillingAddress()
@@ -105,7 +105,7 @@ class QuoteAdapterTest extends TestCase
     {
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn(null);
 
-        $this->assertSame(null, $this->model->getShippingAddress());
+        $this->assertNull($this->model->getShippingAddress());
     }
 
     public function testGetShippingAddress()

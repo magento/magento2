@@ -35,7 +35,9 @@ class ResultTest extends TestCase
      */
     public function resultDataProvider()
     {
-        $phraseMock = $this->getMockBuilder(Phrase::class)->disableOriginalConstructor()->getMock();
+        $phraseMock = $this->getMockBuilder(Phrase::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

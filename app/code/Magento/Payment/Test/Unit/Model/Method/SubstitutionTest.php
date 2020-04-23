@@ -34,9 +34,10 @@ class SubstitutionTest extends TestCase
     {
         $infoMock = $this->getMockBuilder(
             Info::class
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                []
+            )->getMock();
 
         $this->model->setInfoInstance($infoMock);
         $expectedResult = 'StringTitle';
@@ -46,10 +47,8 @@ class SubstitutionTest extends TestCase
             'getAdditionalInformation'
         )->with(
             Substitution::INFO_KEY_TITLE
-        )->will(
-            $this->returnValue(
-                $expectedResult
-            )
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertEquals($expectedResult, $this->model->getTitle());

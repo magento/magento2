@@ -52,12 +52,14 @@ class InfoTest extends TestCase
             StoreManager::class
         )->setMethods(
             ['getStore']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
         )->setMethods(
             ['dispatch']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_escaper = $helper->getObject(Escaper::class);
         $context = $helper->getObject(
             Context::class,
@@ -86,12 +88,13 @@ class InfoTest extends TestCase
 
         if (isset($storeCode)) {
             $storeMock = $this->_getStoreMock($storeCode);
-            $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+            $this->_storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         }
 
         $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
-            ->disableOriginalConstructor()->getMock();
-        $paymentInfo->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
+            ->disableOriginalConstructor()
+            ->getMock();
+        $paymentInfo->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->_object->setData('info', $paymentInfo);
         $this->_object->setData('is_secure_mode', $isSecureMode);
@@ -124,8 +127,9 @@ class InfoTest extends TestCase
             AbstractMethod::class
         )->setMethods(
             ['getStore']
-        )->disableOriginalConstructor()->getMock();
-        $methodInstance->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $methodInstance->expects($this->any())->method('getStore')->willReturn($store);
         return $methodInstance;
     }
 
@@ -135,8 +139,10 @@ class InfoTest extends TestCase
      */
     protected function _getStoreMock($storeCode)
     {
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
-        $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->any())->method('getCode')->willReturn($storeCode);
         return $storeMock;
     }
 
@@ -150,7 +156,8 @@ class InfoTest extends TestCase
     public function testGetSpecificInformation()
     {
         $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_object->setData('info', $paymentInfo);
         $result = $this->_object->getSpecificInformation();

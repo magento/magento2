@@ -83,7 +83,8 @@ class ZendTest extends TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
         $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
@@ -127,7 +128,8 @@ class ZendTest extends TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
         $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);

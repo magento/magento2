@@ -21,7 +21,7 @@ class CcTest extends TestCase
      */
     private $ccModel;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);
