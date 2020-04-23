@@ -196,7 +196,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/access_license_number' => 'acn',
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**

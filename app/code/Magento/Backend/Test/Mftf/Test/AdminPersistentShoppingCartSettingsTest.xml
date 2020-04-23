@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPersistentShoppingCartSettingsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Enable Persistent Shopping cart"/>
+            <title value="Admin should be able to manage persistent shopping cart settings"/>
+            <description value="Admin should be able to enable persistent shopping cart in Magento Admin backend and see additional options"/>
+            <group value="backend"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI stepKey="enablePersistentShoppingCart" command="config:set persistent/options/enabled 1"/>
+            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="disablePersistentShoppingCart" command="config:set persistent/options/enabled 0"/>
+            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToPersistentShoppingCartSettingsActionGroup" stepKey="navigateToPersistenceSettings"/>
+        <actionGroup ref="AssertAdminPersistentShoppingCartOptionsAvailableActionGroup" stepKey="assertOptions"/>
+    </test>
+</tests>

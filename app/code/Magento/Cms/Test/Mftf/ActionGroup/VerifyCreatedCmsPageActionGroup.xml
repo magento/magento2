@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyCreatedCmsPage">
+        <annotations>
+            <description>Verify created cms page in store front. Values are hardcoded from _defaultCmsPage.</description>
+        </annotations>
+
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
+        <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
+    </actionGroup>
+</actionGroups>

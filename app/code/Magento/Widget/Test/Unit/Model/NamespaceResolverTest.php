@@ -13,7 +13,7 @@ class NamespaceResolverTest extends \PHPUnit\Framework\TestCase
     protected $namespaceResolver;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleListMock;
 

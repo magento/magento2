@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,6 +86,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $customerResource;
 
     /**
+     * @var \Magento\Customer\Model\Indexer\Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Init new instance of address entity adapter
      */
     protected function setUp()
@@ -95,6 +101,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
         $this->_entityAdapter = Bootstrap::getObjectManager()->create(
             $this->_testClassName
+        );
+        $this->indexerProcessor = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Indexer\Processor::class
         );
     }
 
@@ -353,6 +362,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $requiredAttributes[] = $keyAttribute;
         foreach (['update', 'remove'] as $action) {
             foreach ($this->_updateData[$action] as $attributes) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $requiredAttributes = array_merge($requiredAttributes, array_keys($attributes));
             }
         }
@@ -493,5 +503,30 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         //Import
         $imported = $this->_entityAdapter->importData();
         $this->assertTrue($imported, 'Must be successfully imported');
+    }
+
+    /**
+     * Test customer indexer gets invalidated after import when Update on Schedule mode is set
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testCustomerIndexer(): void
+    {
+        $file = __DIR__ . '/_files/address_import_update.csv';
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($file, $directoryWrite);
+        $this->_entityAdapter
+            ->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData()
+            ->hasToBeTerminated();
+        $this->indexerProcessor->getIndexer()->reindexAll();
+        $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $this->_entityAdapter->importData();
+        $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
     }
 }

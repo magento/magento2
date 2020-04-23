@@ -348,8 +348,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
 
-                if (isset($customerData['sendemail_store_id'])) {
+                if (isset($customerData['sendemail_store_id']) && $customerData['sendemail_store_id'] !== false) {
                     $customer->setStoreId($customerData['sendemail_store_id']);
+                    try {
+                        $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
+                    } catch (LocalizedException $exception) {
+                        throw new LocalizedException(__("The Store View selected for sending Welcome email from".
+                            " is not related to the customer's associated website."));
+                    }
                 }
 
                 // Save customer

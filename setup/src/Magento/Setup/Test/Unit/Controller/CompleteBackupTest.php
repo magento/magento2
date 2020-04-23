@@ -25,10 +25,10 @@ class CompleteBackupTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertSame('/error/404.phtml', $viewModel->getTemplate());
         $this->assertSame(
-            \Zend\Http\Response::STATUS_CODE_404,
+            \Laminas\Http\Response::STATUS_CODE_404,
             $this->controller->getResponse()->getStatusCode()
         );
     }
@@ -36,7 +36,7 @@ class CompleteBackupTest extends \PHPUnit\Framework\TestCase
     public function testProgressAction()
     {
         $viewModel = $this->controller->progressAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/complete-backup/progress.phtml', $viewModel->getTemplate());
     }

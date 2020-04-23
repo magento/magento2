@@ -19,6 +19,7 @@
 "var store.frontend_name":"Store Frontend Name",
 "var store_email":"Store Email",
 "var order":"Order",
+"var order_id": "Order DB Id",
 "var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -82,7 +83,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_items" order=$order}}
+            {{layout handle="sales_email_order_items" order_id=$order_id}}
         </td>
     </tr>
 </table>

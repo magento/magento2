@@ -16,9 +16,6 @@
             <description value="Users are able to place order using Paypal Smart Button"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
-            <skip>
-                <issueId value="DEVOPS-3311"/>
-            </skip>
             <group value="paypal"/>
         </annotations>
         <before>
@@ -40,7 +37,7 @@
             <createData entity="PaypalConfig" stepKey="createPaypalExpressConfig"/>
 
             <!-- Login -->
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->
@@ -58,7 +55,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Login to storefront as previously created customer-->

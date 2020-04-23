@@ -11,6 +11,8 @@ use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -28,11 +30,29 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quoteCollection = $this->objectManager->create(Collection::class);
+        foreach ($quoteCollection as $quote) {
+            $quote->delete();
+        }
+        parent::tearDown();
     }
 
     /**
@@ -177,9 +197,8 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     public function testGetCustomerCartSecondStore()
     {
-        $maskedQuoteIdSecondStore = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
         $customerCartQuery = $this->getCustomerCartQuery();
-
+        $maskedQuoteIdSecondStore = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1_not_default_store');
         $headerMap = $this->getHeaderMap();
         $headerMap['Store'] = 'fixture_second_store';
         $responseSecondStore = $this->graphQlQuery($customerCartQuery, [], '', $headerMap);

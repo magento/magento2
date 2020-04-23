@@ -21,7 +21,7 @@
         <before>
             <!-- Login as admin -->
             <createData entity="SimpleTwo" stepKey="simpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
