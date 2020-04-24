@@ -8,13 +8,18 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Manually choose store view for LoginAsCustomer functionality -->
     <actionGroup name="AdminLoginAsCustomerChooseStoreViewActionGroup">
+        <annotations>
+            <description>Manually choose store view for LoginAsCustomer functionality.</description>
+        </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>
         </arguments>
-        <selectOption selector="{{AdminLoginAsCustomerLoginManualContentSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
-        <click selector="{{AdminLoginAsCustomerLoginManualActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomer"/>
+
+        <selectOption selector="{{AdminLoginAsCustomerLoginManualContentSection.storeView}}"
+                      userInput="{{storeViewName}}" stepKey="selectStoreView"/>
+        <click selector="{{AdminLoginAsCustomerLoginManualActionsSection.loginAsCustomer}}"
+               stepKey="clickLoginAsCustomer"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.logoLink}}" stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

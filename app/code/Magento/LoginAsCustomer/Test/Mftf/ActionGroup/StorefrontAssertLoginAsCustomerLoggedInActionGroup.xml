@@ -8,21 +8,18 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Admin successfully logged in as Customer -->
     <actionGroup name="StorefrontAssertLoginAsCustomerLoggedInActionGroup">
+        <annotations>
+            <description>Verify Admin successfully logged in as Customer.</description>
+        </annotations>
         <arguments>
             <argument name="customerFullName" type="string"/>
             <argument name="customerEmail" type="string"/>
         </arguments>
-        <seeInCurrentUrl url="{{StorefrontLoginAsCustomerLoginProceedPage.url}}" stepKey="assertOnProceedPage"/>
-        <!-- TODO: uncomment after fix -->
-        <!-- <seeInTitle userInput="You are logged in." stepKey="assertYouAreLoggedInInTitle"/>-->
-        <see selector="{{StorefrontCMSPageSection.mainTitle}}" userInput="You are logged in."
-             stepKey="assertYouAreLoggedInOnPage"/>
-        <!-- TODO: uncomment after fix -->
-        <!-- <see selector="{{LoggedInCustomerHeaderLinksSection.customerDropdownMenu}}" userInput="Welcome, {{customerFullName}}!" stepKey="assertCorrectWelcomeMessage"/>-->
+
         <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="gotoCustomerAccountPage"/>
         <waitForPageLoad stepKey="waitForCustomerAccountPageLoad"/>
+        <see selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" userInput="Welcome, {{customerFullName}}!" stepKey="assertCorrectWelcomeMessage"/>
         <see selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"
              userInput="{{customerEmail}}" stepKey="assertCustomerEmailInContactInformation"/>
     </actionGroup>

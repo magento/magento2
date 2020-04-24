@@ -10,39 +10,44 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminNoAccessToLoginAsCustomerConfigurationTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Permissions and ACl"/>
             <title value="User does not have access to 'Login as customer' section in System Configuration"/>
             <description
                 value="Login into Magento Admin panel as user that does not have access to 'Login as customer' section in System Configuration"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="MQE-1964"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUserBefore"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserBefore"/>
 
             <!--Create New Role-->
             <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
             <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
-                <argument name="role" value="customRoleAllResources"/>
+                <argument name="role" value="CustomRoleAllResources"/>
             </actionGroup>
             <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeLoginAsCustomerAccess">
-                <argument name="resourceName" value="Login As Customer Section"/>
+                <argument name="resourceName" value="Login as Customer Section"/>
             </actionGroup>
             <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
 
             <!--Create New User-->
             <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
                 <argument name="user" value="NewAdminUser"/>
-                <argument name="role" value="customRoleAllResources"/>
+                <argument name="role" value="CustomRoleAllResources"/>
             </actionGroup>
         </before>
         <after>
@@ -52,14 +57,14 @@
 
             <!--Delete new User-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUserAfter"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserAfter"/>
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
                 <argument name="user" value="NewAdminUser"/>
             </actionGroup>
 
             <!--Delete new Role-->
             <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRoleAllResources">
-                <argument name="roleName" value="{{customRoleAllResources.rolename}}"/>
+                <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
@@ -70,8 +75,9 @@
 
         <!-- Login as new User -->
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsSaleRoleUser">
-            <argument name="adminUser" value="NewAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
         <!-- Navigate to Configuration page and open Customers tab -->
@@ -80,11 +86,11 @@
             <argument name="tabName" value="Customers"/>
         </actionGroup>
 
-        <!-- Assert no Login As Customer config section visible -->
-        <actionGroup ref="AssertAdminLoginAsCustomerConfigNotVisibleActionGroup" stepKey="assertConfigNotVisible"/>
+        <!-- Assert no Login as Customer config section visible -->
+        <actionGroup ref="AdminAssertLoginAsCustomerConfigNotVisibleActionGroup" stepKey="assertConfigNotVisible"/>
 
-        <!-- Assert Login As Customer config section is not available by direct url -->
-        <actionGroup ref="AssertAdminLoginAsCustomerConfigNotAvailableDirectlyActionGroup"
+        <!-- Assert Login as Customer config section is not available by direct url -->
+        <actionGroup ref="AdminAssertLoginAsCustomerConfigNotAvailableDirectlyActionGroup"
                      stepKey="assertConfigNotAvailableDirectly"/>
     </test>
 </tests>

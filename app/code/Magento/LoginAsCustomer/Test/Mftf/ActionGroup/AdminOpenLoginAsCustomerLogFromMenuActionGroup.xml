@@ -8,8 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Navigate to Login As Customer Log from Menu -->
     <actionGroup name="AdminOpenLoginAsCustomerLogFromMenuActionGroup">
+        <annotations>
+            <description>Navigate to Login As Customer Log from Menu.</description>
+        </annotations>
+
         <click selector="{{AdminMenuSection.menuItem(AdminMenuCustomers.dataUiId)}}"
                stepKey="clickOnCustomersMenuItem"/>
         <click selector="{{AdminMenuSection.menuItem(AdminMenuLoginAsCustomer.dataUiId)}}"

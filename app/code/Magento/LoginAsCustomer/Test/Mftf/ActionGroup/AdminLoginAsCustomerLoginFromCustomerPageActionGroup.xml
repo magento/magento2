@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Login As Customer Login action is works properly from Customer page -->
     <actionGroup name="AdminLoginAsCustomerLoginFromCustomerPageActionGroup">
+        <annotations>
+            <description>Verify Login As Customer Login action is works properly from Customer page.</description>
+        </annotations>
         <arguments>
             <argument name="customerId" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>

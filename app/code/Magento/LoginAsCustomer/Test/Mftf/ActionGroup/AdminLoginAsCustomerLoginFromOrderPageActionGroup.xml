@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Login As Customer Login action is works properly from Order grid page -->
     <actionGroup name="AdminLoginAsCustomerLoginFromOrderPageActionGroup">
+        <annotations>
+            <description>Verify Login As Customer Login action is works properly from Order grid page.</description>
+        </annotations>
         <arguments>
             <argument name="orderId" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="gotoOrderPage"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>

@@ -22,6 +22,8 @@
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="NewAdminUser" stepKey="createNewAdmin"/>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
@@ -35,28 +37,28 @@
             <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteNewAdmin">
                 <argument name="user" value="NewAdminUser"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutAfter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login into First Customer account -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsFirstCustomerByDefaultAdmin">
-            <argument name="customerEmail" value="$$createFirstCustomer.email$$"/>
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutFirstCustomerDefaultAdmin"/>
 
         <!-- Login into Second Customer account -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsSecondCustomerByDefaultAdmin">
-            <argument name="customerEmail" value="$$createSecondCustomer.email$$"/>
+            <argument name="customerId" value="$$createSecondCustomer.id$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutSecondCustomerDefaultAdmin"/>
 
         <!-- Log out as Default Admin User -->
-        <actionGroup ref="logout" stepKey="logoutAsDefaultAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
 
         <!-- Login as New Admin User -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
@@ -65,16 +67,16 @@
         </actionGroup>
 
         <!-- Login into First Customer account -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsFirstCustomerByNewAdmin">
-            <argument name="customerEmail" value="$$createFirstCustomer.email$$"/>
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutFirstCustomerNewAdmin"/>
 
         <!-- Login into Second Customer account -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsSecondCustomerByNewAdmin">
-            <argument name="customerEmail" value="$$createSecondCustomer.email$$"/>
+            <argument name="customerId" value="$$createSecondCustomer.id$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutSecondCustomerNewAdmin"/>
 
@@ -104,6 +106,6 @@
         </actionGroup>
 
         <!-- Log out as New Admin User -->
-        <actionGroup ref="logout" stepKey="logoutAsNewAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsNewAdmin"/>
     </test>
 </tests>

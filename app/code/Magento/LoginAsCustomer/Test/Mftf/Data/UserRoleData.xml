@@ -9,7 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <!--This Role has access for all resources individually -->
-    <entity name="customRoleAllResources" type="user_role">
+    <entity name="CustomRoleAllResources" type="user_role">
         <data key="name" unique="suffix">allAccessRole</data>
         <data key="rolename">allAccessRole</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>

@@ -8,8 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Verify Login As Customer Login action is absent on Customer grid page -->
     <actionGroup name="AdminLoginAsCustomerAbsentOnCustomerGridPageActionGroup">
+        <annotations>
+            <description>Verify Login As Customer Login action is absent on Customer grid page.</description>
+        </annotations>
+
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="gotoCustomerGridPage"/>
         <waitForPageLoad stepKey="waitForCustomerGridPageLoad"/>
         <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>

@@ -8,14 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontSignOutAndCloseTabActionGroup">
+    <actionGroup name="StorefrontSignOutNotificationBannerAndCloseTabActionGroup">
         <annotations>
-            <description>Customer sign out and close tab.</description>
+            <description>Customer sign out by Notification Banner and close tab.</description>
         </annotations>
 
-        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
-        <waitForElementVisible selector="{{StoreFrontSignOutSection.signOut}}" stepKey="waitForSignOut"/>
-        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
+        <waitForElementVisible selector="{{StorefrontLoginAsCustomerNotificationSection.notificationText}}" stepKey="waitForNotificationBanner"/>
+        <click selector="{{StorefrontLoginAsCustomerNotificationSection.closeLink}}" stepKey="clickToSignOut"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="You are signed out" stepKey="signOut"/>
         <closeTab stepKey="closeTab"/>

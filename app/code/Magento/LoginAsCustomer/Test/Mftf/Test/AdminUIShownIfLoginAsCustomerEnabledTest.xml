@@ -12,7 +12,7 @@
         <annotations>
             <features value="Login As Customer"/>
             <stories value="Availability of UI elements if module enable/disable"/>
-            <title value="UI elements are shown if 'Login as customer' functionality is disabled"/>
+            <title value="UI elements are shown if 'Login as customer' functionality is enabled"/>
             <description
                 value="Verify that UI elements are present and links are working if 'Login as customer' functionality enabled"/>
             <severity value="BLOCKER"/>
@@ -21,13 +21,15 @@
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -39,18 +41,6 @@
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
-
-        <!-- Verify Login As Customer Login action works correctly from Customer grid page -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerGirdPageActionGroup"
-                     stepKey="verifyLoginAsCustomerWorksOnCustomerGridPage">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-        </actionGroup>
-
-        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerGird">
-            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInFromCustomerGird"/>
 
         <!-- Verify Login As Customer Login action works correctly from Customer page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
@@ -73,18 +63,6 @@
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
-
-        <!-- Verify Login As Customer Login action works correctly from Order grid page -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromOrderGridPageActionGroup"
-                     stepKey="verifyLoginAsCustomerWorksOnOrderGridPage">
-            <argument name="orderId" value="$grabOrderId"/>
-        </actionGroup>
-
-        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromOrderGridPage">
-            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInFromOrderGridPage"/>
 
         <!-- Verify Login As Customer Login action works correctly from Order page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageActionGroup"

@@ -17,10 +17,15 @@
                 value="Verify admin user's access to 'Login as Customer Button' can be changed"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="MQE-1964"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserBefore"/>
@@ -28,14 +33,14 @@
             <!--Create New Role-->
             <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
             <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
-                <argument name="role" value="customRoleAllResources"/>
+                <argument name="role" value="CustomRoleAllResources"/>
             </actionGroup>
             <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
 
             <!--Create New User-->
             <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
                 <argument name="user" value="NewAdminUser"/>
-                <argument name="role" value="customRoleAllResources"/>
+                <argument name="role" value="CustomRoleAllResources"/>
             </actionGroup>
         </before>
         <after>
@@ -50,7 +55,7 @@
 
             <!--Delete new Role-->
             <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRoleAllResources">
-                <argument name="roleName" value="{{customRoleAllResources.rolename}}"/>
+                <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
@@ -75,19 +80,20 @@
 
         <!-- Revoke 'Login as Customer Button' access for new User -->
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutNewUser"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsDefaultAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
 
         <actionGroup ref="AdminEditUserRoleActionGroup" stepKey="openEditUserRole">
-            <argument name="roleName" value="{{customRoleAllResources.rolename}}"/>
+            <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
         </actionGroup>
         <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeLoginAsCustomerAccess">
-            <argument name="resourceName" value="Login As Customer Button"/>
+            <argument name="resourceName" value="Allow Login as Customer Button"/>
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveEditedRole"/>
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutDefaultAdminUserAfterRevoke"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsNewUserAfterRevoke">
-            <argument name="adminUser" value="NewAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserAfterRevoke">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
         <!-- Verify new User no longer has access to 'Login as Customer Button' -->

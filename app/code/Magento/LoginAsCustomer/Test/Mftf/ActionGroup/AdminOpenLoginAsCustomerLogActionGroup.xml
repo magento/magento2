@@ -8,8 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Navigate to Login As Customer Log page -->
     <actionGroup name="AdminOpenLoginAsCustomerLogActionGroup">
+        <annotations>
+            <description>Navigate to Login As Customer Log page.</description>
+        </annotations>
+
         <amOnPage url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="gotoLoginAsCustomerLogPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="Login As Customer Log" stepKey="titleIsVisible"/>

@@ -7,11 +7,14 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--  Open User Role resources for edit -->
     <actionGroup name="AdminEditUserRoleActionGroup">
+        <annotations>
+            <description>Open User Role resources for edit.</description>
+        </annotations>
         <arguments>
             <argument name="roleName" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid"/>
         <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}"
                    stepKey="enterRoleName"/>

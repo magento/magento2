@@ -21,9 +21,11 @@
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -39,17 +41,17 @@
         </actionGroup>
 
         <!-- Subscribe for newsletter -->
-        <amOnPage url="{{StorefrontNewsletterManagePage.url}}" stepKey="goToNewsletterManage"/>
-        <click selector="{{StorefrontNewsletterManageSection.subscriptionCheckbox}}"
-               stepKey="checkSubscribedNewsletter"/>
-        <click selector="{{StorefrontNewsletterManageSection.saveButton}}"
-               stepKey="saveSubscription"/>
-        <waitForPageLoad stepKey="waitForSubscriptionSaved"/>
+        <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+        <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessage">
+            <argument name="message" value="We have saved your subscription."/>
+        </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInAsCustomer"/>
 
         <!-- Verify subscription successful -->
-        <amOnPage url="{{AdminNewsletterSubscriberPage.url}}" stepKey="goToNewsletterSubscriberGrid"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.email('1')}}" userInput="$$createCustomer.email$$" stepKey="seeCustomerEmailInSubscriberGrid"/>
-        <see selector="{{AdminNewsletterSubscriberGridSection.type('1')}}" userInput="Customer" stepKey="seeCustomerTypeInSubscriberGrid"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomerIsSubscribedToNewsletters" stepKey="assertSubscribedToNewsletter"/>
     </test>
 </tests>
