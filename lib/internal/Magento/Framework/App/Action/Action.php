@@ -24,6 +24,7 @@ use Magento\Framework\UrlInterface;
  * Action classes that do not extend from this class will lose this behavior and might not function correctly
  *
  * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @see https://community.magento.com/t5/Magento-DevBlog/Decomposition-of-Magento-Controllers/ba-p/430883
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api

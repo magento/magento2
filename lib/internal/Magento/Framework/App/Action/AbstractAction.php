@@ -10,7 +10,11 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
-abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
+/**
+ * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @see https://community.magento.com/t5/Magento-DevBlog/Decomposition-of-Magento-Controllers/ba-p/430883
+ */
+abstract class AbstractAction implements ActionInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -56,6 +60,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve request object
      *
      * @return \Magento\Framework\App\RequestInterface
+     * @deprecated This method should not be used anymore. Inject `RequestInterface` into constructor instead
      */
     public function getRequest()
     {
@@ -66,6 +71,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve response object
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @deprecated This method should not be used anymore. Inject `ResponseInterface` into constructor instead
      */
     public function getResponse()
     {
