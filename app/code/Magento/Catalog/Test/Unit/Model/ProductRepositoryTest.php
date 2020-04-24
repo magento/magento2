@@ -22,6 +22,7 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\Data\ImageContentInterface;
@@ -36,6 +37,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -190,7 +192,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productFactory = $this->createPartialMock(
             ProductFactory::class,
@@ -310,7 +312,7 @@ class ProductRepositoryTest extends TestCase
             );
 
         $mediaProcessor = $this->objectManager->getObject(
-            ProductRepository\MediaGalleryProcessor::class,
+            MediaGalleryProcessor::class,
             [
                 'processor' => $this->processor,
                 'contentFactory' => $this->contentFactory,
@@ -343,12 +345,12 @@ class ProductRepositoryTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'mediaProcessor', $mediaProcessor);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
-     */
     public function testGetAbsentProduct()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
         $this->resourceModel->expects($this->once())->method('getIdBySku')->with('test_sku')
@@ -409,12 +411,12 @@ class ProductRepositoryTest extends TestCase
         $this->assertSame($this->product, $this->model->get($sku, false, $storeId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
-     */
     public function testGetByIdAbsentProduct()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
         $this->product->expects($this->once())->method('load')->with('product_id');
@@ -464,7 +466,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * Test the forceReload parameter
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testGetByIdForcedReload()
     {
@@ -546,7 +548,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * Test forceReload parameter
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testGetForcedReload()
     {
@@ -637,12 +639,10 @@ class ProductRepositoryTest extends TestCase
         $this->assertEquals($this->product, $this->model->save($this->product));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The product was unable to be saved. Please try again.
-     */
     public function testSaveUnableToSaveException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The product was unable to be saved. Please try again.');
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))
             ->method('getIdBySku')->willReturn(null);
@@ -663,12 +663,10 @@ class ProductRepositoryTest extends TestCase
         $this->model->save($this->product);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the  field.
-     */
     public function testSaveException()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Invalid value of "" provided for the  field.');
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
         $this->productFactory->expects($this->exactly(2))
@@ -689,12 +687,10 @@ class ProductRepositoryTest extends TestCase
         $this->model->save($this->product);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid product data: error1,error2
-     */
     public function testSaveInvalidProductException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Invalid product data: error1,error2');
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
         $this->productFactory->expects($this->exactly(2))
@@ -713,12 +709,10 @@ class ProductRepositoryTest extends TestCase
         $this->model->save($this->product);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
-     * @expectedExceptionMessage Database connection error
-     */
     public function testSaveThrowsTemporaryStateExceptionIfDatabaseConnectionErrorOccurred()
     {
+        $this->expectException('Magento\Framework\Exception\TemporaryState\CouldNotSaveException');
+        $this->expectExceptionMessage('Database connection error');
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->productFactory->expects($this->any())
             ->method('create')
@@ -751,12 +745,10 @@ class ProductRepositoryTest extends TestCase
         $this->assertTrue($this->model->delete($this->product));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "product-42" product couldn't be removed.
-     */
     public function testDeleteException()
     {
+        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectExceptionMessage('The "product-42" product couldn\'t be removed.');
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModel->expects($this->once())->method('delete')->with($this->product)

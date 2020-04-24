@@ -3,46 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Product\Link;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class LinkTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @var Link
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dbSelect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $objectManager = new ObjectManager($this);
+        $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+            $this->createMock(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
+            Link::class,
             ['resource' => $this->resource]
         );
     }
 
     protected function prepareAdapter()
     {
-        $this->dbSelect = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->dbSelect = $this->createMock(Select::class);
 
         // method flow
         $this->resource->expects(

@@ -52,7 +52,7 @@ class FilterFactoryTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

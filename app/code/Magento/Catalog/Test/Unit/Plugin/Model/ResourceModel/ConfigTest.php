@@ -40,7 +40,7 @@ class ConfigTest extends TestCase
      */
     private $configResourceModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheMock = $this->createMock(CacheInterface::class);
         $this->cacheStateMock = $this->createMock(StateInterface::class);

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 
@@ -10,49 +11,50 @@ use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcessor;
 use Magento\Catalog\Model\Product\Price\TierPriceFactory;
 use Magento\Catalog\Model\Product\Price\TierPricePersistence;
+use Magento\Catalog\Model\Product\Price\TierPriceStorage;
 use Magento\Catalog\Model\Product\Price\Validation\Result as PriceValidationResult;
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * TierPriceStorage test.
- */
-class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
+class TierPriceStorageTest extends TestCase
 {
     /**
-     * @var TierPricePersistence|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPricePersistence|MockObject
      */
     private $tierPricePersistence;
 
     /**
-     * @var TierPriceValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPriceValidator|MockObject
      */
     private $tierPriceValidator;
 
     /**
-     * @var TierPriceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPriceFactory|MockObject
      */
     private $tierPriceFactory;
 
     /**
-     * @var PriceIndexerProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceIndexerProcessor|MockObject
      */
     private $priceIndexProcessor;
 
     /**
-     * @var ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductIdLocatorInterface|MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\TierPriceStorage
+     * @var TierPriceStorage
      */
     private $tierPriceStorage;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tierPricePersistence = $this->createMock(TierPricePersistence::class);
         $this->tierPricePersistence->method('getEntityLinkField')
@@ -62,9 +64,9 @@ class TierPriceStorageTest extends \PHPUnit\Framework\TestCase
         $this->priceIndexProcessor = $this->createMock(PriceIndexerProcessor::class);
         $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->tierPriceStorage = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Price\TierPriceStorage::class,
+            TierPriceStorage::class,
             [
                 'tierPricePersistence' => $this->tierPricePersistence,
                 'tierPriceValidator' => $this->tierPriceValidator,

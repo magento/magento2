@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Command;
 
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Command\GatewayCommand;
 use Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -14,13 +17,14 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayCommandTest extends \PHPUnit\Framework\TestCase
+class GatewayCommandTest extends TestCase
 {
     /**
      * @var GatewayCommand
@@ -62,7 +66,7 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $errorMessageMapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestBuilder = $this->createMock(BuilderInterface::class);
         $this->transferFactory = $this->createMock(TransferFactoryInterface::class);
@@ -96,12 +100,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a case when request fails.
-     *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage Transaction has been declined. Please try again later.
      */
     public function testExecuteValidationFail()
     {
+        $this->expectException(CommandException::class);
+        $this->expectExceptionMessage('Transaction has been declined. Please try again later.');
         $commandSubject = ['authorize'];
         $validationFailures = [
             __('Failure #1'),
@@ -122,12 +125,11 @@ class GatewayCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a case when request fails and response errors are mapped.
-     *
-     * @expectedException \Magento\Payment\Gateway\Command\CommandException
-     * @expectedExceptionMessage Failure Mapped
      */
     public function testExecuteValidationFailWithMappedErrors()
     {
+        $this->expectException(CommandException::class);
+        $this->expectExceptionMessage('Failure Mapped');
         $commandSubject = ['authorize'];
         $validationFailures = [
             __('Failure #1'),
