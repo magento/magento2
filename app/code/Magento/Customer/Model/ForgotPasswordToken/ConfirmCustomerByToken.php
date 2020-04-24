@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\ForgotPasswordToken;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 
 /**
  * Confirm customer by reset password token
@@ -20,22 +20,22 @@ class ConfirmCustomerByToken
     private $getByToken;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerResource
      */
-    private $customerRepository;
+    private $customerResource;
 
     /**
      * ConfirmByToken constructor.
      *
      * @param GetCustomerByToken $getByToken
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerResource $customerResource
      */
     public function __construct(
         GetCustomerByToken $getByToken,
-        CustomerRepositoryInterface $customerRepository
+        CustomerResource $customerResource
     ) {
         $this->getByToken = $getByToken;
-        $this->customerRepository = $customerRepository;
+        $this->customerResource = $customerResource;
     }
 
     /**
@@ -50,9 +50,7 @@ class ConfirmCustomerByToken
     {
         $customer = $this->getByToken->execute($resetPasswordToken);
         if ($customer->getConfirmation()) {
-            $this->customerRepository->save(
-                $customer->setConfirmation(null)
-            );
+            $this->customerResource->updateColumn($customer->getId(), 'confirmation', null);
         }
     }
 }
