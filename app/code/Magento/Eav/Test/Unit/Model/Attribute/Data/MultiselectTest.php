@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 use Magento\Eav\Model\Attribute;
@@ -48,8 +50,8 @@ class MultiselectTest extends TestCase
         $requestMock = $this->createMock(RequestInterface::class);
         $attributeMock = $this->createMock(Attribute::class);
 
-        $requestMock->expects($this->once())->method('getParam')->will($this->returnValue($param));
-        $attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
+        $requestMock->expects($this->once())->method('getParam')->willReturn($param);
+        $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attributeCode');
 
         $this->model->setAttribute($attributeMock);
         $this->assertEquals($expectedResult, $this->model->extractValue($requestMock));
@@ -86,13 +88,13 @@ class MultiselectTest extends TestCase
     public function testOutputValue($format, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue('value1,value2,'));
+        $entityMock->expects($this->once())->method('getData')->willReturn('value1,value2,');
 
         $sourceMock = $this->createMock(AbstractSource::class);
-        $sourceMock->expects($this->any())->method('getOptionText')->will($this->returnArgument(0));
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturnArgument(0);
 
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getSource')->will($this->returnValue($sourceMock));
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

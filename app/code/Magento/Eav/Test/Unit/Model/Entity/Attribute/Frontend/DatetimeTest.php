@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Frontend;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -43,10 +45,11 @@ class DatetimeTest extends TestCase
     {
         $this->booleanFactoryMock = $this->createMock(BooleanFactory::class);
         $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->attributeMock = $this->createPartialMock(
-            AbstractAttribute::class,
-            ['getAttributeCode', 'getFrontendLabel', 'getFrontendInput']
-        );
+        $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['getFrontendLabel'])
+            ->onlyMethods(['getAttributeCode', 'getFrontendInput'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);
         $this->model->setAttribute($this->attributeMock);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity\Attribute;
 
@@ -118,16 +119,11 @@ class SetTest extends TestCase
         $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
 
         $this->typeMock = $this->createMock(Type::class);
-        $this->objectMock = $this->createPartialMock(AbstractModel::class, [
-                'getEntityTypeId',
-                'getAttributeSetId',
-                'beforeDelete',
-                'getId',
-                'isDeleted',
-                'afterDelete',
-                'afterDeleteCommit',
-                '__wakeup'
-            ]);
+        $this->objectMock = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['getEntityTypeId', 'getAttributeSetId'])
+            ->onlyMethods(['beforeDelete', 'getId', 'isDeleted', 'afterDelete', 'afterDeleteCommit', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -242,9 +238,9 @@ class SetTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'joinLeft', 'where'])
             ->getMock();
-        $selectMock->expects($this->once())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
-        $selectMock->expects($this->atLeastOnce())->method('where')->will($this->returnSelf());
+        $selectMock->expects($this->once())->method('from')->willReturnSelf();
+        $selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
+        $selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
 
         $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()

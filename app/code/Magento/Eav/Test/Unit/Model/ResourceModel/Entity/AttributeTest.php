@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
@@ -52,7 +53,7 @@ class AttributeTest extends TestCase
      */
     public function testSaveOptionSystemAttribute()
     {
-        /** @var $connectionMock MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -72,7 +73,7 @@ class AttributeTest extends TestCase
         ];
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
+        /** @var AbstractModel $model */
         $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['data'] = $attributeData;
         $arguments['context'] = $this->contextMock;
@@ -127,7 +128,7 @@ class AttributeTest extends TestCase
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
-        /** @var $connectionMock MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -146,7 +147,7 @@ class AttributeTest extends TestCase
         ];
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
+        /** @var AbstractModel $model */
         $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['data'] = $attributeData;
         $arguments['context'] = $this->contextMock;
@@ -228,12 +229,12 @@ class AttributeTest extends TestCase
      */
     public function testSaveOptionNoValue()
     {
-        /** @var $connectionMock MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $objectManagerHelper = new ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
+        /** @var AbstractModel $model */
         $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['context'] = $this->contextMock;
         $model = $this->getMockBuilder(AbstractModel::class)
@@ -258,43 +259,45 @@ class AttributeTest extends TestCase
      */
     protected function _prepareResourceModel()
     {
-        $connectionMock = $this->createPartialMock(Mysql::class, [
-                '_connect',
-                'delete',
-                'describeTable',
-                'fetchRow',
-                'insert',
-                'lastInsertId',
-                'quote',
-                'update',
-                'beginTransaction',
-                'commit',
-                'rollback',
-                'select',
-                'getTransactionLevel'
-            ]);
+        $connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(
+                [
+                    'delete',
+                    'rollback',
+                    'describeTable',
+                    'fetchRow',
+                    'insert',
+                    'lastInsertId',
+                    'quote',
+                    'update',
+                    'beginTransaction',
+                    'commit',
+                    'select',
+                    'getTransactionLevel'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $connectionMock->expects(
             $this->any()
         )->method(
             'describeTable'
         )->with(
             'eav_attribute'
-        )->will(
-            $this->returnValue($this->_describeEavAttribute())
+        )->willReturn(
+            $this->_describeEavAttribute()
         );
         $connectionMock->expects(
             $this->any()
         )->method(
             'quote'
-        )->will(
-            $this->returnValueMap(
-                [
-                    [123, 123],
-                    ['4', '"4"'],
-                    ['a_dropdown', '"a_dropdown"'],
-                    ['status', '"status"'],
-                ]
-            )
+        )->willReturnMap(
+            [
+                [123, 123],
+                ['4', '"4"'],
+                ['a_dropdown', '"a_dropdown"'],
+                ['status', '"status"'],
+            ]
         );
         $this->selectMock = $this->createMock(Select::class);
         $connectionMock->expects(
@@ -314,19 +317,17 @@ class AttributeTest extends TestCase
             'getStores'
         )->with(
             true
-        )->will(
-            $this->returnValue(
-                [
-                    new DataObject(['id' => 0]),
-                    new DataObject(['id' => 1])
-                ]
-            )
+        )->willReturn(
+            [
+                new DataObject(['id' => 0]),
+                new DataObject(['id' => 1])
+            ]
         );
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-        $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($connectionMock));
+        $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
+        $resource->expects($this->any())->method('getConnection')->with()->willReturn($connectionMock);
         $eavEntityType = $this->createMock(Type::class);
 
         $relationProcessorMock = $this->createMock(
@@ -337,7 +338,9 @@ class AttributeTest extends TestCase
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
-        $configMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $arguments = [
             'context' => $contextMock,
             'storeManager' => $storeManager,

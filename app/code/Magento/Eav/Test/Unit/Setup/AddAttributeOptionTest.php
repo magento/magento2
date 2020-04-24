@@ -37,7 +37,7 @@ class AddAttributeOptionTest extends TestCase
         $setupMock = $this->createMock(ModuleDataSetupInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->connectionMock->method('select')
-                             ->willReturn($objectManager->getObject(Select::class));
+            ->willReturn($objectManager->getObject(Select::class));
 
         $setupMock->method('getTable')->willReturn('some_table');
         $setupMock->method('getConnection')->willReturn($this->connectionMock);

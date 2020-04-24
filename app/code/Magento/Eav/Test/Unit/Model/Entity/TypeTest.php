@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
@@ -95,7 +97,7 @@ class TypeTest extends TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         // Interrupt program flow by exception
         $exception = new \Exception('Store instance cannot be created.');
-        $this->storeFactoryMock->expects($this->once())->method('create')->will($this->throwException($exception));
+        $this->storeFactoryMock->expects($this->once())->method('create')->willThrowException($exception);
         $this->resourceMock->expects($this->once())->method('rollBack');
         $this->resourceMock->expects($this->never())->method('commit');
 

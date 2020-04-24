@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
@@ -15,7 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table as EavAttributeSource;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 use Magento\Framework\Model\AbstractModel;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class OptionManagementTest extends TestCase
@@ -60,9 +61,9 @@ class OptionManagementTest extends TestCase
                     42 => 'labelLabel',
                 ],
             ],
-            'order' => [
-                'id_new_option' => 'optionSortOrder',
-            ],
+                'order' => [
+                    'id_new_option' => 'optionSortOrder',
+                ],
             ];
 
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
@@ -204,7 +205,7 @@ class OptionManagementTest extends TestCase
         $attributeMock->expects($this->never())->method('getId');
         $attributeMock->expects($this->once())->method('addData')->with($removalMarker);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock)
-        ->willThrowException(new \Exception());
+            ->willThrowException(new \Exception());
         $this->model->delete($entityType, $attributeCode, $optionId);
     }
 

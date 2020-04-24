@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for \Magento\Eav\Model\Form
@@ -50,7 +51,8 @@ class FormTest extends TestCase
             Form::class
         )->setMethods(
             ['_getFilteredFormAttributeCollection', '_getValidator', 'getEntity']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_userAttribute = new DataObject(
             ['is_user_defined' => true, 'attribute_code' => 'attribute_visible_user', 'is_visible' => true]
@@ -63,12 +65,12 @@ class FormTest extends TestCase
             $this->any()
         )->method(
             '_getFilteredFormAttributeCollection'
-        )->will(
-            $this->returnValue($this->_attributes)
+        )->willReturn(
+            $this->_attributes
         );
 
         $this->_entity = new DataObject(['id' => 1, 'attribute_visible_user' => 'abc']);
-        $this->_model->expects($this->any())->method('getEntity')->will($this->returnValue($this->_entity));
+        $this->_model->expects($this->any())->method('getEntity')->willReturn($this->_entity);
     }
 
     /**
@@ -131,12 +133,13 @@ class FormTest extends TestCase
     {
         $validator = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['isValid', 'getMessages']
-        )->getMock();
-        $validator->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['isValid', 'getMessages']
+            )->getMock();
+        $validator->expects($this->once())->method('isValid')->willReturn($isValid);
         if ($messages) {
-            $validator->expects($this->once())->method('getMessages')->will($this->returnValue($messages));
+            $validator->expects($this->once())->method('getMessages')->willReturn($messages);
         } else {
             $validator->expects($this->never())->method('getMessages');
         }

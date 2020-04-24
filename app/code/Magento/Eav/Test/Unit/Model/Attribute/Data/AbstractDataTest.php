@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
@@ -108,19 +109,20 @@ class AbstractDataTest extends TestCase
     public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult, $filter)
     {
         $requestMock = $this->createPartialMock(Http::class, ['getParams', 'getParam']);
-        $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
+        $requestMock->expects($this->any())->method('getParam')->willReturnMap([
             ['attributeCode', false, $value],
             [$requestScope, $value],
-        ]));
-        $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
+        ]);
+        $requestMock->expects($this->any())->method('getParams')->willReturn($params);
 
-        $attributeMock = $this->createPartialMock(
-            Attribute::class,
-            ['getInputFilter', 'getAttributeCode']
-        );
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
+        $attributeMock = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getInputFilter'])
+            ->onlyMethods(['getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attributeCode');
         if ($filter) {
-            $attributeMock->expects($this->any())->method('getInputFilter')->will($this->returnValue($filter));
+            $attributeMock->expects($this->any())->method('getInputFilter')->willReturn($filter);
         }
 
         $this->model->setAttribute($attributeMock);

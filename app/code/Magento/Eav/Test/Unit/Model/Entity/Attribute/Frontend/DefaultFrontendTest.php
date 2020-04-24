@@ -145,10 +145,10 @@ class DefaultFrontendTest extends TestCase
         $this->model->setAttribute($attribute);
         $result = $this->model->getClass();
 
-        self::assertContains($expectedClass, $result);
-        self::assertContains('minimum-length-1', $result);
-        self::assertContains('maximum-length-2', $result);
-        self::assertContains('validate-length', $result);
+        self::assertStringContainsString($expectedClass, $result);
+        self::assertStringContainsString('minimum-length-1', $result);
+        self::assertStringContainsString('maximum-length-2', $result);
+        self::assertStringContainsString('validate-length', $result);
     }
 
     /**
@@ -187,9 +187,9 @@ class DefaultFrontendTest extends TestCase
         $this->model->setAttribute($attribute);
         $result = $this->model->getClass();
 
-        self::assertContains('minimum-length-1', $result);
-        self::assertContains('maximum-length-2', $result);
-        self::assertContains('validate-length', $result);
+        self::assertStringContainsString('minimum-length-1', $result);
+        self::assertStringContainsString('maximum-length-2', $result);
+        self::assertStringContainsString('validate-length', $result);
     }
 
     /**

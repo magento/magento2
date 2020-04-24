@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -37,11 +39,11 @@ class AbstractTest extends TestCase
             AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', '__wakeup']
         );
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
 
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
 
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
 
         $this->_model->setAttribute($attribute);
 

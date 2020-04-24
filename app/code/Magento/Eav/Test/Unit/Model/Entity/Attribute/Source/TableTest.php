@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
@@ -73,18 +75,20 @@ class TableTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->collectionFactory = $this->createPartialMock(
-            CollectionFactory::class,
-            [
-                'create',
-                'setPositionOrder',
-                'setAttributeFilter',
-                'addFieldToFilter',
-                'setStoreFilter',
-                'load',
-                'toOptionArray'
-            ]
-        );
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->addMethods(
+                [
+                    'setPositionOrder',
+                    'setAttributeFilter',
+                    'addFieldToFilter',
+                    'setStoreFilter',
+                    'load',
+                    'toOptionArray'
+                ]
+            )
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->attributeOptionCollectionMock = $this->getMockBuilder(AttributeOptionCollection::class)
             ->setMethods(['toOptionArray'])
@@ -138,8 +142,8 @@ class TableTest extends TestCase
 
         $flatColumns = $this->model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
 
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model;
 
@@ -113,9 +114,9 @@ class AttributeSetRepositoryTest extends TestCase
     {
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
-        $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue($attributeSetId));
+        $attributeSetMock->expects($this->any())->method('getId')->willReturn($attributeSetId);
         $this->assertEquals($attributeSetMock, $this->model->get($attributeSetId));
     }
 
@@ -128,7 +129,7 @@ class AttributeSetRepositoryTest extends TestCase
         $this->expectExceptionMessage('No such entity with id = 9999');
         $attributeSetId = 9999;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
         $this->model->get($attributeSetId);
     }
@@ -210,8 +211,8 @@ class AttributeSetRepositoryTest extends TestCase
     {
         $attributeSetId = 1;
         $attributeSetMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
-        $attributeSetMock->expects($this->any())->method('getId')->will($this->returnValue($attributeSetId));
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $attributeSetMock->expects($this->any())->method('getId')->willReturn($attributeSetId);
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $this->resourceMock->expects($this->once())->method('load')->with($attributeSetMock, $attributeSetId, null);
         $this->resourceMock->expects($this->once())->method('delete')->with($attributeSetMock);
         $this->assertTrue($this->model->deleteById($attributeSetId));

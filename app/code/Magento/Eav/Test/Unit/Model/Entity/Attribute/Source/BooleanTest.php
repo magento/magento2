@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
@@ -37,14 +38,14 @@ class BooleanTest extends TestCase
             ['getAttributeCode', '__wakeup']
         );
 
-        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
         $this->_model->setAttribute($abstractAttributeMock);
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');
@@ -72,7 +73,7 @@ class BooleanTest extends TestCase
         $expectedOrder
     ) {
         $attributeMock = $this->getAttributeMock();
-        $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
+        $attributeMock->expects($this->any())->method('isScopeGlobal')->willReturn($isScopeGlobal);
 
         $entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
@@ -84,11 +85,11 @@ class BooleanTest extends TestCase
         $selectMock = $this->createMock(Select::class);
 
         $collectionMock = $this->getCollectionMock();
-        $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($selectMock));
+        $collectionMock->expects($this->any())->method('getSelect')->willReturn($selectMock);
 
         foreach ($expectedJoinCondition as $step => $data) {
             $selectMock->expects($this->at($step))->method('joinLeft')
-                ->with($data['requisites'], $data['condition'], [])->will($this->returnSelf());
+                ->with($data['requisites'], $data['condition'], [])->willReturnSelf();
         }
 
         $selectMock->expects($this->once())->method('order')->with($expectedOrder);
@@ -169,16 +170,19 @@ class BooleanTest extends TestCase
      */
     protected function getCollectionMock()
     {
-        $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
-        $collectionMock = $this->createPartialMock(
-            AbstractCollection::class,
-            $collectionMethods
-        );
+        $collectionMock = $this->getMockBuilder(AbstractCollection::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getSelect', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $connectionMock = $this->createPartialMock(Mysql::class, ['method']);
+        $connectionMock = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['method'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $collectionMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $collectionMock->expects($this->any())->method('getStoreId')->will($this->returnValue('12'));
+        $collectionMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $collectionMock->expects($this->any())->method('getStoreId')->willReturn('12');
 
         return $collectionMock;
     }
@@ -188,17 +192,17 @@ class BooleanTest extends TestCase
      */
     protected function getAttributeMock()
     {
-        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup' , 'getEntity'];
-        $attributeMock = $this->createPartialMock(
-            AbstractAttribute::class,
-            $attributeMockMethods
-        );
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['isScopeGlobal'])
+            ->onlyMethods(['getAttributeCode', 'getId', 'getBackend', '__wakeup', 'getEntity'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $backendMock = $this->createMock(AbstractBackend::class);
 
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
-        $attributeMock->expects($this->any())->method('getId')->will($this->returnValue('123'));
-        $attributeMock->expects($this->any())->method('getBackend')->will($this->returnValue($backendMock));
-        $backendMock->expects($this->any())->method('getTable')->will($this->returnValue('table'));
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
+        $attributeMock->expects($this->any())->method('getId')->willReturn('123');
+        $attributeMock->expects($this->any())->method('getBackend')->willReturn($backendMock);
+        $backendMock->expects($this->any())->method('getTable')->willReturn('table');
 
         return $attributeMock;
     }

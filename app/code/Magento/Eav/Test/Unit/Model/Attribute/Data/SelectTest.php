@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 use Magento\Eav\Model\Attribute;
@@ -42,13 +44,13 @@ class SelectTest extends TestCase
     public function testOutputValue($format, $value, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
+        $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
         $sourceMock = $this->createMock(AbstractSource::class);
-        $sourceMock->expects($this->any())->method('getOptionText')->will($this->returnValue(123));
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturn(123);
 
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getSource')->will($this->returnValue($sourceMock));
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -91,11 +93,11 @@ class SelectTest extends TestCase
     public function testValidateValue($value, $originalValue, $isRequired, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
-        $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
+        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
 
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
-        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
@@ -150,7 +152,7 @@ class SelectTest extends TestCase
         $entityMock->expects($this->once())->method('setData')->with('attrCode', 'value');
 
         $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attrCode'));
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attrCode');
 
         $this->model->setAttribute($attributeMock);
         $this->model->setEntity($entityMock);

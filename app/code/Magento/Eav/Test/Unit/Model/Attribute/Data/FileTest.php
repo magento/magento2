@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
@@ -70,12 +71,12 @@ class FileTest extends TestCase
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
-        $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
+        $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
         $attributeMock = $this->createMock(Attribute::class);
         $this->urlEncoder->expects($this->exactly($callTimes))
             ->method('encode')
-            ->will($this->returnValue('url_key'));
+            ->willReturn('url_key');
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

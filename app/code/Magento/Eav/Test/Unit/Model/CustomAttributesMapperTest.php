@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeRepository;
@@ -25,7 +27,7 @@ class CustomAttributesMapperTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -38,7 +40,7 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $searchResult->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue($this->getAttributes()));
+            ->willReturn($this->getAttributes());
 
         $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
@@ -46,7 +48,7 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $attributeRepository->expects($this->any())
             ->method('getList')
-            ->will($this->returnValue($searchResult));
+            ->willReturn($searchResult);
 
         $metadata = $this->objectManager->getObject(
             EntityMetadata::class,
@@ -66,8 +68,8 @@ class CustomAttributesMapperTest extends TestCase
             ->willReturn(true);
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(CustomAttributesDataInterface::class))
-            ->will($this->returnValue($metadata));
+            ->with(CustomAttributesDataInterface::class)
+            ->willReturn($metadata);
         $metadataPool->expects($this->once())
             ->method('hasConfiguration')
             ->willReturn(true);
@@ -81,10 +83,10 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $searchCriteriaBuilder->expects($this->any())
             ->method('addFilter')
-            ->will($this->returnValue($searchCriteriaBuilder));
+            ->willReturn($searchCriteriaBuilder);
         $searchCriteriaBuilder->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($searchCriteria));
+            ->willReturn($searchCriteria);
 
         /** @var CustomAttributesMapper $customAttributesMapper */
         $customAttributesMapper = $this->objectManager
@@ -137,7 +139,7 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $searchResult->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue($this->getAttributes()));
+            ->willReturn($this->getAttributes());
 
         $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
@@ -145,7 +147,7 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $attributeRepository->expects($this->any())
             ->method('getList')
-            ->will($this->returnValue($searchResult));
+            ->willReturn($searchResult);
 
         $metadata = $this->objectManager->getObject(
             EntityMetadata::class,
@@ -162,8 +164,8 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(CustomAttributesDataInterface::class))
-            ->will($this->returnValue($metadata));
+            ->with(CustomAttributesDataInterface::class)
+            ->willReturn($metadata);
 
         $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
@@ -174,10 +176,10 @@ class CustomAttributesMapperTest extends TestCase
             ->getMock();
         $searchCriteriaBuilder->expects($this->any())
             ->method('addFilter')
-            ->will($this->returnValue($searchCriteriaBuilder));
+            ->willReturn($searchCriteriaBuilder);
         $searchCriteriaBuilder->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($searchCriteria));
+            ->willReturn($searchCriteria);
 
         /** @var CustomAttributesMapper $customAttributesMapper */
         $customAttributesMapper = $this->objectManager
@@ -220,10 +222,10 @@ class CustomAttributesMapperTest extends TestCase
             ->getMockForAbstractClass();
         $attribute->expects($this->any())
             ->method('isStatic')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue('test'));
+            ->willReturn('test');
 
         /* Attribute with the code we don't want to copy */
         $attribute1 = $this->getMockBuilder(AbstractAttribute::class)
@@ -232,10 +234,10 @@ class CustomAttributesMapperTest extends TestCase
             ->getMockForAbstractClass();
         $attribute1->expects($this->any())
             ->method('isStatic')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $attribute1->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue('test1'));
+            ->willReturn('test1');
 
         /* Static attribute but with the code which exists in custom attributes */
         $attribute2 = $this->getMockBuilder(AbstractAttribute::class)
@@ -244,10 +246,10 @@ class CustomAttributesMapperTest extends TestCase
             ->getMockForAbstractClass();
         $attribute2->expects($this->any())
             ->method('isStatic')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $attribute2->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue('test2'));
+            ->willReturn('test2');
 
         return [$attribute, $attribute1, $attribute2];
     }

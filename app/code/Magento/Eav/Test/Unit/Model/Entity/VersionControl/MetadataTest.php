@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
 
 use Magento\Eav\Model\Entity\VersionControl\Metadata;
@@ -42,10 +44,11 @@ class MetadataTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->model = $this->createPartialMock(
-            AbstractModel::class,
-            ['getResource', 'getAttributes']
-        );
+        $this->model = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['getAttributes'])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->resource = $this->getMockForAbstractClass(
             AdapterInterface::class,

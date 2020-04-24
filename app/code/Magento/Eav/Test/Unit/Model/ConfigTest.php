@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\Cache\Type as Cache;
@@ -74,9 +76,9 @@ class ConfigTest extends TestCase
             ->getMock();
         $this->collectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->cacheStateMock = $this->createMock(StateInterface::class);
         $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
             ->setMethods(['create'])
@@ -109,8 +111,7 @@ class ConfigTest extends TestCase
             ->setMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
         $attributeCollectionMock->expects($this->any())
-            ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->method('setEntityTypeFilter')->willReturnSelf();
         $attributeCollectionMock->expects($this->any())
             ->method('getData')
             ->willReturn([$attributeData]);
@@ -163,7 +164,7 @@ class ConfigTest extends TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertInstanceOf(Attribute::class, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
@@ -216,8 +217,7 @@ class ConfigTest extends TestCase
             ->getMock();
         $attributeCollectionMock
             ->expects($this->any())
-            ->method('setEntityTypeFilter')
-            ->will($this->returnSelf());
+            ->method('setEntityTypeFilter')->willReturnSelf();
         $attributeCollectionMock
             ->expects($this->any())
             ->method('getData')
@@ -278,7 +278,7 @@ class ConfigTest extends TestCase
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
+            ->willReturnMap($factoryCalls);
 
         $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }
@@ -288,12 +288,10 @@ class ConfigTest extends TestCase
         $this->cacheMock->expects($this->once())
             ->method('clean')
             ->with(
-                $this->equalTo(
-                    [
-                        Cache::CACHE_TAG,
-                        Attribute::CACHE_TAG,
-                    ]
-                )
+                [
+                    Cache::CACHE_TAG,
+                    Attribute::CACHE_TAG,
+                ]
             );
         $this->config->clear();
     }

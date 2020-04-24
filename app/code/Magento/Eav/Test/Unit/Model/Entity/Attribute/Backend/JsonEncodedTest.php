@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
@@ -42,22 +43,18 @@ class JsonEncodedTest extends TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $this->attributeMock = $this->getMockBuilder(Attribute::class)
@@ -67,7 +64,7 @@ class JsonEncodedTest extends TestCase
 
         $this->attributeMock->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue('json_encoded'));
+            ->willReturn('json_encoded');
 
         $this->model = new JsonEncoded($this->serializerMock);
         $this->model->setAttribute($this->attributeMock);

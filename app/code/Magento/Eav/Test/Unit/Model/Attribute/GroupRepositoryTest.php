@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute;
 
@@ -182,10 +183,8 @@ class GroupRepositoryTest extends TestCase
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(__('AttributeSet does not exist.'))
-                )
+            ->willThrowException(
+                new NoSuchEntityException(__('AttributeSet does not exist.'))
             );
         $this->model->save($groupMock);
     }
@@ -217,7 +216,7 @@ class GroupRepositoryTest extends TestCase
         $existingGroupMock->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
         $this->groupResourceMock->expects($this->once())
             ->method('save')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->model->save($groupMock);
     }
 
@@ -395,7 +394,7 @@ class GroupRepositoryTest extends TestCase
         $this->groupResourceMock->expects($this->once())
             ->method('delete')
             ->with($groupMock)
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $groupMock->expects($this->once())->method('getId')->willReturn(42);
         $this->model->delete($groupMock);
     }

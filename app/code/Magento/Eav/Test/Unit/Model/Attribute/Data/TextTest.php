@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
@@ -211,7 +212,7 @@ class TextTest extends TestCase
             ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
         );
 
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject $attribute
          */
         $attribute = $this->getMockBuilder($attributeClass)
             ->setMethods(['_init'])

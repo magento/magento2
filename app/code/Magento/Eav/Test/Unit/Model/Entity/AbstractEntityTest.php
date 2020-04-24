@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
 use Magento\Catalog\Model\Product;
@@ -110,17 +112,17 @@ class AbstractEntityTest extends TestCase
             );
             $mock->setAttributeId($code);
 
-            /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
-            $backendModel = $this->createPartialMock(
-                AbstractBackend::class,
-                ['getBackend', 'getBackendTable']
-            );
+            /** @var AbstractBackend $backendModel */
+            $backendModel = $this->getMockBuilder(AbstractBackend::class)
+                ->addMethods(['getBackend', 'getBackendTable'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
 
             $backendModel->setAttribute($mock);
 
-            $mock->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+            $mock->expects($this->any())->method('getBackend')->willReturn($backendModel);
 
-            $mock->expects($this->any())->method('getBackendTable')->will($this->returnValue($code . '_table'));
+            $mock->expects($this->any())->method('getBackendTable')->willReturn($code . '_table');
 
             $attributes[$code] = $mock;
         }
@@ -135,15 +137,15 @@ class AbstractEntityTest extends TestCase
     protected function _getConnectionMock()
     {
         $connection = $this->createPartialMock(Mysql::class, [
-                'describeTable',
-                'getIndexList',
-                'lastInsertId',
-                'insert',
-                'prepareColumnValue',
-                'select',
-                'query',
-                'delete'
-            ]);
+            'describeTable',
+            'getIndexList',
+            'lastInsertId',
+            'insert',
+            'prepareColumnValue',
+            'select',
+            'query',
+            'delete'
+        ]);
         $statement = $this->createPartialMock(
             \Zend_Db_Statement::class,
             ['closeCursor', 'columnCount', 'errorCode', 'errorInfo', 'fetch', 'nextRowset', 'rowCount']
@@ -154,26 +156,26 @@ class AbstractEntityTest extends TestCase
             ->method('from')
             ->willReturnSelf();
 
-        $connection->expects($this->any())->method('query')->will($this->returnValue($statement));
+        $connection->expects($this->any())->method('query')->willReturn($statement);
 
         $connection->expects(
             $this->any()
         )->method(
             'describeTable'
-        )->will(
-            $this->returnValue(['value' => ['test']])
+        )->willReturn(
+            ['value' => ['test']]
         );
 
-        $connection->expects($this->any())->method('prepareColumnValue')->will($this->returnArgument(2));
+        $connection->expects($this->any())->method('prepareColumnValue')->willReturnArgument(2);
 
         $connection->expects(
             $this->once()
         )->method(
             'delete'
         )->with(
-            $this->equalTo('test_table')
-        )->will(
-            $this->returnValue(true)
+            'test_table'
+        )->willReturn(
+            true
         );
 
         $connection->expects($this->any())
@@ -204,18 +206,19 @@ class AbstractEntityTest extends TestCase
      */
     protected function _getAttributeMock($attributeCode, $attributeSetId)
     {
-        $attribute = $this->createPartialMock(
-            AbstractAttribute::class,
-            ['getBackend', 'getBackendTable', 'isInSet', 'getApplyTo', 'getAttributeCode', '__wakeup']
-        );
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['getApplyTo'])
+            ->onlyMethods(['getBackend', 'getBackendTable', 'isInSet', 'getAttributeCode', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $attribute->setAttributeId($attributeCode);
 
         $attribute->expects(
             $this->any()
         )->method(
             'getBackendTable'
-        )->will(
-            $this->returnValue($attributeCode . '_table')
+        )->willReturn(
+            $attributeCode . '_table'
         );
 
         $attribute->expects(
@@ -223,12 +226,12 @@ class AbstractEntityTest extends TestCase
         )->method(
             'isInSet'
         )->with(
-            $this->equalTo($attributeSetId)
-        )->will(
-            $this->returnValue(false)
+            $attributeSetId
+        )->willReturn(
+            false
         );
 
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
 
         return $attribute;
     }
@@ -251,7 +254,7 @@ class AbstractEntityTest extends TestCase
         foreach ($productData as $key => $value) {
             $object->setData($key, $value);
         }
-        $object->expects($this->any())->method('getOrigData')->will($this->returnValue($productOrigData));
+        $object->expects($this->any())->method('getOrigData')->willReturn($productOrigData);
 
         $entityType = new DataObject();
         $entityType->setEntityTypeCode('test');
@@ -262,17 +265,12 @@ class AbstractEntityTest extends TestCase
 
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
-        /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
-        $backendModel = $this->createPartialMock(
-            AbstractBackend::class,
-            [
-                'getBackend',
-                'getBackendTable',
-                'getAffectedFields',
-                'isStatic',
-                'getEntityValueId',
-            ]
-        );
+        /** @var AbstractBackend $backendModel */
+        $backendModel = $this->getMockBuilder(AbstractBackend::class)
+            ->addMethods(['getBackend', 'getBackendTable'])
+            ->onlyMethods(['getAffectedFields', 'isStatic', 'getEntityValueId'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $backendModel->expects(
             $this->once()
@@ -287,7 +285,7 @@ class AbstractEntityTest extends TestCase
         $backendModel->expects($this->never())->method('getEntityValueId');
 
         $backendModel->setAttribute($attribute);
-        $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+        $attribute->expects($this->any())->method('getBackend')->willReturn($backendModel);
         $attribute->setId(222);
         $attributes[$attributeCode] = $attribute;
         $eavConfig = $this->getMockBuilder(Config::class)
@@ -306,20 +304,18 @@ class AbstractEntityTest extends TestCase
                 ]
             ]
         );
-        /** @var $model AbstractEntity|MockObject */
+        /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
-        $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
-        $model->expects($this->any())->method('getConnection')->will($this->returnValue($this->_getConnectionMock()));
+        $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
+        $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());
 
-        $eavConfig->expects($this->any())->method('getAttribute')->will(
-            $this->returnCallback(
-                function ($entityType, $attributeCode) use ($attributes) {
-                    return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
-                }
-            )
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturnCallback(
+            function ($entityType, $attributeCode) use ($attributes) {
+                return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
+            }
         );
         $model->isPartialSave(true);
         $model->save($object);

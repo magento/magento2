@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model;
 
@@ -82,7 +84,7 @@ class AttributeManagementTest extends TestCase
         $this->eavConfigMock =
             $this->createMock(Config::class);
         $this->entityTypeFactoryMock =
-            $this->createPartialMock(ConfigFactory::class, ['create', '__wakeup']);
+            $this->createPartialMock(ConfigFactory::class, ['create']);
         $this->groupRepositoryMock =
             $this->createMock(AttributeGroupRepositoryInterface::class);
         $this->attributeRepositoryMock =
@@ -120,7 +122,7 @@ class AttributeManagementTest extends TestCase
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
-            ->will($this->throwException(new NoSuchEntityException()));
+            ->willThrowException(new NoSuchEntityException());
 
         $this->attributeManagement->assign(
             $entityTypeCode,
@@ -267,17 +269,13 @@ class AttributeManagementTest extends TestCase
         $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(66);
         $entityTypeMock = $this->createMock(Type::class);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
-        $attributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [
-                'getEntityAttributeId',
-                'setAttributeSetId',
-                'loadEntityAttributeIdBySet',
-                'getIsUserDefined',
-                'deleteEntity',
-                '__wakeup'
-            ]
-        );
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->addMethods(['getEntityAttributeId'])
+            ->onlyMethods(
+                ['setAttributeSetId', 'loadEntityAttributeIdBySet', 'getIsUserDefined', 'deleteEntity']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
@@ -308,17 +306,13 @@ class AttributeManagementTest extends TestCase
         $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(66);
         $entityTypeMock = $this->createMock(Type::class);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
-        $attributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [
-                'getEntityAttributeId',
-                'setAttributeSetId',
-                'loadEntityAttributeIdBySet',
-                'getIsUserDefined',
-                'deleteEntity',
-                '__wakeup'
-            ]
-        );
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->addMethods(['getEntityAttributeId'])
+            ->onlyMethods(
+                ['setAttributeSetId', 'loadEntityAttributeIdBySet', 'getIsUserDefined', 'deleteEntity']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
@@ -369,17 +363,13 @@ class AttributeManagementTest extends TestCase
         $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(66);
         $entityTypeMock = $this->createMock(Type::class);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
-        $attributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [
-                'getEntityAttributeId',
-                'setAttributeSetId',
-                'loadEntityAttributeIdBySet',
-                'getIsUserDefined',
-                'deleteEntity',
-                '__wakeup'
-            ]
-        );
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->addMethods(['getEntityAttributeId'])
+            ->onlyMethods(
+                ['setAttributeSetId', 'loadEntityAttributeIdBySet', 'getIsUserDefined', 'deleteEntity']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
