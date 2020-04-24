@@ -11,8 +11,8 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Abstract redirect/forward action class
  *
- * @deprecated Use \Magento\Framework\App\ActionInterface
- * @see https://community.magento.com/t5/Magento-DevBlog/Decomposition-of-Magento-Controllers/ba-p/430883
+ * @deprecated You should avoid inheritance in your controllers
+ * @see \Magento\Framework\App\ActionInterface
  */
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
@@ -60,7 +60,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve request object
      *
      * @return \Magento\Framework\App\RequestInterface
-     * @deprecated This method should not be used anymore. Inject `RequestInterface` into constructor instead
      */
     public function getRequest()
     {
@@ -71,7 +70,6 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * Retrieve response object
      *
      * @return \Magento\Framework\App\ResponseInterface
-     * @deprecated This method should not be used anymore. Inject `ResponseInterface` into constructor instead
      */
     public function getResponse()
     {
