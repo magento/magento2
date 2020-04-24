@@ -42,8 +42,7 @@ class GetContent
             PHP_EOL,
             $this->getDistinctContent(
                 $entityId,
-                (int) $attribute->getAttributeId(),
-                $attribute->getBackendTable()
+                $attribute
             )
         );
     }
@@ -55,18 +54,18 @@ class GetContent
      * @param int $attributeId
      * @return array
      */
-    private function getDistinctContent(int $entityId, int $attributeId, string $table): array
+    private function getDistinctContent(int $entityId, AbstractAttribute $attribute): array
     {
         $connection = $this->resourceConnection->getConnection();
 
         $select = $connection->select()->from(
-            ['abt' => $table],
+            ['abt' => $attribute->getBackendTable()],
             'abt.value'
         )->where(
             $connection->quoteIdentifier('abt.attribute_id') . ' = ?',
-            $attributeId
+            (int) $attribute->getAttributeId()
         )->where(
-            $connection->quoteIdentifier('abt.entity_id') . ' = ?',
+            $connection->quoteIdentifier('abt.' . $attribute->getEntityIdField()) . ' = ?',
             $entityId
         )->distinct(true);
 
