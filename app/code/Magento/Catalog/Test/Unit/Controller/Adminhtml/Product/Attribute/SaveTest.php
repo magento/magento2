@@ -309,7 +309,6 @@ class SaveTest extends AttributeTest
      * @param string $path
      * @param array $params
      * @param array $response
-     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])
