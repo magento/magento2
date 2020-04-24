@@ -79,7 +79,7 @@ class DownloadTest extends TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()

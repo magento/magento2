@@ -3,26 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\ResourceModel;
 
-use \Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test class for \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
  */
-class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
+class CollectionByPagesIteratorTest extends TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator
+     * @var CollectionByPagesIterator
      */
     protected $_resourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_resourceModel = new \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator();
+        $this->_resourceModel = new CollectionByPagesIterator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_resourceModel);
     }
@@ -35,20 +45,20 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
         $pageSize = 2;
         $pageCount = 3;
 
-        /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
+        /** @var MockObject $callbackMock */
         $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+            FetchStrategyInterface::class
         );
 
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
 
-        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $entityFactory = $this->createMock(EntityFactory::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
-        /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+        /** @var AbstractDb|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
             ->getMockForAbstractClass();
@@ -74,7 +84,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit\Framework\TestCase
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             for ($rowNumber = 1; $rowNumber <= $pageSize; $rowNumber++) {
                 $itemId = ($pageNumber - 1) * $pageSize + $rowNumber;
-                $item = new \Magento\Framework\DataObject(['id' => $itemId]);
+                $item = new DataObject(['id' => $itemId]);
                 $collectionMock->addItem($item);
 
                 $callbackMock->expects($this->at($itemId - 1))->method('callback')->with($item);
