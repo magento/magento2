@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Observer;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
-
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
 
 /**
  * Persistent Session Observer
@@ -15,41 +20,34 @@ use Magento\Framework\Event\ObserverInterface;
 class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
 {
     /**
-     * Persistent session
-     *
-     * @var \Magento\Persistent\Helper\Session
+     * @var Session
      */
-    protected $_persistentSession;
+    private $persistentSession;
 
     /**
-     * Persistent data
-     *
-     * @var \Magento\Persistent\Helper\Data
+     * @var Data
      */
-    protected $_persistentData = null;
+    private $persistentData;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
-     * SetRememberMeStatusForAjaxLoginObserver constructor.
-     *
-     * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Data $persistentData
+     * @param Session $persistentSession
+     * @param Json $serializer
      * @throws \RuntimeException
      */
     public function __construct(
-        \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Persistent\Helper\Session $persistentSession,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Data $persistentData,
+        Session $persistentSession,
+        Json $serializer
     ) {
-        $this->_persistentData = $persistentData;
-        $this->_persistentSession = $persistentSession;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->persistentData = $persistentData;
+        $this->persistentSession = $persistentSession;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -60,14 +58,14 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->_persistentData->canProcess($observer)
-            || !$this->_persistentData->isEnabled()
-            || !$this->_persistentData->isRememberMeEnabled()
+        if (!$this->persistentData->canProcess($observer)
+            || !$this->persistentData->isEnabled()
+            || !$this->persistentData->isRememberMeEnabled()
         ) {
             return;
         }
 
-        /** @var $request \Magento\Framework\App\RequestInterface */
+        /** @var $request RequestInterface */
         $request = $observer->getEvent()->getRequest();
         if ($request && $request->isXmlHttpRequest()) {
             $requestData = [];
@@ -76,7 +74,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
                 $requestData = $this->serializer->unserialize($content);
             }
             $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
-            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
+            $this->persistentSession->setRememberMeChecked($isRememberMeChecked);
         }
     }
 }
