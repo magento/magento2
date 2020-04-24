@@ -73,7 +73,7 @@ class ValidatorTest extends TestCase
         $this->elasticsearchClientMock->expects($this->once())->method('testConnection')->willReturn(false);
 
         $expected = ['Elasticsearch connection validation failed'];
-        $this->assertEquals($expected, $this->validator->validate(['engine' => $searchEngine]));
+        $this->assertEquals($expected, $this->validator->validate(['search-engine' => $searchEngine]));
     }
 
     public function testValidateFailException()

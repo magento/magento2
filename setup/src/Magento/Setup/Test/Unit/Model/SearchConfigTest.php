@@ -66,7 +66,11 @@ class SearchConfigTest extends TestCase
     public function testSaveConfiguration(array $installInput, array $searchInput)
     {
         $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
-        $this->searchEngineValidatorMock->expects($this->once())->method('validate')->with($searchInput)->willReturn([]);
+        $this->searchEngineValidatorMock
+            ->expects($this->once())
+            ->method('validate')
+            ->with($searchInput)
+            ->willReturn([]);
 
         $this->searchConfig->saveConfiguration($installInput);
     }

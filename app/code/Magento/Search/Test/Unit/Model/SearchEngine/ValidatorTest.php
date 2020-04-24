@@ -33,7 +33,7 @@ class ValidatorTest extends TestCase
             Validator::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'engineValidators' => ['other-engine' => $this->otherEngineValidatorMock],
+                'engineValidators' => ['otherEngine' => $this->otherEngineValidatorMock],
                 'engineBlacklist' => ['badEngine']
             ]
         );
@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('catalog/search/engine')
-            ->willReturn('other-engine');
+            ->willReturn('otherEngine');
 
         $this->otherEngineValidatorMock->expects($this->once())->method('validate')->willReturn([]);
 
@@ -58,18 +58,18 @@ class ValidatorTest extends TestCase
     {
         $expectedErrors = ["Search engine 'badEngine' is not supported. Fix search configuration and try again."];
 
-        $this->assertEquals($expectedErrors, $this->validator->validate(['engine' => 'badEngine']));
+        $this->assertEquals($expectedErrors, $this->validator->validate(['search-engine' => 'badEngine']));
     }
 
     public function testValidateInvalid()
     {
-        $expectedErrors = ['Validation failed for other-engine'];
+        $expectedErrors = ['Validation failed for otherEngine'];
 
         $this->otherEngineValidatorMock
             ->expects($this->once())
             ->method('validate')
             ->willReturn($expectedErrors);
 
-        $this->assertEquals($expectedErrors, $this->validator->validate(['engine' => 'other-engine']));
+        $this->assertEquals($expectedErrors, $this->validator->validate(['search-engine' => 'otherEngine']));
     }
 }
