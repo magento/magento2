@@ -15,7 +15,8 @@ define([
         defaults: {
             productFormSelector: '#product_addtocart_form',
             declinePayment: false,
-            formInvalid: false
+            formInvalid: false,
+            productAddedToCart: false
         },
 
         /** @inheritdoc */
@@ -45,9 +46,10 @@ define([
         onClick: function () {
             var $form = $(this.productFormSelector);
 
-            if (!this.declinePayment) {
+            if (!this.declinePayment && !this.productAddedToCart) {
                 $form.submit();
                 this.formInvalid = !$form.validation('isValid');
+                this.productAddedToCart = true;
             }
         },
 
@@ -100,6 +102,24 @@ define([
             this.clientConfig.customerId = '';
 
             return this.clientConfig;
+        },
+
+        /** @inheritdoc */
+        onError: function (err) {
+            this.productAddedToCart = false;
+            this._super();
+        },
+
+        /** @inheritdoc */
+        onCancel: function (data, actions) {
+            this.productAddedToCart = false;
+            this._super();
+        },
+
+        /** @inheritdoc */
+        afterOnAuthorize: function (res, resolve, reject, actions) {
+            this.productAddedToCart = false;
+            this._super();
         }
     });
 });
