@@ -64,7 +64,7 @@ class AbstractTest extends AbstractImportTestCase
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;
@@ -200,7 +200,7 @@ class AbstractTest extends AbstractImportTestCase
      */
     public function testGetCreatedItemsCount()
     {
-        $this->assertInternalType('integer', $this->_model->getCreatedItemsCount());
+        $this->assertIsInt($this->_model->getCreatedItemsCount());
     }
 
     /**
@@ -208,7 +208,7 @@ class AbstractTest extends AbstractImportTestCase
      */
     public function testGetUpdatedItemsCount()
     {
-        $this->assertInternalType('int', $this->_model->getUpdatedItemsCount());
+        $this->assertIsInt($this->_model->getUpdatedItemsCount());
     }
 
     /**
@@ -216,6 +216,6 @@ class AbstractTest extends AbstractImportTestCase
      */
     public function testGetDeletedItemsCount()
     {
-        $this->assertInternalType('integer', $this->_model->getDeletedItemsCount());
+        $this->assertIsInt($this->_model->getDeletedItemsCount());
     }
 }

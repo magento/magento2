@@ -46,7 +46,9 @@ class CollectionByPagesIteratorTest extends TestCase
         $pageCount = 3;
 
         /** @var MockObject $callbackMock */
-        $callbackMock = $this->createPartialMock(\stdClass::class, ['callback']);
+        $callbackMock = $this->getMockBuilder(\stdClass::class)->addMethods(['callback'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
@@ -63,22 +65,22 @@ class CollectionByPagesIteratorTest extends TestCase
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
             ->getMockForAbstractClass();
 
-        $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($select));
+        $collectionMock->expects($this->any())->method('getSelect')->willReturn($select);
 
-        $collectionMock->expects($this->exactly($pageCount + 1))->method('clear')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount + 1))->method('clear')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('setPageSize')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount))->method('setPageSize')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('setCurPage')->will($this->returnSelf());
+        $collectionMock->expects($this->exactly($pageCount))->method('setCurPage')->willReturnSelf();
 
-        $collectionMock->expects($this->exactly($pageCount))->method('count')->will($this->returnValue($pageSize));
+        $collectionMock->expects($this->exactly($pageCount))->method('count')->willReturn($pageSize);
 
         $collectionMock->expects(
             $this->exactly($pageCount)
         )->method(
             'getLastPageNumber'
-        )->will(
-            $this->returnValue($pageCount)
+        )->willReturn(
+            $pageCount
         );
 
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {

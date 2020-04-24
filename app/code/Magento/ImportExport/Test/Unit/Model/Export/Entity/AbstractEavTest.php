@@ -46,8 +46,8 @@ class AbstractEavTest extends TestCase
             $this->once()
         )->method(
             '_getExportAttributeCodes'
-        )->will(
-            $this->returnValue($this->_expectedAttributes)
+        )->willReturn(
+            $this->_expectedAttributes
         );
     }
 
@@ -91,8 +91,7 @@ class AbstractEavTest extends TestCase
             '',
             false,
             false,
-            false,
-            ['__wakeup']
+            false
         );
         $testAttribute->setAttributeCode($testAttributeCode);
 
@@ -100,16 +99,16 @@ class AbstractEavTest extends TestCase
             $this->any()
         )->method(
             'getAttributeCollection'
-        )->will(
-            $this->returnValue([$testAttribute])
+        )->willReturn(
+            [$testAttribute]
         );
 
         $this->_model->expects(
             $this->any()
         )->method(
             'getAttributeOptions'
-        )->will(
-            $this->returnValue($testAttributeOptions)
+        )->willReturn(
+            $testAttributeOptions
         );
 
         /** @var AbstractModel|MockObject $item */
@@ -122,7 +121,7 @@ class AbstractEavTest extends TestCase
             true,
             ['getData', '__wakeup']
         );
-        $item->expects($this->any())->method('getData')->will($this->returnValue($testAttributeValue));
+        $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
         $method->setAccessible(true);

@@ -202,7 +202,8 @@ class ImportTest extends AbstractImportTestCase
             ->getMock();
         $this->_behaviorFactory = $this->getMockBuilder(
             \Magento\ImportExport\Model\Source\Import\Behavior\Factory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -274,26 +275,26 @@ class ImportTest extends AbstractImportTestCase
     {
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
-                        ->method('getEntityTypeCode')
-                        ->will($this->returnValue($entityTypeCode));
+            ->method('getEntityTypeCode')
+            ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->once())
-                        ->method('getBehavior')
-                        ->will($this->returnValue($behaviour));
+            ->method('getBehavior')
+            ->willReturn($behaviour);
         $this->import->expects($this->any())
-                    ->method('getDataSourceModel')
-                    ->will($this->returnValue($this->_importData));
+            ->method('getDataSourceModel')
+            ->willReturn($this->_importData);
 
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
         );
         $this->_entityAdapter->expects($this->any())
-                    ->method('importData')
-                    ->will($this->returnValue(true));
+            ->method('importData')
+            ->willReturn(true);
         $this->import->expects($this->any())
-                    ->method('_getEntityAdapter')
-                    ->will($this->returnValue($this->_entityAdapter));
+            ->method('_getEntityAdapter')
+            ->willReturn($this->_entityAdapter);
         $this->_importConfig
             ->expects($this->any())
             ->method('getEntities')
@@ -309,7 +310,7 @@ class ImportTest extends AbstractImportTestCase
         ];
 
         foreach ($importOnceMethodsReturnNull as $method) {
-            $this->import->expects($this->once())->method($method)->will($this->returnValue(null));
+            $this->import->expects($this->once())->method($method)->willReturn(null);
         }
 
         $this->assertEquals(true, $this->import->importSource());
@@ -327,14 +328,14 @@ class ImportTest extends AbstractImportTestCase
         $entityTypeCode = 'code';
         $this->_importData->expects($this->any())
             ->method('getEntityTypeCode')
-            ->will($this->returnValue($entityTypeCode));
+            ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
         $this->_importData->expects($this->any())
             ->method('getBehavior')
-            ->will($this->returnValue($behaviour));
+            ->willReturn($behaviour);
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
-            ->will($this->returnValue($this->_importData));
+            ->willReturn($this->_importData);
         $this->import->expects($this->any())->method('setData')->withConsecutive(
             ['entity', $entityTypeCode],
             ['behavior', $behaviour]
@@ -342,10 +343,10 @@ class ImportTest extends AbstractImportTestCase
 
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
-            ->will($this->throwException($exceptionMock));
+            ->willThrowException($exceptionMock);
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
-            ->will($this->returnValue($this->_entityAdapter));
+            ->willReturn($this->_entityAdapter);
 
         $this->import->importSource();
     }
@@ -366,7 +367,8 @@ class ImportTest extends AbstractImportTestCase
         /** @var AbstractAttribute $attribute */
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getFrontendInput', 'usesSource'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
         $this->assertEquals('boolean', $this->import->getAttributeType($attribute));
@@ -500,9 +502,9 @@ class ImportTest extends AbstractImportTestCase
         $this->assertTrue($this->import->validateSource($csvMock));
 
         $logTrace = $this->import->getFormatedLogTrace();
-        $this->assertContains('Begin data validation', $logTrace);
-        $this->assertContains('This file does not contain any data', $logTrace);
-        $this->assertContains('Import data validation is complete', $logTrace);
+        $this->assertStringContainsString('Begin data validation', $logTrace);
+        $this->assertStringContainsString('This file does not contain any data', $logTrace);
+        $this->assertStringContainsString('Import data validation is complete', $logTrace);
     }
 
     public function testInvalidateIndex()

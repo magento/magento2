@@ -44,10 +44,11 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resultPage = $this->createPartialMock(
-            Page::class,
-            ['setActiveMenu', 'getConfig', 'getTitle', 'prepend', 'addBreadcrumb']
-        );
+        $this->resultPage = $this->getMockBuilder(Page::class)
+            ->addMethods(['getTitle', 'prepend'])
+            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultPage->expects($this->any())->method('getConfig')->willReturnSelf();
         $this->resultPage->expects($this->any())->method('getTitle')->willReturnSelf();
         $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);

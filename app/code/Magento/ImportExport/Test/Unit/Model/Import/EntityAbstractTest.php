@@ -181,14 +181,14 @@ class EntityAbstractTest extends AbstractImportTestCase
         $property->setValue($this->_model, $skippedRows);
 
         $modelForValidateRow = clone $this->_model;
-        $modelForValidateRow->expects($this->any())->method('validateRow')->will($this->returnValue(false));
+        $modelForValidateRow->expects($this->any())->method('validateRow')->willReturn(false);
 
         for ($i = 1; $i <= $rows; $i++) {
             $this->assertFalse($modelForValidateRow->isRowAllowedToImport([], $i));
         }
 
         $modelForIsAllowed = clone $this->_model;
-        $modelForIsAllowed->expects($this->any())->method('validateRow')->will($this->returnValue(true));
+        $modelForIsAllowed->expects($this->any())->method('validateRow')->willReturn(true);
 
         for ($i = 1; $i <= $rows; $i++) {
             $expected = true;
@@ -585,7 +585,7 @@ class EntityAbstractTest extends AbstractImportTestCase
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;

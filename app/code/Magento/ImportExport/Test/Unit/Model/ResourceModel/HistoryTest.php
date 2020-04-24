@@ -43,12 +43,12 @@ class HistoryTest extends TestCase
             Select::class,
             ['from', 'order', 'where', 'limit']
         );
-        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('where')->will($this->returnSelf());
-        $selectMock->expects($this->any())->method('limit')->will($this->returnSelf());
-        $dbAdapterMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $dbAdapterMock->expects($this->any())->method('fetchOne')->will($this->returnValue('result'));
+        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('order')->willReturnSelf();
+        $selectMock->expects($this->any())->method('where')->willReturnSelf();
+        $selectMock->expects($this->any())->method('limit')->willReturnSelf();
+        $dbAdapterMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $dbAdapterMock->expects($this->any())->method('fetchOne')->willReturn('result');
         $this->historyResourceModel->expects($this->any())->method('getConnection')->willReturn($dbAdapterMock);
         $this->historyResourceModel->expects($this->any())->method('getMainTable')->willReturn('mainTable');
         $this->historyResourceModel->expects($this->any())->method('getIdFieldName')->willReturn('id');

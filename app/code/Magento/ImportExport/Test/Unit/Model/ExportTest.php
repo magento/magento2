@@ -65,8 +65,8 @@ class ExportTest extends TestCase
             $this->any()
         )->method(
             'getFileExtension'
-        )->will(
-            $this->returnValue($this->_exportFileExtension)
+        )->willReturn(
+            $this->_exportFileExtension
         );
 
         $logger = $this->createMock(LoggerInterface::class);

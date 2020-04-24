@@ -172,7 +172,7 @@ class FilterTest extends TestCase
         $this->dataObjectProcessor = $this->createMock(DataObjectProcessor::class);
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->localeDate = $this->createMock(Timezone::class);
-        $this->localeDate->expects($this->any())->method('getDateFormat')->will($this->returnValue('12-12-2012'));
+        $this->localeDate->expects($this->any())->method('getDateFormat')->willReturn('12-12-2012');
         $this->reservedAttributeList = $this->createMock(ReservedAttributeList::class);
         $this->localeResolver = $this->createMock(Resolver::class);
         $this->resource = $this->createMock(Product::class);
@@ -182,29 +182,30 @@ class FilterTest extends TestCase
             '',
             false
         );
-        $this->context = $this->createPartialMock(
-            \Magento\Backend\Block\Template\Context::class,
-            ['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout']
-        );
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+            ->onlyMethods(['getFileSystem', 'getEscaper', 'getLocaleDate', 'getLayout'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $filesystem = $this->createMock(Filesystem::class);
-        $this->context->expects($this->any())->method('getFileSystem')->will($this->returnValue($filesystem));
+        $this->context->expects($this->any())->method('getFileSystem')->willReturn($filesystem);
         $escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
-        $escaper->expects($this->any())->method('escapeHtml')->will($this->returnValue(''));
-        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($escaper));
+        $escaper->expects($this->any())->method('escapeHtml')->willReturn('');
+        $this->context->expects($this->any())->method('getEscaper')->willReturn($escaper);
         $timeZone = $this->createMock(Timezone::class);
-        $timeZone->expects($this->any())->method('getDateFormat')->will($this->returnValue('M/d/yy'));
-        $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timeZone));
-        $dateBlock = $this->createPartialMock(
-            Date::class,
-            ['setValue', 'getHtml', 'setId', 'getId']
-        );
-        $dateBlock->expects($this->any())->method('setValue')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getHtml')->will($this->returnValue(''));
-        $dateBlock->expects($this->any())->method('setId')->will($this->returnSelf());
-        $dateBlock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $timeZone->expects($this->any())->method('getDateFormat')->willReturn('M/d/yy');
+        $this->context->expects($this->any())->method('getLocaleDate')->willReturn($timeZone);
+        $dateBlock = $this->getMockBuilder(Date::class)
+            ->addMethods(['setValue', 'setId', 'getId'])
+            ->onlyMethods(['getHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateBlock->expects($this->any())->method('setValue')->willReturnSelf();
+        $dateBlock->expects($this->any())->method('getHtml')->willReturn('');
+        $dateBlock->expects($this->any())->method('setId')->willReturnSelf();
+        $dateBlock->expects($this->any())->method('getId')->willReturn(1);
         $layout = $this->createMock(Layout::class);
-        $layout->expects($this->any())->method('createBlock')->will($this->returnValue($dateBlock));
-        $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
+        $layout->expects($this->any())->method('createBlock')->willReturn($dateBlock);
+        $this->context->expects($this->any())->method('getLayout')->willReturn($layout);
         $this->backendHelper = $this->createMock(Data::class);
         $this->importExportData = $this->createMock(\Magento\ImportExport\Helper\Data::class);
         $this->dateTimeFormatter = $this->createMock(

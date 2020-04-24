@@ -13,15 +13,15 @@ return [
             'behaviorModel' => 'Model_Basic',
             'model' => 'Model\One',
             'types' => [
-                    'product_type_one' => [
-                        'name' => 'product_type_one',
-                        'model' => 'Product\Type\One',
-                    ],
-                    'type_two' => [
-                        'name' => 'type_two',
-                        'model' => 'Product\Type\Two',
-                    ],
+                'product_type_one' => [
+                    'name' => 'product_type_one',
+                    'model' => 'Product\Type\One',
                 ],
+                'type_two' => [
+                    'name' => 'type_two',
+                    'model' => 'Product\Type\Two',
+                ],
+            ],
             'relatedIndexers' => [
                 'simple_index' => [
                     'name' => 'simple_index',

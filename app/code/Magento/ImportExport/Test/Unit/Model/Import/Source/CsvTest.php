@@ -86,12 +86,10 @@ class CsvTest extends TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
-                new Read(
-                    __DIR__ . '/_files/test.csv',
-                    new File()
-                )
+        )->willReturn(
+            new Read(
+                __DIR__ . '/_files/test.csv',
+                new File()
             )
         );
         $model = new Csv(
@@ -123,12 +121,10 @@ class CsvTest extends TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
-                new Read(
-                    __DIR__ . '/_files/test.csv',
-                    new File()
-                )
+        )->willReturn(
+            new Read(
+                __DIR__ . '/_files/test.csv',
+                new File()
             )
         );
         $model = new Csv(

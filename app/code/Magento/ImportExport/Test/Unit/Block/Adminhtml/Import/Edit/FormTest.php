@@ -61,7 +61,8 @@ class FormTest extends TestCase
             ->getMock();
         $this->_behaviorFactory = $this->getMockBuilder(
             Factory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->form = $this->getMockBuilder(Form::class)
             ->setConstructorArgs([
