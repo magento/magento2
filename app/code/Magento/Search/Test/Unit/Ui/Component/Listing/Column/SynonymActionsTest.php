@@ -112,7 +112,6 @@ class SynonymActionsTest extends TestCase
                                         self::STUB_SYNONYM_GROUP_ID
                                     )
                                 ],
-                                '__disableTmpl' => true,
                                 'post' => true
                             ],
                             'edit' => [
@@ -121,7 +120,6 @@ class SynonymActionsTest extends TestCase
                                     self::STUB_SYNONYM_GROUP_ID
                                 ),
                                 'label' => (string)__('View/Edit'),
-                                '__disableTmpl' => true
                             ]
                         ]
                     ]
