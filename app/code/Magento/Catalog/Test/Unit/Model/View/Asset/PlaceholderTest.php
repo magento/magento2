@@ -3,35 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\View\Asset\Placeholder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\MergeableInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PlaceholderTest
- */
-class PlaceholderTest extends \PHPUnit\Framework\TestCase
+class PlaceholderTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\View\Asset\Placeholder
+     * @var Placeholder
      */
     protected $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     protected $repository;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $imageContext;
 
@@ -88,13 +91,13 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(
                 "catalog/placeholder/{$imageType}_placeholder",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 null
             )->willReturn($placeholderPath);
 
         if ($placeholderPath == null) {
             $this->imageContext->expects($this->never())->method('getPath');
-            $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\MergeableInterface::class)
+            $assetMock = $this->getMockBuilder(MergeableInterface::class)
                 ->getMockForAbstractClass();
             $expectedResult = 'path/to_default/placeholder/by_type';
             $assetMock->expects($this->any())->method('getSourceFile')->willReturn($expectedResult);
@@ -128,7 +131,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(
                 "catalog/placeholder/{$imageType}_placeholder",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 null
             )->willReturn($placeholderPath);
 

@@ -3,31 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+class StatusTest extends TestCase
 {
-    /** @var \Magento\Catalog\Model\Product\Attribute\Source\Status */
+    /** @var Status */
     protected $status;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AbstractCollection|MockObject */
     protected $collection;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AbstractAttribute|MockObject */
     protected $attributeModel;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AbstractBackend|MockObject */
     protected $backendAttributeModel;
 
     /**
-     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractEntity|MockObject
      */
     protected $entity;
 
@@ -35,7 +45,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collection = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            Collection::class,
             [
                 '__wakeup',
                 'getSelect',
@@ -47,7 +57,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->attributeModel = $this->createPartialMock(
-            \Magento\Catalog\Model\Entity\Attribute::class,
+            Attribute::class,
             [
                 '__wakeup',
                 'getAttributeCode',
@@ -59,27 +69,27 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->backendAttributeModel = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Sku::class,
+            Sku::class,
             ['__wakeup', 'getTable']
         );
         $this->status = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::class
+            Status::class
         );
 
         $this->attributeModel->expects($this->any())->method('getAttribute')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->attributeModel->expects($this->any())->method('getAttributeCode')
-            ->willReturn('attribute_code');
+            ->will($this->returnValue('attribute_code'));
         $this->attributeModel->expects($this->any())->method('getId')
-            ->willReturn('1');
+            ->will($this->returnValue('1'));
         $this->attributeModel->expects($this->any())->method('getBackend')
-            ->willReturn($this->backendAttributeModel);
+            ->will($this->returnValue($this->backendAttributeModel));
         $this->collection->expects($this->any())->method('getSelect')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->collection->expects($this->any())->method('joinLeft')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->backendAttributeModel->expects($this->any())->method('getTable')
-            ->willReturn('table_name');
+            ->will($this->returnValue('table_name'));
 
         $this->entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
@@ -90,9 +100,9 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testAddValueSortToCollectionGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->attributeModel->expects($this->once())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
@@ -104,16 +114,16 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testAddValueSortToCollectionNotGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $this->collection->expects($this->once())->method('order')->with('check_sql asc')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->collection->expects($this->once())->method('getStoreId')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $this->collection->expects($this->any())->method('getConnection')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->collection->expects($this->any())->method('getCheckSql')
-            ->willReturn('check_sql');
+            ->will($this->returnValue('check_sql'));
 
         $this->attributeModel->expects($this->any())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');

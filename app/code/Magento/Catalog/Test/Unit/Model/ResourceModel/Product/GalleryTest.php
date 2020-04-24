@@ -3,35 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for product media gallery resource.
  */
-class GalleryTest extends \PHPUnit\Framework\TestCase
+class GalleryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery | \PHPUnit\Framework\MockObject\MockObject
+     * @var Gallery|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute | \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAttribute|MockObject
      */
     protected $attribute;
 
@@ -50,13 +66,13 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->connection = $this->createMock(Mysql::class);
         $this->connection->expects($this->any())
             ->method('setCacheAdapter');
 
-        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadata = $this->createMock(EntityMetadata::class);
         $metadata->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
@@ -64,24 +80,24 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityConnection')
             ->willReturn($this->connection);
 
-        $metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $metadataPool = $this->createMock(MetadataPool::class);
         $metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($metadata);
 
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->resource = $objectManager->getObject(
-            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
+            Gallery::class,
             [
                 'metadataPool' => $metadataPool,
                 'resource' => $resource
             ]
         );
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
-        $this->attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $this->product = $this->createMock(Product::class);
+        $this->select = $this->createMock(Select::class);
+        $this->attribute = $this->createMock(AbstractAttribute::class);
     }
 
     public function testLoadDataFromTableByValueId()
@@ -114,7 +130,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         ];
         $whereCondition = null;
         $getTableReturnValue = 'table';
-        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -205,7 +221,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $whereCondition = 'main.store_id = ' . $storeId;
         $getTableReturnValue = 'table';
 
-        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -315,8 +331,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'value.position IS NULL',
             'default_value.position',
             'value.position'
-        )->willReturn($positionCheckSql);
-        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        )->will($this->returnValue($positionCheckSql));
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -334,7 +350,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getData')
             ->with('entity_id')->willReturn($productId);
-        $this->product->expects($this->at(1))->method('getStoreId')->willReturn($storeId);
+        $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
         $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
             ['value.store_id = ?'],
             ['default_value.store_id = ?']
@@ -342,8 +358,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             'value.store_id = ' . $storeId,
             'default_value.store_id = ' . 0
         );
-        $this->connection->expects($this->any())->method('getIfNullSql')->willReturnMap(
-            [
+        $this->connection->expects($this->any())->method('getIfNullSql')->will(
+            $this->returnValueMap([
                 [
                     '`value`.`label`',
                     '`default_value`.`label`',
@@ -359,7 +375,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '`default_value`.`disabled`',
                     'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
                 ]
-            ]
+            ])
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -389,7 +405,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')
-                     ->with($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC)
+                     ->with($positionCheckSql . ' ' . Select::SQL_ASC)
                      ->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchAll')
                          ->with($this->select)
@@ -460,7 +476,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => 'table',

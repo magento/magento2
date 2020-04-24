@@ -3,12 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\GroupPrice;
+
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTest extends \PHPUnit\Framework\TestCase
+class AbstractTest extends TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
@@ -18,24 +34,24 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Catalog helper
      *
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_helper;
 
     protected function setUp(): void
     {
-        $this->_helper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['isPriceGlobal']);
-        $this->_helper->expects($this->any())->method('isPriceGlobal')->willReturn(true);
+        $this->_helper = $this->createPartialMock(Data::class, ['isPriceGlobal']);
+        $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
 
-        $currencyFactoryMock = $this->createPartialMock(\Magento\Directory\Model\CurrencyFactory::class, ['create']);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
-        $groupManagement = $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
-        $scopeOverriddenValue = $this->createMock(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
+        $currencyFactoryMock = $this->createPartialMock(CurrencyFactory::class, ['create']);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $productTypeMock = $this->createMock(Type::class);
+        $configMock = $this->createMock(ScopeConfigInterface::class);
+        $localeFormatMock = $this->createMock(FormatInterface::class);
+        $groupManagement = $this->createMock(GroupManagementInterface::class);
+        $scopeOverriddenValue = $this->createMock(ScopeOverriddenValue::class);
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice::class,
+            AbstractGroupPrice::class,
             [
                 'currencyFactory' => $currencyFactoryMock,
                 'storeManager' => $storeManagerMock,
@@ -48,9 +64,9 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $resource = $this->createPartialMock(\stdClass::class, ['getMainTable']);
-        $resource->expects($this->any())->method('getMainTable')->willReturn('table');
+        $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
 
-        $this->_model->expects($this->any())->method('_getResource')->willReturn($resource);
+        $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));
     }
 
     public function testGetAffectedFields()
@@ -59,16 +75,16 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $attributeId = 42;
 
         $attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup']
         );
-        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
-        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
-        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
-        $attribute->expects($this->any())->method('getName')->willReturn('tier_price');
+        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
+        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tier_price'));
         $this->_model->setAttribute($attribute);
 
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         $object->setTierPrice([['price_id' => 10]]);
         $object->setId(555);
 

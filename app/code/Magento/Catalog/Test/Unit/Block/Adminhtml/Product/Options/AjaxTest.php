@@ -3,32 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Options;
 
+use Magento\Backend\Block\Context;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option;
+use Magento\Catalog\Block\Adminhtml\Product\Options\Ajax;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AjaxTest extends \PHPUnit\Framework\TestCase
+class AjaxTest extends TestCase
 {
-    /** @var \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax */
+    /** @var Ajax */
     protected $block;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EncoderInterface|MockObject */
     protected $encoderInterface;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     protected $productFactory;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Registry|MockObject */
     protected $registry;
 
     /**
@@ -36,13 +50,13 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getEventManager', 'getScopeConfig', 'getLayout', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encoderInterface = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->encoderInterface = $this->createMock(EncoderInterface::class);
+        $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->registry = $this->createMock(Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -52,63 +66,63 @@ class AjaxTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml()
     {
-        $eventManager = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
+        $eventManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $eventManager->expects($this->exactly(2))->method('dispatch')->willReturn(true);
+        $eventManager->expects($this->exactly(2))->method('dispatch')->will($this->returnValue(true));
 
-        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $scopeConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()->getMock();
         $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
+        $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'load', 'getId', '__wakeup', '__sleep'])
             ->getMock();
-        $product->expects($this->once())->method('setStoreId')->willReturnSelf();
-        $product->expects($this->once())->method('load')->willReturnSelf();
-        $product->expects($this->once())->method('getId')->willReturn(1);
+        $product->expects($this->once())->method('setStoreId')->will($this->returnSelf());
+        $product->expects($this->once())->method('load')->will($this->returnSelf());
+        $product->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $optionsBlock = $this->getMockBuilder(\Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class)
+        $optionsBlock = $this->getMockBuilder(Option::class)
             ->setMethods(['setIgnoreCaching', 'setProduct', 'getOptionValues'])
             ->disableOriginalConstructor()
             ->getMock();
-        $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->willReturnSelf();
-        $optionsBlock->expects($this->once())->method('setProduct')->with($product)->willReturnSelf();
-        $optionsBlock->expects($this->once())->method('getOptionValues')->willReturn([]);
+        $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->will($this->returnSelf());
+        $optionsBlock->expects($this->once())->method('setProduct')->with($product)->will($this->returnSelf());
+        $optionsBlock->expects($this->once())->method('getOptionValues')->will($this->returnValue([]));
 
-        $layout = $this->getMockBuilder(\Magento\Framework\View\Layout\Element\Layout::class)
+        $layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['createBlock'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $layout->expects($this->once())->method('createBlock')
-            ->with(\Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class)
-            ->willReturn($optionsBlock);
+            ->with(Option::class)
+            ->will($this->returnValue($optionsBlock));
 
-        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $request = $this->getMockBuilder(Http::class)
             ->setMethods(['getParam'])
             ->disableOriginalConstructor()
             ->getMock();
         $request->expects($this->once())->method('getParam')->with('store')
-            ->willReturn(0);
+            ->will($this->returnValue(0));
 
         $this->context->expects($this->once())->method('getEventManager')
-            ->willReturn($eventManager);
+            ->will($this->returnValue($eventManager));
         $this->context->expects($this->once())->method('getScopeConfig')
-            ->willReturn($scopeConfig);
+            ->will($this->returnValue($scopeConfig));
         $this->context->expects($this->once())->method('getLayout')
-            ->willReturn($layout);
+            ->will($this->returnValue($layout));
         $this->context->expects($this->once())->method('getRequest')
-            ->willReturn($request);
+            ->will($this->returnValue($request));
         $this->registry->expects($this->once())->method('registry')
             ->with('import_option_products')
-            ->willReturn([1]);
-        $this->productFactory->expects($this->once())->method('create')->willReturn($product);
+            ->will($this->returnValue([1]));
+        $this->productFactory->expects($this->once())->method('create')->will($this->returnValue($product));
 
         $this->block = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax::class,
+            Ajax::class,
             [
                 'context' => $this->context,
                 'jsonEncoder' => $this->encoderInterface,

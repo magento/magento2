@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Helper;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
     protected $_productHelper;
 
@@ -21,8 +27,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_productHelper = $objectManager->getObject(\Magento\Catalog\Helper\Product::class, $arguments);
+        $objectManager = new ObjectManager($this);
+        $this->_productHelper = $objectManager->getObject(Product::class, $arguments);
     }
 
     /**

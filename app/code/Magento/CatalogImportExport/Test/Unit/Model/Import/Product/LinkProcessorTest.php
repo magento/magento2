@@ -1,14 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Link;
-use Magento\Catalog\Model\ResourceModel\Product\LinkFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
@@ -57,7 +55,7 @@ class LinkProcessorTest extends TestCase
     protected $resource;
 
     /**
-     * @var LinkFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkFactory
      */
     protected $linkFactory;
 
@@ -82,7 +80,7 @@ class LinkProcessorTest extends TestCase
         $this->resource->method('getMainTable')->willReturn('main_link_table');
 
         $this->linkFactory = $this->createPartialMock(
-            LinkFactory::class,
+            \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
             ['create']
         );
         $this->linkFactory->method('create')->willReturn($this->resource);

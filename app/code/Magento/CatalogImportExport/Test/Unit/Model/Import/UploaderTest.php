@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Uploader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\Http;
 use Magento\Framework\Filesystem\Driver\Https;
 use Magento\Framework\Filesystem\DriverPool;
@@ -59,7 +58,7 @@ class UploaderTest extends TestCase
     protected $readFactory;
 
     /**
-     * @var Write|MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Writer|MockObject
      */
     protected $directoryMock;
 
@@ -89,15 +88,14 @@ class UploaderTest extends TestCase
 
         $this->validator = $this->getMockBuilder(
             NotProtectedExtension::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->readFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->directoryMock = $this->getMockBuilder(Write::class)
+        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Writer::class)
             ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,8 +105,8 @@ class UploaderTest extends TestCase
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
         $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->directoryMock);
+                        ->method('getDirectoryWrite')
+                        ->will($this->returnValue($this->directoryMock));
 
         $this->random = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
@@ -168,13 +166,13 @@ class UploaderTest extends TestCase
         // Expected invocations to create reader and read contents from url
         $this->readFactory->expects($this->once())->method('create')
             ->with($expectedHost)
-            ->willReturn($readMock);
+            ->will($this->returnValue($readMock));
         $readMock->expects($this->once())->method('readAll')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
 
         // Expected invocation to write the temp file
         $this->directoryMock->expects($this->any())->method('writeFile')
-            ->willReturn($expectedFileName);
+            ->will($this->returnValue($expectedFileName));
 
         // Expected invocations save the downloaded file to temp file
         // and move the temp file to the destination directory
@@ -208,8 +206,8 @@ class UploaderTest extends TestCase
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
             ->willReturn($destDir . '/' . $fileName);
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
-        $this->uploader->expects($this->once())->method('getTmpDir')->willReturn('');
-        $this->uploader->expects($this->once())->method('_setUploadFile')->willReturnSelf();
+        $this->uploader->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
+        $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
             ->willReturn(['name' => $fileName]);
 
@@ -223,11 +221,7 @@ class UploaderTest extends TestCase
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMockBuilder($expectedDriverPool)
-            ->disableOriginalConstructor()
-            ->addMethods(['readAll'])
-            ->onlyMethods(['isExists'])
-            ->getMock();
+        $driverMock = $this->createPartialMock($expectedDriverPool, ['readAll', 'isExists']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverMock->expects($this->any())->method('readAll')->willReturn(null);
         $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);

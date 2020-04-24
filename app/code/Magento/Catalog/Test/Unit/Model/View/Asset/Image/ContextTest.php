@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\View\Asset\Image;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
@@ -10,11 +12,10 @@ use Magento\Catalog\Model\View\Asset\Image\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ContextTest
- */
-class ContextTest extends \PHPUnit\Framework\TestCase
+class ContextTest extends TestCase
 {
     /**
      * @var Context
@@ -22,17 +23,17 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriteInterface|MockObject
      */
     protected $mediaDirectory;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 

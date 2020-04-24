@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
@@ -15,14 +16,15 @@ use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Catalog\Model\CategoryLinkRepository
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
+class CategoryLinkRepositoryTest extends TestCase
 {
     /**
      * @var CategoryLinkRepository
@@ -58,9 +60,9 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getProductsIdsBySkus'])
             ->getMock();
-        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
-        $this->productLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productLinkMock = $this->createMock(CategoryProductLinkInterface::class);
         $this->model = new CategoryLinkRepository(
             $this->categoryRepositoryMock,
             $this->productRepositoryMock,

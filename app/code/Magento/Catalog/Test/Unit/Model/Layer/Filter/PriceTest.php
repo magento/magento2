@@ -3,24 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory;
+use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
+use Magento\Catalog\Model\Layer\Filter\Dynamic\Auto;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\Price
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     private $itemDataBuilder;
 
     private $resource;
 
-    /** @var \Magento\Catalog\Model\Layer\Filter\Dynamic\Auto|MockObject */
+    /** @var Auto|MockObject */
     private $algorithm;
 
     /**
@@ -29,12 +43,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $price;
 
     /**
-     * @var \Magento\Catalog\Model\Layer|MockObject
+     * @var Layer|MockObject
      */
     private $layer;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price|MockObject
+     * @var Price|MockObject
      */
     private $dataProvider;
 
@@ -43,13 +57,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    /** @var \Magento\Framework\App\RequestInterface|MockObject */
+    /** @var RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
+    /** @var  ItemFactory|MockObject */
     private $filterItemFactory;
 
-    /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
+    /** @var  State|MockObject */
     private $state;
 
     /**
@@ -57,19 +71,19 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $dataProviderFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory::class
+            PriceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->dataProvider = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\DataProvider\Price::class)
+        $this->dataProvider = $this->getMockBuilder(Price::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPriceId', 'getPrice', 'getResource'])
             ->getMock();
@@ -79,75 +93,75 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dataProvider->expects($this->any())
             ->method('getResource')
-            ->willReturn($this->resource);
+            ->will($this->returnValue($this->resource));
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->dataProvider);
+            ->will($this->returnValue($this->dataProvider));
 
-        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
+        $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->willReturn($this->state);
+            ->will($this->returnValue($this->state));
 
-        $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
+        $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItemData', 'build'])
             ->getMock();
 
         $this->filterItemFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\ItemFactory::class
+            ItemFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $filterItem = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\Item::class
+            Item::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->willReturn($filterItem);
+            ->will($this->returnValue($filterItem));
 
-        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->setMethods(['escapeHtml'])
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
-        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+        $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
             ->getMock();
-        $algorithmFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::class)
+        $algorithmFactory = $this->getMockBuilder(AlgorithmFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->algorithm = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Dynamic\Auto::class)
+        $this->algorithm = $this->getMockBuilder(Auto::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItemsData'])
             ->getMock();
 
         $algorithmFactory->expects($this->any())
             ->method('create')
-            ->willReturn($this->algorithm);
+            ->will($this->returnValue($this->algorithm));
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -179,8 +193,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with($requestField)
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                         switch ($field) {
                             case $requestField:
@@ -189,7 +203,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
                                 return $idValue;
                         }
                     }
-                
+                )
             );
 
         $result = $this->target->apply($this->request);
@@ -217,7 +231,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
+    /** @var  Attribute|MockObject */
     private $attribute;
 
     public function testApply()
@@ -228,13 +242,13 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($field) use ($requestVar, $priceId) {
                         $this->assertTrue(in_array($field, [$requestVar, 'id']));
                         return $priceId;
                     }
-                
+                )
             );
 
         $this->target->apply($this->request);
@@ -246,10 +260,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'attributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->willReturn($attributeCode);
+            ->will($this->returnValue($attributeCode));
         $this->algorithm->expects($this->any())
             ->method('getItemsData')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $this->target->getItems();
     }
 }

@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat;
 
-class StateTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StateTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var State
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerInterface|MockObject
      */
     protected $flatIndexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         );
 
         $this->flatIndexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -44,7 +53,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
     }
@@ -57,15 +66,15 @@ class StateTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->willReturn(
-            true
+        )->will(
+            $this->returnValue(true)
         );
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
+        $this->model = new State(
             $this->scopeConfigMock,
             $this->indexerRegistryMock
         );
-        $this->assertTrue($this->model->isFlatEnabled());
+        $this->assertEquals(true, $this->model->isFlatEnabled());
     }
 
     /**
@@ -78,11 +87,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     public function testIsAvailable($isAvailable, $isFlatEnabled, $isValid, $result)
     {
         $this->flatIndexerMock->expects($this->any())->method('load')->with('catalog_category_flat');
-        $this->flatIndexerMock->expects($this->any())->method('isValid')->willReturn($isValid);
+        $this->flatIndexerMock->expects($this->any())->method('isValid')->will($this->returnValue($isValid));
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
-            ->willReturn($this->flatIndexerMock);
+            ->with(State::INDEXER_ID)
+            ->will($this->returnValue($this->flatIndexerMock));
 
         $this->scopeConfigMock->expects(
             $this->any()
@@ -90,11 +99,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->willReturn(
-            $isFlatEnabled
+        )->will(
+            $this->returnValue($isFlatEnabled)
         );
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
+        $this->model = new State(
             $this->scopeConfigMock,
             $this->indexerRegistryMock,
             $isAvailable

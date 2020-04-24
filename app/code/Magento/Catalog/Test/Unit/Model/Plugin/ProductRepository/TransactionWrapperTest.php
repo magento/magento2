@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Plugin\ProductRepository;
 
-class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper;
+use Magento\Catalog\Model\ResourceModel\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TransactionWrapperTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper
+     * @var TransactionWrapper
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product
+     * @var MockObject|Product
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Api\ProductRepositoryInterface
+     * @var MockObject|ProductRepositoryInterface
      */
     protected $subjectMock;
 
@@ -33,7 +42,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $rollbackClosureMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
@@ -46,9 +55,9 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->resourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->resourceMock = $this->createMock(Product::class);
+        $this->subjectMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $productMock = $this->productMock;
         $this->closureMock = function () use ($productMock) {
             return $productMock;
@@ -57,7 +66,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
             throw new \Exception(self::ERROR_MSG);
         };
 
-        $this->model = new \Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper($this->resourceMock);
+        $this->model = new TransactionWrapper($this->resourceMock);
     }
 
     public function testAroundSaveCommit()
@@ -71,13 +80,10 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testAroundSaveRollBack()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('error occurred');
-
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
@@ -95,13 +101,10 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testAroundDeleteRollBack()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('error occurred');
-
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
@@ -124,13 +127,10 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testAroundDeleteByIdRollBack()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('error occurred');
-
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 

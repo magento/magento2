@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
+use Magento\Catalog\Model\Product\Attribute\Group;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Group
+     * @var Group
      */
     private $model;
 
@@ -25,7 +31,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Group::class,
+            Group::class,
             [
                 'attributeCollectionFactory' => $this->getMockedCollectionFactory()
             ]
@@ -33,14 +39,14 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @return CollectionFactory
      */
     private function getMockedCollectionFactory()
     {
         $mockedCollection = $this->getMockedCollection();
 
         $mockBuilder = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
+            CollectionFactory::class
         );
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -54,11 +60,11 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @return Collection
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
+        $mockBuilder = $this->getMockBuilder(Collection::class);
         $mock = $mockBuilder->disableOriginalConstructor()
             ->getMock();
 

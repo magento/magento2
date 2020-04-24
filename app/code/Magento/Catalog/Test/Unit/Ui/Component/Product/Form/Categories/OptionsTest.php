@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\Component\Product\Form\Categories;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Ui\Component\Product\Form\Categories\Options as CategoriesOptions;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\Catalog\Model\Category;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OptionsTest extends \PHPUnit\Framework\TestCase
+class OptionsTest extends TestCase
 {
     /**
      * @var CategoriesOptions
@@ -24,7 +28,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var CategoryCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryCollectionFactoryMock;
 
@@ -141,7 +145,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $categories
-     * @return CategoryCollection|\PHPUnit\Framework\MockObject\MockObject
+     * @return CategoryCollection|MockObject
      */
     protected function getCategoryCollectionMock($categories)
     {
@@ -168,7 +172,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return Category|\PHPUnit\Framework\MockObject\MockObject
+     * @return Category|MockObject
      */
     protected function getCategoryMock($data)
     {

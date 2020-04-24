@@ -3,37 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use \Magento\Catalog\Model\Product\Option\Repository;
-use \Magento\Catalog\Model\Product\Option\SaveHandler;
+use Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Model\Product\Option\SaveHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SaveHandlerTest extends \PHPUnit\Framework\TestCase
+class SaveHandlerTest extends TestCase
 {
     /**
-     * @var SaveHandler|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaveHandler|MockObject
      */
     protected $model;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $entity;
 
     /**
-     * @var Option|\PHPUnit\Framework\MockObject\MockObject
+     * @var Option|MockObject
      */
     protected $optionMock;
 
     /**
-     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     protected $optionRepository;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
@@ -10,6 +11,7 @@ use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
@@ -21,11 +23,13 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
      * @var Category
@@ -33,67 +37,67 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $category;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var Adapter|\PHPUnit\Framework\MockObject\MockObject
+     * @var Adapter|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var Type|\PHPUnit\Framework\MockObject\MockObject
+     * @var Type|MockObject
      */
     private $entityType;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $managerMock;
 
     /**
-     * @var Category\TreeFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Category\TreeFactory|MockObject
      */
     protected $treeFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     private $indexerProcessorMock;
 
@@ -121,7 +125,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->factoryMock = $this->getMockBuilder(Factory::class)->disableOriginalConstructor()->getMock();
         $this->managerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
-        $this->treeFactoryMock = $this->getMockBuilder(Category\TreeFactory::class)
+        $this->treeFactoryMock = $this->getMockBuilder(TreeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -160,12 +164,12 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->once())->method('fetchCol')->willReturn(['result']);
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($value) {
                         return json_encode($value);
                     }
-                
+                )
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);

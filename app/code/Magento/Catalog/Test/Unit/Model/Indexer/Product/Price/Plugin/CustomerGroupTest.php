@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
@@ -14,11 +16,12 @@ use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CustomerGroup plugin
  */
-class CustomerGroupTest extends \PHPUnit\Framework\TestCase
+class CustomerGroupTest extends TestCase
 {
     /**
      * @var ObjectManager

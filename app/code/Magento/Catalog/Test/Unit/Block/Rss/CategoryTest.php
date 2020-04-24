@@ -3,84 +3,106 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Rss;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Block\Rss\Category;
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Tree;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Config\View;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CategoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Rss\Category
+     * @var Category
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $catalogHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Category|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Rss\Category|MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
+     * @var Image|MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryRepositoryInterface|MockObject
      */
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $viewConfig;
 
     /**
-     * @var \Magento\Framework\Config\View
+     * @var View
      */
     protected $configView;
 
@@ -102,35 +124,35 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->request->expects($this->at(0))->method('getParam')->with('cid')->willReturn(1);
-        $this->request->expects($this->at(1))->method('getParam')->with('store_id')->willReturn(null);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->request->expects($this->at(0))->method('getParam')->with('cid')->will($this->returnValue(1));
+        $this->request->expects($this->at(1))->method('getParam')->with('store_id')->will($this->returnValue(null));
 
-        $this->httpContext = $this->createMock(\Magento\Framework\App\Http\Context::class);
-        $this->catalogHelper = $this->createMock(\Magento\Catalog\Helper\Data::class);
-        $this->categoryFactory = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
+        $this->httpContext = $this->createMock(Context::class);
+        $this->catalogHelper = $this->createMock(Data::class);
+        $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->rssModel = $this->createPartialMock(
             \Magento\Catalog\Model\Rss\Category::class,
             ['getProductCollection']
         );
-        $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
-        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getId']);
-        $this->customerSession->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->imageHelper = $this->createMock(Image::class);
+        $this->customerSession = $this->createPartialMock(Session::class, ['getId']);
+        $this->customerSession->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->getMockBuilder(Store::class)
             ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
-        $store->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
-        $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
+        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->viewConfig = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
-            \Magento\Catalog\Block\Rss\Category::class,
+            Category::class,
             [
                 'request' => $this->request,
                 'scopeConfig' => $this->scopeConfig,
@@ -153,13 +175,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->setMethods(['__sleep', '__wakeup', 'load', 'getId', 'getUrl', 'getName'])
             ->disableOriginalConstructor()->getMock();
-        $category->expects($this->once())->method('getName')->willReturn('Category Name');
+        $category->expects($this->once())->method('getName')->will($this->returnValue('Category Name'));
         $category->expects($this->once())->method('getUrl')
-            ->willReturn('http://magento.com/category-name.html');
+            ->will($this->returnValue('http://magento.com/category-name.html'));
 
-        $this->categoryRepository->expects($this->once())->method('get')->willReturn($category);
+        $this->categoryRepository->expects($this->once())->method('get')->will($this->returnValue($category));
 
-        $configViewMock = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+        $configViewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -167,7 +189,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('getViewConfig')
             ->willReturn($configViewMock);
 
-        $product = $this->getMockBuilder(\Magento\catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->setMethods(
                 [
                     '__sleep',
@@ -179,21 +201,21 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                     'getAllowedPriceInRss'
                 ]
             )->disableOriginalConstructor()->getMock();
-        $product->expects($this->once())->method('getName')->willReturn('Product Name');
-        $product->expects($this->once())->method('getAllowedInRss')->willReturn(true);
+        $product->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
+        $product->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
         $product->expects($this->exactly(2))->method('getProductUrl')
-            ->willReturn('http://magento.com/product.html');
+            ->will($this->returnValue('http://magento.com/product.html'));
         $product->expects($this->once())->method('getDescription')
-            ->willReturn('Product Description');
-        $product->expects($this->once())->method('getAllowedPriceInRss')->willReturn(true);
+            ->will($this->returnValue('Product Description'));
+        $product->expects($this->once())->method('getAllowedPriceInRss')->will($this->returnValue(true));
 
         $this->rssModel->expects($this->once())->method('getProductCollection')
-            ->willReturn([$product]);
+            ->will($this->returnValue([$product]));
         $this->imageHelper->expects($this->once())->method('init')
             ->with($product, 'rss_thumbnail')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->imageHelper->expects($this->once())->method('getUrl')
-            ->willReturn('image_link');
+            ->will($this->returnValue('image_link'));
 
         $data = $this->block->getRssData();
         $this->assertEquals($this->rssFeed['link'], $data['link']);
@@ -221,22 +243,22 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     public function testIsAllowed()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
-        $this->assertTrue($this->block->isAllowed());
+            ->with('rss/catalog/category', ScopeInterface::SCOPE_STORE)
+            ->will($this->returnValue(true));
+        $this->assertEquals(true, $this->block->isAllowed());
     }
 
     public function testGetFeeds()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
+            ->with('rss/catalog/category', ScopeInterface::SCOPE_STORE)
+            ->will($this->returnValue(true));
 
         $category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->setMethods(['__sleep', '__wakeup', 'getTreeModel', 'getResourceCollection', 'getId', 'getName'])
             ->disableOriginalConstructor()->getMock();
 
-        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(
                 [
                     'addIdFilter',
@@ -247,33 +269,33 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                     'getIterator'
                 ]
             )->disableOriginalConstructor()->getMock();
-        $collection->expects($this->once())->method('addIdFilter')->willReturnSelf();
-        $collection->expects($this->exactly(3))->method('addAttributeToSelect')->willReturnSelf();
-        $collection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
-        $collection->expects($this->once())->method('addAttributeToFilter')->willReturnSelf();
-        $collection->expects($this->once())->method('load')->willReturnSelf();
+        $collection->expects($this->once())->method('addIdFilter')->will($this->returnSelf());
+        $collection->expects($this->exactly(3))->method('addAttributeToSelect')->will($this->returnSelf());
+        $collection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
+        $collection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
+        $collection->expects($this->once())->method('load')->will($this->returnSelf());
         $collection->expects($this->once())->method('getIterator')
-                   ->willReturn(new \ArrayIterator([$category]));
-        $category->expects($this->once())->method('getId')->willReturn(1);
-        $category->expects($this->once())->method('getName')->willReturn('Category Name');
-        $category->expects($this->once())->method('getResourceCollection')->willReturn($collection);
-        $this->categoryFactory->expects($this->once())->method('create')->willReturn($category);
+                   ->will($this->returnValue(new \ArrayIterator([$category])));
+        $category->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $category->expects($this->once())->method('getName')->will($this->returnValue('Category Name'));
+        $category->expects($this->once())->method('getResourceCollection')->will($this->returnValue($collection));
+        $this->categoryFactory->expects($this->once())->method('create')->will($this->returnValue($category));
 
-        $node = new \Magento\Framework\DataObject(['id' => 1]);
-        $nodes = $this->getMockBuilder(\Magento\Framework\Data\Tree\Node::class)
+        $node = new DataObject(['id' => 1]);
+        $nodes = $this->getMockBuilder(Node::class)
             ->setMethods(['getChildren'])->disableOriginalConstructor()->getMock();
-        $nodes->expects($this->once())->method('getChildren')->willReturn([$node]);
+        $nodes->expects($this->once())->method('getChildren')->will($this->returnValue([$node]));
 
-        $tree = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\Tree::class)
+        $tree = $this->getMockBuilder(Tree::class)
             ->setMethods(['loadChildren', 'loadNode'])->disableOriginalConstructor()->getMock();
-        $tree->expects($this->once())->method('loadNode')->willReturnSelf();
-        $tree->expects($this->once())->method('loadChildren')->willReturn($nodes);
+        $tree->expects($this->once())->method('loadNode')->will($this->returnSelf());
+        $tree->expects($this->once())->method('loadChildren')->will($this->returnValue($nodes));
 
-        $category->expects($this->once())->method('getTreeModel')->willReturn($tree);
-        $category->expects($this->once())->method('getResourceCollection')->willReturn('');
+        $category->expects($this->once())->method('getTreeModel')->will($this->returnValue($tree));
+        $category->expects($this->once())->method('getResourceCollection')->will($this->returnValue(''));
 
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->willReturn('http://magento.com/category-name.html');
+            ->will($this->returnValue('http://magento.com/category-name.html'));
         $feeds = [
             'group' => 'Categories',
             'feeds' => [

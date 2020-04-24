@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Link;
 
+use Magento\Catalog\Api\Data\ProductLinkInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Link\Converter;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Api\ExtensionAttributesInterface;
+use PHPUnit\Framework\TestCase;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var Converter
@@ -24,12 +31,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $linkedProductSku = 'linkedProductSample';
         $linkedProductId = '2016';
         $linkType = 'associated';
-        $linkMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductLinkInterface::class)
+        $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getLinkType', 'getLinkedProductSku', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
         $basicData = [$linkMock];
-        $linkedProductMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $linkedProductMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $associatedProducts = [$linkedProductSku => $linkedProductMock];
@@ -37,12 +44,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $infoFinal = [100, 300, 500, 'id' => $linkedProductId, 'qty' => 33];
         $linksAsArray = [$linkType => [$infoFinal]];
 
-        $typeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+        $typeMock = $this->getMockBuilder(AbstractType::class)
             ->setMethods(['getAssociatedProducts'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())
@@ -70,7 +77,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $linkedProductMock->expects($this->once())
             ->method('getId')
             ->willReturn($linkedProductId);
-        $attributeMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+        $attributeMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->setMethods(['__toArray'])
             ->getMockForAbstractClass();
         $linkMock->expects($this->once())
@@ -79,7 +86,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())
             ->method('__toArray')
             ->willReturn(['qty' => 33]);
-        
+
         $this->assertEquals($linksAsArray, $this->converter->convertLinksToGroupedArray($productMock));
     }
 }

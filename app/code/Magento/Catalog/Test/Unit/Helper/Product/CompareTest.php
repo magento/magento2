@@ -3,15 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
+use Magento\Catalog\Helper\Product\Compare;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use Magento\Framework\Url\EncoderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CompareTest
- */
-class CompareTest extends \PHPUnit\Framework\TestCase
+class CompareTest extends TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
@@ -19,50 +28,50 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     protected $compareHelper;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper | \PHPUnit\Framework\MockObject\MockObject
+     * @var PostHelper|MockObject
      */
     protected $postDataHelper;
 
     /**
-     * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Catalog\Model\Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $catalogSessionMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->urlBuilder = $this->createPartialMock(\Magento\Framework\Url::class, ['getUrl']);
+        $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
         $this->request = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
+            Http::class,
             ['getServer', 'isSecure']
         );
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $this->context = $this->createPartialMock(
-            \Magento\Framework\App\Helper\Context::class,
+            Context::class,
             ['getUrlBuilder', 'getRequest', 'getUrlEncoder']
         );
-        $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)->getMock();
+        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)->getMock();
         $this->urlEncoder->expects($this->any())
             ->method('encode')
             ->willReturnCallback(
@@ -72,24 +81,24 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             );
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
-            ->willReturn($this->urlBuilder);
+            ->will($this->returnValue($this->urlBuilder));
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->willReturn($this->request);
+            ->will($this->returnValue($this->request));
         $this->context->expects($this->once())
             ->method('getUrlEncoder')
-            ->willReturn($this->urlEncoder);
+            ->will($this->returnValue($this->urlEncoder));
         $this->postDataHelper = $this->createPartialMock(
-            \Magento\Framework\Data\Helper\PostHelper::class,
+            PostHelper::class,
             ['getPostData']
         );
         $this->catalogSessionMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Session::class,
+            Session::class,
             ['getBeforeCompareUrl']
         );
 
         $this->compareHelper = $objectManager->getObject(
-            \Magento\Catalog\Helper\Product\Compare::class,
+            Compare::class,
             [
                 'context' => $this->context,
                 'postHelper' => $this->postDataHelper,
@@ -114,17 +123,17 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($removeUrl)
-            ->willReturn($removeUrl);
+            ->will($this->returnValue($removeUrl));
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($removeUrl, $postParams)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
-        /** @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject $product */
-        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
+        /** @var Product|MockObject $product */
+        $product = $this->createPartialMock(Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')
-            ->willReturn($productId);
+            ->will($this->returnValue($productId));
 
         $this->assertTrue($this->compareHelper->getPostDataRemove($product));
     }
@@ -138,7 +147,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($url)
-            ->willReturn($url);
+            ->will($this->returnValue($url));
 
         $this->assertEquals($url, $this->compareHelper->getClearListUrl());
     }
@@ -157,12 +166,12 @@ class CompareTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($clearUrl)
-            ->willReturn($clearUrl);
+            ->will($this->returnValue($clearUrl));
 
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($clearUrl, $postParams)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $this->assertTrue($this->compareHelper->getPostDataClearList());
     }
@@ -179,7 +188,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             '_secure' => $isRequestSecure
         ];
 
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
         $this->catalogSessionMock->expects($this->once())->method('getBeforeCompareUrl')->willReturn($beforeCompareUrl);
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->urlEncoder->expects($this->once())->method('encode')->with($beforeCompareUrl)

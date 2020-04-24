@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate;
-use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
-use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -24,52 +28,52 @@ use Magento\Framework\View\LayoutInterface;
 class ValidateTest extends AttributeTest
 {
     /**
-     * @var ResultJsonFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultJsonFactory|MockObject
      */
     protected $resultJsonFactoryMock;
 
     /**
-     * @var ResultJson|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultJson|MockObject
      */
     protected $resultJson;
 
     /**
-     * @var LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutFactory|MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var AttributeSet|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeSet|MockObject
      */
     protected $attributeSetMock;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var FormData|\PHPUnit\Framework\MockObject\MockObject
+     * @var FormData|MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeCodeValidator|MockObject
      */
     private $attributeCodeValidatorMock;
 
@@ -148,7 +152,7 @@ class ValidateTest extends AttributeTest
             ->method('create')
             ->willReturnMap(
                 [
-                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
+                [Attribute::class, [], $this->attributeMock],
                 [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
                 ]
             );
@@ -188,7 +192,7 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideUniqueData
      * @param        array   $options
      * @param        boolean $isError
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testUniqueValidation(array $options, $isError)
     {
@@ -330,7 +334,7 @@ class ValidateTest extends AttributeTest
      *
      * @dataProvider provideEmptyOption
      * @param        array $options
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testEmptyOption(array $options, $result)
     {
@@ -453,7 +457,7 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideWhitespaceOption
      * @param        array  $options
      * @param        $result
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testWhitespaceOption(array $options, $result)
     {
@@ -571,7 +575,7 @@ class ValidateTest extends AttributeTest
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function testExecuteWithOptionsDataError()
     {
@@ -600,7 +604,7 @@ class ValidateTest extends AttributeTest
             ->method('create')
             ->willReturnMap(
                 [
-                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
+                [Attribute::class, [], $this->attributeMock],
                 [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
                 ]
             );
@@ -639,7 +643,7 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideInvalidAttributeCodes
      * @param        string $attributeCode
      * @param        $result
-     * @throws       \Magento\Framework\Exception\NotFoundException
+     * @throws       NotFoundException
      */
     public function testExecuteWithInvalidAttributeCode($attributeCode, $result)
     {

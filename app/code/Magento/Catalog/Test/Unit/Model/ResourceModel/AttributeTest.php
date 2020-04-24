@@ -9,66 +9,70 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\ResourceConnections\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Attribute\LockValidatorInterface;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var Adapter|\PHPUnit\Framework\MockObject\MockObject
+     * @var Adapter|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Type|\PHPUnit\Framework\MockObject\MockObject
+     * @var Type|MockObject
      */
     private $eavEntityTypeMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var LockValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LockValidatorInterface|MockObject
      */
     private $lockValidatorMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityMetadataInterface|MockObject
      */
     private $entityMetaDataInterfaceMock;
 
@@ -101,17 +105,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->eavEntityTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
         $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
-            ->getMockForAbstractClass();
-         $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->getMock();
+        $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 
     /**
@@ -171,7 +175,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->setObjectProperty($attributeModel, 'metadataPool', $metadataPoolMock);
 
-        $eavAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $eavAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 

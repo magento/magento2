@@ -13,7 +13,6 @@ use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -69,7 +68,7 @@ class AbstractTypeTest extends TestCase
     {
         $this->entityModel = $this->createMock(Product::class);
         $attrSetColFactory = $this->createPartialMock(
-            CollectionFactory::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
             ['create']
         );
         $attrSetCollection = $this->createMock(Collection::class);
@@ -85,22 +84,23 @@ class AbstractTypeTest extends TestCase
                 'setAttributeSetFilter'
             ]
         );
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getIsVisible', 'getIsGlobal', 'getFrontendLabel', 'getApplyTo'])
-            ->onlyMethods(
-                [
-                    'getAttributeCode',
-                    'getId',
-                    'getIsRequired',
-                    'getIsUnique',
-                    'isStatic',
-                    'getDefaultValue',
-                    'usesSource',
-                    'getFrontendInput'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attribute = $this->createPartialMock(
+            Attribute::class,
+            [
+                'getAttributeCode',
+                'getId',
+                'getIsVisible',
+                'getIsGlobal',
+                'getIsRequired',
+                'getIsUnique',
+                'getFrontendLabel',
+                'isStatic',
+                'getApplyTo',
+                'getDefaultValue',
+                'usesSource',
+                'getFrontendInput',
+            ]
+        );
         $attribute->expects($this->any())->method('getIsVisible')->willReturn(true);
         $attribute->expects($this->any())->method('getIsGlobal')->willReturn(true);
         $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
@@ -161,30 +161,37 @@ class AbstractTypeTest extends TestCase
                 [
                     [
                         'in' => [
-                            'attribute_id',
-                            'boolean_attribute',
-                        ],
+                                'attribute_id',
+                                'boolean_attribute',
+                            ],
                     ],
                     [
                         'in' => [
-                            'related_tgtr_position_behavior',
-                            'related_tgtr_position_limit',
-                            'upsell_tgtr_position_behavior',
-                            'upsell_tgtr_position_limit',
-                            'thumbnail_label',
-                            'small_image_label',
-                            'image_label',
-                        ],
+                                'related_tgtr_position_behavior',
+                                'related_tgtr_position_limit',
+                                'upsell_tgtr_position_behavior',
+                                'upsell_tgtr_position_limit',
+                                'thumbnail_label',
+                                'small_image_label',
+                                'image_label',
+                            ],
                     ],
                 ]
             )
             ->willReturn([$attribute1, $attribute2, $attribute3]);
 
-        $this->connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['joinLeft'])
-            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection = $this->createPartialMock(
+            Mysql::class,
+            [
+                'select',
+                'fetchAll',
+                'fetchPairs',
+                'joinLeft',
+                'insertOnDuplicate',
+                'delete',
+                'quoteInto'
+            ]
+        );
         $this->select = $this->createPartialMock(
             Select::class,
             [
@@ -194,12 +201,12 @@ class AbstractTypeTest extends TestCase
                 'getConnection',
             ]
         );
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->connection->expects($this->any())->method('select')->willReturn($this->select);
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $connection = $this->createMock(Mysql::class);
-        $connection->expects($this->any())->method('quoteInto')->willReturn('query');
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $this->select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
@@ -207,7 +214,7 @@ class AbstractTypeTest extends TestCase
         $this->connection
             ->expects($this->any())
             ->method('fetchAll')
-            ->willReturn($entityAttributes);
+            ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->createPartialMock(
             ResourceConnection::class,
@@ -216,11 +223,11 @@ class AbstractTypeTest extends TestCase
                 'getTableName',
             ]
         );
-        $this->resource->expects($this->any())->method('getConnection')->willReturn(
-            $this->connection
+        $this->resource->expects($this->any())->method('getConnection')->will(
+            $this->returnValue($this->connection)
         );
-        $this->resource->expects($this->any())->method('getTableName')->willReturn(
-            'tableName'
+        $this->resource->expects($this->any())->method('getTableName')->will(
+            $this->returnValue('tableName')
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -237,8 +244,8 @@ class AbstractTypeTest extends TestCase
         $this->abstractType = $this->getMockBuilder(
             \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
         )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        ->disableOriginalConstructor()
+        ->getMockForAbstractClass();
     }
 
     /**
