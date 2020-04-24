@@ -6,6 +6,7 @@
     },
     "require": {
         "magento/framework": "*",
+        "magento/framework-message-queue": "*",
         "magento/framework-bulk": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",

@@ -5,8 +5,7 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-cms": "*",
-        "magento/module-catalog": "*"
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [

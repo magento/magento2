@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
 
-use Magento\MediaGallery\Model\Keyword\Command\SaveAssetLinks;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * SaveAssetLinksTest.
+ * Test for SaveAssetLinks
  */
 class SaveAssetLinksTest extends TestCase
 {
