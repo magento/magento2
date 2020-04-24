@@ -27,10 +27,6 @@ use PHPUnit\Framework\TestCase;
  * - general behaviour is tested
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @see \Magento\Catalog\Model\CategoryTreeTest
- * @magentoDataFixture Magento/Catalog/_files/categories.php
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
  */
 class CategoryTest extends TestCase
 {
@@ -68,14 +64,12 @@ class CategoryTest extends TestCase
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
     }
-
     public function testGetUrlInstance(): void
     {
         $instance = $this->_model->getUrlInstance();
         $this->assertInstanceOf(Url::class, $instance);
         $this->assertSame($instance, $this->_model->getUrlInstance());
     }
-
     public function testGetTreeModel(): void
     {
         $model = $this->_model->getTreeModel();
@@ -114,6 +108,9 @@ class CategoryTest extends TestCase
         $this->assertArrayNotHasKey('custom_design', $attributes);
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testGetProductsPosition(): void
     {
         $this->assertEquals([], $this->_model->getProductsPosition());
@@ -126,6 +123,9 @@ class CategoryTest extends TestCase
         $this->assertNotEmpty($this->_model->getProductsPosition());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testGetStoreIds(): void
     {
         $this->_model = $this->getCategoryByName('Category 1.1');
@@ -218,6 +218,9 @@ class CategoryTest extends TestCase
         $this->assertContains('custom_design_to', array_keys($attributes));
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testCheckId(): void
     {
         $this->_model = $this->getCategoryByName('Category 1.1.1');
@@ -232,6 +235,9 @@ class CategoryTest extends TestCase
         $this->assertNotContains(100, $ids);
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testHasChildren(): void
     {
         $this->_model->load(3);
@@ -254,6 +260,9 @@ class CategoryTest extends TestCase
         $this->assertEquals('test', $this->_model->getName());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testGetProductCount(): void
     {
         $this->_model->load(6);
@@ -326,6 +335,7 @@ class CategoryTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoAppArea adminhtml
      */
     public function testDeleteChildren(): void
@@ -380,6 +390,9 @@ class CategoryTest extends TestCase
         $this->expectExceptionMessage(
             (string)__('The "Name" attribute value is empty. Set the attribute and try again.')
         );
+
+        $categoryResource = $this->objectManager->create(CategoryResource::class);
+        $this->_model = $this->objectManager->create(Category::class, ['resource' => $categoryResource]);
         $this->_model->setData($data);
         $this->_model->validate();
     }
@@ -459,6 +472,9 @@ class CategoryTest extends TestCase
         $this->assertEquals($parentSecondStoreKey . '/test-category-100', $childCategorySecondStore->getUrlPath());
     }
 
+    /*
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     */
     protected function getCategoryByName($categoryName)
     {
         /* @var Collection $collection */
