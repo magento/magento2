@@ -57,26 +57,29 @@ class UrlTest extends TestCase
     {
         $this->filter = $this->getMockBuilder(
             FilterManager::class
-        )->disableOriginalConstructor()->setMethods(
-            ['translitUrl']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['translitUrl']
+            )->getMock();
 
         $this->urlFinder = $this->getMockBuilder(
             UrlFinderInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->url = $this->getMockBuilder(
             \Magento\Framework\Url::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setScope', 'getUrl']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setScope', 'getUrl']
+            )->getMock();
 
         $this->sidResolver = $this->createMock(SidResolverInterface::class);
 
-        $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store = $this->createPartialMock(Store::class, ['getId']);
+        $store->expects($this->any())->method('getId')->willReturn(1);
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $urlFactory = $this->getMockBuilder(UrlFactory::class)
             ->disableOriginalConstructor()
@@ -108,8 +111,8 @@ class UrlTest extends TestCase
             'translitUrl'
         )->with(
             $strIn
-        )->will(
-            $this->returnValue($resultString)
+        )->willReturn(
+            $resultString
         );
 
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
@@ -145,25 +148,34 @@ class UrlTest extends TestCase
     ) {
         $product = $this->getMockBuilder(
             Product::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getStoreId', 'getEntityId', 'getId', 'getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getRequestPath',
-                'getCategoryId', 'getDoNotUseCategoryId', '__wakeup', ]
-        )->getMock();
-        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
-        $product->expects($this->any())->method('getCategoryId')->will($this->returnValue($categoryId));
-        $product->expects($this->any())->method('getRequestPath')->will($this->returnValue($requestPathProduct));
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getStoreId',
+                    'getEntityId',
+                    'getId',
+                    'getUrlKey',
+                    'setRequestPath',
+                    'hasUrlDataObject',
+                    'getRequestPath',
+                    'getCategoryId',
+                    'getDoNotUseCategoryId',
+                ]
+            )->getMock();
+        $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
+        $product->expects($this->any())->method('getCategoryId')->willReturn($categoryId);
+        $product->expects($this->any())->method('getRequestPath')->willReturn($requestPathProduct);
         $product->expects($this->any())
             ->method('setRequestPath')
-            ->with(false)
-            ->will($this->returnSelf());
-        $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-        $product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
-        $this->url->expects($this->any())->method('setScope')->with($storeId)->will($this->returnSelf());
+            ->with(false)->willReturnSelf();
+        $product->expects($this->any())->method('getId')->willReturn($productId);
+        $product->expects($this->any())->method('getUrlKey')->willReturn($productUrlKey);
+        $this->url->expects($this->any())->method('setScope')->with($storeId)->willReturnSelf();
         $this->url->expects($this->any())
             ->method('getUrl')
             ->with($routePath, $routeParamsUrl)
-            ->will($this->returnValue($requestPathProduct));
-        $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue(false));
+            ->willReturn($requestPathProduct);
+        $this->urlFinder->expects($this->any())->method('findOneByData')->willReturn(false);
 
         switch ($getUrlMethod) {
             case 'getUrl':
@@ -177,7 +189,7 @@ class UrlTest extends TestCase
                 $this->sidResolver
                     ->expects($this->never())
                     ->method('getUseSessionInUrl')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
                 break;
         }
     }

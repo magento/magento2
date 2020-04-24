@@ -155,13 +155,16 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)->getMockForAbstractClass();
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->auth = $this->getMockBuilder(AuthorizationInterface::class)->getMockForAbstractClass();
+        $this->auth = $this->getMockBuilder(AuthorizationInterface::class)
+            ->getMockForAbstractClass();
 
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->categoryImage = $this->createPartialMock(
             CategoryImage::class,
@@ -231,7 +234,8 @@ class DataProviderTest extends TestCase
             'image' => $fileName,
         ];
 
-        $imageBackendMock = $this->getMockBuilder(Image::class)->disableOriginalConstructor()
+        $imageBackendMock = $this->getMockBuilder(Image::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $attributeMock = $this->getMockBuilder(Attribute::class)

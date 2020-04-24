@@ -57,25 +57,25 @@ class ImageEntryConverterTest extends TestCase
 
         $this->mediaGalleryEntryMock =
             $this->createPartialMock(ProductAttributeMediaGalleryEntryInterface::class, [
-                    'getId',
-                    'setId',
-                    'getMediaType',
-                    'setMediaType',
-                    'getLabel',
-                    'setLabel',
-                    'getPosition',
-                    'setPosition',
-                    'isDisabled',
-                    'setDisabled',
-                    'getTypes',
-                    'setTypes',
-                    'getFile',
-                    'setFile',
-                    'getContent',
-                    'setContent',
-                    'getExtensionAttributes',
-                    'setExtensionAttributes'
-                ]);
+                'getId',
+                'setId',
+                'getMediaType',
+                'setMediaType',
+                'getLabel',
+                'setLabel',
+                'getPosition',
+                'setPosition',
+                'isDisabled',
+                'setDisabled',
+                'getTypes',
+                'setTypes',
+                'getFile',
+                'setFile',
+                'getContent',
+                'setContent',
+                'getExtensionAttributes',
+                'setExtensionAttributes'
+            ]);
 
         $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->mediaGalleryEntryMock
@@ -151,9 +151,9 @@ class ImageEntryConverterTest extends TestCase
             'position' => '4',
             'disabled' => '0',
             'types' => [
-                    0 => 'image',
-                    1 => 'swatch_image',
-                ],
+                0 => 'image',
+                1 => 'swatch_image',
+            ],
             'content' => null,
             'media_type' => null,
         ];
@@ -191,9 +191,9 @@ class ImageEntryConverterTest extends TestCase
             'position' => '4',
             'disabled' => '0',
             'types' => [
-                    0 => 'image',
-                    1 => 'swatch_image',
-                ],
+                0 => 'image',
+                1 => 'swatch_image',
+            ],
             'content' => [
                 'data' => [
                     'base64_encoded_data' => base64_encode('some_content'),
@@ -201,7 +201,7 @@ class ImageEntryConverterTest extends TestCase
                     'name' => '/s/a/sample_3.jpg'
                 ]
             ],
-                'media_type' => null,
+            'media_type' => null,
         ];
 
         $this->assertEquals($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));

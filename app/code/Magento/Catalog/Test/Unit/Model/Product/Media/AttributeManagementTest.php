@@ -51,11 +51,11 @@ class AttributeManagementTest extends TestCase
         $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($this->storeId));
+            ->willReturn($this->storeId);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->with(null)
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $this->model = new AttributeManagement(
             $this->factoryMock,
             $this->storeManagerMock
@@ -80,8 +80,8 @@ class AttributeManagementTest extends TestCase
             ->with($this->storeId);
         $collectionMock->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue($expectedResult));
-        $this->factoryMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
+            ->willReturn($expectedResult);
+        $this->factoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $this->assertEquals($expectedResult, $this->model->getList($attributeSetName));
     }

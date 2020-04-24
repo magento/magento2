@@ -83,12 +83,12 @@ class ValueTest extends TestCase
 
     public function testGetPrice()
     {
-        $price = 1000;
+        $price = 1000.0;
         $this->model->setPrice($price);
         $this->model->setPriceType(Value::TYPE_PERCENT);
         $this->assertEquals($price, $this->model->getPrice(false));
 
-        $percentPrice = 100;
+        $percentPrice = 100.0;
         $this->CalculateCustomOptionCatalogRule->expects($this->atLeastOnce())
             ->method('execute')
             ->willReturn($percentPrice);
@@ -200,7 +200,7 @@ class ValueTest extends TestCase
     private function getMockedProduct()
     {
         $mockBuilder = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', '__wakeup'])
+            ->setMethods(['getPriceInfo'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -234,7 +234,6 @@ class ValueTest extends TestCase
             ->setMethods(
                 [
                     'duplicate',
-                    '__wakeup',
                     'getIdFieldName',
                     'deleteValues',
                     'deleteValue',

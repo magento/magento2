@@ -142,18 +142,18 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, 'test_frontend_label'],
-                ['attribute_code', null, 'test_attribute_code'],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap(
                 [
-                [Attribute::class, [], $this->attributeMock],
-                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [Attribute::class, [], $this->attributeMock],
+                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
                 ]
             );
         $this->attributeMock->expects($this->once())
@@ -202,11 +202,11 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['attribute_code', null, "test_attribute_code"],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', null, Validate::DEFAULT_MESSAGE_KEY],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -343,12 +343,12 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['frontend_input', 'select', 'multipleselect'],
-                ['attribute_code', null, "test_attribute_code"],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -466,13 +466,13 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                              ['frontend_label', null, null],
-                              ['frontend_input', 'select', 'multipleselect'],
-                              ['attribute_code', null, "test_attribute_code"],
-                              ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                              ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                              ['serialized_options', '[]', $serializedOptions],
-                              ]
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, "test_attribute_code"],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
             );
 
         $this->formDataSerializerMock
@@ -586,11 +586,11 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, 'test_frontend_label'],
-                ['attribute_code', null, 'test_attribute_code'],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 
@@ -604,8 +604,8 @@ class ValidateTest extends AttributeTest
             ->method('create')
             ->willReturnMap(
                 [
-                [Attribute::class, [], $this->attributeMock],
-                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [Attribute::class, [], $this->attributeMock],
+                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
                 ]
             );
 
@@ -627,8 +627,8 @@ class ValidateTest extends AttributeTest
             ->with(
                 json_encode(
                     [
-                    'error' => true,
-                    'message' => $message
+                        'error' => true,
+                        'message' => $message
                     ]
                 )
             )
@@ -652,12 +652,12 @@ class ValidateTest extends AttributeTest
             ->method('getParam')
             ->willReturnMap(
                 [
-                ['frontend_label', null, null],
-                ['frontend_input', 'select', 'multipleselect'],
-                ['attribute_code', null, $attributeCode],
-                ['new_attribute_set_name', null, 'test_attribute_set_name'],
-                ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
-                ['serialized_options', '[]', $serializedOptions],
+                    ['frontend_label', null, null],
+                    ['frontend_input', 'select', 'multipleselect'],
+                    ['attribute_code', null, $attributeCode],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
                 ]
             );
 

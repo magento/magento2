@@ -19,7 +19,7 @@ class DecimalTest extends TestCase
     {
         $attributeModel = $this->createPartialMock(
             Attribute::class,
-            ['getAttributeCode', '__wakeup']
+            ['getAttributeCode']
         );
         $attributeModel->expects($this->once())->method('getAttributeCode')->willReturn('price1');
 

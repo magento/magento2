@@ -53,8 +53,8 @@ class LockValidatorCompositeTest extends TestCase
             'get'
         )->with(
             LockValidatorComposite::class
-        )->will(
-            $this->returnValue($lockValidatorMock)
+        )->willReturn(
+            $lockValidatorMock
         );
 
         $this->model = new LockValidatorComposite(

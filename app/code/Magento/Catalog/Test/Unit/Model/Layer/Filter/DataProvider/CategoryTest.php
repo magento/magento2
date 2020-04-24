@@ -61,7 +61,7 @@ class CategoryTest extends TestCase
             ->getMock();
         $this->categoryFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
@@ -72,7 +72,7 @@ class CategoryTest extends TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getCurrentStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class,
@@ -93,32 +93,29 @@ class CategoryTest extends TestCase
         $categoryId = 4321;
         $this->store->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
         $this->layer->expects($this->any())
             ->method('getCurrentCategory')
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
         $this->category->expects($this->once())
             ->method('setStoreId')
-            ->with($this->equalTo($storeId))
-            ->will($this->returnSelf());
+            ->with($storeId)->willReturnSelf();
         $this->category->expects($this->once())
             ->method('load')
-            ->with($this->equalTo($categoryId))
-            ->will($this->returnSelf());
+            ->with($categoryId)->willReturnSelf();
         $this->category->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
         $this->category->expects($this->any())
             ->method('getPathIds')
-            ->will($this->returnValue([20, 10]));
+            ->willReturn([20, 10]);
         $this->coreRegistry->expects($this->once())
             ->method('register')
             ->with(
-                $this->equalTo('current_category_filter'),
-                $this->equalTo($this->category),
-                $this->equalTo(true)
-            )
-            ->will($this->returnSelf());
+                'current_category_filter',
+                $this->category,
+                true
+            )->willReturnSelf();
         $this->target->setCategoryId($categoryId);
         $this->assertSame($this->category, $this->target->getCategory());
         $this->assertSame(20, $this->target->getResetValue());

@@ -65,22 +65,26 @@ class PricePersistenceTest extends TestCase
     protected function setUp(): void
     {
         $this->attributeResource = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeRepository = $this->getMockBuilder(
             ProductAttributeRepositoryInterface::class
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLinkField', 'getMetadata'])
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->productAttribute = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -112,7 +116,8 @@ class PricePersistenceTest extends TestCase
             ]
         ];
         $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productIdLocator
             ->expects($this->once())
             ->method('retrieveProductIdsBySkus')->with($skus)

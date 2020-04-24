@@ -71,7 +71,7 @@ class MoveTest extends TestCase
      */
     private $messageManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->setMethods(['create'])
@@ -101,7 +101,7 @@ class MoveTest extends TestCase
             ->setMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->context->expects($this->once())->method('getRequest')->will($this->returnValue($this->request));
+        $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
     }

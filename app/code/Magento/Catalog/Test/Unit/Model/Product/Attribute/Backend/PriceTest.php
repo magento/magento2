@@ -46,7 +46,8 @@ class PriceTest extends TestCase
             ->getMockForAbstractClass();
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectHelper->getObject(
             Price::class,
             [
@@ -126,7 +127,9 @@ class PriceTest extends TestCase
         $attributeCode = 'price';
         $defaultStoreId = 0;
         $allStoreIds = [1, 2, 3];
-        $object = $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock();
+        $object = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn($newPrice);
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
         $object->expects($this->any())->method('getStoreId')->willReturn($defaultStoreId);
@@ -161,7 +164,9 @@ class PriceTest extends TestCase
     {
         $attributeCode = 'price';
 
-        $object = $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock();
+        $object = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn('7.77');
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
         $this->attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
@@ -176,7 +181,9 @@ class PriceTest extends TestCase
     {
         $attributeCode = 'price';
 
-        $object = $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock();
+        $object = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn('9.99');
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
         $this->attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);

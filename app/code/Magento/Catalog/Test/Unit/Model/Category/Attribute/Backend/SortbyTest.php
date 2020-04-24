@@ -57,7 +57,6 @@ class SortbyTest extends TestCase
                 'isValueEmpty',
                 'getEntity',
                 'getFrontend',
-                '__wakeup',
                 'getIsRequired',
                 'getIsUnique'
             ]
@@ -220,7 +219,7 @@ class SortbyTest extends TestCase
             ['checkAttributeUniqueValue']
         );
         $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
-        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->will($this->returnValue(true));
+        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(true);
         $this->assertTrue($this->_model->validate(new DataObject()));
     }
 
@@ -251,7 +250,7 @@ class SortbyTest extends TestCase
         );
         $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
         $this->_attribute->expects($this->any())->method('getFrontend')->will($this->returnValue($frontMock));
-        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->will($this->returnValue(false));
+        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(false);
         $this->assertTrue($this->_model->validate(new DataObject()));
     }
 

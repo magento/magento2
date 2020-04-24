@@ -49,7 +49,7 @@ class StateTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(
@@ -66,8 +66,8 @@ class StateTest extends TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->model = new State(
@@ -87,11 +87,11 @@ class StateTest extends TestCase
     public function testIsAvailable($isAvailable, $isFlatEnabled, $isValid, $result)
     {
         $this->flatIndexerMock->expects($this->any())->method('load')->with('catalog_category_flat');
-        $this->flatIndexerMock->expects($this->any())->method('isValid')->will($this->returnValue($isValid));
+        $this->flatIndexerMock->expects($this->any())->method('isValid')->willReturn($isValid);
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(State::INDEXER_ID)
-            ->will($this->returnValue($this->flatIndexerMock));
+            ->willReturn($this->flatIndexerMock);
 
         $this->scopeConfigMock->expects(
             $this->any()
@@ -99,8 +99,8 @@ class StateTest extends TestCase
             'isSetFlag'
         )->with(
             'catalog/frontend/flat_catalog_category'
-        )->will(
-            $this->returnValue($isFlatEnabled)
+        )->willReturn(
+            $isFlatEnabled
         );
 
         $this->model = new State(

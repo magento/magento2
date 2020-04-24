@@ -36,7 +36,7 @@ class ReservedAttributeListTest extends TestCase
     {
         $attribute = $this->createPartialMock(
             Attribute::class,
-            ['getIsUserDefined', 'getAttributeCode', '__sleep', '__wakeup']
+            ['getIsUserDefined', 'getAttributeCode', '__sleep']
         );
 
         $attribute->expects($this->once())->method('getIsUserDefined')->willReturn($isUserDefined);

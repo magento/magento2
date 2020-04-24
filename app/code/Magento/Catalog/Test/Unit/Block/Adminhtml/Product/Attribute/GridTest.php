@@ -20,7 +20,7 @@ class GridTest extends TestCase
     public function testGetRowUrl()
     {
         $attribute = $this->createMock(Attribute::class);
-        $attribute->expects($this->once())->method('getAttributeId')->will($this->returnValue(2));
+        $attribute->expects($this->once())->method('getAttributeId')->willReturn(2);
 
         $filesystem = $this->createMock(Filesystem::class);
 
@@ -30,15 +30,15 @@ class GridTest extends TestCase
         )->method(
             'getUrl'
         )->with(
-            $this->equalTo('catalog/*/edit'),
-            $this->equalTo(['attribute_id' => 2])
-        )->will(
-            $this->returnValue('catalog/product_attribute/edit/id/2')
+            'catalog/*/edit',
+            ['attribute_id' => 2]
+        )->willReturn(
+            'catalog/product_attribute/edit/id/2'
         );
 
         $context = $this->createMock(Context::class);
-        $context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
-        $context->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystem));
+        $context->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->expects($this->any())->method('getFilesystem')->willReturn($filesystem);
 
         $data = ['context' => $context];
 

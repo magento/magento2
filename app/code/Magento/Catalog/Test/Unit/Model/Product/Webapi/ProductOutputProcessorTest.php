@@ -123,15 +123,15 @@ class ProductOutputProcessorTest extends TestCase
                     ]
                 ),
                 'result' => [
-                            'sku' => 'MH01',
-                            'status' => 1,
-                            'product_links' => [],
-                            'tier_prices' => []
+                    'sku' => 'MH01',
+                    'status' => 1,
+                    'product_links' => [],
+                    'tier_prices' => []
                 ],
                 'expectedResult' => [
-                            'sku' => 'MH01',
-                            'status' => 1,
-                            'product_links' => []
+                    'sku' => 'MH01',
+                    'status' => 1,
+                    'product_links' => []
                 ]
             ],
             'request object SKU does not match with product object SKU' => [
@@ -183,10 +183,10 @@ class ProductOutputProcessorTest extends TestCase
                     ]
                 ),
                 'result' => [
-                        'sku' => 'MH01',
-                        'status' => 1,
-                        'product_links' => [],
-                        'tier_prices' => []
+                    'sku' => 'MH01',
+                    'status' => 1,
+                    'product_links' => [],
+                    'tier_prices' => []
                 ],
                 'expectedResult' => [
                     'sku' => 'MH01',

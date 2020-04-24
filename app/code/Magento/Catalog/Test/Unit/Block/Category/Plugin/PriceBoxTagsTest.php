@@ -78,7 +78,8 @@ class PriceBoxTagsTest extends TestCase
             ScopeResolverInterface::class
         )
             ->getMockForAbstractClass();
-        $this->session = $this->getMockBuilder(Session::class)->disableOriginalConstructor()
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'getCustomerGroupId',
@@ -90,7 +91,8 @@ class PriceBoxTagsTest extends TestCase
             )
             ->getMock();
         $this->taxCalculation = $this->getMockBuilder(Calculation::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->priceBoxTags = $objectManager->getObject(
             PriceBoxTags::class,
@@ -128,10 +130,12 @@ class PriceBoxTagsTest extends TestCase
             ]
         );
         $priceBox = $this->getMockBuilder(PriceBox::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceCurrencyInterface->expects($this->once())->method('getCurrency')->willReturn($this->currency);
         $this->currency->expects($this->once())->method('getCode')->willReturn($currencyCode);
-        $scope = $this->getMockBuilder(ScopeInterface::class)->getMock();
+        $scope = $this->getMockBuilder(ScopeInterface::class)
+            ->getMock();
         $this->scopeResolverInterface->expects($this->any())->method('getScope')->willReturn($scope);
         $scope->expects($this->any())->method('getId')->willReturn($scopeId);
         $dateTime = $this->getMockBuilder(\DateTime::class)->getMock();
@@ -143,7 +147,8 @@ class PriceBoxTagsTest extends TestCase
         $this->session->expects($this->once())->method('getCustomerTaxClassId')
             ->willReturn($customerTaxClassId);
         $this->session->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-        $rateRequest = $this->getMockBuilder(DataObject::class)->getMock();
+        $rateRequest = $this->getMockBuilder(DataObject::class)
+            ->getMock();
         $this->taxCalculation->expects($this->once())->method('getRateRequest')->with(
             new DataObject($shippingAddress),
             new DataObject($billingAddress),

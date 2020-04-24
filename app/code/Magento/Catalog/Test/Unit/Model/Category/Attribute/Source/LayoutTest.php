@@ -54,7 +54,8 @@ class LayoutTest extends TestCase
 
         $mockPageLayoutBuilder = $this->getMockBuilder(
             BuilderInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $mockPageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
             ->willReturn($mockPageLayoutConfig);

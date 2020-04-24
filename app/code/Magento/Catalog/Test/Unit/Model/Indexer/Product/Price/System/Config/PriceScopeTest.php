@@ -91,6 +91,6 @@ class PriceScopeTest extends TestCase
         $this->indexerRegistryMock->expects($this->exactly($countCall))
             ->method('get')
             ->with(Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
     }
 }

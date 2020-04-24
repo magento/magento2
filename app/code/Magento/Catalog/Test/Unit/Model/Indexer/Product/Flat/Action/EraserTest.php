@@ -44,13 +44,13 @@ class EraserTest extends TestCase
     {
         $resource = $this->createMock(ResourceConnection::class);
         $this->connection = $this->createMock(AdapterInterface::class);
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
+        $resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->indexerHelper = $this->createMock(Indexer::class);
-        $this->indexerHelper->expects($this->any())->method('getTable')->will($this->returnArgument(0));
-        $this->indexerHelper->expects($this->any())->method('getFlatTableName')->will($this->returnValueMap([
+        $this->indexerHelper->expects($this->any())->method('getTable')->willReturnArgument(0);
+        $this->indexerHelper->expects($this->any())->method('getFlatTableName')->willReturnMap([
             [1, 'store_1_flat'],
             [2, 'store_2_flat'],
-        ]));
+        ]);
 
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->model = new Eraser(
@@ -66,19 +66,17 @@ class EraserTest extends TestCase
         $select = $this->createMock(Select::class);
         $select->expects($this->once())
             ->method('from')
-            ->with(['product_table' => 'catalog_product_entity'])
-            ->will($this->returnSelf());
-        $select->expects($this->once())->method('columns')->with('entity_id')->will($this->returnSelf());
+            ->with(['product_table' => 'catalog_product_entity'])->willReturnSelf();
+        $select->expects($this->once())->method('columns')->with('entity_id')->willReturnSelf();
         $select->expects($this->once())
             ->method('where')
-            ->with('product_table.entity_id IN(?)', $productsToDeleteIds)
-            ->will($this->returnSelf());
+            ->with('product_table.entity_id IN(?)', $productsToDeleteIds)->willReturnSelf();
         $products = [['entity_id' => 2]];
         $statement = $this->createMock(\Zend_Db_Statement_Interface::class);
-        $statement->expects($this->once())->method('fetchAll')->will($this->returnValue($products));
+        $statement->expects($this->once())->method('fetchAll')->willReturn($products);
         $this->connection->expects($this->once())->method('query')->with($select)
-            ->will($this->returnValue($statement));
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($select));
+            ->willReturn($statement);
+        $this->connection->expects($this->once())->method('select')->willReturn($select);
         $this->connection->expects($this->once())->method('delete')
             ->with('store_1_flat', ['entity_id IN(?)' => [1]]);
 
@@ -88,11 +86,11 @@ class EraserTest extends TestCase
     public function testDeleteProductsFromStoreForAllStores()
     {
         $store1 = $this->createMock(Store::class);
-        $store1->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store1->expects($this->any())->method('getId')->willReturn(1);
         $store2 = $this->createMock(Store::class);
-        $store2->expects($this->any())->method('getId')->will($this->returnValue(2));
+        $store2->expects($this->any())->method('getId')->willReturn(2);
         $this->storeManager->expects($this->once())->method('getStores')
-            ->will($this->returnValue([$store1, $store2]));
+            ->willReturn([$store1, $store2]);
         $this->connection->expects($this->at(0))->method('delete')
             ->with('store_1_flat', ['entity_id IN(?)' => [1]]);
         $this->connection->expects($this->at(1))->method('delete')

@@ -43,7 +43,7 @@ class ModeTest extends TestCase
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
-            ['loadByIndexer', 'setStatus', 'save', '__wakeup']
+            ['loadByIndexer', 'setStatus', 'save']
         );
         $this->indexerProcessorMock = $this->createPartialMock(
             Processor::class,
@@ -83,8 +83,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -120,8 +120,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -132,19 +132,15 @@ class ModeTest extends TestCase
             'loadByIndexer'
         )->with(
             'catalog_product_flat'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->indexerStateMock->expects(
             $this->once()
         )->method(
             'setStatus'
         )->with(
             'invalid'
-        )->will(
-            $this->returnSelf()
-        );
-        $this->indexerStateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        )->willReturnSelf();
+        $this->indexerStateMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->indexerProcessorMock->expects($this->never())->method('getIndexer');
 
@@ -173,8 +169,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -190,7 +186,7 @@ class ModeTest extends TestCase
             false,
             false,
             true,
-            ['setScheduled', '__wakeup']
+            ['setScheduled']
         );
         $indexerMock->expects($this->once())->method('setScheduled')->with(false);
 
@@ -198,8 +194,8 @@ class ModeTest extends TestCase
             $this->once()
         )->method(
             'getIndexer'
-        )->will(
-            $this->returnValue($indexerMock)
+        )->willReturn(
+            $indexerMock
         );
 
         $this->model->processValue();

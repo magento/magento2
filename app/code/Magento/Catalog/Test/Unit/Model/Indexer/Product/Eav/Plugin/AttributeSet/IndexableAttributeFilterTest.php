@@ -20,7 +20,7 @@ class IndexableAttributeFilterTest extends TestCase
     {
         $catalogResourceMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'isIndexable', '__wakeup'])
+            ->setMethods(['load', 'isIndexable'])
             ->getMock();
         $catalogResourceMock->expects($this->any())
             ->method('load')
@@ -44,7 +44,7 @@ class IndexableAttributeFilterTest extends TestCase
 
         $attributeMock1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load', '__wakeup'])
+            ->setMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load'])
             ->getMock();
         $attributeMock1->expects($this->any())
             ->method('getAttributeCode')
@@ -55,7 +55,7 @@ class IndexableAttributeFilterTest extends TestCase
 
         $attributeMock2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load', '__wakeup'])
+            ->setMethods(['getId', 'getAttributeId', 'getAttributeCode', 'load'])
             ->getMock();
         $attributeMock2->expects($this->any())
             ->method('getAttributeCode')
@@ -68,7 +68,7 @@ class IndexableAttributeFilterTest extends TestCase
 
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributes', '__wakeup'])
+            ->setMethods(['getAttributes'])
             ->getMock();
         $groupMock->expects($this->once())
             ->method('getAttributes')
@@ -76,7 +76,7 @@ class IndexableAttributeFilterTest extends TestCase
 
         $attributeSetMock = $this->getMockBuilder(Set::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGroups', '__wakeup'])
+            ->setMethods(['getGroups'])
             ->getMock();
         $attributeSetMock->expects($this->once())
             ->method('getGroups')

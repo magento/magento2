@@ -17,7 +17,7 @@ class AdditionalInfoTest extends TestCase
     /** @var  AdditionalInfo */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->model = new AdditionalInfo();
     }

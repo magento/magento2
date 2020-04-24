@@ -109,22 +109,18 @@ class FileTest extends TestCase
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $this->serializer->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
     }
 
@@ -195,21 +191,21 @@ class FileTest extends TestCase
 
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($quoteValue));
+            ->willReturn($quoteValue);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isFile')
-            ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->with($quotePath)
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
-            ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->with($quotePath)
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->exactly(2))
             ->method('getAbsolutePath')
-            ->will($this->returnValue('/file.path'));
+            ->willReturn('/file.path');
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('checkDbUsage')
@@ -217,7 +213,7 @@ class FileTest extends TestCase
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('copyFile')
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
 
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);
@@ -251,21 +247,21 @@ class FileTest extends TestCase
 
         $optionMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($quoteValue));
+            ->willReturn($quoteValue);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isFile')
-            ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->with($quotePath)
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
-            ->with($this->equalTo($quotePath))
-            ->will($this->returnValue(true));
+            ->with($quotePath)
+            ->willReturn(true);
 
         $this->mediaDirectory->expects($this->never())
             ->method('getAbsolutePath')
-            ->will($this->returnValue('/file.path'));
+            ->willReturn('/file.path');
 
         $this->coreFileStorageDatabase->expects($this->once())
             ->method('checkDbUsage')
@@ -336,7 +332,7 @@ class FileTest extends TestCase
             ->getMock();
         $configurationItemOption->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $fileObject = $this->getFileObject()->setData('configuration_item_option', $configurationItemOption);
         $optionTitle = 'Option Title';
         $optionValue = json_encode(['title' => $optionTitle]);
@@ -347,7 +343,7 @@ class FileTest extends TestCase
         $this->escaper->expects($this->once())
             ->method('escapeHtml')
             ->with($optionTitle)
-            ->will($this->returnValue($optionTitle));
+            ->willReturn($optionTitle);
 
         $this->assertEquals('Option Title [2]', $fileObject->getEditableOptionValue($optionValue));
     }
@@ -376,16 +372,15 @@ class FileTest extends TestCase
             ->getMock();
 
         $itemMock->expects($this->any())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
         $this->assertEquals($optionValue, $fileObject->parseOptionValue($userInput, []));
     }
@@ -403,16 +398,15 @@ class FileTest extends TestCase
             ->getMock();
 
         $itemMock->expects($this->any())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
         $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
     }
@@ -430,16 +424,15 @@ class FileTest extends TestCase
             ->getMock();
 
         $itemMock->expects($this->any())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
 
         $itemMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($optionValue));
+            ->willReturn($optionValue);
 
         $this->itemOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemMock));
+            ->willReturn($itemMock);
 
         $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
     }

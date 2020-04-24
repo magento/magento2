@@ -49,7 +49,7 @@ class GalleryTest extends TestCase
      */
     private $dataPersistorMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
         $this->productMock = $this->createPartialMock(Product::class, ['getData']);

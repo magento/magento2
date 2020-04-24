@@ -97,13 +97,16 @@ class ImageTest extends TestCase
 
         $this->storeManagerInterfaceMock = $this->getMockBuilder(
             StoreManagerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->storeMock = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
             ->getMock();
     }
 
@@ -327,16 +330,14 @@ class ImageTest extends TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->will(
-                $this->returnCallback(
-                    function ($class, $params = []) use ($imageUploaderMock) {
-                        if ($class == "\Magento\Catalog\CategoryImageUpload") {
-                            return $imageUploaderMock;
-                        }
-
-                        return $this->objectManager->get($class, $params);
+            ->willReturnCallback(
+                function ($class, $params = []) use ($imageUploaderMock) {
+                    if ($class == "\Magento\Catalog\CategoryImageUpload") {
+                        return $imageUploaderMock;
                     }
-                )
+
+                    return $this->objectManager->get($class, $params);
+                }
             );
 
         $model = $this->objectManager->getObject(

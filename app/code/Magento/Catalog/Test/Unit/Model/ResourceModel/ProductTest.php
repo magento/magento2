@@ -40,11 +40,11 @@ class ProductTest extends TestCase
 
         $this->setFactoryMock = $this->createPartialMock(
             SetFactory::class,
-            ['create', '__wakeup']
+            ['create']
         );
         $this->typeFactoryMock = $this->createPartialMock(
             TypeFactory::class,
-            ['create', '__wakeup']
+            ['create']
         );
 
         $this->model = $objectManager->getObject(
@@ -61,29 +61,29 @@ class ProductTest extends TestCase
         $productTypeId = 4;
         $expectedErrorMessage = ['attribute_set' => 'Invalid attribute set entity type'];
 
-        $productMock = $this->createPartialMock(
-            DataObject::class,
-            ['getAttributeSetId', '__wakeup']
-        );
+        $productMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $attributeSetMock = $this->createPartialMock(
             Set::class,
-            ['load', 'getEntityTypeId', '__wakeup']
+            ['load', 'getEntityTypeId']
         );
         $entityTypeMock = $this->createMock(Type::class);
 
-        $this->typeFactoryMock->expects($this->once())->method('create')->will($this->returnValue($entityTypeMock));
+        $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($entityTypeMock);
         $entityTypeMock->expects($this->once())->method('loadByCode')->with('catalog_product')->willReturnSelf();
 
         $productAttributeSetId = 4;
         $productMock->expects($this->once())->method('getAttributeSetId')
-            ->will($this->returnValue($productAttributeSetId));
+            ->willReturn($productAttributeSetId);
 
-        $this->setFactoryMock->expects($this->once())->method('create')->will($this->returnValue($attributeSetMock));
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($attributeSetMock);
         $attributeSetMock->expects($this->once())->method('load')->with($productAttributeSetId)->willReturnSelf();
 
         //attribute set of wrong type
-        $attributeSetMock->expects($this->once())->method('getEntityTypeId')->will($this->returnValue(3));
-        $entityTypeMock->expects($this->once())->method('getId')->will($this->returnValue($productTypeId));
+        $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(3);
+        $entityTypeMock->expects($this->once())->method('getId')->willReturn($productTypeId);
 
         $this->assertEquals($expectedErrorMessage, $this->model->validate($productMock));
     }

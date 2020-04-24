@@ -36,7 +36,7 @@ class SaveHandlerTest extends TestCase
      */
     protected $optionRepository;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

@@ -41,7 +41,7 @@ class StoreGroupTest extends TestCase
         $this->subjectMock = $this->createMock(Group::class);
         $this->storeGroupMock = $this->createPartialMock(
             \Magento\Store\Model\Group::class,
-            ['getId', '__wakeup', 'dataHasChangedFor']
+            ['getId', 'dataHasChangedFor']
         );
     }
 
@@ -54,7 +54,7 @@ class StoreGroupTest extends TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $model = new StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -69,7 +69,7 @@ class StoreGroupTest extends TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->storeGroupMock->expects($this->once())->method('getId')->willReturn(1);
 
         $this->storeGroupMock->expects(
             $this->once()
@@ -77,8 +77,8 @@ class StoreGroupTest extends TestCase
             'dataHasChangedFor'
         )->with(
             'root_category_id'
-        )->will(
-            $this->returnValue($websiteChanged)
+        )->willReturn(
+            $websiteChanged
         );
 
         $model = new StoreGroup($this->processorMock);

@@ -44,52 +44,35 @@ class StatusTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->collection = $this->createPartialMock(
-            Collection::class,
-            [
-                '__wakeup',
-                'getSelect',
-                'joinLeft',
-                'order',
-                'getStoreId',
-                'getConnection',
-                'getCheckSql'
-            ]
-        );
-        $this->attributeModel = $this->createPartialMock(
-            Attribute::class,
-            [
-                '__wakeup',
-                'getAttributeCode',
-                'getBackend',
-                'getId',
-                'isScopeGlobal',
-                'getEntity',
-                'getAttribute'
-            ]
-        );
+        $this->collection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['joinLeft', 'order', 'getCheckSql'])
+            ->onlyMethods([ 'getSelect', 'getStoreId', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeModel = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['isScopeGlobal', 'getAttribute'])
+            ->onlyMethods([ 'getAttributeCode', 'getBackend', 'getId', 'getEntity'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->backendAttributeModel = $this->createPartialMock(
             Sku::class,
-            ['__wakeup', 'getTable']
+            [ 'getTable']
         );
         $this->status = $this->objectManagerHelper->getObject(
             Status::class
         );
 
-        $this->attributeModel->expects($this->any())->method('getAttribute')
-            ->will($this->returnSelf());
+        $this->attributeModel->expects($this->any())->method('getAttribute')->willReturnSelf();
         $this->attributeModel->expects($this->any())->method('getAttributeCode')
-            ->will($this->returnValue('attribute_code'));
+            ->willReturn('attribute_code');
         $this->attributeModel->expects($this->any())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->attributeModel->expects($this->any())->method('getBackend')
-            ->will($this->returnValue($this->backendAttributeModel));
-        $this->collection->expects($this->any())->method('getSelect')
-            ->will($this->returnSelf());
-        $this->collection->expects($this->any())->method('joinLeft')
-            ->will($this->returnSelf());
+            ->willReturn($this->backendAttributeModel);
+        $this->collection->expects($this->any())->method('getSelect')->willReturnSelf();
+        $this->collection->expects($this->any())->method('joinLeft')->willReturnSelf();
         $this->backendAttributeModel->expects($this->any())->method('getTable')
-            ->will($this->returnValue('table_name'));
+            ->willReturn('table_name');
 
         $this->entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
@@ -100,9 +83,9 @@ class StatusTest extends TestCase
     public function testAddValueSortToCollectionGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(true));
-        $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
-            ->will($this->returnSelf());
+            ->willReturn(true);
+        $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')->willReturnSelf(
+        );
 
         $this->attributeModel->expects($this->once())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
@@ -114,16 +97,14 @@ class StatusTest extends TestCase
     public function testAddValueSortToCollectionNotGlobal()
     {
         $this->attributeModel->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->collection->expects($this->once())->method('order')->with('check_sql asc')
-            ->will($this->returnSelf());
+        $this->collection->expects($this->once())->method('order')->with('check_sql asc')->willReturnSelf();
         $this->collection->expects($this->once())->method('getStoreId')
-            ->will($this->returnValue(1));
-        $this->collection->expects($this->any())->method('getConnection')
-            ->will($this->returnSelf());
+            ->willReturn(1);
+        $this->collection->expects($this->any())->method('getConnection')->willReturnSelf();
         $this->collection->expects($this->any())->method('getCheckSql')
-            ->will($this->returnValue('check_sql'));
+            ->willReturn('check_sql');
 
         $this->attributeModel->expects($this->any())->method('getEntity')->willReturn($this->entity);
         $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');

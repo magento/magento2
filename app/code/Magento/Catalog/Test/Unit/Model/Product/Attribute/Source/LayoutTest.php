@@ -29,7 +29,8 @@ class LayoutTest extends TestCase
     {
         $this->pageLayoutBuilder = $this->getMockBuilder(
             BuilderInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutModel = $this->objectManagerHelper->getObject(
@@ -51,11 +52,11 @@ class LayoutTest extends TestCase
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())
             ->method('toOptionArray')
-            ->will($this->returnValue(['0' => $expectedOptions['1']]));
+            ->willReturn(['0' => $expectedOptions['1']]);
 
         $this->pageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
-            ->will($this->returnValue($mockPageLayoutConfig));
+            ->willReturn($mockPageLayoutConfig);
 
         $layoutOptions = $this->layoutModel->getAllOptions();
         $this->assertEquals($expectedOptions, $layoutOptions);

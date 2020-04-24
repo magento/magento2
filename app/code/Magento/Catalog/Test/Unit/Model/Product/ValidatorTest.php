@@ -21,7 +21,7 @@ class ValidatorTest extends TestCase
         $productMock = $this->createMock(Product::class);
         $requestMock = $this->createMock(RequestInterface::class);
         $responseMock = $this->createMock(DataObject::class);
-        $productMock->expects($this->once())->method('validate')->will($this->returnValue(true));
+        $productMock->expects($this->once())->method('validate')->willReturn(true);
         $this->assertEquals(true, $validator->validate($productMock, $requestMock, $responseMock));
     }
 }

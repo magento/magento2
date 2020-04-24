@@ -58,7 +58,7 @@ class SpecialPriceTest extends TestCase
             $this->priceCurrencyMock->expects($this->once())
                 ->method('convertAndRound')
                 ->with($specialPriceValue)
-                ->will($this->returnValue($expected));
+                ->willReturn($expected);
         } else {
             $expected = $specialPriceValue;
         }
@@ -74,24 +74,25 @@ class SpecialPriceTest extends TestCase
     {
         $saleableItemMock = $this->createPartialMock(
             Product::class,
-            ['getSpecialPrice', 'getPriceInfo', 'getStore', '__wakeup']
+            ['getSpecialPrice', 'getPriceInfo', 'getStore']
         );
 
         $saleableItemMock->expects($this->any())
             ->method('getSpecialPrice')
-            ->will($this->returnValue($specialPrice));
+            ->willReturn($specialPrice);
 
         $priceInfo = $this->getMockBuilder(
             PriceInfoInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $priceInfo->expects($this->any())
             ->method('getAdjustments')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $saleableItemMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         return $saleableItemMock;
     }
@@ -104,11 +105,12 @@ class SpecialPriceTest extends TestCase
     {
         $localeDate = $this->getMockBuilder(
             TimezoneInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $localeDate->expects($this->any())
             ->method('isScopeDateInInterval')
-            ->will($this->returnValue($isValidInterval));
+            ->willReturn($isValidInterval);
 
         return $localeDate;
     }

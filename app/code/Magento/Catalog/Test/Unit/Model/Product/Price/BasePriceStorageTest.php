@@ -199,10 +199,10 @@ class BasePriceStorageTest extends TestCase
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' => [
-                    1 => [
-                        $this->basePriceInterface
-                    ]
+                1 => [
+                    $this->basePriceInterface
                 ]
+            ]
         ];
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
         $this->invalidSkuProcessor->expects($this->once())

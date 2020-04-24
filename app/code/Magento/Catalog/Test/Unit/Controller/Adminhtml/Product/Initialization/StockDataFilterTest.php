@@ -37,7 +37,7 @@ class StockDataFilterTest extends TestCase
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(1);
 
         $this->stockConfiguration = $this->createPartialMock(
             Configuration::class,
@@ -59,7 +59,7 @@ class StockDataFilterTest extends TestCase
         if (isset($inputStockData['use_config_manage_stock']) && $inputStockData['use_config_manage_stock'] === 1) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getManageStock')
-                ->will($this->returnValue($outputStockData['manage_stock']));
+                ->willReturn($outputStockData['manage_stock']);
         }
 
         $this->assertEquals($outputStockData, $this->stockDataFilter->filter($inputStockData));

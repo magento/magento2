@@ -94,7 +94,8 @@ class CategoryLinkTest extends TestCase
     {
         $this->prepareAdapter();
         $this->prepareMetadata();
-        $product = $this->getMockBuilder(ProductInterface::class)->getMockForAbstractClass();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMockForAbstractClass();
         $product->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($this->dbSelectMock)->willReturn(
             [
@@ -122,7 +123,8 @@ class CategoryLinkTest extends TestCase
     {
         $this->prepareAdapter();
         $this->prepareMetadata();
-        $product = $this->getMockBuilder(ProductInterface::class)->getMockForAbstractClass();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMockForAbstractClass();
         $product->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')

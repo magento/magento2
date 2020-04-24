@@ -28,7 +28,9 @@ class CompositeProductRelationsCalculatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->defaultPriceMock = $this->getMockBuilder(DefaultPrice::class)->disableOriginalConstructor()->getMock();
+        $this->defaultPriceMock = $this->getMockBuilder(DefaultPrice::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new CompositeProductRelationsCalculator($this->defaultPriceMock);
     }
 
@@ -37,7 +39,8 @@ class CompositeProductRelationsCalculatorTest extends TestCase
         $tableName = 'catalog_product_relation';
         $maxRelatedProductCount = 200;
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $this->defaultPriceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->defaultPriceMock->expects($this->once())->method('getTable')->with($tableName)->willReturn($tableName);
 

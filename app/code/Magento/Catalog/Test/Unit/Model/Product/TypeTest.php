@@ -246,12 +246,10 @@ class TypeTest extends TestCase
         $mock->expects($this->any())
             ->method('get')
             ->willReturnMap(
-                
-                    [
-                        ['some_model', [], $this->getMockedProductTypeVirtual()],
-                        [Simple::class, [], $this->getMockedProductTypeSimple()],
-                    ]
-                
+                [
+                    ['some_model', [], $this->getMockedProductTypeVirtual()],
+                    [Simple::class, [], $this->getMockedProductTypeSimple()],
+                ]
             );
 
         return $mock;
@@ -319,12 +317,10 @@ class TypeTest extends TestCase
         $mock->expects($this->any())
             ->method('create')
             ->willReturnMap(
-                
-                    [
-                        ['some_model', [], $this->getMockedProductTypePrice()],
-                        [Price::class, [], $this->getMockedProductTypePrice()],
-                    ]
-                
+                [
+                    ['some_model', [], $this->getMockedProductTypePrice()],
+                    [Price::class, [], $this->getMockedProductTypePrice()],
+                ]
             );
 
         return $mock;

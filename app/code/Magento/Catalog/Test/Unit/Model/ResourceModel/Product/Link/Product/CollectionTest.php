@@ -127,10 +127,10 @@ class CollectionTest extends TestCase
         $connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
-        $entity->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
+        $entity->expects($this->any())->method('getConnection')->willReturn($connection);
+        $entity->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
         $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
-        $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
+        $this->universalFactoryMock->expects($this->any())->method('create')->willReturn($entity);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->any())
@@ -150,14 +150,17 @@ class CollectionTest extends TestCase
         $this->dateTimeMock = $this->createMock(DateTime::class);
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->createMock(ProductLimitation::class));
 
         $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadataMock->method('getLinkField')->willReturn('entity_id');
-        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
+        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $metadataPoolMock->method('getMetadata')->willReturn($metadataMock);
 
         $this->collection = $this->objectManager->getObject(
@@ -191,9 +194,9 @@ class CollectionTest extends TestCase
     {
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
+        $product->expects($this->any())->method('getId')->willReturn('5');
         $productStore = new DataObject(['id' => 33]);
-        $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
+        $product->expects($this->any())->method('getStore')->willReturn($productStore);
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());
     }

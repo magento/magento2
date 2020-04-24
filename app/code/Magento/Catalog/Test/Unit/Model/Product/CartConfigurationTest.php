@@ -23,7 +23,7 @@ class CartConfigurationTest extends TestCase
     {
         $cartConfiguration = new CartConfiguration();
         $productMock = $this->createMock(Product::class);
-        $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($productType));
+        $productMock->expects($this->once())->method('getTypeId')->willReturn($productType);
         $this->assertEquals($expected, $cartConfiguration->isProductConfigured($productMock, $config));
     }
 

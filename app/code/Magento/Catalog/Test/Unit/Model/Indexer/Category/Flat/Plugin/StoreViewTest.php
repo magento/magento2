@@ -51,7 +51,7 @@ class StoreViewTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
         $this->stateMock = $this->createPartialMock(
             State::class,
@@ -71,9 +71,9 @@ class StoreViewTest extends TestCase
         $this->mockIndexerMethods();
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
-        $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
@@ -85,7 +85,7 @@ class StoreViewTest extends TestCase
     {
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
@@ -99,7 +99,7 @@ class StoreViewTest extends TestCase
         $this->mockConfigFlatEnabledNever();
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
@@ -114,12 +114,12 @@ class StoreViewTest extends TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(State::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     protected function mockConfigFlatEnabled()
     {
-        $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
+        $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
     }
 
     protected function mockConfigFlatEnabledNever()

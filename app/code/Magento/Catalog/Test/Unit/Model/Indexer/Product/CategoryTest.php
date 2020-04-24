@@ -73,7 +73,7 @@ class CategoryTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'load', 'isInvalid', 'isWorking', '__wakeup']
+            ['getId', 'load', 'isInvalid', 'isWorking']
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(
@@ -107,9 +107,9 @@ class CategoryTest extends TestCase
             Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->at(0))->method('execute')->with($ids)->will($this->returnSelf());
+        $rowMock->expects($this->at(0))->method('execute')->with($ids)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->model->execute($ids);
     }
@@ -124,9 +124,9 @@ class CategoryTest extends TestCase
             Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->once())->method('execute')->with($ids)->will($this->returnSelf());
+        $rowMock->expects($this->once())->method('execute')->with($ids)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
@@ -140,7 +140,7 @@ class CategoryTest extends TestCase
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Category::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     public function testExecuteFull()

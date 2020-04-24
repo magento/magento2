@@ -48,22 +48,23 @@ class UpSellTest extends TestCase
 
         $this->_productMock = $this->createMock(Product::class);
 
-        $this->_duplicateMock = $this->createPartialMock(
-            Product::class,
-            ['setUpSellLinkData', '__wakeup']
-        );
+        $this->_duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setUpSellLinkData'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_linkMock = $this->createPartialMock(
-            Link::class,
-            ['__wakeup', 'getAttributes', 'getUpSellLinkCollection', 'useUpSellLinks']
-        );
+        $this->_linkMock = $this->getMockBuilder(Link::class)
+            ->addMethods(['getUpSellLinkCollection'])
+            ->onlyMethods([ 'getAttributes', 'useUpSellLinks'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_productMock->expects(
             $this->any()
         )->method(
             'getLinkInstance'
-        )->will(
-            $this->returnValue($this->_linkMock)
+        )->willReturn(
+            $this->_linkMock
         );
     }
 
@@ -76,22 +77,23 @@ class UpSellTest extends TestCase
 
         $this->_linkMock->expects($this->once())->method('useUpSellLinks');
 
-        $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
+        $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
-        $productLinkMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
-            ['__wakeup', 'getLinkedProductId', 'toArray']
-        );
+        $productLinkMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)->addMethods(
+            ['getLinkedProductId', 'toArray']
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));
+        $productLinkMock->expects($this->once())->method('getLinkedProductId')->willReturn('100500');
         $productLinkMock->expects(
             $this->once()
         )->method(
             'toArray'
         )->with(
             ['one', 'two']
-        )->will(
-            $this->returnValue(['some' => 'data'])
+        )->willReturn(
+            ['some' => 'data']
         );
 
         $collectionMock = $helper->getCollectionMock(
@@ -102,8 +104,8 @@ class UpSellTest extends TestCase
             $this->once()
         )->method(
             'getUpSellLinkCollection'
-        )->will(
-            $this->returnValue($collectionMock)
+        )->willReturn(
+            $collectionMock
         );
 
         $this->_duplicateMock->expects($this->once())->method('setUpSellLinkData')->with($expectedData);

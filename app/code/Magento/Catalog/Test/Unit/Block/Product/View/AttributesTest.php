@@ -137,7 +137,7 @@ class AttributesTest extends TestCase
             ->method('getValue')
             ->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertTrue(empty($attributes['phrase']));
+        $this->assertEmpty($attributes);
     }
 
     /**
@@ -151,8 +151,8 @@ class AttributesTest extends TestCase
             ->method('getValue')
             ->willReturn($this->phrase);
         $attributes = $this->attributesBlock->getAdditionalData();
-        $this->assertNotTrue(empty($attributes['phrase']));
-        $this->assertNotTrue(empty($attributes['phrase']['value']));
+        $this->assertNotEmpty($attributes['phrase']);
+        $this->assertNotEmpty($attributes['phrase']['value']);
         $this->assertEquals('Yes', $attributes['phrase']['value']);
     }
 }

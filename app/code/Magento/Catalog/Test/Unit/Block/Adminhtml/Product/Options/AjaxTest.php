@@ -70,28 +70,30 @@ class AjaxTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $eventManager->expects($this->exactly(2))->method('dispatch')->will($this->returnValue(true));
+        $eventManager->expects($this->exactly(2))->method('dispatch')->willReturn(true);
 
         $scopeConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
-            ->disableOriginalConstructor()->getMock();
-        $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
-            ->will($this->returnValue(false));
-
-        $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'load', 'getId', '__wakeup', '__sleep'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $product->expects($this->once())->method('setStoreId')->will($this->returnSelf());
-        $product->expects($this->once())->method('load')->will($this->returnSelf());
-        $product->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
+            ->willReturn(false);
+
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setStoreId', 'load', 'getId', '__sleep'])
+            ->getMock();
+        $product->expects($this->once())->method('setStoreId')->willReturnSelf();
+        $product->expects($this->once())->method('load')->willReturnSelf();
+        $product->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsBlock = $this->getMockBuilder(Option::class)
             ->setMethods(['setIgnoreCaching', 'setProduct', 'getOptionValues'])
             ->disableOriginalConstructor()
             ->getMock();
-        $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->will($this->returnSelf());
-        $optionsBlock->expects($this->once())->method('setProduct')->with($product)->will($this->returnSelf());
-        $optionsBlock->expects($this->once())->method('getOptionValues')->will($this->returnValue([]));
+        $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->willReturnSelf();
+        $optionsBlock->expects($this->once())->method('setProduct')->with($product)->willReturnSelf();
+        $optionsBlock->expects($this->once())->method('getOptionValues')->willReturn([]);
 
         $layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
@@ -99,27 +101,27 @@ class AjaxTest extends TestCase
             ->getMockForAbstractClass();
         $layout->expects($this->once())->method('createBlock')
             ->with(Option::class)
-            ->will($this->returnValue($optionsBlock));
+            ->willReturn($optionsBlock);
 
         $request = $this->getMockBuilder(Http::class)
             ->setMethods(['getParam'])
             ->disableOriginalConstructor()
             ->getMock();
         $request->expects($this->once())->method('getParam')->with('store')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $this->context->expects($this->once())->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $this->context->expects($this->once())->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfig));
+            ->willReturn($scopeConfig);
         $this->context->expects($this->once())->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $this->context->expects($this->once())->method('getRequest')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
         $this->registry->expects($this->once())->method('registry')
             ->with('import_option_products')
-            ->will($this->returnValue([1]));
-        $this->productFactory->expects($this->once())->method('create')->will($this->returnValue($product));
+            ->willReturn([1]);
+        $this->productFactory->expects($this->once())->method('create')->willReturn($product);
 
         $this->block = $this->objectManagerHelper->getObject(
             Ajax::class,

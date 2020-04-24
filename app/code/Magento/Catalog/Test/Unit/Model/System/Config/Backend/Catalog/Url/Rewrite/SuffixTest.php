@@ -80,7 +80,7 @@ class SuffixTest extends TestCase
      */
     protected $suffixModel;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()

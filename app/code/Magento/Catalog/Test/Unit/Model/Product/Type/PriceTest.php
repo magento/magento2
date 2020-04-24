@@ -91,7 +91,7 @@ class PriceTest extends TestCase
         );
         $storeMangerMock->expects($this->any())
             ->method('getWebsite')
-            ->will($this->returnValue($this->websiteMock));
+            ->willReturn($this->websiteMock);
 
         $this->scopeConfigMock = $this->getMockForAbstractClass(
             ScopeConfigInterface::class,
@@ -108,7 +108,7 @@ class PriceTest extends TestCase
         $this->groupManagementMock =
             $this->createMock(GroupManagementInterface::class);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
-            ->will($this->returnValue($group));
+            ->willReturn($group);
         $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -171,16 +171,14 @@ class PriceTest extends TestCase
     public function testTierPrices($priceScope, $expectedWebsiteId)
     {
         // establish the behavior of the mocks
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue($priceScope));
-        $this->websiteMock->expects($this->any())->method('getId')->will($this->returnValue($expectedWebsiteId));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($priceScope);
+        $this->websiteMock->expects($this->any())->method('getId')->willReturn($expectedWebsiteId);
         $this->tpFactory->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
-                    function () {
-                        return $this->objectManagerHelper->getObject(TierPrice::class);
-                    }
-                )
+            ->willReturnCallback(
+                function () {
+                    return $this->objectManagerHelper->getObject(TierPrice::class);
+                }
             );
 
         // create sample TierPrice objects that would be coming from a REST call
@@ -211,8 +209,8 @@ class PriceTest extends TestCase
         // test the data actually set on the product
         $tpArray = $this->product->getData($this::KEY_TIER_PRICE);
         $this->assertNotNull($tpArray);
-        $this->assertTrue(is_array($tpArray));
-        $this->assertEquals(count($tps), count($tpArray));
+        $this->assertIsArray($tpArray);
+        $this->assertCount(count($tps), $tpArray);
 
         $count = count($tps);
         for ($i = 0; $i < $count; $i++) {
@@ -240,8 +238,8 @@ class PriceTest extends TestCase
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
-        $this->assertTrue(is_array($tpRests));
-        $this->assertEquals(count($tps), count($tpRests));
+        $this->assertIsArray($tpRests);
+        $this->assertCount(count($tps), $tpRests);
         foreach ($tpRests as $tpRest) {
             $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());
         }

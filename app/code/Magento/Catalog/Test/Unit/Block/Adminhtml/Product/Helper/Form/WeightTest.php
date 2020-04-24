@@ -46,10 +46,11 @@ class WeightTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->weightSwitcher = $this->createPartialMock(
-            Radios::class,
-            ['setId', 'setName', 'setLabel', 'setForm']
-        );
+        $this->weightSwitcher = $this->getMockBuilder(Radios::class)
+            ->addMethods(['setName', 'setLabel'])
+            ->onlyMethods(['setId', 'setForm'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->weightSwitcher->method('setId')->willReturnSelf();
         $this->weightSwitcher->method('setName')->willReturnSelf();
         $this->weightSwitcher->method('setLabel')->willReturnSelf();
@@ -60,7 +61,7 @@ class WeightTest extends TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo('radios')
+            'radios'
         )->willReturn(
             $this->weightSwitcher
         );
@@ -87,9 +88,8 @@ class WeightTest extends TestCase
         $this->weightSwitcher->method(
             'setForm'
         )->with(
-            $this->equalTo($form)
+            $form
         )->willReturnSelf(
-            
         );
 
         $this->_model->setForm($form);

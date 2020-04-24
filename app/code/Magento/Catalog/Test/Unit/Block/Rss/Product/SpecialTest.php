@@ -93,12 +93,13 @@ class SpecialTest extends TestCase
     protected function setUp(): void
     {
         $this->request = $this->createMock(RequestInterface::class);
-        $this->request->expects($this->at(0))->method('getParam')->with('store_id')->will($this->returnValue(null));
-        $this->request->expects($this->at(1))->method('getParam')->with('cid')->will($this->returnValue(null));
+        $this->request->expects($this->at(0))->method('getParam')->with('store_id')->willReturn(null);
+        $this->request->expects($this->at(1))->method('getParam')->with('cid')->willReturn(null);
 
         $this->httpContext = $this->getMockBuilder(Context::class)
-            ->setMethods(['getValue'])->disableOriginalConstructor()->getMock();
-        $this->httpContext->expects($this->any())->method('getValue')->will($this->returnValue(1));
+            ->setMethods(['getValue'])->disableOriginalConstructor()
+            ->getMock();
+        $this->httpContext->expects($this->any())->method('getValue')->willReturn(1);
 
         $this->imageHelper = $this->createMock(Image::class);
         $this->outputHelper = $this->createPartialMock(Output::class, ['productAttribute']);
@@ -109,13 +110,14 @@ class SpecialTest extends TestCase
 
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $store->expects($this->any())->method('getFrontendName')->will($this->returnValue('Store 1'));
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+            ->setMethods(['getId', 'getFrontendName'])->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getId')->willReturn(1);
+        $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
+        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn('en_US');
 
         $this->localeDate = $this->createMock(TimezoneInterface::class);
 
@@ -142,20 +144,19 @@ class SpecialTest extends TestCase
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->with(['type' => 'special_products', 'store_id' => 1])
-            ->will($this->returnValue('http://magento.com/rss/feed/index/type/special_products/store_id/1'));
+            ->willReturn('http://magento.com/rss/feed/index/type/special_products/store_id/1');
         $item = $this->getItemMock();
         $this->rssModel->expects($this->once())->method('getProductsCollection')
-            ->will($this->returnValue([$item]));
-        $this->msrpHelper->expects($this->once())->method('canApplyMsrp')->will($this->returnValue(false));
-        $this->localeDate->expects($this->once())->method('formatDateTime')->will($this->returnValue(date('Y-m-d')));
+            ->willReturn([$item]);
+        $this->msrpHelper->expects($this->once())->method('canApplyMsrp')->willReturn(false);
+        $this->localeDate->expects($this->once())->method('formatDateTime')->willReturn(date('Y-m-d'));
 
-        $this->priceCurrency->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+        $this->priceCurrency->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
 
-        $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')
-            ->will($this->returnSelf());
+        $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')->willReturnSelf();
         $this->imageHelper->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('image_link'));
-        $this->outputHelper->expects($this->once())->method('productAttribute')->will($this->returnValue(''));
+            ->willReturn('image_link');
+        $this->outputHelper->expects($this->once())->method('productAttribute')->willReturn('');
         $data = [
             'title' => 'Store 1 - Special Products',
             'description' => 'Store 1 - Special Products',
@@ -173,12 +174,12 @@ class SpecialTest extends TestCase
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
-        $this->assertContains('<a href="http://magento.com/product-name.html"><', $description);
-        $this->assertContains(
+        $this->assertStringContainsString('<a href="http://magento.com/product-name.html"><', $description);
+        $this->assertStringContainsString(
             sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')),
             $description
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img src="image_link" alt="" border="0" align="left" height="75" width="75" />',
             $description
         );
@@ -191,7 +192,6 @@ class SpecialTest extends TestCase
     {
         $item = $this->getMockBuilder(Product::class)
             ->setMethods([
-                '__wakeup',
                 '__sleep',
                 'getName',
                 'getProductUrl',
@@ -203,17 +203,18 @@ class SpecialTest extends TestCase
                 'getFinalPrice',
                 'getPrice',
                 'getUseSpecial',
-            ])->disableOriginalConstructor()->getMock();
-        $item->expects($this->once())->method('getAllowedInRss')->will($this->returnValue(true));
-        $item->expects($this->any())->method('getSpecialToDate')->will($this->returnValue(date('Y-m-d')));
-        $item->expects($this->exactly(2))->method('getFinalPrice')->will($this->returnValue(10));
-        $item->expects($this->once())->method('getSpecialPrice')->will($this->returnValue(15));
-        $item->expects($this->exactly(2))->method('getAllowedPriceInRss')->will($this->returnValue(true));
-        $item->expects($this->once())->method('getUseSpecial')->will($this->returnValue(true));
-        $item->expects($this->once())->method('getDescription')->will($this->returnValue('Product Description'));
-        $item->expects($this->once())->method('getName')->will($this->returnValue('Product Name'));
+            ])->disableOriginalConstructor()
+            ->getMock();
+        $item->expects($this->once())->method('getAllowedInRss')->willReturn(true);
+        $item->expects($this->any())->method('getSpecialToDate')->willReturn(date('Y-m-d'));
+        $item->expects($this->exactly(2))->method('getFinalPrice')->willReturn(10);
+        $item->expects($this->once())->method('getSpecialPrice')->willReturn(15);
+        $item->expects($this->exactly(2))->method('getAllowedPriceInRss')->willReturn(true);
+        $item->expects($this->once())->method('getUseSpecial')->willReturn(true);
+        $item->expects($this->once())->method('getDescription')->willReturn('Product Description');
+        $item->expects($this->once())->method('getName')->willReturn('Product Name');
         $item->expects($this->exactly(2))->method('getProductUrl')
-            ->will($this->returnValue('http://magento.com/product-name.html'));
+            ->willReturn('http://magento.com/product-name.html');
 
         return $item;
     }
@@ -222,7 +223,7 @@ class SpecialTest extends TestCase
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals(true, $this->block->isAllowed());
     }
 
@@ -235,10 +236,10 @@ class SpecialTest extends TestCase
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->with(['type' => 'special_products'])
-            ->will($this->returnValue('http://magento.com/rss/feed/index/type/special_products/store_id/1'));
+            ->willReturn('http://magento.com/rss/feed/index/type/special_products/store_id/1');
         $expected = [
             'label' => 'Special Products',
             'link' => 'http://magento.com/rss/feed/index/type/special_products/store_id/1',

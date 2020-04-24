@@ -183,42 +183,48 @@ class SaveTest extends TestCase
         /**
          * @var \Magento\Catalog\Model\Category|MockObject $categoryMock
          */
-        $categoryMock = $this->createPartialMock(Category::class, [
-                'setStoreId',
-                'load',
-                'getPath',
-                'getResource',
-                'setPath',
-                'setParentId',
-                'setData',
-                'addData',
-                'setAttributeSetId',
-                'getDefaultAttributeSetId',
-                'getProductsReadonly',
-                'setPostedProducts',
-                'getId',
-                'validate',
-                'unsetData',
-                'save',
-                'toArray'
-            ]);
+        $categoryMock = $this->getMockBuilder(Category::class)
+            ->addMethods(['setAttributeSetId', 'getProductsReadonly', 'setPostedProducts'])
+            ->onlyMethods(
+                [
+                    'setStoreId',
+                    'load',
+                    'getPath',
+                    'getResource',
+                    'setPath',
+                    'setParentId',
+                    'setData',
+                    'addData',
+                    'getDefaultAttributeSetId',
+                    'getId',
+                    'validate',
+                    'unsetData',
+                    'save',
+                    'toArray'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         /**
          * @var \Magento\Catalog\Model\Category|MockObject $parentCategoryMock
          */
-        $parentCategoryMock = $this->createPartialMock(Category::class, [
-                'setStoreId',
-                'load',
-                'getPath',
-                'setPath',
-                'setParentId',
-                'setData',
-                'addData',
-                'setAttributeSetId',
-                'getDefaultAttributeSetId',
-                'getProductsReadonly',
-                'setPostedProducts',
-                'getId'
-            ]);
+        $parentCategoryMock = $this->getMockBuilder(Category::class)
+            ->addMethods(['setAttributeSetId', 'getProductsReadonly', 'setPostedProducts'])
+            ->onlyMethods(
+                [
+                    'setStoreId',
+                    'load',
+                    'getPath',
+                    'setPath',
+                    'setParentId',
+                    'setData',
+                    'addData',
+                    'getDefaultAttributeSetId',
+                    'getId'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         /**
          * @var Session|MockObject $sessionMock
          */
@@ -230,7 +236,10 @@ class SaveTest extends TestCase
         /**
          * @var Config|MockObject $wysiwygConfigMock
          */
-        $wysiwygConfigMock = $this->createPartialMock(Config::class, ['setStoreId']);
+        $wysiwygConfigMock = $this->getMockBuilder(Config::class)
+            ->addMethods(['setStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /**
          * @var StoreManagerInterface|MockObject $storeManagerMock
          */
@@ -529,7 +538,7 @@ class SaveTest extends TestCase
         $eavConfig->expects($this->once())
             ->method('getEntityType')
             ->with(CategoryAttributeInterface::ENTITY_TYPE_CODE)
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
 
         $model = $this->objectManager->getObject(Save::class, [
             'eavConfig' => $eavConfig

@@ -149,7 +149,7 @@ class ReloadTest extends TestCase
             ->with('noroute')
             ->willReturn(true);
 
-        $this->assertSame(true, $this->model->execute());
+        $this->assertTrue($this->model->execute());
     }
 
     public function testExecute()

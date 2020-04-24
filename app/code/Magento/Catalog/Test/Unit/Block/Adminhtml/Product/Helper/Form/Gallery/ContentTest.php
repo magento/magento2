@@ -74,12 +74,13 @@ class ContentTest extends TestCase
      */
     protected $objectManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->fileSystemMock = $this->createPartialMock(
-            Filesystem::class,
-            ['stat', 'getDirectoryRead']
-        );
+        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
+            ->addMethods(['stat'])
+            ->onlyMethods(['getDirectoryRead'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->readMock = $this->createMock(ReadInterface::class);
         $this->galleryMock = $this->createMock(Gallery::class);
         $this->mediaConfigMock = $this->createPartialMock(
@@ -169,10 +170,10 @@ class ContentTest extends TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
     }
@@ -244,10 +245,10 @@ class ContentTest extends TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
@@ -441,10 +442,10 @@ class ContentTest extends TestCase
 
         $this->readMock->expects($this->any())
             ->method('isFile')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')

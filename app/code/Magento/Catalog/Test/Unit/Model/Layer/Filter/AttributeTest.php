@@ -97,8 +97,7 @@ class AttributeTest extends TestCase
             ->getMock();
 
         $this->filterAttribute->expects($this->any())
-            ->method('applyFilterToCollection')
-            ->will($this->returnSelf());
+            ->method('applyFilterToCollection')->willReturnSelf();
 
         $this->filterAttributeFactory = $this->getMockBuilder(
             AttributeFactory::class
@@ -109,7 +108,7 @@ class AttributeTest extends TestCase
 
         $this->filterAttributeFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->filterAttribute));
+            ->willReturn($this->filterAttribute);
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -117,7 +116,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $this->frontend = $this->getMockBuilder(AbstractFrontend::class)
             ->disableOriginalConstructor()
@@ -129,7 +128,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
@@ -142,7 +141,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $stripTagsFilter->expects($this->any())
             ->method('filter')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $string = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
@@ -150,12 +149,10 @@ class AttributeTest extends TestCase
             ->getMock();
         $string->expects($this->any())
             ->method('strlen')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return strlen($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return strlen($value);
+                }
             );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -181,46 +178,41 @@ class AttributeTest extends TestCase
 
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
 
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $filterItem->expects($this->once())
             ->method('setFilter')
-            ->with($this->target)
-            ->will($this->returnSelf());
+            ->with($this->target)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($attributeLabel)
-            ->will($this->returnSelf());
+            ->with($attributeLabel)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeValue)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
-            ->with(0)
-            ->will($this->returnSelf());
+            ->with(0)->willReturnSelf();
 
         $this->state->expects($this->once())
             ->method('addFilter')
-            ->with($filterItem)
-            ->will($this->returnSelf());
+            ->with($filterItem)->willReturnSelf();
 
         $result = $this->target->apply($this->request);
 
@@ -235,26 +227,25 @@ class AttributeTest extends TestCase
 
         $this->attribute->expects($this->once())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
 
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $this->state->expects($this->once())
             ->method('addFilter')
-            ->with($filterItem)
-            ->will($this->returnSelf());
+            ->with($filterItem)->willReturnSelf();
 
         $expectedFilterItems = [];
 
@@ -279,27 +270,23 @@ class AttributeTest extends TestCase
 
         $filterItem->expects($this->once())
             ->method('setFilter')
-            ->with($this->target)
-            ->will($this->returnSelf());
+            ->with($this->target)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($label)
-            ->will($this->returnSelf());
+            ->with($label)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($value)
-            ->will($this->returnSelf());
+            ->with($value)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
-            ->with($count)
-            ->will($this->returnSelf());
+            ->with($count)->willReturnSelf();
 
         $this->filterItemFactory->expects($this->at($index))
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         return $filterItem;
     }

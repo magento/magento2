@@ -88,7 +88,7 @@ class FlatTest extends TestCase
     public function testExecute()
     {
         $ids = [1, 2, 3];
-        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($ids));
+        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($ids);
 
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
@@ -100,7 +100,7 @@ class FlatTest extends TestCase
     public function testExecuteList()
     {
         $ids = [1, 2, 3];
-        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($ids));
+        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($ids);
 
         $result = $this->model->executeList($ids);
         $this->assertNull($result);
@@ -125,7 +125,7 @@ class FlatTest extends TestCase
     public function testExecuteRow()
     {
         $except = 5;
-        $this->productFlatIndexerRow->expects($this->any())->method('execute')->with($this->equalTo($except));
+        $this->productFlatIndexerRow->expects($this->any())->method('execute')->with($except);
 
         $result = $this->model->executeRow($except);
         $this->assertNull($result);

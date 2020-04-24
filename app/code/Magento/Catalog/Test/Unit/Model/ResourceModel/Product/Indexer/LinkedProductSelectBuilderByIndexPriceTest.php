@@ -79,7 +79,8 @@ class LinkedProductSelectBuilderByIndexPriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();

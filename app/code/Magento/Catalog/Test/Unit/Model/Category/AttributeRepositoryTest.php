@@ -59,22 +59,14 @@ class AttributeRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->searchBuilderMock =
-            $this->createMock(SearchCriteriaBuilder::class);
-        $this->filterBuilderMock =
-            $this->createMock(FilterBuilder::class);
-        $this->attributeRepositoryMock =
-            $this->createMock(AttributeRepositoryInterface::class);
-        $this->searchResultMock =
-            $this->createPartialMock(SearchResultsInterface::class, [
-                    'getItems',
-                    'getSearchCriteria',
-                    'getTotalCount',
-                    'setItems',
-                    'setSearchCriteria',
-                    'setTotalCount',
-                    '__wakeup',
-                ]);
+        $this->searchBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
+        $this->attributeRepositoryMock = $this->createMock(AttributeRepositoryInterface::class);
+        $this->searchResultMock = $this->getMockBuilder(SearchResultsInterface::class)
+            ->onlyMethods(
+                ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
+            )
+            ->getMock();
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new DataObject(['default_attribute_set_id' => 3]));
@@ -118,9 +110,7 @@ class AttributeRepositoryTest extends TestCase
         $filterMock = $this->createMock(Filter::class);
         $this->filterBuilderMock->expects($this->once())->method('setField')
             ->with('attribute_set_id')->willReturnSelf();
-        $this->filterBuilderMock->expects($this->once())->method('setValue')->with(
-            3
-        )->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())->method('setValue')->with(3)->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);

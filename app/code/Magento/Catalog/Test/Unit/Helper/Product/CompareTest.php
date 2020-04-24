@@ -71,7 +71,8 @@ class CompareTest extends TestCase
             Context::class,
             ['getUrlBuilder', 'getRequest', 'getUrlEncoder']
         );
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)->getMock();
+        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
+            ->getMock();
         $this->urlEncoder->expects($this->any())
             ->method('encode')
             ->willReturnCallback(
@@ -81,21 +82,21 @@ class CompareTest extends TestCase
             );
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilder));
+            ->willReturn($this->urlBuilder);
         $this->context->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->once())
             ->method('getUrlEncoder')
-            ->will($this->returnValue($this->urlEncoder));
+            ->willReturn($this->urlEncoder);
         $this->postDataHelper = $this->createPartialMock(
             PostHelper::class,
             ['getPostData']
         );
-        $this->catalogSessionMock = $this->createPartialMock(
-            Session::class,
-            ['getBeforeCompareUrl']
-        );
+        $this->catalogSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getBeforeCompareUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->compareHelper = $objectManager->getObject(
             Compare::class,
@@ -123,17 +124,17 @@ class CompareTest extends TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($removeUrl)
-            ->will($this->returnValue($removeUrl));
+            ->willReturn($removeUrl);
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($removeUrl, $postParams)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** @var Product|MockObject $product */
-        $product = $this->createPartialMock(Product::class, ['getId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getId']);
         $product->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
 
         $this->assertTrue($this->compareHelper->getPostDataRemove($product));
     }
@@ -147,7 +148,7 @@ class CompareTest extends TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($url)
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->compareHelper->getClearListUrl());
     }
@@ -166,12 +167,12 @@ class CompareTest extends TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with($clearUrl)
-            ->will($this->returnValue($clearUrl));
+            ->willReturn($clearUrl);
 
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
             ->with($clearUrl, $postParams)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->compareHelper->getPostDataClearList());
     }

@@ -48,7 +48,6 @@ class ProductLinksTest extends TestCase
                     'setCrossSellLinkData',
                     'setUpSellLinkData',
                     'setRelatedLinkData',
-                    '__wakeup',
                 ]
             )
             ->disableOriginalConstructor();

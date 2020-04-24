@@ -116,21 +116,21 @@ class GalleryTest extends TestCase
         $leftJoinTables = [
             0 => [
                 0 => [
-                        'store_value' => 'catalog_product_entity_media_gallery_value_video',
-                    ],
+                    'store_value' => 'catalog_product_entity_media_gallery_value_video',
+                ],
                 1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
                 2 => [
-                        'video_provider' => 'provider',
-                        'video_url' => 'url',
-                        'video_title' => 'title',
-                        'video_description' => 'description',
-                        'video_metadata' => 'metadata',
-                    ],
+                    'video_provider' => 'provider',
+                    'video_url' => 'url',
+                    'video_title' => 'title',
+                    'video_description' => 'description',
+                    'video_metadata' => 'metadata',
+                ],
             ],
         ];
         $whereCondition = null;
         $getTableReturnValue = 'table';
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -183,8 +183,8 @@ class GalleryTest extends TestCase
             ]
         ];
         $this->connection->expects($this->once())->method('fetchAll')
-                         ->with($this->select)
-                         ->willReturn($resultRow);
+            ->with($this->select)
+            ->willReturn($resultRow);
 
         $methodResult = $this->resource->loadDataFromTableByValueId(
             $tableNameAlias,
@@ -205,23 +205,23 @@ class GalleryTest extends TestCase
         $cols = null;
         $leftJoinTables = [
             0 => [
-                    0 => [
-                            'store_value' => 'catalog_product_entity_media_gallery_value_video',
-                        ],
-                    1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 => [
-                            'video_provider' => 'provider',
-                            'video_url' => 'url',
-                            'video_title' => 'title',
-                            'video_description' => 'description',
-                            'video_metadata' => 'metadata',
-                        ],
+                0 => [
+                    'store_value' => 'catalog_product_entity_media_gallery_value_video',
                 ],
+                1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
+                2 => [
+                    'video_provider' => 'provider',
+                    'video_url' => 'url',
+                    'video_title' => 'title',
+                    'video_description' => 'description',
+                    'video_metadata' => 'metadata',
+                ],
+            ],
         ];
         $whereCondition = 'main.store_id = ' . $storeId;
         $getTableReturnValue = 'table';
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -275,8 +275,8 @@ class GalleryTest extends TestCase
         ];
 
         $this->connection->expects($this->once())->method('fetchAll')
-                         ->with($this->select)
-                         ->willReturn($resultRow);
+            ->with($this->select)
+            ->willReturn($resultRow);
 
         $methodResult = $this->resource->loadDataFromTableByValueId(
             $tableNameAlias,
@@ -331,8 +331,8 @@ class GalleryTest extends TestCase
             'value.position IS NULL',
             'default_value.position',
             'value.position'
-        )->will($this->returnValue($positionCheckSql));
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        )->willReturn($positionCheckSql);
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -350,7 +350,7 @@ class GalleryTest extends TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getData')
             ->with('entity_id')->willReturn($productId);
-        $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
+        $this->product->expects($this->at(1))->method('getStoreId')->willReturn($storeId);
         $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
             ['value.store_id = ?'],
             ['default_value.store_id = ?']
@@ -358,8 +358,8 @@ class GalleryTest extends TestCase
             'value.store_id = ' . $storeId,
             'default_value.store_id = ' . 0
         );
-        $this->connection->expects($this->any())->method('getIfNullSql')->will(
-            $this->returnValueMap([
+        $this->connection->expects($this->any())->method('getIfNullSql')->willReturnMap(
+            [
                 [
                     '`value`.`label`',
                     '`default_value`.`label`',
@@ -375,7 +375,7 @@ class GalleryTest extends TestCase
                     '`default_value`.`disabled`',
                     'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
                 ]
-            ])
+            ]
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -402,14 +402,14 @@ class GalleryTest extends TestCase
         $this->select->expects($this->at(6))->method('where')
             ->with('main.disabled = 0')->willReturnSelf();
         $this->select->expects($this->at(8))->method('where')
-                     ->with('entity.entity_id = ?', $productId)
-                     ->willReturnSelf();
+            ->with('entity.entity_id = ?', $productId)
+            ->willReturnSelf();
         $this->select->expects($this->once())->method('order')
-                     ->with($positionCheckSql . ' ' . Select::SQL_ASC)
-                     ->willReturnSelf();
+            ->with($positionCheckSql . ' ' . Select::SQL_ASC)
+            ->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchAll')
-                         ->with($this->select)
-                         ->willReturn($resultRow);
+            ->with($this->select)
+            ->willReturn($resultRow);
 
         $this->assertEquals($resultRow, $this->resource->loadProductGalleryByAttributeId($this->product, $attributeId));
     }
@@ -476,7 +476,7 @@ class GalleryTest extends TestCase
             ],
         ];
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => 'table',
@@ -490,6 +490,6 @@ class GalleryTest extends TestCase
         $this->connection->expects($this->once())->method('fetchAll')
             ->with($this->select)
             ->willReturn($results);
-        $this->assertEquals($this->resource->countImageUses(1), count($results));
+        $this->assertCount($this->resource->countImageUses(1), $results);
     }
 }

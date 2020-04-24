@@ -104,21 +104,21 @@ class TopmenuTest extends TestCase
         );
 
         $this->catalogLayerMock->expects($this->once())->method('getCurrentCategory')
-            ->will($this->returnValue($this->childrenCategoryMock));
+            ->willReturn($this->childrenCategoryMock);
 
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->categoryMock->expects($this->atLeastOnce())->method('getParentId')
-            ->will($this->returnValue($categoryParentId));
+            ->willReturn($categoryParentId);
         $this->categoryMock->expects($this->once())->method('getParentIds')
-            ->will($this->returnValue($categoryParentIds));
+            ->willReturn($categoryParentIds);
 
         $this->layerResolverMock->expects($this->once())->method('get')
-            ->will($this->returnValue($this->catalogLayerMock));
+            ->willReturn($this->catalogLayerMock);
 
         $this->storeMock->expects($this->once())->method('getRootCategoryId')
-            ->will($this->returnValue($rootCategoryId));
+            ->willReturn($rootCategoryId);
 
         $this->categoryCollectionMock->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->categoryMock]));
@@ -157,11 +157,11 @@ class TopmenuTest extends TestCase
         $treeMock = $this->createMock(Tree::class);
 
         $parentCategoryNodeMock = $this->_getCleanMock(Node::class);
-        $parentCategoryNodeMock->expects($this->once())->method('getTree')->will($this->returnValue($treeMock));
+        $parentCategoryNodeMock->expects($this->once())->method('getTree')->willReturn($treeMock);
         $parentCategoryNodeMock->expects($this->once())->method('addChild');
 
         $blockMock = $this->_getCleanMock(\Magento\Theme\Block\Html\Topmenu::class);
-        $blockMock->expects($this->once())->method('getMenu')->will($this->returnValue($parentCategoryNodeMock));
+        $blockMock->expects($this->once())->method('getMenu')->willReturn($parentCategoryNodeMock);
 
         $this->block->beforeGetHtml($blockMock);
     }

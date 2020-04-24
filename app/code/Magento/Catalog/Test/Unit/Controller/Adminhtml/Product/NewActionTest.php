@@ -48,11 +48,12 @@ class NewActionTest extends ProductTest
             Builder::class,
             ['build']
         );
-        $this->product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
-            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->resultPage = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()

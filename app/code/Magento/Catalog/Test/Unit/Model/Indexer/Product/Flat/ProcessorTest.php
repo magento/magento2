@@ -47,7 +47,7 @@ class ProcessorTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
 
         $this->_indexerMock = $this->createPartialMock(Indexer::class, ['getId', 'invalidate']);
-        $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->_indexerMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->_stateMock = $this->createPartialMock(
             State::class,
@@ -80,7 +80,7 @@ class ProcessorTest extends TestCase
      */
     public function testMarkIndexerAsInvalid()
     {
-        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
+        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->_indexerMock->expects($this->once())->method('invalidate');
         $this->prepareIndexer();
         $this->_model->markIndexerAsInvalid();
@@ -91,7 +91,7 @@ class ProcessorTest extends TestCase
      */
     public function testMarkDisabledIndexerAsInvalid()
     {
-        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(false));
+        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(false);
         $this->_indexerMock->expects($this->never())->method('invalidate');
         $this->_model->markIndexerAsInvalid();
     }
@@ -101,7 +101,7 @@ class ProcessorTest extends TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
     }
 
     /**

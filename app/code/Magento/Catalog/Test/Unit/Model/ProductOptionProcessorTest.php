@@ -196,7 +196,7 @@ class ProductOptionProcessorTest extends TestCase
 
         if (!empty($expected)) {
             $this->assertArrayHasKey($expected, $result);
-            $this->assertTrue(is_array($result));
+            $this->assertIsArray($result);
             $this->assertSame($this->customOption, $result['custom_options'][0]);
         } else {
             $this->assertEmpty($result);

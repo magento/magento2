@@ -37,7 +37,8 @@ class MviewStateTest extends TestCase
 
         $state = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
@@ -45,16 +46,16 @@ class MviewStateTest extends TestCase
 
         $relatedViewState = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $relatedViewState->expects(
             $this->once()
         )->method(
             'loadByView'
         )->with(
-            $this->equalTo($relatedViewId)
+            $relatedViewId
         )->willReturnSelf(
-            
         );
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
@@ -68,9 +69,8 @@ class MviewStateTest extends TestCase
         )->method(
             'setVersionId'
         )->with(
-            $this->equalTo($relatedVersion)
+            $relatedVersion
         )->willReturnSelf(
-            
         );
 
         $relatedViewState->expects(
@@ -78,23 +78,22 @@ class MviewStateTest extends TestCase
         )->method(
             'setStatus'
         )->with(
-            $this->equalTo($stateStatus)
+            $stateStatus
         )->willReturnSelf(
-            
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
             ChangelogInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $relatedViewChangelog->expects(
             $this->once()
         )->method(
             'setViewId'
         )->with(
-            $this->equalTo($relatedViewId)
+            $relatedViewId
         )->willReturnSelf(
-            
         );
 
         $relatedViewChangelog->expects($this->once())->method('getVersion')->willReturn($relatedVersion);
@@ -126,7 +125,8 @@ class MviewStateTest extends TestCase
 
         $state = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
@@ -134,16 +134,16 @@ class MviewStateTest extends TestCase
 
         $relatedViewState = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $relatedViewState->expects(
             $this->once()
         )->method(
             'loadByView'
         )->with(
-            $this->equalTo($relatedViewId)
+            $relatedViewId
         )->willReturnSelf(
-            
         );
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
@@ -159,14 +159,14 @@ class MviewStateTest extends TestCase
         )->method(
             'setStatus'
         )->with(
-            $this->equalTo('idle')
+            'idle'
         )->willReturnSelf(
-            
         );
 
         $relatedViewChangelog = $this->getMockBuilder(
             ChangelogInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $model = new MviewState(
             $relatedViewState,
@@ -201,7 +201,8 @@ class MviewStateTest extends TestCase
 
         $state = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
@@ -209,16 +210,16 @@ class MviewStateTest extends TestCase
 
         $relatedViewState = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $relatedViewState->expects(
             $this->once()
         )->method(
             'loadByView'
         )->with(
-            $this->equalTo($relatedViewId)
+            $relatedViewId
         )->willReturnSelf(
-            
         );
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('enabled');
@@ -233,7 +234,8 @@ class MviewStateTest extends TestCase
 
         $relatedViewChangelog = $this->getMockBuilder(
             ChangelogInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $model = new MviewState(
             $relatedViewState,
@@ -261,7 +263,8 @@ class MviewStateTest extends TestCase
 
         $state = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $state->expects($this->exactly(2))->method('getViewId')->willReturn($stateViewId);
 
@@ -269,16 +272,16 @@ class MviewStateTest extends TestCase
 
         $relatedViewState = $this->getMockBuilder(
             StateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $relatedViewState->expects(
             $this->once()
         )->method(
             'loadByView'
         )->with(
-            $this->equalTo($relatedViewId)
+            $relatedViewId
         )->willReturnSelf(
-            
         );
 
         $relatedViewState->expects($this->once())->method('getMode')->willReturn('disabled');
@@ -293,7 +296,8 @@ class MviewStateTest extends TestCase
 
         $relatedViewChangelog = $this->getMockBuilder(
             ChangelogInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $model = new MviewState(
             $relatedViewState,

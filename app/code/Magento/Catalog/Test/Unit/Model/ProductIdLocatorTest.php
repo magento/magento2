@@ -46,11 +46,13 @@ class ProductIdLocatorTest extends TestCase
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->setMethods(['getMetadata'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionFactory = $this
             ->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -79,13 +81,16 @@ class ProductIdLocatorTest extends TestCase
                     'clear'
                 ]
             )
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getSku', 'getData', 'getTypeId'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $metaDataInterface = $this->getMockBuilder(EntityMetadataInterface::class)
             ->setMethods(['getLinkField'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(ProductInterface::SKU, ['in' => $skus])->willReturnSelf();

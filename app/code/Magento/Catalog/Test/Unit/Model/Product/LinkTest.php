@@ -44,45 +44,44 @@ class LinkTest extends TestCase
     {
         $linkCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setLinkModel']
-        )->getMock();
-        $linkCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setLinkModel']
+            )->getMock();
+        $linkCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $linkCollectionFactory = $this->getMockBuilder(
             CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['create']
+            )->getMock();
         $linkCollectionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($linkCollection));
+            ->willReturn($linkCollection);
         $this->productCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setLinkModel']
-        )->getMock();
-        $this->productCollection->expects($this->any())->method('setLinkModel')->will($this->returnSelf());
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setLinkModel']
+            )->getMock();
+        $this->productCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $productCollectionFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['create']
+            )->getMock();
         $productCollectionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->productCollection));
+            ->willReturn($this->productCollection);
 
-        $this->resource = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                'saveProductLinks',
-                'getAttributeTypeTable',
-                'getAttributesByType',
-                'getTable',
-                'getConnection',
-                '_construct',
-                'getIdFieldName',
-            ]
-        );
+        $this->resource = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(
+                ['saveProductLinks', 'getAttributeTypeTable', 'getAttributesByType', 'getTable', 'getIdFieldName']
+            )
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->saveProductLinksMock = $this->getMockBuilder(SaveHandler::class)
             ->disableOriginalConstructor()
@@ -127,12 +126,12 @@ class LinkTest extends TestCase
             ->expects($this->any())
             ->method('getTable')
             ->with($attributeTypeTable)
-            ->will($this->returnValue($attributeTypeTable));
+            ->willReturn($attributeTypeTable);
         $this->resource
             ->expects($this->any())
             ->method('getAttributeTypeTable')
             ->with($attributeType)
-            ->will($this->returnValue($attributeTypeTable));
+            ->willReturn($attributeTypeTable);
         $this->assertEquals($attributeTypeTable, $this->model->getAttributeTypeTable($attributeType));
     }
 
@@ -159,7 +158,7 @@ class LinkTest extends TestCase
         $this->resource
             ->expects($this->any())->method('getAttributesByType')
             ->with($typeId)
-            ->will($this->returnValue($linkAttributes));
+            ->willReturn($linkAttributes);
         $this->model->setData('link_type_id', $typeId);
         $this->assertEquals($linkAttributes, $this->model->getAttributes());
     }

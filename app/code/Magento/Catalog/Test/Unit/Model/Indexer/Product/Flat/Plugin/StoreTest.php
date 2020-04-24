@@ -39,7 +39,7 @@ class StoreTest extends TestCase
         $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Store::class);
         $this->storeMock = $this->createPartialMock(
             Store::class,
-            ['getId', '__wakeup', 'dataHasChangedFor']
+            ['getId', 'dataHasChangedFor']
         );
     }
 
@@ -52,7 +52,7 @@ class StoreTest extends TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeMock);
@@ -67,7 +67,7 @@ class StoreTest extends TestCase
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
 
         $this->storeMock->expects(
             $this->once()
@@ -75,8 +75,8 @@ class StoreTest extends TestCase
             'dataHasChangedFor'
         )->with(
             'group_id'
-        )->will(
-            $this->returnValue($storeGroupChanged)
+        )->willReturn(
+            $storeGroupChanged
         );
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store($this->processorMock);

@@ -62,7 +62,8 @@ class EditTest extends TestCase
     {
         $this->attributeHelper = $this->getMockBuilder(Attribute::class)
             ->setMethods(['getProductIds', 'setProductIds'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
@@ -70,17 +71,21 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->filter = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getCollection'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getCollection'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->collectionFactory = $this->getMockBuilder(
             CollectionFactory::class
-        )->setMethods(['create'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultPage = $this->getMockBuilder(Page::class)
-            ->setMethods(['getConfig'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getConfig'])->disableOriginalConstructor()
+            ->getMock();
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
         $resultPageFactory->expects($this->any())->method('create')->willReturn($this->resultPage);
 
         $this->prepareContext();
@@ -101,12 +106,14 @@ class EditTest extends TestCase
     {
         $this->request = $this->getMockBuilder(Http::class)
             ->setMethods(['getParam', 'getParams', 'setParams'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = $this->createMock(ObjectManagerInterface::class);
         $product = $this->getMockBuilder(Product::class)
             ->setMethods(['isProductsHasSku'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())->method('isProductsHasSku')
             ->with([1, 2, 3])
             ->willReturn(true);
@@ -116,11 +123,13 @@ class EditTest extends TestCase
             ->willReturn($product);
         $messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods([])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $messageManager->expects($this->any())->method('addErrorMessage')->willReturn(true);
         $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($objectManager);
         $this->context->expects($this->any())->method('getMessageManager')->willReturn($messageManager);
@@ -144,17 +153,20 @@ class EditTest extends TestCase
 
         $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(['getAllIds'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $collection->expects($this->any())->method('getAllIds')->willReturn([1, 2, 3]);
         $this->filter->expects($this->any())->method('getCollection')->with($collection)->willReturn($collection);
         $this->collectionFactory->expects($this->any())->method('create')->willReturn($collection);
 
         $title = $this->getMockBuilder(Title::class)
             ->setMethods(['prepend'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $config = $this->getMockBuilder(Config::class)
             ->setMethods(['getTitle'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $config->expects($this->any())->method('getTitle')->willReturn($title);
         $this->resultPage->expects($this->any())->method('getConfig')->willReturn($config);
 
@@ -171,10 +183,12 @@ class EditTest extends TestCase
 
         $title = $this->getMockBuilder(Title::class)
             ->setMethods(['prepend'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $config = $this->getMockBuilder(Config::class)
             ->setMethods(['getTitle'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $config->expects($this->any())->method('getTitle')->willReturn($title);
         $this->resultPage->expects($this->any())->method('getConfig')->willReturn($config);
 

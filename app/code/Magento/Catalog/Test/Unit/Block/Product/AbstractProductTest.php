@@ -78,13 +78,13 @@ class AbstractProductTest extends TestCase
 
         $this->productContextMock->expects($this->once())
             ->method('getStockRegistry')
-            ->will($this->returnValue($this->stockRegistryMock));
+            ->willReturn($this->stockRegistryMock);
         $this->productContextMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
         $this->productContextMock->expects($this->once())
             ->method('getImageBuilder')
-            ->will($this->returnValue($this->imageBuilder));
+            ->willReturn($this->imageBuilder);
 
         $this->block = new Simple(
             $this->productContextMock,
@@ -107,10 +107,10 @@ class AbstractProductTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.price.render.default')
-            ->will($this->returnValue($priceRenderBlock));
+            ->willReturn($priceRenderBlock);
         $priceRenderBlock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($expectedPriceHtml));
+            ->willReturn($expectedPriceHtml);
 
         $this->assertEquals($expectedPriceHtml, $this->block->getProductPrice($product));
     }
@@ -127,11 +127,11 @@ class AbstractProductTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.price.render.default')
-            ->will($this->returnValue($priceRenderBlock));
+            ->willReturn($priceRenderBlock);
 
         $priceRenderBlock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($expectedPriceHtml));
+            ->willReturn($expectedPriceHtml);
 
         $this->assertEquals(
             $expectedPriceHtml,
@@ -168,19 +168,19 @@ class AbstractProductTest extends TestCase
         $this->stockRegistryMock->expects($this->once())
             ->method('getStockItem')
             ->with($id, $websiteId)
-            ->will($this->returnValue($stockItemMock));
+            ->willReturn($stockItemMock);
         $productMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $productMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $stockItemMock->expects($this->once())
             ->method('getMinSaleQty')
-            ->will($this->returnValue($minSale));
+            ->willReturn($minSale);
 
         /** @var Product|MockObject $productMock */
         $this->assertEquals($result, $this->block->getMinimalQty($productMock));

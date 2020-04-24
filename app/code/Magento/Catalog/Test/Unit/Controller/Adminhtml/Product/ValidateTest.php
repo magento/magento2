@@ -73,16 +73,17 @@ class ValidateTest extends ProductTest
             Builder::class,
             ['build']
         );
-        $this->product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
+        $this->product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
             ->setMethods([
-                'addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep', '__wakeup', 'getAttributes',
+                'addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep', 'getAttributes',
                 'setAttributeSetId',
             ])
             ->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->product->expects($this->any())->method('getAttributes')->will($this->returnValue([]));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->product->expects($this->any())->method('getAttributes')->willReturn([]);
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->resultPage = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -140,8 +141,7 @@ class ValidateTest extends ProductTest
         );
 
         $storeManagerInterfaceMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnSelf());
+            ->method('getStore')->willReturnSelf();
 
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(

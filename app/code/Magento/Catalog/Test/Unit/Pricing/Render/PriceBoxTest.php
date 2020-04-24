@@ -53,8 +53,8 @@ class PriceBoxTest extends TestCase
 
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
-            ->with($this->equalTo($expectedValue))
-            ->will($this->returnValue($expectedValue));
+            ->with($expectedValue)
+            ->willReturn($expectedValue);
 
         $result = $this->object->jsonEncode($expectedValue);
 
@@ -68,8 +68,8 @@ class PriceBoxTest extends TestCase
         $expectedTestValue = 'test_value';
         $this->mathRandom->expects($this->once())
             ->method('getRandomString')
-            ->with($this->equalTo($expectedValue))
-            ->will($this->returnValue('test_value'));
+            ->with($expectedValue)
+            ->willReturn('test_value');
 
         $result = $this->object->getRandomString($expectedValue);
 
@@ -85,11 +85,11 @@ class PriceBoxTest extends TestCase
      */
     public function testGetCanDisplayQty($typeCode, $expected)
     {
-        $product = $this->createPartialMock(Product::class, ['getTypeId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getTypeId']);
 
         $product->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeCode));
+            ->willReturn($typeCode);
 
         $this->assertEquals($expected, $this->object->getCanDisplayQty($product));
     }

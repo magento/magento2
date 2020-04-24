@@ -67,10 +67,11 @@ class CategoryManagementTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
         $this->categoryTreeMock = $this->createMock(Tree::class);
-        $this->categoriesFactoryMock = $this->createPartialMock(
-            CollectionFactory::class,
-            ['create', 'addFilter', 'getFirstItem']
-        );
+        $this->categoriesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->addMethods(['addFilter', 'getFirstItem'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManagerHelper->getObject(
             CategoryManagement::class,
@@ -215,12 +216,10 @@ class CategoryManagementTest extends TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
-                [
-                    [$categoryId, null, $categoryMock],
-                    [$parentId, null, $parentCategoryMock],
-                ]
-            ));
+            ->willReturnMap([
+                [$categoryId, null, $categoryMock],
+                [$parentId, null, $parentCategoryMock],
+            ]);
         $parentCategoryMock->expects($this->once())->method('hasChildren')->willReturn(true);
         $parentCategoryMock->expects($this->once())->method('getChildren')->willReturn('5,6,7');
         $categoryMock->expects($this->once())->method('getPath');
@@ -248,12 +247,10 @@ class CategoryManagementTest extends TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
-                [
-                    [$categoryId, null, $categoryMock],
-                    [$parentId, null, $parentCategoryMock],
-                ]
-            ));
+            ->willReturnMap([
+                [$categoryId, null, $categoryMock],
+                [$parentId, null, $parentCategoryMock],
+            ]);
         $categoryMock->expects($this->once())->method('getPath')->willReturn('test');
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test');
         $this->model->move($categoryId, $parentId, $afterId);
@@ -278,12 +275,10 @@ class CategoryManagementTest extends TestCase
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap(
-                [
-                    [$categoryId, null, $categoryMock],
-                    [$parentId, null, $parentCategoryMock],
-                ]
-            ));
+            ->willReturnMap([
+                [$categoryId, null, $categoryMock],
+                [$parentId, null, $parentCategoryMock],
+            ]);
         $categoryMock->expects($this->once())
             ->method('move')
             ->with($parentId, $afterId)

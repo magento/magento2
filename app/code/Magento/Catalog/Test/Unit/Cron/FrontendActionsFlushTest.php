@@ -36,8 +36,8 @@ class FrontendActionsFlushTest extends TestCase
         $this->productFrontendActionMock = $this->getMockBuilder(
             ProductFrontendAction::class
         )
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->frontendStorageConfigurationPoolMock = $this->getMockBuilder(
             FrontendStorageConfigurationPool::class
         )
@@ -63,8 +63,7 @@ class FrontendActionsFlushTest extends TestCase
         $selectMock
             ->expects($this->once())
             ->method('from')
-            ->with('catalog_product_frontend_action', ['action_id', 'type_id'])
-            ->will($this->returnSelf());
+            ->with('catalog_product_frontend_action', ['action_id', 'type_id'])->willReturnSelf();
         $selectMock
             ->expects($this->once())
             ->method('group')

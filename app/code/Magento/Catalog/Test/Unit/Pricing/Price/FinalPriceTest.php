@@ -65,11 +65,11 @@ class FinalPriceTest extends TestCase
 
         $this->saleableMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->any())
             ->method('getPrice')
-            ->with($this->equalTo(BasePrice::PRICE_CODE))
-            ->will($this->returnValue($this->basePriceMock));
+            ->with(BasePrice::PRICE_CODE)
+            ->willReturn($this->basePriceMock);
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->model = new FinalPrice(
@@ -88,7 +88,7 @@ class FinalPriceTest extends TestCase
         $price = 10;
         $this->basePriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
         $result = $this->model->getValue();
         $this->assertEquals($price, $result);
     }
@@ -102,14 +102,14 @@ class FinalPriceTest extends TestCase
         $minimalPrice = 5;
         $this->basePriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($basePrice));
+            ->willReturn($basePrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($basePrice))
-            ->will($this->returnValue($minimalPrice));
+            ->with($basePrice)
+            ->willReturn($minimalPrice);
         $this->saleableMock->expects($this->once())
             ->method('getMinimalPrice')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $result = $this->model->getMinimalPrice();
         $this->assertEquals($minimalPrice, $result);
         //The second time will return cached value
@@ -129,16 +129,16 @@ class FinalPriceTest extends TestCase
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
             ->with($minimalPrice)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->basePriceMock->expects($this->never())
             ->method('getValue');
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($convertedPrice))
-            ->will($this->returnValue($finalPrice));
+            ->with($convertedPrice)
+            ->willReturn($finalPrice);
         $this->saleableMock->expects($this->once())
             ->method('getMinimalPrice')
-            ->will($this->returnValue($minimalPrice));
+            ->willReturn($minimalPrice);
         $result = $this->model->getMinimalPrice();
         $this->assertEquals($finalPrice, $result);
         //The second time will return cached value
@@ -155,11 +155,11 @@ class FinalPriceTest extends TestCase
         $minimalPrice = 5;
         $this->basePriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($basePrice));
+            ->willReturn($basePrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($basePrice))
-            ->will($this->returnValue($minimalPrice));
+            ->with($basePrice)
+            ->willReturn($minimalPrice);
         $result = $this->model->getMaximalPrice();
         $this->assertEquals($minimalPrice, $result);
         //The second time will return cached value

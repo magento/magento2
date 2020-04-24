@@ -50,8 +50,8 @@ class HandlerFactoryTest extends TestCase
             'create'
         )->with(
             Composite::class
-        )->will(
-            $this->returnValue('object')
+        )->willReturn(
+            'object'
         );
         $this->assertEquals(
             'object',

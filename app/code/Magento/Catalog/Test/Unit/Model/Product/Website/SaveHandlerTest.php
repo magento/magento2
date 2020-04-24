@@ -31,7 +31,7 @@ class SaveHandlerTest extends TestCase
     /** @var  ProductInterface|MockObject */
     private $product;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->productWebsiteLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()

@@ -71,7 +71,7 @@ class FlatTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'load', 'isInvalid', 'isWorking', '__wakeup']
+            ['getId', 'load', 'isInvalid', 'isWorking']
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(
@@ -97,7 +97,7 @@ class FlatTest extends TestCase
 
     public function testExecuteWithIndexerInvalid()
     {
-        $this->indexerMock->expects($this->once())->method('isInvalid')->will($this->returnValue(true));
+        $this->indexerMock->expects($this->once())->method('isInvalid')->willReturn(true);
         $this->prepareIndexer();
 
         $this->rowsMock->expects($this->never())->method('create');
@@ -109,18 +109,18 @@ class FlatTest extends TestCase
     {
         $ids = [1, 2, 3];
 
-        $this->indexerMock->expects($this->once())->method('isInvalid')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(true));
+        $this->indexerMock->expects($this->once())->method('isInvalid')->willReturn(false);
+        $this->indexerMock->expects($this->once())->method('isWorking')->willReturn(true);
         $this->prepareIndexer();
 
         $rowMock = $this->createPartialMock(
             Rows::class,
             ['reindex']
         );
-        $rowMock->expects($this->at(0))->method('reindex')->with($ids, true)->will($this->returnSelf());
-        $rowMock->expects($this->at(1))->method('reindex')->with($ids, false)->will($this->returnSelf());
+        $rowMock->expects($this->at(0))->method('reindex')->with($ids, true)->willReturnSelf();
+        $rowMock->expects($this->at(1))->method('reindex')->with($ids, false)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
@@ -133,17 +133,17 @@ class FlatTest extends TestCase
     {
         $ids = [1, 2, 3];
 
-        $this->indexerMock->expects($this->once())->method('isInvalid')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(false));
+        $this->indexerMock->expects($this->once())->method('isInvalid')->willReturn(false);
+        $this->indexerMock->expects($this->once())->method('isWorking')->willReturn(false);
         $this->prepareIndexer();
 
         $rowMock = $this->createPartialMock(
             Rows::class,
             ['reindex']
         );
-        $rowMock->expects($this->once())->method('reindex')->with($ids, false)->will($this->returnSelf());
+        $rowMock->expects($this->once())->method('reindex')->with($ids, false)->willReturnSelf();
 
-        $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
+        $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
@@ -157,7 +157,7 @@ class FlatTest extends TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(State::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 
     public function testExecuteFull()

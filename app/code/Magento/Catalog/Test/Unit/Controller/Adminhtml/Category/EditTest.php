@@ -129,35 +129,36 @@ class EditTest extends TestCase
             ]
         );
 
-        $this->contextMock = $this->createPartialMock(
-            Context::class,
-            [
-                'getTitle',
-                'getRequest',
-                'getObjectManager',
-                'getEventManager',
-                'getResponse',
-                'getMessageManager',
-                'getResultRedirectFactory',
-                'getSession'
-            ]
-        );
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle'])
+            ->onlyMethods(
+                [
+                    'getRequest',
+                    'getObjectManager',
+                    'getEventManager',
+                    'getResponse',
+                    'getMessageManager',
+                    'getResultRedirectFactory',
+                    'getSession'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
         );
 
-        $this->resultPageMock = $this->createPartialMock(
-            ResultPage::class,
-            ['setActiveMenu', 'getConfig', 'addBreadcrumb', 'getLayout', 'getBlock', 'getTitle', 'prepend']
-        );
+        $this->resultPageMock = $this->getMockBuilder(ResultPage::class)
+            ->addMethods(['setActiveMenu', 'addBreadcrumb', 'getBlock', 'getTitle', 'prepend'])
+            ->onlyMethods(['getConfig', 'getLayout'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultPageMock->expects($this->any())
-            ->method('getConfig')
-            ->will($this->returnSelf());
+            ->method('getConfig')->willReturnSelf();
         $this->resultPageMock->expects($this->any())
-            ->method('getTitle')
-            ->will($this->returnSelf());
+            ->method('getTitle')->willReturnSelf();
 
         $this->resultPageFactoryMock = $this->createPartialMock(
             PageFactory::class,
@@ -240,50 +241,46 @@ class EditTest extends TestCase
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', false, $categoryId],
-                        ['store', null, $storeId],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', false, $categoryId],
+                    ['store', null, $storeId],
+                ]
             );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getQuery')
             ->with('isAjax')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mockInitCategoryCall();
 
         $this->sessionMock->expects($this->once())
             ->method('__call')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->storeManagerInterfaceMock->expects($this->any())
             ->method('getStore')
-            ->with($storeId)
-            ->will($this->returnSelf());
+            ->with($storeId)->willReturnSelf();
 
         if (!$categoryId) {
             if (!$storeId) {
                 $this->storeManagerInterfaceMock->expects($this->once())
-                    ->method('getDefaultStoreView')
-                    ->will($this->returnSelf());
+                    ->method('getDefaultStoreView')->willReturnSelf();
             }
             $this->storeManagerInterfaceMock->expects($this->once())
                 ->method('getRootCategoryId')
-                ->will($this->returnValue($rootCategoryId));
+                ->willReturn($rootCategoryId);
             $categoryId = $rootCategoryId;
         }
 
         $this->requestMock->expects($this->atLeastOnce())
             ->method('setParam')
             ->with('id', $categoryId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->categoryMock->expects($this->atLeastOnce())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
 
         $this->edit->execute();
     }
@@ -314,6 +311,6 @@ class EditTest extends TestCase
     {
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->categoryMock));
+            ->willReturn($this->categoryMock);
     }
 }

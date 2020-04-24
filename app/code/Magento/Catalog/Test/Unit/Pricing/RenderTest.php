@@ -54,13 +54,13 @@ class RenderTest extends TestCase
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -85,23 +85,23 @@ class RenderTest extends TestCase
 
         $this->layout->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($this->pricingRenderBlock));
+            ->willReturn($this->pricingRenderBlock);
 
         $this->registry->expects($this->once())
             ->method('registry')
-            ->with($this->equalTo('product'))
-            ->will($this->returnValue($product));
+            ->with('product')
+            ->willReturn($product);
 
         $arguments = $this->object->getData();
         $arguments['render_block'] = $this->object;
         $this->pricingRenderBlock->expects($this->any())
             ->method('render')
             ->with(
-                $this->equalTo('test_price_type_code'),
-                $this->equalTo($product),
-                $this->equalTo($arguments)
+                'test_price_type_code',
+                $product,
+                $arguments
             )
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertEquals($expectedValue, $this->object->toHtml());
     }
@@ -115,30 +115,33 @@ class RenderTest extends TestCase
         $this->registry->expects($this->never())
             ->method('registry');
 
-        $block = $this->createPartialMock(\Magento\Framework\Pricing\Render::class, ['getProductItem', 'render']);
+        $block = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)->addMethods(['getProductItem'])
+            ->onlyMethods(['render'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $arguments = $this->object->getData();
         $arguments['render_block'] = $this->object;
         $block->expects($this->any())
             ->method('render')
             ->with(
-                $this->equalTo('test_price_type_code'),
-                $this->equalTo($product),
-                $this->equalTo($arguments)
+                'test_price_type_code',
+                $product,
+                $arguments
             )
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $block->expects($this->any())
             ->method('getProductItem')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->layout->expects($this->once())
             ->method('getParentName')
-            ->will($this->returnValue('parent_name'));
+            ->willReturn('parent_name');
 
         $this->layout->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($expectedValue, $this->object->toHtml());
     }

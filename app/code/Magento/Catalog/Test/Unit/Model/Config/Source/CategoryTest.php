@@ -49,11 +49,11 @@ class CategoryTest extends TestCase
          */
         $categoryCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $categoryCollectionFactory->expects($this->any())->method('create')->will(
-            $this->returnValue($this->categoryCollection)
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $categoryCollectionFactory->expects($this->any())->method('create')->willReturn(
+            $this->categoryCollection
         );
 
         $helper = new ObjectManager($this);
@@ -71,18 +71,18 @@ class CategoryTest extends TestCase
         ];
 
         $this->categoryCollection->expects($this->once())->method('addAttributeToSelect')->with(
-            $this->equalTo('name')
-        )->will($this->returnValue($this->categoryCollection));
-        $this->categoryCollection->expects($this->once())->method('addRootLevelFilter')->will(
-            $this->returnValue($this->categoryCollection)
+            'name'
+        )->willReturn($this->categoryCollection);
+        $this->categoryCollection->expects($this->once())->method('addRootLevelFilter')->willReturn(
+            $this->categoryCollection
         );
         $this->categoryCollection->expects($this->once())->method('load');
-        $this->categoryCollection->expects($this->any())->method('getIterator')->will(
-            $this->returnValue(new \ArrayIterator([$this->category]))
+        $this->categoryCollection->expects($this->any())->method('getIterator')->willReturn(
+            new \ArrayIterator([$this->category])
         );
 
-        $this->category->expects($this->once())->method('getName')->will($this->returnValue('name'));
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(3));
+        $this->category->expects($this->once())->method('getName')->willReturn('name');
+        $this->category->expects($this->once())->method('getId')->willReturn(3);
 
         $this->assertEquals($expect, $this->model->toOptionArray());
     }

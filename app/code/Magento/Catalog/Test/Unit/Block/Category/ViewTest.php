@@ -41,7 +41,7 @@ class ViewTest extends TestCase
     {
         $categoryTag = ['catalog_category_1'];
         $currentCategoryMock = $this->createMock(Category::class);
-        $currentCategoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
+        $currentCategoryMock->expects($this->once())->method('getIdentities')->willReturn($categoryTag);
         $this->block->setCurrentCategory($currentCategoryMock);
         $this->assertEquals($categoryTag, $this->block->getIdentities());
     }

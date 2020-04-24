@@ -62,13 +62,13 @@ class IndexerTest extends TestCase
         $contextMock = $this->createMock(Context::class);
 
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
-        $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
+        $this->_resourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $flatHelperMock = $this->createPartialMock(
             Indexer::class,
             ['isAddChildData']
         );
-        $flatHelperMock->expects($this->any())->method('isAddChildData')->will($this->returnValue(true));
+        $flatHelperMock->expects($this->any())->method('isAddChildData')->willReturn(true);
 
         $eavConfigMock = $this->createMock(Config::class);
 
@@ -111,7 +111,7 @@ class IndexerTest extends TestCase
     public function testGetFlatColumnsDdlDefinition()
     {
         foreach ($this->_model->getFlatColumnsDdlDefinition() as $column) {
-            $this->assertTrue(is_array($column), 'Columns must be an array value');
+            $this->assertIsArray($column, 'Columns must be an array value');
             $this->assertArrayHasKey('type', $column, 'Column must have type definition at least');
         }
     }
@@ -131,8 +131,8 @@ class IndexerTest extends TestCase
             $this->any()
         )->method(
             'getName'
-        )->will(
-            $this->returnValue('catalog_product_flat_cl')
+        )->willReturn(
+            'catalog_product_flat_cl'
         );
 
         $this->_connectionMock->expects(
@@ -141,8 +141,8 @@ class IndexerTest extends TestCase
             'getTables'
         )->with(
             'catalog_product_flat_%'
-        )->will(
-            $this->returnValue(['catalog_product_flat_1', 'catalog_product_flat_2', 'catalog_product_flat_3'])
+        )->willReturn(
+            ['catalog_product_flat_1', 'catalog_product_flat_2', 'catalog_product_flat_3']
         );
 
         $this->_connectionMock->expects($this->once())->method('dropTable')->with('catalog_product_flat_3');
@@ -151,8 +151,8 @@ class IndexerTest extends TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $this->_setStoreManagerExpectedStores([1, 2]);
@@ -169,8 +169,8 @@ class IndexerTest extends TestCase
             $this->any()
         )->method(
             'getName'
-        )->will(
-            $this->returnValue('catalog_product_flat_cl')
+        )->willReturn(
+            'catalog_product_flat_cl'
         );
 
         $this->_connectionMock->expects(
@@ -179,16 +179,14 @@ class IndexerTest extends TestCase
             'getTables'
         )->with(
             'catalog_product_flat_%'
-        )->will(
-            $this->returnValue(
-                [
-                    'catalog_product_flat_1',
-                    'catalog_product_flat_2',
-                    'catalog_product_flat_3',
-                    'catalog_product_flat_4',
-                    'catalog_product_flat_cl',
-                ]
-            )
+        )->willReturn(
+            [
+                'catalog_product_flat_1',
+                'catalog_product_flat_2',
+                'catalog_product_flat_3',
+                'catalog_product_flat_4',
+                'catalog_product_flat_cl',
+            ]
         );
 
         $this->_connectionMock->expects($this->exactly(3))->method('dropTable');
@@ -197,8 +195,8 @@ class IndexerTest extends TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $this->_setStoreManagerExpectedStores([1]);
@@ -215,8 +213,8 @@ class IndexerTest extends TestCase
             $this->any()
         )->method(
             'getName'
-        )->will(
-            $this->returnValue('catalog_product_flat_cl')
+        )->willReturn(
+            'catalog_product_flat_cl'
         );
 
         $this->_connectionMock->expects(
@@ -225,8 +223,8 @@ class IndexerTest extends TestCase
             'getTables'
         )->with(
             'catalog_product_flat_%'
-        )->will(
-            $this->returnValue(['catalog_product_flat_cl'])
+        )->willReturn(
+            ['catalog_product_flat_cl']
         );
 
         $this->_connectionMock->expects($this->never())->method('dropTable');
@@ -235,8 +233,8 @@ class IndexerTest extends TestCase
             $this->once()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $this->_setStoreManagerExpectedStores([1]);
@@ -253,11 +251,11 @@ class IndexerTest extends TestCase
     {
         $stores = [];
         foreach ($storeIds as $storeId) {
-            $store = $this->createPartialMock(Store::class, ['getId', '__sleep', '__wakeup']);
-            $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+            $store = $this->createPartialMock(Store::class, ['getId', '__sleep']);
+            $store->expects($this->once())->method('getId')->willReturn($storeId);
             $stores[] = $store;
         }
 
-        $this->_storeManagerMock->expects($this->once())->method('getStores')->will($this->returnValue($stores));
+        $this->_storeManagerMock->expects($this->once())->method('getStores')->willReturn($stores);
     }
 }

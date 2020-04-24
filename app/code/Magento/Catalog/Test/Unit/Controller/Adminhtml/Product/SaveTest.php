@@ -65,11 +65,12 @@ class SaveTest extends ProductTest
             Builder::class,
             ['build']
         );
-        $this->product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
-            ->setMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
+        $this->product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
+        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
+        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
+        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
 
         $this->messageManagerMock = $this->getMockForAbstractClass(
             ManagerInterface::class
@@ -120,8 +121,7 @@ class SaveTest extends ProductTest
         );
 
         $storeManagerInterfaceMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnSelf());
+            ->method('getStore')->willReturnSelf();
 
         $this->action = (new ObjectManagerHelper($this))->getObject(
             Save::class,

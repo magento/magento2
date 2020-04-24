@@ -176,29 +176,34 @@ class CopierTest extends TestCase
             ->method('getResource')
             ->willReturn($resourceMock);
 
-        $duplicateMock = $this->createPartialMock(
-            Product::class,
-            [
-                '__wakeup',
-                'setData',
-                'setOptions',
-                'getData',
-                'setIsDuplicate',
-                'setOriginalLinkId',
-                'setStatus',
-                'setCreatedAt',
-                'setUpdatedAt',
-                'setId',
-                'getEntityId',
-                'save',
-                'setUrlKey',
-                'setStoreId',
-                'getStoreIds',
-                'setMetaTitle',
-                'setMetaKeyword',
-                'setMetaDescription',
-            ]
-        );
+        $duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(
+                [
+                    'setIsDuplicate',
+                    'setOriginalLinkId',
+                    'setUrlKey',
+                    'setMetaTitle',
+                    'setMetaKeyword',
+                    'setMetaDescription'
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'setData',
+                    'setOptions',
+                    'getData',
+                    'setStatus',
+                    'setCreatedAt',
+                    'setUpdatedAt',
+                    'setId',
+                    'getEntityId',
+                    'save',
+                    'setStoreId',
+                    'getStoreIds'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($duplicateMock);
@@ -324,29 +329,28 @@ class CopierTest extends TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
-        $duplicateMock = $this->createPartialMock(
-            Product::class,
-            [
-                '__wakeup',
-                'setData',
-                'setOptions',
-                'getData',
-                'setIsDuplicate',
-                'setOriginalLinkId',
-                'setStatus',
-                'setCreatedAt',
-                'setUpdatedAt',
-                'setId',
-                'getEntityId',
-                'save',
-                'setUrlKey',
-                'setStoreId',
-                'getStoreIds',
-            ]
-        );
-        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
+        $duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setIsDuplicate', 'setOriginalLinkId', 'setUrlKey'])
+            ->onlyMethods(
+                [
+                    'setData',
+                    'setOptions',
+                    'getData',
+                    'setStatus',
+                    'setCreatedAt',
+                    'setUpdatedAt',
+                    'setId',
+                    'getEntityId',
+                    'save',
+                    'setStoreId',
+                    'getStoreIds'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);

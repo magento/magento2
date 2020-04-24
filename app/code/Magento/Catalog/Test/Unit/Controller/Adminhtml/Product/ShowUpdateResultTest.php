@@ -49,10 +49,10 @@ class ShowUpdateResultTest extends TestCase
      */
     protected function getSession()
     {
-        $session = $this->createPartialMock(
-            Session::class,
-            ['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult']
-        );
+        $session = $this->getMockBuilder(Session::class)
+            ->addMethods(['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $session->expects($this->once())
             ->method('hasCompositeProductResult')
             ->willReturn(true);
@@ -92,28 +92,33 @@ class ShowUpdateResultTest extends TestCase
             ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
         );
 
-        $responseInterfaceMock = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
         $managerInterfaceMock = $this->createMock(ManagerInterface::class);
         $this->session = $this->getSession();
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $helperDataMock = $this->createMock(Data::class);
-        $this->context = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getObjectManager',
-                'getEventManager',
-                'getMessageManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getTitle',
-                'getView',
-                'getResultRedirectFactory'
-            ]);
+        $this->context = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle'])
+            ->onlyMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getEventManager',
+                    'getMessageManager',
+                    'getSession',
+                    'getActionFlag',
+                    'getHelper',
+                    'getView',
+                    'getResultRedirectFactory'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->context->expects($this->any())
             ->method('getEventManager')

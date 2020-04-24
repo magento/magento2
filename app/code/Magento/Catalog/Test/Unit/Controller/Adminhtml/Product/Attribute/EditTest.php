@@ -107,9 +107,11 @@ class EditTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMock();
 
         $this->eavAttribute = $this->createPartialMock(
             Attribute::class,
@@ -156,10 +158,11 @@ class EditTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->createPartialMock(
-            Context::class,
-            ['getRequest', 'getObjectManager', 'getResultPageFactory', 'getSession']
-        );
+        $this->context = $this->getMockBuilder(Context::class)
+            ->addMethods(['getResultPageFactory'])
+            ->onlyMethods(['getRequest', 'getObjectManager', 'getSession'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);

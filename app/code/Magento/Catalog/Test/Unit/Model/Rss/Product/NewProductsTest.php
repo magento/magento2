@@ -54,7 +54,7 @@ class NewProductsTest extends TestCase
     {
         $this->product = $this->createMock(Product::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
         $this->visibility = $this->createMock(Visibility::class);
         $this->timezone = $this->createMock(Timezone::class);
 
@@ -74,21 +74,20 @@ class NewProductsTest extends TestCase
         /** @var \DateTime|MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $dateObject->expects($this->any())
-            ->method('setTime')
-            ->will($this->returnSelf());
+            ->method('setTime')->willReturnSelf();
         $dateObject->expects($this->any())
             ->method('format')
-            ->will($this->returnValue(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)));
+            ->willReturn(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
 
         $this->timezone->expects($this->exactly(2))
             ->method('date')
-            ->will($this->returnValue($dateObject));
+            ->willReturn($dateObject);
 
         /** @var Collection $productCollection */
         $productCollection =
             $this->createMock(Collection::class);
-        $this->product->expects($this->once())->method('getResourceCollection')->will(
-            $this->returnValue($productCollection)
+        $this->product->expects($this->once())->method('getResourceCollection')->willReturn(
+            $productCollection
         );
         $storeId = 1;
         $productCollection->expects($this->once())->method('setStoreId')->with($storeId);
@@ -98,8 +97,8 @@ class NewProductsTest extends TestCase
         $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
         $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->will($this->returnSelf());
         $visibleIds = [1, 3];
-        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->will(
-            $this->returnValue($visibleIds)
+        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->willReturn(
+            $visibleIds
         );
         $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->will(
             $this->returnSelf()

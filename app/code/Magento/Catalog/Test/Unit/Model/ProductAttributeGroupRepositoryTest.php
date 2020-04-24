@@ -48,7 +48,7 @@ class ProductAttributeGroupRepositoryTest extends TestCase
         );
         $this->groupResourceMock = $this->createPartialMock(
             Group::class,
-            ['load', '__wakeup']
+            ['load']
         );
 
         $objectManager = new ObjectManager($this);

@@ -39,8 +39,8 @@ class ConfigTest extends TestCase
             'get'
         )->with(
             'some_group'
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
         $this->assertSame($expectedResult, $this->_model->getAttributeNames('some_group'));
     }

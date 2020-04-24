@@ -48,7 +48,7 @@ class StoreGroupTest extends TestCase
     {
         $this->groupMock = $this->createPartialMock(
             GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup']
+            ['dataHasChangedFor', 'isObjectNew']
         );
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,
@@ -57,7 +57,7 @@ class StoreGroupTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
         $this->subject = $this->createMock(Group::class);
         $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);

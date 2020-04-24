@@ -69,7 +69,7 @@ class InventoryTest extends TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->inventory = $objectManager->getObject(
             Inventory::class,
@@ -90,7 +90,7 @@ class InventoryTest extends TestCase
     {
         $this->backordersMock->expects($this->once())
             ->method('toOptionArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
         $this->assertEquals('return-value', $this->inventory->getBackordersOption());
     }
 
@@ -114,9 +114,9 @@ class InventoryTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('store')
-            ->will($this->returnValue('125'));
+            ->willReturn('125');
 
-        $this->assertTrue(is_integer($this->inventory->getStoreId()));
+        $this->assertIsInt($this->inventory->getStoreId());
     }
 
     /**
@@ -129,7 +129,7 @@ class InventoryTest extends TestCase
         $this->stockConfigurationMock->expects($this->once())
             ->method('getDefaultConfigValue')
             ->with('field-name')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->inventory->getDefaultConfigValue('field-name'));
     }

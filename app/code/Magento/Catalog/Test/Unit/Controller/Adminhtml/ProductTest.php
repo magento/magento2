@@ -72,55 +72,65 @@ abstract class ProductTest extends TestCase
             ->willReturn($productActionMock);
 
         $block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->layout = $this->getMockBuilder(Layout::class)
             ->setMethods(['getBlock'])->disableOriginalConstructor()
             ->getMock();
-        $this->layout->expects($this->any())->method('getBlock')->will($this->returnValue($block));
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($block);
 
         $eventManager = $this->getMockBuilder(Manager::class)
-            ->setMethods(['dispatch'])->disableOriginalConstructor()->getMock();
-        $eventManager->expects($this->any())->method('dispatch')->will($this->returnSelf());
-        $requestInterfaceMock = $this->getMockBuilder(Http::class)->setMethods(
-            ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
-        )->disableOriginalConstructor()->getMock();
+            ->setMethods(['dispatch'])->disableOriginalConstructor()
+            ->getMock();
+        $eventManager->expects($this->any())->method('dispatch')->willReturnSelf();
+        $requestInterfaceMock = $this->getMockBuilder(Http::class)
+            ->setMethods(
+                ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
+            )->disableOriginalConstructor()
+            ->getMock();
 
-        $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)->setMethods(
-            ['setRedirect', 'sendResponse']
-        )->getMock();
+        $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
+            ->setMethods(
+                ['setRedirect', 'sendResponse']
+            )->getMock();
 
         $managerInterfaceMock = $this->createMock(ManagerInterface::class);
-        $sessionMock = $this->createPartialMock(
-            Session::class,
-            ['getProductData', 'setProductData']
-        );
+        $sessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getProductData', 'setProductData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $helperDataMock = $this->createMock(Data::class);
-        $this->context = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getObjectManager',
-                'getEventManager',
-                'getMessageManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getTitle',
-                'getView',
-                'getResultRedirectFactory',
-                'getResultFactory'
-            ]);
+        $this->context = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle'])
+            ->onlyMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getEventManager',
+                    'getMessageManager',
+                    'getSession',
+                    'getActionFlag',
+                    'getHelper',
+                    'getView',
+                    'getResultRedirectFactory',
+                    'getResultFactory'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
-        $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $this->context->expects($this->any())->method('getRequest')->willReturn($requestInterfaceMock);
+        $this->context->expects($this->any())->method('getResponse')->willReturn($responseInterfaceMock);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
         $this->context->expects($this->any())->method('getMessageManager')
-            ->will($this->returnValue($managerInterfaceMock));
-        $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
-        $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
-        $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
+            ->willReturn($managerInterfaceMock);
+        $this->context->expects($this->any())->method('getSession')->willReturn($sessionMock);
+        $this->context->expects($this->any())->method('getActionFlag')->willReturn($actionFlagMock);
+        $this->context->expects($this->any())->method('getHelper')->willReturn($helperDataMock);
 
         foreach ($additionalParams as $property => $object) {
             $this->context->expects($this->any())->method('get' . ucfirst($property))->willReturn($object);

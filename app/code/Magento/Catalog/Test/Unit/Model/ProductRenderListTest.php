@@ -56,7 +56,7 @@ class ProductRenderListTest extends TestCase
     /** @var CollectionModifier|MockObject */
     private $collectionModifier;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this
             ->getMockBuilder(CollectionFactory::class)

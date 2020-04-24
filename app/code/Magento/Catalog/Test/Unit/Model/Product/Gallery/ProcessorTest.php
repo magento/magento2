@@ -88,10 +88,10 @@ class ProcessorTest extends TestCase
                 Gallery::GALLERY_TABLE
             );
 
-        $this->dataObject = $this->createPartialMock(
-            DataObject::class,
-            ['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes']
-        );
+        $this->dataObject = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectHelper->getObject(
             Processor::class,
@@ -112,12 +112,12 @@ class ProcessorTest extends TestCase
 
         $attribute = $this->createPartialMock(
             Attribute::class,
-            ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup']
+            ['getBackendTable', 'isStatic', 'getAttributeId', 'getName']
         );
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('image'));
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getName')->willReturn('image');
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
 
         $this->attributeRepository->expects($this->once())
             ->method('get')
@@ -147,18 +147,18 @@ class ProcessorTest extends TestCase
         $attributeCode = 'attr_code';
         $attribute = $this->createPartialMock(
             Attribute::class,
-            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity', '__wakeup']
+            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity']
         );
         $attributeEntity = $this->getMockBuilder(AbstractResource::class)
             ->setMethods(['checkAttributeUniqueValue'])
             ->getMockForAbstractClass();
 
-        $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
-        $attribute->expects($this->any())->method('getIsRequired')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('isValueEmpty')->will($this->returnValue($value));
-        $attribute->expects($this->any())->method('getIsUnique')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('getEntity')->will($this->returnValue($attributeEntity));
-        $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->will($this->returnValue(true));
+        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
+        $attribute->expects($this->any())->method('isValueEmpty')->willReturn($value);
+        $attribute->expects($this->any())->method('getIsUnique')->willReturn(true);
+        $attribute->expects($this->any())->method('getEntity')->willReturn($attributeEntity);
+        $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->willReturn(true);
 
         $this->attributeRepository->expects($this->once())
             ->method('get')

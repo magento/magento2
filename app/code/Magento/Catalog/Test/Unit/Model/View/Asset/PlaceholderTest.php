@@ -40,9 +40,13 @@ class PlaceholderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMockForAbstractClass();
-        $this->imageContext = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
-        $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->getMock();
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->imageContext = $this->getMockBuilder(ContextInterface::class)
+            ->getMockForAbstractClass();
+        $this->repository = $this->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Placeholder(
             $this->imageContext,
             $this->scopeConfig,

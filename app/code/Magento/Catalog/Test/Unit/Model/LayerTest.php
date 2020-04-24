@@ -118,7 +118,7 @@ class LayerTest extends TestCase
         $helper = new ObjectManager($this);
 
         $this->category = $this->getMockBuilder(Category::class)
-            ->setMethods(['getId', '__wakeup'])
+            ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -128,7 +128,7 @@ class LayerTest extends TestCase
             ->getMock();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getRootCategoryId', 'getFilters', '__wakeup'])
+            ->setMethods(['getRootCategoryId', 'getFilters'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -137,7 +137,7 @@ class LayerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
 
         $this->stateKeyGenerator = $this->getMockBuilder(StateKey::class)
             ->setMethods(['toString'])
@@ -151,7 +151,8 @@ class LayerTest extends TestCase
 
         $this->collectionProvider = $this->getMockBuilder(
             ItemCollectionProviderInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->filter = $this->getMockBuilder(Item::class)
             ->setMethods(['getFilter', 'getValueString'])
@@ -168,11 +169,11 @@ class LayerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->any())->method('getStateKey')
-            ->will($this->returnValue($this->stateKeyGenerator));
+            ->willReturn($this->stateKeyGenerator);
         $this->context->expects($this->any())->method('getCollectionFilter')
-            ->will($this->returnValue($this->collectionFilter));
+            ->willReturn($this->collectionFilter);
         $this->context->expects($this->any())->method('getCollectionProvider')
-            ->will($this->returnValue($this->collectionProvider));
+            ->willReturn($this->collectionProvider);
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -182,7 +183,7 @@ class LayerTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stateFactory->expects($this->any())->method('create')->will($this->returnValue($this->state));
+        $this->stateFactory->expects($this->any())->method('create')->willReturn($this->state);
 
         $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -191,7 +192,7 @@ class LayerTest extends TestCase
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $this->currentCategory = $this->createPartialMock(
             Category::class,
-            ['getId', '__wakeup']
+            ['getId']
         );
 
         $this->model = $helper->getObject(
@@ -214,29 +215,29 @@ class LayerTest extends TestCase
     public function testGetStateKey()
     {
         $stateKey = 'sk';
-        $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+        $this->registry->expects($this->once())->method('registry')->with('current_category')
+            ->willReturn($this->category);
 
         $this->stateKeyGenerator->expects($this->once())->method('toString')
-            ->with($this->equalTo($this->category))
-            ->will($this->returnValue($stateKey));
+            ->with($this->category)
+            ->willReturn($stateKey);
 
         $this->assertEquals($stateKey, $this->model->getStateKey());
     }
 
     public function testGetProductCollection()
     {
-        $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+        $this->registry->expects($this->once())->method('registry')->with('current_category')
+            ->willReturn($this->category);
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(333));
+        $this->category->expects($this->any())->method('getId')->willReturn(333);
 
         $this->collectionFilter->expects($this->once())->method('filter')
-            ->with($this->equalTo($this->collection), $this->equalTo($this->category));
+            ->with($this->collection, $this->category);
 
         $this->collectionProvider->expects($this->once())->method('getCollection')
-            ->with($this->equalTo($this->category))
-            ->will($this->returnValue($this->collection));
+            ->with($this->category)
+            ->willReturn($this->collection);
 
         $result = $this->model->getProductCollection();
         $this->assertInstanceOf(Collection::class, $result);
@@ -247,19 +248,19 @@ class LayerTest extends TestCase
     public function testApply()
     {
         $stateKey = 'sk';
-        $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+        $this->registry->expects($this->once())->method('registry')->with('current_category')
+            ->willReturn($this->category);
 
         $this->stateKeyGenerator->expects($this->once())->method('toString')
-            ->with($this->equalTo($this->category))
-            ->will($this->returnValue($stateKey));
+            ->with($this->category)
+            ->willReturn($stateKey);
 
-        $this->state->expects($this->any())->method('getFilters')->will($this->returnValue([$this->filter]));
+        $this->state->expects($this->any())->method('getFilters')->willReturn([$this->filter]);
 
-        $this->filter->expects($this->once())->method('getFilter')->will($this->returnValue($this->abstractFilter));
-        $this->filter->expects($this->once())->method('getValueString')->will($this->returnValue('t'));
+        $this->filter->expects($this->once())->method('getFilter')->willReturn($this->abstractFilter);
+        $this->filter->expects($this->once())->method('getValueString')->willReturn('t');
 
-        $this->abstractFilter->expects($this->once())->method('getRequestVar')->will($this->returnValue('t'));
+        $this->abstractFilter->expects($this->once())->method('getRequestVar')->willReturn('t');
 
         $result = $this->model->apply();
         $this->assertInstanceOf(Layer::class, $result);
@@ -267,11 +268,11 @@ class LayerTest extends TestCase
 
     public function testPrepareProductCollection()
     {
-        $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
-            ->will($this->returnValue($this->category));
+        $this->registry->expects($this->once())->method('registry')->with('current_category')
+            ->willReturn($this->category);
 
         $this->collectionFilter->expects($this->once())->method('filter')
-            ->with($this->equalTo($this->collection), $this->equalTo($this->category));
+            ->with($this->collection, $this->category);
 
         $result = $this->model->prepareProductCollection($this->collection);
         $this->assertInstanceOf(Layer::class, $result);
@@ -287,7 +288,7 @@ class LayerTest extends TestCase
         $categoryId = 333;
         $currentCategoryId = 334;
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
+        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($this->currentCategory);
 
@@ -303,7 +304,7 @@ class LayerTest extends TestCase
     {
         $categoryId = 333;
 
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue($categoryId));
+        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
 
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($this->category);
@@ -319,7 +320,7 @@ class LayerTest extends TestCase
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Please correct the category.');
         $this->categoryRepository->expects($this->once())->method('get')
-            ->will($this->throwException(new NoSuchEntityException()));
+            ->willThrowException(new NoSuchEntityException());
 
         $this->model->setCurrentCategory(1);
     }
@@ -335,7 +336,7 @@ class LayerTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Please correct the category.');
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(null));
+        $this->category->expects($this->once())->method('getId')->willReturn(null);
 
         $this->model->setCurrentCategory($this->category);
     }
@@ -356,12 +357,12 @@ class LayerTest extends TestCase
         $rootCategoryId = 333;
         $this->currentCategory->getData('current_category', null);
 
-        $this->registry->expects($this->once())->method('registry')->with($this->equalTo('current_category'))
+        $this->registry->expects($this->once())->method('registry')->with('current_category')
             ->willReturn(null);
         $this->categoryRepository->expects($this->once())->method('get')->with($rootCategoryId)
             ->willReturn($this->currentCategory);
         $this->store->expects($this->any())->method('getRootCategoryId')
-            ->will($this->returnValue($rootCategoryId));
+            ->willReturn($rootCategoryId);
 
         $this->assertEquals($this->currentCategory, $this->model->getCurrentCategory());
         $this->assertEquals($this->currentCategory, $this->model->getData('current_category'));

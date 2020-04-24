@@ -89,9 +89,12 @@ class BuilderTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->wysiwygConfigMock = $this->createPartialMock(WysiwygConfig::class, ['setStoreId']);
+        $this->wysiwygConfigMock = $this->getMockBuilder(WysiwygConfig::class)
+            ->addMethods(['setStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this->createMock(Http::class);
-        $methods = ['setStoreId', 'setData', 'load', '__wakeup', 'setAttributeSetId', 'setTypeId'];
+        $methods = ['setStoreId', 'setData', 'load', 'setAttributeSetId', 'setTypeId'];
         $this->productMock = $this->createPartialMock(Product::class, $methods);
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])
@@ -193,7 +196,7 @@ class BuilderTest extends TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')
@@ -265,7 +268,7 @@ class BuilderTest extends TestCase
 
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $this->productMock->expects($this->any())
             ->method('setData')

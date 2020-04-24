@@ -60,7 +60,8 @@ class MassStatusTest extends ProductTest
     protected function setUp(): void
     {
         $this->priceProcessorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productBuilderMock = $this->getMockBuilder(Builder::class)
             ->setMethods(['build'])
             ->disableOriginalConstructor()
@@ -68,7 +69,7 @@ class MassStatusTest extends ProductTest
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getStoreId', '__sleep', '__wakeup'])
+            ->setMethods(['getTypeId', 'getStoreId', '__sleep'])
             ->getMock();
         $productMock->expects($this->any())
             ->method('getTypeId')
@@ -106,9 +107,9 @@ class MassStatusTest extends ProductTest
 
         $collectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->abstractDbMock);

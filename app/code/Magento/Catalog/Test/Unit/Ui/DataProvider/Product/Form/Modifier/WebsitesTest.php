@@ -180,10 +180,10 @@ class WebsitesTest extends AbstractModifierTest
     public function testModifyMeta()
     {
         $meta = $this->getModel()->modifyMeta([]);
-        $this->assertTrue(isset($meta['websites']));
-        $this->assertTrue(isset($meta['websites']['children'][self::SECOND_WEBSITE_ID]));
-        $this->assertTrue(isset($meta['websites']['children'][self::WEBSITE_ID]));
-        $this->assertTrue(isset($meta['websites']['children']['copy_to_stores.' . self::WEBSITE_ID]));
+        $this->assertArrayHasKey('websites', $meta);
+        $this->assertArrayHasKey(self::SECOND_WEBSITE_ID, $meta['websites']['children']);
+        $this->assertArrayHasKey(self::WEBSITE_ID, $meta['websites']['children']);
+        $this->assertArrayHasKey('copy_to_stores.' . self::WEBSITE_ID, $meta['websites']['children']);
         $this->assertEquals(
             $meta['websites']['children'][self::SECOND_WEBSITE_ID]['arguments']['data']['config']['value'],
             (string) self::SECOND_WEBSITE_ID

@@ -42,9 +42,11 @@ class InvalidSkuProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->invalidSkuProcessor = $objectManager->getObject(
@@ -70,7 +72,8 @@ class InvalidSkuProcessorTest extends TestCase
             ->willReturn($idsBySku);
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getPriceType'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $productPriceType = 0;
         $product->expects($this->atLeastOnce())->method('getPriceType')->willReturn($productPriceType);
         $this->productRepository->expects($this->atLeastOnce())->method('get')->willReturn($product);

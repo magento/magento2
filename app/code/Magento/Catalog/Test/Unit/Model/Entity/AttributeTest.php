@@ -165,7 +165,8 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->extensionAttributesFactory = $this->getMockBuilder(
             ExtensionAttributesFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -186,9 +187,9 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->attributeOptionFactoryMock =
             $this->getMockBuilder(AttributeOptionInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -199,7 +200,8 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->reservedAttributeListMock = $this->getMockBuilder(
             ReservedAttributeList::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->resolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->getMock();
         $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)

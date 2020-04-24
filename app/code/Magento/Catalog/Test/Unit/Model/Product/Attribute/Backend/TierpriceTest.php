@@ -62,17 +62,21 @@ class TierpriceTest extends TestCase
     {
         $this->productAttributeBackendTierprice = $this
             ->getMockBuilder(Tierprice::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getName', 'isScopeGlobal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->localeFormat = $this->getMockBuilder(FormatInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectHelper = new ObjectManager($this);
         $this->tierprice = $objectHelper->getObject(
@@ -110,7 +114,8 @@ class TierpriceTest extends TestCase
             ]
         ];
         $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->atLeastOnce())
@@ -189,9 +194,11 @@ class TierpriceTest extends TestCase
             ],
         ];
         $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $allCustomersGroup = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->groupManagement
             ->expects($this->exactly(2))
             ->method('getAllCustomersGroup')

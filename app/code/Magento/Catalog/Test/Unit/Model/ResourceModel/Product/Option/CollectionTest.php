@@ -119,23 +119,24 @@ class CollectionTest extends TestCase
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->joinProcessor = $this->getMockBuilder(
             JoinProcessorInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resourceMock = $this->createPartialMock(
             Option::class,
-            ['getConnection', '__wakeup', 'getMainTable', 'getTable']
+            ['getConnection', 'getMainTable', 'getTable']
         );
         $this->selectMock = $this->createPartialMock(Select::class, ['from', 'reset', 'join']);
         $this->connection =
             $this->createPartialMock(Mysql::class, ['select']);
         $this->connection->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
-            ->will($this->returnValue('test_main_table'));
+            ->willReturn('test_main_table');
         $this->resourceMock->expects($this->exactly(3))
             ->method('getTable')
             ->withConsecutive(

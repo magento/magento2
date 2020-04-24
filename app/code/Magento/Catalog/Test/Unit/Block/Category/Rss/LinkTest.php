@@ -74,7 +74,7 @@ class LinkTest extends TestCase
      */
     public function testIsRssAllowed($isAllowed)
     {
-        $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue($isAllowed));
+        $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn($isAllowed);
         $this->assertEquals($isAllowed, $this->link->isRssAllowed());
     }
 
@@ -101,9 +101,9 @@ class LinkTest extends TestCase
      */
     public function testIsTopCategory($isTop, $categoryLevel)
     {
-        $categoryModel = $this->createPartialMock(Category::class, ['__wakeup', 'getLevel']);
-        $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
-        $categoryModel->expects($this->any())->method('getLevel')->will($this->returnValue($categoryLevel));
+        $categoryModel = $this->createPartialMock(Category::class, [ 'getLevel']);
+        $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
+        $categoryModel->expects($this->any())->method('getLevel')->willReturn($categoryLevel);
         $this->assertEquals($isTop, $this->link->isTopCategory());
     }
 
@@ -121,15 +121,15 @@ class LinkTest extends TestCase
     public function testGetLink()
     {
         $rssUrl = 'http://rss.magento.com';
-        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->will($this->returnValue($rssUrl));
+        $this->urlBuilderInterface->expects($this->once())->method('getUrl')->willReturn($rssUrl);
 
-        $categoryModel = $this->createPartialMock(Category::class, ['__wakeup', 'getId']);
-        $this->registry->expects($this->once())->method('registry')->will($this->returnValue($categoryModel));
-        $categoryModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $categoryModel = $this->createPartialMock(Category::class, [ 'getId']);
+        $this->registry->expects($this->once())->method('registry')->willReturn($categoryModel);
+        $categoryModel->expects($this->any())->method('getId')->willReturn('1');
 
-        $storeModel = $this->createPartialMock(Category::class, ['__wakeup', 'getId']);
-        $this->storeManagerInterface->expects($this->any())->method('getStore')->will($this->returnValue($storeModel));
-        $storeModel->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $storeModel = $this->createPartialMock(Category::class, [ 'getId']);
+        $this->storeManagerInterface->expects($this->any())->method('getStore')->willReturn($storeModel);
+        $storeModel->expects($this->any())->method('getId')->willReturn('1');
 
         $this->assertEquals($rssUrl, $this->link->getLink());
     }

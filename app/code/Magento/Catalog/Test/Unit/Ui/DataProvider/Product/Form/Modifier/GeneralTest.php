@@ -57,8 +57,8 @@ class GeneralTest extends AbstractModifierTest
         return $this->objectManager->getObject(
             General::class,
             [
-            'locator' => $this->locatorMock,
-            'arrayManager' => $this->arrayManagerMock,
+                'locator' => $this->locatorMock,
+                'arrayManager' => $this->arrayManagerMock,
             ]
         );
     }
@@ -71,15 +71,15 @@ class GeneralTest extends AbstractModifierTest
         $this->assertNotEmpty(
             $this->getModel()->modifyMeta(
                 [
-                'first_panel_code' => [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'label' => 'Test label',
+                    'first_panel_code' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'label' => 'Test label',
+                                ]
+                            ],
                         ]
-                    ],
-                ]
-                ]
+                    ]
                 ]
             )
         );
@@ -159,9 +159,9 @@ class GeneralTest extends AbstractModifierTest
                 'defaultStatus' => 1,
                 'statusAttributeValue' => 1,
                 'expectedResult' => [
-                        General::DATA_SOURCE_DEFAULT => [
-                            ProductAttributeInterface::CODE_STATUS => 1,
-                        ],
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 1,
+                    ],
                 ],
             ],
             'Without disable status value' => [
@@ -170,9 +170,9 @@ class GeneralTest extends AbstractModifierTest
                 'defaultStatus' => 1,
                 'statusAttributeValue' => 2,
                 'expectedResult' => [
-                        General::DATA_SOURCE_DEFAULT => [
-                            ProductAttributeInterface::CODE_STATUS => 2,
-                        ],
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 2,
+                    ],
                 ],
             ],
             'With enable status value with empty modelId' => [

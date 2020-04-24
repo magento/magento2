@@ -114,7 +114,7 @@ class ListProductTest extends TestCase
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($this->layerMock));
+            ->willReturn($this->layerMock);
         $this->postDataHelperMock = $this->createMock(PostHelper::class);
         $this->typeInstanceMock = $this->createMock(Simple::class);
         $this->productMock = $this->createMock(Product::class);
@@ -124,9 +124,15 @@ class ListProductTest extends TestCase
         $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->toolbarMock = $this->createMock(Toolbar::class);
 
-        $this->urlHelperMock = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
-        $this->context = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
-        $this->renderer = $this->getMockBuilder(Render::class)->disableOriginalConstructor()->getMock();
+        $this->urlHelperMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->renderer = $this->getMockBuilder(Render::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventManager = $this->getMockForAbstractClass(ManagerInterface::class, [], '', false);
 
         $this->context->expects($this->any())->method('getRegistry')->willReturn($this->registryMock);
@@ -160,48 +166,48 @@ class ListProductTest extends TestCase
 
         $this->productMock->expects($this->once())
             ->method('getIdentities')
-            ->will($this->returnValue([$productTag]));
+            ->willReturn([$productTag]);
 
         $this->productMock->expects($this->once())
             ->method('getCategoryCollection')
-            ->will($this->returnValue($this->catCollectionMock));
+            ->willReturn($this->catCollectionMock);
 
         $this->catCollectionMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->catCollectionMock));
+            ->willReturn($this->catCollectionMock);
 
         $this->catCollectionMock->expects($this->once())
             ->method('setPage')
-            ->will($this->returnValue($this->catCollectionMock));
+            ->willReturn($this->catCollectionMock);
 
         $this->catCollectionMock->expects($this->once())
             ->method('count')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->registryMock->expects($this->any())
             ->method('registry')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
 
         $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
         $currentCategory->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
 
         $this->catCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue([$currentCategory]));
+            ->willReturn([$currentCategory]);
 
         $this->prodCollectionMock->expects($this->any())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->productMock])));
+            ->willReturn(new \ArrayIterator([$this->productMock]));
 
         $this->layerMock->expects($this->any())
             ->method('getCurrentCategory')
-            ->will($this->returnValue($currentCategory));
+            ->willReturn($currentCategory);
 
         $this->layerMock->expects($this->once())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->prodCollectionMock));
+            ->willReturn($this->prodCollectionMock);
 
         $this->assertEquals(
             [$categoryTag, $productTag],
@@ -225,22 +231,22 @@ class ListProductTest extends TestCase
 
         $this->typeInstanceMock->expects($this->once())
             ->method('isPossibleBuyFromList')
-            ->with($this->equalTo($this->productMock))
-            ->will($this->returnValue(true));
+            ->with($this->productMock)
+            ->willReturn(true);
         $this->cartHelperMock->expects($this->any())
             ->method('getAddUrl')
-            ->with($this->equalTo($this->productMock), $this->equalTo([]))
-            ->will($this->returnValue($url));
+            ->with($this->productMock, [])
+            ->willReturn($url);
         $this->productMock->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $this->productMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($this->typeInstanceMock));
+            ->willReturn($this->typeInstanceMock);
         $this->urlHelperMock->expects($this->once())
             ->method('getEncodedUrl')
-            ->with($this->equalTo($url))
-            ->will($this->returnValue($uenc));
+            ->with($url)
+            ->willReturn($uenc);
         $result = $this->block->getAddToCartPostParams($this->productMock);
         $this->assertEquals($expectedPostData, $result);
     }

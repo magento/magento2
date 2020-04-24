@@ -198,8 +198,8 @@ class CostStorageTest extends TestCase
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' => [
-                    1 => Type::TYPE_VIRTUAL
-                ]
+                1 => Type::TYPE_VIRTUAL
+            ]
         ];
         $this->costInterface->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
         $this->invalidSkuProcessor

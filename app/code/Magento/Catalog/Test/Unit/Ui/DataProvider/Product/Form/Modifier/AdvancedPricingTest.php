@@ -110,13 +110,13 @@ class AdvancedPricingTest extends AbstractModifierTest
         return $this->objectManager->getObject(
             AdvancedPricing::class,
             [
-            'locator' => $this->locatorMock,
-            'storeManager' => $this->storeManagerMock,
-            'groupRepository' => $this->groupRepositoryMock,
-            'groupManagement' => $this->groupManagementMock,
-            'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-            'moduleManager' => $this->moduleManagerMock,
-            'directoryHelper' => $this->directoryHelperMock
+                'locator' => $this->locatorMock,
+                'storeManager' => $this->storeManagerMock,
+                'groupRepository' => $this->groupRepositoryMock,
+                'groupManagement' => $this->groupManagementMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'moduleManager' => $this->moduleManagerMock,
+                'directoryHelper' => $this->directoryHelperMock
             ]
         );
     }

@@ -65,7 +65,7 @@ class TreeTest extends TestCase
         $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('from')->with('catalog_category_entity');
         $connection = $this->createMock(Mysql::class);
-        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection->expects($this->once())->method('select')->willReturn($select);
         $this->_resource = $this->createMock(ResourceConnection::class);
         $this->_resource->expects(
             $this->once()
@@ -73,8 +73,8 @@ class TreeTest extends TestCase
             'getConnection'
         )->with(
             'catalog'
-        )->will(
-            $this->returnValue($connection)
+        )->willReturn(
+            $connection
         );
         $this->_resource->expects(
             $this->once()
@@ -82,8 +82,8 @@ class TreeTest extends TestCase
             'getTableName'
         )->with(
             'catalog_category_entity'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
         $eventManager = $this->createMock(ManagerInterface::class);
         $this->_attributeConfig = $this->createMock(Config::class);
@@ -116,12 +116,12 @@ class TreeTest extends TestCase
             'getAttributeNames'
         )->with(
             'catalog_category'
-        )->will(
-            $this->returnValue($attributes)
+        )->willReturn(
+            $attributes
         );
         $collection = $this->getCollectionMock();
         $collection->expects($this->once())->method('addAttributeToSelect')->with($attributes);
-        $this->_collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $this->_collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->assertSame($collection, $this->_model->getCollection());
         // Makes sure the value is calculated only once
         $this->assertSame($collection, $this->_model->getCollection());
@@ -157,19 +157,19 @@ class TreeTest extends TestCase
     {
         $objectHelper = new ObjectManager($this);
         $select = $this->createMock(Select::class);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('join')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinInner')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('join')->willReturnSelf();
+        $select->expects($this->any())->method('joinInner')->willReturnSelf();
+        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
 
         $connection = $this->createMock(AdapterInterface::class);
-        $connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $connection->expects($this->any())->method('fetchCol')->will($this->returnValue([]));
+        $connection->expects($this->any())->method('select')->willReturn($select);
+        $connection->expects($this->any())->method('fetchCol')->willReturn([]);
 
         $resource = $this->createMock(ResourceConnection::class);
-        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
-        $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
+        $resource->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $eventManager = $this->createMock(ManagerInterface::class);
         $attributeConfig = $this->createMock(Config::class);
@@ -178,19 +178,19 @@ class TreeTest extends TestCase
         $attributeConfig->expects($this->once())
             ->method('getAttributeNames')
             ->with('catalog_category')
-            ->will($this->returnValue($attributes));
+            ->willReturn($attributes);
 
         $collection = $this->createMock(Collection::class);
-        $collection->expects($this->never())->method('getAllIds')->will($this->returnValue([]));
-        $collection->expects($this->once())->method('getAllIdsSql')->will($this->returnValue($select));
+        $collection->expects($this->never())->method('getAllIds')->willReturn([]);
+        $collection->expects($this->once())->method('getAllIdsSql')->willReturn($select);
         $collectionFactory = $this->createMock(Factory::class);
-        $collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $collectionFactory->expects($this->once())->method('create')->willReturn($collection);
 
         $store = $this->createMock(Store::class);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $store->expects($this->any())->method('getId')->willReturn(1);
 
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $categoryMetadataMock = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -217,8 +217,8 @@ class TreeTest extends TestCase
         );
 
         $nodeMock = $this->createPartialMock(Node::class, ['getId', 'getPath']);
-        $nodeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $nodeMock->expects($this->once())->method('getPath')->will($this->returnValue([]));
+        $nodeMock->expects($this->any())->method('getId')->willReturn(1);
+        $nodeMock->expects($this->once())->method('getPath')->willReturn([]);
 
         $model->addNode($nodeMock);
 

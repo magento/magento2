@@ -31,7 +31,7 @@ class FullTest extends TestCase
      */
     private $full;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);

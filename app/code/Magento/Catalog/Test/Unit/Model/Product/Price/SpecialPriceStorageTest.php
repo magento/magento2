@@ -67,19 +67,25 @@ class SpecialPriceStorageTest extends TestCase
     protected function setUp(): void
     {
         $this->specialPriceResource = $this->getMockBuilder(SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMock();
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeRepository = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->invalidSkuProcessor = $this
             ->getMockBuilder(InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->validationResult = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->specialPriceFactory = $this->getMockBuilder(
             SpecialPriceInterfaceFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -132,7 +138,8 @@ class SpecialPriceStorageTest extends TestCase
         $this->specialPriceResource->expects($this->atLeastOnce())
             ->method('getEntityLinkField')->willReturn('entity_id');
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $price->expects($this->exactly(3))->method('setPrice');
         $this->specialPriceFactory->expects($this->atLeastOnce())->method('create')->willReturn($price);
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')->willReturn(
@@ -151,7 +158,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdate()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
@@ -175,7 +183,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdateWithInvalidSku()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
@@ -220,7 +229,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdateWithoutPrice()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(null);
@@ -266,7 +276,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdateWithException()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
@@ -311,7 +322,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdateWithIncorrectPriceFrom()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
@@ -357,7 +369,8 @@ class SpecialPriceStorageTest extends TestCase
     public function testUpdateWithIncorrectPriceTo()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);

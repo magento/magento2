@@ -59,10 +59,10 @@ class DeleteTest extends TestCase
             ['getParam', 'getPost']
         );
         $auth = $this->createPartialMock(Auth::class, ['getAuthStorage']);
-        $this->authStorage = $this->createPartialMock(
-            StorageInterface::class,
-            ['processLogin', 'processLogout', 'isLoggedIn', 'prolong', 'setDeletedPath']
-        );
+        $this->authStorage = $this->getMockBuilder(StorageInterface::class)
+            ->addMethods(['setDeletedPath'])
+            ->onlyMethods(['processLogin', 'processLogout', 'isLoggedIn', 'prolong'])
+            ->getMock();
         $eventManager = $this->getMockForAbstractClass(
             ManagerInterface::class,
             [],
@@ -90,23 +90,23 @@ class DeleteTest extends TestCase
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
         $context->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($messageManager));
+            ->willReturn($messageManager);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getAuth')
-            ->will($this->returnValue($auth));
+            ->willReturn($auth);
         $context->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
         $auth->expects($this->any())
             ->method('getAuthStorage')
-            ->will($this->returnValue($this->authStorage));
+            ->willReturn($this->authStorage);
 
         $this->resultRedirect = $this->createMock(Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);

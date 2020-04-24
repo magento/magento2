@@ -56,7 +56,7 @@ class PriceTest extends TestCase
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->productCollection));
+            ->willReturn($this->productCollection);
         $this->coreRegistry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
@@ -93,13 +93,11 @@ class PriceTest extends TestCase
         $map = $this->getValueMap();
         $this->scopeConfig->expects($this->exactly(5))
             ->method('getValue')
-            ->will(
-                $this->returnCallback(
-                    function ($key, $scope) use ($map) {
-                        $this->assertArrayHasKey($key, $map);
-                        return $map[$key]['scope'] === $scope ? $map[$key]['value'] : null;
-                    }
-                )
+            ->willReturnCallback(
+                function ($key, $scope) use ($map) {
+                    $this->assertArrayHasKey($key, $map);
+                    return $map[$key]['scope'] === $scope ? $map[$key]['value'] : null;
+                }
             );
         $this->assertSame($map[Price::XML_PATH_RANGE_CALCULATION]['value'], $this->target->getRangeCalculationValue());
         $this->assertSame($map[Price::XML_PATH_RANGE_STEP]['value'], $this->target->getRangeStepValue());
@@ -124,11 +122,11 @@ class PriceTest extends TestCase
         $priceRange = 10;
         $category->expects($this->once())
             ->method('getFilterPriceRange')
-            ->will($this->returnValue($priceRange));
+            ->willReturn($priceRange);
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $this->target->getPriceRange();
     }
 
@@ -142,15 +140,15 @@ class PriceTest extends TestCase
         $priceRange = 0;
         $category->expects($this->once())
             ->method('getFilterPriceRange')
-            ->will($this->returnValue($priceRange));
+            ->willReturn($priceRange);
         $this->coreRegistry->expects($this->once())
             ->method('registry')
             ->with('current_category_filter')
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $maxPrice = 8000;
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
-            ->will($this->returnValue($maxPrice));
+            ->willReturn($maxPrice);
         $this->target->getPriceRange();
     }
 
@@ -159,7 +157,7 @@ class PriceTest extends TestCase
         $maxPrice = 8000;
         $this->productCollection->expects($this->once())
             ->method('getMaxPrice')
-            ->will($this->returnValue($maxPrice));
+            ->willReturn($maxPrice);
         $this->assertSame((float)$maxPrice, $this->target->getMaxPrice());
     }
 
@@ -202,7 +200,7 @@ class PriceTest extends TestCase
         $this->resource->expects($this->once())
             ->method('getCount')
             ->with($range)
-            ->will($this->returnValue($count));
+            ->willReturn($count);
         $this->assertSame($count, $this->target->getRangeItemCounts($range));
     }
 

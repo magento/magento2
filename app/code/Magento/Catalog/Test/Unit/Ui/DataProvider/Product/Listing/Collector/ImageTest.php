@@ -51,7 +51,7 @@ class ImageTest extends TestCase
     /** @var ImageInterfaceFactory|MockObject */
     private $imageInterfaceFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()

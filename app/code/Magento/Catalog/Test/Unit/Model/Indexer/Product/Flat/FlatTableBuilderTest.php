@@ -93,7 +93,8 @@ class FlatTableBuilderTest extends TestCase
             ->getMockForAbstractClass();
         $this->tableDataMock = $this->getMockBuilder(
             TableDataInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -102,7 +103,8 @@ class FlatTableBuilderTest extends TestCase
             ->getMock();
         $this->metadataMock = $this->getMockBuilder(
             EntityMetadataInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $this->flatTableBuilder = $objectManagerHelper->getObject(

@@ -118,8 +118,8 @@ class CategoriesJsonTest extends TestCase
             ->method('create')
             ->willReturn($this->layoutMock);
 
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
+        $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
+        $context->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->controller = new CategoriesJson(
             $context,
@@ -132,8 +132,8 @@ class CategoriesJsonTest extends TestCase
     protected function _getTreeBlock()
     {
         $this->chooserBlockMock = $this->createMock(Chooser::class);
-        $this->layoutMock->expects($this->once())->method('createBlock')->will(
-            $this->returnValue($this->chooserBlockMock)
+        $this->layoutMock->expects($this->once())->method('createBlock')->willReturn(
+            $this->chooserBlockMock
         );
     }
 
@@ -142,18 +142,18 @@ class CategoriesJsonTest extends TestCase
         $this->_getTreeBlock();
         $testCategoryId = 1;
 
-        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValue($testCategoryId));
+        $this->requestMock->expects($this->any())->method('getPost')->willReturn($testCategoryId);
         $categoryMock = $this->createMock(Category::class);
-        $categoryMock->expects($this->once())->method('load')->will($this->returnValue($categoryMock));
-        $categoryMock->expects($this->once())->method('getId')->will($this->returnValue($testCategoryId));
+        $categoryMock->expects($this->once())->method('load')->willReturn($categoryMock);
+        $categoryMock->expects($this->once())->method('getId')->willReturn($testCategoryId);
         $this->objectManagerMock->expects($this->once())->method('create')
-            ->with($this->equalTo(Category::class))->will($this->returnValue($categoryMock));
+            ->with(Category::class)->willReturn($categoryMock);
 
-        $this->chooserBlockMock->expects($this->once())->method('setSelectedCategories')->will(
-            $this->returnValue($this->chooserBlockMock)
+        $this->chooserBlockMock->expects($this->once())->method('setSelectedCategories')->willReturn(
+            $this->chooserBlockMock
         );
         $testHtml = '<div>Some test html</div>';
-        $this->chooserBlockMock->expects($this->once())->method('getTreeJson')->will($this->returnValue($testHtml));
+        $this->chooserBlockMock->expects($this->once())->method('getTreeJson')->willReturn($testHtml);
         $this->resultJson->expects($this->once())->method('setJsonData')->with($testHtml)->willReturnSelf();
         $this->controller->execute();
     }

@@ -48,7 +48,7 @@ class AbstractTypeTest extends TestCase
         $this->model = $this->objectManagerHelper->getObject(Simple::class);
 
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource', 'getStatus'])
+            ->setMethods(['getHasOptions', '__sleep', 'getResource', 'getStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
@@ -56,18 +56,18 @@ class AbstractTypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->product->expects($this->any())->method('getResource')->will($this->returnValue($this->productResource));
+        $this->product->expects($this->any())->method('getResource')->willReturn($this->productResource);
 
         $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getGroupSortPath', 'getSortPath', '__wakeup'])
+            ->setMethods(['getGroupSortPath', 'getSortPath'])
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function testIsSalable()
     {
-        $this->product->expects($this->any())->method('getStatus')->will(
-            $this->returnValue(Status::STATUS_ENABLED)
+        $this->product->expects($this->any())->method('getStatus')->willReturn(
+            Status::STATUS_ENABLED
         );
         $this->product->setData('is_salable', 3);
         $this->assertEquals(true, $this->model->isSalable($this->product));
@@ -75,11 +75,11 @@ class AbstractTypeTest extends TestCase
 
     public function testGetAttributeById()
     {
-        $this->productResource->expects($this->any())->method('loadAllAttributes')->will(
-            $this->returnValue($this->productResource)
+        $this->productResource->expects($this->any())->method('loadAllAttributes')->willReturn(
+            $this->productResource
         );
-        $this->productResource->expects($this->any())->method('getSortedAttributes')->will(
-            $this->returnValue([$this->attribute])
+        $this->productResource->expects($this->any())->method('getSortedAttributes')->willReturn(
+            [$this->attribute]
         );
         $this->attribute->setId(1);
 
@@ -93,12 +93,12 @@ class AbstractTypeTest extends TestCase
     public function testAttributesCompare($attr1, $attr2, $expectedResult)
     {
         $attribute = $this->attribute;
-        $attribute->expects($this->any())->method('getSortPath')->will($this->returnValue(1));
+        $attribute->expects($this->any())->method('getSortPath')->willReturn(1);
 
         $attribute2 = clone $attribute;
 
-        $attribute->expects($this->any())->method('getGroupSortPath')->will($this->returnValue($attr1));
-        $attribute2->expects($this->any())->method('getGroupSortPath')->will($this->returnValue($attr2));
+        $attribute->expects($this->any())->method('getGroupSortPath')->willReturn($attr1);
+        $attribute2->expects($this->any())->method('getGroupSortPath')->willReturn($attr2);
 
         $this->assertEquals($expectedResult, $this->model->attributesCompare($attribute, $attribute2));
     }
@@ -117,10 +117,10 @@ class AbstractTypeTest extends TestCase
 
     public function testGetSetAttributes()
     {
-        $this->productResource->expects($this->once())->method('loadAllAttributes')->will(
-            $this->returnValue($this->productResource)
+        $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturn(
+            $this->productResource
         );
-        $this->productResource->expects($this->once())->method('getSortedAttributes')->will($this->returnValue(5));
+        $this->productResource->expects($this->once())->method('getSortedAttributes')->willReturn(5);
         $this->assertEquals(5, $this->model->getSetAttributes($this->product));
         //Call the method for a second time, the cached copy should be used
         $this->assertEquals(5, $this->model->getSetAttributes($this->product));
@@ -128,7 +128,7 @@ class AbstractTypeTest extends TestCase
 
     public function testHasOptions()
     {
-        $this->product->expects($this->once())->method('getHasOptions')->will($this->returnValue(true));
+        $this->product->expects($this->once())->method('getHasOptions')->willReturn(true);
         $this->assertEquals(true, $this->model->hasOptions($this->product));
     }
 }

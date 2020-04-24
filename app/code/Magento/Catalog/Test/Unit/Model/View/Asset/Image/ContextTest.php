@@ -39,9 +39,11 @@ class ContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->mediaConfig->expects($this->any())->method('getBaseMediaPath')->willReturn('catalog/product');
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
         $this->mediaDirectory->expects($this->once())->method('create')->with('catalog/product');
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()

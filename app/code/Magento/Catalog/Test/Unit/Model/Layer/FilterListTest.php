@@ -93,22 +93,22 @@ class FilterListTest extends TestCase
     {
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with($expectedClass, [
                 'data' => ['attribute_model' => $this->attributeMock],
                 'layer' => $this->layerMock])
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->layerCategoryConfigMock->expects($this->once())
             ->method('isCategoryFilterVisibleInLayerNavigation')
@@ -144,15 +144,15 @@ class FilterListTest extends TestCase
                     'layer' => $this->layerMock
                 ]
             )
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->layerCategoryConfigMock->expects($this->once())
             ->method('isCategoryFilterVisibleInLayerNavigation')

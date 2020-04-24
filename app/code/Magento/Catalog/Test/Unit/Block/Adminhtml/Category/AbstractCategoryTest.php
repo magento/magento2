@@ -69,7 +69,7 @@ class AbstractCategoryTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->urlBuilderMock = $this->getMockBuilder(
             UrlInterface::class
@@ -85,7 +85,7 @@ class AbstractCategoryTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+            ->willReturn($this->storeManagerMock);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class AbstractCategoryTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
 
         $this->category = $this->objectManager->getObject(
             AbstractCategory::class,

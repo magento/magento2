@@ -43,25 +43,28 @@ class StockTest extends TestCase
         $this->objectHelper = new ObjectManager($this);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
+            ->setMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
-            ['getIsInStock', 'getQty', '__wakeup']
+            ['getIsInStock', 'getQty']
         );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
         $this->model = $this->objectHelper->getObject(
             Stock::class,
             ['stockRegistry' => $this->stockRegistry]
         );
-        $attribute = $this->createPartialMock(DataObject::class, ['getAttributeCode']);
+        $attribute = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $attribute->expects($this->atLeastOnce())
             ->method('getAttributeCode')
-            ->will($this->returnValue(self::ATTRIBUTE_NAME));
+            ->willReturn(self::ATTRIBUTE_NAME);
         $this->model->setAttribute($attribute);
     }
 
@@ -69,13 +72,13 @@ class StockTest extends TestCase
     {
         $productId = 2;
 
-        $this->stockItemMock->expects($this->once())->method('getIsInStock')->will($this->returnValue(1));
-        $this->stockItemMock->expects($this->once())->method('getQty')->will($this->returnValue(5));
+        $this->stockItemMock->expects($this->once())->method('getIsInStock')->willReturn(1);
+        $this->stockItemMock->expects($this->once())->method('getQty')->willReturn(5);
 
-        $store = $this->createPartialMock(Store::class, ['getWebsiteId', '__wakeup']);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->once())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $object = new DataObject(['id' => $productId, 'store' => $store]);
         $this->model->afterLoad($object);
         $data = $object->getData();

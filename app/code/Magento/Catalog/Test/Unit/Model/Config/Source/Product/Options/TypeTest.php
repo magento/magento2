@@ -64,7 +64,7 @@ class TypeTest extends TestCase
             ],
         ];
 
-        $this->productOptionConfig->expects($this->any())->method('getAll')->will($this->returnValue($allOptions));
+        $this->productOptionConfig->expects($this->any())->method('getAll')->willReturn($allOptions);
 
         $this->assertEquals($expect, $this->model->toOptionArray());
     }

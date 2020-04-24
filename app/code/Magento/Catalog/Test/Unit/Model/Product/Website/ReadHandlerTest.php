@@ -26,7 +26,7 @@ class ReadHandlerTest extends TestCase
     /** @var  ReadHandler  */
     private $readHandler;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->websiteLinkMock = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()

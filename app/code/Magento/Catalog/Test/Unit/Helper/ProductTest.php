@@ -49,31 +49,34 @@ class ProductTest extends TestCase
     {
         $product1 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product2 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product2->expects(
             $this->once()
         )->method(
             'getData'
         )->with(
-            $this->equalTo('attribute')
+            'attribute'
         )->willReturn(
             true
         );
 
         $product3 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $product3->expects(
             $this->once()
         )->method(
             'dataHasChangedFor'
         )->with(
-            $this->equalTo('attribute')
+            'attribute'
         )->willReturn(
             true
         );

@@ -69,8 +69,9 @@ class NotifyStockTest extends TestCase
     protected function setUp(): void
     {
         $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
-            ->setMethods(['getProductsCollection', '__wakeup'])
-            ->disableOriginalConstructor()->getMock();
+            ->setMethods(['getProductsCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
         $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -87,25 +88,25 @@ class NotifyStockTest extends TestCase
     public function testGetRssData()
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->will($this->returnValue('http://magento.com/rss/feeds/index/type/notifystock'));
+            ->willReturn('http://magento.com/rss/feeds/index/type/notifystock');
         $item = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getId', 'getQty', 'getName'])
+            ->setMethods(['__sleep', 'getId', 'getQty', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $item->expects($this->once())->method('getQty')->will($this->returnValue(1));
-        $item->expects($this->any())->method('getName')->will($this->returnValue('Low Stock Product'));
+        $item->expects($this->once())->method('getId')->willReturn(1);
+        $item->expects($this->once())->method('getQty')->willReturn(1);
+        $item->expects($this->any())->method('getName')->willReturn('Low Stock Product');
 
         $this->rssModel->expects($this->once())->method('getProductsCollection')
-            ->will($this->returnValue([$item]));
+            ->willReturn([$item]);
         $this->urlBuilder->expects($this->once())->method('getUrl')
             ->with('catalog/product/edit', ['id' => 1, '_secure' => true, '_nosecret' => true])
-            ->will($this->returnValue('http://magento.com/catalog/product/edit/id/1'));
+            ->willReturn('http://magento.com/catalog/product/edit/id/1');
 
         $data = $this->block->getRssData();
-        $this->assertTrue(is_string($data['title']));
-        $this->assertTrue(is_string($data['description']));
-        $this->assertTrue(is_string($data['entries'][0]['description']));
+        $this->assertIsString($data['title']);
+        $this->assertIsString($data['description']);
+        $this->assertIsString($data['entries'][0]['description']);
         $this->assertEquals($this->rssFeed, $data);
     }
 

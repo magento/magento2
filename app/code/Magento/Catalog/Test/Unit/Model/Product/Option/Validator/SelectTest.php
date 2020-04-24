@@ -64,8 +64,8 @@ class SelectTest extends TestCase
                 ]
             ],
         ];
-        $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
-        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getData'];
+        $configMock->expects($this->once())->method('getAll')->willReturn($config);
+        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getData'];
         $this->valueMock = $this->createPartialMock(Option::class, $methods, []);
         $this->validator = new Select(
             $configMock,
@@ -81,16 +81,16 @@ class SelectTest extends TestCase
      */
     public function testIsValidSuccess($expectedResult, array $value)
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
-        $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([$value]));
+        $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn([$value]);
         if (isset($value['price'])) {
             $this->localeFormatMock
                 ->expects($this->once())
                 ->method('getNumber')
-                ->will($this->returnValue($value['price']));
+                ->willReturn($value['price']);
         }
         $this->assertEquals($expectedResult, $this->validator->isValid($this->valueMock));
     }
@@ -131,15 +131,15 @@ class SelectTest extends TestCase
      */
     public function testIsValidateWithInvalidOptionValues()
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
         $this->valueMock
             ->expects($this->once())
             ->method('getData')
             ->with('values')
-            ->will($this->returnValue('invalid_data'));
+            ->willReturn('invalid_data');
 
         $messages = [
             'option values' => 'Invalid option value',
@@ -153,11 +153,11 @@ class SelectTest extends TestCase
      */
     public function testIsValidateWithEmptyValues()
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
-        $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([]));
+        $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn([]);
         $messages = [
             'option values' => 'Invalid option value',
         ];
@@ -178,12 +178,12 @@ class SelectTest extends TestCase
             'price' => $price,
             'title' => $title,
         ];
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->expects($this->never())->method('getPriceType');
         $this->valueMock->expects($this->never())->method('getPrice');
-        $this->valueMock->expects($this->any())->method('getData')->with('values')->will($this->returnValue([$value]));
-        $this->localeFormatMock->expects($this->any())->method('getNumber')->will($this->returnValue($price));
+        $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn([$value]);
+        $this->localeFormatMock->expects($this->any())->method('getNumber')->willReturn($price);
         $messages = [
             'option values' => 'Invalid option value',
         ];

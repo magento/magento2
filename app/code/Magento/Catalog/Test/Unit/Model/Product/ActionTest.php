@@ -73,31 +73,27 @@ class ActionTest extends TestCase
             WebsiteFactory::class,
             ['create']
         );
-        $this->resource = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                'updateAttributes',
-                'getConnection',
-                '_construct',
-                'getIdFieldName',
-            ]
-        );
+        $this->resource = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['updateAttributes', 'getIdFieldName'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->productWebsite = $this->createPartialMock(
             Website::class,
-            ['addProducts', 'removeProducts', '__wakeup']
+            ['addProducts', 'removeProducts']
         );
         $this->productWebsiteFactory
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->productWebsite));
+            ->willReturn($this->productWebsite);
         $this->categoryIndexer = $this->createPartialMock(
             Indexer::class,
             ['getId', 'load', 'isScheduled', 'reindexList']
         );
-        $this->eavConfig = $this->createPartialMock(Config::class, ['__wakeup', 'getAttribute']);
+        $this->eavConfig = $this->createPartialMock(Config::class, [ 'getAttribute']);
         $this->eavAttribute = $this->createPartialMock(
             Attribute::class,
-            ['__wakeup', 'isIndexable']
+            [ 'isIndexable']
         );
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
@@ -126,26 +122,25 @@ class ActionTest extends TestCase
         $this->resource
             ->expects($this->any())
             ->method('updateAttributes')
-            ->with($productIds, $attrData, $storeId)
-            ->will($this->returnSelf());
+            ->with($productIds, $attrData, $storeId)->willReturnSelf();
 
         $this->categoryIndexer
             ->expects($this->any())
             ->method('isScheduled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->categoryIndexer
             ->expects($this->any())
             ->method('reindexList')
-            ->will($this->returnValue($productIds));
+            ->willReturn($productIds);
         $this->prepareIndexer();
         $this->eavConfig
             ->expects($this->any())
             ->method('getAttribute')
-            ->will($this->returnValue($this->eavAttribute));
+            ->willReturn($this->eavAttribute);
         $this->eavAttribute
             ->expects($this->any())
             ->method('isIndexable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertEquals($this->model, $this->model->updateAttributes($productIds, $attrData, $storeId));
         $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
         $this->assertEquals($this->model->getDataByKey('attributes_data'), $attrData);
@@ -165,17 +160,16 @@ class ActionTest extends TestCase
         $this->productWebsite
             ->expects($this->any())
             ->method($methodName)
-            ->with($websiteIds, $productIds)
-            ->will($this->returnSelf());
+            ->with($websiteIds, $productIds)->willReturnSelf();
 
         $this->categoryIndexer
             ->expects($this->any())
             ->method('isScheduled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->categoryIndexer
             ->expects($this->any())
             ->method('reindexList')
-            ->will($this->returnValue($productIds));
+            ->willReturn($productIds);
         $this->prepareIndexer();
         $this->model->updateWebsites($productIds, $websiteIds, $type);
         $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
@@ -199,6 +193,6 @@ class ActionTest extends TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(Category::INDEXER_ID)
-            ->will($this->returnValue($this->categoryIndexer));
+            ->willReturn($this->categoryIndexer);
     }
 }

@@ -59,11 +59,11 @@ class LinkTest extends TestCase
             $this->at(0)
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->connection)
+        )->willReturn(
+            $this->connection
         );
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->dbSelect);
     }
 
     public function testGetAttributesByType()
@@ -72,7 +72,7 @@ class LinkTest extends TestCase
         $result = [100, 200, 300, 400];
 
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
         $this->dbSelect->expects(
             $this->atLeastOnce()
         )->method(
@@ -80,10 +80,10 @@ class LinkTest extends TestCase
         )->with(
             'link_type_id = ?',
             $typeId
-        )->will(
-            $this->returnValue($this->dbSelect)
+        )->willReturn(
+            $this->dbSelect
         );
-        $this->connection->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn($result);
         $this->assertEquals($result, $this->model->getAttributesByType($typeId));
     }
 
@@ -98,8 +98,8 @@ class LinkTest extends TestCase
             'getTableName'
         )->with(
             'catalog_product_link_attribute_' . $inputTable
-        )->will(
-            $this->returnValue($resultTable)
+        )->willReturn(
+            $resultTable
         );
         $this->assertEquals($resultTable, $this->model->getAttributeTypeTable($inputTable));
     }
@@ -117,8 +117,8 @@ class LinkTest extends TestCase
 
         // method flow
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
-        $this->dbSelect->expects($this->atLeastOnce())->method('where')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
+        $this->dbSelect->expects($this->atLeastOnce())->method('where')->willReturn($this->dbSelect);
         $this->connection->expects(
             $this->once()
         )->method(
@@ -126,8 +126,8 @@ class LinkTest extends TestCase
         )->with(
             $this->dbSelect,
             $bind
-        )->will(
-            $this->returnValue($fetchedData)
+        )->willReturn(
+            $fetchedData
         );
 
         $this->assertEquals($result, $this->model->getChildrenIds($parentId, $typeId));
@@ -142,8 +142,8 @@ class LinkTest extends TestCase
 
         // method flow
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
-        $this->dbSelect->expects($this->any())->method('where')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
+        $this->dbSelect->expects($this->any())->method('where')->willReturn($this->dbSelect);
 
         $this->connection->expects(
             $this->once()
@@ -151,8 +151,8 @@ class LinkTest extends TestCase
             'fetchAll'
         )->with(
             $this->dbSelect
-        )->will(
-            $this->returnValue($fetchedData)
+        )->willReturn(
+            $fetchedData
         );
 
         $this->assertEquals($result, $this->model->getParentIdsByChild($childId, $typeId));

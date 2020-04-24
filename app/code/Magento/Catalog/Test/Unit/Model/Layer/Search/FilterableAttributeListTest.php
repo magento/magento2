@@ -54,32 +54,30 @@ class FilterableAttributeListTest extends TestCase
     public function testGetList()
     {
         $storeMock = $this->createMock(Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $storeId = 4321;
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
 
         $collectionMock = $this->createMock(Collection::class);
         $this->collectionFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $collectionMock
             ->expects($this->once())
             ->method('setItemObjectClass')
-            ->with(Attribute::class)
-            ->will($this->returnSelf());
+            ->with(Attribute::class)->willReturnSelf();
         $collectionMock
             ->expects($this->once())
-            ->method('addStoreLabel')
-            ->will($this->returnSelf());
+            ->method('addStoreLabel')->willReturnSelf();
         $collectionMock
             ->expects($this->once())
             ->method('setOrder');
 
-        $collectionMock->expects($this->once())->method('addIsFilterableInSearchFilter')->will($this->returnSelf());
-        $collectionMock->expects($this->once())->method('addVisibleFilter')->will($this->returnSelf());
+        $collectionMock->expects($this->once())->method('addIsFilterableInSearchFilter')->willReturnSelf();
+        $collectionMock->expects($this->once())->method('addVisibleFilter')->willReturnSelf();
         $collectionMock->expects($this->once())->method('load');
 
         $this->assertEquals($collectionMock, $this->model->getList());

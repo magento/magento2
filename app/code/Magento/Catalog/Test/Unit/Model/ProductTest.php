@@ -302,13 +302,13 @@ class ProductTest extends TestCase
         );
         $this->appStateMock->expects($this->any())
             ->method('getAreaCode')
-            ->will($this->returnValue(FrontNameResolver::AREA_CODE));
+            ->willReturn(FrontNameResolver::AREA_CODE);
 
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(
             RemoveAction::class
         );
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
         $cacheInterfaceMock = $this->createMock(CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
@@ -318,20 +318,21 @@ class ProductTest extends TestCase
             '',
             false
         );
-        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
+        $contextMock->expects($this->any())->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
         $contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->willReturn($cacheInterfaceMock);
         $contextMock->expects($this->any())
             ->method('getActionValidator')
-            ->will($this->returnValue($actionValidatorMock));
+            ->willReturn($actionValidatorMock);
 
         $this->optionInstanceMock = $this->getMockBuilder(Option::class)
-            ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
-            ->disableOriginalConstructor()->getMock();
+            ->setMethods(['setProduct', 'saveOptions', '__sleep'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $optionFactory = $this->createPartialMock(
             OptionFactory::class,
@@ -364,10 +365,10 @@ class ProductTest extends TestCase
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->store));
+            ->willReturn($this->store);
         $this->storeManager->expects($this->any())
             ->method('getWebsite')
-            ->will($this->returnValue($this->website));
+            ->willReturn($this->website);
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
@@ -395,7 +396,8 @@ class ProductTest extends TestCase
 
         $this->metadataServiceMock = $this->createMock(ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mediaGalleryEntryConverterPoolMock =
             $this->createPartialMock(
@@ -481,16 +483,16 @@ class ProductTest extends TestCase
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->willReturn(
+            $productType
         );
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'isInGroup'])
+            ->setMethods(['isInGroup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $attribute->expects($this->any())->method('isInGroup')->will($this->returnValue(true));
-        $productType->expects($this->any())->method('getSetAttributes')->will(
-            $this->returnValue([$attribute])
+        $attribute->expects($this->any())->method('isInGroup')->willReturn(true);
+        $productType->expects($this->any())->method('getSetAttributes')->willReturn(
+            [$attribute]
         );
         $expect = [$attribute];
         $this->assertEquals($expect, $this->model->getAttributes(5));
@@ -502,7 +504,7 @@ class ProductTest extends TestCase
         $expectedStoreIds = [1, 2, 3];
         $websiteIds = ['test'];
         $this->model->setWebsiteIds($websiteIds);
-        $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
+        $this->website->expects($this->once())->method('getStoreIds')->willReturn($expectedStoreIds);
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
     }
 
@@ -522,16 +524,16 @@ class ProductTest extends TestCase
 
         $this->storeManager->expects(
             $this->exactly(
-                (int) !$isObjectNew
+                (int)!$isObjectNew
             )
         )
             ->method('isSingleStoreMode')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->website->expects(
             $this->once()
         )->method('getStoreIds')
-            ->will($this->returnValue($websiteIDs));
+            ->willReturn($websiteIDs);
 
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
     }
@@ -542,12 +544,12 @@ class ProductTest extends TestCase
     public function getSingleStoreIds()
     {
         return [
-          [
-              false
-          ],
-          [
-              true
-          ],
+            [
+                false
+            ],
+            [
+                true
+            ],
         ];
     }
 
@@ -556,7 +558,7 @@ class ProductTest extends TestCase
         $this->model->setStoreId(3);
         $this->assertEquals(3, $this->model->getStoreId());
         $this->model->unsStoreId();
-        $this->store->expects($this->once())->method('getId')->will($this->returnValue(5));
+        $this->store->expects($this->once())->method('getId')->willReturn(5);
         $this->assertEquals(5, $this->model->getStoreId());
     }
 
@@ -565,7 +567,7 @@ class ProductTest extends TestCase
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->resource->expects($this->once())->method('getCategoryCollection')->willReturn($collection);
         $this->assertInstanceOf(Collection::class, $this->model->getCategoryCollection());
     }
 
@@ -587,7 +589,7 @@ class ProductTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getCategoryCollection',
+                    'getCategoryCollection',
                 ]
             )
             ->getMockForAbstractClass();
@@ -646,33 +648,33 @@ class ProductTest extends TestCase
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->resource->expects($this->once())->method('getCategoryCollection')->willReturn($collection);
         $this->assertSame($this->model->getCategoryCollection(), $this->model->getCategoryCollection());
     }
 
     public function testGetCategory()
     {
         $this->model->setData('category_ids', [10]);
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
-        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($this->category));
+        $this->category->expects($this->any())->method('getId')->willReturn(10);
+        $this->registry->expects($this->any())->method('registry')->willReturn($this->category);
+        $this->categoryRepository->expects($this->any())->method('get')->willReturn($this->category);
         $this->assertInstanceOf(Category::class, $this->model->getCategory());
     }
 
     public function testGetCategoryId()
     {
         $this->model->setData('category_ids', [10]);
-        $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
+        $this->category->expects($this->any())->method('getId')->willReturn(10);
 
         $this->registry->expects($this->at(0))->method('registry');
-        $this->registry->expects($this->at(1))->method('registry')->will($this->returnValue($this->category));
+        $this->registry->expects($this->at(1))->method('registry')->willReturn($this->category);
         $this->assertFalse($this->model->getCategoryId());
         $this->assertEquals(10, $this->model->getCategoryId());
     }
 
     public function testGetIdBySku()
     {
-        $this->resource->expects($this->once())->method('getIdBySku')->will($this->returnValue(5));
+        $this->resource->expects($this->once())->method('getIdBySku')->willReturn(5);
         $this->assertEquals(5, $this->model->getIdBySku('someSku'));
     }
 
@@ -727,10 +729,10 @@ class ProductTest extends TestCase
             $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
                 ->method('get')
                 ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-                ->will($this->returnValue($this->categoryIndexerMock));
+                ->willReturn($this->categoryIndexerMock);
             $this->categoryIndexerMock->expects($this->any())
                 ->method('isScheduled')
-                ->will($this->returnValue($isScheduled));
+                ->willReturn($isScheduled);
             $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
         }
         $this->productFlatProcessor->expects($this->exactly($productFlatCount))->method('reindexRow');
@@ -797,9 +799,11 @@ class ProductTest extends TestCase
     public function getIdentitiesProvider()
     {
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
-            ->disableOriginalConstructor()->setMethods(['getStockItem'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem'])->getMock();
         $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $extensionAttributesMock->expects($this->any())->method('getStockItem')->willReturn($stockItemMock);
         $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
 
@@ -935,8 +939,8 @@ class ProductTest extends TestCase
     {
         $this->productTypeInstanceMock->expects($this->once())
             ->method('getPriceInfo')
-            ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->with($this->model)
+            ->willReturn($this->_priceInfoMock);
         $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
     }
 
@@ -947,8 +951,8 @@ class ProductTest extends TestCase
     {
         $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
-            ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->with($this->model)
+            ->willReturn($this->_priceInfoMock);
 
         //initialize the priceInfo field
         $this->model->getPriceInfo();
@@ -966,8 +970,8 @@ class ProductTest extends TestCase
     {
         $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
-            ->with($this->equalTo($this->model))
-            ->will($this->returnValue($this->_priceInfoMock));
+            ->with($this->model)
+            ->willReturn($this->_priceInfoMock);
         $this->assertEquals($this->_priceInfoMock, $this->model->getPriceInfo());
         $this->assertEquals($this->_priceInfoMock, $this->model->reloadPriceInfo());
     }
@@ -1056,12 +1060,13 @@ class ProductTest extends TestCase
     protected function configureSaveTest()
     {
         $productTypeMock = $this->getMockBuilder(Simple::class)
-            ->disableOriginalConstructor()->setMethods(['beforeSave', 'save'])->getMock();
-        $productTypeMock->expects($this->once())->method('beforeSave')->will($this->returnSelf());
-        $productTypeMock->expects($this->once())->method('save')->will($this->returnSelf());
+            ->disableOriginalConstructor()
+            ->setMethods(['beforeSave', 'save'])->getMock();
+        $productTypeMock->expects($this->once())->method('beforeSave')->willReturnSelf();
+        $productTypeMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->productTypeInstanceMock->expects($this->once())->method('factory')->with($this->model)
-            ->will($this->returnValue($productTypeMock));
+            ->willReturn($productTypeMock);
 
         $this->model->getResource()->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
         $this->model->getResource()->expects($this->any())->method('commit')->will($this->returnSelf());
@@ -1091,14 +1096,13 @@ class ProductTest extends TestCase
         $this->moduleManager->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_CatalogInventory')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($stockItemMock, $data['stock_item'], StockItemInterface::class)
-            ->will($this->returnSelf());
+            ->with($stockItemMock, $data['stock_item'], StockItemInterface::class)->willReturnSelf();
         $this->stockItemFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($stockItemMock));
+            ->willReturn($stockItemMock);
         $stockItemMock->expects($this->once())->method('setProduct')->with($this->model);
 
         $this->assertEquals($this->model, $this->model->fromArray($data));
@@ -1109,7 +1113,7 @@ class ProductTest extends TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-            ->will($this->returnValue($this->categoryIndexerMock));
+            ->willReturn($this->categoryIndexerMock);
     }
 
     /**
@@ -1160,8 +1164,8 @@ class ProductTest extends TestCase
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->willReturn(
+            $productType
         );
 
         $frontendMock = $this->getMockBuilder(AbstractFrontend::class)
@@ -1170,7 +1174,7 @@ class ProductTest extends TestCase
             ->getMockForAbstractClass();
         $frontendMock->expects($this->any())->method('getInputType')->willReturn('media_image');
         $attributeImage = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->setMethods(['getFrontend', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeImage->expects($this->any())
@@ -1178,7 +1182,7 @@ class ProductTest extends TestCase
             ->willReturn($frontendMock);
         $attributeImage->expects($this->any())->method('getAttributeCode')->willReturn('image');
         $attributeSmallImage = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->setMethods(['getFrontend', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeSmallImage->expects($this->any())
@@ -1186,8 +1190,8 @@ class ProductTest extends TestCase
             ->willReturn($frontendMock);
         $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
 
-        $productType->expects($this->any())->method('getSetAttributes')->will(
-            $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
+        $productType->expects($this->any())->method('getSetAttributes')->willReturn(
+            ['image' => $attributeImage, 'small_image' => $attributeSmallImage]
         );
 
         return [$attributeImage, $attributeSmallImage];
@@ -1326,41 +1330,41 @@ class ProductTest extends TestCase
     {
         $mediaEntries =
             [
-            'images' => [
-                [
-                    'value_id' => 1,
-                    'file' => 'imageFile.jpg',
-                    'media_type' => 'image',
-                ],
-                [
-                    'value_id' => 3,
-                    'file' => 'imageFile.jpg',
-                ],
-                [
-                    'value_id' => 2,
-                    'file' => 'smallImageFile.jpg',
-                    'media_type' => 'image',
-                ],
+                'images' => [
+                    [
+                        'value_id' => 1,
+                        'file' => 'imageFile.jpg',
+                        'media_type' => 'image',
+                    ],
+                    [
+                        'value_id' => 3,
+                        'file' => 'imageFile.jpg',
+                    ],
+                    [
+                        'value_id' => 2,
+                        'file' => 'smallImageFile.jpg',
+                        'media_type' => 'image',
+                    ],
                 ]
             ];
         $expectedImageDataObject = new DataObject(
             [
-            'value_id' => 1,
-            'file' => 'imageFile.jpg',
-            'media_type' => 'image',
-            'url' => 'http://magento.dev/pub/imageFile.jpg',
-            'id' => 1,
-            'path' => '/var/www/html/pub/imageFile.jpg',
+                'value_id' => 1,
+                'file' => 'imageFile.jpg',
+                'media_type' => 'image',
+                'url' => 'http://magento.dev/pub/imageFile.jpg',
+                'id' => 1,
+                'path' => '/var/www/html/pub/imageFile.jpg',
             ]
         );
         $expectedSmallImageDataObject = new DataObject(
             [
-            'value_id' => 2,
-            'file' => 'smallImageFile.jpg',
-            'media_type' => 'image',
-            'url' => 'http://magento.dev/pub/smallImageFile.jpg',
-            'id' => 2,
-            'path' => '/var/www/html/pub/smallImageFile.jpg',
+                'value_id' => 2,
+                'file' => 'smallImageFile.jpg',
+                'media_type' => 'image',
+                'url' => 'http://magento.dev/pub/smallImageFile.jpg',
+                'id' => 2,
+                'path' => '/var/www/html/pub/smallImageFile.jpg',
             ]
         );
 
@@ -1384,10 +1388,11 @@ class ProductTest extends TestCase
                 [3, 'not_null_skeep_foreache'],
             ]
         );
-        $imagesCollectionMock->expects(self::exactly(2))->method('addItem')->withConsecutive(
-            $expectedImageDataObject,
-            $expectedSmallImageDataObject
-        );
+        $imagesCollectionMock->expects(self::exactly(2))->method('addItem')
+            ->withConsecutive(
+                [$expectedImageDataObject],
+                [$expectedSmallImageDataObject]
+            );
         $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 
         $this->model->getMediaGalleryImages();
@@ -1415,7 +1420,7 @@ class ProductTest extends TestCase
         $attributeValue2 = new AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertCount(1, $this->model->getCustomAttributes());
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $initialCustomAttributeValue,
@@ -1424,7 +1429,7 @@ class ProductTest extends TestCase
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->model->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertCount(1, $this->model->getCustomAttributes());
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $newCustomAttributeValue,
@@ -1508,12 +1513,12 @@ class ProductTest extends TestCase
         $productTypePriceMock->expects($this->any())
             ->method('getFinalPrice')
             ->with($qty, $this->model)
-            ->will($this->returnValue($finalPrice));
+            ->willReturn($finalPrice);
 
         $this->productTypeInstanceMock->expects($this->any())
             ->method('priceFactory')
             ->with($this->model->getTypeId())
-            ->will($this->returnValue($productTypePriceMock));
+            ->willReturn($productTypePriceMock);
 
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
         $this->model->setFinalPrice(9.99);
@@ -1548,8 +1553,8 @@ class ProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->productTypeInstanceMock->expects($this->exactly(2))->method('factory')->will(
-            $this->returnValue($productType)
+        $this->productTypeInstanceMock->expects($this->exactly(2))->method('factory')->willReturn(
+            $productType
         );
 
         $this->model->getTypeInstance();

@@ -48,12 +48,13 @@ class ModeTest extends TestCase
         $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
-            ['loadByIndexer', 'setStatus', 'save', '__wakeup']
+            ['loadByIndexer', 'setStatus', 'save']
         );
-        $this->indexerRegistry = $this->createPartialMock(
-            IndexerRegistry::class,
-            ['load', 'setScheduled', 'get']
-        );
+        $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
+            ->addMethods(['load', 'setScheduled'])
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->flatIndexer = $this->createMock(IndexerInterface::class);
 
@@ -90,8 +91,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -128,8 +129,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);
@@ -140,19 +141,15 @@ class ModeTest extends TestCase
             'loadByIndexer'
         )->with(
             'catalog_category_flat'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->indexerStateMock->expects(
             $this->once()
         )->method(
             'setStatus'
         )->with(
             'invalid'
-        )->will(
-            $this->returnSelf()
-        );
-        $this->indexerStateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        )->willReturnSelf();
+        $this->indexerStateMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->indexerRegistry->expects($this->never())->method('load');
         $this->indexerRegistry->expects($this->never())->method('setScheduled');
@@ -182,8 +179,8 @@ class ModeTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);

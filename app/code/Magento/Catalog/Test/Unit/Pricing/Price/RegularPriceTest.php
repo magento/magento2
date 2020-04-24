@@ -55,7 +55,7 @@ class RegularPriceTest extends TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
 
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
@@ -78,11 +78,11 @@ class RegularPriceTest extends TestCase
         $convertedPrice = 85;
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($price)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
         //The second call will use cached value
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -112,15 +112,15 @@ class RegularPriceTest extends TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($priceValue));
+            ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($priceValue)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($convertedPrice))
-            ->will($this->returnValue($amountValue));
+            ->with($convertedPrice)
+            ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->regularPrice->getAmount());
     }
 

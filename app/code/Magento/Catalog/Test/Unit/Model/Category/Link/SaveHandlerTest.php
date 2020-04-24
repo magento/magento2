@@ -47,7 +47,8 @@ class SaveHandlerTest extends TestCase
         $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)->getMockForAbstractClass();
+        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)
+            ->getMockForAbstractClass();
         $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();

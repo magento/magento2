@@ -78,8 +78,8 @@ class ImageTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeCollectionFactory->expects($this->any())->method('create')->will(
-            $this->returnValue($this->attributeCollection)
+        $this->attributeCollectionFactory->expects($this->any())->method('create')->willReturn(
+            $this->attributeCollection
         );
 
         $this->attribute = $this->getMockBuilder(Attribute::class)

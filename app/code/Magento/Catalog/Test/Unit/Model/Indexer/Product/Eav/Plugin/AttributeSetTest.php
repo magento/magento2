@@ -53,7 +53,7 @@ class AttributeSetTest extends TestCase
      */
     private $originalSetMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filterMock = $this->createMock(IndexableAttributeFilter::class);
         $this->subjectMock = $this->createMock(EavAttributeSet::class);

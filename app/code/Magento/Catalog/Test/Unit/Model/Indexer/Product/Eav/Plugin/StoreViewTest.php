@@ -34,7 +34,7 @@ class StoreViewTest extends TestCase
 
         $objectMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive', '__wakeup'])
+            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive'])
             ->getMock();
         $objectMock->expects($this->any())
             ->method('getId')

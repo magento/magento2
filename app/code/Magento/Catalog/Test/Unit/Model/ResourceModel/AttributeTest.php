@@ -86,7 +86,8 @@ class AttributeTest extends TestCase
             ->setMethods(['from', 'where', 'join', 'deleteFromSelect'])
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(Adapter::class)->getMockForAbstractClass();
+        $this->connectionMock = $this->getMockBuilder(Adapter::class)
+            ->getMockForAbstractClass();
         $this->connectionMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->once())->method('query')->willReturn($this->selectMock);
         $this->connectionMock->expects($this->once())->method('delete')->willReturn($this->selectMock);
@@ -100,8 +101,11 @@ class AttributeTest extends TestCase
             ->setMethods(['delete', 'getConnection'])
             ->getMock();
 
-        $this->contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
         $this->eavEntityTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();

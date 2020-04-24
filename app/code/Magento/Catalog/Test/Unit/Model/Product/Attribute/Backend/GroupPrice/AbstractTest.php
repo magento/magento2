@@ -41,7 +41,7 @@ class AbstractTest extends TestCase
     protected function setUp(): void
     {
         $this->_helper = $this->createPartialMock(Data::class, ['isPriceGlobal']);
-        $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
+        $this->_helper->expects($this->any())->method('isPriceGlobal')->willReturn(true);
 
         $currencyFactoryMock = $this->createPartialMock(CurrencyFactory::class, ['create']);
         $storeManagerMock = $this->createMock(StoreManagerInterface::class);
@@ -63,10 +63,12 @@ class AbstractTest extends TestCase
                 'scopeOverriddenValue' => $scopeOverriddenValue
             ]
         );
-        $resource = $this->createPartialMock(\stdClass::class, ['getMainTable']);
-        $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
+        $resource = $this->getMockBuilder(\stdClass::class)->addMethods(['getMainTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resource->expects($this->any())->method('getMainTable')->willReturn('table');
 
-        $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));
+        $this->_model->expects($this->any())->method('_getResource')->willReturn($resource);
     }
 
     public function testGetAffectedFields()
@@ -76,12 +78,12 @@ class AbstractTest extends TestCase
 
         $attribute = $this->createPartialMock(
             AbstractAttribute::class,
-            ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup']
+            ['getBackendTable', 'isStatic', 'getAttributeId', 'getName']
         );
-        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
-        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
-        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tier_price'));
+        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
+        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
+        $attribute->expects($this->any())->method('getName')->willReturn('tier_price');
         $this->_model->setAttribute($attribute);
 
         $object = new DataObject();

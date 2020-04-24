@@ -18,10 +18,10 @@ class TabsTest extends TestCase
     public function testAddTab()
     {
         $tabBlock = $this->createMock(Template::class);
-        $tabBlock->expects($this->once())->method('setTemplate')->with('template')->will($this->returnSelf());
+        $tabBlock->expects($this->once())->method('setTemplate')->with('template')->willReturnSelf();
 
         $layout = $this->createMock(Layout::class);
-        $layout->expects($this->once())->method('createBlock')->with('block')->will($this->returnValue($tabBlock));
+        $layout->expects($this->once())->method('createBlock')->with('block')->willReturn($tabBlock);
 
         $helper = new ObjectManager($this);
         $block = $helper->getObject(Tabs::class, ['layout' => $layout]);

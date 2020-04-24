@@ -298,7 +298,8 @@ class HelperTest extends TestCase
                     ],
                 ]
             );
-        $website = $this->getMockBuilder(WebsiteInterface::class)->getMockForAbstractClass();
+        $website = $this->getMockBuilder(WebsiteInterface::class)
+            ->getMockForAbstractClass();
         $website->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn($isSingleStore);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($website);
@@ -325,12 +326,12 @@ class HelperTest extends TestCase
         $this->assertEquals($expWebsiteIds, $this->productMock->getDataByKey('website_ids'));
 
         $productOptions = $this->productMock->getOptions();
-        $this->assertTrue(2 == count($productOptions));
+        $this->assertCount(2, $productOptions);
         list($option2, $option3) = $productOptions;
-        $this->assertTrue($option2->getOptionId() == $optionsData['option2']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
-        $this->assertTrue($option3->getOptionId() == $optionsData['option3']['option_id']);
-        $this->assertTrue('sku' == $option2->getData('product_sku'));
+        $this->assertEquals($optionsData['option2']['option_id'], $option2->getOptionId());
+        $this->assertEquals('sku', $option2->getData('product_sku'));
+        $this->assertEquals($optionsData['option3']['option_id'], $option3->getOptionId());
+        $this->assertEquals('sku', $option2->getData('product_sku'));
 
         $productLinks = $this->productMock->getProductLinks();
         $this->assertCount(count($expectedLinks), $productLinks);
@@ -758,6 +759,6 @@ class HelperTest extends TestCase
 
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
-            ->will($this->returnValueMap($repositoryReturnMap));
+            ->willReturnMap($repositoryReturnMap);
     }
 }

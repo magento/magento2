@@ -67,7 +67,7 @@ class AttributeTest extends TestCase
         $cacheInterfaceMock = $this->createMock(CacheInterface::class);
 
         $actionValidatorMock = $this->createMock(RemoveAction::class);
-        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -76,29 +76,22 @@ class AttributeTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getCacheManager')
-            ->will($this->returnValue($cacheInterfaceMock));
+            ->willReturn($cacheInterfaceMock);
         $this->contextMock->expects($this->any())->method('getActionValidator')
-            ->will($this->returnValue($actionValidatorMock));
+            ->willReturn($actionValidatorMock);
 
         $dbAdapterMock = $this->createMock(Mysql::class);
 
-        $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->will($this->returnValue(1));
+        $dbAdapterMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
-        $this->resourceMock = $this->createPartialMock(
-            AbstractResource::class,
-            [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'save',
-                'saveInSetIncluding',
-                'isUsedBySuperProducts',
-                'delete'
-            ]
-        );
+        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName', 'save', 'saveInSetIncluding', 'isUsedBySuperProducts', 'delete'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->setMethods(['clear'])
@@ -107,7 +100,7 @@ class AttributeTest extends TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($dbAdapterMock));
+            ->willReturn($dbAdapterMock);
 
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(

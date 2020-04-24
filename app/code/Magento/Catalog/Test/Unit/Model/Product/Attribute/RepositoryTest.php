@@ -111,15 +111,11 @@ class RepositoryTest extends TestCase
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
         $this->searchResultMock =
-            $this->createPartialMock(SearchResultsInterface::class, [
-                    'getItems',
-                    'getSearchCriteria',
-                    'getTotalCount',
-                    'setItems',
-                    'setSearchCriteria',
-                    'setTotalCount',
-                    '__wakeup',
-                ]);
+            $this->getMockBuilder(SearchResultsInterface::class)
+                ->onlyMethods(
+                    ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
+                )
+                ->getMock();
         $this->optionManagementMock =
             $this->createMock(ProductAttributeOptionManagementInterface::class);
 
@@ -243,7 +239,7 @@ class RepositoryTest extends TestCase
         $this->expectExceptionMessage('"frontend_label" is required. Enter and try again.');
         $attributeMock = $this->createPartialMock(
             Attribute::class,
-            ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId']
+            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', 'setAttributeId']
         );
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
@@ -259,7 +255,7 @@ class RepositoryTest extends TestCase
         $this->expectExceptionMessage('Invalid value of "" provided for the frontend_label field.');
         $attributeMock = $this->createPartialMock(
             Attribute::class,
-            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId']
+            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', 'setAttributeId']
         );
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();

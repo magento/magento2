@@ -43,12 +43,12 @@ class TypesListTest extends TestCase
     {
         $this->inputTypeFactoryMock = $this->createPartialMock(
             InputtypeFactory::class,
-            ['create', '__wakeup']
+            ['create']
         );
         $this->attributeTypeFactoryMock =
             $this->createPartialMock(ProductAttributeTypeInterfaceFactory::class, [
-                    'create',
-                ]);
+                'create',
+            ]);
 
         $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()

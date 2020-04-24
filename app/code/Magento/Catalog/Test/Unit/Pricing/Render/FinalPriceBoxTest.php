@@ -98,14 +98,15 @@ class FinalPriceBoxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->product = $this->createPartialMock(
-            Product::class,
-            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable', 'getId']
-        );
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getCanShowPrice'])
+            ->onlyMethods(['getPriceInfo', 'isSalable', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceInfo = $this->createMock(PriceInfoInterface::class);
         $this->product->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfo));
+            ->willReturn($this->priceInfo);
 
         $eventManager = $this->createMock(ManagerStub::class);
         $this->layout = $this->createMock(Layout::class);
@@ -126,43 +127,45 @@ class FinalPriceBoxTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)->getMockForAbstractClass();
+        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->getMockForAbstractClass();
 
-        $store = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $store = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $context->expects($this->any())
             ->method('getLogger')
-            ->will($this->returnValue($this->logger));
+            ->willReturn($this->logger);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
         $context->expects($this->any())
             ->method('getCacheState')
-            ->will($this->returnValue($cacheState));
+            ->willReturn($cacheState);
         $context->expects($this->any())
             ->method('getStoreManager')
-            ->will($this->returnValue($storeManager));
+            ->willReturn($storeManager);
         $context->expects($this->any())
             ->method('getAppState')
-            ->will($this->returnValue($appState));
+            ->willReturn($appState);
         $context->expects($this->any())
             ->method('getResolver')
-            ->will($this->returnValue($resolver));
+            ->willReturn($resolver);
         $context->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($urlBuilder));
+            ->willReturn($urlBuilder);
 
         $this->rendererPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
@@ -171,7 +174,7 @@ class FinalPriceBoxTest extends TestCase
         $this->price = $this->createMock(PriceInterface::class);
         $this->price->expects($this->any())
             ->method('getPriceCode')
-            ->will($this->returnValue(FinalPrice::PRICE_CODE));
+            ->willReturn(FinalPrice::PRICE_CODE);
 
         $objectManager = new ObjectManager($this);
         $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
@@ -198,13 +201,13 @@ class FinalPriceBoxTest extends TestCase
         $priceType = $this->createMock(MsrpPrice::class);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo('msrp_price'))
-            ->will($this->returnValue($priceType));
+            ->with('msrp_price')
+            ->willReturn($priceType);
 
         $priceType->expects($this->any())
             ->method('canApplyMsrp')
-            ->with($this->equalTo($this->product))
-            ->will($this->returnValue(false));
+            ->with($this->product)
+            ->willReturn(false);
 
         $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
 
@@ -213,7 +216,7 @@ class FinalPriceBoxTest extends TestCase
         //assert price wrapper
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
-        $this->assertRegExp('/[final_price]/', $result);
+        $this->assertMatchesRegularExpression('/[final_price]/', $result);
     }
 
     public function testNotSalableItem()
@@ -233,25 +236,25 @@ class FinalPriceBoxTest extends TestCase
         $priceType = $this->createMock(MsrpPrice::class);
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo('msrp_price'))
-            ->will($this->returnValue($priceType));
+            ->with('msrp_price')
+            ->willReturn($priceType);
 
         $priceType->expects($this->any())
             ->method('canApplyMsrp')
-            ->with($this->equalTo($this->product))
-            ->will($this->returnValue(true));
+            ->with($this->product)
+            ->willReturn(true);
 
         $priceType->expects($this->any())
             ->method('isMinimalPriceLessMsrp')
-            ->with($this->equalTo($this->product))
-            ->will($this->returnValue(true));
+            ->with($this->product)
+            ->willReturn(true);
 
         $priceBoxRender = $this->getMockBuilder(PriceBox::class)
             ->disableOriginalConstructor()
             ->getMock();
         $priceBoxRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('test'));
+            ->willReturn('test');
 
         $arguments = [
             'real_price_html' => '',
@@ -260,7 +263,7 @@ class FinalPriceBoxTest extends TestCase
         $this->rendererPool->expects($this->once())
             ->method('createPriceRender')
             ->with('msrp_price', $this->product, $arguments)
-            ->will($this->returnValue($priceBoxRender));
+            ->willReturn($priceBoxRender);
 
         $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
 
@@ -281,8 +284,8 @@ class FinalPriceBoxTest extends TestCase
 
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo('msrp_price'))
-            ->will($this->throwException(new \InvalidArgumentException()));
+            ->with('msrp_price')
+            ->willThrowException(new \InvalidArgumentException());
 
         $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
 
@@ -291,7 +294,7 @@ class FinalPriceBoxTest extends TestCase
         //assert price wrapper
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
-        $this->assertRegExp('/[final_price]/', $result);
+        $this->assertMatchesRegularExpression('/[final_price]/', $result);
     }
 
     public function testRenderAmountMinimal()
@@ -345,26 +348,26 @@ class FinalPriceBoxTest extends TestCase
 
         $regularPriceAmount->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($regularPrice));
+            ->willReturn($regularPrice);
         $finalPriceAmount->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($finalPrice));
+            ->willReturn($finalPrice);
 
         $regularPriceType->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($regularPriceAmount));
+            ->willReturn($regularPriceAmount);
         $finalPriceType->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($finalPriceAmount));
+            ->willReturn($finalPriceAmount);
 
         $this->priceInfo->expects($this->at(0))
             ->method('getPrice')
             ->with(RegularPrice::PRICE_CODE)
-            ->will($this->returnValue($regularPriceType));
+            ->willReturn($regularPriceType);
         $this->priceInfo->expects($this->at(1))
             ->method('getPrice')
             ->with(FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($finalPriceType));
+            ->willReturn($finalPriceType);
 
         $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
     }
@@ -393,12 +396,12 @@ class FinalPriceBoxTest extends TestCase
         $finalPriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
         $finalPriceAmount->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($finalPrice));
+            ->willReturn($finalPrice);
 
         $finalPriceType = $this->createMock(FinalPrice::class);
         $finalPriceType->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($finalPriceAmount));
+            ->willReturn($finalPriceAmount);
 
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
@@ -413,7 +416,7 @@ class FinalPriceBoxTest extends TestCase
     {
         $this->product->expects($this->any())
             ->method('getCanShowPrice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEmpty($this->object->toHtml());
     }

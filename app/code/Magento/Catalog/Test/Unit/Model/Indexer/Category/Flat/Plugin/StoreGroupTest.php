@@ -58,14 +58,14 @@ class StoreGroupTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
         $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
         $this->subjectMock = $this->createMock(Group::class);
 
         $this->groupMock = $this->createPartialMock(
             GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup']
+            ['dataHasChangedFor', 'isObjectNew']
         );
 
         $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);

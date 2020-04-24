@@ -94,13 +94,19 @@ class CategoryListTest extends TestCase
         $categoryIdFirst = 1;
         $categoryIdSecond = 2;
 
-        $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
-        $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categoryFirst = $this->getMockBuilder(Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categorySecond = $this->getMockBuilder(Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var SearchCriteriaInterface|MockObject $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
-        $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
+        $collection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
         $collection->expects($this->once())->method('getData')->willReturn(
             [['entity_id' => $categoryIdFirst], ['entity_id' => $categoryIdSecond]]

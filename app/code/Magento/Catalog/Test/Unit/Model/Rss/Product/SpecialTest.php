@@ -49,7 +49,7 @@ class SpecialTest extends TestCase
     {
         $this->product = $this->createMock(Product::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
         $this->storeManager = $this->createMock(StoreManager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -66,17 +66,17 @@ class SpecialTest extends TestCase
     {
         $storeId = 1;
         $store = $this->createMock(Store::class);
-        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->will(
-            $this->returnValue($store)
+        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->willReturn(
+            $store
         );
         $websiteId = 1;
-        $store->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         /** @var Collection $productCollection */
         $productCollection =
             $this->createMock(Collection::class);
-        $this->product->expects($this->once())->method('getResourceCollection')->will(
-            $this->returnValue($productCollection)
+        $this->product->expects($this->once())->method('getResourceCollection')->willReturn(
+            $productCollection
         );
         $customerGroupId = 1;
         $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->will($this->returnSelf());

@@ -61,7 +61,7 @@ class MassActionTest extends TestCase
 
     public function testGetComponentName()
     {
-        $this->assertTrue($this->massAction->getComponentName() === MassAction::NAME);
+        $this->assertSame(MassAction::NAME, $this->massAction->getComponentName());
     }
 
     /**

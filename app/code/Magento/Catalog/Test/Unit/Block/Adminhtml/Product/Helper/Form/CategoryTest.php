@@ -52,7 +52,7 @@ class CategoryTest extends TestCase
                 break;
             case false:
                 $this->assertEquals('hidden', $model->getType());
-                $this->assertContains('hidden', $model->getClass());
+                $this->assertStringContainsString('hidden', $model->getClass());
                 break;
         }
     }

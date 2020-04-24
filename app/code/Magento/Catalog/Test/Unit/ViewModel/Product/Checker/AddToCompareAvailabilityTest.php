@@ -41,7 +41,7 @@ class AddToCompareAvailabilityTest extends TestCase
 
         $this->stockConfigurationMock =
             $this->getMockBuilder(StockConfigurationInterface::class)
-            ->getMock();
+                ->getMock();
 
         $this->viewModel = $objectManager->getObject(
             AddToCompareAvailability::class,

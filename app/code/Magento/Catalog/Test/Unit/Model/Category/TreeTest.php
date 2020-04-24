@@ -71,15 +71,18 @@ class TreeTest extends TestCase
 
         $this->categoryTreeMock = $this->getMockBuilder(
             Tree::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->categoryCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
             StoreManagerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->treeResourceFactoryMock = $this->createMock(
             TreeFactory::class
@@ -108,54 +111,60 @@ class TreeTest extends TestCase
     {
         $category = $this->getMockBuilder(
             Category::class
-        )->disableOriginalConstructor()->getMock();
-        $category->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
+        )->disableOriginalConstructor()
+            ->getMock();
+        $category->expects($this->exactly(2))->method('getId')->willReturn(1);
 
         $node = $this->getMockBuilder(
             Node::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $node->expects($this->once())->method('loadChildren');
         $this->categoryTreeMock->expects($this->once())->method('loadNode')
-            ->with($this->equalTo(1))
-            ->will($this->returnValue($node));
+            ->with(1)
+            ->willReturn($node);
 
-        $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
-        $store->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
 
-        $this->categoryCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setProductStoreId')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setLoadProductCount')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setStoreId')->will($this->returnSelf());
+        $this->categoryCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setProductStoreId')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setLoadProductCount')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setStoreId')->willReturnSelf();
 
         $this->categoryTreeMock->expects($this->once())->method('addCollectionData')
-            ->with($this->equalTo($this->categoryCollection));
+            ->with($this->categoryCollection);
         $this->tree->getRootNode($category);
     }
 
     public function testGetRootNode()
     {
-        $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
-        $store->expects($this->once())->method('getRootCategoryId')->will($this->returnValue(2));
-        $store->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->once())->method('getRootCategoryId')->willReturn(2);
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->categoryCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setProductStoreId')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setLoadProductCount')->will($this->returnSelf());
-        $this->categoryCollection->expects($this->once())->method('setStoreId')->will($this->returnSelf());
+        $this->categoryCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setProductStoreId')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setLoadProductCount')->willReturnSelf();
+        $this->categoryCollection->expects($this->once())->method('setStoreId')->willReturnSelf();
 
         $node = $this->getMockBuilder(
             Tree::class
         )->disableOriginalConstructor()
-        ->getMock();
+            ->getMock();
         $node->expects($this->once())->method('addCollectionData')
-            ->with($this->equalTo($this->categoryCollection));
-        $node->expects($this->once())->method('getNodeById')->with($this->equalTo(2));
+            ->with($this->categoryCollection);
+        $node->expects($this->once())->method('getNodeById')->with(2);
         $this->categoryTreeMock->expects($this->once())->method('load')
-            ->with($this->equalTo(null))
-            ->will($this->returnValue($node));
+            ->with(null)
+            ->willReturn($node);
         $this->tree->getRootNode();
     }
 
@@ -165,43 +174,30 @@ class TreeTest extends TestCase
         $currentLevel = 1;
 
         $treeNodeMock1 = $this->createMock(CategoryTreeInterface::class);
-        $treeNodeMock1->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setProductCount')->with(4)
-            ->will($this->returnSelf());
-        $treeNodeMock1->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
+        $treeNodeMock1->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setName')->with('Name' . $currentLevel)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setPosition')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setLevel')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setIsActive')->with(true)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setProductCount')->with(4)->willReturnSelf();
+        $treeNodeMock1->expects($this->once())->method('setChildrenData')->willReturnSelf();
 
         $treeNodeMock2 = $this->createMock(CategoryTreeInterface::class);
-        $treeNodeMock2->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setProductCount')->with(4)
-            ->will($this->returnSelf());
-        $treeNodeMock2->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setName')->with('Name' . $currentLevel)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setPosition')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setLevel')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setIsActive')->with(true)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setProductCount')->with(4)->willReturnSelf();
+        $treeNodeMock2->expects($this->once())->method('setChildrenData')->willReturnSelf();
 
         $this->treeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
-        $node = $this->getMockBuilder(Node::class)->disableOriginalConstructor()
+        $node = $this->getMockBuilder(Node::class)
+            ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'hasChildren',
@@ -216,16 +212,16 @@ class TreeTest extends TestCase
                 ]
             )
             ->getMock();
-        $node->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $node->expects($this->any())->method('getChildren')->will($this->returnValue([$node]));
+        $node->expects($this->any())->method('hasChildren')->willReturn(true);
+        $node->expects($this->any())->method('getChildren')->willReturn([$node]);
 
-        $node->expects($this->any())->method('getId')->will($this->returnValue($currentLevel));
-        $node->expects($this->any())->method('getParentId')->will($this->returnValue($currentLevel - 1));
-        $node->expects($this->any())->method('getName')->will($this->returnValue('Name' . $currentLevel));
-        $node->expects($this->any())->method('getPosition')->will($this->returnValue($currentLevel));
-        $node->expects($this->any())->method('getLevel')->will($this->returnValue($currentLevel));
-        $node->expects($this->any())->method('getIsActive')->will($this->returnValue(true));
-        $node->expects($this->any())->method('getProductCount')->will($this->returnValue(4));
+        $node->expects($this->any())->method('getId')->willReturn($currentLevel);
+        $node->expects($this->any())->method('getParentId')->willReturn($currentLevel - 1);
+        $node->expects($this->any())->method('getName')->willReturn('Name' . $currentLevel);
+        $node->expects($this->any())->method('getPosition')->willReturn($currentLevel);
+        $node->expects($this->any())->method('getLevel')->willReturn($currentLevel);
+        $node->expects($this->any())->method('getIsActive')->willReturn(true);
+        $node->expects($this->any())->method('getProductCount')->willReturn(4);
         $this->tree->getTree($node, $depth, $currentLevel);
     }
 
@@ -233,24 +229,18 @@ class TreeTest extends TestCase
     {
         $currentLevel = 1;
         $treeNodeMock = $this->createMock(CategoryTreeInterface::class);
-        $this->treeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($treeNodeMock));
-        $treeNodeMock->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setProductCount')->with(4)
-            ->will($this->returnSelf());
-        $treeNodeMock->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
+        $this->treeFactoryMock->expects($this->any())->method('create')->willReturn($treeNodeMock);
+        $treeNodeMock->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setName')->with('Name' . $currentLevel)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setPosition')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setLevel')->with($currentLevel)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setIsActive')->with(true)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setProductCount')->with(4)->willReturnSelf();
+        $treeNodeMock->expects($this->once())->method('setChildrenData')->willReturnSelf();
 
-        $node = $this->getMockBuilder(Node::class)->disableOriginalConstructor()
+        $node = $this->getMockBuilder(Node::class)
+            ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'hasChildren',
@@ -265,16 +255,16 @@ class TreeTest extends TestCase
                 ]
             )
             ->getMock();
-        $node->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
+        $node->expects($this->any())->method('hasChildren')->willReturn(false);
         $node->expects($this->never())->method('getChildren');
 
-        $node->expects($this->once())->method('getId')->will($this->returnValue($currentLevel));
-        $node->expects($this->once())->method('getParentId')->will($this->returnValue($currentLevel - 1));
-        $node->expects($this->once())->method('getName')->will($this->returnValue('Name' . $currentLevel));
-        $node->expects($this->once())->method('getPosition')->will($this->returnValue($currentLevel));
-        $node->expects($this->once())->method('getLevel')->will($this->returnValue($currentLevel));
-        $node->expects($this->once())->method('getIsActive')->will($this->returnValue(true));
-        $node->expects($this->once())->method('getProductCount')->will($this->returnValue(4));
+        $node->expects($this->once())->method('getId')->willReturn($currentLevel);
+        $node->expects($this->once())->method('getParentId')->willReturn($currentLevel - 1);
+        $node->expects($this->once())->method('getName')->willReturn('Name' . $currentLevel);
+        $node->expects($this->once())->method('getPosition')->willReturn($currentLevel);
+        $node->expects($this->once())->method('getLevel')->willReturn($currentLevel);
+        $node->expects($this->once())->method('getIsActive')->willReturn(true);
+        $node->expects($this->once())->method('getProductCount')->willReturn(4);
         $this->tree->getTree($node);
     }
 }

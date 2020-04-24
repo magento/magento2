@@ -34,7 +34,7 @@ class RelatedTest extends TestCase
     {
         $productTag = ['compare_item_1'];
         $product = $this->createMock(Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTag);
 
         $itemsCollection = new \ReflectionProperty(
             Related::class,
@@ -58,10 +58,11 @@ class RelatedTest extends TestCase
      */
     public function testCanItemsAddToCart($isComposite, $isSaleable, $hasRequiredOptions, $canItemsAddToCart)
     {
-        $product = $this->createPartialMock(
-            Product::class,
-            ['isComposite', 'isSaleable', 'getRequiredOptions']
-        );
+        $product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getRequiredOptions'])
+            ->onlyMethods(['isComposite', 'isSaleable'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())->method('isComposite')->willReturn($isComposite);
         $product->expects($this->any())->method('isSaleable')->willReturn($isSaleable);
         $product->expects($this->any())->method('getRequiredOptions')->willReturn($hasRequiredOptions);

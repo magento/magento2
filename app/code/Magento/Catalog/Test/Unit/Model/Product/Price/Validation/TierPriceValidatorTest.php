@@ -85,22 +85,30 @@ class TierPriceValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerGroupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->validationResult = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->invalidSkuProcessor = $this
             ->getMockBuilder(InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->tierPrice = $this->getMockBuilder(TierPriceInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
@@ -127,9 +135,11 @@ class TierPriceValidatorTest extends TestCase
     {
         $searchCriteria = $this
             ->getMockBuilder(SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $filter = $this->getMockBuilder(AbstractSimpleObject::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->filterBuilder->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
         $this->filterBuilder->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
         $this->filterBuilder->expects($this->atLeastOnce())->method('create')->willReturn($filter);
@@ -137,7 +147,8 @@ class TierPriceValidatorTest extends TestCase
         $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('create')->willReturn($searchCriteria);
         $customerGroupSearchResults = $this
             ->getMockBuilder(GroupSearchResultsInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerGroupSearchResults->expects($this->once())->method('getItems')
             ->willReturn($returned['customerGroupSearchResults_getItems']);
         $this->customerGroupRepository->expects($this->atLeastOnce())->method('getList')
@@ -208,7 +219,8 @@ class TierPriceValidatorTest extends TestCase
         $existingPrices = [$this->tierPrice];
         $this->prepareRetrieveValidationResultMethod($sku, $returned);
         $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willReturn($website);
         $this->prepareCustomerGroupRepositoryMock($returned);
 
@@ -228,7 +240,8 @@ class TierPriceValidatorTest extends TestCase
         $customerGroupName = 'test_Group';
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getCode', 'getId'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);
         $customerGroupId = 23;
         $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn($customerGroupId);

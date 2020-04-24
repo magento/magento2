@@ -111,10 +111,10 @@ class IndexTest extends TestCase
         $this->sessionMock = $this->createMock(Session::class);
         $this->visitorMock = $this->createMock(Visitor::class);
         $this->listCompareMock = $this->createMock(ListCompare::class);
-        $this->catalogSession = $this->createPartialMock(
-            \Magento\Catalog\Model\Session::class,
-            ['setBeforeCompareUrl']
-        );
+        $this->catalogSession = $this->getMockBuilder(\Magento\Catalog\Model\Session::class)
+            ->addMethods(['setBeforeCompareUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()

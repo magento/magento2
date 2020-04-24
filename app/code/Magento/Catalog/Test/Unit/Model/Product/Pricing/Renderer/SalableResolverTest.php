@@ -27,10 +27,10 @@ class SalableResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->product = $this->createPartialMock(
-            Product::class,
-            ['__wakeup', 'getCanShowPrice']
-        );
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getCanShowPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(

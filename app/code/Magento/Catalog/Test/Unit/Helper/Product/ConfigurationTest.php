@@ -69,12 +69,10 @@ class ConfigurationTest extends TestCase
         $additionalOptionMock->expects($this->once())->method('getValue');
 
         $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
-        $itemMock->expects($this->any())->method('getOptionByCode')->will($this->returnValueMap(
-            [
-                ['option_ids', $optionMock],
-                ['additional_options', $additionalOptionMock]
-            ]
-        ));
+        $itemMock->expects($this->any())->method('getOptionByCode')->willReturnMap([
+            ['option_ids', $optionMock],
+            ['additional_options', $additionalOptionMock]
+        ]);
 
         $this->assertEquals($additionalOptionResult, $this->helper->getCustomOptions($itemMock));
     }

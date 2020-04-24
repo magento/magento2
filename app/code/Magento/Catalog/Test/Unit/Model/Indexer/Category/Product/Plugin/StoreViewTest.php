@@ -58,7 +58,7 @@ class StoreViewTest extends TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
         $this->subject = $this->createMock(Group::class);
         $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
@@ -67,8 +67,7 @@ class StoreViewTest extends TestCase
             [
                 'isObjectNew',
                 'getId',
-                'dataHasChangedFor',
-                '__wakeup'
+                'dataHasChangedFor'
             ]
         );
         $this->tableMaintainer = $this->createPartialMock(

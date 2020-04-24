@@ -29,7 +29,7 @@ class VisibilityTest extends TestCase
     {
         $abstractAttributeMock = $this->createPartialMock(
             AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup']
+            ['getAttributeCode']
         );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
@@ -39,7 +39,7 @@ class VisibilityTest extends TestCase
         $flatColumns = $this->_model->getFlatColumns();
 
         $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');

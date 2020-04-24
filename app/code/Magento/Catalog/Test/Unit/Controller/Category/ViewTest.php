@@ -141,42 +141,44 @@ class ViewTest extends TestCase
 
         $this->update = $this->createMock(ProcessorInterface::class);
         $this->layout = $this->createMock(Layout::class);
-        $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
+        $this->layout->expects($this->any())->method('getUpdate')->willReturn($this->update);
 
         $this->pageConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageConfig->expects($this->any())->method('addBodyClass')->willReturnSelf();
 
         $this->page = $this->getMockBuilder(Page::class)
             ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout', 'addUpdate'])
-            ->disableOriginalConstructor()->getMock();
-        $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
-        $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
-        $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->page->expects($this->any())->method('getConfig')->willReturn($this->pageConfig);
+        $this->page->expects($this->any())->method('addPageLayoutHandles')->willReturnSelf();
+        $this->page->expects($this->any())->method('getLayout')->willReturn($this->layout);
         $this->page->expects($this->any())->method('addUpdate')->willReturnSelf();
 
         $this->view = $this->createMock(ViewInterface::class);
-        $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);
 
         $this->resultFactory = $this->createMock(ResultFactory::class);
-        $this->resultFactory->expects($this->any())->method('create')->will($this->returnValue($this->page));
+        $this->resultFactory->expects($this->any())->method('create')->willReturn($this->page);
 
         $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->context->expects($this->any())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->any())->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+            ->willReturn($this->objectManager);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
+        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
         $this->context->expects($this->any())->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactory));
+            ->willReturn($this->resultFactory);
 
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
 
         $this->store = $this->createMock(Store::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
         $this->catalogDesign = $this->createMock(Design::class);
 
@@ -186,7 +188,7 @@ class ViewTest extends TestCase
             ->getMock();
         $resultPageFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->page));
+            ->willReturn($this->page);
 
         $this->action = (new ObjectManager($this))->getObject(
             View::class,
@@ -220,14 +222,14 @@ class ViewTest extends TestCase
         );
 
         $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
-            ->will($this->returnValue($this->category));
+            ->willReturn($this->category);
 
         $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
 
-        $settings = $this->createPartialMock(
-            DataObject::class,
-            ['getPageLayout', 'getLayoutUpdates']
-        );
+        $settings = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getPageLayout', 'getLayoutUpdates'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->category->expects($this->at(1))
             ->method('hasChildren')
             ->willReturn(true);
@@ -238,9 +240,9 @@ class ViewTest extends TestCase
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
-        $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
+        $settings->expects($this->atLeastOnce())->method('getPageLayout')->willReturn($pageLayout);
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-        $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
+        $this->catalogDesign->expects($this->any())->method('getDesignSettings')->willReturn($settings);
 
         $this->action->execute();
     }
@@ -257,8 +259,8 @@ class ViewTest extends TestCase
 
         foreach ($data as $expectedData) {
             $this->page->expects($this->at($index))
-            ->method('addPageLayoutHandles')
-            ->with($expectedData[0], $expectedData[1], $expectedData[2]);
+                ->method('addPageLayoutHandles')
+                ->with($expectedData[0], $expectedData[1], $expectedData[2]);
             $index++;
         }
     }

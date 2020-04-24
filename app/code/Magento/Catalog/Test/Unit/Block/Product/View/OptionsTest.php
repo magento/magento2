@@ -65,7 +65,10 @@ class OptionsTest extends TestCase
             ['layout' => $layout]
         );
 
-        $optValFactoryMock = $this->createPartialMock('\Magento\Catalog\Model\Product\Option\ValueFactory', ['create']);
+        $optValFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\ValueFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
         $option = $this->_objectHelper->getObject(
             \Magento\Catalog\Model\Product\Option::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optValFactoryMock]
@@ -116,7 +119,7 @@ class OptionsTest extends TestCase
         )->method(
             'setOption'
         )->with(
-            $this->equalTo($option)
+            $option
         )->willReturn(
             $dateBlock
         );

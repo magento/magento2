@@ -36,7 +36,7 @@ class ListCompareTest extends TestCase
         $context = $this->createPartialMock(Context::class, ['getLayout']);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
 
         $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(
@@ -58,10 +58,10 @@ class ListCompareTest extends TestCase
         $productId = 1;
 
         //Verification
-        $product = $this->createPartialMock(Product::class, ['getId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getId']);
         $product->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
 
         $blockMock = $this->createPartialMock(Render::class, ['render']);
         $blockMock->expects($this->once())
@@ -75,12 +75,12 @@ class ListCompareTest extends TestCase
                     'zone' => Render::ZONE_ITEM_LIST
                 ]
             )
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
         $this->assertEquals($expectedResult, $this->block->getProductPrice($product, '-compare-list-top'));
     }

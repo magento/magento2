@@ -49,7 +49,7 @@ class MinimalTierPriceCalculatorTest extends TestCase
      */
     private $calculator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->price = $this->createMock(TierPrice::class);
         $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);

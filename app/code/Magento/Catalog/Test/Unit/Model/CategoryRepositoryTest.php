@@ -200,7 +200,7 @@ class CategoryRepositoryTest extends TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($categoryData));
+            ->willReturn($categoryData);
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
         $categoryMock->expects($this->once())->method('addData')->with($dataForSave);
         $this->categoryResourceMock->expects($this->once())
@@ -220,7 +220,7 @@ class CategoryRepositoryTest extends TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue($categoryData));
+            ->willReturn($categoryData);
         $categoryMock = $this->createMock(CategoryModel::class);
         $parentCategoryMock = $this->createMock(CategoryModel::class);
         $categoryMock->expects($this->any())->method('getId')
@@ -247,7 +247,7 @@ class CategoryRepositoryTest extends TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
@@ -272,8 +272,11 @@ class CategoryRepositoryTest extends TestCase
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
-            ->will($this->returnValue([]));
-        $objectMock = $this->createPartialMock(DataObject::class, ['getFrontend', 'getLabel']);
+            ->willReturn([]);
+        $objectMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getFrontend', 'getLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
