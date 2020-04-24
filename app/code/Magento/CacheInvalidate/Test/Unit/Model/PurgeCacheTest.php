@@ -6,19 +6,20 @@
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
 use Laminas\Uri\UriFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class PurgeCacheTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Laminas\Http\Client\Adapter\Socket */
+    /** @var MockObject|\Laminas\Http\Client\Adapter\Socket */
     protected $socketAdapterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
+    /** @var MockObject|\Magento\Framework\Cache\InvalidateLogger */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Cache\Server */
+    /** @var MockObject|\Magento\PageCache\Model\Cache\Server */
     protected $cacheServer;
 
     protected function setUp()
