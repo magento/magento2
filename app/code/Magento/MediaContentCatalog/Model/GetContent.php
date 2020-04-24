@@ -51,7 +51,7 @@ class GetContent
      * Load values of an attribute for all store views
      *
      * @param int $entityId
-     * @param int $attributeId
+     * @param AbstractAttribute $attribute
      * @return array
      */
     private function getDistinctContent(int $entityId, AbstractAttribute $attribute): array
