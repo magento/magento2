@@ -63,10 +63,10 @@ class GetContent
             ['abt' => $table],
             'abt.value'
         )->where(
-            'abt.attribute_id = ?',
+            $connection->quoteIdentifier('abt.attribute_id') . ' = ?',
             $attributeId
         )->where(
-            'abt.entity_id = ?',
+            $connection->quoteIdentifier('abt.entity_id') . ' = ?',
             $entityId
         )->distinct(true);
 
