@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Toolbar;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CurrentCategory;
-use Magento\Framework\Exception\NoSuchEntityException;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Model\Category\Toolbar\Config;
 use Magento\Catalog\Model\Category\Config as CategoryConfig;
 
@@ -26,12 +26,12 @@ class ConfigTest extends TestCase
     /**
      * @var CurrentCategory|MockObject
      */
-    private $currentCategory;
+    private $currentCategoryMock;
 
     /**
      * @var CategoryConfig|MockObject
      */
-    private $categoryConfig;
+    private $categoryConfigMock;
 
     /**
      * @var string
@@ -46,45 +46,45 @@ class ConfigTest extends TestCase
     /**
      * @var CategoryInterface|MockObject
      */
-    private $category;
+    private $categoryMock;
 
     protected function setUp(): void
     {
-        $this->currentCategory = $this->getMockBuilder(CurrentCategory::class)
+        $this->currentCategoryMock = $this->getMockBuilder(CurrentCategory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
 
-        $this->categoryConfig = $this->getMockBuilder(CategoryConfig::class)
+        $this->categoryConfigMock = $this->getMockBuilder(CategoryConfig::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultSortField'])
             ->getMock();
 
-        $this->category = $this->getMockBuilder(Category::class)
+        $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultSortBy'])
             ->getMock();
 
         $this->defaultSortField = 'position';
-        $this->categoryConfig->expects($this->any())
+        $this->categoryConfigMock->expects($this->any())
             ->method('getDefaultSortField')
             ->willReturn($this->defaultSortField);
 
         $this->expectedSortBy = 'price';
 
-        $this->currentCategory->expects($this->any())
+        $this->currentCategoryMock->expects($this->any())
             ->method('get')
-            ->willReturn($this->category);
+            ->willReturn($this->categoryMock);
 
         $this->object = new Config(
-            $this->currentCategory,
-            $this->categoryConfig
+            $this->currentCategoryMock,
+            $this->categoryConfigMock
         );
     }
 
     public function testGetOrderFieldDefaultSortOrderException(): void
     {
-        $this->currentCategory->expects($this->any())
+        $this->currentCategoryMock->expects($this->any())
             ->method('get')
             ->willThrowException(new NoSuchEntityException(__('No such entity.')));
 
@@ -93,9 +93,9 @@ class ConfigTest extends TestCase
         $this->assertEquals($this->defaultSortField, $result);
     }
 
-    public function testGetOrderFieldDefaultSortOrder()
+    public function testGetOrderFieldDefaultSortOrder(): void
     {
-        $this->category->expects($this->any())
+        $this->categoryMock->expects($this->any())
             ->method('getDefaultSortBy')
             ->willReturn($this->expectedSortBy);
         $result = $this->object->getOrderField();
@@ -105,7 +105,7 @@ class ConfigTest extends TestCase
 
     public function testGetOrderField(): void
     {
-        $this->category->expects($this->any())
+        $this->categoryMock->expects($this->any())
             ->method('getDefaultSortBy')
             ->willReturn(null);
         $result = $this->object->getOrderField();

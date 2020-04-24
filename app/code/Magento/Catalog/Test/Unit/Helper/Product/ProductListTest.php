@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
-use Magento\Catalog\Helper\Product\ProductList;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 
 class ProductListTest extends TestCase
@@ -23,21 +23,21 @@ class ProductListTest extends TestCase
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private $scopeConfig;
+    private $scopeConfigMock;
 
     /**
      * @var ToolbarConfig|MockObject
      */
-    private $toolbarConfig;
+    private $toolbarConfigMock;
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->toolbarConfig = $this->createMock(ToolbarConfig::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->toolbarConfigMock = $this->createMock(ToolbarConfig::class);
 
         $this->object = new ProductList(
-            $this->scopeConfig,
-            $this->toolbarConfig
+            $this->scopeConfigMock,
+            $this->toolbarConfigMock
         );
     }
 
@@ -45,7 +45,7 @@ class ProductListTest extends TestCase
     {
         $order = 'position';
 
-        $this->toolbarConfig->expects($this->any())
+        $this->toolbarConfigMock->expects($this->any())
             ->method('getOrderField')
             ->willReturn($order);
         $this->assertEquals($order, $this->object->getDefaultSortField());

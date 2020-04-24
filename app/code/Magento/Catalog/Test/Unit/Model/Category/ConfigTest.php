@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
-use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Model\Category\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Category\Config;
 use Magento\Catalog\Model\Config as CatalogConfig;
 
 class ConfigTest extends TestCase
@@ -24,7 +24,7 @@ class ConfigTest extends TestCase
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private $scopeConfig;
+    private $scopeConfigMock;
 
     protected function setUp(): void
     {
@@ -33,15 +33,15 @@ class ConfigTest extends TestCase
             ->setMethods(['getDefaultSortField'])
             ->getMock();
 
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->object = new Config($this->scopeConfig);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->object = new Config($this->scopeConfigMock);
     }
 
     public function testGetDefaultSortField(): void
     {
         $order = 'position';
         $scopeCode = 'store';
-        $this->scopeConfig->expects($this->any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with(
                 CatalogConfig::XML_PATH_LIST_DEFAULT_SORT_BY,
