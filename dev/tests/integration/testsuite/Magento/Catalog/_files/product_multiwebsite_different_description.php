@@ -36,5 +36,3 @@ $productRepository->save($product);
 $product = $productRepository->get('simple-on-two-websites-different-description');
 $product->setDescription('<p>Product second description</p>');
 $productRepository->save($product);
-
-

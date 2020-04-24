@@ -49,7 +49,6 @@ class GetContentTest extends TestCase
             'Description with <b>html tag</b>',
             $this->getContent->execute((int) $product->getEntityId(), $product->getAttributes()['description'])
         );
-
     }
 
     /**
