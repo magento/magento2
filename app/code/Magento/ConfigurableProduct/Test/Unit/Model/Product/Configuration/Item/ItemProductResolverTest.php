@@ -35,7 +35,7 @@ class ItemProductResolverTest extends TestCase
     /**
      * Set up method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
