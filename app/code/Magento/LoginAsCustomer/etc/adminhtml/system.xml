@@ -23,7 +23,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[If set to "Yes", when login as customer Page Cache will be disabled.]]></comment>
                 </field>
-                <field id="store_view_login" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_store_view_manual_choice" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store View To Login In</label>
                     <source_model>Magento\LoginAsCustomer\Model\Config\Source\StoreViewLogin</source_model>
                     <comment><![CDATA[

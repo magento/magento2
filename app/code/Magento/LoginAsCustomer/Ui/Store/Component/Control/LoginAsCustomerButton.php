@@ -10,7 +10,7 @@ namespace Magento\LoginAsCustomer\Ui\Store\Component\Control;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Class LoginAsCustomerButton
+ * Login As Customer button UI component.
  */
 class LoginAsCustomerButton implements ButtonProviderInterface
 {
@@ -32,4 +32,3 @@ class LoginAsCustomerButton implements ButtonProviderInterface
         ];
     }
 }
-

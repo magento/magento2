@@ -11,7 +11,7 @@ use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Login as customer button
+ * Login As Customer button UI component.
  */
 class LoginAsCustomerButton extends GenericButton implements ButtonProviderInterface
 {
@@ -33,7 +33,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData(): array
     {
@@ -49,10 +49,13 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
                 'sort_order' => 70,
             ];
         }
+
         return $data;
     }
 
     /**
+     * Get Login As Customer login url.
+     *
      * @return string
      */
     public function getLoginUrl(): string

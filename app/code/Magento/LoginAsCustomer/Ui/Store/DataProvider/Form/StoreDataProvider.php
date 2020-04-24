@@ -11,7 +11,7 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Class StoreDataProvider
+ * Login As Customer store view form data provider.
  */
 class StoreDataProvider extends AbstractDataProvider
 {
@@ -34,5 +34,4 @@ class StoreDataProvider extends AbstractDataProvider
         $this->collection = $collectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
-
 }

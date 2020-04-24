@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Config
+ * LoginAsCustomer module config model.
  */
 class Config
 {
@@ -20,7 +20,7 @@ class Config
      * Extension config path
      */
     private const XML_PATH_EXTENSION_ENABLED = 'loginascustomer/general/enabled';
-    private const STORE_VIEW_TO_LOGIN_IN = 'loginascustomer/general/store_view_login';
+    private const ENABLE_STORE_VIEW_MANUAL_CHOICE = 'loginascustomer/general/enable_store_view_manual_choice';
 
     /**
      * @var ScopeConfigInterface
@@ -34,7 +34,6 @@ class Config
     private $metadata;
 
     /**
-     * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param ProductMetadataInterface $metadata
      */
@@ -47,37 +46,30 @@ class Config
     }
 
     /**
-     * Retrieve store config value
-     * @param string $path
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getConfig($path, $storeId = null)
-    {
-        return $this->scopeConfig->getValue(
-            $path,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
+     * Check if Login As Customer extension is enabled.
+     *
      * @return bool
      */
     public function isEnabled(): bool
     {
-        return (bool)$this->getConfig(
-            self::XML_PATH_EXTENSION_ENABLED
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_EXTENSION_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            null
         );
     }
 
     /**
+     * Check if store view manual choice is enabled.
+     *
      * @return bool
      */
-    public function getStoreViewLogin(): bool
+    public function isManualChoiceEnabled(): bool
     {
-        return (bool)$this->getConfig(
-            self::STORE_VIEW_TO_LOGIN_IN
+        return (bool)$this->scopeConfig->getValue(
+            self::ENABLE_STORE_VIEW_MANUAL_CHOICE,
+            ScopeInterface::SCOPE_STORE,
+            null
         );
     }
 }
