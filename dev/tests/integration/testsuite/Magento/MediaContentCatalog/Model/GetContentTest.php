@@ -38,7 +38,7 @@ class GetContentTest extends TestCase
     }
 
     /**
-     * Test for get content from entities in different store views
+     * Test for get content from product in different store views
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -53,7 +53,7 @@ class GetContentTest extends TestCase
     }
 
     /**
-     * Test for get content from entities in different store views
+     * Test for get content from product in different store views
      *
      * @magentoDataFixture Magento/Catalog/_files/product_multiwebsite_different_description.php
      */
@@ -64,6 +64,5 @@ class GetContentTest extends TestCase
             '<p>Product base description</p>' . PHP_EOL . '<p>Product second description</p>',
             $this->getContent->execute((int) $product->getEntityId(), $product->getAttributes()['description'])
         );
-
     }
 }
