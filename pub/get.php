@@ -19,7 +19,7 @@ $configCacheFile = BP . '/var/resource_config.json';
 
 $isAllowed = function ($resource, array $allowedResources) {
     foreach ($allowedResources as $allowedResource) {
-        if (0 === stripos($resource, $allowedResource)) {
+        if (0 === stripos($resource, 'media/' . $allowedResource)) {
             return true;
         }
     }

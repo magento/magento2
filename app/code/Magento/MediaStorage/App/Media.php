@@ -177,7 +177,16 @@ class Media implements AppInterface
             /** @var Synchronization $sync */
             $sync = $this->syncFactory->create(['directory' => $this->directoryPub]);
             $sync->synchronize($this->relativeFileName);
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+
+            $isNeedResize = $this->isNeedImageResize($this->relativeFileName);
+            $originalImageName = $this->getOriginalImage($this->relativeFileName);
+
+            if($isNeedResize) {
+                $this->imageResize->resizeFromImageName($originalImageName);
+            }else{
+                $this->imageResize->copyFileFromDbStorage($originalImageName);
+            }
+
             if ($this->directoryPub->isReadable($this->relativeFileName)) {
                 $this->response->setFilePath($this->directoryPub->getAbsolutePath($this->relativeFileName));
             } else {
@@ -188,6 +197,17 @@ class Media implements AppInterface
         }
 
         return $this->response;
+    }
+
+    /**
+     * Check if type image need resize
+     *
+     * @param string $originalImageName
+     * @return bool
+     */
+    public function isNeedImageResize(string $originalImageName)
+    {
+        return stripos($originalImageName, 'media/catalog/product') === 0;
     }
 
     /**
@@ -219,7 +239,8 @@ class Media implements AppInterface
      */
     private function getOriginalImage(string $resizedImagePath): string
     {
-        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
+        $resizedImagePath = ltrim($resizedImagePath, 'media/');
+        return preg_replace('|^catalog\/product\/cache\/[\w\d.]+(.*)$|', '$1', $resizedImagePath);
     }
 
     /**

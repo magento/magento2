@@ -153,17 +153,27 @@ class ImageResize
         $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
         $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
 
-        if ($this->fileStorageDatabase->checkDbUsage() &&
-            !$this->mediaDirectory->isFile($mediastoragefilename)
-        ) {
-            $this->fileStorageDatabase->saveFileToFilesystem($mediastoragefilename);
-        }
+        $this->copyFileFromDbStorage($mediastoragefilename);
 
         if (!$this->mediaDirectory->isFile($originalImagePath)) {
             throw new NotFoundException(__('Cannot resize image "%1" - original image not found', $originalImagePath));
         }
         foreach ($this->getViewImages($this->getThemesInUse()) as $viewImage) {
             $this->resize($viewImage, $originalImagePath, $originalImageName);
+        }
+    }
+
+    /**
+     * Copy image from Db Storage, if DB usage
+     *
+     * @param string $originalImageName
+     */
+    public function copyFileFromDbStorage(string $originalImageName)
+    {
+        if ($this->fileStorageDatabase->checkDbUsage() &&
+            !$this->mediaDirectory->isFile($originalImageName)
+        ) {
+            $this->fileStorageDatabase->saveFileToFilesystem($originalImageName);
         }
     }
 
