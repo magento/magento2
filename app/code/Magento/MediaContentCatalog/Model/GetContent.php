@@ -60,13 +60,13 @@ class GetContent
         $connection = $this->resourceConnection->getConnection();
 
         $select = $connection->select()->from(
-            $table,
-            'value'
+            ['abt' => $table],
+            'abt.value'
         )->where(
-            'attribute_id = ?',
+            'abt.attribute_id = ?',
             $attributeId
         )->where(
-            'entity_id = ?',
+            'abt.entity_id = ?',
             $entityId
         )->distinct(true);
 
