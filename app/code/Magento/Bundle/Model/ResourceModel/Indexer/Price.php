@@ -377,8 +377,7 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $query = $select->insertFromSelect($this->getBundlePriceTable());
-        $connection->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $this->getBundlePriceTable(), []);
     }
 
     /**
@@ -418,8 +417,7 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $query = $select->insertFromSelect($this->getBundleOptionTable());
-        $connection->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $this->getBundleOptionTable(), []);
 
         $this->getConnection()->delete($priceTable->getTableName());
         $this->applyBundlePrice($priceTable);
@@ -575,8 +573,7 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
-        $query = $select->insertFromSelect($this->getBundleSelectionTable());
-        $connection->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
 
         $this->applyFixedBundleSelectionPrice();
     }
@@ -627,8 +624,7 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
-        $query = $select->insertFromSelect($this->getBundleSelectionTable());
-        $connection->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
     }
 
     /**
@@ -697,8 +693,7 @@ class Price implements DimensionalIndexerInterface
             $select->where($this->dimensionToFieldMapper[$dimension->getName()] . ' = ?', $dimension->getValue());
         }
 
-        $query = $select->insertFromSelect($this->getTable('catalog_product_index_tier_price'));
-        $connection->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $this->getTable('catalog_product_index_tier_price'), []);
     }
 
     /**
@@ -725,8 +720,7 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $query = $select->insertFromSelect($priceTable->getTableName());
-        $this->getConnection()->query($query);
+        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), []);
     }
 
     /**
@@ -785,7 +779,7 @@ class Price implements DimensionalIndexerInterface
         if ($this->fullReindexAction) {
             return $this->tableMaintainer->getMainReplicaTable($dimensions);
         }
-        return $this->tableMaintainer->getMainTable($dimensions);
+        return $this->tableMaintainer->getMainTableByDimensions($dimensions);
     }
 
     /**
