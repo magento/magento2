@@ -5,18 +5,20 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Observer;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 class FlushAllCacheObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Observer\FlushAllCacheObserver */
+    /** @var MockObject|\Magento\CacheInvalidate\Observer\FlushAllCacheObserver */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer */
+    /** @var MockObject|\Magento\Framework\Event\Observer */
     protected $observerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Config */
+    /** @var MockObject|\Magento\PageCache\Model\Config */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
+    /** @var MockObject|\Magento\CacheInvalidate\Model\PurgeCache */
     protected $purgeCache;
 
     /**
