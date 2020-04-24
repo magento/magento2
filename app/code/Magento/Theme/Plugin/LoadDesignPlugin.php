@@ -21,12 +21,12 @@ class LoadDesignPlugin
     /**
      * @var DesignLoader
      */
-    protected $_designLoader;
+    private $designLoader;
 
     /**
      * @var MessageManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @param DesignLoader $designLoader
@@ -36,7 +36,7 @@ class LoadDesignPlugin
         DesignLoader $designLoader,
         MessageManagerInterface $messageManager
     ) {
-        $this->_designLoader = $designLoader;
+        $this->designLoader = $designLoader;
         $this->messageManager = $messageManager;
     }
 
@@ -50,7 +50,7 @@ class LoadDesignPlugin
     public function beforeExecute(ActionInterface $subject)
     {
         try {
-            $this->_designLoader->load();
+            $this->designLoader->load();
         } catch (LocalizedException $e) {
             if ($e->getPrevious() instanceof ValidationException) {
                 /** @var MessageInterface $message */

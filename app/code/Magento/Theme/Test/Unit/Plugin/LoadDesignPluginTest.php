@@ -6,10 +6,10 @@
 namespace Magento\Framework\App\Test\Unit\Action\Plugin;
 
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Plugin\LoadDesignPlugin;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\DesignLoader;
+use Magento\Theme\Plugin\LoadDesignPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
