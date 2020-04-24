@@ -43,7 +43,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('edit_form', $form->getId());
         $this->assertEquals('post', $form->getMethod());
         $this->assertTrue($form->getUseContainer());
-        $this->assertContains('/id/3', $form->getAction());
+        $this->assertStringContainsString('/id/3', $form->getAction());
 
         // Check all expected form elements are present
         $expectedElements = [

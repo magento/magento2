@@ -241,7 +241,7 @@ class CsrfValidatorTest extends TestCase
         /** @var HttpResponse $response */
         $response = $this->httpResponseFactory->create();
         $caught->getReplaceResult()->renderResult($response);
-        $this->assertContains(
+        $this->assertStringContainsString(
             self::AWARE_URL,
             $response->getHeaders()->toString()
         );

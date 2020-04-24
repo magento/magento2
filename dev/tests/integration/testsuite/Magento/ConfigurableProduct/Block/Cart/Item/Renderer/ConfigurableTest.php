@@ -63,6 +63,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->block->getCheckoutSession()->getQuote()->getAllVisibleItems()[0]
         );
         $html = $this->block->getProductPriceHtml($configurableProduct);
-        $this->assertContains('<span class="price">$10.00</span>', $html);
+        $this->assertStringContainsString('<span class="price">$10.00</span>', $html);
     }
 }

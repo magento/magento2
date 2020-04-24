@@ -34,7 +34,7 @@ class IndexTest extends AbstractController
         $this->getRequest()->setParam('q', $searchString);
         $this->dispatch('catalogsearch/result');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Simple product name', $responseBody);
+        $this->assertStringContainsString('Simple product name', $responseBody);
     }
 
     /**

@@ -69,7 +69,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testProcess()
     {
         $this->observer->process();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'ohn Smith,',
             $this->transportBuilder->getSentMessage()->getRawMessage()
         );
@@ -120,7 +120,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $message = $this->transportBuilder->getSentMessage();
         $messageContent = $message->getBody()->getParts()[0]->getRawContent();
         $expectedText = array_shift($translation);
-        $this->assertContains('/frontend/Magento/luma/pt_BR/', $messageContent);
-        $this->assertContains(substr($expectedText, 0, 50), $messageContent);
+        $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
+        $this->assertStringContainsString(substr($expectedText, 0, 50), $messageContent);
     }
 }

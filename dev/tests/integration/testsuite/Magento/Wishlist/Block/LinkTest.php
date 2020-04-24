@@ -41,7 +41,7 @@ class LinkTest extends TestCase
      */
     public function testWishListLinkVisible(): void
     {
-        $this->assertContains('My Wish List', strip_tags($this->block->toHtml()));
+        $this->assertStringContainsString('My Wish List', strip_tags($this->block->toHtml()));
     }
 
     /**

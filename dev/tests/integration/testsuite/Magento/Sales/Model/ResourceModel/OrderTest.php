@@ -161,7 +161,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $orderRepository = $this->objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
         $order = $orderRepository->get($order->getId());
         $this->assertEquals(255, strlen($order->getStoreName()));
-        $this->assertContains($store->getWebsite()->getName(), $order->getStoreName());
-        $this->assertContains($store->getGroup()->getName(), $order->getStoreName());
+        $this->assertStringContainsString($store->getWebsite()->getName(), $order->getStoreName());
+        $this->assertStringContainsString($store->getGroup()->getName(), $order->getStoreName());
     }
 }
