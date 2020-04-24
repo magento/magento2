@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class VisibilityTest extends \PHPUnit\Framework\TestCase
+class VisibilityTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\Catalog\Model\Product\Visibility::class);
+        $this->_model = $objectManager->getObject(Visibility::class);
     }
 
     public function testGetFlatColumns()
     {
         $abstractAttributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             ['getAttributeCode', '__wakeup']
         );
 

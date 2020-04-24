@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Widget;
 
 use Exception;
@@ -18,10 +20,9 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionClass;
-use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -31,12 +32,12 @@ use RuntimeException;
 class LinkTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UrlFinderInterface
+     * @var MockObject|UrlFinderInterface
      */
     protected $urlFinder;
 
@@ -46,14 +47,14 @@ class LinkTest extends TestCase
     protected $block;
 
     /**
-     * @var AbstractResource|PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|MockObject
      */
     protected $entityResource;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->urlFinder = $this->createMock(UrlFinderInterface::class);
@@ -78,34 +79,31 @@ class LinkTest extends TestCase
 
     /**
      * Tests getHref with wrong id_path
-     *
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Parameter id_path is not set.
      */
     public function testGetHrefWithoutSetIdPath()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Parameter id_path is not set.');
         $this->block->getHref();
     }
 
     /**
      * Tests getHref with wrong id_path
-     *
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Wrong id_path structure.
      */
     public function testGetHrefIfSetWrongIdPath()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Wrong id_path structure.');
         $this->block->setData('id_path', 'wrong_id_path');
         $this->block->getHref();
     }
 
     /**
      * Tests getHref with wrong store ID
-     *
-     * @expectedException Exception
      */
     public function testGetHrefWithSetStoreId()
     {
+        $this->expectException('Exception');
         $this->block->setData('id_path', 'type/id');
         $this->block->setData('store_id', 'store_id');
         $this->storeManager->expects($this->once())
@@ -197,7 +195,7 @@ class LinkTest extends TestCase
             ->willReturnCallback(
                 function ($route, $params) use ($storeId) {
                     $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
-                    return $baseUrl .'/' . ltrim($params['_direct'], '/');
+                    return $baseUrl . '/' . ltrim($params['_direct'], '/');
                 }
             );
 

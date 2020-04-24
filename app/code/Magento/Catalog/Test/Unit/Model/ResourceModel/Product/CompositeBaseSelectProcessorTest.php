@@ -3,30 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
+class CompositeBaseSelectProcessorTest extends TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager =  new ObjectManager($this);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testInitializeWithWrongProcessorInstance()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
         $processorValid = $this->createMock(BaseSelectProcessorInterface::class);
         $processorInvalid = $this->createMock(\stdClass::class);
 

@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AbstractTypeTest extends \PHPUnit\Framework\TestCase
+class AbstractTypeTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -16,31 +23,31 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @var Simple|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|MockObject
      */
     private $productResource;
 
     /**
-     * @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->model = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\Type\Simple::class);
+        $this->model = $this->objectManagerHelper->getObject(Simple::class);
 
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource', 'getStatus'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,7 +58,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 
         $this->product->expects($this->any())->method('getResource')->will($this->returnValue($this->productResource));
 
-        $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
+        $this->attribute = $this->getMockBuilder(Attribute::class)
             ->setMethods(['getGroupSortPath', 'getSortPath', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

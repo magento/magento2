@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,10 @@
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
-class VirtualTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogImportExport\Model\Import\Product\Type\Virtual;
+use PHPUnit\Framework\TestCase;
+
+class VirtualTest extends TestCase
 {
     /**
      * Test for method prepareAttributesWithDefaultValueForSave
@@ -14,7 +17,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
     public function testPrepareAttributesWithDefaultValueForSave()
     {
         $virtualModelMock = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Type\Virtual::class,
+            Virtual::class,
             []
         );
 

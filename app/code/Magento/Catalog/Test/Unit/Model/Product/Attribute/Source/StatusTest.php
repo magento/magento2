@@ -3,39 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+class StatusTest extends TestCase
 {
-    /** @var \Magento\Catalog\Model\Product\Attribute\Source\Status */
+    /** @var Status */
     protected $status;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractCollection|MockObject */
     protected $collection;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractAttribute|MockObject */
     protected $attributeModel;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractBackend|MockObject */
     protected $backendAttributeModel;
 
     /**
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|MockObject
      */
     protected $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collection = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            Collection::class,
             [
                 '__wakeup',
                 'getSelect',
@@ -47,7 +57,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->attributeModel = $this->createPartialMock(
-            \Magento\Catalog\Model\Entity\Attribute::class,
+            Attribute::class,
             [
                 '__wakeup',
                 'getAttributeCode',
@@ -59,11 +69,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->backendAttributeModel = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Sku::class,
+            Sku::class,
             ['__wakeup', 'getTable']
         );
         $this->status = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::class
+            Status::class
         );
 
         $this->attributeModel->expects($this->any())->method('getAttribute')
