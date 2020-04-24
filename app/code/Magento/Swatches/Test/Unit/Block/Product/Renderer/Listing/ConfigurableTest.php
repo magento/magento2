@@ -10,6 +10,7 @@ use Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts;
 use Magento\Framework\Locale\Format;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -20,53 +21,53 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /** @var Configurable */
     private $configurable;
 
-    /** @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\ArrayUtils|MockObject */
     private $arrayUtils;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|MockObject */
     private $jsonEncoder;
 
-    /** @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ConfigurableProduct\Helper\Data|MockObject */
     private $helper;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Data|MockObject */
     private $swatchHelper;
 
-    /** @var \Magento\Swatches\Helper\Media|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Media|MockObject */
     private $swatchMediaHelper;
 
-    /** @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Product|MockObject */
     private $catalogProduct;
 
-    /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\Session\CurrentCustomer|MockObject */
     private $currentCustomer;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|MockObject */
     private $priceCurrency;
 
-    /** @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|MockObject */
     private $configurableAttributeData;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|MockObject */
     private $product;
 
-    /** @var \Magento\Catalog\Model\Product\Type\AbstractType|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Type\AbstractType|MockObject */
     private $typeInstance;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject */
     private $scopeConfig;
 
-    /** @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Image|MockObject */
     private $imageHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product\Image\UrlBuilder|MockObject */
     private $imageUrlBuilder;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     private $variationPricesMock;
 
     /**
-     * @var GetEnabledOptionsProducts|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetEnabledOptionsProducts|MockObject
      */
     private $enabledOptionsProducts;
 
@@ -103,25 +104,26 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->enabledOptionsProducts = $this->getMockBuilder(GetEnabledOptionsProducts::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configurable = $this->getMockBuilder(\Magento\Swatches\Block\Product\Renderer\Listing\Configurable::class)
-            ->setConstructorArgs(
-                [
-                    'context' => $context,
-                    'arrayUtils' => $this->arrayUtils,
-                    'jsonEncoder' => $this->jsonEncoder,
-                    'helper' => $this->helper,
-                    'catalogProduct' => $this->catalogProduct,
-                    'currentCustomer' => $this->currentCustomer,
-                    'priceCurrency' => $this->priceCurrency,
-                    'configurableAttributeData' => $this->configurableAttributeData,
-                    'swatchHelper' => $this->swatchHelper,
-                    'swatchMediaHelper' => $this->swatchMediaHelper,
-                    'data' => [],
-                    'swatchAttributesProvider' => $swatchAttributesProvider,
-                    'localeFormat' => $format,
-                    'variationPrices' => $this->variationPricesMock,
-                ]
-            )->setMethods(['getAllowProducts'])->getMock();
+        $this->configurable = $this->getMockBuilder(
+            \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::class
+        )->setConstructorArgs(
+            [
+                'context' => $context,
+                'arrayUtils' => $this->arrayUtils,
+                'jsonEncoder' => $this->jsonEncoder,
+                'helper' => $this->helper,
+                'catalogProduct' => $this->catalogProduct,
+                'currentCustomer' => $this->currentCustomer,
+                'priceCurrency' => $this->priceCurrency,
+                'configurableAttributeData' => $this->configurableAttributeData,
+                'swatchHelper' => $this->swatchHelper,
+                'swatchMediaHelper' => $this->swatchMediaHelper,
+                'data' => [],
+                'swatchAttributesProvider' => $swatchAttributesProvider,
+                'localeFormat' => $format,
+                'variationPrices' => $this->variationPricesMock,
+            ]
+        )->setMethods(['getAllowProducts'])->getMock();
     }
 
     /**
@@ -141,7 +143,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchNotUsedInProductListing()
     {
@@ -166,7 +168,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
+     * @covers \Magento\Swatches\Block\Product\Renderer\Listing\Configurable::getSwatchAttributesData
      */
     public function testGetJsonSwatchUsedInProductListing()
     {

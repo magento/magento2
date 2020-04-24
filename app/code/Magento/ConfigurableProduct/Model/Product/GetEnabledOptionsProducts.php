@@ -74,9 +74,7 @@ class GetEnabledOptionsProducts
         $collection = $this->productCollectionFactory->create();
         $collection->setFlag('product_children', true);
         $collection->setProductFilter($product);
-        if (null !== $this->configurable->getStoreFilter($product)) {
-            $collection->addStoreFilter($this->configurable->getStoreFilter($product));
-        }
+        $collection->addStoreFilter($product->getStore());
 
         $collection->getSelect()->joinInner(
             ['cwd' => $collection->getConnection()->getTableName('catalog_product_index_website')],
@@ -99,6 +97,8 @@ class GetEnabledOptionsProducts
     }
 
     /**
+     * Retrieve attributes for select.
+     *
      * @param ProductInterface $product
      * @return array
      */

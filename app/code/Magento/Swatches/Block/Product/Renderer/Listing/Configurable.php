@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Block\Product\Renderer\Listing;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
+use Magento\ConfigurableProduct\Model\Product\GetEnabledOptionsProducts;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
@@ -45,6 +47,11 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     private $layerResolver;
 
     /**
+     * @var GetEnabledOptionsProducts|null
+     */
+    private $enabledOptionsProducts;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @param Context $context
      * @param ArrayUtils $arrayUtils
@@ -61,6 +68,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * @param \Magento\Framework\Locale\Format|null $localeFormat
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
      * @param Resolver $layerResolver
+     * @param GetEnabledOptionsProducts|null $enabledOptionsProducts
      */
     public function __construct(
         Context $context,
@@ -77,7 +85,8 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         SwatchAttributesProvider $swatchAttributesProvider = null,
         \Magento\Framework\Locale\Format $localeFormat = null,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
-        Resolver $layerResolver = null
+        Resolver $layerResolver = null,
+        GetEnabledOptionsProducts $enabledOptionsProducts = null
     ) {
         parent::__construct(
             $context,
@@ -100,6 +109,23 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
         $this->layerResolver = $layerResolver ?: ObjectManager::getInstance()->get(Resolver::class);
+        $this->enabledOptionsProducts = $enabledOptionsProducts ?: ObjectManager::getInstance()->get(
+            GetEnabledOptionsProducts::class
+        );
+    }
+
+    /**
+     * Get Allowed Products
+     *
+     * @return \Magento\Catalog\Model\Product[]
+     */
+    public function getAllowProducts()
+    {
+        if (!$this->hasAllowProducts()) {
+            $products = $this->enabledOptionsProducts->execute($this->getProduct());
+            $this->setAllowProducts($products);
+        }
+        return $this->getData('allow_products');
     }
 
     /**
