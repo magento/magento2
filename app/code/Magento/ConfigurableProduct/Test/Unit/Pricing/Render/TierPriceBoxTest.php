@@ -74,17 +74,19 @@ class TierPriceBoxTest extends TestCase
         $this->rendererPool = $this->createPartialMock(RendererPool::class, []);
         $this->salableResolver = $this->createPartialMock(SalableResolverInterface::class, ['isSalable']);
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->getMockForAbstractClass(ConfigurableOptionsProviderInterface::class);
+        $this->configurableOptionsProvider = $this->getMockForAbstractClass(
+            ConfigurableOptionsProviderInterface::class
+        );
 
         $this->model = (new ObjectManager($this))->getObject(
             TierPriceBox::class,
             [
-                'context'                     => $this->context,
-                'saleableItem'                => $this->saleableItem,
-                'price'                       => $this->price,
-                'rendererPool'                => $this->rendererPool,
-                'salableResolver'             => $this->salableResolver,
-                'minimalPriceCalculator'      => $this->minimalPriceCalculator,
+                'context' => $this->context,
+                'saleableItem' => $this->saleableItem,
+                'price' => $this->price,
+                'rendererPool' => $this->rendererPool,
+                'salableResolver' => $this->salableResolver,
+                'minimalPriceCalculator' => $this->minimalPriceCalculator,
                 'configurableOptionsProvider' => $this->configurableOptionsProvider,
             ]
         );

@@ -37,14 +37,11 @@ class ConfigurableAttributeDataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->createPartialMock(Product::class, [
-                'getTypeInstance',
-                'setParentId',
-                'hasPreconfiguredValues',
-                'getPreconfiguredValues',
-                'getPriceInfo',
-                'getStoreId'
-            ]);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['setParentId', 'hasPreconfiguredValues'])
+            ->onlyMethods(['getTypeInstance', 'getPreconfiguredValues', 'getPriceInfo', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeMock = $this->createMock(
             Attribute::class
         );
@@ -94,7 +91,7 @@ class ConfigurableAttributeDataTest extends TestCase
 
         $productAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
+            ->setMethods(['getStoreLabel', 'getAttributeCode', 'getId', 'getAttributeLabel'])
             ->getMock();
         $productAttributeMock->expects($this->once())
             ->method('getId')
@@ -107,7 +104,7 @@ class ConfigurableAttributeDataTest extends TestCase
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', '__wakeup', 'getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
+            ->setMethods(['getProductAttribute', 'getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
             ->getMock();
         $attributeMock->expects($this->once())
             ->method('getProductAttribute')
@@ -131,7 +128,8 @@ class ConfigurableAttributeDataTest extends TestCase
 
         $configurableProduct = $this->getMockBuilder(
             Configurable::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $configurableProduct->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->product)

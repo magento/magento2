@@ -95,20 +95,22 @@ class PriceTest extends TestCase
         $customerGroupId = 1;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->createPartialMock(
-            Product::class,
-            ['getCustomOption', 'setFinalPrice', 'getCustomerGroupId']
-        );
+        $configurableProduct = $this->getMockBuilder(Product::class)
+            ->addMethods(['getCustomerGroupId'])
+            ->onlyMethods(['getCustomOption', 'setFinalPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Option|MockObject $customOption */
-        $customOption = $this->createPartialMock(
-            Option::class,
-            ['getProduct']
-        );
+        $customOption = $this->getMockBuilder(Option::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Product|MockObject $simpleProduct */
-        $simpleProduct = $this->createPartialMock(
-            Product::class,
-            ['setCustomerGroupId', 'setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption']
-        );
+        $simpleProduct = $this->getMockBuilder(Product::class)
+            ->addMethods(['setCustomerGroupId'])
+            ->onlyMethods(['setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $configurableProduct->method('getCustomOption')
             ->willReturnMap([

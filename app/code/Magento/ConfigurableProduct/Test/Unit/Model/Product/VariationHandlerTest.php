@@ -86,7 +86,10 @@ class VariationHandlerTest extends TestCase
             Configurable::class
         );
 
-        $this->product = $this->createPartialMock(Product::class, ['getMediaGallery']);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getMediaGallery'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectHelper->getObject(
             VariationHandler::class,
@@ -162,8 +165,8 @@ class VariationHandlerTest extends TestCase
                 'configurable_attribute' => '{"new_attr":"6"}',
                 'sku' => 'config-red',
                 'quantity_and_stock_status' => [
-                        'qty' => '',
-                    ],
+                    'qty' => '',
+                ],
             ]
         ];
 
@@ -183,7 +186,6 @@ class VariationHandlerTest extends TestCase
         $parentProductMock = $this->getMockBuilder(Product::class)
             ->setMethods(
                 [
-                    '__wakeup',
                     'getNewVariationsAttributeSetId',
                     'getStockData',
                     'getQuantityAndStockStatus',
@@ -195,7 +197,6 @@ class VariationHandlerTest extends TestCase
         $newSimpleProductMock = $this->getMockBuilder(Product::class)
             ->setMethods(
                 [
-                    '__wakeup',
                     'save',
                     'getId',
                     'setStoreId',

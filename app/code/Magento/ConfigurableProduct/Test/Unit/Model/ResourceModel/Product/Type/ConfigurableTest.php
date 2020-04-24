@@ -94,7 +94,7 @@ class ConfigurableTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getData'])
+            ->setMethods(['__sleep', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)

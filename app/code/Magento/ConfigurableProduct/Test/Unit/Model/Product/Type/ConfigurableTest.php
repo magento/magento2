@@ -233,7 +233,9 @@ class ConfigurableTest extends TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'customerSession' => $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock(),
+                'customerSession' => $this->getMockBuilder(Session::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
                 'serializer' => $this->serializer,
@@ -304,7 +306,7 @@ class ConfigurableTest extends TestCase
             ->willReturnMap($dataMap);
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
+            ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__sleep'])
             ->getMock();
         $expectedAttributeData = $this->attributeData[1];
         unset($expectedAttributeData['id']);
@@ -425,30 +427,26 @@ class ConfigurableTest extends TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', '__wakeup', '__sleep'])
+            ->setMethods(['getProductAttribute', '__sleep'])
             ->getMock();
         $attribute->expects($this->any())->method('getProductAttribute')->willReturn($eavAttribute);
 
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getStoreId', 'getData', 'hasData', '__wakeup', '__sleep'])
+            ->setMethods(['getStoreId', 'getData', 'hasData', '__sleep'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn($productStore);
         $product->expects($this->atLeastOnce())->method('hasData')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['_cache_instance_configurable_attributes', 1],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['_cache_instance_configurable_attributes', 1],
+                ]
             );
         $product->expects($this->any())->method('getData')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['_cache_instance_configurable_attributes', null, [$attribute]],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['_cache_instance_configurable_attributes', null, [$attribute]],
+                ]
             );
 
         $result = $this->model->getConfigurableAttributesAsArray($product);
@@ -535,7 +533,7 @@ class ConfigurableTest extends TestCase
     public function testHasOptions()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['__wakeup', 'getOptions'])
+            ->setMethods(['getOptions'])
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())->method('getOptions')->willReturn([true]);
@@ -546,7 +544,7 @@ class ConfigurableTest extends TestCase
     public function testHasOptionsConfigurableAttribute()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['__wakeup', 'getAttributeCode', 'getOptions', 'hasData', 'getData'])
+            ->setMethods(['getAttributeCode', 'getOptions', 'hasData', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock = $this->getMockBuilder(Attribute::class)
@@ -567,7 +565,7 @@ class ConfigurableTest extends TestCase
     public function testHasOptionsFalse()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['__wakeup', 'getOptions', 'hasData', 'getData'])
+            ->setMethods(['getOptions', 'hasData', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -585,7 +583,7 @@ class ConfigurableTest extends TestCase
     public function testIsSalable()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['__wakeup', 'getStatus', 'hasData', 'getData', 'getStoreId', 'setData', 'getSku'])
+            ->setMethods(['getStatus', 'hasData', 'getData', 'getStoreId', 'setData', 'getSku'])
             ->disableOriginalConstructor()
             ->getMock();
         $productMock
@@ -610,16 +608,14 @@ class ConfigurableTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('setProductFilter')
-            ->with($productMock)
-            ->will($this->returnSelf());
+            ->with($productMock)->willReturnSelf();
         $productCollection
             ->expects($this->once())
-            ->method('addStoreFilter')
-            ->will($this->returnSelf());
+            ->method('addStoreFilter')->willReturnSelf();
         $productCollection
             ->expects($this->once())
             ->method('getSize')
@@ -628,11 +624,11 @@ class ConfigurableTest extends TestCase
             ->expects($this->once())
             ->method('process')
             ->with($productCollection)
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->productCollectionFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($productCollection));
+            ->willReturn($productCollection);
         $this->assertTrue($this->model->isSalable($productMock));
     }
 

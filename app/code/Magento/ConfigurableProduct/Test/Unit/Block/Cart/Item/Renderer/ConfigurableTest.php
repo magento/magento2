@@ -42,7 +42,7 @@ class ConfigurableTest extends TestCase
         $this->configManager = $this->createMock(ConfigInterface::class);
         $this->imageHelper = $this->createPartialMock(
             Image::class,
-            ['init', 'resize', '__toString']
+            ['init', 'resize']
         );
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->productConfigMock = $this->createMock(Configuration::class);
@@ -69,9 +69,9 @@ class ConfigurableTest extends TestCase
     {
         $productTags = ['catalog_product_1'];
         $product = $this->createMock(Product::class);
-        $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
+        $product->expects($this->exactly(2))->method('getIdentities')->willReturn($productTags);
         $item = $this->createMock(Item::class);
-        $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->exactly(2))->method('getProduct')->willReturn($product);
         $this->renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->renderer->getIdentities());
     }

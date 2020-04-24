@@ -68,7 +68,7 @@ class DataTest extends TestCase
 
         $this->_productMock->expects($this->once())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
 
         $this->_model->getAllowAttributes($this->_productMock);
     }
@@ -119,7 +119,7 @@ class DataTest extends TestCase
     {
         $currentProductMock = $this->createPartialMock(
             Product::class,
-            ['getTypeInstance', '__wakeup']
+            ['getTypeInstance']
         );
         $provider = [];
         $provider[] = [
@@ -133,49 +133,52 @@ class DataTest extends TestCase
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
-            $attribute = $this->createPartialMock(DataObject::class, ['getProductAttribute']);
-            $productAttribute = $this->createPartialMock(
-                DataObject::class,
-                ['getId', 'getAttributeCode']
-            );
+            $attribute = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getProductAttribute'])
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productAttribute = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getId', 'getAttributeCode'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $productAttribute->expects($this->any())
                 ->method('getId')
-                ->will($this->returnValue('attribute_id_' . $i));
+                ->willReturn('attribute_id_' . $i);
             $productAttribute->expects($this->any())
                 ->method('getAttributeCode')
-                ->will($this->returnValue('attribute_code_' . $i));
+                ->willReturn('attribute_code_' . $i);
             $attribute->expects($this->any())
                 ->method('getProductAttribute')
-                ->will($this->returnValue($productAttribute));
+                ->willReturn($productAttribute);
             $attributes[] = $attribute;
         }
         $typeInstanceMock = $this->createMock(Configurable::class);
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
-            ->will($this->returnValue($attributes));
+            ->willReturn($attributes);
         $currentProductMock->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
+            ->willReturn($typeInstanceMock);
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
                 Product::class,
-                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages', 'isSalable']
+                ['getData', 'getImage', 'getId', 'getMediaGalleryImages', 'isSalable']
             );
             $productMock->expects($this->any())
                 ->method('getData')
-                ->will($this->returnCallback([$this, 'getDataCallback']));
+                ->willReturnCallback([$this, 'getDataCallback']);
             $productMock->expects($this->any())
                 ->method('getId')
-                ->will($this->returnValue('product_id_' . $i));
+                ->willReturn('product_id_' . $i);
             $productMock
                 ->expects($this->any())
                 ->method('isSalable')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
             if ($i == 2) {
                 $productMock->expects($this->any())
                     ->method('getImage')
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
             }
             $allowedProducts[] = $productMock;
         }

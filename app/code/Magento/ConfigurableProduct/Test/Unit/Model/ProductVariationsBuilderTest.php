@@ -50,7 +50,7 @@ class ProductVariationsBuilderTest extends TestCase
 
         $this->product = $this->createPartialMock(
             Product::class,
-            ['getData', 'getPrice', 'getName', 'getSku', '__wakeup', 'getCustomAttributes']
+            ['getData', 'getPrice', 'getName', 'getSku', 'getCustomAttributes']
         );
 
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
@@ -70,7 +70,7 @@ class ProductVariationsBuilderTest extends TestCase
     {
         $output = $this->createPartialMock(
             Product::class,
-            ['setPrice', '__wakeup', 'setData', 'getCustomAttributes', 'setName', 'setSku', 'setVisibility']
+            ['setPrice', 'setData', 'getCustomAttributes', 'setName', 'setSku', 'setVisibility']
         );
         $attributes = [10 => ['attribute_code' => 'sort_order']];
         $variations = [

@@ -41,7 +41,10 @@ class ConfigurablePriceResolverTest extends TestCase
     protected function setUp(): void
     {
         $className = Configurable::class;
-        $this->configurable = $this->createPartialMock($className, ['getUsedProducts']);
+        $this->configurable = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getUsedProducts'])
+            ->getMock();
 
         $className = PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
@@ -71,7 +74,8 @@ class ConfigurablePriceResolverTest extends TestCase
     {
         $product = $this->getMockBuilder(
             Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product->expects($this->never())->method('getSku');
 

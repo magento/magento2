@@ -176,7 +176,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::exactly(2))
@@ -229,7 +229,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::once())
@@ -283,7 +283,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::exactly(2))

@@ -65,13 +65,10 @@ class AddAttributeTest extends TestCase
             ->getMock();
         $this->request = $this->createMock(RequestInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            [
-                'sendResponse',
-                'setBody'
-            ]
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setBody'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->setMethods(['build'])
@@ -80,16 +77,16 @@ class AddAttributeTest extends TestCase
 
         $this->context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->request));
+            ->willReturn($this->request);
         $this->context->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->response));
+            ->willReturn($this->response);
         $this->context->expects($this->any())
             ->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactory));
+            ->willReturn($this->resultFactory);
         $this->context->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->view));
+            ->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             AddAttribute::class,

@@ -37,7 +37,7 @@ class CommonTaxCollectorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->commonTaxCollectorPlugin = $this->objectManager->getObject(CommonTaxCollectorPlugin::class);
@@ -51,10 +51,10 @@ class CommonTaxCollectorTest extends TestCase
         $childTaxClassId = 10;
 
         /** @var Product|MockObject $childProductMock */
-        $childProductMock = $this->createPartialMock(
-            Product::class,
-            ['getTaxClassId']
-        );
+        $childProductMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getTaxClassId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $childProductMock->method('getTaxClassId')->willReturn($childTaxClassId);
         /* @var AbstractItem|MockObject $quoteItemMock */
         $childQuoteItemMock = $this->createMock(
@@ -69,10 +69,11 @@ class CommonTaxCollectorTest extends TestCase
         );
         $productMock->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         /* @var AbstractItem|MockObject $quoteItemMock */
-        $quoteItemMock = $this->createPartialMock(
-            AbstractItem::class,
-            ['getProduct', 'getHasChildren', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode']
-        );
+        $quoteItemMock = $this->getMockBuilder(AbstractItem::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(['getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $quoteItemMock->method('getProduct')->willReturn($productMock);
         $quoteItemMock->method('getHasChildren')->willReturn(true);
         $quoteItemMock->method('getChildren')->willReturn([$childQuoteItemMock]);

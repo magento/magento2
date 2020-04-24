@@ -83,7 +83,9 @@ class LoaderTest extends TestCase
 
         $attributes = [$attribute];
 
-        $iterator = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
+        $iterator = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $iterator->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));
 

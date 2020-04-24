@@ -52,8 +52,8 @@ class ConfigurableTest extends TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         $this->assertEquals(
             true,
@@ -73,8 +73,8 @@ class ConfigurableTest extends TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue('custom_product_type')
+        )->willReturn(
+            'custom_product_type'
         );
         $this->assertEquals(
             'Expected',

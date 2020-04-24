@@ -252,9 +252,9 @@ class ConfigurableTest extends TestCase
      * @dataProvider cacheKeyProvider
      * @param array $expected
      * @param string|null $priceCurrency
-     * @param string|null $customerGroupId
+     * @param int|null $customerGroupId
      */
-    public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null)
+    public function testGetCacheKeyInfo(array $expected, ?string $priceCurrency = null, ?int $customerGroupId = null)
     {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])

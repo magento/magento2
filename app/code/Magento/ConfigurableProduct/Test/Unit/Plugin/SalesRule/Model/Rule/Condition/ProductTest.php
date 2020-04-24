@@ -50,7 +50,7 @@ class ProductTest extends TestCase
      */
     private $validatorPlugin;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->validator = $this->createValidator();
@@ -95,17 +95,23 @@ class ProductTest extends TestCase
             ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $productMock->expects($this->any())
-        ->method('loadAllAttributes')
-        ->willReturn($attributeLoaderInterfaceMock);
+            ->method('loadAllAttributes')
+            ->willReturn($attributeLoaderInterfaceMock);
         /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var FormatInterface|MockObject $formatMock */
         $formatMock = new Format(
-            $this->getMockBuilder(ScopeResolverInterface::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(ResolverInterface::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(CurrencyFactory::class)->disableOriginalConstructor()->getMock()
+            $this->getMockBuilder(ScopeResolverInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder(ResolverInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder(CurrencyFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock()
         );
 
         return new SalesRuleProduct(
@@ -130,7 +136,7 @@ class ProductTest extends TestCase
         $configurableProductMock
             ->expects($this->any())
             ->method('hasData')
-            ->with($this->equalTo('special_price'))
+            ->with('special_price')
             ->willReturn(false);
 
         /* @var AbstractItem|MockObject $item */
@@ -150,7 +156,7 @@ class ProductTest extends TestCase
         $simpleProductMock
             ->expects($this->any())
             ->method('hasData')
-            ->with($this->equalTo('special_price'))
+            ->with('special_price')
             ->willReturn(true);
 
         $childItem = $this->getMockBuilder(AbstractItem::class)
@@ -213,7 +219,7 @@ class ProductTest extends TestCase
         $simpleProductMock
             ->expects($this->any())
             ->method('hasData')
-            ->with($this->equalTo('special_price'))
+            ->with('special_price')
             ->willReturn(true);
 
         /* @var AbstractItem|MockObject $item */
@@ -244,7 +250,7 @@ class ProductTest extends TestCase
         $configurableProductMock
             ->expects($this->any())
             ->method('hasData')
-            ->with($this->equalTo('special_price'))
+            ->with('special_price')
             ->willReturn(false);
 
         /* @var AbstractItem|MockObject $item */

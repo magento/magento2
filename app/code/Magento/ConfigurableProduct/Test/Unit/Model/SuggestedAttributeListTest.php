@@ -64,15 +64,15 @@ class SuggestedAttributeListTest extends TestCase
         )->with(
             $this->labelPart,
             ['position' => 'any']
-        )->will(
-            $this->returnValue($this->labelPart)
+        )->willReturn(
+            $this->labelPart
         );
         $this->configurableAttributeHandler->expects(
             $this->once()
         )->method(
             'getApplicableAttributes'
-        )->will(
-            $this->returnValue($this->collectionMock)
+        )->willReturn(
+            $this->collectionMock
         );
         $valueMap = [
             ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
@@ -81,19 +81,20 @@ class SuggestedAttributeListTest extends TestCase
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValueMap($valueMap)
+        )->willReturnMap(
+            $valueMap
         );
-        $this->attributeMock = $this->createPartialMock(
-            Attribute::class,
-            ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource']
-        );
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getFrontendLabel'])
+            ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionMock->expects(
             $this->once()
         )->method(
             'getItems'
-        )->will(
-            $this->returnValue(['id' => $this->attributeMock])
+        )->willReturn(
+            ['id' => $this->attributeMock]
         );
         $this->suggestedListModel = new SuggestedAttributeList(
             $this->configurableAttributeHandler,
@@ -105,11 +106,11 @@ class SuggestedAttributeListTest extends TestCase
     {
         $source = $this->createMock(AbstractSource::class);
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
-        $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
-        $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
-        $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue('options'));
+        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
+        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
+        $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn('options');
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(true);
 

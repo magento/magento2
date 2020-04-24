@@ -57,8 +57,7 @@ class SalableProcessorTest extends TestCase
 
         $productCollection->expects($this->once())
             ->method('addAttributeToFilter')
-            ->with(ProductInterface::STATUS, Status::STATUS_ENABLED)
-            ->will($this->returnSelf());
+            ->with(ProductInterface::STATUS, Status::STATUS_ENABLED)->willReturnSelf();
 
         $stockStatusResource = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
             ->setMethods(['addStockDataToCollection'])
@@ -66,13 +65,12 @@ class SalableProcessorTest extends TestCase
             ->getMock();
         $stockStatusResource->expects($this->once())
             ->method('addStockDataToCollection')
-            ->with($productCollection, true)
-            ->will($this->returnSelf());
+            ->with($productCollection, true)->willReturnSelf();
 
         $this->stockStatusFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($stockStatusResource));
+            ->willReturn($stockStatusResource);
 
         $this->model->process($productCollection);
 

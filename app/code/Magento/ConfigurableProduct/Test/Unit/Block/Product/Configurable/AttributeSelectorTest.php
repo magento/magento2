@@ -43,8 +43,8 @@ class AttributeSelectorTest extends TestCase
             'getUrl'
         )->with(
             '*/product_set/save'
-        )->will(
-            $this->returnValue('some_url')
+        )->willReturn(
+            'some_url'
         );
         $this->assertEquals('some_url', $this->attributeSelector->getAttributeSetCreationUrl());
     }
@@ -58,8 +58,8 @@ class AttributeSelectorTest extends TestCase
             'getUrl'
         )->with(
             '*/product_attribute/suggestConfigurableAttributes'
-        )->will(
-            $this->returnValue($source)
+        )->willReturn(
+            $source
         );
         $expected = ['source' => $source, 'minLength' => 0, 'className' => 'category-select', 'showAll' => true];
         $this->assertEquals($expected, $this->attributeSelector->getSuggestWidgetOptions());

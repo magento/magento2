@@ -137,7 +137,7 @@ class FactoryTest extends TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValues', 'setData', '__wakeup'])
+            ->setMethods(['setValues', 'setData'])
             ->getMock();
 
         $this->attributeFactory->expects(static::once())

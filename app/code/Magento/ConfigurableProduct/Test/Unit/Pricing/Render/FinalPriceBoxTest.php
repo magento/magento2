@@ -78,7 +78,9 @@ class FinalPriceBoxTest extends TestCase
         $this->rendererPool = $this->createMock(RendererPool::class);
         $this->salableResolver = $this->getMockForAbstractClass(SalableResolverInterface::class);
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->getMockForAbstractClass(ConfigurableOptionsProviderInterface::class);
+        $this->configurableOptionsProvider = $this->getMockForAbstractClass(
+            ConfigurableOptionsProviderInterface::class
+        );
 
         $this->model = (new ObjectManager($this))->getObject(
             FinalPriceBox::class,

@@ -90,20 +90,20 @@ class MatrixTest extends TestCase
 
         $productMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
         $productMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($storeMock));
+            ->willReturn($storeMock);
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $this->stockRegistryMock->expects($this->once())
             ->method('getStockItem')
             ->with($productId, $websiteId)
-            ->will($this->returnValue($stockItemMock));
+            ->willReturn($stockItemMock);
         $stockItemMock->expects($this->once())
             ->method('getQty')
-            ->will($this->returnValue($qty));
+            ->willReturn($qty);
 
         $this->assertEquals($qty, $this->_block->getProductStockQty($productMock));
     }

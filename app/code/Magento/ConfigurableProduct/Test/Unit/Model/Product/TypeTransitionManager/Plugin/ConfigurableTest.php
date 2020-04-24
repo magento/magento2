@@ -47,7 +47,7 @@ class ConfigurableTest extends TestCase
         $this->model = new Configurable(
             $this->requestMock
         );
-        $this->productMock = $this->createPartialMock(Product::class, ['setTypeId', '__wakeup']);
+        $this->productMock = $this->createPartialMock(Product::class, ['setTypeId']);
         $this->subjectMock = $this->createMock(TypeTransitionManager::class);
         $this->closureMock = function () {
             return 'Expected';
@@ -62,8 +62,8 @@ class ConfigurableTest extends TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue('not_empty_attribute_data')
+        )->willReturn(
+            'not_empty_attribute_data'
         );
         $this->productMock->expects(
             $this->once()
@@ -83,8 +83,8 @@ class ConfigurableTest extends TestCase
             'getParam'
         )->with(
             'attributes'
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);

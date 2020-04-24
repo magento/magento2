@@ -50,7 +50,7 @@ class ConfigurableTest extends TestCase
     {
         $this->itemMock = $this->createPartialMock(
             Item::class,
-            ['getProductType', 'getProductOptions', '__wakeup']
+            ['getProductType', 'getProductOptions']
         );
         $this->closureMock = function () {
             return 'Expected';
@@ -69,15 +69,15 @@ class ConfigurableTest extends TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->will(
-            $this->returnValue(['simple_name' => 'simpleName'])
+        )->willReturn(
+            ['simple_name' => 'simpleName']
         );
         $this->assertEquals(
             'simpleName',
@@ -87,7 +87,7 @@ class ConfigurableTest extends TestCase
 
     public function testAroundGetNameIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
+        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',
@@ -101,15 +101,15 @@ class ConfigurableTest extends TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->will(
-            $this->returnValue(['simple_sku' => 'simpleName'])
+        )->willReturn(
+            ['simple_sku' => 'simpleName']
         );
         $this->assertEquals(
             'simpleName',
@@ -119,7 +119,7 @@ class ConfigurableTest extends TestCase
 
     public function testAroundGetSkuIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
+        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',
@@ -133,22 +133,22 @@ class ConfigurableTest extends TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->will(
-            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        )->willReturn(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->will(
-            $this->returnValue(['simple_sku' => 'simpleName'])
+        )->willReturn(
+            ['simple_sku' => 'simpleName']
         );
         $this->productFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->productMock)
+        )->willReturn(
+            $this->productMock
         );
         $this->productMock->expects(
             $this->once()
@@ -156,8 +156,8 @@ class ConfigurableTest extends TestCase
             'getIdBySku'
         )->with(
             'simpleName'
-        )->will(
-            $this->returnValue('id')
+        )->willReturn(
+            'id'
         );
         $this->assertEquals(
             'id',
@@ -167,7 +167,7 @@ class ConfigurableTest extends TestCase
 
     public function testAroundGetProductIdIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
+        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',

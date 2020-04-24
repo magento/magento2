@@ -53,9 +53,9 @@ class PluginTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createPartialMock(
             Configurable::class,
-            ['getSelectedAttributesInfo', '__wakeup']
+            ['getSelectedAttributesInfo']
         );
-        $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->closureMock = function () {
             return ['options'];
         };
@@ -69,15 +69,15 @@ class PluginTest extends TestCase
             $this->once()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue(Configurable::TYPE_CODE)
+        )->willReturn(
+            Configurable::TYPE_CODE
         );
         $this->productMock->expects(
             $this->once()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->typeInstanceMock)
+        )->willReturn(
+            $this->typeInstanceMock
         );
         $this->typeInstanceMock->expects(
             $this->once()
@@ -85,8 +85,8 @@ class PluginTest extends TestCase
             'getSelectedAttributesInfo'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue(['attributes'])
+        )->willReturn(
+            ['attributes']
         );
         $this->assertEquals(
             ['attributes', 'options'],
@@ -96,7 +96,7 @@ class PluginTest extends TestCase
 
     public function testAroundGetOptionsWhenProductTypeIsSimple()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('simple'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('simple');
         $this->productMock->expects($this->never())->method('getTypeInstance');
         $this->assertEquals(
             ['options'],
