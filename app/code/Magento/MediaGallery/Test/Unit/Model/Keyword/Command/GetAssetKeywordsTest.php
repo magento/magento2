@@ -56,7 +56,7 @@ class GetAssetKeywordsTest extends TestCase
     /**
      * Posive test for the main case
      *
-     * @dataProvider casesProvider()
+     * @dataProvider casesProvider
      * @param array $databaseQueryResult
      * @param int $expectedNumberOfFoundKeywords
      */
@@ -81,8 +81,17 @@ class GetAssetKeywordsTest extends TestCase
     {
         return [
             'not_found' => [[],0],
-            'find_one_keyword' => [['keywordRawData'],1],
-            'find_several_keywords' => [['keywordRawData', 'keywordRawData'],2],
+            'find_one_keyword' => [
+                'result' => [['id' => 1, 'keyword' => 'keywordRawData']],
+                'expectedCount' => 1
+            ],
+            'find_several_keywords' => [
+                'results' => [
+                    ['id' => 1, 'keyword'=> 'keywordRawData'],
+                    ['id' => 2, 'keyword' => 'keywordRawData']
+                ],
+                'expectedCount' => 2
+            ],
         ];
     }
 
