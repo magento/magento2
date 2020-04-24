@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Order\Admin\Item\Plugin;
 
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurableTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable
+     * @var Configurable
      */
     protected $configurable;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $itemMock;
 
@@ -28,28 +37,28 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
         $this->itemMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
+            Item::class,
             ['getProductType', 'getProductOptions', '__wakeup']
         );
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->productMock = $this->createMock(Product::class);
         $this->subjectMock = $this->createMock(\Magento\Sales\Model\Order\Admin\Item::class);
-        $this->configurable = new \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable(
+        $this->configurable = new Configurable(
             $this->productFactoryMock
         );
     }
@@ -60,15 +69,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->willReturn(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        )->will(
+            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->willReturn(
-            ['simple_name' => 'simpleName']
+        )->will(
+            $this->returnValue(['simple_name' => 'simpleName'])
         );
         $this->assertEquals(
             'simpleName',
@@ -78,7 +87,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetNameIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
+        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',
@@ -92,15 +101,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->willReturn(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        )->will(
+            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->willReturn(
-            ['simple_sku' => 'simpleName']
+        )->will(
+            $this->returnValue(['simple_sku' => 'simpleName'])
         );
         $this->assertEquals(
             'simpleName',
@@ -110,7 +119,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetSkuIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
+        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',
@@ -124,22 +133,22 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getProductType'
-        )->willReturn(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        )->will(
+            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
         );
         $this->itemMock->expects(
             $this->once()
         )->method(
             'getProductOptions'
-        )->willReturn(
-            ['simple_sku' => 'simpleName']
+        )->will(
+            $this->returnValue(['simple_sku' => 'simpleName'])
         );
         $this->productFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->willReturn(
-            $this->productMock
+        )->will(
+            $this->returnValue($this->productMock)
         );
         $this->productMock->expects(
             $this->once()
@@ -147,8 +156,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'getIdBySku'
         )->with(
             'simpleName'
-        )->willReturn(
-            'id'
+        )->will(
+            $this->returnValue('id')
         );
         $this->assertEquals(
             'id',
@@ -158,7 +167,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundGetProductIdIfProductIsSimple()
     {
-        $this->itemMock->expects($this->once())->method('getProductType')->willReturn('simple');
+        $this->itemMock->expects($this->once())->method('getProductType')->will($this->returnValue('simple'));
         $this->itemMock->expects($this->never())->method('getProductOptions');
         $this->assertEquals(
             'Expected',

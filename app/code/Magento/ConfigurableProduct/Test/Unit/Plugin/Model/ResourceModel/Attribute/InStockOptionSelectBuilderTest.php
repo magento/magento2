@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel\Attribute;
 
@@ -11,8 +12,10 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilde
 use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
+class InStockOptionSelectBuilderTest extends TestCase
 {
     /**
      * @var InStockOptionSelectBuilder
@@ -23,9 +26,9 @@ class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
      * @var ObjectManager
      */
     private $objectManagerHelper;
-    
+
     /**
-     * @var Status|\PHPUnit\Framework\MockObject\MockObject
+     * @var Status|MockObject
      */
     private $stockStatusResourceMock;
 
@@ -35,10 +38,10 @@ class InStockOptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $optionSelectBuilderMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
-    
+
     protected function setUp(): void
     {
         $this->stockStatusResourceMock = $this->getMockBuilder(Status::class)

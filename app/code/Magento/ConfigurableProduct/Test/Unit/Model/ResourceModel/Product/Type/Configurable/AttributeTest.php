@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type\Configurable;
 
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as AttributeModel;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
-    /** @var  \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  MockObject */
     protected $connection;
 
     /**
@@ -27,21 +34,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit\Framework\MockObject\MockObject
+     * @var Relation|MockObject
      */
     protected $relation;
 
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)->getMock();
 
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -66,7 +73,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $select,
             [
                 'product_super_attribute_id' => $attributeId,
-                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                'store_id' => Store::DEFAULT_STORE_ID,
             ]
         )->willReturn(0);
 
@@ -101,7 +108,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $select,
             [
                 'product_super_attribute_id' => $attributeId,
-                'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                'store_id' => Store::DEFAULT_STORE_ID,
             ]
         )->willReturn(1);
 

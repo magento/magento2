@@ -17,11 +17,12 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CommonTaxCollector plugin
  */
-class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
+class CommonTaxCollectorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -36,9 +37,9 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->commonTaxCollectorPlugin = $this->objectManager->getObject(CommonTaxCollectorPlugin::class);
     }
 
@@ -77,11 +78,11 @@ class CommonTaxCollectorTest extends \PHPUnit\Framework\TestCase
         $quoteItemMock->method('getChildren')->willReturn([$childQuoteItemMock]);
 
         /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
-        $taxClassObjectMock = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
+        $taxClassObjectMock = $this->createMock(TaxClassKeyInterface::class);
         $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId);
 
         /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
-        $quoteDetailsItemMock = $this->getMockForAbstractClass(QuoteDetailsItemInterface::class);
+        $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
         $quoteDetailsItemMock->method('getTaxClassKey')->willReturn($taxClassObjectMock);
 
         $this->commonTaxCollectorPlugin->afterMapItem(
