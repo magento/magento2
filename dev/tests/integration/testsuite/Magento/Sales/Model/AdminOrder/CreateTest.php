@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
+use Magento\Backend\Model\Auth;
 use Magento\Backend\Model\Session\Quote as SessionQuote;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -42,11 +43,21 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var Auth
+     */
+    private $auth;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
         $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->auth = $this->objectManager->create(Auth::class);
+        $this->auth->login(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
     }
 
     /**
