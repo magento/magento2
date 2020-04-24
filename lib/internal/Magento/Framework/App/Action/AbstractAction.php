@@ -1,7 +1,5 @@
 <?php
 /**
- * Abstract redirect/forward action class
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,10 +9,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**
+ * Abstract redirect/forward action class
+ *
  * @deprecated Use \Magento\Framework\App\ActionInterface
  * @see https://community.magento.com/t5/Magento-DevBlog/Decomposition-of-Magento-Controllers/ba-p/430883
  */
-abstract class AbstractAction implements ActionInterface
+abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
 {
     /**
      * @var \Magento\Framework\App\RequestInterface
