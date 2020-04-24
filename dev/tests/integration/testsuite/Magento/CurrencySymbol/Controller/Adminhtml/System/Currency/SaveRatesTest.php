@@ -36,15 +36,6 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     }
 
     /**
-     * Tear down
-     */
-    protected function tearDown(): void
-    {
-        $this->_model = null;
-        parent::tearDown();
-    }
-
-    /**
      * Test save action
      *
      * @magentoDbIsolation enabled
@@ -66,7 +57,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('All valid rates have been saved.')),
+            $this->containsEqual((string)__('All valid rates have been saved.')),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
 
@@ -99,7 +90,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 $this->escaper->escapeHtml(
                     (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
                 )

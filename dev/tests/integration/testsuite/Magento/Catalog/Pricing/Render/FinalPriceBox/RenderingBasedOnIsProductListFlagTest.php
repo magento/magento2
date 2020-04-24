@@ -73,7 +73,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     public function testRenderingByDefault()
     {
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99', $html);
         $this->assertGreaterThanOrEqual(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
@@ -103,7 +103,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99', $html);
         $this->assertGreaterThanOrEqual(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(

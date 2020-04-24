@@ -115,7 +115,7 @@ class IndexTest extends AbstractBackendController
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     /**
@@ -127,7 +127,7 @@ class IndexTest extends AbstractBackendController
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**
@@ -161,7 +161,7 @@ class IndexTest extends AbstractBackendController
         $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid"', $body);
+        $this->assertStringContainsString('<div id="customer_cart_grid"', $body);
     }
 
     /**

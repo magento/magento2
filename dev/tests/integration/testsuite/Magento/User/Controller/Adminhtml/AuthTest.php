@@ -23,7 +23,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->dispatch('backend/admin/auth/forgotpassword');
         $expected = 'Password Help';
-        $this->assertContains($expected, $this->getResponse()->getBody());
+        $this->assertStringContainsString($expected, $this->getResponse()->getBody());
     }
 
     /**

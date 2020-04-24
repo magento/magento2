@@ -55,9 +55,9 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->_block->toHtml();
         $attributeLabel = $this->_model->getStoreLabel();
-        $this->assertContains('<span>' . $attributeLabel . '</span>', $html);
-        $this->assertContains('<option value="1">Male</option>', $html);
-        $this->assertContains('<option value="2">Female</option>', $html);
-        $this->assertContains('<option value="3">Not Specified</option>', $html);
+        $this->assertStringContainsString('<span>' . $attributeLabel . '</span>', $html);
+        $this->assertStringContainsString('<option value="1">Male</option>', $html);
+        $this->assertStringContainsString('<option value="2">Female</option>', $html);
+        $this->assertStringContainsString('<option value="3">Not Specified</option>', $html);
     }
 }

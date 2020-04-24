@@ -121,7 +121,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             'link_type' => 'file',
             'link_file' => '/j/e/jellyfish_2_4.jpg',
             'number_of_downloads' => '15',
-            'price' => '15.0000',
+            'price' => 15,
             'sample_type' => 'file',
             'sort_order' => '1',
             'title' => 'Updated downloadable link #1',
@@ -251,7 +251,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->get(\Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class);
         $allLinksIds = $linksFactory->create()->addProductToFilter($product->getEntityId())->getAllIds();
         $this->assertEquals(
-            '{"qty":23,"links":["' . implode('","', $allLinksIds). '"]}',
+            '{"qty":23,"links":["' . implode('","', $allLinksIds) . '"]}',
             $product->getCustomOption('info_buyRequest')->getValue()
         );
     }

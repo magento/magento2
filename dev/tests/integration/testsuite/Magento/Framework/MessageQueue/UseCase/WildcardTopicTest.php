@@ -35,10 +35,10 @@ class WildcardTopicTest extends QueueTestCaseAbstract
 
         $this->assertFileExists($this->logFilePath, "No handlers invoked (log file was not created).");
         foreach ($nonMatchingQueues as $queueName) {
-            $this->assertNotContains($queueName, file_get_contents($this->logFilePath));
+            $this->assertStringNotContainsString($queueName, file_get_contents($this->logFilePath));
         }
         foreach ($matchingQueues as $queueName) {
-            $this->assertContains($queueName, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($queueName, file_get_contents($this->logFilePath));
         }
     }
 
@@ -71,7 +71,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
      */
     private function generateTestObject()
     {
-        $testObject = $this->objectManager->create(AsyncTestData::class);
+        $testObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
         $testObject->setValue('||Message Contents||');
         $testObject->setTextFilePath($this->logFilePath);
         return $testObject;

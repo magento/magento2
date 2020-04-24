@@ -80,7 +80,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
 
         $actualOutput = $this->commandTester->getDisplay();
 
-        $this->assertContains($expectedOutput, $actualOutput);
+        $this->assertStringContainsString($expectedOutput, $actualOutput);
 
         static::assertEquals(
             Cli::RETURN_SUCCESS,
@@ -135,7 +135,7 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
 
         $actualOutput = $this->commandTester->getDisplay();
 
-        $this->assertContains($expectedOutput, $actualOutput);
+        $this->assertStringContainsString($expectedOutput, $actualOutput);
 
         static::assertEquals(
             Cli::RETURN_SUCCESS,

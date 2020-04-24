@@ -45,7 +45,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             // filter empty values
             $elementPathParts = array_values(array_filter($elementPathParts));
             foreach ($elementPathParts as $elementPathPart) {
-                $this->assertContains($elementPathPart, $searchResults[$itemIndex]['url'], 'Item URL is invalid.');
+                $this->assertStringContainsString(
+                    $elementPathPart,
+                    $searchResults[$itemIndex]['url'],
+                    'Item URL is invalid.'
+                );
             }
             unset($searchResults[$itemIndex]['url']);
 
@@ -93,7 +97,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             \Magento\Config\Model\Config\Structure\Data::class,
             ['reader' => $structureReader]
         );
-        /** @var \Magento\Config\Model\Config\Structure $structure  */
+        /** @var \Magento\Config\Model\Config\Structure $structure */
         $structure = $objectManager->create(
             \Magento\Config\Model\Config\Structure::class,
             ['structureData' => $structureData]
@@ -115,15 +119,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Field',
                 [
                     [
-                        'id'          => 'test_section/test_group/test_field_1',
-                        'type'        => null,
-                        'name'        => 'Test Field',
+                        'id' => 'test_section/test_group/test_field_1',
+                        'type' => null,
+                        'name' => 'Test Field',
                         'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                     [
-                        'id'          => 'test_section/test_group/test_field_2',
-                        'type'        => null,
-                        'name'        => 'Test Field',
+                        'id' => 'test_section/test_group/test_field_2',
+                        'type' => null,
+                        'name' => 'Test Field',
                         'description' => ' / Test Tab / Test Section / Test Group',
                     ],
                 ],
@@ -132,9 +136,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Group',
                 [
                     [
-                        'id'          => 'test_section/test_group',
-                        'type'        => null,
-                        'name'        => 'Test Group',
+                        'id' => 'test_section/test_group',
+                        'type' => null,
+                        'name' => 'Test Group',
                         'description' => ' / Test Tab / Test Section',
                     ],
                 ],
@@ -143,9 +147,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'Test Section',
                 [
                     [
-                        'id'          => '/test_section',
-                        'type'        => null,
-                        'name'        => 'Test Section',
+                        'id' => '/test_section',
+                        'type' => null,
+                        'name' => 'Test Section',
                         'description' => ' / Test Tab',
                     ],
                 ],

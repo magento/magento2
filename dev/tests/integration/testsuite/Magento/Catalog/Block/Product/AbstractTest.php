@@ -123,7 +123,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
         $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
-        $this->assertContains('review', $html);
+        $this->assertStringContainsString('review', $html);
     }
 
     public function testGetProduct()

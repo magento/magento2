@@ -8,30 +8,13 @@ declare(strict_types=1);
 namespace Magento\Review\Controller\Adminhtml\Customer;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test for customer product reviews page.
- *
- * @magentoAppArea adminhtml
  */
 class ProductReviewsTest extends AbstractBackendController
 {
-    /** @var LayoutInterface  */
-    private $layout;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->layout = $this->_objectManager->get(LayoutInterface::class);
-    }
-
     /**
      * Check Customer product review action.
      *
@@ -40,36 +23,9 @@ class ProductReviewsTest extends AbstractBackendController
      */
     public function testProductReviewsAction(): void
     {
-        $this->dispatchWithIdParam(1);
-        $this->assertContains('<div id="reviewGrid"', $this->getResponse()->getBody());
-    }
-
-    /**
-     * @return void
-     */
-    public function testProductReviews(): void
-    {
-        $customerId = 1;
-        $this->dispatchWithIdParam($customerId);
-        $block = $this->layout->getBlock('admin.customer.reviews');
-        $this->assertNotFalse($block);
-        $this->assertEquals(
-            $customerId,
-            $block->getCustomerId(),
-            'Block customer id value does not match expected value'
-        );
-    }
-
-    /**
-     * Dispatch request with id parameter
-     *
-     * @param int $id
-     * @return void
-     */
-    private function dispatchWithIdParam(int $id): void
-    {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setParams(['id' => $id]);
+        $this->getRequest()->setPostValue(['id' => 1])->setMethod(Http::METHOD_POST);
         $this->dispatch('backend/review/customer/productReviews');
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<div id="reviewGrid"', $body);
     }
 }

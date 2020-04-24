@@ -59,16 +59,16 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/circular.csv');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"Circular dependencies:","Total number of chains"' . PHP_EOL . ',2' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains('"Circular dependencies for each module:",' . PHP_EOL, $fileContents);
-        $this->assertContains(
+        $this->assertStringContainsString('"Circular dependencies for each module:",' . PHP_EOL, $fileContents);
+        $this->assertStringContainsString(
             'magento/module-a,1' . PHP_EOL . 'magento/module-a->magento/module-b->magento/module-a' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'magento/module-b,1' . PHP_EOL . 'magento/module-b->magento/module-a->magento/module-b' . PHP_EOL,
             $fileContents
         );
