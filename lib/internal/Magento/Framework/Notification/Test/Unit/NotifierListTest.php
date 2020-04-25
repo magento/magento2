@@ -42,9 +42,7 @@ class NotifierListTest extends TestCase
         );
         $this->expectException('InvalidArgumentException');
         $result = $notifierList->asArray();
-        foreach ($result as $notifier) {
-            $this->assertInstanceOf(NotifierInterface::class, $notifier);
-        }
+        $this->assertContainsOnlyInstancesOf(NotifierInterface::class, $result);
     }
 
     public function testAsArrayException()

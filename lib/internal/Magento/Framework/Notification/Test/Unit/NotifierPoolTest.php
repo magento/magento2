@@ -37,7 +37,7 @@ class NotifierPoolTest extends TestCase
         $notifier2 = $this->createMock(NotifierPool::class);
         $this->notifiers = [$notifier1, $notifier2];
         $this->notifierList = $this->createMock(NotifierList::class);
-        $this->notifierList->expects($this->any())->method('asArray')->will($this->returnValue($this->notifiers));
+        $this->notifierList->expects($this->any())->method('asArray')->willReturn($this->notifiers);
         $this->notifierPool = $this->objectManagerHelper->getObject(
             NotifierPool::class,
             [
