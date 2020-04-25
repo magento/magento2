@@ -60,30 +60,34 @@ class AggregatedTest extends TestCase
      * Setup tests
      * @return void
      */
-    public function setup(): void
+    protected function setup(): void
     {
         $this->fileListFactoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->fileListMock = $this->getMockBuilder(FileList::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->fileListFactoryMock->expects($this->any())->method('create')
-            ->will($this->returnValue($this->fileListMock));
+            ->willReturn($this->fileListMock);
         $this->libraryFilesMock = $this->getMockBuilder(CollectorInterface::class)
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $this->baseFilesMock = $this->getMockBuilder(CollectorInterface::class)->getMock();
+        $this->baseFilesMock = $this->getMockBuilder(CollectorInterface::class)
+            ->getMock();
         $this->overriddenBaseFilesMock = $this->getMockBuilder(CollectorInterface::class)
             ->getMock();
-        $this->themeMock = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $this->themeMock = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
     }
 
     public function testGetFilesEmpty()
     {
-        $this->libraryFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
-        $this->baseFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
-        $this->overriddenBaseFilesMock->expects($this->any())->method('getFiles')->will($this->returnValue([]));
+        $this->libraryFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
+        $this->baseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
+        $this->overriddenBaseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
 
         $aggregated = new Aggregated(
             $this->fileListFactoryMock,
@@ -93,8 +97,8 @@ class AggregatedTest extends TestCase
             $this->loggerMock
         );
 
-        $this->themeMock->expects($this->any())->method('getInheritedThemes')->will($this->returnValue([]));
-        $this->themeMock->expects($this->any())->method('getCode')->will($this->returnValue('theme_code'));
+        $this->themeMock->expects($this->any())->method('getInheritedThemes')->willReturn([]);
+        $this->themeMock->expects($this->any())->method('getCode')->willReturn('theme_code');
 
         $this->loggerMock->expects($this->once())
             ->method('notice')
@@ -115,24 +119,24 @@ class AggregatedTest extends TestCase
      */
     public function testGetFiles($libraryFiles, $baseFiles, $themeFiles)
     {
-        $this->fileListMock->expects($this->at(0))->method('add')->with($this->equalTo($libraryFiles));
-        $this->fileListMock->expects($this->at(1))->method('add')->with($this->equalTo($baseFiles));
-        $this->fileListMock->expects($this->any())->method('getAll')->will($this->returnValue(['returnedFile']));
+        $this->fileListMock->expects($this->at(0))->method('add')->with($libraryFiles);
+        $this->fileListMock->expects($this->at(1))->method('add')->with($baseFiles);
+        $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
         $this->libraryFilesMock->expects($this->atLeastOnce())
             ->method('getFiles')
             ->with($this->themeMock, $subPath)
-            ->will($this->returnValue($libraryFiles));
+            ->willReturn($libraryFiles);
 
         $this->baseFilesMock->expects($this->atLeastOnce())
             ->method('getFiles')
             ->with($this->themeMock, $subPath)
-            ->will($this->returnValue($baseFiles));
+            ->willReturn($baseFiles);
 
         $this->overriddenBaseFilesMock->expects($this->any())
             ->method('getFiles')
-            ->will($this->returnValue($themeFiles));
+            ->willReturn($themeFiles);
 
         $aggregated = new Aggregated(
             $this->fileListFactoryMock,
@@ -142,9 +146,10 @@ class AggregatedTest extends TestCase
             $this->loggerMock
         );
 
-        $inheritedThemeMock = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $inheritedThemeMock = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
-            ->will($this->returnValue([$inheritedThemeMock]));
+            ->willReturn([$inheritedThemeMock]);
 
         $this->assertEquals(['returnedFile'], $aggregated->getFiles($this->themeMock, $subPath));
     }

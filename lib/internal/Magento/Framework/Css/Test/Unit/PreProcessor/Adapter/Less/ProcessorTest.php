@@ -84,7 +84,7 @@ class ProcessorTest extends TestCase
     public function testProcessContentException()
     {
         $this->expectException('Magento\Framework\View\Asset\ContentProcessorException');
-        $this->expectExceptionMessageRegExp('(Test exception)');
+        $this->expectExceptionMessageMatches('(Test exception)');
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())
@@ -115,7 +115,7 @@ class ProcessorTest extends TestCase
     public function testProcessContentEmpty()
     {
         $this->expectException('Magento\Framework\View\Asset\ContentProcessorException');
-        $this->expectExceptionMessageRegExp('(Compilation from source: LESS file is empty: test-path)');
+        $this->expectExceptionMessageMatches('(Compilation from source: LESS file is empty: test-path)');
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())

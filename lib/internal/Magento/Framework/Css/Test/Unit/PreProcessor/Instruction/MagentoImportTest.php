@@ -70,7 +70,7 @@ class MagentoImportTest extends TestCase
             ErrorHandlerInterface::class
         );
         $this->asset = $this->createMock(File::class);
-        $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
+        $this->asset->expects($this->any())->method('getContentType')->willReturn('css');
         $this->assetRepo = $this->createMock(Repository::class);
         $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
         $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
@@ -97,30 +97,30 @@ class MagentoImportTest extends TestCase
         $relatedAsset = $this->createMock(File::class);
         $relatedAsset->expects($this->once())
             ->method('getFilePath')
-            ->will($this->returnValue($resolvedPath));
+            ->willReturn($resolvedPath);
         $context = $this->createMock(FallbackContext::class);
         $this->assetRepo->expects($this->once())
             ->method('createRelated')
             ->with($foundPath, $this->asset)
-            ->will($this->returnValue($relatedAsset));
-        $relatedAsset->expects($this->once())->method('getContext')->will($this->returnValue($context));
+            ->willReturn($relatedAsset);
+        $relatedAsset->expects($this->once())->method('getContext')->willReturn($context);
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
+        $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->willReturn($theme);
         $files = [];
         foreach ($foundFiles as $file) {
             $fileObject = $this->createMock(\Magento\Framework\View\File::class);
             $fileObject->expects($this->any())
                 ->method('getModule')
-                ->will($this->returnValue($file['module']));
+                ->willReturn($file['module']);
             $fileObject->expects($this->any())
                 ->method('getFilename')
-                ->will($this->returnValue($file['filename']));
+                ->willReturn($file['filename']);
             $files[] = $fileObject;
         }
         $this->fileSource->expects($this->once())
             ->method('getFiles')
             ->with($theme, $resolvedPath)
-            ->will($this->returnValue($files));
+            ->willReturn($files);
         $this->object->process($chain);
         $this->assertEquals($expectedContent, $chain->getContent());
         $this->assertEquals('css', $chain->getContentType());
@@ -199,7 +199,7 @@ class MagentoImportTest extends TestCase
         $exception = new \LogicException('Error happened');
         $this->assetRepo->expects($this->once())
             ->method('createRelated')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
         $this->errorHandler->expects($this->once())
             ->method('processException')
             ->with($exception);
