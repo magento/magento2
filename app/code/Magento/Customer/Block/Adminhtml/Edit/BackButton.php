@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 class BackButton extends GenericButton implements ButtonProviderInterface
 {
     /**
+     * Get Button Data
+     *
      * @return array
      */
     public function getButtonData()
@@ -32,6 +34,12 @@ class BackButton extends GenericButton implements ButtonProviderInterface
      */
     public function getBackUrl()
     {
+        if ($this->context->getRequest()->getparam('review_id')) {
+            return $this->getUrl(
+                'review/product/edit',
+                ['id' => $this->context->getRequest()->getparam('review_id')]
+            );
+        }
         return $this->getUrl('*/*/');
     }
 }
