@@ -86,8 +86,8 @@ class AttributeMergerTest extends TestCase
             'provider',
             'dataScope',
             ['field' => [
-                    'validation' => ['length' => true]
-                ]
+                'validation' => ['length' => true]
+            ]
             ]
         );
 

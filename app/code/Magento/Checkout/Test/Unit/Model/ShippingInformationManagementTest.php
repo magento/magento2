@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
@@ -30,7 +31,7 @@ use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -134,43 +135,43 @@ class ShippingInformationManagementTest extends TestCase
         );
         $this->cartTotalsRepositoryMock = $this->getMockForAbstractClass(CartTotalRepositoryInterface::class);
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
-        $this->shippingAddressMock = $this->createPartialMock(
-            Address::class,
-            [
-                'getSaveInAddressBook',
-                'getSameAsBilling',
-                'getCustomerAddressId',
-                'setShippingAddress',
-                'getShippingAddress',
-                'setSaveInAddressBook',
-                'setSameAsBilling',
-                'setCollectShippingRates',
-                'getCountryId',
-                'importCustomerAddressData',
-                'save',
-                'getShippingRateByCode',
-                'getShippingMethod',
-                'setLimitCarrier'
-            ]
-        );
+        $this->shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['setShippingAddress', 'getShippingAddress', 'setCollectShippingRates', 'setLimitCarrier'])
+            ->onlyMethods(
+                [
+                    'getSaveInAddressBook',
+                    'getSameAsBilling',
+                    'getCustomerAddressId',
+                    'setSaveInAddressBook',
+                    'setSameAsBilling',
+                    'getCountryId',
+                    'importCustomerAddressData',
+                    'save',
+                    'getShippingRateByCode',
+                    'getShippingMethod'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'isVirtual',
-                'getItemsCount',
-                'getIsMultiShipping',
-                'setIsMultiShipping',
-                'validateMinimumAmount',
-                'getStoreId',
-                'setShippingAddress',
-                'getShippingAddress',
-                'collectTotals',
-                'getExtensionAttributes',
-                'setExtensionAttributes',
-                'setBillingAddress'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getIsMultiShipping', 'setIsMultiShipping'])
+            ->onlyMethods(
+                [
+                    'isVirtual',
+                    'getItemsCount',
+                    'validateMinimumAmount',
+                    'getStoreId',
+                    'setShippingAddress',
+                    'getShippingAddress',
+                    'collectTotals',
+                    'getExtensionAttributes',
+                    'setExtensionAttributes',
+                    'setBillingAddress'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->shippingAssignmentFactoryMock = $this->createPartialMock(
             ShippingAssignmentFactory::class,
@@ -237,10 +238,9 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn(null);
         $this->shippingAddressMock->expects($this->once())
             ->method('setLimitCarrier');
-        $this->cartExtensionMock = $this->createPartialMock(
-            CartExtension::class,
-            ['getShippingAssignments', 'setShippingAssignments']
-        );
+        $this->cartExtensionMock = $this->getMockBuilder(CartExtension::class)
+            ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
+            ->getMock();
         $this->cartExtensionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->cartExtensionMock);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
@@ -105,34 +106,34 @@ class CartTest extends TestCase
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
+            ->setMethods(['getStockItem'])
             ->getMock();
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
-            ['getMinSaleQty', '__wakeup']
+            ['getMinSaleQty']
         );
         $this->stockState = $this->createPartialMock(
             StockState::class,
-            ['suggestQty', '__wakeup']
+            ['suggestQty']
         );
         $this->storeMock =
-            $this->createPartialMock(Store::class, ['getWebsiteId', 'getId', '__wakeup']);
+            $this->createPartialMock(Store::class, ['getWebsiteId', 'getId']);
         $this->requestInfoFilterMock = $this->createMock(
             RequestInfoFilterInterface::class
         );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
         $this->storeMock->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->storeMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cart = $this->objectManagerHelper->getObject(
@@ -158,23 +159,23 @@ class CartTest extends TestCase
         $data = [[] , ['qty' => -2], ['qty' => 3], ['qty' => 3.5], ['qty' => 5], ['qty' => 4]];
         $this->quoteMock->expects($this->any())
             ->method('getItemById')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [2, $this->prepareQuoteItemMock(2)],
                 [3, $this->prepareQuoteItemMock(3)],
                 [4, $this->prepareQuoteItemMock(4)],
                 [5, $this->prepareQuoteItemMock(5)],
-            ]));
+            ]);
 
         $this->stockState->expects($this->at(0))
             ->method('suggestQty')
-            ->will($this->returnValue(3.0));
+            ->willReturn(3.0);
         $this->stockState->expects($this->at(1))
             ->method('suggestQty')
-            ->will($this->returnValue(3.5));
+            ->willReturn(3.5);
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
 
         $this->assertSame(
             [
@@ -199,7 +200,7 @@ class CartTest extends TestCase
 
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
             'checkout_cart_update_items_before',
             ['cart' => $this->cart, 'info' => $infoDataObject]
@@ -219,41 +220,41 @@ class CartTest extends TestCase
      */
     public function prepareQuoteItemMock($itemId)
     {
-        $store = $this->createPartialMock(Store::class, ['getId', '__wakeup', 'getWebsiteId']);
+        $store = $this->createPartialMock(Store::class, ['getId', 'getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $store->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         switch ($itemId) {
             case 2:
                 $product = $this->createPartialMock(
                     Product::class,
-                    ['getStore', 'getId', '__wakeup']
+                    ['getStore', 'getId']
                 );
                 $product->expects($this->once())
                     ->method('getId')
-                    ->will($this->returnValue(4));
+                    ->willReturn(4);
                 $product->expects($this->once())
                     ->method('getStore')
-                    ->will($this->returnValue($store));
+                    ->willReturn($store);
                 break;
             case 3:
                 $product = $this->createPartialMock(
                     Product::class,
-                    ['getStore', 'getId', '__wakeup']
+                    ['getStore', 'getId']
                 );
                 $product->expects($this->once())
                     ->method('getId')
-                    ->will($this->returnValue(5));
+                    ->willReturn(5);
                 $product->expects($this->once())
                     ->method('getStore')
-                    ->will($this->returnValue($store));
+                    ->willReturn($store);
                 break;
             case 4:
                 $product = false;
@@ -265,7 +266,7 @@ class CartTest extends TestCase
         $quoteItem = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
         $quoteItem->expects($this->once())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         return $quoteItem;
     }
 
@@ -279,19 +280,19 @@ class CartTest extends TestCase
         $itemsCount = 1;
         $quoteMock = $this->createPartialMock(
             Quote::class,
-            ['getItemsCount', 'getItemsQty', '__wakeup']
+            ['getItemsCount', 'getItemsQty']
         );
 
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->checkoutSessionMock->expects($this->at(2))->method('getQuoteId')->will($this->returnValue($quoteId));
-        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue(true));
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $this->checkoutSessionMock->expects($this->at(2))->method('getQuoteId')->willReturn($quoteId);
+        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with('checkout/cart_link/use_qty', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue($useQty));
+            ->willReturn($useQty);
 
         $qtyMethodName = ($useQty) ? 'getItemsQty' : 'getItemsCount';
-        $quoteMock->expects($this->once())->method($qtyMethodName)->will($this->returnValue($itemsCount));
+        $quoteMock->expects($this->once())->method($qtyMethodName)->willReturn($itemsCount);
 
         $this->assertEquals($itemsCount, $this->cart->getSummaryQty());
     }
@@ -318,23 +319,23 @@ class CartTest extends TestCase
     {
         $product = $this->createPartialMock(
             Product::class,
-            ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId', '__wakeup']
+            ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
         );
         $product->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $product->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue([10]));
+            ->willReturn([10]);
         $product->expects($this->any())
             ->method('getProductUrl')
-            ->will($this->returnValue('url'));
+            ->willReturn('url');
         $this->productRepository->expects($this->any())
             ->method('getById')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
             'checkout_cart_product_add_before',
@@ -342,11 +343,11 @@ class CartTest extends TestCase
         );
 
         $this->quoteMock->expects($this->once())
-        ->method('addProduct')
-        ->will($this->returnValue(1));
+            ->method('addProduct')
+            ->willReturn(1);
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
 
         $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
             'checkout_cart_product_add_after',
@@ -369,23 +370,23 @@ class CartTest extends TestCase
     {
         $product = $this->createPartialMock(
             Product::class,
-            ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId', '__wakeup']
+            ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
         );
         $product->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $product->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue([10]));
+            ->willReturn([10]);
         $product->expects($this->any())
             ->method('getProductUrl')
-            ->will($this->returnValue('url'));
+            ->willReturn('url');
         $this->productRepository->expects($this->any())
             ->method('getById')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with(
             'checkout_cart_product_add_before',
@@ -394,10 +395,10 @@ class CartTest extends TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
-            ->will($this->returnValue('error'));
+            ->willReturn('error');
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
 
         $this->expectException(LocalizedException::class);
         $this->cart->addProduct(4, 4);
@@ -412,17 +413,17 @@ class CartTest extends TestCase
     {
         $product = $this->createPartialMock(
             Product::class,
-            ['getWebsiteIds', 'getId', '__wakeup']
+            ['getWebsiteIds', 'getId']
         );
         $product->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $product->expects($this->any())
             ->method('getWebsiteIds')
-            ->will($this->returnValue([10]));
+            ->willReturn([10]);
         $this->productRepository->expects($this->any())
             ->method('getById')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $this->eventManagerMock->expects($this->never())->method('dispatch')->with(
             'checkout_cart_product_add_before',

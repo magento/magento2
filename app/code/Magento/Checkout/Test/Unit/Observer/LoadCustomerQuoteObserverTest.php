@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Checkout\Model\Session;
@@ -59,8 +61,8 @@ class LoadCustomerQuoteObserverTest extends TestCase
     public function testLoadCustomerQuoteThrowingException()
     {
         $exception = new \Exception('Message');
-        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->will(
-            $this->throwException($exception)
+        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->willThrowException(
+            $exception
         );
         $this->messageManager->expects($this->once())->method('addExceptionMessage')
             ->with($exception, 'Load customer quote error');

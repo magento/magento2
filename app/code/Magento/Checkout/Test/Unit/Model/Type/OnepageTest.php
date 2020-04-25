@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model\Type;
 
@@ -148,17 +149,19 @@ class OnepageTest extends TestCase
         $this->checkoutHelperMock = $this->createMock(Data::class);
         $this->customerUrlMock = $this->createMock(Url::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->checkoutSessionMock = $this->createPartialMock(
-            Session::class,
-            ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData']
-        );
+        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getLastOrderId'])
+            ->onlyMethods(['getQuote', 'setStepData', 'getStepData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSessionMock = $this->createPartialMock(
             \Magento\Customer\Model\Session::class,
             ['getCustomerDataObject', 'isLoggedIn']
         );
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->addressFactoryMock = $this->createMock(AddressFactory::class);
         $this->formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
         $this->customerFactoryMock = $this->createMock(CustomerFactory::class);
@@ -190,12 +193,13 @@ class OnepageTest extends TestCase
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             ExtensibleDataObjectConverter::class
-        )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
+        )->setMethods(['toFlatArray'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->extensibleDataObjectConverterMock
             ->expects($this->any())
             ->method('toFlatArray')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->onepage = $this->objectManagerHelper->getObject(
@@ -234,7 +238,7 @@ class OnepageTest extends TestCase
     public function testGetQuote()
     {
         $returnValue = 'ababagalamaga';
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($returnValue));
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($returnValue);
         $this->assertEquals($returnValue, $this->onepage->getQuote());
     }
 
@@ -258,23 +262,25 @@ class OnepageTest extends TestCase
             false
         );
         /** @var Quote|MockObject $quoteMock */
-        $quoteMock = $this->createPartialMock(Quote::class, [
-                'isMultipleShippingAddresses',
-                'removeAllAddresses',
-                'save',
-                'assignCustomer',
-                'getData',
-                'getCustomerId',
-                '__wakeup',
-                'getBillingAddress',
-                'setPasswordHash',
-                'getCheckoutMethod',
-                'isVirtual',
-                'getShippingAddress',
-                'getCustomerData',
-                'collectTotals',
-            ]);
-        $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->will($this->returnValue(true));
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getCustomerId', 'setPasswordHash', 'getCustomerData'])
+            ->onlyMethods(
+                [
+                    'isMultipleShippingAddresses',
+                    'removeAllAddresses',
+                    'save',
+                    'assignCustomer',
+                    'getData',
+                    'getBillingAddress',
+                    'getCheckoutMethod',
+                    'isVirtual',
+                    'getShippingAddress',
+                    'collectTotals'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->willReturn(true);
         $quoteMock->expects($this->once())->method('removeAllAddresses');
         $quoteMock->expects($this->once())->method('assignCustomer')->with($customer);
 
@@ -283,10 +289,10 @@ class OnepageTest extends TestCase
         $this->customerSessionMock
             ->expects($this->once())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customer));
-        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->checkoutSessionMock->expects($this->any())->method('getStepData')->will($this->returnValue($stepData));
+            ->willReturn($customer);
+        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $this->checkoutSessionMock->expects($this->any())->method('getStepData')->willReturn($stepData);
 
         if ($isSetStepDataCalled) {
             $this->checkoutSessionMock->expects($this->once())
@@ -316,19 +322,19 @@ class OnepageTest extends TestCase
      */
     public function testGetCheckoutMethod($isLoggedIn, $quoteCheckoutMethod, $isAllowedGuestCheckout, $expected)
     {
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn($isLoggedIn);
         /** @var Quote|MockObject $quoteMock */
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
         $quoteMock->expects($this->any())
             ->method('getCheckoutMethod')
-            ->will($this->returnValue($quoteCheckoutMethod));
+            ->willReturn($quoteCheckoutMethod);
 
         $this->checkoutHelperMock
             ->expects($this->any())
             ->method('isAllowedGuestCheckout')
-            ->will($this->returnValue($isAllowedGuestCheckout));
+            ->willReturn($isAllowedGuestCheckout);
 
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals($expected, $this->onepage->getCheckoutMethod());
@@ -352,8 +358,8 @@ class OnepageTest extends TestCase
     {
         $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
         /** @var Quote|MockObject $quoteMock */
-        $quoteMock = $this->createPartialMock(Quote::class, ['setCheckoutMethod', '__wakeup']);
-        $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->will($this->returnSelf());
+        $quoteMock = $this->createPartialMock(Quote::class, ['setCheckoutMethod']);
+        $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->willReturnSelf();
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $this->checkoutSessionMock->expects($this->once())->method('setStepData')->with('billing', 'allow', true);
         $this->onepage->setQuote($quoteMock);
@@ -365,14 +371,14 @@ class OnepageTest extends TestCase
         $orderIncrementId = 100001;
         $orderId = 1;
         $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $orderMock = $this->createPartialMock(
             Order::class,
-            ['load', 'getIncrementId', '__wakeup']
+            ['load', 'getIncrementId']
         );
-        $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
-        $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
-        $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));
+        $orderMock->expects($this->once())->method('load')->with($orderId)->willReturnSelf();
+        $orderMock->expects($this->once())->method('getIncrementId')->willReturn($orderIncrementId);
+        $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($orderMock);
         $this->assertEquals($orderIncrementId, $this->onepage->getLastOrderId());
     }
 }

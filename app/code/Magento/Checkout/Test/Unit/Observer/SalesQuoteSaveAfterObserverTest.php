@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Checkout\Model\Session;
@@ -38,10 +40,10 @@ class SalesQuoteSaveAfterObserverTest extends TestCase
     {
         $quoteId = 7;
         $observer = $this->createMock(Observer::class);
-        $observer->expects($this->once())->method('getEvent')->will(
-            $this->returnValue(new DataObject(
+        $observer->expects($this->once())->method('getEvent')->willReturn(
+            new DataObject(
                 ['quote' => new DataObject(['is_checkout_cart' => 1, 'id' => $quoteId])]
-            ))
+            )
         );
         $this->checkoutSession->expects($this->once())->method('setQuoteId')->with($quoteId);
 

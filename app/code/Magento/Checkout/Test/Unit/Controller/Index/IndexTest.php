@@ -29,8 +29,8 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Theme\Block\Html\Header;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMocker;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount as InvokedCount;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -130,10 +130,11 @@ class IndexTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock(ObjectManagerInterface::class);
         $this->data = $this->basicMock(Data::class);
-        $this->quote = $this->createPartialMock(
-            Quote::class,
-            ['getHasError', 'hasItems', 'validateMinimumAmount', 'hasError']
-        );
+        $this->quote = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getHasError', 'hasError'])
+            ->onlyMethods(['hasItems', 'validateMinimumAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock = $this->basicMock(Context::class);
         $this->session = $this->basicMock(Session::class);
         $this->onepageMock = $this->basicMock(Onepage::class);
@@ -186,7 +187,7 @@ class IndexTest extends TestCase
         ];
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($objectManagerReturns));
+            ->willReturnMap($objectManagerReturns);
         $this->basicStub($this->objectManagerMock, 'create')
             ->willReturn($this->basicMock(UrlInterface::class));
         // context stubs
@@ -219,8 +220,11 @@ class IndexTest extends TestCase
      * @param InvokedCount $expectedCall
      * @dataProvider sessionRegenerationDataProvider
      */
-    public function testRegenerateSessionIdOnExecute(bool $secure, string $referer, InvokedCount $expectedCall)
-    {
+    public function testRegenerateSessionIdOnExecute(
+        bool $secure,
+        ?string $referer,
+        \PHPUnit\Framework\MockObject\Rule\InvokedCount $expectedCall
+    ) {
         $this->data->method('canOnepageCheckout')
             ->willReturn(true);
         $this->quote->method('hasItems')
@@ -257,7 +261,7 @@ class IndexTest extends TestCase
             ],
             [
                 'secure' => true,
-                'referer' => false,
+                'referer' => null,
                 'expectedCall' => self::once()
             ],
             [
@@ -316,7 +320,7 @@ class IndexTest extends TestCase
      * @param string $className
      * @return MockObject
      */
-    private function basicMock(string $className): \PHPUnit\Framework\MockObject\MockObject
+    private function basicMock(string $className): MockObject
     {
         return $this->getMockBuilder($className)
             ->disableOriginalConstructor()

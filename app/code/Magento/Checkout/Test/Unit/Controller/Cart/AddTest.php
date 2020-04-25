@@ -54,17 +54,21 @@ class AddTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->formKeyValidator = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactory =
             $this->getMockBuilder(RedirectFactory::class)
-                ->disableOriginalConstructor()->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()->getmock();
+            ->disableOriginalConstructor()
+            ->getmock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cartAdd = $this->objectManagerHelper->getObject(

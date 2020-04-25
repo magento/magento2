@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
@@ -70,7 +71,8 @@ class PaymentInformationManagementTest extends TestCase
         $this->cartManagementMock = $this->createMock(CartManagementInterface::class);
 
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)->getMock();
+        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
+            ->getMock();
         $this->model = $objectManager->getObject(
             PaymentInformationManagement::class,
             [
@@ -211,10 +213,11 @@ class PaymentInformationManagementTest extends TestCase
         $quoteBillingAddress = $this->createMock(Address::class);
         $shippingRate = $this->createPartialMock(Rate::class, []);
         $shippingRate->setCarrier('flatrate');
-        $quoteShippingAddress = $this->createPartialMock(
-            Address::class,
-            ['setLimitCarrier', 'getShippingMethod', 'getShippingRateByCode']
-        );
+        $quoteShippingAddress = $this->getMockBuilder(Address::class)
+            ->addMethods(['setLimitCarrier'])
+            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
         $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);

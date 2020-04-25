@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Checkout\Model\Session;
@@ -35,8 +37,8 @@ class UnsetAllObserverTest extends TestCase
 
     public function testUnsetAll()
     {
-        $this->checkoutSession->expects($this->once())->method('clearQuote')->will($this->returnSelf());
-        $this->checkoutSession->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->checkoutSession->expects($this->once())->method('clearQuote')->willReturnSelf();
+        $this->checkoutSession->expects($this->once())->method('clearStorage')->willReturnSelf();
 
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()

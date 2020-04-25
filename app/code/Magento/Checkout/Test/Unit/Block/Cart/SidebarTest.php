@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 use Magento\Catalog\Helper\Image;
@@ -94,19 +96,19 @@ class SidebarTest extends TestCase
         );
         $contextMock->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
         $contextMock->expects($this->once())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilderMock));
+            ->willReturn($this->urlBuilderMock);
         $contextMock->expects($this->once())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+            ->willReturn($this->storeManagerMock);
         $contextMock->expects($this->once())
             ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfigMock));
+            ->willReturn($this->scopeConfigMock);
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
 
         $this->serializer = $this->createMock(Json::class);
 
@@ -131,12 +133,12 @@ class SidebarTest extends TestCase
 
         $totalsBlockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($totalsHtml));
+            ->willReturn($totalsHtml);
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('checkout.cart.minicart.totals')
-            ->will($this->returnValue($totalsBlockMock));
+            ->willReturn($totalsBlockMock);
 
         $this->assertEquals($totalsHtml, $this->model->getTotalsHtml());
     }

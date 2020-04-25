@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
 use Magento\Catalog\Block\Product\Image;
@@ -93,7 +95,7 @@ class RendererTest extends TestCase
         /** @var Product|MockObject $product */
         $product = $this->createPartialMock(
             Product::class,
-            ['getName', '__wakeup', 'getIdentities']
+            ['getName', 'getIdentities']
         );
         $product->expects($this->any())->method('getName')->willReturn('Parent Product');
 

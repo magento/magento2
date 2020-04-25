@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
@@ -105,14 +106,18 @@ class CartTest extends TestCase
         $shortcutButtonsHtml = '<span>Buttons</span>';
         $websiteId = 100;
 
-        $subtotalMock = $this->createPartialMock(DataObject::class, ['getValue']);
+        $subtotalMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getTotals', 'getHasError', 'getAllVisibleItems', 'getStore']
-        );
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getHasError'])
+            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getTotals')->willReturn($totals);
         $quoteMock->expects($this->once())->method('getHasError')->willReturn(false);
@@ -124,17 +129,25 @@ class CartTest extends TestCase
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
 
-        $quoteItemMock = $this->createPartialMock(Item::class, ['getProduct', 'getStoreId']);
+        $quoteItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
 
-        $storeMock = $this->createPartialMock(Store::class, ['getWebsiteId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getWebsiteId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
-        $productMock = $this->createPartialMock(
-            Product::class,
-            ['isVisibleInSiteVisibility', 'getId', 'setUrlDataObject']
-        );
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setUrlDataObject'])
+            ->onlyMethods(['isVisibleInSiteVisibility', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quoteItemMock->expects($this->exactly(3))->method('getProduct')->willReturn($productMock);
         $quoteItemMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
@@ -197,24 +210,32 @@ class CartTest extends TestCase
         $productRewrite = [$productId => ['rewrite' => 'product']];
         $itemData = ['item' => 'data'];
         $shortcutButtonsHtml = '<span>Buttons</span>';
-        $subtotalMock = $this->createPartialMock(DataObject::class, ['getValue']);
+        $subtotalMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
         $totals = ['subtotal' => $subtotalMock];
 
-        $quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['getTotals', 'getHasError', 'getAllVisibleItems', 'getStore']
-        );
-        $quoteItemMock = $this->createPartialMock(
-            Item::class,
-            ['getProduct', 'getOptionByCode', 'getStoreId']
-        );
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getHasError'])
+            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $quoteItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getProduct', 'getOptionByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getTotals')->willReturn($totals);
         $quoteMock->expects($this->once())->method('getHasError')->willReturn(false);
 
-        $storeMock = $this->createPartialMock(Store::class, ['getWebsiteId']);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getWebsiteId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
@@ -227,10 +248,11 @@ class CartTest extends TestCase
 
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
 
-        $productMock = $this->createPartialMock(
-            Product::class,
-            ['isVisibleInSiteVisibility', 'getId', 'setUrlDataObject']
-        );
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setUrlDataObject'])
+            ->onlyMethods(['isVisibleInSiteVisibility', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $optionsMock = $this->createMock(Option::class);
         $optionsMock->expects($this->once())->method('getProduct')->willReturn($productMock);

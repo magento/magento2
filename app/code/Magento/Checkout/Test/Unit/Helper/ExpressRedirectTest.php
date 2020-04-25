@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Helper;
 
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
@@ -49,17 +51,19 @@ class ExpressRedirectTest extends TestCase
     {
         $this->_actionFlag = $this->getMockBuilder(
             ActionFlag::class
-        )->disableOriginalConstructor()->setMethods(
-            ['set']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['set']
+            )->getMock();
 
         $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->_customerSession = $this->getMockBuilder(
             Session::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setBeforeAuthUrl']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setBeforeAuthUrl']
+            )->getMock();
 
         $this->_context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -83,21 +87,22 @@ class ExpressRedirectTest extends TestCase
     {
         $expressRedirectMock = $this->getMockBuilder(
             RedirectLoginInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getActionFlagList',
-                'getResponse',
-                'getCustomerBeforeAuthUrl',
-                'getLoginUrl',
-                'getRedirectActionName',
-            ]
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getActionFlagList',
+                    'getResponse',
+                    'getCustomerBeforeAuthUrl',
+                    'getLoginUrl',
+                    'getRedirectActionName',
+                ]
+            )->getMock();
         $expressRedirectMock->expects(
             $this->any()
         )->method(
             'getActionFlagList'
-        )->will(
-            $this->returnValue($actionFlagList)
+        )->willReturn(
+            $actionFlagList
         );
 
         $atIndex = 0;
@@ -112,15 +117,16 @@ class ExpressRedirectTest extends TestCase
             $this->once()
         )->method(
             'getLoginUrl'
-        )->will(
-            $this->returnValue($expectedLoginUrl)
+        )->willReturn(
+            $expectedLoginUrl
         );
 
         $urlMock = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addRequestParam']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['addRequestParam']
+            )->getMock();
         $urlMock->expects(
             $this->once()
         )->method(
@@ -128,8 +134,8 @@ class ExpressRedirectTest extends TestCase
         )->with(
             $expectedLoginUrl,
             ['context' => 'checkout']
-        )->will(
-            $this->returnValue($expectedLoginUrl)
+        )->willReturn(
+            $expectedLoginUrl
         );
 
         $this->_objectManager->expects(
@@ -138,25 +144,26 @@ class ExpressRedirectTest extends TestCase
             'get'
         )->with(
             Data::class
-        )->will(
-            $this->returnValue($urlMock)
+        )->willReturn(
+            $urlMock
         );
 
         $responseMock = $this->getMockBuilder(
             Http::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setRedirect', '__wakeup']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setRedirect']
+            )->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
 
-        $expressRedirectMock->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
+        $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
 
         $expressRedirectMock->expects(
             $this->any()
         )->method(
             'getCustomerBeforeAuthUrl'
-        )->will(
-            $this->returnValue($customerBeforeAuthUrl)
+        )->willReturn(
+            $customerBeforeAuthUrl
         );
         $expectedCustomerBeforeAuthUrl = $customerBeforeAuthUrl !== null
         ? $customerBeforeAuthUrl : $customerBeforeAuthUrlDefault;
