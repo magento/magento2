@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\App;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -50,7 +52,8 @@ class ResourceConnectionTest extends TestCase
         $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMock();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMock();
 
         $this->objectManager = (new ObjectManager($this));
         $this->unit = $this->objectManager->getObject(

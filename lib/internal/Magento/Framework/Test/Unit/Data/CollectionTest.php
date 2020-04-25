@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Data;
 
@@ -18,7 +19,7 @@ class CollectionTest extends TestCase
      */
     private $collection;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(EntityFactoryInterface::class);
         $this->collection = new Collection($factoryMock);

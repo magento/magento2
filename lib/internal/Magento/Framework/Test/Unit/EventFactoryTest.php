@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Event;
@@ -32,7 +34,8 @@ class EventFactoryTest extends TestCase
     {
         $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new EventFactory($this->_objectManagerMock);
-        $this->_expectedObject = $this->getMockBuilder(Event::class)->getMock();
+        $this->_expectedObject = $this->getMockBuilder(Event::class)
+            ->getMock();
     }
 
     public function testCreate()
@@ -45,8 +48,8 @@ class EventFactoryTest extends TestCase
         )->with(
             Event::class,
             $arguments
-        )->will(
-            $this->returnValue($this->_expectedObject)
+        )->willReturn(
+            $this->_expectedObject
         );
 
         $this->assertEquals($this->_expectedObject, $this->_model->create($arguments));

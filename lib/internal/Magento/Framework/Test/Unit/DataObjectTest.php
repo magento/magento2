@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * \Magento\Framework\DataObject test case.
@@ -163,8 +164,11 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->createPartialMock(DataObject::class, ['setTestData', 'getTestData']);
-        $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
+        $mock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['setTestData', 'getTestData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mock->expects($this->once())->method('setTestData')->with('data');
         $mock->expects($this->once())->method('getTestData');
 
         $mock->setDataUsingMethod('test_data', 'data');

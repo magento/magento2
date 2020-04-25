@@ -109,7 +109,7 @@ class TranslateTest extends TestCase
         $this->packDictionary = $this->createMock(Dictionary::class);
         $this->directory = $this->createMock(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
+        $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->directory);
         $this->fileDriver = $this->createMock(DriverInterface::class);
 
         $this->translate = new Translate(
@@ -157,11 +157,11 @@ class TranslateTest extends TestCase
 
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(json_encode($cachedData)));
+            ->willReturn(json_encode($cachedData));
 
         $this->appState->expects($this->exactly($area ? 0 : 1))
             ->method('getAreaCode')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->translate->loadData($area, $forceReload);
         $this->assertEquals($cachedData, $this->translate->getData());
@@ -192,27 +192,27 @@ class TranslateTest extends TestCase
 
         $this->appState->expects($this->exactly($area ? 0 : 1))
             ->method('getAreaCode')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->directory->expects($this->any())->method('isExist')->will($this->returnValue(true));
+        $this->directory->expects($this->any())->method('isExist')->willReturn(true);
 
         // _loadModuleTranslation()
         $modules = ['some_module', 'other_module', 'another_module', 'current_module'];
         $this->request->expects($this->any())
             ->method('getControllerModule')
             ->willReturn('current_module');
-        $this->moduleList->expects($this->once())->method('getNames')->will($this->returnValue($modules));
+        $this->moduleList->expects($this->once())->method('getNames')->willReturn($modules);
         $moduleData = [
             'module original' => 'module translated',
             'module theme' => 'module-theme original translated',
             'module pack' => 'module-pack original translated',
             'module db' => 'module-db original translated',
         ];
-        $this->modulesReader->expects($this->any())->method('getModuleDir')->will($this->returnValue('/app/module'));
+        $this->modulesReader->expects($this->any())->method('getModuleDir')->willReturn('/app/module');
         $themeData = [
             'theme original' => 'theme translated',
             'module theme' => 'theme translated overwrite',
@@ -221,25 +221,21 @@ class TranslateTest extends TestCase
         ];
         $this->csvParser->expects($this->any())
             ->method('getDataPairs')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['/app/module/en_US.csv', 0, 1, $moduleData],
-                        ['/app/module/en_GB.csv', 0, 1, $moduleData],
-                        ['/theme.csv', 0, 1, $themeData],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['/app/module/en_US.csv', 0, 1, $moduleData],
+                    ['/app/module/en_GB.csv', 0, 1, $moduleData],
+                    ['/theme.csv', 0, 1, $themeData],
+                ]
             );
         $this->fileDriver->expects($this->any())
             ->method('isExists')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['/app/module/en_US.csv', true],
-                        ['/app/module/en_GB.csv', true],
-                        ['/theme.csv', true],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['/app/module/en_US.csv', true],
+                    ['/app/module/en_GB.csv', true],
+                    ['/theme.csv', true],
+                ]
             );
 
         // _loadPackTranslation
@@ -248,19 +244,19 @@ class TranslateTest extends TestCase
             'module pack' => 'pack translated overwrite',
             'module db' => 'pack-db translated overwrite',
         ];
-        $this->packDictionary->expects($this->once())->method('getDictionary')->will($this->returnValue($packData));
+        $this->packDictionary->expects($this->once())->method('getDictionary')->willReturn($packData);
 
         // _loadThemeTranslation()
         $this->viewFileSystem->expects($this->any())
             ->method('getLocaleFileName')
-            ->will($this->returnValue('/theme.csv'));
+            ->willReturn('/theme.csv');
 
         // _loadDbTranslation()
         $dbData = [
             'db original' => 'db translated',
             'module db' => 'db translated overwrite',
         ];
-        $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue($dbData));
+        $this->resource->expects($this->any())->method('getTranslationArray')->willReturn($dbData);
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))->method('save');
 
@@ -302,7 +298,7 @@ class TranslateTest extends TestCase
     {
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(json_encode($data)));
+            ->willReturn(json_encode($data));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
         $this->assertEquals($result, $this->translate->getData());
@@ -322,7 +318,7 @@ class TranslateTest extends TestCase
 
     public function testGetLocale(): void
     {
-        $this->locale->expects($this->once())->method('getLocale')->will($this->returnValue('en_US'));
+        $this->locale->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->assertEquals('en_US', $this->translate->getLocale());
 
         $this->locale->expects($this->never())->method('getLocale');
@@ -342,11 +338,11 @@ class TranslateTest extends TestCase
 
     public function testGetTheme(): void
     {
-        $this->request->expects($this->at(0))->method('getParam')->with('theme')->will($this->returnValue(''));
+        $this->request->expects($this->at(0))->method('getParam')->with('theme')->willReturn('');
 
         $requestTheme = ['theme_title' => 'Theme Title'];
         $this->request->expects($this->at(1))->method('getParam')->with('theme')
-            ->will($this->returnValue($requestTheme));
+            ->willReturn($requestTheme);
 
         $this->assertEquals('theme', $this->translate->getTheme());
         $this->assertEquals('themeTheme Title', $this->translate->getTheme());
@@ -356,10 +352,10 @@ class TranslateTest extends TestCase
     {
         $forceReload = true;
         $this->expectsSetConfig(null, null);
-        $this->moduleList->expects($this->once())->method('getNames')->will($this->returnValue([]));
-        $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('frontend'));
-        $this->packDictionary->expects($this->once())->method('getDictionary')->will($this->returnValue([]));
-        $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue([]));
+        $this->moduleList->expects($this->once())->method('getNames')->willReturn([]);
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('frontend');
+        $this->packDictionary->expects($this->once())->method('getDictionary')->willReturn([]);
+        $this->resource->expects($this->any())->method('getTranslationArray')->willReturn([]);
         $this->assertEquals($this->translate, $this->translate->loadData(null, $forceReload));
     }
 
@@ -368,18 +364,16 @@ class TranslateTest extends TestCase
      */
     protected function expectsSetConfig($themeId, $localeCode = 'en_US'): void
     {
-        $this->locale->expects($this->any())->method('getLocale')->will($this->returnValue($localeCode));
+        $this->locale->expects($this->any())->method('getLocale')->willReturn($localeCode);
         $scope = new DataObject(['code' => 'frontendCode', 'id' => 1]);
         $scopeAdmin = new DataObject(['code' => 'adminCode', 'id' => 0]);
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [null, $scope],
-                        ['admin', $scopeAdmin],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [null, $scope],
+                    ['admin', $scopeAdmin],
+                ]
             );
         $designTheme = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
@@ -389,6 +383,6 @@ class TranslateTest extends TestCase
             ->method('getThemePath')
             ->willReturn($themeId);
 
-        $this->viewDesign->expects($this->any())->method('getDesignTheme')->will($this->returnValue($designTheme));
+        $this->viewDesign->expects($this->any())->method('getDesignTheme')->willReturn($designTheme);
     }
 }

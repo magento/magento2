@@ -28,13 +28,13 @@ class ValidatorTest extends TestCase
      */
     protected $methodsMap;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->methodsMap = $this->createMock(MethodsMap::class);
 
         $this->methodsMap->expects(static::any())
             ->method('getMethodsMap')
-            ->will($this->throwException(new \InvalidArgumentException('message', 333)));
+            ->willThrowException(new \InvalidArgumentException('message', 333));
 
         $this->typeProcessor = $this->createMock(TypeProcessor::class);
         $this->typeProcessor->expects(static::any())

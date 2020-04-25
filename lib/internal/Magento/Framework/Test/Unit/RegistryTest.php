@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Customer\Model\Customer;
@@ -35,7 +37,7 @@ class RegistryTest extends TestCase
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->registry);
     }

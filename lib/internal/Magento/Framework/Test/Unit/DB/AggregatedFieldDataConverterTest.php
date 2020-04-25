@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\DB;
 
@@ -19,8 +20,10 @@ class AggregatedFieldDataConverterTest extends TestCase
 {
     public function testConvert()
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)->getMock();
-        $queryModifier = $this->getMockBuilder(QueryModifierInterface::class)->getMock();
+        $connection = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
+        $queryModifier = $this->getMockBuilder(QueryModifierInterface::class)
+            ->getMock();
         $fields = [
             new FieldToConvert(
                 'ClassOne',

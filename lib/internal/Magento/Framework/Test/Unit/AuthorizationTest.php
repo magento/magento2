@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\AuthorizationInterface.
@@ -34,7 +35,7 @@ class AuthorizationTest extends TestCase
     {
         $this->_policyMock = $this->createMock(PolicyInterface::class);
         $roleLocatorMock = $this->createMock(RoleLocatorInterface::class);
-        $roleLocatorMock->expects($this->any())->method('getAclRoleId')->will($this->returnValue('U1'));
+        $roleLocatorMock->expects($this->any())->method('getAclRoleId')->willReturn('U1');
         $this->_model = new Authorization($this->_policyMock, $roleLocatorMock);
     }
 
@@ -45,13 +46,13 @@ class AuthorizationTest extends TestCase
 
     public function testIsAllowedReturnPositiveValue()
     {
-        $this->_policyMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->_policyMock->expects($this->once())->method('isAllowed')->willReturn(true);
         $this->assertTrue($this->_model->isAllowed('Magento_Module::acl_resource'));
     }
 
     public function testIsAllowedReturnNegativeValue()
     {
-        $this->_policyMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
+        $this->_policyMock->expects($this->once())->method('isAllowed')->willReturn(false);
         $this->assertFalse($this->_model->isAllowed('Magento_Module::acl_resource'));
     }
 }
