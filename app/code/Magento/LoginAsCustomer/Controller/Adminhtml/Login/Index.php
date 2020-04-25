@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
-use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
-use Magento\LoginAsCustomer\Model\Login;
 
 /**
  * Login As Customer log grid action
@@ -30,23 +28,6 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
     /**
-     * @var Login
-     */
-    private $loginModel;
-
-    /**
-     * @param Context $context
-     * @param Login $loginModel
-     */
-    public function __construct(
-        Context $context,
-        Login $loginModel
-    ) {
-        parent::__construct($context);
-        $this->loginModel = $loginModel;
-    }
-
-    /**
      * Login As Customer log grid action
      *
      * @return ResultInterface
@@ -58,8 +39,6 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
             $resultForward->forward('grid');
             return $resultForward;
         }
-
-        $this->loginModel->deleteNotUsed();
 
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

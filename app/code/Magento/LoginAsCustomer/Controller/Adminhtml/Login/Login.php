@@ -11,6 +11,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LoginAsCustomer\Api\CreateSecretInterface;
 
 /**
  * Login as customer action
@@ -28,11 +31,6 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_button';
 
     /**
-     * @var \Magento\LoginAsCustomer\Model\Login
-     */
-    private $loginModel;
-
-    /**
      * @var \Magento\Backend\Model\Auth\Session
      */
     private $authSession;
@@ -48,33 +46,46 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     private $url;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @var \Magento\LoginAsCustomer\Model\Config
      */
     private $config;
 
     /**
+     * @var CreateSecretInterface
+     */
+    private $createSecretProcessor;
+
+    /**
      * Login constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\LoginAsCustomer\Model\Login $loginModel
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Url $url
-     * @param \Magento\LoginAsCustomer\Model\Config $config
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\LoginAsCustomer\Model\Config $config,
+     * @param CreateSecretInterface $createSecretProcessor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\LoginAsCustomer\Model\Login $loginModel,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Url $url,
-        \Magento\LoginAsCustomer\Model\Config $config
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\LoginAsCustomer\Model\Config $config,
+        CreateSecretInterface $createSecretProcessor
     ) {
         parent::__construct($context);
-        $this->loginModel = $loginModel;
         $this->authSession = $authSession;
         $this->storeManager = $storeManager;
         $this->url = $url;
+        $this->customerRepository = $customerRepository;
         $this->config = $config;
+        $this->createSecretProcessor = $createSecretProcessor;
     }
 
     /**
@@ -84,12 +95,6 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      */
     public function execute(): ResultInterface
     {
-        $request = $this->getRequest();
-        $customerId = (int) $request->getParam('customer_id');
-        if (!$customerId) {
-            $customerId = (int) $request->getParam('entity_id');
-        }
-
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -98,34 +103,37 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             return $resultRedirect->setPath('customer/index/index');
         }
 
-        $customerStoreId = $request->getParam('store_id');
+        $request = $this->getRequest();
 
+        $customerId = (int) $request->getParam('customer_id');
+        if (!$customerId) {
+            $customerId = (int) $request->getParam('entity_id');
+        }
+
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
+            return $resultRedirect->setPath('customer/index/index');
+        }
+
+        $customerStoreId = $request->getParam('store_id');
         if (!isset($customerStoreId) && $this->config->isManualChoiceEnabled()) {
             $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
             return $resultRedirect->setPath('loginascustomer/login/manual', ['entity_id' => $customerId ]);
         }
 
-        $login = $this->loginModel->setCustomerId($customerId);
-
-        $login->deleteNotUsed();
-
-        $customer = $login->getCustomer();
-
-        if (!$customer->getId()) {
-            $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
-            return $resultRedirect->setPath('customer/index/index');
-        }
 
         $user = $this->authSession->getUser();
-        $login->generate($user->getId());
-        $store = $this->storeManager->getStore();
+        $secret = $this->createSecretProcessor->execute($customerId, (int)$user->getId());
 
+        $store = $this->storeManager->getStore();
         if (null === $store) {
             $store = $this->storeManager->getDefaultStoreView();
         }
 
         $redirectUrl = $this->url->setScope($store)
-            ->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
+            ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
 
         return $resultRedirect->setUrl($redirectUrl);
     }

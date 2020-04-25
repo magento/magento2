@@ -20,6 +20,6 @@ class Login extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('login_as_customer_log', 'login_id');
+        $this->_init('login_as_customer', 'login_id');
     }
 }
