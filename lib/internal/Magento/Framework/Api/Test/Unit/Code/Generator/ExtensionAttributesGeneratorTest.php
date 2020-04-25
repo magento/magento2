@@ -119,12 +119,10 @@ class ExtensionAttributesGeneratorTest extends TestCase
 
         $expectedValidationResult = false;
         $this->assertEquals($expectedValidationResult, $reflectionMethod->invoke($model));
-        $this->assertTrue(
-            in_array(
-                'Invalid extension name [\Magento\Catalog\Api\Data\ProductInterface].'
-                . ' Use \Magento\Catalog\Api\Data\ProductExtension',
-                $model->getErrors()
-            ),
+        $this->assertContains(
+            'Invalid extension name [\Magento\Catalog\Api\Data\ProductInterface].'
+            . ' Use \Magento\Catalog\Api\Data\ProductExtension',
+            $model->getErrors(),
             'Expected validation error message is missing.'
         );
     }

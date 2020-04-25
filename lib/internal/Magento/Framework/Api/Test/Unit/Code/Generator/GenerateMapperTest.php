@@ -50,14 +50,14 @@ class GenerateMapperTest extends TestCase
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
             ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleMapper::class)
-            ->will($this->returnValue('SampleMapper.php'));
+            ->willReturn('SampleMapper.php');
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with('SampleMapper.php', $sampleMapperCode);
 
         $model->expects($this->once())
             ->method('_validateData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertEquals('SampleMapper.php', $model->generate());
     }
 }

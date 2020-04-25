@@ -65,7 +65,8 @@ abstract class EntityChildTestAbstract extends TestCase
         $this->ioObjectMock = $this->createMock(Io::class);
         $this->classGenerator = $this->createMock(ClassGenerator::class);
         $this->definedClassesMock = $this->getMockBuilder(DefinedClasses::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->generator = $objectManager->getObject(
