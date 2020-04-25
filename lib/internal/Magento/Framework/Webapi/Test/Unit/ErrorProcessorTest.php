@@ -51,7 +51,8 @@ class ErrorProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->_loggerMock = $this->getMockBuilder(LoggerInterface::class)
+        ->getMock();
 
         $filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -339,7 +340,7 @@ class ErrorProcessorTest extends TestCase
             "Masked exception HTTP code is invalid: expected '{$expectedHttpCode}', " .
             "given '{$maskedException->getHttpCode()}'."
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedMessage,
             $maskedException->getMessage(),
             "Masked exception message is invalid: expected '{$expectedMessage}', " .

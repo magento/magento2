@@ -138,7 +138,7 @@ class JsonTest extends TestCase
             $this->fail("Exception is expected to be raised");
         } catch (Exception $e) {
             $this->assertInstanceOf(Exception::class, $e, 'Exception type is invalid');
-            $this->assertContains('Decoding error:', $e->getMessage(), 'Exception message is invalid');
+            $this->assertStringContainsString('Decoding error:', $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
                 Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),

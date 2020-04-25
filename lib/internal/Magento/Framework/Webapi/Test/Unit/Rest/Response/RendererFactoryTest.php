@@ -34,7 +34,8 @@ class RendererFactoryTest extends TestCase
         $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(
             Request::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $renders = [
             'default' => ['type' => '*/*', 'model' => Json::class],
@@ -63,7 +64,8 @@ class RendererFactoryTest extends TestCase
         /** Mock renderer. */
         $rendererMock = $this->getMockBuilder(
             Json::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
         /** Mock object to return mocked renderer. */
         $this->_objectManagerMock->expects(
             $this->once()

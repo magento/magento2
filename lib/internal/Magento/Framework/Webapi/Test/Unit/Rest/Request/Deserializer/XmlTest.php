@@ -74,6 +74,8 @@ class XmlTest extends TestCase
 
     public function testHandleErrors()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         /** Add error message */
         $firstErrorMessage = "No document type declaration. ";
         $this->_xmlDeserializer->handleErrors(null, $firstErrorMessage, null, null);

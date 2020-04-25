@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Webapi\Test\Unit;
 
 use Magento\Eav\Model\TypeLocator;

@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response;
 
 use Magento\Framework\Webapi\Rest\Request;

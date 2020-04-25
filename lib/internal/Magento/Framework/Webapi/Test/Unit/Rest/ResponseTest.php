@@ -37,13 +37,16 @@ class ResponseTest extends TestCase
         /** Mock all objects required for SUT. */
         $this->rendererMock = $this->getMockBuilder(
             Json::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
         $rendererFactoryMock = $this->getMockBuilder(
             RendererFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
         $this->errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+        ->getMock();
         $this->appStateMock = $this->createMock(State::class);
 
         /** Init SUP. */

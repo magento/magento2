@@ -33,7 +33,8 @@ class DeserializerFactoryTest extends TestCase
         $expectedMetadata = ['text_xml' => ['type' => 'text/xml', 'model' => 'Xml']];
         $validInterpreterMock = $this->getMockBuilder(
             Xml::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($validInterpreterMock));
@@ -62,7 +63,8 @@ class DeserializerFactoryTest extends TestCase
         $expectedMetadata = ['text_xml' => ['type' => 'text/xml', 'model' => 'Xml']];
         $invalidInterpreter = $this->getMockBuilder(
             \Magento\Framework\Webapi\Response\Rest\Renderer\Json::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $this->expectException('LogicException');
         $this->expectExceptionMessage(
