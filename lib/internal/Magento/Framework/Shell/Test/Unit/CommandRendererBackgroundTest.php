@@ -28,7 +28,8 @@ class CommandRendererBackgroundTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->osInfo = $this->getMockBuilder(OsInfo::class)->getMock();
+        $this->osInfo = $this->getMockBuilder(OsInfo::class)
+            ->getMock();
     }
 
     /**
@@ -40,7 +41,7 @@ class CommandRendererBackgroundTest extends TestCase
     {
         $this->osInfo->expects($this->once())
             ->method('isWindows')
-            ->will($this->returnValue($isWindows));
+            ->willReturn($isWindows);
 
         $commandRenderer = new CommandRendererBackground($this->osInfo);
         $this->assertEquals(
