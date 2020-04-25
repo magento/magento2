@@ -67,8 +67,8 @@ class ReaderTest extends TestCase
         )->with(
             'indexer.xml',
             'scope'
-        )->will(
-            $this->returnValue($files)
+        )->willReturn(
+            $files
         );
 
         $constraint = function (\DOMDocument $actual) use ($expectedFile) {
@@ -87,8 +87,8 @@ class ReaderTest extends TestCase
             'convert'
         )->with(
             $this->callback($constraint)
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->_model->read('scope'));

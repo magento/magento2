@@ -226,12 +226,10 @@ class MultiDimensionProviderTest extends TestCase
 
         $dimensionProviderMock->expects($this->any())
             ->method('getIterator')
-            ->will(
-                $this->returnCallback(
-                    function () use ($dimensions) {
-                        return \SplFixedArray::fromArray($dimensions);
-                    }
-                )
+            ->willReturnCallback(
+                function () use ($dimensions) {
+                    return \SplFixedArray::fromArray($dimensions);
+                }
             );
 
         return $dimensionProviderMock;

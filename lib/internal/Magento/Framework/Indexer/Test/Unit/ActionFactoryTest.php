@@ -35,7 +35,8 @@ class ActionFactoryTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('NotAction doesn\'t implement \Magento\Framework\Indexer\ActionInterface');
-        $notActionInterfaceMock = $this->getMockBuilder('NotAction')->getMock();
+        $notActionInterfaceMock = $this->getMockBuilder('NotAction')
+            ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('NotAction', [])
