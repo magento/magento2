@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection\Config\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection\Config\Converter
+     * @var Converter
      */
     protected $_model;
 
@@ -26,7 +31,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $this->_filePath = __DIR__ . '/_files/';
         $this->_source = new \DOMDocument();
-        $this->_model = new \Magento\Framework\App\ResourceConnection\Config\Converter();
+        $this->_model = new Converter();
     }
 
     public function testConvert()

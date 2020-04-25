@@ -5,43 +5,50 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\File\Collector\Base;
+use Magento\Framework\View\File\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Component\ComponentFile;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\File;
 
-class BaseTest extends \PHPUnit\Framework\TestCase
+class BaseTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\Collector\Base
+     * @var Base
      */
     private $fileCollector;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemeInterface|MockObject
      */
     private $themeMock;
 
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit\Framework\MockObject\MockObject
+     * @var DirSearch|MockObject
      */
     private $dirSearch;
 
     protected function setUp(): void
     {
-        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\Factory::class)
+        $this->fileFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $this->themeMock = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
 
-        $this->dirSearch = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $this->dirSearch = $this->createMock(DirSearch::class);
 
-        $this->fileCollector = new \Magento\Framework\View\File\Collector\Base(
+        $this->fileCollector = new Base(
             $this->dirSearch,
             $this->fileFactoryMock,
             'layout'
@@ -53,13 +60,13 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $files = [];
         foreach (['shared', 'theme'] as $fileType) {
             for ($i = 0; $i < 2; $i++) {
-                $file = $this->createMock(\Magento\Framework\Component\ComponentFile::class);
+                $file = $this->createMock(ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')
-                    ->willReturn("{$fileType}/module/{$i}/path");
+                    ->will($this->returnValue("{$fileType}/module/{$i}/path"));
                 $file->expects($this->once())
                     ->method('getComponentName')
-                    ->willReturn('Module_' . $i);
+                    ->will($this->returnValue('Module_' . $i));
                 $files[$fileType][] = $file;
             }
         }
@@ -82,20 +89,20 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->fileCollector->getFiles($this->themeMock, '*.xml');
         $this->assertCount(4, $result);
-        $this->assertInstanceOf(\Magento\Framework\View\File::class, $result[0]);
-        $this->assertInstanceOf(\Magento\Framework\View\File::class, $result[1]);
-        $this->assertInstanceOf(\Magento\Framework\View\File::class, $result[2]);
-        $this->assertInstanceOf(\Magento\Framework\View\File::class, $result[3]);
+        $this->assertInstanceOf(File::class, $result[0]);
+        $this->assertInstanceOf(File::class, $result[1]);
+        $this->assertInstanceOf(File::class, $result[2]);
+        $this->assertInstanceOf(File::class, $result[3]);
     }
 
     /**
      * Create file mock object
      *
-     * @return \Magento\Framework\View\File|\PHPUnit\Framework\MockObject\MockObject
+     * @return File|MockObject
      */
     protected function createFileMock()
     {
-        return $this->getMockBuilder(\Magento\Framework\View\File::class)
+        return $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

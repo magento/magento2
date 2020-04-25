@@ -9,14 +9,17 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-class ElementTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Layout\Element;
+
+class ElementTest extends TestCase
 {
     /**
      * @dataProvider elementNameDataProvider
      */
     public function testGetElementName($xml, $name)
     {
-        $model = new \Magento\Framework\View\Layout\Element($xml);
+        $model = new Element($xml);
         $this->assertEquals($name, $model->getElementName());
     }
 
@@ -57,7 +60,7 @@ class ElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsCacheable($xml, $expected)
     {
-        $model = new \Magento\Framework\View\Layout\Element($xml);
+        $model = new Element($xml);
         $this->assertEquals($expected, $model->isCacheable());
     }
 }

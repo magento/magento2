@@ -9,88 +9,101 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Design\Theme\Image;
+use Magento\Framework\Filesystem;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\Theme\Image\Uploader;
+use Magento\Theme\Model\Theme;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Theme\Model\Theme\Image\Path;
+use Magento\Framework\Image\Factory;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\App\Area;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image
+     * @var Image
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \Magento\Framework\Image|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Image|MockObject
      */
     protected $_imageMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Uploader|MockObject
      */
     protected $_uploaderMock;
 
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
+     * @var Theme|MockObject
      */
     protected $_themeMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
+     * @var Write|MockObject
      */
     protected $_mediaDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
+     * @var Write|MockObject
      */
     protected $_rootDirectoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Theme\Image\Path
+     * @var MockObject|Path
      */
     protected $imagePathMock;
 
     protected function setUp(): void
     {
         $this->_mediaDirectoryMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
+            Write::class,
             ['isExist', 'copyFile', 'getRelativePath', 'delete']
         );
         $this->_rootDirectoryMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
+            Write::class,
             ['isExist', 'copyFile', 'getRelativePath', 'delete']
         );
         $this->_filesystemMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem::class,
+            Filesystem::class,
             ['getDirectoryWrite', '__wakeup', 'delete']
         );
         $this->_filesystemMock->expects($this->at(0))
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
-            ->willReturn($this->_mediaDirectoryMock);
+            ->will($this->returnValue($this->_mediaDirectoryMock));
         $this->_filesystemMock->expects($this->at(1))
             ->method('getDirectoryWrite')
             ->with(DirectoryList::ROOT)
-            ->willReturn($this->_rootDirectoryMock);
-        $imageFactory = $this->createMock(\Magento\Framework\Image\Factory::class);
+            ->will($this->returnValue($this->_rootDirectoryMock));
+        $imageFactory = $this->createMock(Factory::class);
         $this->_imageMock = $this->createMock(\Magento\Framework\Image::class);
-        $imageFactory->expects($this->any())->method('create')->willReturn($this->_imageMock);
+        $imageFactory->expects($this->any())->method('create')->will($this->returnValue($this->_imageMock));
 
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup']);
-        $this->_uploaderMock = $this->createMock(\Magento\Framework\View\Design\Theme\Image\Uploader::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->_themeMock = $this->createPartialMock(Theme::class, ['__wakeup']);
+        $this->_uploaderMock = $this->createMock(Uploader::class);
 
         $this->imagePathMock = $this->_getImagePathMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(
-            \Magento\Framework\View\Design\Theme\Image::class,
+            Image::class,
             [
                 'filesystem' => $this->_filesystemMock,
                 'imageFactory' => $imageFactory,
@@ -112,30 +125,30 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Theme\Image\Path
+     * @return MockObject|Path
      */
     protected function _getImagePathMock()
     {
-        $imagePathMock = $this->createMock(\Magento\Theme\Model\Theme\Image\Path::class);
+        $imagePathMock = $this->createMock(Path::class);
         $testBaseUrl = 'http://localhost/media_path/';
 
         $imagePathMock->expects($this->any())->method('getPreviewImageDefaultUrl')
-            ->willReturn($testBaseUrl . 'test_default_preview.png');
+            ->will($this->returnValue($testBaseUrl . 'test_default_preview.png'));
 
         $testBaseDir = '/media_path/';
         $imagePathMock->expects(
             $this->any()
         )->method(
             'getImagePreviewDirectory'
-        )->willReturn(
-            $testBaseDir . 'theme/preview'
+        )->will(
+            $this->returnValue($testBaseDir . 'theme/preview')
         );
         $imagePathMock->expects(
             $this->any()
         )->method(
             'getTemporaryDirectory'
-        )->willReturn(
-            $testBaseDir . 'tmp'
+        )->will(
+            $this->returnValue($testBaseDir . 'tmp')
         );
         return $imagePathMock;
     }
@@ -151,8 +164,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'theme_id' => 1,
             'theme_title' => 'Sample theme',
             'preview_image' => 'images/preview.png',
-            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-            'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
+            'area' => Area::AREA_FRONTEND,
+            'type' => ThemeInterface::TYPE_VIRTUAL
         ];
     }
 
@@ -195,36 +208,36 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $this->_mediaDirectoryMock->expects($this->once())
             ->method('getRelativePath')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->_rootDirectoryMock->expects($this->once())
             ->method('getRelativePath')
             ->with($previewImage)
-            ->willReturn($relativePath);
+            ->will($this->returnValue($relativePath));
 
         $this->_rootDirectoryMock->expects($this->once())
             ->method('copyFile')
             ->with($relativePath, $this->anything())
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
-        $themeImageMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Image::class)
+        $themeImageMock = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPreviewImagePath'])
             ->getMock();
         $themeImageMock->expects($this->atLeastOnce())
             ->method('getPreviewImagePath')
-            ->willReturn($previewImage);
+            ->will($this->returnValue($previewImage));
 
-        $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+        $themeMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
             ->setMethods(['getThemeImage', 'getPreviewImage', '__wakeup'])
             ->getMock();
         $themeMock->expects($this->atLeastOnce())
             ->method('getPreviewImage')
-            ->willReturn($previewImage);
+            ->will($this->returnValue($previewImage));
         $themeMock->expects($this->atLeastOnce())
             ->method('getThemeImage')
-            ->willReturn($themeImageMock);
+            ->will($this->returnValue($themeImageMock));
 
         $this->assertTrue($this->_model->createPreviewImageCopy($themeMock));
         $this->assertEquals($previewImage, $this->_themeMock->getData('preview_image'));
@@ -270,11 +283,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         )->with(
             $scope,
             '/media_path/tmp'
-        )->willReturn(
-            $tmpFilePath
+        )->will(
+            $this->returnValue($tmpFilePath)
         );
 
-        $this->_mediaDirectoryMock->expects($this->at(0))->method('getRelativePath')->willReturnArgument(0);
+        $this->_mediaDirectoryMock->expects($this->at(0))->method('getRelativePath')->will($this->returnArgument(0));
         $this->_mediaDirectoryMock->expects($this->at(1))->method('delete')->with($this->stringContains('test.png'));
 
         $this->_mediaDirectoryMock->expects($this->at(2))->method('delete')->with($tmpFilePath);
@@ -292,7 +305,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imagePathMock->expects($this->any())
             ->method('getPreviewImageUrl')
             ->with($this->_themeMock)
-            ->willReturn('http://localhost/media_path/preview/image.png');
+            ->will($this->returnValue('http://localhost/media_path/preview/image.png'));
 
         $this->assertEquals('http://localhost/media_path/preview/image.png', $this->_model->getPreviewImageUrl());
     }

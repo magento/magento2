@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,7 +9,12 @@
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
-class ExcelTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Convert\Excel;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\File\Write;
+use PHPUnit\Framework\TestCase;
+
+class ExcelTest extends TestCase
 {
     /**
      * Test data
@@ -70,7 +75,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert()
     {
-        $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($this->_testData));
+        $convert = new Excel(new \ArrayIterator($this->_testData));
         $convert->setDataHeader($this->_testHeader);
         $convert->setDataFooter($this->_testFooter);
         $this->assertXmlStringEqualsXmlString(
@@ -87,7 +92,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertCallback()
     {
-        $convert = new \Magento\Framework\Convert\Excel(
+        $convert = new Excel(
             new \ArrayIterator($this->_testData),
             [$this, 'callbackMethod']
         );
@@ -102,22 +107,22 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     protected function _writeFile($callback = false)
     {
-        $name = md5(microtime());
+        $name = hash('md5', (string)microtime());
         $file = TESTS_TEMP_DIR . '/' . $name . '.xml';
 
-        $stream = new \Magento\Framework\Filesystem\File\Write(
+        $stream = new Write(
             $file,
-            new \Magento\Framework\Filesystem\Driver\File(),
+            new File(),
             'w+'
         );
         $stream->lock();
 
         if (!$callback) {
-            $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($this->_testData));
+            $convert = new Excel(new \ArrayIterator($this->_testData));
             $convert->setDataHeader($this->_testHeader);
             $convert->setDataFooter($this->_testFooter);
         } else {
-            $convert = new \Magento\Framework\Convert\Excel(
+            $convert = new Excel(
                 new \ArrayIterator($this->_testData),
                 [$this, 'callbackMethod']
             );

@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Adapter\Less;
 
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Source;
-use Magento\Framework\Css\PreProcessor\File\Temporary;
-use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class ProcessorTest
- */
-class ProcessorTest extends \PHPUnit\Framework\TestCase
+class ProcessorTest extends TestCase
 {
     const TEST_CONTENT = 'test-content';
 
@@ -33,22 +34,22 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     private $processor;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var Source|\PHPUnit\Framework\MockObject\MockObject
+     * @var Source|MockObject
      */
     private $assetSourceMock;
 
     /**
-     * @var Temporary|\PHPUnit\Framework\MockObject\MockObject
+     * @var Temporary|MockObject
      */
     private $temporaryFileMock;
 
@@ -57,15 +58,15 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetSourceMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Source::class)
+        $this->assetSourceMock = $this->getMockBuilder(Source::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->temporaryFileMock = $this->getMockBuilder(\Magento\Framework\Css\PreProcessor\File\Temporary::class)
+        $this->temporaryFileMock = $this->getMockBuilder(Temporary::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,13 +80,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for processContent method (exception)
-     *
      */
     public function testProcessContentException()
     {
-        $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
-        $this->expectExceptionMessageMatches('(Test exception)');
-
+        $this->expectException('Magento\Framework\View\Asset\ContentProcessorException');
+        $this->expectExceptionMessageRegExp('(Test exception)');
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())
@@ -112,13 +111,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test for processContent method (empty content)
-     *
      */
     public function testProcessContentEmpty()
     {
-        $this->expectException(\Magento\Framework\View\Asset\ContentProcessorException::class);
-        $this->expectExceptionMessageMatches('(Compilation from source: LESS file is empty: test-path)');
-
+        $this->expectException('Magento\Framework\View\Asset\ContentProcessorException');
+        $this->expectExceptionMessageRegExp('(Compilation from source: LESS file is empty: test-path)');
         $assetMock = $this->getAssetMock();
 
         $this->appStateMock->expects(self::once())
@@ -179,11 +176,11 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit\Framework\MockObject\MockObject
+     * @return File|MockObject
      */
     private function getAssetMock()
     {
-        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
+        $assetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
 

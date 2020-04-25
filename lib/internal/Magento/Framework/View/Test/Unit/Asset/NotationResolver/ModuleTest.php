@@ -6,31 +6,37 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
-class ModuleTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\File;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\NotationResolver\Module;
+
+class ModuleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
+     * @var File|MockObject
      */
     private $asset;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\NotationResolver\Module;
+     * @var Module ;
      */
     private $object;
 
     protected function setUp(): void
     {
-        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->asset = $this->createMock(File::class);
         $this->assetRepo = $this->createPartialMock(
-            \Magento\Framework\View\Asset\Repository::class,
+            Repository::class,
             ['createUsingContext', 'createSimilar']
         );
-        $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
+        $this->object = new Module($this->assetRepo);
     }
 
     public function testConvertModuleNotationToPathNoModularSeparator()
@@ -57,17 +63,17 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $similarRelPath,
         $expectedResult
     ) {
-        $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $similarAsset = $this->createMock(File::class);
         $similarAsset->expects($this->any())
             ->method('getPath')
-            ->willReturn($similarRelPath);
+            ->will($this->returnValue($similarRelPath));
         $this->asset->expects($this->once())
             ->method('getPath')
-            ->willReturn($assetRelPath);
+            ->will($this->returnValue($assetRelPath));
         $this->assetRepo->expects($this->once())
             ->method('createSimilar')
             ->with($relatedFieldId, $this->asset)
-            ->willReturn($similarAsset);
+            ->will($this->returnValue($similarAsset));
         $this->assertEquals(
             $expectedResult,
             $this->object->convertModuleNotationToPath($this->asset, $relatedFieldId)

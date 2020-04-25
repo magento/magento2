@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,8 +9,9 @@ namespace Magento\Framework\Config\Test\Unit;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\Config\Scope;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ScopeTest extends \PHPUnit\Framework\TestCase
+class ScopeTest extends TestCase
 {
     /**
      * @var Scope

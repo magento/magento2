@@ -5,17 +5,21 @@
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Model\Layout\Translator;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Simplexml\Element;
 use Magento\Framework\Phrase;
 
-class TranslatorTest extends \PHPUnit\Framework\TestCase
+class TranslatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Model\Layout\Translator
+     * @var Translator
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
@@ -45,9 +49,9 @@ class TranslatorTest extends \PHPUnit\Framework\TestCase
 </layout>
 XML;
 
-        $this->_xmlDocument = simplexml_load_string($string, \Magento\Framework\Simplexml\Element::class);
+        $this->_xmlDocument = simplexml_load_string($string, Element::class);
 
-        $this->_object = new \Magento\Framework\View\Model\Layout\Translator();
+        $this->_object = new Translator();
     }
 
     /**

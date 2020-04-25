@@ -5,12 +5,13 @@
  */
 namespace Magento\Framework\View\Test\Unit\Url;
 
+use PHPUnit\Framework\TestCase;
 use \Magento\Framework\View\Url\CssResolver;
 
-class CssResolverTest extends \PHPUnit\Framework\TestCase
+class CssResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Url\CssResolver
+     * @var CssResolver
      */
     protected $object;
 

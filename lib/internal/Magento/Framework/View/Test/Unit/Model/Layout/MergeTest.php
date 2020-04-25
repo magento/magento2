@@ -5,21 +5,24 @@
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\Url\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\Serialize\SerializerInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
-/**
- * Class MergeTest
- *
- * @package Magento\Framework\View\Test\Unit\Model\Layout
- */
-class MergeTest extends \PHPUnit\Framework\TestCase
+class MergeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge
+     * @var Merge
      */
     private $model;
 
@@ -29,37 +32,37 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FrontendInterface|MockObject
      */
     private $cache;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit\Framework\MockObject\MockObject
+     * @var Validator|MockObject
      */
     private $layoutValidator;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $appState;
 
     /**
-     * @var LayoutCacheKeyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutCacheKeyInterface|MockObject
      */
     protected $layoutCacheKeyMock;
 
@@ -67,14 +70,14 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->scope = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
-        $this->cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->layoutValidator = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\Validator::class)
+        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->layoutValidator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +87,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Model\Layout\Merge::class,
+            Merge::class,
             [
                 'scope' => $this->scope,
                 'cache' => $this->cache,
@@ -97,13 +100,10 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testValidateMergedLayoutThrowsException()
     {
-        $this->expectException(\Magento\Framework\Config\Dom\ValidationSchemaException::class);
+        $this->expectException('Magento\Framework\Config\Dom\ValidationSchemaException');
         $this->expectExceptionMessage('Processed schema file is not valid.');
-
         $messages = [
             'Please correct the XSD data and try again.',
         ];

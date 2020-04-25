@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class RemoveAccentsTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Filter\RemoveAccents;
+use PHPUnit\Framework\TestCase;
+
+class RemoveAccentsTest extends TestCase
 {
     /**
      * @param string $string
@@ -16,7 +19,7 @@ class RemoveAccentsTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveAccents($string, $german, $expected)
     {
-        $filter = new \Magento\Framework\Filter\RemoveAccents($german);
+        $filter = new RemoveAccents($german);
         $this->assertEquals($expected, $filter->filter($string));
     }
 

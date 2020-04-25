@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,16 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TermTest extends \PHPUnit\Framework\TestCase
+class TermTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit\Framework\MockObject\MockObject
+     * @var Term|MockObject
      */
     private $requestFilter;
 
@@ -21,7 +25,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
@@ -31,19 +35,19 @@ class TermTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
+        $this->requestFilter = $this->getMockBuilder(Term::class)
             ->setMethods(['getField', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($field, $operator, $value) {
                         return sprintf(
                             is_array($value) ? '%s %s (%s)' : '%s %s %s',
@@ -52,7 +56,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
                             is_array($value) ? implode(', ', $value) : $value
                         );
                     }
-                
+                )
             );
 
         $this->filter = $objectManager->getObject(
@@ -74,10 +78,10 @@ class TermTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->willReturn($field);
+            ->will($this->returnValue($field));
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getValue')
-            ->willReturn($value);
+            ->will($this->returnValue($value));
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);

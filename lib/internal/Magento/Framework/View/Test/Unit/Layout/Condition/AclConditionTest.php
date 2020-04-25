@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Condition;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Layout\AclCondition;
 
-class AclConditionTest extends \PHPUnit\Framework\TestCase
+class AclConditionTest extends TestCase
 {
     /**
      * @var AclCondition
@@ -16,7 +18,7 @@ class AclConditionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 

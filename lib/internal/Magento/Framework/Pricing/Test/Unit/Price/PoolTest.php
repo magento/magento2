@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\Pool;
+use Magento\Framework\Pricing\Price\Pool;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Pool
  */
-class PoolTest extends \PHPUnit\Framework\TestCase
+class PoolTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Price\Pool
+     * @var Pool
      */
     protected $pool;
 

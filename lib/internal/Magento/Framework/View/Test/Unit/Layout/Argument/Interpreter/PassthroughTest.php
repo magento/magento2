@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
 use \Magento\Framework\View\Layout\Argument\Interpreter\Passthrough;
 
-class PassthroughTest extends \PHPUnit\Framework\TestCase
+class PassthroughTest extends TestCase
 {
     /**
      * @var Passthrough

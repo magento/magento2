@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Helper;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Asset\PreProcessor\Helper\Sort;
 
 /**
- * Class SortTest
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\Helper\Sorter2
  */
-class SortTest extends \PHPUnit\Framework\TestCase
+class SortTest extends TestCase
 {
     /**
      * @param array $arrayData

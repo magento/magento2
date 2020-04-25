@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,11 +7,9 @@
 namespace Magento\Framework\Test\Unit\Translate\Js;
 
 use Magento\Framework\Translate\Js\Config;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConfigTest
- */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @return void

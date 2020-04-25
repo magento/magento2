@@ -3,17 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Event\Test\Unit;
 
-use \Magento\Framework\Event\Observer;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConfigTest
- *
- * @package Magento\Framework\Event
- */
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
     /**
      * @var Observer
@@ -28,10 +26,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testIsValidFor()
     {
         $eventName = 'eventName';
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
+        $eventMock = $this->createPartialMock(Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->willReturn($eventName);
+            ->will($this->returnValue($eventName));
         $this->observer->setData('event_name', $eventName);
         $this->assertTrue($this->observer->isValidFor($eventMock));
     }
@@ -103,11 +101,11 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $callbackMock = [$this->createPartialMock(\stdClass::class, [$callbackName]), $callbackName];
         $callbackMock[0]->expects($this->once())
             ->method('testCallback')
-            ->willReturn(true);
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
+            ->will($this->returnValue(true));
+        $eventMock = $this->createPartialMock(Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->willReturn($eventName);
+            ->will($this->returnValue($eventName));
         $this->observer->setData('event_name', $eventName);
         $this->observer->setData('callback', $callbackMock);
 
@@ -118,10 +116,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     {
         $eventName = 'eventName';
         $notValidName = 'event_name_2';
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getName']);
+        $eventMock = $this->createPartialMock(Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->willReturn($eventName);
+            ->will($this->returnValue($eventName));
         $this->observer->setData('event_name', $notValidName);
 
         $this->observer->dispatch($eventMock);

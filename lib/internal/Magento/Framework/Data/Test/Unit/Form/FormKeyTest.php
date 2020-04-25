@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Data\Test\Unit\Form;
 
@@ -10,24 +11,26 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Session\SessionManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Framework\Data\Form\FormKey
  */
-class FormKeyTest extends \PHPUnit\Framework\TestCase
+class FormKeyTest extends TestCase
 {
     /**
-     * @var Random|\PHPUnit\Framework\MockObject\MockObject
+     * @var Random|MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var SessionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var SessionManager|MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
@@ -38,9 +41,9 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->mathRandomMock = $this->createMock(Random::class);
         $methods = ['setData', 'getData'];
-        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\SessionManager::class, $methods);
+        $this->sessionMock = $this->createPartialMock(SessionManager::class, $methods);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeJs')->willReturnArgument(0);
         $this->formKey = new FormKey(
@@ -59,12 +62,12 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getData')
-            ->willReturnMap($valueMap);
+            ->will($this->returnValueMap($valueMap));
         $this->mathRandomMock
             ->expects($this->once())
             ->method('getRandomString')
             ->with(16)
-            ->willReturn('random_string');
+            ->will($this->returnValue('random_string'));
         $this->sessionMock->expects($this->once())->method('setData')->with(FormKey::FORM_KEY, 'random_string');
         $this->formKey->getFormKey();
     }
@@ -75,7 +78,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
             ->expects($this->exactly(2))
             ->method('getData')
             ->with(FormKey::FORM_KEY)
-            ->willReturn('random_string');
+            ->will($this->returnValue('random_string'));
         $this->mathRandomMock
             ->expects($this->never())
             ->method('getRandomString');

@@ -5,24 +5,29 @@
  */
 namespace Magento\Framework\View\Test\Unit\Url;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Url\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Url\Config
+     * @var Config
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     protected function setUp(): void
     {
         $this->_scopeConfig = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->_model = new \Magento\Framework\View\Url\Config($this->_scopeConfig);
+        $this->_model = new Config($this->_scopeConfig);
     }
 
     /**
@@ -39,8 +44,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             $path
-        )->willReturn(
-            $expectedValue
+        )->will(
+            $this->returnValue($expectedValue)
         );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);

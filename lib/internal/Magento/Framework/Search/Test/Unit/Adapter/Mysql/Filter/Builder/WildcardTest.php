@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,22 +6,27 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard as WildcardBuilder;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WildcardTest extends \PHPUnit\Framework\TestCase
+class WildcardTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|MockObject
      */
     private $requestFilter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard
+     * @var WildcardBuilder
      */
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
@@ -31,27 +36,27 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
+        $this->requestFilter = $this->getMockBuilder(Term::class)
             ->setMethods(['getField', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($field, $operator, $value) {
                         return sprintf('%s %s %s', $field, $operator, $value);
                     }
-                
+                )
             );
 
         $this->filter = $objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard::class,
+            WildcardBuilder::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]
@@ -69,7 +74,7 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->willReturn($field);
+            ->will($this->returnValue($field));
         $this->requestFilter->expects($this->once())->method('getValue')->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);

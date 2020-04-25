@@ -3,39 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\Collection;
-use \Magento\Framework\Pricing\Price\Pool;
+use Magento\Framework\Pricing\Price\Collection;
+use Magento\Framework\Pricing\Price\Factory;
+use Magento\Framework\Pricing\Price\Pool;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class Collection
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Price\Collection
+     * @var Collection
      */
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\Pool
+     * @var Pool
      */
     protected $pool;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInterface|MockObject
      */
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
@@ -56,9 +62,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
-        $this->priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
-        $this->factoryMock = $this->createMock(\Magento\Framework\Pricing\Price\Factory::class);
+        $this->saleableItemMock = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->factoryMock = $this->createMock(Factory::class);
 
         $this->collection = new Collection(
             $this->saleableItemMock,
@@ -80,7 +86,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo('RegularPrice'),
                 $this->quantity
             )
-            ->willReturn($this->priceMock);
+            ->will($this->returnValue($this->priceMock));
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
         //Calling the get method again with the same code, cached copy should be used
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
@@ -98,7 +104,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo($this->pool->current()),
                 $this->quantity
             )
-            ->willReturn($this->priceMock);
+            ->will($this->returnValue($this->priceMock));
         $this->assertEquals($this->priceMock, $this->collection->current());
     }
 }

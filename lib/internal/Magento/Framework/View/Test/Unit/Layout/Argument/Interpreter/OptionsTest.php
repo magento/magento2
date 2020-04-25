@@ -5,17 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use \Magento\Framework\View\Layout\Argument\Interpreter\Options;
 
-class OptionsTest extends \PHPUnit\Framework\TestCase
+class OptionsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InterpreterInterface|MockObject
      */
     protected $_interpreter;
 
@@ -26,22 +31,22 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 
     public function testEvaluate()
     {
-        $modelClass = \Magento\Framework\Data\OptionSourceInterface::class;
+        $modelClass = OptionSourceInterface::class;
         $model = $this->getMockForAbstractClass($modelClass);
         $model->expects(
             $this->once()
         )->method(
             'toOptionArray'
-        )->willReturn(
-            
+        )->will(
+            $this->returnValue(
                 ['value1' => 'label 1', 'value2' => 'label 2', ['value' => 'value3', 'label' => 'label 3']]
-            
+            )
         );
         $this->_objectManager->expects(
             $this->once()
@@ -49,8 +54,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $modelClass
-        )->willReturn(
-            $model
+        )->will(
+            $this->returnValue($model)
         );
         $input = ['model' => $modelClass];
         $expected = [

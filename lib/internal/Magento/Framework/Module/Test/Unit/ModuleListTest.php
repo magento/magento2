@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList\Loader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,8 +47,8 @@ class ModuleListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->config = $this->createMock(DeploymentConfig::class);
+        $this->loader = $this->createMock(Loader::class);
         $this->model = new ModuleList($this->config, $this->loader);
     }
 

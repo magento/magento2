@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,26 +9,33 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class AuthorizationTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Authorization;
+use Magento\Framework\Authorization\PolicyInterface;
+use Magento\Framework\Authorization\RoleLocatorInterface;
+use Magento\Framework\AuthorizationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AuthorizationTest extends TestCase
 {
     /**
      * Authorization model
      *
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_policyMock;
 
     protected function setUp(): void
     {
-        $this->_policyMock = $this->createMock(\Magento\Framework\Authorization\PolicyInterface::class);
-        $roleLocatorMock = $this->createMock(\Magento\Framework\Authorization\RoleLocatorInterface::class);
-        $roleLocatorMock->expects($this->any())->method('getAclRoleId')->willReturn('U1');
-        $this->_model = new \Magento\Framework\Authorization($this->_policyMock, $roleLocatorMock);
+        $this->_policyMock = $this->createMock(PolicyInterface::class);
+        $roleLocatorMock = $this->createMock(RoleLocatorInterface::class);
+        $roleLocatorMock->expects($this->any())->method('getAclRoleId')->will($this->returnValue('U1'));
+        $this->_model = new Authorization($this->_policyMock, $roleLocatorMock);
     }
 
     protected function tearDown(): void
@@ -38,13 +45,13 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAllowedReturnPositiveValue()
     {
-        $this->_policyMock->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->_policyMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
         $this->assertTrue($this->_model->isAllowed('Magento_Module::acl_resource'));
     }
 
     public function testIsAllowedReturnNegativeValue()
     {
-        $this->_policyMock->expects($this->once())->method('isAllowed')->willReturn(false);
+        $this->_policyMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
         $this->assertFalse($this->_model->isAllowed('Magento_Module::acl_resource'));
     }
 }

@@ -3,19 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\PriceBox
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceBoxTest extends \PHPUnit\Framework\TestCase
+class PriceBoxTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -25,68 +41,68 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var RendererPool|MockObject
      */
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleable;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInterface|MockObject
      */
     protected $price;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->rendererPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
+        $this->rendererPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
             ->setMethods(['createAmountRender'])
             ->getMock();
 
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
+        $layout = $this->createMock(LayoutInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $cacheState = $this->getMockBuilder(StateInterface::class)
             ->getMockForAbstractClass();
         $storeConfig = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getLayout', 'getEventManager', 'getStoreConfig', 'getScopeConfig', 'getCacheState'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
             ->method('getLayout')
-            ->willReturn($layout);
+            ->will($this->returnValue($layout));
         $this->context->expects($this->any())
             ->method('getEventManager')
-            ->willReturn($eventManager);
+            ->will($this->returnValue($eventManager));
         $this->context->expects($this->any())
             ->method('getStoreConfig')
-            ->willReturn($storeConfig);
+            ->will($this->returnValue($storeConfig));
         $this->context->expects($this->any())
             ->method('getScopeConfig')
-            ->willReturn($scopeConfigMock);
+            ->will($this->returnValue($scopeConfigMock));
         $this->context->expects($this->any())
             ->method('getCacheState')
-            ->willReturn($cacheState);
+            ->will($this->returnValue($cacheState));
 
-        $this->saleable = $this->createMock(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->saleable = $this->createMock(SaleableInterface::class);
 
-        $this->price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->price = $this->createMock(PriceInterface::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Framework\Pricing\Render\PriceBox::class,
+            PriceBox::class,
             [
                 'context' => $this->context,
                 'saleableItem' => $this->saleable,
@@ -106,10 +122,10 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
     {
         $this->price->expects($this->once())
             ->method('getPriceCode')
-            ->willReturn($priceCode);
+            ->will($this->returnValue($priceCode));
 
         $priceBox = $this->objectManager->getObject(
-            \Magento\Framework\Pricing\Render\PriceBox::class,
+            PriceBox::class,
             [
                 'context' => $this->context,
                 'saleableItem' => $this->saleable,
@@ -154,39 +170,39 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
     {
         $priceCode = 'test_price';
 
-        $price = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price = $this->createMock(PriceInterface::class);
 
-        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $priceInfo = $this->createMock(Base::class);
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($priceCode)
-            ->willReturn($price);
+            ->will($this->returnValue($price));
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
-            ->willReturn($priceInfo);
+            ->will($this->returnValue($priceInfo));
 
         $this->assertEquals($price, $this->model->getPriceType($priceCode));
     }
 
     public function testRenderAmount()
     {
-        $amount = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
         $arguments = [];
         $resultHtml = 'result_html';
 
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['toHtml'])
             ->getMock();
         $amountRender->expects($this->once())
             ->method('toHtml')
-            ->willReturn($resultHtml);
+            ->will($this->returnValue($resultHtml));
 
         $this->rendererPool->expects($this->once())
             ->method('createAmountRender')
             ->with($amount, $this->saleable, $this->price, $arguments)
-            ->willReturn($amountRender);
+            ->will($this->returnValue($amountRender));
 
         $this->assertEquals($resultHtml, $this->model->renderAmount($amount, $arguments));
     }
@@ -210,7 +226,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
         $priceId = 'price_id';
         $this->saleable->expects($this->once())
             ->method('getId')
-            ->willReturn($priceId);
+            ->will($this->returnValue($priceId));
 
         if (!empty($prefix)) {
             $this->model->setData('price_id_prefix', $prefix);

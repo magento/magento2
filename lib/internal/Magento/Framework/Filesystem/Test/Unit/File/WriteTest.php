@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,14 @@
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class WriteTest
- */
-class WriteTest extends \PHPUnit\Framework\TestCase
+class WriteTest extends TestCase
 {
     /**
      * @var Write
@@ -35,17 +36,17 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'w';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var DriverInterface|MockObject
      */
     protected $driver;
 
     protected function setUp(): void
     {
-        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->driver->expects($this->once())
             ->method('fileOpen')
             ->with($this->path, $this->mode)
@@ -53,40 +54,34 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file = new Write($this->path, $this->driver, $this->mode);
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
     }
 
-    /**
-     */
     public function testInstanceFileNotExists()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $file = new Write($this->path, $driver, 'r');
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
-    /**
-     */
     public function testInstanceFileAlreadyExists()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $file = new Write($this->path, $driver, 'x');
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
     public function testWrite()
@@ -96,7 +91,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileWrite')
             ->with($this->resource, $data)
-            ->willReturn($result);
+            ->will($this->returnValue($result));
         $this->assertEquals($result, $this->file->write($data));
     }
 
@@ -109,7 +104,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
-            ->willReturn($result);
+            ->will($this->returnValue($result));
         $this->assertEquals($result, $this->file->writeCsv($data, $delimiter, $enclosure));
     }
 
@@ -119,16 +114,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileFlush')
             ->with($this->resource)
-            ->willReturn($result);
+            ->will($this->returnValue($result));
         $this->assertEquals($result, $this->file->flush());
     }
 
-    /**
-     */
     public function testWriteException()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $data = 'data';
         $emptyTranslation = '';
 
@@ -140,12 +132,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file->write($data);
     }
 
-    /**
-     */
     public function testWriteCsvException()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $data = [];
         $delimiter = ',';
         $enclosure = '"';
@@ -159,12 +148,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file->writeCsv($data, $delimiter, $enclosure);
     }
 
-    /**
-     */
     public function testFlushException()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $emptyTranslation = '';
 
         $this->driver->expects($this->once())
@@ -182,7 +168,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileLock')
             ->with($this->resource, $lockMode)
-            ->willReturn($result);
+            ->will($this->returnValue($result));
         $this->assertEquals($result, $this->file->lock($lockMode));
     }
 
@@ -192,7 +178,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->driver->expects($this->once())
             ->method('fileUnlock')
             ->with($this->resource)
-            ->willReturn($result);
+            ->will($this->returnValue($result));
         $this->assertEquals($result, $this->file->unlock());
     }
 }

@@ -5,10 +5,16 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\Escaper;
 
-class SelectTest extends \PHPUnit\Framework\TestCase
+class SelectTest extends TestCase
 {
     /**
      * @var Select
@@ -16,36 +22,36 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $select;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaper;
 
     protected function setUp(): void
     {
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
 
-        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->once())
             ->method('getEscaper')
-            ->willReturn($this->escaper);
+            ->will($this->returnValue($this->escaper));
         $context->expects($this->once())
             ->method('getEventManager')
-            ->willReturn($eventManager);
+            ->will($this->returnValue($eventManager));
         $context->expects($this->once())
             ->method('getScopeConfig')
-            ->willReturn($scopeConfig);
+            ->will($this->returnValue($scopeConfig));
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->select = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Html\Select::class,
+            Select::class,
             ['context' => $context]
         );
     }
@@ -99,10 +105,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -136,10 +142,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -188,10 +194,10 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->willReturn('ESCAPED');
+            ->will($this->returnValue('ESCAPED'));
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->willReturn('ESCAPED_ATTR');
+            ->will($this->returnValue('ESCAPED_ATTR'));
 
         $optionsSets = [
             $this->getOptionsWithSingleQuotes(),

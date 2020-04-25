@@ -3,22 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
-class CacheTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Config;
+use Magento\Framework\Cache\Frontend\Decorator\Bare;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
+use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache
+     * @var Cache
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject[]
+     * @var MockObject[]
      */
     protected $_cacheTypeMocks;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_cacheFrontendMock;
 
@@ -27,7 +38,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->_initCacheTypeMocks();
 
         $this->_cacheFrontendMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Cache\FrontendInterface::class,
+            FrontendInterface::class,
             [],
             '',
             true,
@@ -36,27 +47,27 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             ['clean']
         );
 
-        $frontendPoolMock = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
+        $frontendPoolMock = $this->createMock(Pool::class);
         $frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
 
         $frontendPoolMock->expects(
             $this->any()
         )->method(
             'current'
-        )->willReturn(
-            $this->_cacheFrontendMock
+        )->will(
+            $this->returnValue($this->_cacheFrontendMock)
         );
         $frontendPoolMock->expects(
             $this->any()
         )->method(
             'get'
         )->with(
-            \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
-        )->willReturn(
-            $this->_cacheFrontendMock
+            Pool::DEFAULT_FRONTEND_ID
+        )->will(
+            $this->returnValue($this->_cacheFrontendMock)
         );
 
-        $this->_model = new \Magento\Framework\App\Cache($frontendPoolMock);
+        $this->_model = new Cache($frontendPoolMock);
     }
 
     /**
@@ -65,15 +76,15 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected function _initCacheTypeMocks()
     {
         $cacheTypes = [
-            \Magento\Framework\Cache\Frontend\Decorator\TagScope::class,
-            \Magento\Framework\Cache\Frontend\Decorator\Bare::class,
+            TagScope::class,
+            Bare::class,
         ];
         foreach ($cacheTypes as $type) {
             $this->_cacheTypeMocks[$type] = $this->getMockBuilder($type)
                 ->setMethods(['clean'])
                 ->setConstructorArgs(
                     [
-                        $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class), '
+                        $this->getMockForAbstractClass(FrontendInterface::class), '
                         FIXTURE_TAG'
                     ]
                 )
@@ -85,7 +96,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      * Callback for the object manager to get different cache type mocks
      *
      * @param string $type Class of the cache type
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     public function getTypeMock($type)
     {
@@ -118,8 +129,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             'test_id'
-        )->willReturn(
-            'test_data'
+        )->will(
+            $this->returnValue('test_data')
         );
         $this->assertEquals('test_data', $this->_model->load('test_id'));
     }
@@ -152,7 +163,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function saveDataProvider()
     {
-        $configTag = \Magento\Framework\App\Config::CACHE_TAG;
+        $configTag = Config::CACHE_TAG;
         return [
             'default tags' => ['test_data', 'test_id', [], 'test_data', 'test_id', []],
             'config tags' => [
@@ -187,8 +198,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'remove'
         )->with(
             'test_id'
-        )->willReturn(
-            $result
+        )->will(
+            $this->returnValue($result)
         );
         $this->assertEquals($result, $this->_model->remove('test_id'));
     }
@@ -211,8 +222,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             $expectedTags
-        )->willReturn(
-            true
+        )->will(
+            $this->returnValue(true)
         );
         $this->assertTrue($this->_model->clean($expectedTags));
     }
@@ -225,8 +236,8 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'clean'
         )->with(
             \Zend_Cache::CLEANING_MODE_ALL
-        )->willReturn(
-            true
+        )->will(
+            $this->returnValue(true)
         );
         $this->assertTrue($this->_model->clean());
     }

@@ -5,20 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RuleInterface|MockObject
      */
     private $rule;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ComponentRegistrarInterface|MockObject
      */
     private $componentRegistrar;
 
@@ -29,20 +31,17 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
+        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
         $this->componentRegistrar = $this->getMockForAbstractClass(
-            \Magento\Framework\Component\ComponentRegistrarInterface::class
+            ComponentRegistrarInterface::class
         );
         $this->model = new Module($this->rule, $this->componentRegistrar);
     }
 
-    /**
-     */
     public function testGetPatternDirsException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Required parameter "module_name" is not specified');
-
         $this->model->getPatternDirs([]);
     }
 
@@ -54,11 +53,11 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, $module)
-            ->willReturn($modulePath);
+            ->will($this->returnValue($modulePath));
         $this->rule->expects($this->once())
             ->method('getPatternDirs')
             ->with(['module_name' => $module, 'module_dir' => $modulePath])
-            ->willReturn($expectedResult);
+            ->will($this->returnValue($expectedResult));
         $this->assertEquals($expectedResult, $this->model->getPatternDirs(['module_name' => $module]));
     }
 }

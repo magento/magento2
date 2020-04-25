@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,9 @@
 namespace Magento\Framework\Serialize\Test\Unit;
 
 use Magento\Framework\Serialize\JsonValidator;
+use PHPUnit\Framework\TestCase;
 
-class JsonValidatorTest extends \PHPUnit\Framework\TestCase
+class JsonValidatorTest extends TestCase
 {
     /**
      * @var JsonValidator

@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
+use Magento\Framework\Code\Generator\ClassGenerator;
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ConverterTest
- * @package Magento\Framework\ObjectManager\Code\Generator
- */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var string
@@ -25,22 +29,22 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $resultClassName;
 
     /**
-     * @var Io | \PHPUnit\Framework\MockObject\MockObject
+     * @var Io|MockObject
      */
     protected $ioObjectMock;
 
     /**
-     * @var \Magento\Framework\Code\Generator\EntityAbstract
+     * @var EntityAbstract
      */
     protected $generator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\ClassGenerator | \PHPUnit\Framework\MockObject\MockObject
+     * @var ClassGenerator|MockObject
      */
     protected $classGenerator;
 
     /**
-     * @var \Magento\Framework\Code\Generator\DefinedClasses | \PHPUnit\Framework\MockObject\MockObject
+     * @var DefinedClasses|MockObject
      */
     private $definedClassesMock;
 
@@ -49,15 +53,15 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->sourceClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample::class;
         $this->resultClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\SampleConverter::class;
 
-        $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
-        $this->classGenerator = $this->createMock(\Magento\Framework\Code\Generator\ClassGenerator::class);
+        $this->ioObjectMock = $this->createMock(Io::class);
+        $this->classGenerator = $this->createMock(ClassGenerator::class);
 
-        $this->definedClassesMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\DefinedClasses::class)
+        $this->definedClassesMock = $this->getMockBuilder(DefinedClasses::class)
             ->disableOriginalConstructor()->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->generator = $objectManager->getObject(
-            \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
+            Converter::class,
             [
                 'sourceClassName' => $this->sourceClassName,
                 'resultClassName' => $this->resultClassName,
@@ -76,12 +80,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         //Mocking _validateData call
         $this->definedClassesMock->expects($this->at(0))
             ->method('isClassLoadable')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $this->ioObjectMock->expects($this->once())
             ->method('makeResultFileDirectory')
             ->with($this->resultClassName)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         //Mocking _generateCode call
         $this->classGenerator->expects($this->once())
@@ -99,13 +103,13 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('generate')
-            ->willReturn($generatedCode);
+            ->will($this->returnValue($generatedCode));
 
         //Mocking generation
         $this->ioObjectMock->expects($this->any())
             ->method('generateResultFileName')
             ->with($this->resultClassName)
-            ->willReturn($resultFileName);
+            ->will($this->returnValue($resultFileName));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);

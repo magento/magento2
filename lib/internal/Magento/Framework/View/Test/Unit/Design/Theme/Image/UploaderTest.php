@@ -9,52 +9,60 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
-class UploaderTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Design\Theme\Image\Uploader;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Exception\LocalizedException;
+
+class UploaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Uploader|MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_transferAdapterMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_fileUploader;
 
     protected function setUp(): void
     {
-        $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_filesystemMock = $this->createMock(Filesystem::class);
         $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
         $this->_fileUploader = $this->createMock(\Magento\Framework\File\Uploader::class);
 
-        $adapterFactory = $this->createMock(\Magento\Framework\HTTP\Adapter\FileTransferFactory::class);
+        $adapterFactory = $this->createMock(FileTransferFactory::class);
         $adapterFactory->expects(
             $this->once()
         )->method(
             'create'
-        )->willReturn(
-            $this->_transferAdapterMock
+        )->will(
+            $this->returnValue($this->_transferAdapterMock)
         );
 
-        $uploaderFactory = $this->createPartialMock(\Magento\Framework\File\UploaderFactory::class, ['create']);
-        $uploaderFactory->expects($this->any())->method('create')->willReturn($this->_fileUploader);
+        $uploaderFactory = $this->createPartialMock(UploaderFactory::class, ['create']);
+        $uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_fileUploader));
 
-        $this->_model = new \Magento\Framework\View\Design\Theme\Image\Uploader(
+        $this->_model = new Uploader(
             $this->_filesystemMock,
             $adapterFactory,
             $uploaderFactory
@@ -96,7 +104,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => true,
                 'save' => true,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -104,7 +112,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => false,
                 'save' => true,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -112,7 +120,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => true,
                 'save' => false,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ]
         ];
     }
@@ -133,8 +141,8 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             'isUploaded'
         )->with(
             $testScope
-        )->willReturn(
-            $isUploaded
+        )->will(
+            $this->returnValue($isUploaded)
         );
         $this->_transferAdapterMock->expects(
             $this->any()
@@ -142,23 +150,23 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             'isValid'
         )->with(
             $testScope
-        )->willReturn(
-            $isValid
+        )->will(
+            $this->returnValue($isValid)
         );
         $this->_fileUploader->expects(
             $this->any()
         )->method(
             'checkAllowedExtension'
-        )->willReturn(
-            $checkExtension
+        )->will(
+            $this->returnValue($checkExtension)
         );
-        $this->_fileUploader->expects($this->any())->method('save')->willReturn($save);
+        $this->_fileUploader->expects($this->any())->method('save')->will($this->returnValue($save));
         $this->_fileUploader->expects(
             $this->any()
         )->method(
             'getUploadedFileName'
-        )->willReturn(
-            'test_filename'
+        )->will(
+            $this->returnValue('test_filename')
         );
 
         $this->assertEquals($result, $this->_model->uploadPreviewImage($testScope, '/tmp'));

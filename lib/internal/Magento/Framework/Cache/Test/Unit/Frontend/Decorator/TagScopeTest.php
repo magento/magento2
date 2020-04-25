@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
-class TagScopeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
+use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TagScopeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Cache\Frontend\Decorator\TagScope
+     * @var TagScope
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_frontend;
 
     protected function setUp(): void
     {
-        $this->_frontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->_object = new \Magento\Framework\Cache\Frontend\Decorator\TagScope($this->_frontend, 'enforced_tag');
+        $this->_frontend = $this->createMock(FrontendInterface::class);
+        $this->_object = new TagScope($this->_frontend, 'enforced_tag');
     }
 
     protected function tearDown(): void
@@ -46,8 +53,8 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
             'test_id',
             ['test_tag_one', 'test_tag_two', 'enforced_tag'],
             111
-        )->willReturn(
-            $expectedResult
+        )->will(
+            $this->returnValue($expectedResult)
         );
         $actualResult = $this->_object->save('test_value', 'test_id', ['test_tag_one', 'test_tag_two'], 111);
         $this->assertSame($expectedResult, $actualResult);
@@ -63,8 +70,8 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['enforced_tag']
-        )->willReturn(
-            $expectedResult
+        )->will(
+            $this->returnValue($expectedResult)
         );
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_ALL,
@@ -83,8 +90,8 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', 'test_tag_two', 'enforced_tag']
-        )->willReturn(
-            $expectedResult
+        )->will(
+            $this->returnValue($expectedResult)
         );
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
@@ -108,8 +115,8 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', 'enforced_tag']
-        )->willReturn(
-            $fixtureResultOne
+        )->will(
+            $this->returnValue($fixtureResultOne)
         );
         $this->_frontend->expects(
             $this->at(1)
@@ -118,8 +125,8 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_two', 'enforced_tag']
-        )->willReturn(
-            $fixtureResultTwo
+        )->will(
+            $this->returnValue($fixtureResultTwo)
         );
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,

@@ -6,9 +6,11 @@
 
 namespace Magento\Framework\View\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
-class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
+class EntitySpecificHandlesListTest extends TestCase
 {
     /**
      * @var EntitySpecificHandlesList
@@ -17,7 +19,7 @@ class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->entitySpecificHandlesList = $objectManager->getObject(EntitySpecificHandlesList::class);
     }
 

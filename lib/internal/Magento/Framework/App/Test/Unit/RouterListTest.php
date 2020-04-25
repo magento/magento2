@@ -5,17 +5,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
-class RouterListTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\RouterList;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RouterListTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\RouterList
+     * @var RouterList
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
@@ -34,8 +41,8 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
             'anotherRouter' => ['class' => 'AnotherClass', 'disable' => false, 'sortOrder' => 15],
         ];
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->model = new \Magento\Framework\App\RouterList($this->objectManagerMock, $this->routerList);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->model = new RouterList($this->objectManagerMock, $this->routerList);
     }
 
     public function testCurrent()
@@ -44,7 +51,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->willReturn($expectedClass);
+            ->will($this->returnValue($expectedClass));
 
         $this->assertEquals($expectedClass, $this->model->current());
     }
@@ -55,7 +62,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('FrontClass')
-            ->willReturn($expectedClass);
+            ->will($this->returnValue($expectedClass));
 
         $this->model->next();
         $this->assertEquals($expectedClass, $this->model->current());
@@ -82,12 +89,12 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
             ->with('DefaultClass')
-            ->willReturn($defaultClass);
+            ->will($this->returnValue($defaultClass));
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with('FrontClass')
-            ->willReturn($frontClass);
+            ->will($this->returnValue($frontClass));
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

@@ -3,13 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-use \Magento\Framework\HTTP\PhpEnvironment\Request;
-
 use Laminas\Stdlib\Parameters;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class RequestTest extends TestCase
 {
     /**
      * @var Request
@@ -17,17 +25,17 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManager|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var CookieReaderInterface|MockObject
      */
     private $cookieReader;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit\Framework\MockObject\MockObject
+     * @var StringUtils|MockObject
      */
     private $converter;
 
@@ -38,14 +46,14 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->cookieReader = $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
-        $this->converter = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->cookieReader = $this->createMock(CookieReaderInterface::class);
+        $this->converter = $this->createMock(StringUtils::class);
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
@@ -239,7 +247,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->willReturn($default);
+            ->will($this->returnValue($default));
 
         $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
     }
@@ -254,7 +262,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($key, $default)
-            ->willReturn($value);
+            ->will($this->returnValue($value));
 
         $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
     }
@@ -268,7 +276,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getCookie')
             ->with($nullKey, $default)
-            ->willReturn($default);
+            ->will($this->returnValue($default));
 
         $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
     }

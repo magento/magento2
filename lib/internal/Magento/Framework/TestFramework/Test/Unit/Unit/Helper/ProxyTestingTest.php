@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\TestFramework\Test\Unit\Unit\Helper;
 
-class ProxyTestingTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\TestCase;
+
+class ProxyTestingTest extends TestCase
 {
     /**
      * @param string $method
@@ -43,7 +48,7 @@ class ProxyTestingTest extends \PHPUnit\Framework\TestCase
         $builder->willReturnCallback($callProxy);
 
         // Test it
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();
+        $helper = new ProxyTesting();
         $result = $helper->invokeWithExpectations(
             $object,
             $proxiedObject,

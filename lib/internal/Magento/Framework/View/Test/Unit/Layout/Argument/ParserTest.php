@@ -5,13 +5,16 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument;
 
-class ParserTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Layout\Argument\Parser;
+
+class ParserTest extends TestCase
 {
     public function testParse()
     {
         $document = new \DOMDocument();
         $document->load(__DIR__ . '/_files/arguments.xml');
-        $parser = new \Magento\Framework\View\Layout\Argument\Parser();
+        $parser = new Parser();
         $actual = $parser->parse($document->getElementsByTagName('argument')->item(0));
         $expected = [
             'updater' => ['Updater1', 'Updater2'],

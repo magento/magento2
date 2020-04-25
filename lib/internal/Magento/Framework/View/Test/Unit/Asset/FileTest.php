@@ -6,22 +6,27 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\Source;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\File;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Source|\PHPUnit\Framework\MockObject\MockObject
+     * @var Source|MockObject
      */
     private $source;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit\Framework\MockObject\MockObject
+     * @var Minification|MockObject
      */
     private $minificationMock;
 
@@ -32,9 +37,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->source = $this->createMock(\Magento\Framework\View\Asset\Source::class);
-        $this->context = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\ContextInterface::class);
-        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
+        $this->source = $this->createMock(Source::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,8 +60,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUrl()
     {
-        $this->context->expects($this->once())->method('getBaseUrl')->willReturn('http://example.com/');
-        $this->context->expects($this->once())->method('getPath')->willReturn('static');
+        $this->context->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('static'));
         $this->assertEquals('http://example.com/static/Magento_Module/dir/file.css', $this->object->getUrl());
     }
 
@@ -76,7 +81,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPath($contextPath, $module, $filePath, $expected)
     {
-        $this->context->expects($this->once())->method('getPath')->willReturn($contextPath);
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue($contextPath));
         $object = new File($this->source, $this->context, $filePath, $module, '', $this->minificationMock);
         $this->assertEquals($expected, $object->getPath());
     }
@@ -103,20 +108,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->source->expects($this->once())
             ->method('getFile')
             ->with($this->object)
-            ->willReturn('result');
+            ->will($this->returnValue('result'));
         $this->assertEquals('result', $this->object->getSourceFile());
         $this->assertEquals('result', $this->object->getSourceFile()); // second time to assert in-memory caching
     }
 
-    /**
-     */
     public function testGetSourceFileMissing()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('Unable to resolve the source file for \'context/Magento_Module/dir/file.css\'');
-
-        $this->context->expects($this->once())->method('getPath')->willReturn('context');
-        $this->source->expects($this->once())->method('getFile')->willReturn(false);
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('context'));
+        $this->source->expects($this->once())->method('getFile')->will($this->returnValue(false));
         $this->object->getSourceFile();
     }
 
@@ -130,7 +132,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->source->expects($this->exactly(2))
             ->method('getContent')
             ->with($this->object)
-            ->willReturn($content);
+            ->will($this->returnValue($content));
         $this->assertEquals($content, $this->object->getContent());
         $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
@@ -146,17 +148,14 @@ class FileTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testGetContentNotFound()
     {
-        $this->expectException(\Magento\Framework\View\Asset\File\NotFoundException::class);
+        $this->expectException('Magento\Framework\View\Asset\File\NotFoundException');
         $this->expectExceptionMessage('Unable to get content for \'Magento_Module/dir/file.css\'');
-
         $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->object->getContent();
     }
 

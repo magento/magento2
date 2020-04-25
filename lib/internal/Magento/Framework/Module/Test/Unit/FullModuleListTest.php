@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList\Loader;
+use PHPUnit\Framework\TestCase;
 
-class FullModuleListTest extends \PHPUnit\Framework\TestCase
+class FullModuleListTest extends TestCase
 {
     /**
      * @var ModuleList
@@ -16,7 +18,7 @@ class FullModuleListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $loaderMock = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $loaderMock = $this->createMock(Loader::class);
         $modules = [
             'Vendor_A' => ['data' => 'a'],
             'Vendor_B' => ['data' => 'b'],

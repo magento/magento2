@@ -30,9 +30,9 @@ class CacheTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->frontendCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -59,6 +59,6 @@ class CacheTest extends TestCase
             ->with(self::LOCK_PREFIX . $identifier)
             ->willReturn(true);
 
-        $this->assertTrue($this->cache->unlock($identifier));
+        $this->assertEquals(true, $this->cache->unlock($identifier));
     }
 }

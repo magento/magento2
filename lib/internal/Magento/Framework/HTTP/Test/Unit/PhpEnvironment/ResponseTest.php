@@ -3,26 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-use \Magento\Framework\HTTP\PhpEnvironment\Response;
+use Laminas\Http\Header\GenericHeader;
+use Laminas\Http\Headers;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\HTTP\PhpEnvironment\Response;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
+    /** @var MockObject|Response */
     protected $response;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Laminas\Http\Headers */
+    /** @var MockObject|Headers */
     protected $headers;
 
     protected function setUp(): void
     {
         $this->response = $this->createPartialMock(
-            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
+            Response::class,
             ['getHeaders', 'send', 'clearHeader']
         );
         $this->headers = $this->createPartialMock(
-            \Laminas\Http\Headers::class,
+            Headers::class,
             ['has', 'get', 'current', 'removeHeader']
         );
     }
@@ -37,15 +44,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
         $this->headers
             ->expects($this->once())
             ->method('has')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->headers
             ->expects($this->once())
             ->method('get')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $this->assertTrue($this->response->getHeader('testName'));
     }
@@ -55,15 +62,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
         $this->headers
             ->expects($this->once())
             ->method('has')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->headers
             ->expects($this->never())
             ->method('get')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $this->assertFalse($this->response->getHeader('testName'));
     }
@@ -85,7 +92,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
         $this->response
             ->expects($this->never())
             ->method('clearHeader')
@@ -99,7 +106,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
         $this->response
             ->expects($this->once())
             ->method('clearHeader')
@@ -111,34 +118,34 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testClearHeaderIfHeaderExistsAndWasFound()
     {
         $response = $this->response = $this->createPartialMock(
-            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
+            Response::class,
             ['getHeaders', 'send']
         );
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = \Laminas\Http\Header\GenericHeader::fromString('Header-name: header-value');
+        $header = GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())
             ->method('has')
             ->with('Header-name')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->headers
             ->expects($this->once())
             ->method('get')
             ->with('Header-name')
-            ->willReturn($header);
+            ->will($this->returnValue($header));
         $this->headers
             ->expects($this->once())
             ->method('removeHeader')
             ->with($header)
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
 
         $response->clearHeader('Header-name');
     }
@@ -146,24 +153,24 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testClearHeaderAndHeaderNotExists()
     {
         $response = $this->response = $this->createPartialMock(
-            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
+            Response::class,
             ['getHeaders', 'send']
         );
 
         $this->headers->addHeaderLine('Header-name: header-value');
 
-        $header = \Laminas\Http\Header\GenericHeader::fromString('Header-name: header-value');
+        $header = GenericHeader::fromString('Header-name: header-value');
 
         $this->headers
             ->expects($this->once())
             ->method('has')
             ->with('Header-name')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->headers
             ->expects($this->never())
             ->method('get')
             ->with('Header-name')
-            ->willReturn($header);
+            ->will($this->returnValue($header));
         $this->headers
             ->expects($this->never())
             ->method('removeHeader')
@@ -172,18 +179,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $response
             ->expects($this->once())
             ->method('getHeaders')
-            ->willReturn($this->headers);
+            ->will($this->returnValue($this->headers));
 
         $response->clearHeader('Header-name');
     }
 
-    /**
-     */
     public function testHttpResponseCodeWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/Invalid HTTP response code/');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessageRegExp('/Invalid HTTP response code/');
         $this->response->setHttpResponseCode(1);
     }
 
@@ -194,21 +198,21 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetRedirect()
     {
-        /** @var \Magento\Framework\App\Response\Http $response */
+        /** @var Http $response */
         $response = $this->createPartialMock(
-            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
+            Response::class,
             ['setHeader', 'setHttpResponseCode', 'sendHeaders']
         );
         $response
             ->expects($this->once())
             ->method('setHeader')
             ->with('Location', 'testUrl', true)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $response
             ->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(302)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $response->setRedirect('testUrl');
     }

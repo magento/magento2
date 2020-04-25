@@ -3,21 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Relations;
 
+use Magento\Framework\ObjectManager\Relations\Runtime;
+use Magento\Test\Di\Child;
+use Magento\Test\Di\ChildInterface;
+use Magento\Test\Di\DiInterface;
+use Magento\Test\Di\DiParent;
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/../_files/Child.php';
 
-class RuntimeTest extends \PHPUnit\Framework\TestCase
+class RuntimeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager\Relations\Runtime
+     * @var Runtime
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $this->model = new Runtime();
     }
 
     /**
@@ -36,9 +44,9 @@ class RuntimeTest extends \PHPUnit\Framework\TestCase
     public function getParentsDataProvider()
     {
         return [
-            [\Magento\Test\Di\DiInterface::class, []],
-            [\Magento\Test\Di\DiParent::class, [null, \Magento\Test\Di\DiInterface::class]],
-            [\Magento\Test\Di\Child::class, [\Magento\Test\Di\DiParent::class, \Magento\Test\Di\ChildInterface::class]]
+            [DiInterface::class, []],
+            [DiParent::class, [null, DiInterface::class]],
+            [Child::class, [DiParent::class, ChildInterface::class]]
         ];
     }
 

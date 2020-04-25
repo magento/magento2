@@ -3,28 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Framework\App\Request\Http as RequestHttp;
-use Magento\Framework\App\Response\Http as ResponseHttp;
-use Magento\Framework\App\Http as AppHttp;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\ExceptionHandlerInterface;
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\Http as AppHttp;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\App\Request\PathInfoProcessorInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\Route\ConfigInterface\Proxy;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\AreaList;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Framework\App\ExceptionHandlerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
-use Magento\Framework\App\Route\ConfigInterface\Proxy;
-use Magento\Framework\App\Request\PathInfoProcessorInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class HttpTest extends \PHPUnit\Framework\TestCase
+class HttpTest extends TestCase
 {
     /**
      * @var HelperObjectManager
@@ -84,20 +87,20 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new HelperObjectManager($this);
         $cookieReaderMock = $this->getMockBuilder(CookieReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $routeConfigMock = $this->getMockBuilder(Proxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pathInfoProcessorMock = $this->getMockBuilder(PathInfoProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
         $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->setConstructorArgs(
                 [
@@ -114,13 +117,13 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCodeByFrontName'])
             ->getMock();
-        $this->configLoaderMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
+        $this->configLoaderMock = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(ResponseHttp::class);
-        $this->frontControllerMock = $this->getMockBuilder(\Magento\Framework\App\FrontControllerInterface::class)
+        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
@@ -128,7 +131,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->exceptionHandlerMock = $this->getMockForAbstractClass(ExceptionHandlerInterface::class);
+        $this->exceptionHandlerMock = $this->createMock(ExceptionHandlerInterface::class);
 
         $this->http = $this->objectManager->getObject(
             AppHttp::class,
@@ -165,8 +168,8 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())->method('configure')->with([]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\App\FrontControllerInterface::class)
-            ->willReturn($this->frontControllerMock);
+            ->with(FrontControllerInterface::class)
+            ->will($this->returnValue($this->frontControllerMock));
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->requestMock)
@@ -188,13 +191,10 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->responseMock, $this->http->launch());
     }
 
-    /**
-     */
     public function testLaunchException()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Message');
-
         $this->setUpLaunch();
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')

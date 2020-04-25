@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,19 +7,21 @@
 
 namespace Magento\Framework\Archive\Test\Unit;
 
-use Composer\Composer;
+use Magento\Framework\Archive\Zip;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ZipTest extends \PHPUnit\Framework\TestCase
+class ZipTest extends TestCase
 {
 
     /**
-     * @var \Magento\Framework\Archive\Zip|\PHPUnit\Framework\MockObject\MockObject
+     * @var Zip|MockObject
      */
     protected $zip;
 
     protected function setUp(): void
     {
-        $this->zip = $this->getMockBuilder(\Magento\Framework\Archive\Zip::class)
+        $this->zip = $this->getMockBuilder(Zip::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -30,7 +32,7 @@ class ZipTest extends \PHPUnit\Framework\TestCase
     public function testConstructorNoExceptions()
     {
         try {
-            $reflectedClass = new \ReflectionClass(\Magento\Framework\Archive\Zip::class);
+            $reflectedClass = new \ReflectionClass(Zip::class);
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke($this->zip, []);
         } catch (\Exception $e) {

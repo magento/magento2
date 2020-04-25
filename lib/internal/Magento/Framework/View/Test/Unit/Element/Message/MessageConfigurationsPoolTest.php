@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Element\Message\MessageConfigurationsPool;
 
-class MessageConfigurationsPoolTest extends \PHPUnit\Framework\TestCase
+class MessageConfigurationsPoolTest extends TestCase
 {
     public function testGetMessageConfiguration()
     {

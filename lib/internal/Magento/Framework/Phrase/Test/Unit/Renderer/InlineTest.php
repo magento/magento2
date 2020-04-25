@@ -3,38 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-class InlineTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Phrase\Renderer\Inline;
+use Magento\Framework\Translate\Inline\ProviderInterface;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\TranslateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class InlineTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TranslateInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TranslateInterface|MockObject
      */
     protected $translator;
 
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Inline
+     * @var Inline
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProviderInterface|MockObject
      */
     protected $provider;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     protected function setUp(): void
     {
-        $this->translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
-        $this->provider = $this->createMock(\Magento\Framework\Translate\Inline\ProviderInterface::class);
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->translator = $this->createMock(TranslateInterface::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $this->renderer = new \Magento\Framework\Phrase\Renderer\Inline(
+        $this->renderer = new Inline(
             $this->translator,
             $this->provider,
             $this->loggerMock
@@ -49,16 +59,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
 
         $this->translator->expects($this->once())
             ->method('getTheme')
-            ->willReturn($theme);
+            ->will($this->returnValue($theme));
 
-        $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+        $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->willReturn($inlineTranslate);
+            ->will($this->returnValue($inlineTranslate));
 
         $this->assertEquals($result, $this->renderer->render([$text], []));
     }
@@ -67,14 +77,14 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     {
         $text = 'test';
 
-        $inlineTranslate = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+        $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->willReturn($inlineTranslate);
+            ->will($this->returnValue($inlineTranslate));
 
         $this->assertEquals($text, $this->renderer->render([$text], []));
     }

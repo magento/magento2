@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Factory
  *
@@ -7,10 +7,14 @@
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Profiler\Driver\Factory;
+use Magento\Framework\Profiler\DriverInterface;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Factory
+     * @var Factory
      */
     protected $_factory;
 
@@ -26,7 +30,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_factory = new \Magento\Framework\Profiler\Driver\Factory(
+        $this->_factory = new Factory(
             $this->_defaultDriverPrefix,
             $this->_defaultDriverType
         );
@@ -40,7 +44,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDefaultConstructor()
     {
-        $factory = new \Magento\Framework\Profiler\Driver\Factory();
+        $factory = new Factory();
         $this->assertAttributeNotEmpty('_defaultDriverPrefix', $factory);
         $this->assertAttributeNotEmpty('_defaultDriverType', $factory);
     }
@@ -54,7 +58,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         $driver = $this->_factory->create($config);
         $this->assertInstanceOf($expectedClass, $driver);
-        $this->assertInstanceOf(\Magento\Framework\Profiler\DriverInterface::class, $driver);
+        $this->assertInstanceOf(DriverInterface::class, $driver);
     }
 
     /**
@@ -63,13 +67,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function createDataProvider()
     {
         $defaultDriverClass = $this->getMockClass(
-            \Magento\Framework\Profiler\DriverInterface::class,
+            DriverInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Test_Default'
         );
         $testDriverClass = $this->getMockClass(
-            \Magento\Framework\Profiler\DriverInterface::class,
+            DriverInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Test_Test'
@@ -90,13 +94,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->_factory->create(['type' => 'baz']);
     }
 
-    /**
-     */
     public function testCreateInvalidClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Driver class "stdClass" must implement \\Magento\\Framework\\Profiler\\DriverInterface.');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            'Driver class "stdClass" must implement \Magento\Framework\Profiler\DriverInterface.'
+        );
         $this->_factory->create(['type' => 'stdClass']);
     }
 }

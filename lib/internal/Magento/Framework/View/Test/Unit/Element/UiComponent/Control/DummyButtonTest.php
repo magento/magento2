@@ -5,13 +5,11 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\Control;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Element\UiComponent\Control\DummyButton;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class DummyButtonTest
- */
-class DummyButtonTest extends \PHPUnit\Framework\TestCase
+class DummyButtonTest extends TestCase
 {
     /**
      * Checks that button data for button dummy is empty array

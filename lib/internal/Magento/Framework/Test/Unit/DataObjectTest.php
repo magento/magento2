@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,10 +9,13 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-class DataObjectTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\TestCase;
+
+class DataObjectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     private $dataObject;
 
@@ -22,7 +25,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->dataObject = new \Magento\Framework\DataObject();
+        $this->dataObject = new DataObject();
     }
 
     /**
@@ -39,11 +42,11 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         $this->assertEquals([], $object->getData());
 
         $data = ['test' => 'test'];
-        $object = new \Magento\Framework\DataObject($data);
+        $object = new DataObject($data);
         $this->assertEquals($data, $object->getData());
     }
 
@@ -111,7 +114,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
             'key2' => [
                 'subkey2.1' => 'value2.1',
                 'subkey2.2' => 'multiline' . PHP_EOL . 'string',
-                'subkey2.3' => new \Magento\Framework\DataObject(['test_key' => 'test_value']),
+                'subkey2.3' => new DataObject(['test_key' => 'test_value']),
             ],
             'key3' => 5,
         ];
@@ -135,7 +138,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
                 'subkey2.1' => 'value2.1',
                 'subkey2.2' => 'multiline
 string',
-                'subkey2.3' => new \Magento\Framework\DataObject(['test_key' => 'test_value']),
+                'subkey2.3' => new DataObject(['test_key' => 'test_value']),
             ],
         ];
         foreach ($data as $key => $value) {
@@ -160,7 +163,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
+        $mock = $this->createPartialMock(DataObject::class, ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 
@@ -180,8 +183,8 @@ string',
 
         $this->dataObject->setData('key2', 'value2');
         $this->assertEquals('value2', $this->dataObject->getData('key2'));
-        $this->assertNull($this->dataObject->getKey2());
-        $this->assertNull($this->dataObject->getDataUsingMethod('key2'));
+        $this->assertEquals(null, $this->dataObject->getKey2());
+        $this->assertEquals(null, $this->dataObject->getDataUsingMethod('key2'));
     }
 
     /**
@@ -282,12 +285,10 @@ string',
 
     /**
      * Tests \Magento\Framework\DataObject->__call()
-     *
      */
     public function testCall()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->dataObject->setData('key', 'value');
         $this->dataObject->setTest('test');
         $this->assertEquals('test', $this->dataObject->getData('test'));

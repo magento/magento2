@@ -9,38 +9,46 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\View\Layout\Element;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\AclCondition;
 use Magento\Framework\View\Layout\ConfigCondition;
 use Magento\Framework\View\Layout\Reader\Block;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
-class BlockTest extends \PHPUnit\Framework\TestCase
+class BlockTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScheduledStructure|MockObject
      */
     protected $scheduledStructure;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReaderPool|MockObject
      */
     protected $readerPool;
 
     /**
-     * @var \Magento\Framework\View\Layout\Element
+     * @var Element
      */
     protected $currentElement;
 
     /**
      * @param string $xml
      * @param string $elementType
-     * @return \Magento\Framework\View\Layout\Element
+     * @return Element
      */
     protected function getElement($xml, $elementType)
     {
@@ -48,7 +56,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
             . $xml
             . '</' . Block::TYPE_BLOCK . '>';
 
-        $xml = simplexml_load_string($xml, \Magento\Framework\View\Layout\Element::class);
+        $xml = simplexml_load_string($xml, Element::class);
         return $xml->{$elementType};
     }
 
@@ -72,8 +80,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      */
     protected function getBlock(array $arguments)
     {
-        return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(\Magento\Framework\View\Layout\Reader\Block::class, $arguments);
+        return (new ObjectManager($this))
+            ->getObject(Block::class, $arguments);
     }
 
     /**
@@ -82,18 +90,18 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scheduledStructure = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure::class);
-        $this->context = $this->createMock(\Magento\Framework\View\Layout\Reader\Context::class);
-        $this->readerPool = $this->createMock(\Magento\Framework\View\Layout\ReaderPool::class);
+        $this->scheduledStructure = $this->createMock(ScheduledStructure::class);
+        $this->context = $this->createMock(Context::class);
+        $this->readerPool = $this->createMock(ReaderPool::class);
     }
 
     /**
      * @param string $literal
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $scheduleStructureCount
+     * @param InvokedCount $scheduleStructureCount
      * @param string $ifconfigValue
      * @param array $expectedConditions
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getCondition
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCondition
+     * @param InvokedCount $getCondition
+     * @param InvokedCount $setCondition
      * @param string $aclKey
      * @param string $aclValue
      *
@@ -110,7 +118,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $aclValue
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
-            ->willReturn($this->scheduledStructure);
+            ->will($this->returnValue($this->scheduledStructure));
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
@@ -142,8 +150,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $helper = $this->createMock(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class);
-        $helper->expects($scheduleStructureCount)->method('scheduleStructure')->willReturn($literal);
+        $helper = $this->createMock(Helper::class);
+        $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
 
         $this->prepareReaderPool(
             '<' . $literal . ' ifconfig="' . $ifconfigValue . '" ' . $aclKey . '="' . $aclValue . '" >'
@@ -240,9 +248,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $literal
      * @param string $remove
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getCondition
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCondition
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
+     * @param InvokedCount $getCondition
+     * @param InvokedCount $setCondition
+     * @param InvokedCount $setRemoveCondition
      * @dataProvider processReferenceDataProvider
      */
     public function testProcessReference(
@@ -259,7 +267,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->context->expects($this->once())->method('getScheduledStructure')
-            ->willReturn($this->scheduledStructure);
+            ->will($this->returnValue($this->scheduledStructure));
 
         $this->scheduledStructure->expects($setRemoveCondition)
             ->method('setElementToRemoveList')

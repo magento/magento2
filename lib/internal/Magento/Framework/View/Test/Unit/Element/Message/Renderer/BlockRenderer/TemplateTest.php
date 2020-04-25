@@ -5,23 +5,26 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer\BlockRenderer;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
 
-class TemplateTest extends \PHPUnit\Framework\TestCase
+class TemplateTest extends TestCase
 {
     public function testGetCacheKeyInfo()
     {
         $helper = new ObjectManager($this);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
-        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($storeMock);
 
         /** @var Template $template */
         $template = $helper->getObject(
-            \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template::class,
+            Template::class,
             [
                 'storeManager' => $storeManager
             ]

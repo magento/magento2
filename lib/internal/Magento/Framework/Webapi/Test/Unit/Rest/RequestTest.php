@@ -5,9 +5,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\AreaList;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\Webapi\Rest\Request\Deserializer\Json;
+use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
+use PHPUnit\Framework\TestCase;
+
+class RequestTest extends TestCase
 {
     /**
      * Request mock.
@@ -17,32 +29,32 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CookieManagerInterface
      */
     protected $_cookieManagerMock;
 
-    /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory */
+    /** @var DeserializerFactory */
     protected $_deserializerFactory;
 
     protected function setUp(): void
     {
         /** Prepare mocks for request constructor arguments. */
         $this->_deserializerFactory = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Rest\Request\DeserializerFactory::class
+            DeserializerFactory::class
         )->setMethods(
             ['deserialize', 'get']
         )->disableOriginalConstructor()->getMock();
-        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
-        $areaListMock->expects($this->once())->method('getFrontName')->willReturn('rest');
+        $areaListMock = $this->createMock(AreaList::class);
+        $configScopeMock = $this->createMock(ScopeInterface::class);
+        $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
-        $this->_cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
-        $converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+        $this->_cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $this->_request = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Request::class)
+        $this->_request = $this->getMockBuilder(Request::class)
             ->setMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
             ->setConstructorArgs(
                 [
@@ -80,8 +92,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Accept'
-        )->willReturn(
-            $acceptHeader
+        )->will(
+            $this->returnValue($acceptHeader)
         );
         $this->assertSame($expectedResult, $this->_request->getAcceptTypes());
     }
@@ -104,7 +116,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected function _prepareSutForGetBodyParamsTest($params)
     {
         $content = 'rawBody';
-        $this->_request->expects($this->exactly(2))->method('getContent')->willReturn($content);
+        $this->_request->expects($this->exactly(2))->method('getContent')->will($this->returnValue($content));
         $contentType = 'contentType';
         $this->_request->expects(
             $this->once()
@@ -112,11 +124,11 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Content-Type'
-        )->willReturn(
-            $contentType
+        )->will(
+            $this->returnValue($contentType)
         );
         $deserializer = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Rest\Request\Deserializer\Json::class
+            Json::class
         )->disableOriginalConstructor()->setMethods(
             ['deserialize']
         )->getMock();
@@ -126,8 +138,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'deserialize'
         )->with(
             $content
-        )->willReturn(
-            $params
+        )->will(
+            $this->returnValue($params)
         );
         $this->_deserializerFactory->expects(
             $this->once()
@@ -135,8 +147,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'get'
         )->with(
             $contentType
-        )->willReturn(
-            $deserializer
+        )->will(
+            $this->returnValue($deserializer)
         );
     }
 
@@ -156,13 +168,13 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'getHeader'
         )->with(
             'Content-Type'
-        )->willReturn(
-            $contentTypeHeader
+        )->will(
+            $this->returnValue($contentTypeHeader)
         );
 
         try {
             $this->assertEquals($contentType, $this->_request->getContentType());
-        } catch (\Magento\Framework\Exception\InputException $e) {
+        } catch (InputException $e) {
             if ($exceptionMessage) {
                 $this->assertEquals(
                     $exceptionMessage,

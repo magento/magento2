@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,10 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-use \Magento\Framework\Filter\ArrayFilter;
+use Magento\Framework\Filter\ArrayFilter;
+use PHPUnit\Framework\TestCase;
 
-class ArrayFilterTest extends \PHPUnit\Framework\TestCase
+class ArrayFilterTest extends TestCase
 {
     public function testFilter()
     {

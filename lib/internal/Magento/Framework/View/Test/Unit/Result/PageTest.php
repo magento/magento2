@@ -5,6 +5,19 @@
  */
 namespace Magento\Framework\View\Test\Unit\Result;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Page\Config\Renderer;
+use Magento\Framework\View\FileSystem;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Page\Config\RendererFactory;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
@@ -13,81 +26,81 @@ use Magento\Framework\View\EntitySpecificHandlesList;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit\Framework\TestCase
+class PageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Result\Page
+     * @var Page
      */
     private $page;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
+     * @var Layout|MockObject
      */
     private $layout;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit\Framework\MockObject\MockObject
+     * @var Merge|MockObject
      */
     private $layoutMerge;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\Page\Config|MockObject
      */
     private $pageConfig;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InlineInterface|MockObject
      */
     private $translateInline;
 
     /**
-     * @var \Magento\Framework\View\Page\Config\Renderer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Renderer|MockObject
      */
     private $pageConfigRenderer;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileSystem|MockObject
      */
     private $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutFactory|MockObject
      */
     private $layoutFactory;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntitySpecificHandlesList */
+    /** @var MockObject|EntitySpecificHandlesList */
     private $entitySpecificHandlesListMock;
 
     protected function setUp(): void
     {
-        $this->layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+        $this->layout = $this->getMockBuilder(Layout::class)
             ->setMethods(['addHandle', 'getUpdate', 'isLayoutDefined'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
+        $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutFactory->expects($this->any())->method('create')->willReturn($this->layout);
-        $this->layoutMerge = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Merge::class)
+        $this->layoutFactory->expects($this->any())->method('create')->will($this->returnValue($this->layout));
+        $this->layoutMerge = $this->getMockBuilder(Merge::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->layout->expects($this->any())
             ->method('getUpdate')
-            ->willReturn($this->layoutMerge);
+            ->will($this->returnValue($this->layoutMerge));
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -95,13 +108,13 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewFileSystem = $this->getMockBuilder(\Magento\Framework\View\FileSystem::class)
+        $this->viewFileSystem = $this->getMockBuilder(FileSystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->context = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             [
                 'layout' => $this->layout,
                 'request' => $this->request,
@@ -110,13 +123,13 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
-        $this->pageConfigRenderer = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Renderer::class)
+        $this->pageConfigRenderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pageConfigRendererFactory = $this->getMockBuilder(\Magento\Framework\View\Page\Config\RendererFactory::class)
+        $pageConfigRendererFactory = $this->getMockBuilder(RendererFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -127,9 +140,9 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Result\Page::class,
+            Page::class,
             [
                 'isIsolated' => true,
                 'layoutFactory' => $this->layoutFactory,
@@ -147,7 +160,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->willReturn($fullActionName);
+            ->will($this->returnValue($fullActionName));
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -170,7 +183,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->willReturn($fullActionName);
+            ->will($this->returnValue($fullActionName));
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -203,7 +216,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->willReturn($fullActionName);
+            ->will($this->returnValue($fullActionName));
 
         $this->assertEquals($expectedFullActionName, $this->page->getDefaultLayoutHandle());
     }
@@ -223,7 +236,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->willReturn($fullActionName);
+            ->will($this->returnValue($fullActionName));
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')
@@ -253,7 +266,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->willReturn($fullActionName);
+            ->will($this->returnValue($fullActionName));
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')

@@ -6,21 +6,26 @@
 
 namespace Magento\Framework\View\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\DesignExceptions;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
+class DesignExceptionsTest extends TestCase
 {
-    /** @var \Magento\Framework\View\DesignExceptions */
+    /** @var DesignExceptions */
     private $designExceptions;
 
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     private $scopeConfigMock;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Http|MockObject */
     private $requestMock;
 
     /** @var string */
@@ -29,18 +34,18 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $scopeType = 'scope_type';
 
-    /** @var Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->designExceptions = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\DesignExceptions::class,
+            DesignExceptions::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'exceptionConfigPath' => $this->exceptionConfigPath,
@@ -63,13 +68,13 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with($this->equalTo('HTTP_USER_AGENT'))
-            ->willReturn($userAgent);
+            ->will($this->returnValue($userAgent));
 
         if ($userAgent) {
             $this->scopeConfigMock->expects($this->once())
                 ->method('getValue')
                 ->with($this->equalTo($this->exceptionConfigPath), $this->equalTo($this->scopeType))
-                ->willReturn($configValue);
+                ->will($this->returnValue($configValue));
         }
 
         $this->serializerMock->expects($this->exactly($callNum))

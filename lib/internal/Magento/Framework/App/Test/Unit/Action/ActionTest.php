@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
-use \Magento\Framework\App\Action\Action;
-
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http as HttpRequest;
+
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Profiler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config as PageConfig;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionTest extends \PHPUnit\Framework\TestCase
+class ActionTest extends TestCase
 {
     /**
      * @var ActionFake
@@ -98,7 +101,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
                 'view' => $this->viewMock,
             ]
         );
-        \Magento\Framework\Profiler::disable();
+        Profiler::disable();
     }
 
     public function testDispatchPostDispatch()

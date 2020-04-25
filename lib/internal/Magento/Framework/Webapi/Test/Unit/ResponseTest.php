@@ -5,9 +5,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi\Test\Unit;
 
-class ResponseTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Webapi\Response;
+use PHPUnit\Framework\TestCase;
+
+class ResponseTest extends TestCase
 {
     /**
      * Response object.
@@ -19,7 +24,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         /** Initialize SUT. */
-        $this->_response = new \Magento\Framework\Webapi\Response();
+        $this->_response = new Response();
         parent::setUp();
     }
 
@@ -40,19 +45,19 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         /** Test message adding functionality. */
         $this->_response->addMessage(
             'Message text',
-            \Magento\Framework\Webapi\Response::HTTP_OK,
+            Response::HTTP_OK,
             ['key' => 'value'],
-            \Magento\Framework\Webapi\Response::MESSAGE_TYPE_SUCCESS
+            Response::MESSAGE_TYPE_SUCCESS
         );
         $this->assertTrue($this->_response->hasMessages(), 'New message is not added correctly.');
 
         /** Test message getting functionality. */
         $expectedMessage = [
-            \Magento\Framework\Webapi\Response::MESSAGE_TYPE_SUCCESS => [
+            Response::MESSAGE_TYPE_SUCCESS => [
                 [
                     'key' => 'value',
                     'message' => 'Message text',
-                    'code' => \Magento\Framework\Webapi\Response::HTTP_OK,
+                    'code' => Response::HTTP_OK,
                 ],
             ],
         ];

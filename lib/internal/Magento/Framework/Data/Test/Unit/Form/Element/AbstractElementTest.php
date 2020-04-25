@@ -3,44 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
+
+use Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Collection;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
-class AbstractElementTest extends \PHPUnit\Framework\TestCase
+class AbstractElementTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractElement|MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $_collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $_escaperMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_factoryMock =
-            $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+            $this->createMock(Factory::class);
         $this->_collectionFactoryMock =
-            $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $this->_escaperMock = $objectManager->getObject(\Magento\Framework\Escaper::class);
+            $this->createMock(CollectionFactory::class);
+        $this->_escaperMock = $objectManager->getObject(Escaper::class);
 
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             [
                 $this->_factoryMock,
                 $this->_collectionFactoryMock,
@@ -56,7 +70,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     {
         $elementId = 11;
         $elementMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             [],
             '',
             false,
@@ -66,10 +80,10 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         );
         $elementMock->expects($this->once())
             ->method('getId')
-            ->willReturn($elementId);
+            ->will($this->returnValue($elementId));
 
         $formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\AbstractForm::class,
+            AbstractForm::class,
             ['checkElementId', 'addElementToCollection']
         );
         $formMock->expects($this->once())
@@ -79,11 +93,11 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
             ->method('addElementToCollection')
             ->with($elementMock);
 
-        $collectionMock = $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
+        $collectionMock = $this->createMock(Collection::class);
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($collectionMock);
+            ->will($this->returnValue($collectionMock));
 
         $this->_model->setForm($formMock);
         $this->_model->addElement($elementMock);
@@ -99,15 +113,15 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $htmlId = 'some_id';
 
         $formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\AbstractForm::class,
+            AbstractForm::class,
             ['getHtmlIdPrefix', 'getHtmlIdSuffix']
         );
         $formMock->expects($this->any())
             ->method('getHtmlIdPrefix')
-            ->willReturn($htmlIdPrefix);
+            ->will($this->returnValue($htmlIdPrefix));
         $formMock->expects($this->any())
             ->method('getHtmlIdSuffix')
-            ->willReturn($htmlIdSuffix);
+            ->will($this->returnValue($htmlIdSuffix));
 
         $this->_model->setId($htmlId);
         $this->_model->setForm($formMock);
@@ -120,12 +134,12 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     public function testGetNameWithoutSuffix()
     {
         $formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\AbstractForm::class,
+            AbstractForm::class,
             ['getFieldNameSuffix', 'addSuffixToName']
         );
         $formMock->expects($this->any())
             ->method('getFieldNameSuffix')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $formMock->expects($this->never())
             ->method('addSuffixToName');
 
@@ -141,15 +155,15 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $returnValue = 'some_value';
 
         $formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\AbstractForm::class,
+            AbstractForm::class,
             ['getFieldNameSuffix', 'addSuffixToName']
         );
         $formMock->expects($this->once())
             ->method('getFieldNameSuffix')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $formMock->expects($this->once())
             ->method('addSuffixToName')
-            ->willReturn($returnValue);
+            ->will($this->returnValue($returnValue));
 
         $this->_model->setForm($formMock);
 
@@ -163,19 +177,19 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     {
         $elementId = 'element_id';
 
-        $formMock = $this->createPartialMock(\Magento\Framework\Data\Form\AbstractForm::class, ['removeField']);
+        $formMock = $this->createPartialMock(AbstractForm::class, ['removeField']);
         $formMock->expects($this->once())
             ->method('removeField')
             ->with($elementId);
 
-        $collectionMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Collection::class, ['remove']);
+        $collectionMock = $this->createPartialMock(Collection::class, ['remove']);
         $collectionMock->expects($this->once())
             ->method('remove')
             ->with($elementId);
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($collectionMock);
+            ->will($this->returnValue($collectionMock));
 
         $this->_model->setForm($formMock);
         $this->_model->removeField($elementId);
@@ -256,11 +270,11 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $value = '<a href="#hash_tag">my &#039;quoted&#039; string</a>';
         $expectedValue = '&lt;a href=&quot;#hash_tag&quot;&gt;my &#039;quoted&#039; string&lt;/a&gt;';
 
-        $filterMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['filter']);
+        $filterMock = $this->createPartialMock(DataObject::class, ['filter']);
         $filterMock->expects($this->once())
             ->method('filter')
             ->with($value)
-            ->willReturnArgument(0);
+            ->will($this->returnArgument(0));
 
         $this->_model->setValueFilter($filterMock);
         $this->_model->setValue($value);
@@ -276,7 +290,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtml(array $initialData, $expectedValue)
     {
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
 
         $this->_model->setData($initialData);
@@ -294,7 +308,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $idSuffix = isset($initialData['id_suffix']) ? $initialData['id_suffix'] : null;
         $this->_model->setData($initialData);
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
         $this->assertEquals($expectedValue, $this->_model->getLabelHtml($idSuffix));
     }
@@ -309,7 +323,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setData($initialData);
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
         $this->assertEquals($expectedValue, $this->_model->getDefaultHtml());
     }
@@ -321,7 +335,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setRequired(true);
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
         $expectedHtml = '<div class="admin__field">'
             . "\n"
@@ -342,12 +356,12 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $expectedHtml = 'some-html';
 
         $rendererMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\Renderer\RendererInterface::class
+            RendererInterface::class
         );
         $rendererMock->expects($this->once())
             ->method('render')
             ->with($this->_model)
-            ->willReturn($expectedHtml);
+            ->will($this->returnValue($expectedHtml));
         $this->_model->setRenderer($rendererMock);
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
@@ -377,7 +391,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
     public function testGetHtmlContainerIdWithoutId()
     {
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
         $this->assertEquals('', $this->_model->getHtmlContainerId());
     }
@@ -390,7 +404,7 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $containerId = 'some-id';
         $this->_model->setContainerId($containerId);
         $this->_model->setForm(
-            $this->createMock(\Magento\Framework\Data\Form\AbstractForm::class)
+            $this->createMock(AbstractForm::class)
         );
         $this->assertEquals($containerId, $this->_model->getHtmlContainerId());
     }
@@ -403,12 +417,12 @@ class AbstractElementTest extends \PHPUnit\Framework\TestCase
         $id = 'id';
         $prefix = 'prefix_';
         $formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\AbstractForm::class,
+            AbstractForm::class,
             ['getFieldContainerIdPrefix']
         );
         $formMock->expects($this->once())
             ->method('getFieldContainerIdPrefix')
-            ->willReturn($prefix);
+            ->will($this->returnValue($prefix));
 
         $this->_model->setId($id);
         $this->_model->setForm($formMock);

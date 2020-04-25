@@ -5,17 +5,21 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 
-class HelperMethodTest extends \PHPUnit\Framework\TestCase
+class HelperMethodTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit\Framework\MockObject\MockObject
+     * @var NamedParams|MockObject
      */
     protected $_interpreter;
 
@@ -26,8 +30,8 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_interpreter = $this->createMock(NamedParams::class);
         $this->_model = new HelperMethod($this->_objectManager, $this->_interpreter);
     }
 
@@ -42,11 +46,11 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             $input
-        )->willReturn(
-            $evaluatedValue
+        )->will(
+            $this->returnValue($evaluatedValue)
         );
 
-        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->willReturn($this);
+        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->will($this->returnValue($this));
 
         $expected = 'some text (evaluated) (updated)';
         $actual = $this->_model->evaluate($input);

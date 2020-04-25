@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,30 +6,36 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term;
+use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression as RequestBoolQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder
+     * @var Builder
      */
     private $builder;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|PreprocessorInterface
+     * @var MockObject|PreprocessorInterface
      */
     private $preprocessor;
 
     /**
-     * @var ConditionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
@@ -41,53 +47,53 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition', 'combineQueries', 'wrapBrackets'])
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($field, $operator, $value) {
                         return sprintf('%s %s %s', $field, $operator, $value);
                     }
-                
+                )
             );
         $this->conditionManager->expects($this->any())
             ->method('combineQueries')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($queries, $operator) {
                         return implode(
                             ' ' . $operator . ' ',
                             array_filter($queries, 'strlen')
                         );
                     }
-                
+                )
             );
         $this->conditionManager->expects($this->any())
             ->method('wrapBrackets')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function ($query) {
                         return !empty($query) ? sprintf('(%s)', $query) : '';
                     }
-                
+                )
             );
 
-        $rangeBuilder = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range::class)
+        $rangeBuilder = $this->getMockBuilder(Range::class)
             ->setMethods(['buildFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $rangeBuilder->expects($this->any())
             ->method('buildFilter')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function (FilterInterface $filter, $isNegation) {
                         /**
                          * @var \Magento\Framework\Search\Request\Filter\Range $filter
-                         * @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter
+                         * @var AdapterInterface $adapter
                          */
                         $fromCondition = '';
                         if ($filter->getFrom() !== null) {
@@ -109,21 +115,21 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
                         return $this->conditionManager->combineQueries([$fromCondition, $toCondition], $unionOperator);
                     }
-                
+                )
             );
 
-        $termBuilder = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term::class)
+        $termBuilder = $this->getMockBuilder(Term::class)
             ->setMethods(['buildFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $termBuilder->expects($this->any())
             ->method('buildFilter')
-            ->willReturnCallback(
-                
+            ->will(
+                $this->returnCallback(
                     function (FilterInterface $filter, $isNegation) {
                         /**
                          * @var \Magento\Framework\Search\Request\Filter\Term $filter
-                         * @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter
+                         * @var AdapterInterface $adapter
                          */
                         return $this->conditionManager->generateCondition(
                             $filter->getField(),
@@ -131,11 +137,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                             $filter->getValue()
                         );
                     }
-                
+                )
             );
 
         $this->preprocessor = $this->getMockBuilder(
-            \Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface::class
+            PreprocessorInterface::class
         )
             ->setMethods(['process'])
             ->disableOriginalConstructor()
@@ -147,7 +153,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->builder = $objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder::class,
+            Builder::class,
             [
                 'range' => $rangeBuilder,
                 'term' => $termBuilder,
@@ -158,7 +164,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param FilterInterface|\PHPUnit\Framework\MockObject\MockObject $filter
+     * @param FilterInterface|MockObject $filter
      * @param string $conditionType
      * @param string $expectedResult
      * @dataProvider buildFilterDataProvider
@@ -203,7 +209,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $field
      * @param $value
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|MockObject
      */
     private function createTermFilter($field, $value)
     {
@@ -214,10 +220,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->exactly(1))
             ->method('getField')
-            ->willReturn($field);
+            ->will($this->returnValue($field));
         $filter->expects($this->once())
             ->method('getValue')
-            ->willReturn($value);
+            ->will($this->returnValue($value));
         return $filter;
     }
 
@@ -247,7 +253,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param $field
      * @param $from
      * @param $to
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|MockObject
      */
     private function createRangeFilter($field, $from, $to)
     {
@@ -258,13 +264,13 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->exactly(2))
             ->method('getField')
-            ->willReturn($field);
+            ->will($this->returnValue($field));
         $filter->expects($this->atLeastOnce())
             ->method('getFrom')
-            ->willReturn($from);
+            ->will($this->returnValue($from));
         $filter->expects($this->atLeastOnce())
             ->method('getTo')
-            ->willReturn($to);
+            ->will($this->returnValue($to));
         return $filter;
     }
 
@@ -381,7 +387,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $must
      * @param array $should
      * @param array $mustNot
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|MockObject
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
@@ -392,29 +398,26 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())
             ->method('getMust')
-            ->willReturn($must);
+            ->will($this->returnValue($must));
         $filter->expects($this->once())
             ->method('getShould')
-            ->willReturn($should);
+            ->will($this->returnValue($should));
         $filter->expects($this->once())
             ->method('getMustNot')
-            ->willReturn($mustNot);
+            ->will($this->returnValue($mustNot));
         return $filter;
     }
 
-    /**
-     */
     public function testUnknownFilterType()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        /** @var FilterInterface|\PHPUnit\Framework\MockObject\MockObject $filter */
-        $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
+        $this->expectException('InvalidArgumentException');
+        /** @var FilterInterface|MockObject $filter */
+        $filter = $this->getMockBuilder(FilterInterface::class)
             ->setMethods(['getType'])
             ->getMockForAbstractClass();
         $filter->expects($this->any())
             ->method('getType')
-            ->willReturn('unknownType');
+            ->will($this->returnValue('unknownType'));
         $this->builder->build($filter, RequestBoolQuery::QUERY_CONDITION_MUST);
     }
 }

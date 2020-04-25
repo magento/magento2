@@ -3,28 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\DB\Test\Unit\Select;
 
+use Magento\Framework\DB\Platform\Quote;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\FromRenderer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FromRendererTest
- */
-class FromRendererTest extends \PHPUnit\Framework\TestCase
+class FromRendererTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select\FromRenderer
+     * @var FromRenderer
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\DB\Platform\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     protected $selectMock;
 
@@ -35,12 +38,12 @@ class FromRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->quoteMock =
-            $this->createPartialMock(\Magento\Framework\DB\Platform\Quote::class, ['quoteTableAs', 'quoteIdentifier']);
-        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['getPart']);
+            $this->createPartialMock(Quote::class, ['quoteTableAs', 'quoteIdentifier']);
+        $this->selectMock = $this->createPartialMock(Select::class, ['getPart']);
         $this->model = $objectManager->getObject(
-            \Magento\Framework\DB\Select\FromRenderer::class,
+            FromRenderer::class,
             ['quote' => $this->quoteMock]
         );
     }
@@ -70,7 +73,7 @@ class FromRendererTest extends \PHPUnit\Framework\TestCase
             ->method('quoteTableAs')
             ->willReturnCallback(
                 function ($tableName, $correlationName) {
-                    return $tableName.' AS '.$correlationName;
+                    return $tableName . ' AS ' . $correlationName;
                 }
             );
         $this->selectMock->expects($this->once())

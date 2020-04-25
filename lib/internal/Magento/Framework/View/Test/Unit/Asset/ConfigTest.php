@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\TestFramework\Unit\BaseTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Config;
 use Magento\Store\Model\ScopeInterface;
@@ -13,20 +16,20 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Tests Magento\Framework\View\Asset\Config
  */
-class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
+class ConfigTest extends BaseTestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
+     * @var MockObject|State
      */
     private $appStateMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\Config
+     * @var Config
      */
     private $model;
 
@@ -35,9 +38,9 @@ class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Config($this->scopeConfigMock, $this->appStateMock);

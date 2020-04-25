@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Translate\Test\Unit;
 
-class AdapterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Translate\Adapter;
+use PHPUnit\Framework\TestCase;
+
+class AdapterTest extends TestCase
 {
     /**
      * Check that translate calls are passed to given translator
@@ -27,7 +32,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         )->willReturn(
             $translatedStr
         );
-        $translator = new \Magento\Framework\Translate\Adapter(
+        $translator = new Adapter(
             ['translator' => [$translatorMock, 'translate']]
         );
 
@@ -47,7 +52,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTranslateNoProxy()
     {
-        $translator = new \Magento\Framework\Translate\Adapter();
+        $translator = new Adapter();
         $this->assertEquals('test string', $translator->translate('test string'));
     }
 

@@ -6,20 +6,22 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\NotationResolver\Variable;
 use Magento\Framework\View\Asset\Repository;
 
-class VariableTest extends \PHPUnit\Framework\TestCase
+class VariableTest extends TestCase
 {
     /**
-     * @var FallbackContext|\PHPUnit\Framework\MockObject\MockObject
+     * @var FallbackContext|MockObject
      */
     private $context;
 
     /**
-     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     private $assetRepo;
 
@@ -48,7 +50,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->assetRepo->expects($this->any())
             ->method('getStaticViewFileContext')
-            ->willReturn($this->context);
+            ->will($this->returnValue($this->context));
 
         $this->object = new Variable($this->assetRepo);
     }

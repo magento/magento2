@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class XsdTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom;
+use PHPUnit\Framework\TestCase;
+
+class XsdTest extends TestCase
 {
     /**
      * @param string $xsdFile
@@ -23,7 +26,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
         $schema = __DIR__ . "/../../etc/{$xsdFile}";
 
         libxml_use_internal_errors(true);
-        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
+        $result = Dom::validateDomDocument($dom, $schema);
         $errorsQty = count($result);
         libxml_use_internal_errors(false);
 

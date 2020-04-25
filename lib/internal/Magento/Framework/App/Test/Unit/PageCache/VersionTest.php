@@ -3,13 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
-use \Magento\Framework\App\PageCache\Version;
+use Magento\Framework\App\PageCache\Version;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
-use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class VersionTest extends \PHPUnit\Framework\TestCase
+class VersionTest extends TestCase
 {
     /**
      * Version instance
@@ -21,21 +29,21 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CookieManagerInterface|MockObject
      */
     protected $cookieManagerMock;
 
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CookieMetadataFactory|MockObject
      */
     protected $cookieMetadataFactoryMock;
 
     /**
      * Request mock
      *
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
@@ -44,16 +52,16 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $objectManager = new ObjectManagerHelper($this);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()->getMock();
         $this->version = $objectManager->getObject(
-            \Magento\Framework\App\PageCache\Version::class,
+            Version::class,
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
@@ -75,34 +83,34 @@ class VersionTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcess($isPost)
     {
-        $this->requestMock->expects($this->once())->method('isPost')->willReturn($isPost);
+        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
         if ($isPost) {
-            $publicCookieMetadataMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
+            $publicCookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setPath')
                 ->with('/')
-                ->willReturnSelf();
+                ->will($this->returnSelf());
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setDuration')
                 ->with(Version::COOKIE_PERIOD)
-                ->willReturnSelf();
+                ->will($this->returnSelf());
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setSecure')
                 ->with(false)
-                ->willReturnSelf();
-                
+                ->will($this->returnSelf());
+
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
                 ->with(false)
-                ->willReturnSelf();
+                ->will($this->returnSelf());
 
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()
-                ->willReturn(
-                    $publicCookieMetadataMock
+                ->will(
+                    $this->returnValue($publicCookieMetadataMock)
                 );
 
             $this->cookieManagerMock->expects($this->once())

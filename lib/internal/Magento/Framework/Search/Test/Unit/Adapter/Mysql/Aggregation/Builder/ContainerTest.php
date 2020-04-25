@@ -1,16 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class ContainerTest extends \PHPUnit\Framework\TestCase
+class ContainerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
@@ -23,9 +25,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     {
         $bucketName = 'providerName';
         $bucketValue = 'dataProvider';
-        /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container $provider */
+        /** @var Container $provider */
         $provider = $this->objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container::class,
+            Container::class,
             ['buckets' => [$bucketName => $bucketValue]]
         );
         $this->assertEquals($bucketValue, $provider->get($bucketName));

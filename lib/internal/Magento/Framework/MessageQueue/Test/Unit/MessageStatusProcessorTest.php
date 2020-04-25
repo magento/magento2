@@ -3,17 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\MessageStatusProcessor;
+use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for MessageStatusProcessor.
  */
-class MessageStatusProcessorTest extends \PHPUnit\Framework\TestCase
+class MessageStatusProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\MessageStatusProcessor
+     * @var MessageStatusProcessor
      */
     private $messageStatusProcessor;
 
@@ -26,7 +32,7 @@ class MessageStatusProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->messageStatusProcessor = $objectManagerHelper->getObject(
-            \Magento\Framework\MessageQueue\MessageStatusProcessor::class
+            MessageStatusProcessor::class
         );
     }
 
@@ -37,11 +43,11 @@ class MessageStatusProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testAcknowledgeMessages()
     {
-        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
+        $queue = $this->getMockBuilder(QueueInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $queue->expects($this->atLeastOnce())->method('acknowledge');
-        $message = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
+        $message = $this->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -55,11 +61,11 @@ class MessageStatusProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testRejectMessages()
     {
-        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
+        $queue = $this->getMockBuilder(QueueInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $queue->expects($this->atLeastOnce())->method('reject');
-        $message = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
+        $message = $this->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
