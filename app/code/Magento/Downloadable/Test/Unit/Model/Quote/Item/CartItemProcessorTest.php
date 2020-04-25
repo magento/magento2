@@ -170,10 +170,9 @@ class CartItemProcessorTest extends TestCase
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
-        $extAttributeMock = $this->createPartialMock(
-            ProductOptionExtension::class,
-            ['setDownloadableOption']
-        );
+        $extAttributeMock = $this->getMockBuilder(ProductOptionExtension::class)
+            ->addMethods(['setDownloadableOption'])
+            ->getMock();
 
         $this->objectHelperMock->expects($this->once())->method('populateWithArray')->with(
             $downloadableOptionMock,
@@ -207,10 +206,9 @@ class CartItemProcessorTest extends TestCase
             ->method('getOptionByCode')
             ->with('downloadable_link_ids');
 
-        $extAttributeMock = $this->createPartialMock(
-            ProductOptionExtension::class,
-            ['setDownloadableOption']
-        );
+        $extAttributeMock = $this->getMockBuilder(ProductOptionExtension::class)
+            ->addMethods(['setDownloadableOption'])
+            ->getMock();
         $productOptionMock = $this->createMock(ProductOptionInterface::class);
         $productOptionMock->expects($this->any())
             ->method('getExtensionAttributes')
