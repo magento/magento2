@@ -66,10 +66,9 @@ class ShippingAddressAssignmentTest extends TestCase
         );
         $this->quoteMock = $this->createMock(Quote::class);
         $this->addressMock = $this->createMock(Address::class);
-        $this->extensionAttributeMock = $this->createPartialMock(
-            CartExtension::class,
-            ['setShippingAssignments']
-        );
+        $this->extensionAttributeMock = $this->getMockBuilder(CartExtension::class)
+            ->addMethods(['setShippingAssignments'])
+            ->getMock();
 
         $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         //shipping assignment processing
