@@ -33,14 +33,14 @@ class LocalizedExceptionTest extends TestCase
         $this->renderedMessage = 'rendered message';
         $rendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
+            ->willReturn($this->renderedMessage);
         Phrase::setRenderer($rendererMock);
     }
 
     /**
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Phrase::setRenderer($this->defaultRenderer);
     }
@@ -78,13 +78,13 @@ class LocalizedExceptionTest extends TestCase
             'withNoNameParameters' => [
                 'message %1 %2',
                 ['parameter1',
-                 'parameter2'],
+                    'parameter2'],
                 'message parameter1 parameter2',
             ],
             'withNamedParameters'  => [
                 'message %key1 %key2',
                 ['key1' => 'parameter1',
-                 'key2' => 'parameter2'],
+                    'key2' => 'parameter2'],
                 'message parameter1 parameter2',
             ],
             'withoutParameters'    => [

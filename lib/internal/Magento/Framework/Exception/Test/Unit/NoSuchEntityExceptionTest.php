@@ -42,7 +42,7 @@ class NoSuchEntityExceptionTest extends TestCase
     /**
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Phrase::setRenderer($this->defaultRenderer);
     }
