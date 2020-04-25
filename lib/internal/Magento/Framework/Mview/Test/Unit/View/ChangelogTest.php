@@ -53,7 +53,7 @@ class ChangelogTest extends TestCase
     {
         $resourceMock =
             $this->createMock(ResourceConnection::class);
-        $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(true));
+        $resourceMock->expects($this->once())->method('getConnection')->willReturn(true);
         $model = new Changelog($resourceMock);
         $this->assertInstanceOf(ChangelogInterface::class, $model);
     }
@@ -64,7 +64,7 @@ class ChangelogTest extends TestCase
         $this->expectExceptionMessage('The write connection to the database isn\'t available. Please try again later.');
         $resourceMock =
             $this->createMock(ResourceConnection::class);
-        $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(null));
+        $resourceMock->expects($this->once())->method('getConnection')->willReturn(null);
         $model = new Changelog($resourceMock);
         $model->setViewId('ViewIdTest');
         $this->assertNull($model);
@@ -116,7 +116,7 @@ class ChangelogTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
-            ->will($this->returnValue(['version_id' => 10]));
+            ->willReturn(['version_id' => 10]);
 
         $this->model->setViewId('viewIdtest');
         $this->assertEquals(10, $this->model->getVersion());
@@ -141,7 +141,7 @@ class ChangelogTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->model->setViewId('viewIdtest');
         $this->assertEquals(0, $this->model->getVersion());
@@ -168,7 +168,7 @@ class ChangelogTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
-            ->will($this->returnValue(['no_version_column' => 'blabla']));
+            ->willReturn(['no_version_column' => 'blabla']);
 
         $this->model->setViewId('viewIdtest');
         $this->model->getVersion();
@@ -207,7 +207,7 @@ class ChangelogTest extends TestCase
         $this->connectionMock->expects($this->once())
             ->method('dropTable')
             ->with($changelogTableName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->model->setViewId('viewIdtest');
         $this->model->drop();
@@ -221,13 +221,12 @@ class ChangelogTest extends TestCase
 
         $tableMock = $this->createMock(Table::class);
         $tableMock->expects($this->exactly(2))
-            ->method('addColumn')
-            ->will($this->returnSelf());
+            ->method('addColumn')->willReturnSelf();
 
         $this->connectionMock->expects($this->once())
             ->method('newTable')
             ->with($changelogTableName)
-            ->will($this->returnValue($tableMock));
+            ->willReturn($tableMock);
         $this->connectionMock->expects($this->once())
             ->method('createTable')
             ->with($tableMock);
@@ -256,23 +255,20 @@ class ChangelogTest extends TestCase
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())
             ->method('distinct')
-            ->with(true)
-            ->will($this->returnSelf());
+            ->with(true)->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('from')
-            ->with($changelogTableName, ['entity_id'])
-            ->will($this->returnSelf());
+            ->with($changelogTableName, ['entity_id'])->willReturnSelf();
         $selectMock->expects($this->exactly(2))
-            ->method('where')
-            ->will($this->returnSelf());
+            ->method('where')->willReturnSelf();
 
         $this->connectionMock->expects($this->once())
             ->method('select')
-            ->will($this->returnValue($selectMock));
+            ->willReturn($selectMock);
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($selectMock)
-            ->will($this->returnValue([1]));
+            ->willReturn([1]);
 
         $this->model->setViewId('viewIdtest');
         $this->assertEquals([1], $this->model->getList(1, 2));
@@ -307,12 +303,12 @@ class ChangelogTest extends TestCase
      */
     protected function mockGetConnection($connection)
     {
-        $this->resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($connection);
     }
 
     protected function mockGetTableName()
     {
-        $this->resourceMock->expects($this->once())->method('getTableName')->will($this->returnArgument(0));
+        $this->resourceMock->expects($this->once())->method('getTableName')->willReturnArgument(0);
     }
 
     /**
@@ -326,9 +322,9 @@ class ChangelogTest extends TestCase
         )->method(
             'isTableExists'
         )->with(
-            $this->equalTo($changelogTableName)
-        )->will(
-            $this->returnValue($result)
+            $changelogTableName
+        )->willReturn(
+            $result
         );
     }
 }

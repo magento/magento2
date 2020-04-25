@@ -42,7 +42,7 @@ class SubscriptionFactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(SubscriptionInterface::class, ['some_data'])
-            ->will($this->returnValue($subscriptionInterfaceMock));
+            ->willReturn($subscriptionInterfaceMock);
         $this->assertEquals($subscriptionInterfaceMock, $this->model->create(['some_data']));
     }
 }

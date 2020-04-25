@@ -52,7 +52,7 @@ class CollectionTest extends TestCase
      */
     private $collection;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -169,9 +169,7 @@ class CollectionTest extends TestCase
 
         $views = $this->collection->getViewsByStateMode(StateInterface::MODE_DISABLED);
         $this->assertCount($numDisabledViews, $views);
-        foreach ($views as $view) {
-            $this->assertInstanceOf(ViewInterface::class, $view);
-        }
+        $this->assertContainsOnlyInstancesOf(ViewInterface::class, $views);
 
         $views = $this->collection->getViewsByStateMode(StateInterface::MODE_ENABLED);
         $this->assertCount($numEnabledViews, $views);

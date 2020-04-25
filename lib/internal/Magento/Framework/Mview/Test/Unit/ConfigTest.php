@@ -36,7 +36,7 @@ class ConfigTest extends TestCase
     {
         $this->dataMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(['some_data']));
+            ->willReturn(['some_data']);
         $this->assertEquals(['some_data'], $this->model->getViews());
     }
 
@@ -45,7 +45,7 @@ class ConfigTest extends TestCase
         $this->dataMock->expects($this->once())
             ->method('get')
             ->with('some_view')
-            ->will($this->returnValue(['some_data']));
+            ->willReturn(['some_data']);
         $this->assertEquals(['some_data'], $this->model->getView('some_view'));
     }
 }

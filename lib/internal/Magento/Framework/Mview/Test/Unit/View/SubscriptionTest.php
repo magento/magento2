@@ -53,7 +53,7 @@ class SubscriptionTest extends TestCase
 
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
@@ -81,7 +81,7 @@ class SubscriptionTest extends TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->model = new Subscription(
             $this->resourceMock,
@@ -121,52 +121,42 @@ class SubscriptionTest extends TestCase
             ->getMock();
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
-            ->with($triggerName)
-            ->will($this->returnSelf());
+            ->with($triggerName)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('getName')
-            ->will($this->returnValue('triggerName'));
+            ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
             ->method('setTime')
-            ->with(Trigger::TIME_AFTER)
-            ->will($this->returnSelf());
+            ->with(Trigger::TIME_AFTER)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('setEvent')
-            ->will($this->returnSelf());
+            ->method('setEvent')->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with($this->tableName)
-            ->will($this->returnSelf());
+            ->with($this->tableName)->willReturnSelf();
 
         $triggerMock->expects($this->at(4))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
 
         $triggerMock->expects($this->at(5))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
 
         $triggerMock->expects($this->at(11))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
 
         $triggerMock->expects($this->at(12))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
 
         $triggerMock->expects($this->at(18))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")->willReturnSelf();
 
         $triggerMock->expects($this->at(19))
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")
-            ->will($this->returnSelf());
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")->willReturnSelf();
 
         $changelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,
@@ -179,18 +169,18 @@ class SubscriptionTest extends TestCase
         );
         $changelogMock->expects($this->exactly(3))
             ->method('getName')
-            ->will($this->returnValue('test_view_cl'));
+            ->willReturn('test_view_cl');
         $changelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getChangelog')
-            ->will($this->returnValue($changelogMock));
+            ->willReturn($changelogMock);
 
         $this->triggerFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->will($this->returnValue($triggerMock));
+            ->willReturn($triggerMock);
 
         $otherChangelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,
@@ -203,10 +193,10 @@ class SubscriptionTest extends TestCase
         );
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getName')
-            ->will($this->returnValue('other_test_view_cl'));
+            ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
         $otherViewMock = $this->getMockForAbstractClass(
             ViewInterface::class,
@@ -219,29 +209,29 @@ class SubscriptionTest extends TestCase
         );
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
-            ->will($this->returnValue('other_id'));
+            ->willReturn('other_id');
         $otherViewMock->expects($this->exactly(1))
             ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
+            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
-            ->will($this->returnValue($otherChangelogMock));
+            ->willReturn($otherChangelogMock);
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getId')
-            ->will($this->returnValue('this_id'));
+            ->willReturn('this_id');
         $this->viewMock->expects($this->never())
             ->method('getSubscriptions');
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
             ->with(StateInterface::MODE_ENABLED)
-            ->will($this->returnValue([$this->viewMock, $otherViewMock]));
+            ->willReturn([$this->viewMock, $otherViewMock]);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('dropTrigger')
             ->with('triggerName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
@@ -253,29 +243,24 @@ class SubscriptionTest extends TestCase
     {
         $triggerMock = $this->createMock(Trigger::class);
         $triggerMock->expects($this->exactly(3))
-            ->method('setName')
-            ->will($this->returnSelf());
+            ->method('setName')->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('getName')
-            ->will($this->returnValue('triggerName'));
+            ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
             ->method('setTime')
-            ->with(Trigger::TIME_AFTER)
-            ->will($this->returnSelf());
+            ->with(Trigger::TIME_AFTER)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('setEvent')
-            ->will($this->returnSelf());
+            ->method('setEvent')->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
             ->method('setTable')
-            ->with($this->tableName)
-            ->will($this->returnSelf());
+            ->with($this->tableName)->willReturnSelf();
         $triggerMock->expects($this->exactly(3))
-            ->method('addStatement')
-            ->will($this->returnSelf());
+            ->method('addStatement')->willReturnSelf();
 
         $this->triggerFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->will($this->returnValue($triggerMock));
+            ->willReturn($triggerMock);
 
         $otherChangelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,
@@ -288,10 +273,10 @@ class SubscriptionTest extends TestCase
         );
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getName')
-            ->will($this->returnValue('other_test_view_cl'));
+            ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
             ->method('getColumnName')
-            ->will($this->returnValue('entity_id'));
+            ->willReturn('entity_id');
 
         $otherViewMock = $this->getMockForAbstractClass(
             ViewInterface::class,
@@ -304,33 +289,33 @@ class SubscriptionTest extends TestCase
         );
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
-            ->will($this->returnValue('other_id'));
+            ->willReturn('other_id');
         $otherViewMock->expects($this->exactly(1))
             ->method('getSubscriptions')
-            ->will($this->returnValue([['name' => $this->tableName], ['name' => 'otherTableName']]));
+            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
-            ->will($this->returnValue($otherChangelogMock));
+            ->willReturn($otherChangelogMock);
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getId')
-            ->will($this->returnValue('this_id'));
+            ->willReturn('this_id');
         $this->viewMock->expects($this->never())
             ->method('getSubscriptions');
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
             ->with(StateInterface::MODE_ENABLED)
-            ->will($this->returnValue([$this->viewMock, $otherViewMock]));
+            ->willReturn([$this->viewMock, $otherViewMock]);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('dropTrigger')
             ->with('triggerName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $triggerMock->expects($this->exactly(3))
             ->method('getStatements')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
