@@ -12,7 +12,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
-use Magento\MediaContentCatalog\Model\GetContent;
+use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Observe the catalog_category_save_after event and run processing relation between category content and media asset.
@@ -23,6 +25,11 @@ class Category implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -54,11 +61,13 @@ class Category implements ObserverInterface
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        MetadataPool $metadataPool,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->metadataPool = $metadataPool;
         $this->fields = $fields;
     }
 
@@ -70,6 +79,7 @@ class Category implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('category');
+        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
 
         if ($model instanceof CatalogCategory) {
             foreach ($this->fields as $field) {
@@ -84,7 +94,7 @@ class Category implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    $this->getContent->execute((int) $model->getEntityId(), $model->getAttributes()[$field])
+                    $this->getContent->execute((int) $model[$metadata->getLinkField()], $model->getAttributes()[$field])
                 );
             }
         }

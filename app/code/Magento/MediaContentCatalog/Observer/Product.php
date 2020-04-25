@@ -12,7 +12,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
-use Magento\MediaContentCatalog\Model\GetContent;
+use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -23,6 +25,11 @@ class Product implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -54,8 +61,10 @@ class Product implements ObserverInterface
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        MetadataPool $metadataPool,
         array $fields
     ) {
+        $this->metadataPool = $metadataPool;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -72,6 +81,7 @@ class Product implements ObserverInterface
         $model = $observer->getEvent()->getData('product');
 
         if ($model instanceof CatalogProduct) {
+            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -84,7 +94,7 @@ class Product implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    $this->getContent->execute((int) $model->getEntityId(), $model->getAttributes()[$field])
+                    $this->getContent->execute((int) $model[$metadata->getLinkField()], $model->getAttributes()[$field])
                 );
             }
         }

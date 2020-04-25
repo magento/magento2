@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCatalog\Model;
+namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
