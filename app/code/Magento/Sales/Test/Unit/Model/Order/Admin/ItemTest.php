@@ -1,21 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Admin;
 
-/**
- * Class ValidatorTest
- */
-class ItemTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Admin\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $orderItemMock;
 
-    /** @var \Magento\Sales\Model\Order\Admin\Item */
+    /** @var Item */
     protected $item;
 
     protected function setUp(): void
@@ -23,7 +24,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->item = new \Magento\Sales\Model\Order\Admin\Item();
+        $this->item = new Item();
     }
 
     public function testGetSku()

@@ -14,21 +14,18 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\CustomerAssignment;
 use Magento\Sales\Observer\AssignOrderToCustomerObserver;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AssignOrderToCustomerObserverTest
- */
 class AssignOrderToCustomerObserverTest extends TestCase
 {
     /** @var AssignOrderToCustomerObserver */
     protected $sut;
 
-    /** @var OrderRepositoryInterface|PHPUnit\Framework\MockObject\MockObject */
+    /** @var OrderRepositoryInterface|MockObject */
     protected $orderRepositoryMock;
 
-    /** @var CustomerAssignment | PHPUnit\Framework\MockObject\MockObject */
+    /** @var CustomerAssignment|MockObject */
     protected $assignmentMock;
 
     /**
@@ -38,7 +35,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
     {
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->assignmentMock =  $this->getMockBuilder(CustomerAssignment::class)
         ->disableOriginalConstructor()
@@ -58,15 +55,15 @@ class AssignOrderToCustomerObserverTest extends TestCase
     public function testAssignOrderToCustomerAfterGuestOrder($orderCustomerId, $customerId)
     {
         $orderId = 1;
-        /** @var Observer|PHPUnit\Framework\MockObject\MockObject $observerMock */
+        /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
-        /** @var Event|PHPUnit\Framework\MockObject\MockObject $eventMock */
+        /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
-        /** @var CustomerInterface|PHPUnit\Framework\MockObject\MockObject $customerMock */
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        /** @var OrderInterface|PHPUnit\Framework\MockObject\MockObject $orderMock */
+        /** @var CustomerInterface|MockObject $customerMock */
+        $customerMock = $this->createMock(CustomerInterface::class);
+        /** @var OrderInterface|MockObject $orderMock */
         $orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

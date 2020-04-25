@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,20 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Comment;
 
-/**
- * Class ValidatorTest
- */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Shipment\Comment;
+use Magento\Sales\Model\Order\Shipment\Comment\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment\Validator
+     * @var Validator
      */
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Comment|MockObject
      */
     protected $commentModelMock;
 
@@ -27,10 +29,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->commentModelMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment\Comment::class,
+            Comment::class,
             ['hasData', 'getData', '__wakeup']
         );
-        $this->validator = new \Magento\Sales\Model\Order\Shipment\Comment\Validator();
+        $this->validator = new Validator();
     }
 
     /**
@@ -45,10 +47,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->commentModelMock->expects($this->any())
             ->method('hasData')
-            ->willReturnMap($commentDataMap);
+            ->will($this->returnValueMap($commentDataMap));
         $this->commentModelMock->expects($this->once())
             ->method('getData')
-            ->willReturn($commentData);
+            ->will($this->returnValue($commentData));
         $actualWarnings = $this->validator->validate($this->commentModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

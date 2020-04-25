@@ -1,23 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity;
+use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 class OrderCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
+     * @var OrderCommentSender
      */
     protected $sender;
 
     protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::class);
+        $this->stepIdentityContainerInit(OrderCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
@@ -82,7 +84,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder()
     {
         $isVirtualOrder = true;
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
         $customerName='Test Customer';
         $frontendStatusLabel='Complete';

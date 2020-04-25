@@ -1,47 +1,55 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 
-/**
- * Class AddressTest
- */
-class AddressTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Validator;
+use Magento\Sales\Model\ResourceModel\Order\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AddressTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Address
+     * @var Address
      */
     protected $addressResource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Address|MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit\Framework\MockObject\MockObject
+     * @var Validator|MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
+     * @var Snapshot|MockObject
      */
     protected $entitySnapshotMock;
 
@@ -51,26 +59,26 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Address::class,
             ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['__wakeup', 'getId']);
-        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Address\Validator::class);
+        $this->orderMock = $this->createPartialMock(Order::class, ['__wakeup', 'getId']);
+        $this->appResourceMock = $this->createMock(ResourceConnection::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
+        $this->validatorMock = $this->createMock(Validator::class);
         $this->entitySnapshotMock = $this->createMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
+            Snapshot::class
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            ->will($this->returnValue($this->connectionMock));
+        $objectManager = new ObjectManager($this);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->addressResource = $objectManager->getObject(
-            \Magento\Sales\Model\ResourceModel\Order\Address::class,
+            Address::class,
             [
                 'resource' => $this->appResourceMock,
                 'validator' => $this->validatorMock,
@@ -87,38 +95,36 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->willReturn([]);
+            ->will($this->returnValue([]));
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
 
         $this->addressResource->save($this->addressMock);
     }
 
     /**
      * test _beforeSaveMethod via save() with failed validation
-     *
      */
     public function testSaveValidationFailed()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We can\'t save the address:');
-
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
-            ->willReturn(['warning message']);
+            ->will($this->returnValue(['warning message']));
         $this->addressResource->save($this->addressMock);
     }
 }

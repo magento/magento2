@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -17,16 +17,16 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AbstractSenderTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractSenderTest extends TestCase
 {
     /**
      * @var Sender|MockObject
@@ -120,11 +120,11 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->orderMock->expects($this->any())
             ->method('getStore')
-            ->willReturn($this->storeMock);
+            ->will($this->returnValue($this->storeMock));
         $paymentInfoMock = $this->createMock(Info::class);
         $this->orderMock->expects($this->any())
             ->method('getPayment')
-            ->willReturn($paymentInfoMock);
+            ->will($this->returnValue($paymentInfoMock));
 
         $this->addressRenderer = $this->createMock(Renderer::class);
         $this->addressMock = $this->createMock(Address::class);
@@ -133,11 +133,11 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         $this->paymentHelper = $this->createPartialMock(Data::class, ['getInfoBlockHtml']);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
-            ->willReturn('payment');
+            ->will($this->returnValue('payment'));
 
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
     }
 
     /**
@@ -148,14 +148,14 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
-            ->willReturn($billingAddress);
+            ->will($this->returnValue($billingAddress));
         if ($isVirtual) {
             $this->orderMock->expects($this->never())
                 ->method('getShippingAddress');
         } else {
             $this->orderMock->expects($this->once())
                 ->method('getShippingAddress')
-                ->willReturn($billingAddress);
+                ->will($this->returnValue($billingAddress));
         }
     }
 
@@ -180,7 +180,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->willReturn($this->storeMock);
+            ->will($this->returnValue($this->storeMock));
     }
 
     /**
@@ -199,6 +199,6 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->senderBuilderFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($senderMock);
+            ->will($this->returnValue($senderMock));
     }
 }

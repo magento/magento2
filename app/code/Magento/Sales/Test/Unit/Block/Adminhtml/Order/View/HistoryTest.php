@@ -1,30 +1,36 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
 
-class HistoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\View\History;
+use Magento\Sales\Helper\Admin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class HistoryTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Admin|\PHPUnit\Framework\MockObject\MockObject
+     * @var Admin|MockObject
      */
     protected $adminHelperMock;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\View\History
+     * @var History
      */
     protected $viewHistory;
 
     protected function setUp(): void
     {
-        $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
+        $this->adminHelperMock = $this->getMockBuilder(Admin::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewHistory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\View\History::class,
+        $this->viewHistory = (new ObjectManager($this))->getObject(
+            History::class,
             [
                 'adminHelper' => $this->adminHelperMock
             ]
@@ -42,7 +48,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
         $this->adminHelperMock
             ->expects($this->any())
             ->method('escapeHtmlWithLinks')
-            ->willReturn($expected);
+            ->will($this->returnValue($expected));
         $actual = $this->viewHistory->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }

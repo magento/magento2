@@ -1,26 +1,31 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Data;
+use Magento\Sales\Model\Order\Pdf\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config
+     * @var Config
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_dataStorage;
 
     protected function setUp(): void
     {
-        $this->_dataStorage = $this->createMock(\Magento\Framework\Config\Data::class);
-        $this->_model = new \Magento\Sales\Model\Order\Pdf\Config($this->_dataStorage);
+        $this->_dataStorage = $this->createMock(Data::class);
+        $this->_model = new Config($this->_dataStorage);
     }
 
     public function testGetRenderersPerProduct()
@@ -33,8 +38,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             "renderers/page_type",
             []
-        )->willReturn(
-            $configuration
+        )->will(
+            $this->returnValue($configuration)
         );
 
         $this->assertSame($configuration, $this->_model->getRenderersPerProduct('page_type'));
@@ -51,8 +56,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->with(
             'totals',
             []
-        )->willReturn(
-            $configuration
+        )->will(
+            $this->returnValue($configuration)
         );
 
         $this->assertSame($configuration, $this->_model->getTotals());

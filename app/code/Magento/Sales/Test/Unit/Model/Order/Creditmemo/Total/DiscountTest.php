@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,59 +6,68 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-class DiscountTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Creditmemo\Total\Cost;
+use Magento\Sales\Model\Order\Creditmemo\Total\Discount;
+use Magento\Tax\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DiscountTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
+     * @var Cost
      */
     protected $total;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     protected $creditmemoItemMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Item|MockObject
      */
     protected $orderItemMock;
 
     /**
-     * @var \Magento\Tax\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $taxConfig;
 
     protected function setUp(): void
     {
         $this->orderMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order::class,
+            Order::class,
             ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount']
         );
-        $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->orderItemMock = $this->createPartialMock(Order::class, [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
                 'getDiscountRefunded', 'getQtyRefunded'
             ]);
-        $this->creditmemoMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
+        $this->creditmemoMock = $this->createPartialMock(Creditmemo::class, [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
                 'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount'
             ]);
-        $this->creditmemoItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo\Item::class, [
+        $this->creditmemoItemMock = $this->createPartialMock(Item::class, [
                 'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
                 'setBaseDiscountAmount', 'isLast'
             ]);
-        $this->taxConfig = $this->createMock(\Magento\Tax\Model\Config::class);
+        $this->taxConfig = $this->createMock(Config::class);
 
-        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Discount($this->taxConfig);
+        $this->total = new Discount($this->taxConfig);
     }
 
     public function testCollect()
@@ -274,13 +283,10 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->total, $this->total->collect($this->creditmemoMock));
     }
 
-    /**
-     */
     public function testCollectNonZeroShipping()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('You can not refund shipping if there is no shipping amount.');
-
         $this->creditmemoMock->expects($this->once())
             ->method('setDiscountAmount')
             ->willReturnSelf();

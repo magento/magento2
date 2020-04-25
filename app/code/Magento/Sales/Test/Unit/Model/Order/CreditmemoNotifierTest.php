@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,17 +7,23 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\MailException;
-
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\CreditmemoNotifier;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Status\History;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class CreditmemoNotifierTest
- */
-class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class CreditmemoNotifierTest extends TestCase
 {
     /**
-     * @var CollectionFactory |\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $historyCollectionFactory;
 
@@ -27,17 +33,17 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManager|MockObject
      */
     protected $creditmemoSenderMock;
 
@@ -48,14 +54,14 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->creditmemo = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
+            Creditmemo::class,
             ['__wakeUp', 'getEmailSent']
         );
         $this->creditmemoSenderMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender::class,
+            CreditmemoSender::class,
             ['send']
         );
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new CreditmemoNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -69,11 +75,11 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
     public function testNotifySuccess()
     {
         $historyCollection = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
+            Collection::class,
             ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
         );
         $historyItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Status\History::class,
+            History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp']
         );
         $historyItem->expects($this->at(0))
@@ -84,13 +90,13 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->creditmemo)
-            ->willReturn($historyItem);
+            ->will($this->returnValue($historyItem));
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->willReturn($historyCollection);
+            ->will($this->returnValue($historyCollection));
 
         $this->creditmemoSenderMock->expects($this->once())
             ->method('send')
@@ -106,7 +112,7 @@ class CreditmemoNotifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->assertFalse($this->notifier->notify($this->creditmemo));
     }
 

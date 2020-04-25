@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,29 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session\Quote;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
+use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
+use Magento\Sales\Model\AdminOrder\Create;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProcessDataTest
  *
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProcessDataTest extends \PHPUnit\Framework\TestCase
+class ProcessDataTest extends TestCase
 {
     /**
      * @var ProcessData
@@ -24,42 +36,42 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
     protected $processData;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
+     * @var Forward|MockObject
      */
     protected $resultForward;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
      */
     protected $resultForwardFactory;
 
@@ -69,10 +81,10 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $context = $this->createMock(Context::class);
 
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -94,7 +106,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $response = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ResponseInterface::class,
+            ResponseInterface::class,
             [],
             '',
             false,
@@ -108,17 +120,17 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $context->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
 
-        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
         $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $this->session = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
+        $this->session = $this->createMock(Quote::class);
         $context->expects($this->any())->method('getSession')->willReturn($this->session);
-        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
+        $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 
-        $this->resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
+        $this->resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
@@ -131,7 +143,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultForward);
 
         $this->processData = $objectManagerHelper->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData::class,
+            ProcessData::class,
             [
                 'context' => $context,
                 'escaper' => $this->escaper,
@@ -153,7 +165,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
             \Magento\Quote\Model\Quote::class,
             ['getCouponCode', 'isVirtual', 'getAllItems']
         );
-        $create = $this->createMock(\Magento\Sales\Model\AdminOrder\Create::class);
+        $create = $this->createMock(Create::class);
 
         $paramReturnMap = [
             ['customer_id', null, null],
@@ -163,8 +175,8 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->atLeastOnce())->method('getParam')->willReturnMap($paramReturnMap);
 
         $objectManagerParamMap = [
-            [\Magento\Sales\Model\AdminOrder\Create::class, $create],
-            [\Magento\Backend\Model\Session\Quote::class, $this->session]
+            [Create::class, $create],
+            [Quote::class, $this->session]
         ];
         $this->objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($objectManagerParamMap);
 
@@ -198,7 +210,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $create->expects($this->once())->method('initRuleData')->willReturnSelf();
         $create->expects($this->any())->method('getQuote')->willReturn($quote);
 
-        $address = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $address = $this->createMock(Address::class);
         $create->expects($this->once())->method('getBillingAddress')->willReturn($address);
 
         $quote->expects($this->any())->method('isVirtual')->willReturn(true);
@@ -209,7 +221,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
 
         $this->session->expects($this->any())->method('getQuote')->willReturn($quote);
         $item = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            AbstractCollection::class,
             [],
             '',
             false,
@@ -239,7 +251,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
             ->method('forward')
             ->with('index')
             ->willReturnSelf();
-        $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->processData->execute());
+        $this->assertInstanceOf(Forward::class, $this->processData->execute());
     }
 
     /**

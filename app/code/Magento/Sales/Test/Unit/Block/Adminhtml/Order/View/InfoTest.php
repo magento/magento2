@@ -1,67 +1,75 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\View\Info;
+use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InfoTests
- */
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\View\Info
+     * @var Info
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $authorizationMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $contextMock;
 
     protected function setUp(): void
     {
         $this->contextMock
-            = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getAuthorization']);
-        $this->authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+            = $this->createPartialMock(Context::class, ['getAuthorization']);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->contextMock
-            ->expects($this->any())->method('getAuthorization')->willReturn($this->authorizationMock);
+            ->expects($this->any())->method('getAuthorization')->will($this->returnValue($this->authorizationMock));
         $this->groupRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\GroupRepositoryInterface::class
+            GroupRepositoryInterface::class
         );
-        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->coreRegistryMock = $this->createMock(Registry::class);
         $methods = ['getCustomerGroupId', '__wakeUp'];
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, $methods);
+        $this->orderMock = $this->createPartialMock(Order::class, $methods);
         $this->groupMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\GroupInterface::class,
+            GroupInterface::class,
             [],
             '',
             false
@@ -72,28 +80,28 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             'registry' => $this->coreRegistryMock,
         ];
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $block */
-        $this->block = $helper->getObject(\Magento\Sales\Block\Adminhtml\Order\View\Info::class, $arguments);
+        $helper = new ObjectManager($this);
+        /** @var Info $block */
+        $this->block = $helper->getObject(Info::class, $arguments);
     }
 
     public function testGetAddressEditLink()
     {
-        $contextMock = $this->createPartialMock(\Magento\Backend\Block\Template\Context::class, ['getAuthorization']);
-        $authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
-        $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
+        $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
+        $authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
         $arguments = ['context' => $contextMock];
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $block */
-        $block = $helper->getObject(\Magento\Sales\Block\Adminhtml\Order\View\Info::class, $arguments);
+        $helper = new ObjectManager($this);
+        /** @var Info $block */
+        $block = $helper->getObject(Info::class, $arguments);
 
         $authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Sales::actions_edit')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
-        $address = new \Magento\Framework\DataObject();
+        $address = new DataObject();
         $this->assertEmpty($block->getAddressEditLink($address));
     }
 
@@ -103,10 +111,10 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('registry')
             ->with('current_order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->willReturn(4);
+            ->will($this->returnValue($this->orderMock));
+        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
         $this->groupRepositoryMock
-            ->expects($this->once())->method('getById')->with(4)->willReturn($this->groupMock);
+            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
@@ -120,14 +128,14 @@ class InfoTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('registry')
             ->with('current_order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->willReturn(4);
+            ->will($this->returnValue($this->orderMock));
+        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
         $this->groupRepositoryMock
-            ->expects($this->once())->method('getById')->with(4)->willReturn($this->groupMock);
+            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
-            ->willReturn('group_code');
+            ->will($this->returnValue('group_code'));
         $this->assertEquals('group_code', $this->block->getCustomerGroupName());
     }
 }

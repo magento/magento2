@@ -1,42 +1,50 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Config\Data;
+use Magento\Sales\Model\Config\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $_readerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $_cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->_readerMock = $this->getMockBuilder(
-            \Magento\Sales\Model\Config\Reader::class
+            Reader::class
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock = $this->getMockBuilder(
-            \Magento\Framework\App\Cache\Type\Config::class
+            Config::class
         )->disableOriginalConstructor()->getMock();
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testGet()
@@ -50,7 +58,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($expected);
 
         $configData = $this->objectManager->getObject(
-            \Magento\Sales\Model\Config\Data::class,
+            Data::class,
             [
                 'reader' => $this->_readerMock,
                 'cache' => $this->_cacheMock,

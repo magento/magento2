@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Operations;
 
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\Adapter;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
@@ -18,31 +17,33 @@ use Magento\Sales\Model\Order\Payment\State\CommandInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface as TransactionManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProcessInvoiceOperationTest extends \PHPUnit\Framework\TestCase
+class ProcessInvoiceOperationTest extends TestCase
 {
     /**
-     * @var TransactionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransactionManagerInterface|MockObject
      */
     private $transactionManager;
 
     /**
-     * @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EventManagerInterface|MockObject
      */
     private $eventManager;
 
     /**
-     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BuilderInterface|MockObject
      */
     private $transactionBuilder;
 
     /**
-     * @var CommandInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CommandInterface|MockObject
      */
     private $stateCommand;
 
     /**
-     * @var ProcessInvoiceOperation|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProcessInvoiceOperation|MockObject
      */
     protected $model;
 
@@ -68,14 +69,14 @@ class ProcessInvoiceOperationTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $transactionId = '1ASD3456';
 
-        /** @var Order|\PHPUnit\Framework\MockObject\MockObject $order */
+        /** @var Order|MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $order->method('getStoreId')
             ->willReturn($storeId);
 
-        /** @var Adapter|\PHPUnit\Framework\MockObject\MockObject $paymentMethod */
+        /** @var Adapter|MockObject $paymentMethod */
         $paymentMethod = $this->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
             ->getMock();

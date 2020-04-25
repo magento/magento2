@@ -1,51 +1,52 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
+use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
-use Magento\Sales\Model\Order\ShipmentFactory;
-use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\Shipment\Track;
-use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcessor;
+use Magento\Sales\Model\Order\ShipmentFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ShipmentDocumentFactoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
+class ShipmentDocumentFactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentFactory
+     * @var MockObject|ShipmentFactory
      */
     private $shipmentFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Order
+     * @var MockObject|Order
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentItemCreationInterface
+     * @var MockObject|ShipmentItemCreationInterface
      */
     private $itemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentCommentCreationInterface
+     * @var MockObject|ShipmentCommentCreationInterface
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentInterface
+     * @var MockObject|ShipmentInterface
      */
     private $shipmentMock;
 
@@ -55,27 +56,27 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     private $shipmentDocumentFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|HydratorPool
+     * @var MockObject|HydratorPool
      */
     private $hydratorPoolMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|TrackFactory
+     * @var MockObject|TrackFactory
      */
     private $trackFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|HydratorInterface
+     * @var MockObject|HydratorInterface
      */
     private $hydratorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ExtensionAttributesProcessor
+     * @var MockObject|ExtensionAttributesProcessor
      */
     private $extensionAttributeProcessorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Track
+     * @var MockObject|Track
      */
     private $trackMock;
 
@@ -91,11 +92,11 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()

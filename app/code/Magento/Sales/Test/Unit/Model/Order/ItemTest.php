@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,37 +7,42 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for order item class.
  */
-class ItemTest extends \PHPUnit\Framework\TestCase
+class ItemTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Item
+     * @var Item
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var OrderFactory |\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderFactory|MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
 
@@ -49,7 +54,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
             'orderFactory' => $this->orderFactory,
             'serializer' => $this->serializerMock
         ];
-        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, $arguments);
+        $this->model = $this->objectManager->getObject(Item::class, $arguments);
     }
 
     public function testSetParentItemNull()
@@ -60,7 +65,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testSetParentItem()
     {
-        $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
+        $item = $this->objectManager->getObject(Item::class, []);
         $this->assertEquals($this->model, $this->model->setParentItem($item));
         $this->assertEquals($item, $this->model->getParentItem());
         $this->assertTrue($item->getHasChildren());
@@ -69,7 +74,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPatentItem()
     {
-        $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
+        $item = $this->objectManager->getObject(Item::class, []);
         $this->model->setData(OrderItemInterface::PARENT_ITEM, $item);
         $this->assertEquals($item, $this->model->getParentItem());
     }
@@ -77,7 +82,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function testSetOrder()
     {
         $orderId = 123;
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order = $this->createMock(Order::class);
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
@@ -92,7 +97,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         //set order_id and get order by id
         $orderId = 123;
-        $order = $this->createMock(\Magento\Sales\Model\Order::class);
+        $order = $this->createMock(Order::class);
         $order->expects($this->once())
             ->method('load')
             ->with($orderId)
@@ -144,33 +149,33 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function getStatusIdDataProvider()
     {
         return [
-            [0, 0, 0, null, 0, 0, \Magento\Sales\Model\Order\Item::STATUS_PENDING],
-            [0, 10, 1, 100, 10, 80, \Magento\Sales\Model\Order\Item::STATUS_SHIPPED],
-            [1, 10, 1, 100, 10, 80, \Magento\Sales\Model\Order\Item::STATUS_SHIPPED],
-            [1, 10, 1, 100, 10, 99, \Magento\Sales\Model\Order\Item::STATUS_MIXED],
-            [0, 10, 80, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_INVOICED],
-            [1, 10, 80, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_INVOICED],
-            [1, 10, 99, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_MIXED],
-            [80, 10, null, 100, 10, null, \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED],
-            [null, null, null, 9, 9, null, \Magento\Sales\Model\Order\Item::STATUS_REFUNDED],
-            [null, 9, null, 9, null, null, \Magento\Sales\Model\Order\Item::STATUS_CANCELED],
-            [1, 10, 70, 100, 10, 79, \Magento\Sales\Model\Order\Item::STATUS_PARTIAL],
-            [0, 10, 70, 100, 10, 79, \Magento\Sales\Model\Order\Item::STATUS_PARTIAL]
+            [0, 0, 0, null, 0, 0, Item::STATUS_PENDING],
+            [0, 10, 1, 100, 10, 80, Item::STATUS_SHIPPED],
+            [1, 10, 1, 100, 10, 80, Item::STATUS_SHIPPED],
+            [1, 10, 1, 100, 10, 99, Item::STATUS_MIXED],
+            [0, 10, 80, 100, 10, 0, Item::STATUS_INVOICED],
+            [1, 10, 80, 100, 10, 0, Item::STATUS_INVOICED],
+            [1, 10, 99, 100, 10, 0, Item::STATUS_MIXED],
+            [80, 10, null, 100, 10, null, Item::STATUS_BACKORDERED],
+            [null, null, null, 9, 9, null, Item::STATUS_REFUNDED],
+            [null, 9, null, 9, null, null, Item::STATUS_CANCELED],
+            [1, 10, 70, 100, 10, 79, Item::STATUS_PARTIAL],
+            [0, 10, 70, 100, 10, 79, Item::STATUS_PARTIAL]
         ];
     }
 
     public function testGetStatuses()
     {
         $statuses = [
-            \Magento\Sales\Model\Order\Item::STATUS_PENDING => 'Ordered',
-            \Magento\Sales\Model\Order\Item::STATUS_SHIPPED => 'Shipped',
-            \Magento\Sales\Model\Order\Item::STATUS_INVOICED => 'Invoiced',
-            \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED => 'Backordered',
-            \Magento\Sales\Model\Order\Item::STATUS_RETURNED => 'Returned',
-            \Magento\Sales\Model\Order\Item::STATUS_REFUNDED => 'Refunded',
-            \Magento\Sales\Model\Order\Item::STATUS_CANCELED => 'Canceled',
-            \Magento\Sales\Model\Order\Item::STATUS_PARTIAL => 'Partial',
-            \Magento\Sales\Model\Order\Item::STATUS_MIXED => 'Mixed',
+            Item::STATUS_PENDING => 'Ordered',
+            Item::STATUS_SHIPPED => 'Shipped',
+            Item::STATUS_INVOICED => 'Invoiced',
+            Item::STATUS_BACKORDERED => 'Backordered',
+            Item::STATUS_RETURNED => 'Returned',
+            Item::STATUS_REFUNDED => 'Refunded',
+            Item::STATUS_CANCELED => 'Canceled',
+            Item::STATUS_PARTIAL => 'Partial',
+            Item::STATUS_MIXED => 'Mixed',
         ];
         $this->assertEquals($statuses, $this->model->getStatuses());
     }
@@ -199,7 +204,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         if (is_string($options)) {
             $this->serializerMock->expects($this->once())
                 ->method('unserialize')
-                ->willReturn($expectedResult);
+                ->will($this->returnValue($expectedResult));
         }
         $this->model->setData('product_options', $options);
         $result = $this->model->getProductOptions();

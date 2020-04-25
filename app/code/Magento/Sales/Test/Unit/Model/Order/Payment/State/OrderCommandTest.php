@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,12 +10,13 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\State\OrderCommand;
 use Magento\Sales\Model\Order\StatusResolver;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see OrderCommand
  */
-class OrderCommandTest extends \PHPUnit\Framework\TestCase
+class OrderCommandTest extends TestCase
 {
     /**
      * @var float

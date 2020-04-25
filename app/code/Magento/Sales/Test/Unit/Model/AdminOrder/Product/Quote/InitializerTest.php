@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,84 +6,92 @@
 
 namespace Magento\Sales\Test\Unit\Model\AdminOrder\Product\Quote;
 
-/**
- * Initializer test
- */
-class InitializerTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InitializerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer
+     * @var Initializer
      */
     protected $model;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $stockRegistry;
 
     protected function setUp(): void
     {
         $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             ['addProduct', '__wakeup', 'getStore']
         );
 
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getId', 'setIsQtyDecimal', 'setCartQty', '__wakeup']
         );
 
-        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getQty', 'setQty']);
+        $this->configMock = $this->createPartialMock(DataObject::class, ['getQty', 'setQty']);
 
-        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
+        $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
-            \Magento\CatalogInventory\Model\Stock\Item::class,
+            Item::class,
             ['getIsQtyDecimal', '__wakeup']
         );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+            ->will($this->returnValue($this->stockItemMock));
 
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->once())
             ->method('getWebsiteId')
-            ->willReturn(10);
+            ->will($this->returnValue(10));
         $this->quoteMock->expects($this->any())
             ->method('getStore')
-            ->willReturn($store);
+            ->will($this->returnValue($store));
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager
             ->getObject(
-                \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer::class,
+                Initializer::class,
                 ['stockRegistry' => $this->stockRegistry]
             );
     }
@@ -97,30 +105,30 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
 
         $this->stockItemMock->expects($this->once())
             ->method('getIsQtyDecimal')
-            ->willReturn(10);
+            ->will($this->returnValue(10));
 
         $this->productMock->expects($this->once())
             ->method('getId')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->productMock->expects($this->once())
             ->method('setIsQtyDecimal')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->productMock->expects($this->once())
             ->method('setCartQty')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->configMock->expects($this->once())
             ->method('getQty')
-            ->willReturn(20);
+            ->will($this->returnValue(20));
 
         $this->configMock->expects($this->never())
             ->method('setQty');
 
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
-            ->willReturn($quoteItemMock);
+            ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
             \Magento\Quote\Model\Quote\Item::class,
@@ -141,26 +149,26 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->once())
             ->method('getId')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->productMock->expects($this->never())
             ->method('setIsQtyDecimal');
 
         $this->productMock->expects($this->once())
             ->method('setCartQty')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->configMock->expects($this->exactly(2))
             ->method('getQty')
-            ->willReturn(10);
+            ->will($this->returnValue(10));
 
         $this->configMock->expects($this->once())
             ->method('setQty')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
 
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
-            ->willReturn($quoteItemMock);
+            ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
             \Magento\Quote\Model\Quote\Item::class,

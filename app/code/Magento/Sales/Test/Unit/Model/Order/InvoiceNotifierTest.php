@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,36 +7,42 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\InvoiceNotifier;
+use Magento\Sales\Model\Order\Status\History;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class InvoiceNotifierTest
- */
-class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
+class InvoiceNotifierTest extends TestCase
 {
     /**
-     * @var CollectionFactory |\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $historyCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceNotifier
+     * @var InvoiceNotifier
      */
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
+     * @var Invoice|MockObject
      */
     protected $invoice;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManager|MockObject
      */
     protected $invoiceSenderMock;
 
@@ -47,14 +53,14 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->invoice = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
+            Invoice::class,
             ['__wakeUp', 'getEmailSent']
         );
         $this->invoiceSenderMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class,
+            InvoiceSender::class,
             ['send']
         );
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new InvoiceNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -68,11 +74,11 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
     public function testNotifySuccess()
     {
         $historyCollection = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
+            Collection::class,
             ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
         );
         $historyItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Status\History::class,
+            History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp']
         );
         $historyItem->expects($this->at(0))
@@ -83,13 +89,13 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->invoice)
-            ->willReturn($historyItem);
+            ->will($this->returnValue($historyItem));
         $this->invoice->expects($this->once())
             ->method('getEmailSent')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->willReturn($historyCollection);
+            ->will($this->returnValue($historyCollection));
 
         $this->invoiceSenderMock->expects($this->once())
             ->method('send')
@@ -105,7 +111,7 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
     {
         $this->invoice->expects($this->once())
             ->method('getEmailSent')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->assertFalse($this->notifier->notify($this->invoice));
     }
 

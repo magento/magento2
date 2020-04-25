@@ -1,78 +1,93 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\DB\Transaction;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CaptureTest
- * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CaptureTest extends \PHPUnit\Framework\TestCase
+class CaptureTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $actionFlagMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture
+     * @var Capture
      */
     protected $controller;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $invoiceManagement;
 
     /**
-     * @var InvoiceRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceRepositoryInterface|MockObject
      */
     protected $invoiceRepository;
 
@@ -83,33 +98,33 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
+        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
+        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
+        $this->helperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class
+            RedirectFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -120,7 +135,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -149,19 +164,19 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
-        $this->invoiceManagement = $this->getMockBuilder(\Magento\Sales\Api\InvoiceManagementInterface::class)
+        $this->invoiceManagement = $this->getMockBuilder(InvoiceManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Sales\Api\InvoiceManagementInterface::class)
+            ->with(InvoiceManagementInterface::class)
             ->willReturn($this->invoiceManagement);
         $this->invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->controller = $objectManager->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture::class,
+            Capture::class,
             [
                 'context' => $contextMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock,
@@ -185,9 +200,9 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['setIsInProcess', '__wakeup'])
             ->getMock();
@@ -196,29 +211,29 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
             ->method('setCapture')
             ->with($invoiceId);
 
-        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->willReturn($orderMock);
+            ->will($this->returnValue($orderMock));
 
-        $transactionMock = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
+        $transactionMock = $this->getMockBuilder(Transaction::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $transactionMock->expects($this->at(0))
             ->method('addObject')
             ->with($invoiceMock)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $transactionMock->expects($this->at(1))
             ->method('addObject')
             ->with($orderMock)
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $transactionMock->expects($this->at(2))
             ->method('save');
 
@@ -228,7 +243,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -236,17 +251,17 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
-            ->with(\Magento\Framework\DB\Transaction::class)
-            ->willReturn($transactionMock);
+            ->with(Transaction::class)
+            ->will($this->returnValue($transactionMock));
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($resultRedirect);
+            ->will($this->returnValue($resultRedirect));
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -261,20 +276,20 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn(null);
 
-        $resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
+        $resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($resultForward);
+            ->will($this->returnValue($resultForward));
 
         $this->assertSame($resultForward, $this->controller->execute());
     }
@@ -287,7 +302,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
         $invoiceId = 2;
 
         $message = 'Invoice capturing error';
-        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
+        $e = new LocalizedException(__($message));
 
         $this->invoiceManagement->expects($this->once())
             ->method('setCapture')
@@ -297,9 +312,9 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
-        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -309,23 +324,23 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($resultRedirect);
+            ->will($this->returnValue($resultRedirect));
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -343,14 +358,14 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
         $this->invoiceManagement->expects($this->once())
             ->method('setCapture')
             ->with($invoiceId)
             ->will($this->throwException($e));
 
-        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -360,16 +375,16 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->willReturn($invoiceId);
+            ->will($this->returnValue($invoiceId));
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -377,7 +392,7 @@ class CaptureTest extends \PHPUnit\Framework\TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($resultRedirect);
+            ->will($this->returnValue($resultRedirect));
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

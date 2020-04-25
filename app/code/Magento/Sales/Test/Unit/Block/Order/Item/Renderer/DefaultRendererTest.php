@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,29 +6,39 @@
 
 namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 
-class DefaultRendererTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DefaultRendererTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
+     * @var MockObject|DefaultRenderer
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Block\Template
+     * @var MockObject|Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
+     * @var MockObject|Layout
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item  */
+    /** @var MockObject|Item  */
     protected $itemMock;
 
     /**
@@ -36,24 +46,24 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+        $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
-            \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer::class,
+            DefaultRenderer::class,
             [
                 'context' => $this->objectManager->getObject(
-                    \Magento\Backend\Block\Template\Context::class,
+                    Context::class,
                     ['layout' => $this->layoutMock]
                 )
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
+        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['setItem', 'toHtml'])
             ->getMock();
@@ -66,7 +76,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             'getDiscountTaxCompensationAmount',
             'getWeeeTaxAppliedRowAmount',
         ];
-        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
             ->setMethods($itemMockMethods)
             ->getMock();
@@ -79,7 +89,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_unit_price')
-            ->willReturn($this->priceRenderBlock);
+            ->will($this->returnValue($this->priceRenderBlock));
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -87,7 +97,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->willReturn($html);
+            ->will($this->returnValue($html));
 
         $this->assertEquals($html, $this->block->getItemPriceHtml($this->itemMock));
     }
@@ -99,7 +109,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total')
-            ->willReturn($this->priceRenderBlock);
+            ->will($this->returnValue($this->priceRenderBlock));
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -107,7 +117,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->willReturn($html);
+            ->will($this->returnValue($html));
 
         $this->assertEquals($html, $this->block->getItemRowTotalHtml($this->itemMock));
     }
@@ -119,7 +129,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total_after_discount')
-            ->willReturn($this->priceRenderBlock);
+            ->will($this->returnValue($this->priceRenderBlock));
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -127,7 +137,7 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->willReturn($html);
+            ->will($this->returnValue($html));
 
         $this->assertEquals($html, $this->block->getItemRowTotalAfterDiscountHtml($this->itemMock));
     }
@@ -147,19 +157,19 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
-            ->willReturn($rowTotal);
+            ->will($this->returnValue($rowTotal));
         $this->itemMock->expects($this->once())
             ->method('getTaxAmount')
-            ->willReturn($taxAmount);
+            ->will($this->returnValue($taxAmount));
         $this->itemMock->expects($this->once())
             ->method('getDiscountTaxCompensationAmount')
-            ->willReturn($discountTaxCompensationAmount);
+            ->will($this->returnValue($discountTaxCompensationAmount));
         $this->itemMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->willReturn($discountAmount);
+            ->will($this->returnValue($discountAmount));
         $this->itemMock->expects($this->once())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->willReturn($weeeTaxAppliedRowAmount);
+            ->will($this->returnValue($weeeTaxAppliedRowAmount));
 
         $this->assertEquals($expectedResult, $this->block->getTotalAmount($this->itemMock));
     }

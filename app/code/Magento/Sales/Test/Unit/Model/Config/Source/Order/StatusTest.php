@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,25 +6,29 @@
 namespace Magento\Sales\Test\Unit\Model\Config\Source\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Config\Source\Order\Status;
+use Magento\Sales\Model\Order\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+class StatusTest extends TestCase
 {
-    /** @var \Magento\Sales\Model\Config\Source\Order\Status */
+    /** @var Status */
     protected $object;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Config|MockObject */
     protected $config;
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(\Magento\Sales\Model\Order\Config::class);
+        $this->config = $this->createMock(Config::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->object = $this->objectManager->getObject(
-            \Magento\Sales\Model\Config\Source\Order\Status::class,
+            Status::class,
             ['orderConfig' => $this->config]
         );
     }
@@ -32,7 +36,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testToOptionArray()
     {
         $this->config->expects($this->once())->method('getStateStatuses')
-            ->willReturn(['status1', 'status2']);
+            ->will($this->returnValue(['status1', 'status2']));
 
         $this->assertEquals(
             [

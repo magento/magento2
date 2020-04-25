@@ -16,11 +16,13 @@ use Magento\Sales\Model\Validator;
 use Magento\Sales\Model\ValidatorInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Sales\Model\Validator
  */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
      * Testable Object
@@ -37,27 +39,27 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ValidatorResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ValidatorResultInterfaceFactory|MockObject
      */
     private $validatorResultFactoryMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ValidatorResultInterface|MockObject
      */
     private $validatorResultMock;
 
     /**
-     * @var ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ValidatorInterface|MockObject
      */
     private $validatorMock;
 
     /**
-     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     private $entityMock;
 
@@ -68,12 +70,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->entityMock = $this->getMockForAbstractClass(OrderInterface::class);
-        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->entityMock = $this->createMock(OrderInterface::class);
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
             ->setMethods(['create'])->disableOriginalConstructor()->getMock();
-        $this->validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $this->validatorResultMock = $this->createMock(ValidatorResultInterface::class);
         $this->validatorResultFactoryMock->expects($this->any())->method('create')
             ->willReturn($this->validatorResultMock);
         $this->objectManager = new ObjectManager($this);

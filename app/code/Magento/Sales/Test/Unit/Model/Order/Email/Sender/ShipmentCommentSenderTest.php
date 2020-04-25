@@ -1,39 +1,43 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
+use Magento\Sales\Model\Order\Shipment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ShipmentCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender
+     * @var ShipmentCommentSender
      */
     protected $sender;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $shipmentMock;
 
     protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::class);
+        $this->stepIdentityContainerInit(ShipmentCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->shipmentMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             ['getStore', '__wakeup', 'getOrder']
         );
         $this->shipmentMock->expects($this->any())
             ->method('getStore')
-            ->willReturn($this->storeMock);
+            ->will($this->returnValue($this->storeMock));
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
-            ->willReturn($this->orderMock);
+            ->will($this->returnValue($this->orderMock));
 
         $this->sender = new ShipmentCommentSender(
             $this->templateContainerMock,
@@ -61,12 +65,12 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
@@ -106,12 +110,12 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
@@ -145,14 +149,14 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder()
     {
         $isVirtualOrder = true;
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
         $customerName='Test Customer';
         $frontendStatusLabel='Complete';
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
