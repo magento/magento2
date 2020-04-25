@@ -110,8 +110,7 @@ class ExternalVideoEntryConverterTest extends TestCase
             );
 
         $this->mediaGalleryEntryExtensionMock = $this->getMockBuilder(ProductAttributeMediaGalleryEntryExtension::class)
-            ->addMethods(['getVideoProvider'])
-            ->onlyMethods(['setVideoContent', 'getVideoContent'])
+             ->addMethods(['getVideoProvider', 'setVideoContent', 'getVideoContent'])
             ->disableOriginalConstructor()
             ->getMock();
 
