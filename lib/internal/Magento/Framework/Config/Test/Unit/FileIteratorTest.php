@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\FileIterator;
@@ -60,7 +62,7 @@ class FileIteratorTest extends TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
@@ -81,7 +83,7 @@ class FileIteratorTest extends TestCase
                 ->willReturn($this->fileRead);
             $this->fileRead->expects($this->at($index))
                 ->method('readAll')
-                ->will($this->returnValue($contents[$index++]));
+                ->willReturn($contents[$index++]);
         }
         $this->assertEquals($expectedArray, $this->fileIterator->toArray());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
@@ -47,8 +49,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/numeric/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -57,8 +59,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/numeric/two',
             $xpath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->object->isNumericArray($xpath));
     }
@@ -73,8 +75,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/numeric/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -83,8 +85,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/numeric/two',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(2)
@@ -93,8 +95,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/numeric/three',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertFalse($this->object->isNumericArray($xpath));
     }
@@ -109,8 +111,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/assoc/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -119,8 +121,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/assoc/two',
             $xpath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertEquals('id', $this->object->getAssocArrayKeyAttribute($xpath));
     }
@@ -135,8 +137,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/assoc/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -145,8 +147,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/assoc/two',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(2)
@@ -155,8 +157,8 @@ class ArrayNodeConfigTest extends TestCase
         )->with(
             '/root/assoc/three',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertNull($this->object->getAssocArrayKeyAttribute($xpath));
     }

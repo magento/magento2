@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\Dom;
@@ -152,7 +154,9 @@ class DomTest extends TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $dom = new Dom($xml, $this->validationStateMock);
+        $actualErrors = [];
+
+        $dom = new Dom($xml, $this->validationStateMock, [], null, null);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -209,7 +213,7 @@ class DomTest extends TestCase
             ->with($schemaFile)
             ->willReturn(false);
         $this->assertEquals(
-            ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            ["Unknown validation error"],
             $dom->validateDomDocument($domMock, $schemaFile)
         );
     }

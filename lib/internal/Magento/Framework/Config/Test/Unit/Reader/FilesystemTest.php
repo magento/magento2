@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Reader;
 
 use Magento\Framework\Config\ConverterInterface;
@@ -74,7 +76,7 @@ class FilesystemTest extends TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->_file);
@@ -93,7 +95,7 @@ class FilesystemTest extends TestCase
             []
         );
         $this->_fileResolverMock
-            ->expects($this->once())->method('get')->will($this->returnValue([]));
+            ->expects($this->once())->method('get')->willReturn([]);
 
         $this->assertEmpty($model->read('scope'));
     }
@@ -106,10 +108,8 @@ class FilesystemTest extends TestCase
             $this->once()
         )->method(
             'getSchema'
-        )->will(
-            $this->returnValue(
-                $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
-            )
+        )->willReturn(
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
         );
         $this->_validationStateMock->expects($this->any())
             ->method('isValidationRequired')
@@ -122,7 +122,7 @@ class FilesystemTest extends TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
 
         $model->read('scope');
     }
@@ -135,10 +135,8 @@ class FilesystemTest extends TestCase
             $this->any()
         )->method(
             'getPerFileSchema'
-        )->will(
-            $this->returnValue(
-                $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
-            )
+        )->willReturn(
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/Test/Unit/_files/reader/schema.xsd')
         );
         $this->_validationStateMock->expects($this->any())
             ->method('isValidationRequired')
@@ -152,7 +150,7 @@ class FilesystemTest extends TestCase
             'fileName',
             []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
         $model->read('scope');
     }
 
@@ -160,7 +158,7 @@ class FilesystemTest extends TestCase
     {
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Instance of the DOM config merger is expected, got StdClass instead.');
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
+        $this->_fileResolverMock->expects($this->once())->method('get')->willReturn([$this->_file]);
         $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,

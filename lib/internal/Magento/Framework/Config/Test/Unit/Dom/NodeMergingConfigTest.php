@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use Magento\Framework\Config\Dom\NodeMergingConfig;
@@ -46,8 +48,8 @@ class NodeMergingConfigTest extends TestCase
         )->with(
             '/root/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -56,8 +58,8 @@ class NodeMergingConfigTest extends TestCase
         )->with(
             '/root/two',
             $xpath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertEquals('id', $this->object->getIdAttribute($xpath));
     }
@@ -72,8 +74,8 @@ class NodeMergingConfigTest extends TestCase
         )->with(
             '/root/one',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(1)
@@ -82,8 +84,8 @@ class NodeMergingConfigTest extends TestCase
         )->with(
             '/root/two',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->nodePathMatcher->expects(
             $this->at(2)
@@ -92,8 +94,8 @@ class NodeMergingConfigTest extends TestCase
         )->with(
             '/root/three',
             $xpath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertNull($this->object->getIdAttribute($xpath));
     }

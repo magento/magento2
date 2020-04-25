@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Data;
 
 use Magento\Framework\Config\CacheInterface;
@@ -117,8 +119,8 @@ class ScopedTest extends TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         /** set empty cache data */
@@ -128,8 +130,8 @@ class ScopedTest extends TestCase
             'load'
         )->with(
             'adminhtml::tag'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         /** get data from reader  */
@@ -139,8 +141,8 @@ class ScopedTest extends TestCase
             'read'
         )->with(
             'adminhtml'
-        )->will(
-            $this->returnValue($testValue)
+        )->willReturn(
+            $testValue
         );
 
         $this->serializerMock->expects($this->once())
@@ -170,8 +172,8 @@ class ScopedTest extends TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue('adminhtml')
+        )->willReturn(
+            'adminhtml'
         );
 
         $this->serializerMock->expects($this->once())
