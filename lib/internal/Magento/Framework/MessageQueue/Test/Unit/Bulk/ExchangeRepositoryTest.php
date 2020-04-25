@@ -38,7 +38,8 @@ class ExchangeRepositoryTest extends TestCase
     {
         $this->exchangeFactory = $this
             ->getMockBuilder(ExchangeFactoryInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->exchangeRepository = $objectManager->getObject(
@@ -61,7 +62,8 @@ class ExchangeRepositoryTest extends TestCase
         $connectionName = 'amqp';
         $exchange = $this
             ->getMockBuilder(Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->exchangeFactory->expects($this->once())->method('create')->with($connectionName)->willReturn($exchange);
         $this->assertEquals($exchange, $this->exchangeRepository->getByConnectionName($connectionName));
     }

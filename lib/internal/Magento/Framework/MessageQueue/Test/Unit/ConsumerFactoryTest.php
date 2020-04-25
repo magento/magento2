@@ -75,7 +75,8 @@ class ConsumerFactoryTest extends TestCase
             ]
         ];
         $consumerFactory = $this->getConsumerFactoryInstance($consumers);
-        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)->getMock();
+        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)
+            ->getMock();
         $this->assertInstanceOf(get_class($consumerInstanceMock), $consumerFactory->get(self::TEST_CONSUMER_NAME));
     }
 
@@ -92,7 +93,8 @@ class ConsumerFactoryTest extends TestCase
         $consumerType = 'async';
 
         /** @var ConsumerConfigItem|MockObject $consumerConfigItemMock */
-        $consumerConfigItemMock = $this->getMockBuilder(ConsumerConfigItem::class)->disableOriginalConstructor()
+        $consumerConfigItemMock = $this->getMockBuilder(ConsumerConfigItem::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $consumerConfigItemMock->expects($this->any())->method('getName')->willReturn(self::TEST_CONSUMER_NAME);
         $consumerConfigItemMock->expects($this->any())->method('getQueue')->willReturn(self::TEST_CONSUMER_QUEUE);
@@ -126,7 +128,8 @@ class ConsumerFactoryTest extends TestCase
                 ]
             );
 
-        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)->getMock();
+        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)
+            ->getMock();
         $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
             ->setMethods(['configure'])
             ->getMockForAbstractClass();

@@ -28,8 +28,8 @@ class ReaderTest extends TestCase
     {
         $this->envConfig =
             $this->getMockBuilder(Env::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->reader = new Reader($this->envConfig);
     }
 

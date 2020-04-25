@@ -79,23 +79,30 @@ class PublisherTest extends TestCase
     {
         $this->exchangeRepository = $this
             ->getMockBuilder(ExchangeRepository::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageValidator = $this->getMockBuilder(MessageValidator::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->publisherConfig = $this
             ->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->responseQueueNameBuilder = $this
             ->getMockBuilder(ResponseQueueNameBuilder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageIdGenerator = $this
             ->getMockBuilder(MessageIdGeneratorInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->publisher = $objectManager->getObject(
@@ -131,29 +138,33 @@ class PublisherTest extends TestCase
         $this->messageEncoder->expects($this->once())
             ->method('encode')->with($topicName, $message)->willReturn($encodedMessage);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageIdGenerator->expects($this->once())
             ->method('generate')->with($topicName)->willReturn($messageId);
         $this->envelopeFactory->expects($this->once())->method('create')->with(
             $this->logicalAnd(
                 $this->arrayHasKey('body'),
                 $this->arrayHasKey('properties'),
-                $this->contains($encodedMessage)
+                $this->containsEqual($encodedMessage)
             )
         )->willReturn($envelope);
         $publisher = $this
             ->getMockBuilder(PublisherConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
         $connection = $this
             ->getMockBuilder(PublisherConnectionInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getName')->with()->willReturn($connectionName);
         $exchange = $this
             ->getMockBuilder(Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->exchangeRepository->expects($this->once())
             ->method('getByConnectionName')->with($connectionName)->willReturn($exchange);
         $exchange->expects($this->once())->method('enqueue')->with($topicName, [$envelope])->willReturn(null);

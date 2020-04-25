@@ -31,7 +31,9 @@ class HandlersTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->methodsMap = $this->getMockBuilder(MethodsMap::class)->disableOriginalConstructor()->getMock();
+        $this->methodsMap = $this->getMockBuilder(MethodsMap::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->validator = $objectManager->getObject(HandlersValidator::class, ['methodsMap' => $this->methodsMap]);
     }
 

@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\LockInterfaceFactory;
 use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class MessageControllerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|MockObject
+     * @var LockInterfaceFactory|MockObject
      */
     private $lockFactory;
 
@@ -37,8 +38,9 @@ class MessageControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->lockFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\LockInterfaceFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $this->lockFactory = $this->getMockBuilder(LockInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->messageController = $objectManager->getObject(

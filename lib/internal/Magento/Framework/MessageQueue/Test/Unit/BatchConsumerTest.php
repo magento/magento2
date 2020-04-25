@@ -92,16 +92,21 @@ class BatchConsumerTest extends TestCase
     {
         $this->configuration = $this
             ->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queueRepository = $this->getMockBuilder(QueueRepository::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mergerFactory = $this->getMockBuilder(MergerFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageProcessorLoader = $this
             ->getMockBuilder(MessageProcessorLoader::class)
             ->disableOriginalConstructor()
@@ -122,14 +127,16 @@ class BatchConsumerTest extends TestCase
         );
 
         $this->consumerConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager->setBackwardCompatibleProperty(
             $this->batchConsumer,
             'consumerConfig',
             $this->consumerConfig
         );
         $this->messageController = $this->getMockBuilder(MessageController::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager->setBackwardCompatibleProperty(
             $this->batchConsumer,
             'messageController',
@@ -155,19 +162,23 @@ class BatchConsumerTest extends TestCase
         $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $consumerConfigItem = $this
             ->getMockBuilder(ConsumerConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->consumerConfig->expects($this->once())
             ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
         $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
         $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queueRepository->expects($this->once())
             ->method('get')->with($connectionName, $queueName)->willReturn($queue);
         $merger = $this->getMockBuilder(MergerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mergerFactory->expects($this->once())->method('create')->with($consumerName)->willReturn($merger);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
         $this->messageController->expects($this->exactly($numberOfMessages))
             ->method('lock')->with($envelope, $consumerName);
@@ -202,19 +213,23 @@ class BatchConsumerTest extends TestCase
         $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $consumerConfigItem = $this
             ->getMockBuilder(ConsumerConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->consumerConfig->expects($this->once())
             ->method('getConsumer')->with($consumerName)->willReturn($consumerConfigItem);
         $consumerConfigItem->expects($this->once())->method('getConnection')->willReturn($connectionName);
         $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queueRepository->expects($this->once())
             ->method('get')->with($connectionName, $queueName)->willReturn($queue);
         $merger = $this->getMockBuilder(MergerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mergerFactory->expects($this->once())->method('create')->with($consumerName)->willReturn($merger);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $queue->expects($this->exactly($numberOfMessages))->method('dequeue')->willReturn($envelope);
         $exception = new MessageLockException(__('Exception Message'));
         $this->messageController->expects($this->atLeastOnce())

@@ -115,7 +115,7 @@ return [
             'connection' => 'db',
             'queue' => 'q.05'
         ],
-         'cons.06' => [
+        'cons.06' => [
             'name' => 'cons.06',
             'handlers' => [
                 'top.04' => [
@@ -130,7 +130,7 @@ return [
             'max_messages' => '512',
             'connection' => 'db',
             'queue' => 'q.06'
-         ],
+        ],
         'cons.07' => [
             'name' => 'cons.07',
             'handlers' => [

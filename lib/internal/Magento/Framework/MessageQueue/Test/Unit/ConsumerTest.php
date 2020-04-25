@@ -108,22 +108,29 @@ class ConsumerTest extends TestCase
     {
         $this->configuration = $this
             ->getMockBuilder(ConsumerConfigurationInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->queueRepository = $this->getMockBuilder(QueueRepository::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
         $objectManager = new ObjectManager($this);
         $this->poisonPillCompare = $this->getMockBuilder(PoisonPillCompareInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->poisonPillRead = $this->getMockBuilder(PoisonPillReadInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         //Hard dependency used because CallbackInvoker invokes closure logic defined inside of Customer class.
         $this->callbackInvoker = new CallbackInvoker(
             $this->poisonPillRead,
@@ -143,14 +150,16 @@ class ConsumerTest extends TestCase
         );
 
         $this->consumerConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager->setBackwardCompatibleProperty(
             $this->consumer,
             'consumerConfig',
             $this->consumerConfig
         );
         $this->messageController = $this->getMockBuilder(MessageController::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager->setBackwardCompatibleProperty(
             $this->consumer,
             'messageController',
@@ -180,10 +189,12 @@ class ConsumerTest extends TestCase
         $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion')->willReturn('version-1');
         $this->poisonPillCompare->expects($this->atLeastOnce())->method('isLatestVersion')->willReturn(true);
         $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configuration->expects($this->once())->method('getQueue')->willReturn($queue);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $queue->expects($this->atLeastOnce())->method('dequeue')->willReturn($envelope);
         $envelope->expects($this->once())->method('getProperties')->willReturn($properties);
         $this->communicationConfig->expects($this->once())->method('getTopic')->with($properties['topic_name'])

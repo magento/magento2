@@ -44,7 +44,8 @@ class ExchangeFactoryTest extends TestCase
     {
         $this->connectionTypeResolver = $this
             ->getMockBuilder(ConnectionTypeResolver::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->amqpExchangeFactory = $this
             ->getMockBuilder(\Magento\Framework\Amqp\ExchangeFactory::class)
@@ -74,7 +75,8 @@ class ExchangeFactoryTest extends TestCase
             ->method('getConnectionType')->with($connectionName)->willReturn($connectionName);
         $exchange = $this
             ->getMockBuilder(Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->amqpExchangeFactory->expects($this->once())
             ->method('create')->with($connectionName, $data)->willReturn($exchange);
         $this->assertEquals($exchange, $this->exchangeFactory->create($connectionName, $data));
@@ -112,7 +114,8 @@ class ExchangeFactoryTest extends TestCase
             ->method('getConnectionType')->with($connectionName)->willReturn($connectionName);
         $exchange = $this
             ->getMockBuilder(\Magento\Framework\Amqp\Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->amqpExchangeFactory->expects($this->once())
             ->method('create')->with($connectionName, $data)->willReturn($exchange);
         $this->exchangeFactory->create($connectionName, $data);
