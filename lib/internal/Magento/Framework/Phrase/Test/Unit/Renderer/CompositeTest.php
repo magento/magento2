@@ -57,8 +57,8 @@ class CompositeTest extends TestCase
         )->with(
             [$text],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterFirst)
+        )->willReturn(
+            $resultAfterFirst
         );
 
         $this->rendererTwo->expects(
@@ -71,8 +71,8 @@ class CompositeTest extends TestCase
                 $resultAfterFirst,
             ],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterSecond)
+        )->willReturn(
+            $resultAfterSecond
         );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));

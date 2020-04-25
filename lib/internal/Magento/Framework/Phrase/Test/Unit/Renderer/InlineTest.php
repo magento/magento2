@@ -59,16 +59,16 @@ class InlineTest extends TestCase
 
         $this->translator->expects($this->once())
             ->method('getTheme')
-            ->will($this->returnValue($theme));
+            ->willReturn($theme);
 
         $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($result, $this->renderer->render([$text], []));
     }
@@ -80,11 +80,11 @@ class InlineTest extends TestCase
         $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->provider->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($inlineTranslate));
+            ->willReturn($inlineTranslate);
 
         $this->assertEquals($text, $this->renderer->render([$text], []));
     }
