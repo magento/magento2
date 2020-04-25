@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
@@ -36,7 +37,7 @@ class ThemeDependencyCheckerTest extends TestCase
      */
     private $themePackageInfo;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->themePackageInfo = $this->createMock(ThemePackageInfo::class);
         $this->themeCollection = $this->createMock(Collection::class);
@@ -130,7 +131,7 @@ class ThemeDependencyCheckerTest extends TestCase
                 true,
                 ['frontend/Magento/a'],
                 ['frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.',
-                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.']
+                    'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.']
             ],
             [
                 true,
@@ -138,8 +139,8 @@ class ThemeDependencyCheckerTest extends TestCase
                 ['frontend/Magento/a', 'frontend/Magento/b'],
                 ['frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
                 . ' Parent themes cannot be uninstalled.',
-                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
-                . ' Parent themes cannot be uninstalled.']
+                    'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
+                    . ' Parent themes cannot be uninstalled.']
             ],
         ];
     }

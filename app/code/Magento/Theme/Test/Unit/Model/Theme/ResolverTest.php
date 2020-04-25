@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\State;
@@ -69,8 +71,8 @@ class ResolverTest extends TestCase
             $this->exactly(2)
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects($this->never())->method('getArea');
         $this->designMock->expects($this->never())->method('getConfigurationDesignTheme');
@@ -79,8 +81,8 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects($this->never())->method('create');
@@ -89,8 +91,8 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -102,15 +104,15 @@ class ResolverTest extends TestCase
             $this->exactly(2)
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects($this->never())->method('getConfigurationDesignTheme');
 
@@ -118,8 +120,8 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects($this->never())->method('create');
@@ -128,8 +130,8 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -141,38 +143,38 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue('other_theme')
+        )->willReturn(
+            'other_theme'
         );
 
         $this->themeMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->themeCollectionMock)
+        )->willReturn(
+            $this->themeCollectionMock
         );
 
         $this->themeCollectionMock->expects(
@@ -181,16 +183,16 @@ class ResolverTest extends TestCase
             'getThemeByFullPath'
         )->with(
             'other_area' . ThemeInterface::PATH_SEPARATOR . 'other_theme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
 
         $this->appStateMock->expects(
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('other_area')
+        )->willReturn(
+            'other_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
@@ -202,38 +204,38 @@ class ResolverTest extends TestCase
             $this->once()
         )->method(
             'getDesignTheme'
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('design_area')
+        )->willReturn(
+            'design_area'
         );
         $this->designMock->expects(
             $this->once()
         )->method(
             'getConfigurationDesignTheme'
-        )->will(
-            $this->returnValue(12)
+        )->willReturn(
+            12
         );
 
         $this->themeMock->expects(
             $this->once()
         )->method(
             'getArea'
-        )->will(
-            $this->returnValue('theme_area')
+        )->willReturn(
+            'theme_area'
         );
 
         $this->themeCollectionFactoryMock->expects(
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->themeCollectionMock)
+        )->willReturn(
+            $this->themeCollectionMock
         );
 
         $this->themeCollectionMock->expects(
@@ -242,16 +244,16 @@ class ResolverTest extends TestCase
             'getItemById'
         )->with(
             12
-        )->will(
-            $this->returnValue($this->themeMock)
+        )->willReturn(
+            $this->themeMock
         );
 
         $this->appStateMock->expects(
             $this->once()
         )->method(
             'getAreaCode'
-        )->will(
-            $this->returnValue('other_area')
+        )->willReturn(
+            'other_area'
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());

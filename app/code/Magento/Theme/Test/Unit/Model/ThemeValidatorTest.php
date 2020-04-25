@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme model
@@ -46,10 +47,11 @@ class ThemeValidatorTest extends TestCase
     {
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
-        $this->configData = $this->createPartialMock(
-            Value::class,
-            ['getCollection', 'addFieldToFilter']
-        );
+        $this->configData = $this->getMockBuilder(Value::class)
+            ->addMethods(['addFieldToFilter'])
+            ->onlyMethods(['getCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->themeValidator = new ThemeValidator(
             $this->storeManager,
             $this->themeProvider,

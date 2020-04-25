@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Backend\App\Action\Context;
@@ -77,9 +79,12 @@ class DeleteTest extends TestCase
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)->getMock();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMock();
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -98,7 +103,8 @@ class DeleteTest extends TestCase
 
         $this->registry = $this->getMockBuilder(
             Registry::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -202,7 +208,8 @@ class DeleteTest extends TestCase
                     ['back', false, false],
                 ]
             );
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
         $redirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();

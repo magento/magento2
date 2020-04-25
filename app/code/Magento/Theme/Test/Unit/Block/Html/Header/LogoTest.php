@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html\Header;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -27,19 +29,19 @@ class LogoTest extends TestCase
 
         $urlBuilder = $this->createMock(UrlInterface::class);
 
-        $scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue('default/image.gif'));
+        $scopeConfig->expects($this->once())->method('getValue')->willReturn('default/image.gif');
         $urlBuilder->expects(
             $this->once()
         )->method(
             'getBaseUrl'
-        )->will(
-            $this->returnValue('http://localhost/pub/media/')
+        )->willReturn(
+            'http://localhost/pub/media/'
         );
-        $mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $mediaDirectory->expects($this->any())->method('isFile')->willReturn(true);
 
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($mediaDirectory));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($mediaDirectory);
         $helper = $this->createPartialMock(Database::class, ['checkDbUsage']);
-        $helper->expects($this->once())->method('checkDbUsage')->will($this->returnValue(false));
+        $helper->expects($this->once())->method('checkDbUsage')->willReturn(false);
 
         $objectManager = new ObjectManager($this);
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
@@ -58,7 +60,8 @@ class MessagePluginTest extends TestCase
             ->getMockForAbstractClass();
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
-        $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)->getMockForAbstractClass();
+        $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)
+            ->getMockForAbstractClass();
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,

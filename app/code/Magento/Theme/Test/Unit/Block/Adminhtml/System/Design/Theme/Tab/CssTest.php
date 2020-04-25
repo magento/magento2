@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Tab;
 
@@ -82,8 +83,8 @@ class CssTest extends TestCase
             'get'
         )->with(
             Size::class
-        )->will(
-            $this->returnValue($sizeModel)
+        )->willReturn(
+            $sizeModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -106,8 +107,8 @@ class CssTest extends TestCase
             'get'
         )->with(
             ScopeConfigInterface::class
-        )->will(
-            $this->returnValue($configModel)
+        )->willReturn(
+            $configModel
         );
 
         $result = $method->invokeArgs($this->_model, []);
@@ -143,7 +144,7 @@ class CssTest extends TestCase
         $fileId = 1;
         $themeId = 1;
         $this->urlCoder->expects($this->atLeastOnce())->method('encode')->with($fileId)
-            ->will($this->returnValue('encoded'));
+            ->willReturn('encoded');
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
             ->with($this->anything(), ['theme_id' => $themeId, 'file' => 'encoded']);
         $this->_model->getDownloadUrl($fileId, $themeId);

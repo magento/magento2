@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -92,7 +94,8 @@ class StorageTest extends TestCase
             ->getMock();
         $this->extensionAttributes = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )->disableOriginalConstructor()->setMethods(['getDesignConfigData', 'setDesignConfigData'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['getDesignConfigData', 'setDesignConfigData'])->getMock();
         $this->designConfigData = $this->getMockBuilder(DesignConfigDataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Framework\App\Area;
@@ -37,11 +39,14 @@ class ExceptionsTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder(DesignInterface::class)->getMock();
+        $this->designMock = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder(ManagerInterface::class)->getMock());
-        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
+            ->willReturn($this->getMockBuilder(ManagerInterface::class)
+            ->getMock());
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
         $this->model = (new ObjectManager($this))->getObject(
             Exceptions::class,
             [

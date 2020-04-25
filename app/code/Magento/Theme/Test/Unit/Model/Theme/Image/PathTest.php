@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test of image path model
@@ -59,11 +60,11 @@ class PathTest extends TestCase
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
             ->with('/theme/origin')
-            ->will($this->returnValue('/theme/origin'));
+            ->willReturn('/theme/origin');
 
         $this->filesystem->expects($this->any())->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($this->mediaDirectory));
+            ->willReturn($this->mediaDirectory);
 
         $this->model = new Path(
             $this->filesystem,
@@ -77,17 +78,18 @@ class PathTest extends TestCase
     public function testGetPreviewImageUrl()
     {
         /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
-        $theme = $this->createPartialMock(
-            Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup']
-        );
+        $theme = $this->getMockBuilder(Theme::class)
+            ->addMethods(['getPreviewImage'])
+            ->onlyMethods(['isPhysical', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $theme->expects($this->any())
             ->method('getPreviewImage')
-            ->will($this->returnValue('image.png'));
+            ->willReturn('image.png');
 
         $store = $this->createMock(Store::class);
-        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
-        $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/');
+        $this->_storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
     }
 
@@ -97,10 +99,11 @@ class PathTest extends TestCase
         $expectedPath = 'theme/preview/preview.jpg';
 
         /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
-        $theme = $this->createPartialMock(
-            Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup']
-        );
+        $theme = $this->getMockBuilder(Theme::class)
+            ->addMethods(['getPreviewImage'])
+            ->onlyMethods(['isPhysical', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
@@ -109,7 +112,7 @@ class PathTest extends TestCase
 
         $theme->expects($this->once())
             ->method('getPreviewImage')
-            ->will($this->returnValue($previewImage));
+            ->willReturn($previewImage);
 
         $result = $this->model->getPreviewImagePath($theme);
 
@@ -134,7 +137,7 @@ class PathTest extends TestCase
         $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->with(PathInterface::PREVIEW_DIRECTORY_PATH)
-            ->will($this->returnValue('/theme/preview'));
+            ->willReturn('/theme/preview');
         $this->assertEquals(
             '/theme/preview',
             $this->model->getImagePreviewDirectory()

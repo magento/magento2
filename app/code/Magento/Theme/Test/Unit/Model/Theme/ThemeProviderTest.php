@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
@@ -187,7 +189,7 @@ class ThemeProviderTest extends TestCase
             ->method('toArray')
             ->willReturn($themeArray);
 
-        $this->themeFactory->expects($this->once())->method('create')->will($this->returnValue($this->theme));
+        $this->themeFactory->expects($this->once())->method('create')->willReturn($this->theme);
         $this->cache->expects($this->once())
             ->method('load')
             ->with('theme-by-id-' . self::THEME_ID)

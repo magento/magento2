@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
 
 use Laminas\Stdlib\Parameters;
@@ -64,7 +66,7 @@ class SaveTest extends TestCase
     /** @var DataPersistorInterface|MockObject */
     protected $dataPersistor;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->designConfigRepository = $this->createMock(DesignConfigRepository::class);
@@ -78,7 +80,8 @@ class SaveTest extends TestCase
             false
         );
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->request->expects($this->atLeastOnce())
             ->method('isPost')

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Ui\Component\Design\Config\SearchRobots;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -46,7 +48,7 @@ class ResetButtonTest extends TestCase
      */
     private $resetButton;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()

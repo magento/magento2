@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html;
 
 use Magento\Framework\App\Config;
@@ -80,8 +82,8 @@ class PagerTest extends TestCase
         $expectedPages = range(1, 5);
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->exactly(2))
-                       ->method('getCurPage')
-                       ->willReturn(2);
+            ->method('getCurPage')
+            ->willReturn(2);
         $collectionMock->expects($this->any())
             ->method('getLastPageNumber')
             ->willReturn(10);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Favicon;
 
 use Magento\Config\Model\Config\Backend\Image\Favicon as ImageFavicon;
@@ -54,10 +56,12 @@ class FaviconTest extends TestCase
      */
     protected function setUp(): void
     {
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
         $this->store = $this->getMockBuilder(
             Store::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);

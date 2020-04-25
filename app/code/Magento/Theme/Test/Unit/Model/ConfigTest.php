@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme config model
@@ -72,10 +73,11 @@ class ConfigTest extends TestCase
             true,
             ['getStores', 'isSingleStoreMode']
         );
-        $this->_configData = $this->createPartialMock(
-            Value::class,
-            ['getCollection', 'addFieldToFilter', '__wakeup']
-        );
+        $this->_configData = $this->getMockBuilder(Value::class)
+            ->addMethods(['addFieldToFilter'])
+            ->onlyMethods(['getCollection', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_configCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->_layoutCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
@@ -109,7 +111,7 @@ class ConfigTest extends TestCase
      */
     public function testAssignToStoreInSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
 
         $themePath = 'Magento/blank';
         /** Unassign themes from store */
@@ -119,8 +121,8 @@ class ConfigTest extends TestCase
             $this->once()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->_configData)
+        )->willReturn(
+            $this->_configData
         );
 
         $this->_configData->expects(
@@ -130,8 +132,8 @@ class ConfigTest extends TestCase
         )->with(
             'scope',
             ScopeInterface::SCOPE_STORES
-        )->will(
-            $this->returnValue($this->_configData)
+        )->willReturn(
+            $this->_configData
         );
 
         $this->_configData->expects(
@@ -141,12 +143,12 @@ class ConfigTest extends TestCase
         )->with(
             'path',
             DesignInterface::XML_PATH_THEME_ID
-        )->will(
-            $this->returnValue([$configEntity])
+        )->willReturn(
+            [$configEntity]
         );
 
-        $this->_themeMock->expects($this->any())->method('getId')->will($this->returnValue(6));
-        $this->_themeMock->expects($this->any())->method('getThemePath')->will($this->returnValue($themePath));
+        $this->_themeMock->expects($this->any())->method('getId')->willReturn(6);
+        $this->_themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
 
         $this->_scopeConfigWriter->expects($this->once())->method('delete');
 
@@ -160,7 +162,7 @@ class ConfigTest extends TestCase
      */
     public function testAssignToStoreNonSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
 
         $themePath = 'Magento/blank';
         /** Unassign themes from store */
@@ -170,8 +172,8 @@ class ConfigTest extends TestCase
             $this->once()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->_configData)
+        )->willReturn(
+            $this->_configData
         );
 
         $this->_configData->expects(
@@ -181,8 +183,8 @@ class ConfigTest extends TestCase
         )->with(
             'scope',
             ScopeInterface::SCOPE_STORES
-        )->will(
-            $this->returnValue($this->_configData)
+        )->willReturn(
+            $this->_configData
         );
 
         $this->_configData->expects(
@@ -192,12 +194,12 @@ class ConfigTest extends TestCase
         )->with(
             'path',
             DesignInterface::XML_PATH_THEME_ID
-        )->will(
-            $this->returnValue([$configEntity])
+        )->willReturn(
+            [$configEntity]
         );
 
-        $this->_themeMock->expects($this->any())->method('getId')->will($this->returnValue(6));
-        $this->_themeMock->expects($this->any())->method('getThemePath')->will($this->returnValue($themePath));
+        $this->_themeMock->expects($this->any())->method('getId')->willReturn(6);
+        $this->_themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
 
         $this->_scopeConfigWriter->expects($this->once())->method('delete');
 

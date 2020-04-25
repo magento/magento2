@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
@@ -70,7 +72,8 @@ class DataProviderTest extends TestCase
 
         $this->metadataLoader = $this->getMockBuilder(
             ConfigMetadataLoader::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->metadataLoader->expects($this->once())
             ->method('getData')
             ->willReturn([]);
@@ -81,7 +84,8 @@ class DataProviderTest extends TestCase
 
         $collectionFactory = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);

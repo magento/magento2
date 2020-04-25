@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html;
 
 use Magento\Framework\App\Config;
@@ -33,8 +35,9 @@ class HeaderTest extends TestCase
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
-            ->disableOriginalConstructor()->getMock();
-        $context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($this->scopeConfig));
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
 
         $this->unit = (new ObjectManager($this))->getObject(
             Header::class,

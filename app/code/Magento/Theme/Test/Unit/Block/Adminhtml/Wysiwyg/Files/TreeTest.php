@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
 use Magento\Backend\Model\Url;
@@ -54,8 +56,8 @@ class TreeTest extends TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -65,8 +67,8 @@ class TreeTest extends TestCase
         )->with(
             'adminhtml/*/treeJson',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesTree->getTreeLoaderUrl());

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme virtual model
@@ -32,7 +33,7 @@ class VirtualTest extends TestCase
         $themeStaging = $this->createMock(Theme::class);
 
         $theme = $this->createPartialMock(Theme::class, ['__wakeup', 'getStagingVersion']);
-        $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue($themeStaging));
+        $theme->expects($this->once())->method('getStagingVersion')->willReturn($themeStaging);
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $themeFactory->expects($this->never())->method('create');
@@ -61,9 +62,9 @@ class VirtualTest extends TestCase
     public function testGetStagingThemeNew()
     {
         $theme = $this->createPartialMock(Theme::class, ['__wakeup', 'getStagingVersion']);
-        $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue(null));
+        $theme->expects($this->once())->method('getStagingVersion')->willReturn(null);
         $appState = $this->createPartialMock(State::class, ['getAreaCode']);
-        $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('fixture_area'));
+        $appState->expects($this->any())->method('getAreaCode')->willReturn('fixture_area');
         $appStateProperty = new \ReflectionProperty(Theme::class, '_appState');
         $appStateProperty->setAccessible(true);
         /** @var DataObject $theme */
@@ -97,7 +98,7 @@ class VirtualTest extends TestCase
         $themeStaging->expects($this->at(1))->method('save');
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeStaging));
+        $themeFactory->expects($this->once())->method('create')->willReturn($themeStaging);
 
         $themeCopyService = $this->createPartialMock(CopyService::class, ['copy']);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $themeStaging);
@@ -136,8 +137,8 @@ class VirtualTest extends TestCase
             'isThemeAssignedToStore'
         )->with(
             $themeMock
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $objectManagerHelper = new ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(

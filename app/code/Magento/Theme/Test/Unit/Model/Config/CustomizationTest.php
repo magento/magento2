@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme customization config model
@@ -48,8 +49,10 @@ class CustomizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
-        $this->designPackage = $this->getMockBuilder(DesignInterface::class)->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
+        $this->designPackage = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
         $this->themeCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,7 +62,7 @@ class CustomizationTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->themeCollection));
+        $collectionFactory->expects($this->any())->method('create')->willReturn($this->themeCollection);
 
         $this->themeProviderMock = $this->getMockBuilder(ThemeProvider::class)
             ->disableOriginalConstructor()

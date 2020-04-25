@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Backend\Block\Menu;
@@ -152,11 +154,16 @@ class EditTest extends ThemeTest
         $themeId = 23;
 
         $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
-        $tab = $this->createPartialMock(
-            Css::class,
-            ['setFiles', 'canShowTab']
-        );
-        $menu = $this->createPartialMock(Menu::class, ['setActive', 'getMenuModel']);
+        $tab = $this->getMockBuilder(Css::class)
+            ->addMethods(['setFiles'])
+            ->onlyMethods(['canShowTab'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $menu = $this->getMockBuilder(Menu::class)
+            ->addMethods(['setActive'])
+            ->onlyMethods(['getMenuModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $menuModel = $this->createMock(\Magento\Backend\Model\Menu::class);
         $themeHelper = $this->createMock(Theme::class);
         $cssAsset = $this->getMockForAbstractClass(LocalInterface::class, [], '', false);

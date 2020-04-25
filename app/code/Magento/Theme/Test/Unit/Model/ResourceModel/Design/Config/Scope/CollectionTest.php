@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\ResourceModel\Design\Config\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -75,23 +77,23 @@ class CollectionTest extends TestCase
                     'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     'scope_id' => null,
                     'scopes' => [
-                       [
-                           'scope' => ScopeInterface::SCOPE_WEBSITE,
-                           'scope_id' => 1,
-                           'scopes' => [
-                               [
-                                   'scope' => ScopeInterface::SCOPE_GROUP,
-                                   'scope_id' => 1,
-                                   'scopes' => [
-                                       [
-                                           'scope' => ScopeInterface::SCOPE_STORE,
-                                           'scope_id' => 1,
-                                           'scopes' => [],
+                        [
+                            'scope' => ScopeInterface::SCOPE_WEBSITE,
+                            'scope_id' => 1,
+                            'scopes' => [
+                                [
+                                    'scope' => ScopeInterface::SCOPE_GROUP,
+                                    'scope_id' => 1,
+                                    'scopes' => [
+                                        [
+                                            'scope' => ScopeInterface::SCOPE_STORE,
+                                            'scope_id' => 1,
+                                            'scopes' => [],
                                         ],
-                                   ],
-                               ],
-                           ],
-                       ],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             );
@@ -145,7 +147,7 @@ class CollectionTest extends TestCase
                 'store_website_id' => 1,
                 'store_group_id' => 1,
                 'store_id' => 1,
-                'second_field' => 'WebsiteValue' #parent (website level) value
+                'second_field' => 'WebsiteValue' //parent (website level) value
             ]),
         ];
 

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
@@ -33,58 +35,59 @@ class SaveTest extends ThemeTest
         $this->_request->expects($this->at(0))
             ->method('getParam')
             ->with('back', false)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->_request->expects($this->at(1))
             ->method('getParam')
             ->with('theme')
-            ->will($this->returnValue($themeData));
+            ->willReturn($themeData);
 
         $this->_request->expects($this->at(2))
             ->method('getParam')
             ->with('custom_css_content')
-            ->will($this->returnValue($customCssContent));
+            ->willReturn($customCssContent);
 
         $this->_request->expects($this->at(3))
             ->method('getParam')
             ->with('js_removed_files')
-            ->will($this->returnValue($jsRemovedFiles));
+            ->willReturn($jsRemovedFiles);
 
         $this->_request->expects($this->at(4))
             ->method('getParam')
             ->with('js_order')
-            ->will($this->returnValue($jsOrder));
+            ->willReturn($jsOrder);
 
-        $this->_request->expects($this->once(5))->method('getPostValue')->will($this->returnValue(true));
+        $this->_request->expects($this->once(5))->method('getPostValue')->willReturn(true);
 
-        $themeMock = $this->createPartialMock(
-            Theme::class,
-            ['save', 'load', 'setCustomization', 'getThemeImage', '__wakeup']
-        );
+        $themeMock = $this->getMockBuilder(Theme::class)
+            ->addMethods(['setCustomization'])
+            ->onlyMethods(['save', 'load', 'getThemeImage', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $themeImage = $this->createMock(Data::class);
-        $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
+        $themeMock->expects($this->any())->method('getThemeImage')->willReturn($themeImage);
 
         $themeFactory = $this->createPartialMock(
             FlyweightFactory::class,
             ['create']
         );
-        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeMock));
+        $themeFactory->expects($this->once())->method('create')->willReturn($themeMock);
 
         $this->_objectManagerMock->expects($this->at(0))
             ->method('get')
             ->with(FlyweightFactory::class)
-            ->will($this->returnValue($themeFactory));
+            ->willReturn($themeFactory);
 
         $this->_objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with(CustomCss::class)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->_objectManagerMock->expects($this->at(2))
             ->method('create')
             ->with(SingleFile::class)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->_model->execute();
     }

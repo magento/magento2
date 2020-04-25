@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
@@ -47,7 +49,7 @@ class FileTest extends TestCase
      */
     private $databaseHelper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $context = $this->getMockObject(Context::class);
         $registry = $this->getMockObject(Registry::class);
@@ -108,7 +110,7 @@ class FileTest extends TestCase
         );
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->fileBackend);
     }

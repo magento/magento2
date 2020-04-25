@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Backend\App\Action\Context;
@@ -92,13 +94,17 @@ class DownloadCustomCssTest extends TestCase
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)->getMock();
-        $this->redirect = $this->getMockBuilder(RedirectInterface::class)->getMock();
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->getMock();
+        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
+            ->getMock();
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['sendResponse', 'setRedirect'])
             ->getMock();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMock();
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,7 +129,8 @@ class DownloadCustomCssTest extends TestCase
 
         $this->registry = $this->getMockBuilder(
             Registry::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,7 +157,8 @@ class DownloadCustomCssTest extends TestCase
         $fileName = 'file.ext';
         $fullPath = 'path/to/file';
 
-        $file = $this->getMockBuilder(FileInterface::class)->getMock();
+        $file = $this->getMockBuilder(FileInterface::class)
+            ->getMock();
         $customization = $this->getMockBuilder(Customization::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -192,7 +200,8 @@ class DownloadCustomCssTest extends TestCase
         $this->fileFactory->expects($this->once())
             ->method('create')
             ->with($fileName, ['type' => 'filename', 'value' => $fullPath], DirectoryList::ROOT)
-            ->willReturn($this->getMockBuilder(ResponseInterface::class)->getMock());
+            ->willReturn($this->getMockBuilder(ResponseInterface::class)
+            ->getMock());
 
         $this->assertInstanceOf(ResponseInterface::class, $this->controller->execute());
     }
@@ -210,7 +219,8 @@ class DownloadCustomCssTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
         $this->objectManager->expects($this->any())
             ->method('get')
             ->with(LoggerInterface::class)

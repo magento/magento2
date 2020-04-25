@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme\Customization;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -17,7 +19,8 @@ class ConfigTest extends TestCase
             'key'  => 'value',
             'key1' => 'value1',
         ];
-        $config = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $config = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
         $config->expects($this->once())
             ->method('getValue')
             ->with(Config::XML_PATH_CUSTOM_FILES, 'default')

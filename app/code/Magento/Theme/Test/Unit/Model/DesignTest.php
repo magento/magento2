@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test design model
@@ -67,7 +68,8 @@ class DesignTest extends TestCase
         $this->resource = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Design::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheManager = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
 
         $context->expects($this->any())
             ->method('getCacheManager')
@@ -190,7 +192,8 @@ class DesignTest extends TestCase
      */
     public function testChangeDesign()
     {
-        $design = $this->getMockBuilder(DesignInterface::class)->getMock();
+        $design = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
 
         $this->model->setDesign('test');
         /** @var $design \Magento\Framework\View\DesignInterface */

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Helper;
 
@@ -25,12 +26,12 @@ class ThemeTest extends TestCase
     public function testGetCssAssets($layoutStr, $expectedResult)
     {
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
+        $theme->expects($this->once())->method('getArea')->willReturn('area');
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
         $assetRepo = $this->createPartialMock(Repository::class, ['createAsset']);
         $assetRepo->expects($this->any())
             ->method('createAsset')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $helper = new Theme(
             $this->createMock(Context::class),
             $layoutMergeFactory,
@@ -131,8 +132,8 @@ class ThemeTest extends TestCase
             $this->any()
         )->method(
             'getFileLayoutUpdatesXml'
-        )->will(
-            $this->returnValue($layoutElement)
+        )->willReturn(
+            $layoutElement
         );
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
@@ -143,7 +144,7 @@ class ThemeTest extends TestCase
         $processorFactory->expects($this->any())
             ->method('create')
             ->with(['theme' => $theme])
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         return $processorFactory;
     }

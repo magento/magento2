@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
 use Magento\Backend\Model\Url;
@@ -68,8 +70,8 @@ class ContentTest extends TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -79,8 +81,8 @@ class ContentTest extends TestCase
         )->with(
             'adminhtml/*/newFolder',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getNewfolderUrl());
@@ -98,8 +100,8 @@ class ContentTest extends TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -109,8 +111,8 @@ class ContentTest extends TestCase
         )->with(
             'adminhtml/*/deleteFiles',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getDeleteFilesUrl());
@@ -128,8 +130,8 @@ class ContentTest extends TestCase
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->_urlBuilder->expects(
@@ -139,8 +141,8 @@ class ContentTest extends TestCase
         )->with(
             'adminhtml/*/onInsert',
             $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getOnInsertUrl());
@@ -173,8 +175,8 @@ class ContentTest extends TestCase
             'getParam'
         )->with(
             'target_element_id'
-        )->will(
-            $this->returnValue($expectedRequest)
+        )->willReturn(
+            $expectedRequest
         );
 
         $this->assertEquals($expectedRequest, $this->_filesContent->getTargetElementId());
@@ -199,8 +201,8 @@ class ContentTest extends TestCase
         )->with(
             'adminhtml/*/contents',
             ['type' => $expectedRequest] + $requestParams
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
 
         $this->_request->expects(
@@ -209,16 +211,16 @@ class ContentTest extends TestCase
             'getParam'
         )->with(
             'type'
-        )->will(
-            $this->returnValue($expectedRequest)
+        )->willReturn(
+            $expectedRequest
         );
 
         $this->_helperStorage->expects(
             $this->once()
         )->method(
             'getRequestParams'
-        )->will(
-            $this->returnValue($requestParams)
+        )->willReturn(
+            $requestParams
         );
 
         $this->assertEquals($expectedUrl, $this->_filesContent->getContentsUrl());

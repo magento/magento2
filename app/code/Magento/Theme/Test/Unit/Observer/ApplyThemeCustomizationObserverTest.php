@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Observer;
 
@@ -58,18 +59,19 @@ class ApplyThemeCustomizationObserverTest extends TestCase
             $this->any()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($this->themeCustomization)
+        )->willReturn(
+            $this->themeCustomization
         );
 
         $designMock = $this->createMock(DesignInterface::class);
-        $designMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
+        $designMock->expects($this->any())->method('getDesignTheme')->willReturn($themeMock);
 
         $this->assetsMock = $this->createMock(GroupedCollection::class);
 
         $this->assetRepo = $this->createMock(Repository::class);
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
@@ -90,13 +92,13 @@ class ApplyThemeCustomizationObserverTest extends TestCase
         $fileService = $this->getMockForAbstractClass(
             FileAssetInterface::class
         );
-        $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
+        $file->expects($this->any())->method('getCustomizationService')->willReturn($fileService);
 
         $this->assetRepo->expects($this->once())
             ->method('createArbitrary')
-            ->will($this->returnValue($asset));
+            ->willReturn($asset);
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
 
         $observer = new Observer();
@@ -110,7 +112,7 @@ class ApplyThemeCustomizationObserverTest extends TestCase
             ->method('getCustomizationService')
             ->willThrowException(new \InvalidArgumentException());
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->logger->expects($this->once())->method('critical');
 
         $observer = new Observer();

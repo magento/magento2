@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\CustomerData;
 
 use Magento\Framework\Message\Collection;
@@ -32,7 +34,8 @@ class MessagesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
         $this->messageInterpretationStrategy = $this->createMock(
             InterpretationStrategyInterface::class
         );
@@ -43,7 +46,8 @@ class MessagesTest extends TestCase
     {
         $msgType = 'error';
         $msgText = 'All is lost';
-        $msg = $this->getMockBuilder(MessageInterface::class)->getMock();
+        $msg = $this->getMockBuilder(MessageInterface::class)
+            ->getMock();
         $messages = [$msg];
         $msgCollection = $this->getMockBuilder(Collection::class)
             ->getMock();

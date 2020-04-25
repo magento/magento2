@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design;
 
 use Magento\Backend\Helper\Data;
@@ -116,10 +118,10 @@ abstract class ThemeTest extends TestCase
             '',
             false
         );
-        $this->session = $this->createPartialMock(
-            Session::class,
-            ['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData']
-        );
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice', 'setThemeData', 'setThemeCustomCssData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createMock(ActionFlag::class);
         $this->backendHelper = $this->createMock(Data::class);
         $this->coreRegistry = $this->createMock(Registry::class);

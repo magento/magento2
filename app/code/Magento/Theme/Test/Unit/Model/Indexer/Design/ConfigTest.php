@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test design config indexer model
@@ -87,22 +88,22 @@ class ConfigTest extends TestCase
             $collectionFactory,
             [
                 'fieldsets' => ['test_fieldset' => [
-                        'fields' => [
-                            'first_field' => [
-                                'name' => 'firstField',
-                                'origin' => null,
-                                'type' => 'filterable',
-                                'handler' => null,
-                            ],
-                            'second_field' => [
-                                'name' => 'secondField',
-                                'origin' => null,
-                                'type' => 'searchable',
-                                'handler' => null,
-                            ],
+                    'fields' => [
+                        'first_field' => [
+                            'name' => 'firstField',
+                            'origin' => null,
+                            'type' => 'filterable',
+                            'handler' => null,
                         ],
-                        'provider' => $indexerFieldset,
-                    ]
+                        'second_field' => [
+                            'name' => 'secondField',
+                            'origin' => null,
+                            'type' => 'searchable',
+                            'handler' => null,
+                        ],
+                    ],
+                    'provider' => $indexerFieldset,
+                ]
                 ],
                 'saveHandler' => 'saveHandlerClass',
                 'structure' => 'structureClass',

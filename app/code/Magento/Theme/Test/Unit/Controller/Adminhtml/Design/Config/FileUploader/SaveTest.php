@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploader;
 
 use Magento\Backend\App\Action\Context;
@@ -30,7 +32,7 @@ class SaveTest extends TestCase
     /** @var Save */
     protected $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

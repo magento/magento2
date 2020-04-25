@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
@@ -34,9 +36,9 @@ class RegistrationTest extends TestCase
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->filesystemCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,7 +75,8 @@ class RegistrationTest extends TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $parentTheme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $parentTheme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $parentThemeFromCollectionId = 123;
         $parentThemeFromCollection = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['getType', 'getId'])

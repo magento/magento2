@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Storage helper test
@@ -105,9 +106,11 @@ class StorageTest extends TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWrite));
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)->getMock();
-        $this->urlDecoder = $this->getMockBuilder(DecoderInterface::class)->getMock();
+            ->willReturn($this->directoryWrite);
+        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
+            ->getMock();
+        $this->urlDecoder = $this->getMockBuilder(DecoderInterface::class)
+            ->getMock();
 
         $this->directoryWrite->expects($this->any())->method('create')->willReturn(true);
         $this->contextHelper->expects($this->any())->method('getRequest')->willReturn($this->request);
@@ -117,16 +120,16 @@ class StorageTest extends TestCase
 
         $this->theme->expects($this->any())
             ->method('getCustomization')
-            ->will($this->returnValue($this->customization));
+            ->willReturn($this->customization);
 
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with(Storage::PARAM_THEME_ID)
-            ->will($this->returnValue(6));
+            ->willReturn(6);
         $this->request->expects($this->at(1))
             ->method('getParam')
             ->with(Storage::PARAM_CONTENT_TYPE)
-            ->will($this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE));
+            ->willReturn(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);
 
         $this->helper = new Storage(
             $this->contextHelper,
@@ -192,11 +195,11 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getCustomizationPath'
-        )->will(
-            $this->returnValue($this->customizationPath)
+        )->willReturn(
+            $this->customizationPath
         );
 
-        $this->directoryWrite->expects($this->any())->method('isExist')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
 
         $this->assertEquals($thumbnailPath, $this->helper->getThumbnailPath($image));
     }
@@ -209,8 +212,8 @@ class StorageTest extends TestCase
             'getParam'
         )->with(
             Storage::PARAM_THEME_ID
-        )->will(
-            $this->returnValue(6)
+        )->willReturn(
+            6
         );
         $this->request->expects(
             $this->at(1)
@@ -218,8 +221,8 @@ class StorageTest extends TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue('image')
+        )->willReturn(
+            'image'
         );
         $this->request->expects(
             $this->at(2)
@@ -227,8 +230,8 @@ class StorageTest extends TestCase
             'getParam'
         )->with(
             Storage::PARAM_NODE
-        )->will(
-            $this->returnValue('node')
+        )->willReturn(
+            'node'
         );
 
         $expectedResult = [
@@ -247,8 +250,8 @@ class StorageTest extends TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
         );
 
         $this->request->expects(
@@ -257,8 +260,8 @@ class StorageTest extends TestCase
             'getParam'
         )->with(
             Storage::PARAM_CONTENT_TYPE
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
         );
 
         $fontTypes = $this->helper->getAllowedExtensionsByType();

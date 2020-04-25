@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Storage model test
@@ -81,27 +82,27 @@ class StorageTest extends TestCase
 
         $file->expects($this->any())
             ->method('getPathInfo')
-            ->will(
-                $this->returnCallback(
-                    function ($path) {
-                        return pathinfo($path);
-                    }
-                )
+            ->willReturnCallback(
+                function ($path) {
+                    return pathinfo($path);
+                }
             );
 
-        $this->_helperStorage = $this->createPartialMock(
-            Storage::class,
-            [
-                'urlEncode',
-                'getStorageType',
-                'getCurrentPath',
-                'getStorageRoot',
-                'getShortFilename',
-                'getSession',
-                'convertPathToId',
-                'getRequestParams'
-            ]
-        );
+        $this->_helperStorage = $this->getMockBuilder(Storage::class)
+            ->addMethods(['urlEncode'])
+            ->onlyMethods(
+                [
+                    'getStorageType',
+                    'getCurrentPath',
+                    'getStorageRoot',
+                    'getShortFilename',
+                    'getSession',
+                    'convertPathToId',
+                    'getRequestParams'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $reflection = new \ReflectionClass(Storage::class);
         $reflection_property = $reflection->getProperty('file');
@@ -118,8 +119,8 @@ class StorageTest extends TestCase
             $this->once()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->directoryWrite)
+        )->willReturn(
+            $this->directoryWrite
         );
 
         $this->_storageModel = new \Magento\Theme\Model\Wysiwyg\Storage(
@@ -151,41 +152,41 @@ class StorageTest extends TestCase
     {
         $uploader = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty', 'path' => 'absPath']));
+        $uploader->expects($this->once())->method('save')->willReturn(['not_empty', 'path' => 'absPath']);
 
         $this->_helperStorage->expects(
             $this->any()
         )->method(
             'getStorageType'
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
         );
 
         /** Prepare filesystem */
 
-        $this->directoryWrite->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isFile')->willReturn(true);
 
-        $this->directoryWrite->expects($this->once())->method('isReadable')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->once())->method('isReadable')->willReturn(true);
 
         /** Prepare image */
 
         $image = $this->createMock(Gd2::class);
 
-        $image->expects($this->once())->method('open')->will($this->returnValue(true));
+        $image->expects($this->once())->method('open')->willReturn(true);
 
-        $image->expects($this->once())->method('keepAspectRatio')->will($this->returnValue(true));
+        $image->expects($this->once())->method('keepAspectRatio')->willReturn(true);
 
-        $image->expects($this->once())->method('resize')->will($this->returnValue(true));
+        $image->expects($this->once())->method('resize')->willReturn(true);
 
-        $image->expects($this->once())->method('save')->will($this->returnValue(true));
+        $image->expects($this->once())->method('save')->willReturn(true);
 
-        $this->_imageFactory->expects($this->at(0))->method('create')->will($this->returnValue($image));
+        $this->_imageFactory->expects($this->at(0))->method('create')->willReturn($image);
 
         /** Prepare session */
 
         $session = $this->createMock(Session::class);
 
-        $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
+        $this->_helperStorage->expects($this->any())->method('getSession')->willReturn($session);
 
         $expectedResult = [
             'not_empty'
@@ -202,7 +203,7 @@ class StorageTest extends TestCase
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $uploader = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
+        $uploader->expects($this->once())->method('save')->willReturn(null);
 
         $this->_storageModel->uploadFile($this->_storageRoot);
     }
@@ -216,11 +217,11 @@ class StorageTest extends TestCase
 
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($uploader));
 
-        $uploader->expects($this->once())->method('setAllowedExtensions')->will($this->returnValue($uploader));
+        $uploader->expects($this->once())->method('setAllowedExtensions')->willReturn($uploader);
 
-        $uploader->expects($this->once())->method('setAllowRenameFiles')->will($this->returnValue($uploader));
+        $uploader->expects($this->once())->method('setAllowRenameFiles')->willReturn($uploader);
 
-        $uploader->expects($this->once())->method('setFilesDispersion')->will($this->returnValue($uploader));
+        $uploader->expects($this->once())->method('setFilesDispersion')->willReturn($uploader);
 
         return $uploader;
     }
@@ -240,8 +241,8 @@ class StorageTest extends TestCase
             'isWritable'
         )->with(
             $this->_storageRoot
-        )->will(
-            $this->returnValue($isWritable)
+        )->willReturn(
+            $isWritable
         );
 
         $this->directoryWrite->expects(
@@ -250,8 +251,8 @@ class StorageTest extends TestCase
             'isExist'
         )->with(
             $fullNewPath
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_helperStorage->expects(
@@ -260,8 +261,8 @@ class StorageTest extends TestCase
             'getShortFilename'
         )->with(
             $newDirectoryName
-        )->will(
-            $this->returnValue($newDirectoryName)
+        )->willReturn(
+            $newDirectoryName
         );
 
         $this->_helperStorage->expects(
@@ -270,16 +271,16 @@ class StorageTest extends TestCase
             'convertPathToId'
         )->with(
             $fullNewPath
-        )->will(
-            $this->returnValue($newDirectoryName)
+        )->willReturn(
+            $newDirectoryName
         );
 
         $this->_helperStorage->expects(
             $this->any()
         )->method(
             'getStorageRoot'
-        )->will(
-            $this->returnValue($this->_storageRoot)
+        )->willReturn(
+            $this->_storageRoot
         );
 
         $expectedResult = [
@@ -320,8 +321,8 @@ class StorageTest extends TestCase
             'isWritable'
         )->with(
             $this->_storageRoot
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->directoryWrite->expects(
@@ -330,8 +331,8 @@ class StorageTest extends TestCase
             'isExist'
         )->with(
             $fullNewPath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
@@ -350,13 +351,13 @@ class StorageTest extends TestCase
             'isExist'
         )->with(
             $this->_storageRoot
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
-        $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($dirs));
+        $this->directoryWrite->expects($this->once())->method('search')->willReturn($dirs);
 
-        $this->directoryWrite->expects($this->any())->method('isDirectory')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isDirectory')->willReturn(true);
 
         $this->assertEquals($dirs, $this->_storageModel->getDirsCollection($this->_storageRoot));
     }
@@ -373,8 +374,8 @@ class StorageTest extends TestCase
             'isExist'
         )->with(
             $this->_storageRoot
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_storageModel->getDirsCollection($this->_storageRoot);
@@ -389,25 +390,25 @@ class StorageTest extends TestCase
             $this->once()
         )->method(
             'getCurrentPath'
-        )->will(
-            $this->returnValue($this->_storageRoot)
+        )->willReturn(
+            $this->_storageRoot
         );
 
         $this->_helperStorage->expects(
             $this->once()
         )->method(
             'getStorageType'
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
         );
 
-        $this->_helperStorage->expects($this->any())->method('urlEncode')->will($this->returnArgument(0));
+        $this->_helperStorage->expects($this->any())->method('urlEncode')->willReturnArgument(0);
 
         $paths = [$this->_storageRoot . '/' . 'font1.ttf', $this->_storageRoot . '/' . 'font2.ttf'];
 
-        $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($paths));
+        $this->directoryWrite->expects($this->once())->method('search')->willReturn($paths);
 
-        $this->directoryWrite->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isFile')->willReturn(true);
 
         $result = $this->_storageModel->getFilesCollection();
 
@@ -425,23 +426,23 @@ class StorageTest extends TestCase
             $this->once()
         )->method(
             'getCurrentPath'
-        )->will(
-            $this->returnValue($this->_storageRoot)
+        )->willReturn(
+            $this->_storageRoot
         );
 
         $this->_helperStorage->expects(
             $this->once()
         )->method(
             'getStorageType'
-        )->will(
-            $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
+        )->willReturn(
+            \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
         );
 
-        $this->_helperStorage->expects($this->any())->method('urlEncode')->will($this->returnArgument(0));
+        $this->_helperStorage->expects($this->any())->method('urlEncode')->willReturnArgument(0);
 
         $paths = [$this->_storageRoot . '/picture1.jpg'];
 
-        $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($paths));
+        $this->directoryWrite->expects($this->once())->method('search')->willReturn($paths);
 
         $this->directoryWrite->expects(
             $this->once()
@@ -449,8 +450,8 @@ class StorageTest extends TestCase
             'isFile'
         )->with(
             $this->_storageRoot . '/picture1.jpg'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $result = $this->_storageModel->getFilesCollection();
@@ -479,25 +480,25 @@ class StorageTest extends TestCase
             'isExist'
         )->with(
             $currentPath
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
-        $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($dirs));
+        $this->directoryWrite->expects($this->once())->method('search')->willReturn($dirs);
 
-        $this->directoryWrite->expects($this->any())->method('isDirectory')->will($this->returnValue(true));
+        $this->directoryWrite->expects($this->any())->method('isDirectory')->willReturn(true);
 
         $this->_helperStorage->expects(
             $this->once()
         )->method(
             'getCurrentPath'
-        )->will(
-            $this->returnValue($currentPath)
+        )->willReturn(
+            $currentPath
         );
 
-        $this->_helperStorage->expects($this->any())->method('getShortFilename')->will($this->returnArgument(0));
+        $this->_helperStorage->expects($this->any())->method('getShortFilename')->willReturnArgument(0);
 
-        $this->_helperStorage->expects($this->any())->method('convertPathToId')->will($this->returnArgument(0));
+        $this->_helperStorage->expects($this->any())->method('convertPathToId')->willReturnArgument(0);
 
         $result = $this->_storageModel->getTreeArray();
         $this->assertEquals($expectedResult, $result);
@@ -512,7 +513,7 @@ class StorageTest extends TestCase
 
         $this->_helperStorage->expects($this->once())
             ->method('getCurrentPath')
-            ->will($this->returnValue($this->_storageRoot));
+            ->willReturn($this->_storageRoot);
 
         $this->urlDecoder->expects($this->any())
             ->method('decode')
@@ -548,8 +549,8 @@ class StorageTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'getStorageRoot'
-        )->will(
-            $this->returnValue($this->_storageRoot)
+        )->willReturn(
+            $this->_storageRoot
         );
 
         $this->directoryWrite->expects($this->once())->method('delete')->with($directoryPath);
@@ -569,8 +570,8 @@ class StorageTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'getStorageRoot'
-        )->will(
-            $this->returnValue($this->_storageRoot)
+        )->willReturn(
+            $this->_storageRoot
         );
 
         $this->_storageModel->deleteDirectory($directoryPath);

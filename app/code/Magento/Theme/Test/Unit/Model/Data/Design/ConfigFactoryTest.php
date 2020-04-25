@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Data\Design;
 
 use Magento\Framework\App\ScopeValidatorInterface;
@@ -50,7 +52,7 @@ class ConfigFactoryTest extends TestCase
     /** @var WebsiteInterface|MockObject */
     protected $website;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->designConfigFactory = $this->createPartialMock(
             \Magento\Theme\Api\Data\DesignConfigInterfaceFactory::class,
@@ -159,11 +161,11 @@ class ConfigFactoryTest extends TestCase
             ->method('setFieldConfig')
             ->withConsecutive(
                 [
-                   [
-                       'path' => 'design/header/default_title',
-                       'fieldset' => 'head',
-                       'field' => 'header_default_title'
-                   ]
+                    [
+                        'path' => 'design/header/default_title',
+                        'fieldset' => 'head',
+                        'field' => 'header_default_title'
+                    ]
                 ],
                 [
                     [

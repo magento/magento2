@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme page layout config model
@@ -54,7 +55,8 @@ class BuilderTest extends TestCase
 
         $this->fileCollector = $this->getMockBuilder(
             Aggregated::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->themeCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()

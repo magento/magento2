@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\View;
 
@@ -93,8 +94,8 @@ class DesignTest extends TestCase
     public function testGetThemePath($themePath, $themeId, $expectedResult)
     {
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $theme->expects($this->once())->method('getThemePath')->will($this->returnValue($themePath));
-        $theme->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $theme->expects($this->once())->method('getThemePath')->willReturn($themePath);
+        $theme->expects($this->any())->method('getId')->willReturn($themeId);
         /** @var ThemeInterface $theme */
         $this->assertEquals($expectedResult, $this->model->getThemePath($theme));
     }
@@ -163,16 +164,17 @@ class DesignTest extends TestCase
         $localeMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $localeMock->expects($this->once())
             ->method('getLocale')
-            ->will($this->returnValue($locale));
+            ->willReturn($locale);
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($localeMock));
+            ->willReturn($localeMock);
         $this->state->expects($this->any())
             ->method('getAreaCode')
             ->willReturn($area);
         $this->themeFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->getMockBuilder(ThemeInterface::class)->getMock());
+            ->willReturn($this->getMockBuilder(ThemeInterface::class)
+            ->getMock());
 
         $params = $this->model->getDesignParams();
 
@@ -190,7 +192,8 @@ class DesignTest extends TestCase
     public function testSetDesignTheme()
     {
         $area = 'adminhtml';
-        $theme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
 
         $this->assertInstanceOf(get_class($this->model), $this->model->setDesignTheme($theme, $area));
     }

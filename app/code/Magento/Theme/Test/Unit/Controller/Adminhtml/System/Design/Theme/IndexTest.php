@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Backend\Model\Menu;
@@ -26,7 +28,7 @@ class IndexTest extends ThemeTest
             ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
-            ->with($this->equalTo('Magento_Theme::system_design_theme'))
+            ->with('Magento_Theme::system_design_theme')
             ->willReturn([]);
 
         $menuBlock = $this->createMock(\Magento\Backend\Block\Menu::class);

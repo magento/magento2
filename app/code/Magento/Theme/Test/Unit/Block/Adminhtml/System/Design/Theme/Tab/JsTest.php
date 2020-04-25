@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Tab;
 
 use Magento\Backend\Model\Url;
@@ -83,7 +85,7 @@ class JsTest extends TestCase
         $themeId = 2;
         $uploadUrl = 'upload_url';
         $themeMock = $this->createPartialMock(Theme::class, ['isVirtual', 'getId', '__wakeup']);
-        $themeMock->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
         $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
 

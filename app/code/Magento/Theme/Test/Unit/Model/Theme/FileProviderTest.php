@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
@@ -47,7 +49,8 @@ class FileProviderTest extends TestCase
     public function testGetItems()
     {
         $items = ['item'];
-        $theme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $filters = ['name' => 'filter'];
         $this->file->expects($this->once())
             ->method('addThemeFilter')

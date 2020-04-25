@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme model
@@ -212,8 +213,11 @@ class ThemeTest extends TestCase
      */
     public function testIsDeletable($themeType, $isDeletable)
     {
-        $themeModel = $this->createPartialMock(Theme::class, ['getType']);
-        $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
+        $themeModel = $this->getMockBuilder(Theme::class)
+            ->addMethods(['getType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeModel->expects($this->once())->method('getType')->willReturn($themeType);
         /** @var \Magento\Theme\Model\Theme $themeModel */
         $this->assertEquals($isDeletable, $themeModel->isDeletable());
     }
@@ -259,7 +263,8 @@ class ThemeTest extends TestCase
      */
     public function testGetInheritedThemes()
     {
-        $inheritedTheme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $inheritedTheme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
 
         $this->_model->setParentId(10);
         $this->themeFactory->expects($this->once())
@@ -433,7 +438,8 @@ class ThemeTest extends TestCase
         $this->customizationFactory->expects($this->once())
             ->method('create')
             ->willReturn(
-                $this->getMockBuilder(CustomizationInterface::class)->getMock()
+                $this->getMockBuilder(CustomizationInterface::class)
+                    ->getMock()
             );
         $this->assertInstanceOf(
             CustomizationInterface::class,
@@ -580,16 +586,16 @@ class ThemeTest extends TestCase
             ],
             'valid data with parent' => [
                 'value' => [
-                        'theme_data' => 'theme_data',
-                        'parent_theme' => [
-                            'theme_data' => 'theme_data'
-                        ]
-                    ],
+                    'theme_data' => 'theme_data',
+                    'parent_theme' => [
+                        'theme_data' => 'theme_data'
+                    ]
+                ],
                 'expected' => [
                     'theme_data' => 'theme_data',
                     'parent_theme' => 'theme_instance'
                 ],
-                    'expected call count' => 1
+                'expected call count' => 1
             ],
             'valid data with children' => [
                 'value' => [

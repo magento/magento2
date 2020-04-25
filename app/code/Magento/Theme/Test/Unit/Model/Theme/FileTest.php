@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\Event\ManagerInterface;
@@ -58,28 +60,33 @@ class FileTest extends TestCase
     {
         $context = $this->getMockBuilder(
             Context::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->registry = $this->getMockBuilder(
             Registry::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->themeFactory = $this->getMockBuilder(FlyweightFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fileServiceFactory = $this->getMockBuilder(
             FileServiceFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->resource = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $context->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder(ManagerInterface::class)->getMock());
+            ->willReturn($this->getMockBuilder(ManagerInterface::class)
+            ->getMock());
         $validator = $this->getMockBuilder(RemoveAction::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $validator->expects($this->any())
             ->method('isAllowed')
             ->willReturn(true);
@@ -152,7 +159,8 @@ class FileTest extends TestCase
     {
         $themeId = 1;
         $themePath = '/path/to/theme';
-        $theme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $theme->expects($this->once())
             ->method('getId')
             ->willReturn($themeId);
@@ -173,7 +181,8 @@ class FileTest extends TestCase
     {
         $themeId = 1;
         $this->model->setThemeId($themeId);
-        $theme = $this->getMockBuilder(ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->with($themeId, DesignInterface::DEFAULT_AREA)
