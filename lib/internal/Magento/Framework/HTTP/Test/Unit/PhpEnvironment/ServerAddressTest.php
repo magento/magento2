@@ -29,9 +29,10 @@ class ServerAddressTest extends TestCase
     {
         $this->_request = $this->getMockBuilder(
             Http::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getServer']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getServer']
+            )->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->_serverAddress = $objectManager->getObject(
@@ -51,8 +52,8 @@ class ServerAddressTest extends TestCase
             'getServer'
         )->with(
             'SERVER_ADDR'
-        )->will(
-            $this->returnValue($serverVar)
+        )->willReturn(
+            $serverVar
         );
         $this->assertEquals($expected, $this->_serverAddress->getServerAddress($ipToLong));
     }

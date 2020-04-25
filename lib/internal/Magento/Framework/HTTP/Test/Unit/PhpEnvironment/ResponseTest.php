@@ -44,15 +44,15 @@ class ResponseTest extends TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
         $this->headers
             ->expects($this->once())
             ->method('has')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->headers
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->response->getHeader('testName'));
     }
@@ -62,15 +62,15 @@ class ResponseTest extends TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
         $this->headers
             ->expects($this->once())
             ->method('has')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->headers
             ->expects($this->never())
             ->method('get')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertFalse($this->response->getHeader('testName'));
     }
@@ -79,7 +79,7 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
         $response->appendBody('testContent');
-        $this->assertContains('testContent', $response->getBody());
+        $this->assertStringContainsString('testContent', $response->getBody());
     }
 
     public function testSendResponseWithException()
@@ -92,7 +92,7 @@ class ResponseTest extends TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
         $this->response
             ->expects($this->never())
             ->method('clearHeader')
@@ -106,7 +106,7 @@ class ResponseTest extends TestCase
         $this->response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
         $this->response
             ->expects($this->once())
             ->method('clearHeader')
@@ -130,22 +130,22 @@ class ResponseTest extends TestCase
             ->expects($this->once())
             ->method('has')
             ->with('Header-name')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->headers
             ->expects($this->once())
             ->method('get')
             ->with('Header-name')
-            ->will($this->returnValue($header));
+            ->willReturn($header);
         $this->headers
             ->expects($this->once())
             ->method('removeHeader')
             ->with($header)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
 
         $response->clearHeader('Header-name');
     }
@@ -165,12 +165,12 @@ class ResponseTest extends TestCase
             ->expects($this->once())
             ->method('has')
             ->with('Header-name')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->headers
             ->expects($this->never())
             ->method('get')
             ->with('Header-name')
-            ->will($this->returnValue($header));
+            ->willReturn($header);
         $this->headers
             ->expects($this->never())
             ->method('removeHeader')
@@ -179,7 +179,7 @@ class ResponseTest extends TestCase
         $response
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue($this->headers));
+            ->willReturn($this->headers);
 
         $response->clearHeader('Header-name');
     }
@@ -187,7 +187,7 @@ class ResponseTest extends TestCase
     public function testHttpResponseCodeWithException()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessageRegExp('/Invalid HTTP response code/');
+        $this->expectExceptionMessageMatches('/Invalid HTTP response code/');
         $this->response->setHttpResponseCode(1);
     }
 
