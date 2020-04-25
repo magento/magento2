@@ -105,6 +105,7 @@ class CallbackTest extends TestCase
      */
     public function testSetArguments($value, $expectedValue)
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
         $option = new Callback(function () {
         });
         $option->setArguments($value);

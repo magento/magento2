@@ -71,8 +71,8 @@ class ConstraintTest extends TestCase
             'isValid'
         )->with(
             $value
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         if ($expectedResult) {
@@ -82,8 +82,8 @@ class ConstraintTest extends TestCase
                 $this->once()
             )->method(
                 'getMessages'
-            )->will(
-                $this->returnValue($expectedMessages)
+            )->willReturn(
+                $expectedMessages
             );
         }
 

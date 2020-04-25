@@ -147,17 +147,17 @@ class BuilderTest extends TestCase
 
         // Case 3. Check callback on validator
         $actualConstraints = [
-        [
-            'alias' => 'sku_alias',
-            'class' => StringLength::class,
-        'options' => [
-        'callback' => [
-        new Callback(
-            function ($validator) {
-                $validator->setMin(20);
-                $validator->setMax(100);
-            }
-        ), ], ],'property' => 'sku', 'type' => 'property', ], ];
+            [
+                'alias' => 'sku_alias',
+                'class' => StringLength::class,
+                'options' => [
+                    'callback' => [
+                        new Callback(
+                            function ($validator) {
+                                $validator->setMin(20);
+                                $validator->setMax(100);
+                            }
+                        ), ], ],'property' => 'sku', 'type' => 'property', ], ];
 
         $expectedValidator = new Validator();
         $expectedValidator->addValidator(
@@ -185,6 +185,8 @@ class BuilderTest extends TestCase
      */
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(
             Builder::class,
@@ -206,6 +208,8 @@ class BuilderTest extends TestCase
      */
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(
             Builder::class,

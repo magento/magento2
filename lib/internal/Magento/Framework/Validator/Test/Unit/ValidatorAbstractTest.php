@@ -40,7 +40,8 @@ class ValidatorAbstractTest extends TestCase
      */
     protected function _getTranslator()
     {
-        return $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        return $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
     }
 
     /**

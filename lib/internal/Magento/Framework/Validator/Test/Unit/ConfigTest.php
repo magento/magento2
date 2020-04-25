@@ -230,7 +230,11 @@ class ConfigTest extends TestCase
      */
     public function testBuilderConfiguration()
     {
-        $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->getMock();
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
+        $this->getMockBuilder(Builder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_initConfig([__DIR__ . '/_files/validation/positive/builder/validation.xml']);
         $builder = $this->_config->createValidatorBuilder('test_entity_a', 'check_builder');
