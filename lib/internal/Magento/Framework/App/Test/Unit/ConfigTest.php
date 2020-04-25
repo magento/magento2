@@ -36,7 +36,7 @@ class ConfigTest extends TestCase
      */
     private $appConfig;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()

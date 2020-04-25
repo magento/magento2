@@ -72,10 +72,10 @@ class ManagerTest extends TestCase
         $cacheStatusMap = [['foo', true], ['bar', false], ['baz', false]];
         $this->cacheState->expects($this->exactly(3))
             ->method('isEnabled')
-            ->will($this->returnValueMap($cacheStatusMap));
+            ->willReturnMap($cacheStatusMap);
         $this->cacheState->expects($this->exactly(2))
             ->method('setEnabled')
-            ->will($this->returnValueMap([['bar', true], ['baz', true]]));
+            ->willReturnMap([['bar', true], ['baz', true]]);
         $this->cacheState->expects($this->once())->method('persist');
         $this->assertEquals(['bar', 'baz'], $this->model->setEnabled($caches, true));
     }
@@ -93,7 +93,7 @@ class ManagerTest extends TestCase
         $cacheStatusMap = [['foo', true], ['bar', false], ['baz', false]];
         $this->cacheState->expects($this->exactly(3))
             ->method('isEnabled')
-            ->will($this->returnValueMap($cacheStatusMap));
+            ->willReturnMap($cacheStatusMap);
         $this->cacheState->expects($this->once())->method('setEnabled')->with('foo', false);
         $this->cacheState->expects($this->once())->method('persist');
         $this->frontendPool->expects($this->never())->method('get');
@@ -112,11 +112,11 @@ class ManagerTest extends TestCase
         $frontendFoo = $this->getMockForAbstractClass(FrontendInterface::class);
         $frontendBar = $this->getMockForAbstractClass(FrontendInterface::class);
         $frontendBaz = $this->getMockForAbstractClass(FrontendInterface::class);
-        $this->frontendPool->expects($this->exactly(3))->method('get')->will($this->returnValueMap([
+        $this->frontendPool->expects($this->exactly(3))->method('get')->willReturnMap([
             ['foo', $frontendFoo],
             ['bar', $frontendBar],
             ['baz', $frontendBaz],
-        ]));
+        ]);
         $backendOne = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
         $backendTwo = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
         $frontendFoo->expects($this->once())->method('getBackend')->willReturn($backendOne);

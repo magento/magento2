@@ -49,7 +49,7 @@ class PoolTest extends TestCase
             [['r2d1' => 'value1', 'r2d2' => 'value2'], $this->_frontendInstances['resource2']],
         ];
         $frontendFactory = $this->createMock(Factory::class);
-        $frontendFactory->expects($this->any())->method('create')->will($this->returnValueMap($frontendFactoryMap));
+        $frontendFactory->expects($this->any())->method('create')->willReturnMap($frontendFactoryMap);
 
         $deploymentConfig = $this->createMock(DeploymentConfig::class);
         $deploymentConfig->expects(
@@ -58,8 +58,8 @@ class PoolTest extends TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue(['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]])
+        )->willReturn(
+            ['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]]
         );
 
         $frontendSettings = [
@@ -104,8 +104,8 @@ class PoolTest extends TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue($fixtureCacheConfig)
+        )->willReturn(
+            $fixtureCacheConfig
         );
 
         $frontendFactory = $this->createMock(Factory::class);

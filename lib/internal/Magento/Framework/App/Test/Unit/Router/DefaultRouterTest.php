@@ -33,15 +33,13 @@ class DefaultRouterTest extends TestCase
         $actionFactory = $this->createMock(ActionFactory::class);
         $actionFactory->expects($this->once())->method('create')->with(
             Forward::class
-        )->will(
-            $this->returnValue(
-                $this->getMockForAbstractClass(AbstractAction::class, [], '', false)
-            )
+        )->willReturn(
+            $this->getMockForAbstractClass(AbstractAction::class, [], '', false)
         );
         $noRouteHandler = $this->createMock(NoRouteHandler::class);
-        $noRouteHandler->expects($this->any())->method('process')->will($this->returnValue(true));
+        $noRouteHandler->expects($this->any())->method('process')->willReturn(true);
         $noRouteHandlerList = $this->createMock(NoRouteHandlerList::class);
-        $noRouteHandlerList->expects($this->any())->method('getHandlers')->will($this->returnValue([$noRouteHandler]));
+        $noRouteHandlerList->expects($this->any())->method('getHandlers')->willReturn([$noRouteHandler]);
         $this->_model = $helper->getObject(
             DefaultRouter::class,
             [

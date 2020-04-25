@@ -66,8 +66,8 @@ class FrontendPoolTest extends TestCase
             'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
-        )->will(
-            $this->returnValue($fixtureConfigData)
+        )->willReturn(
+            $fixtureConfigData
         );
 
         $cacheFrontend = $this->createMock(FrontendInterface::class);
@@ -77,8 +77,8 @@ class FrontendPoolTest extends TestCase
             'get'
         )->with(
             $expectedFrontendId
-        )->will(
-            $this->returnValue($cacheFrontend)
+        )->willReturn(
+            $cacheFrontend
         );
 
         $accessProxy = $this->createMock(AccessProxy::class);
@@ -89,8 +89,8 @@ class FrontendPoolTest extends TestCase
         )->with(
             AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
-        )->will(
-            $this->returnValue($accessProxy)
+        )->willReturn(
+            $accessProxy
         );
 
         $this->assertSame($accessProxy, $this->_model->get($inputCacheType));

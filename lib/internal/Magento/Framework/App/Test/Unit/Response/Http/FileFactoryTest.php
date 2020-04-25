@@ -43,25 +43,30 @@ class FileFactoryTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->fileSystemMock =
-            $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'isFile']);
+            $this->getMockBuilder(Filesystem::class)
+                ->addMethods(['isFile'])
+                ->onlyMethods(['getDirectoryWrite'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->dirMock = $this->getMockBuilder(
             Write::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->fileSystemMock->expects(
             $this->any()
         )->method(
             'getDirectoryWrite'
-        )->withAnyParameters()->will(
-            $this->returnValue($this->dirMock)
+        )->withAnyParameters()->willReturn(
+            $this->dirMock
         );
 
         $this->fileSystemMock->expects(
             $this->any()
         )->method(
             'isFile'
-        )->withAnyParameters()->will(
-            $this->returnValue(0)
+        )->withAnyParameters()->willReturn(
+            0
         );
         $this->responseMock = $this->createPartialMock(
             Http::class,
@@ -86,16 +91,12 @@ class FileFactoryTest extends TestCase
             $this->never()
         )->method(
             'setHeader'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->responseMock->expects(
             $this->never()
         )->method(
             'setHttpResponseCode'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->getModel()->create('fileName', $content);
     }
 
@@ -106,35 +107,33 @@ class FileFactoryTest extends TestCase
 
         $this->dirMock->expects($this->once())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')
-            ->will($this->returnSelf());
+            ->method('setHeader')->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
-            ->with(200)
-            ->will($this->returnSelf());
+            ->with(200)->willReturnSelf();
         $this->responseMock->expects($this->once())
-            ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->method('sendHeaders')->willReturnSelf();
 
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $this->dirMock->expects($this->never())
             ->method('delete')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->at(1))
             ->method('eof')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $streamMock->expects($this->at(2))
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -149,35 +148,33 @@ class FileFactoryTest extends TestCase
 
         $this->dirMock->expects($this->once())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')
-            ->will($this->returnSelf());
+            ->method('setHeader')->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
-            ->with(200)
-            ->will($this->returnSelf());
+            ->with(200)->willReturnSelf();
         $this->responseMock->expects($this->once())
-            ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->method('sendHeaders')->willReturnSelf();
 
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $this->dirMock->expects($this->once())
             ->method('delete')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->at(1))
             ->method('eof')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $streamMock->expects($this->at(2))
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('read');
         $streamMock->expects($this->once())
@@ -189,31 +186,29 @@ class FileFactoryTest extends TestCase
     {
         $this->dirMock->expects($this->never())
             ->method('isFile')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->dirMock->expects($this->never())
             ->method('stat')
-            ->will($this->returnValue(['size' => 100]));
+            ->willReturn(['size' => 100]);
         $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')
-            ->will($this->returnSelf());
+            ->method('setHeader')->willReturnSelf();
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
-            ->with(200)
-            ->will($this->returnSelf());
+            ->with(200)->willReturnSelf();
         $this->responseMock->expects($this->once())
-            ->method('sendHeaders')
-            ->will($this->returnSelf());
+            ->method('sendHeaders')->willReturnSelf();
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dirMock->expects($this->once())
             ->method('openFile')
-            ->will($this->returnValue($streamMock));
+            ->willReturn($streamMock);
         $streamMock->expects($this->once())
             ->method('eof')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $streamMock->expects($this->once())
             ->method('close');
         $this->getModelMock()->create('fileName', 'content');

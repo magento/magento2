@@ -26,7 +26,7 @@ class ShellTest extends TestCase
     /** @var  Shell */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()

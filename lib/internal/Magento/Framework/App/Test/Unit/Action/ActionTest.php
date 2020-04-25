@@ -84,7 +84,10 @@ class ActionTest extends TestCase
         $this->_requestMock = $this->createMock(HttpRequest::class);
         $this->_responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
 
-        $this->pageConfigMock = $this->createPartialMock(PageConfig::class, ['getConfig']);
+        $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
+            ->addMethods(['getConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageConfigMock);
         $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);

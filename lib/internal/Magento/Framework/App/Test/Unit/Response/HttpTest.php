@@ -81,7 +81,8 @@ class HttpTest extends TestCase
             ->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             CookieMetadataFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(
             Context::class
@@ -133,12 +134,11 @@ class HttpTest extends TestCase
             ->getMock();
         $sensitiveCookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with('/')
-            ->will($this->returnSelf());
+            ->with('/')->willReturnSelf();
 
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
-            ->will($this->returnValue($expectedCookieValue));
+            ->willReturn($expectedCookieValue);
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieLifetime')
@@ -161,8 +161,7 @@ class HttpTest extends TestCase
         $cookieMetadataMock = $this->createMock(CookieMetadata::class);
         $cookieMetadataMock->expects($this->once())
             ->method('setPath')
-            ->with('/')
-            ->will($this->returnSelf());
+            ->with('/')->willReturnSelf();
         $this->contextMock->expects($this->once())
             ->method('getVaryString')
             ->willReturn(null);
@@ -325,11 +324,11 @@ class HttpTest extends TestCase
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(CookieManagerInterface::class)
-            ->will($this->returnValue($this->cookieManagerMock));
+            ->willReturn($this->cookieManagerMock);
         $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with(CookieMetadataFactory::class)
-            ->will($this->returnValue($this->cookieMetadataFactoryMock));
+            ->willReturn($this->cookieMetadataFactoryMock);
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();

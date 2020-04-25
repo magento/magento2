@@ -55,11 +55,13 @@ class VersionTest extends TestCase
         $objectManager = new ObjectManagerHelper($this);
         $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             CookieMetadataFactory::class
         )
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->version = $objectManager->getObject(
             Version::class,
             [
@@ -83,34 +85,30 @@ class VersionTest extends TestCase
      */
     public function testProcess($isPost)
     {
-        $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn($isPost);
         if ($isPost) {
             $publicCookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setPath')
-                ->with('/')
-                ->will($this->returnSelf());
+                ->with('/')->willReturnSelf();
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setDuration')
-                ->with(Version::COOKIE_PERIOD)
-                ->will($this->returnSelf());
+                ->with(Version::COOKIE_PERIOD)->willReturnSelf();
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setSecure')
-                ->with(false)
-                ->will($this->returnSelf());
+                ->with(false)->willReturnSelf();
 
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
-                ->with(false)
-                ->will($this->returnSelf());
+                ->with(false)->willReturnSelf();
 
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()
-                ->will(
-                    $this->returnValue($publicCookieMetadataMock)
+                ->willReturn(
+                    $publicCookieMetadataMock
                 );
 
             $this->cookieManagerMock->expects($this->once())

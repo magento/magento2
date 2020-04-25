@@ -40,13 +40,11 @@ class CleanupFilesTest extends TestCase
         $dir2 = $this->getDirectoryCleanMock();
         $this->filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
-                        [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
+                    [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
+                ]
             );
         $this->object->clearCodeGeneratedClasses();
     }
@@ -55,10 +53,10 @@ class CleanupFilesTest extends TestCase
     {
         $static = $this->getDirectoryCleanMock();
         $var = $this->getDirectoryCleanMock(DirectoryList::TMP_MATERIALIZATION_DIR);
-        $this->filesystem->expects($this->exactly(2))->method('getDirectoryWrite')->will($this->returnValueMap([
+        $this->filesystem->expects($this->exactly(2))->method('getDirectoryWrite')->willReturnMap([
             [DirectoryList::STATIC_VIEW, DriverPool::FILE, $static],
             [DirectoryList::VAR_DIR, DriverPool::FILE, $var],
-        ]));
+        ]);
         $this->object->clearMaterializedViewFiles();
     }
 
@@ -73,7 +71,7 @@ class CleanupFilesTest extends TestCase
         $dir = $this->getMockForAbstractClass(WriteInterface::class);
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
-        $dir->expects($this->once())->method('isExist')->will($this->returnValue(true));
+        $dir->expects($this->once())->method('isExist')->willReturn(true);
         return $dir;
     }
 }

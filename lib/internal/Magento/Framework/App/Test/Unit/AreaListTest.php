@@ -161,10 +161,10 @@ class AreaListTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->with(
-                $this->equalTo(AreaInterface::class),
-                $this->equalTo(['areaCode' => 'testArea'])
+                AreaInterface::class,
+                ['areaCode' => 'testArea']
             )
-            ->will($this->returnValue('ok'));
+            ->willReturn('ok');
 
         return $objectManagerMock;
     }

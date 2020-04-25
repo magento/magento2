@@ -44,7 +44,7 @@ class RequestFactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(RequestInterface::class, $arguments)
-            ->will($this->returnValue($appRequest));
+            ->willReturn($appRequest);
 
         $this->assertEquals($appRequest, $this->model->create($arguments));
     }

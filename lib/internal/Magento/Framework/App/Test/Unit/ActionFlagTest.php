@@ -32,7 +32,7 @@ class ActionFlagTest extends TestCase
 
     public function testSetIfActionNotExist()
     {
-        $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
+        $this->_requestMock->expects($this->once())->method('getActionName')->willReturn('action_name');
         $this->_requestMock->expects($this->once())->method('getRouteName');
         $this->_requestMock->expects($this->once())->method('getControllerName');
         $this->_actionFlag->set('', 'flag', 'value');
@@ -48,7 +48,7 @@ class ActionFlagTest extends TestCase
 
     public function testGetIfFlagNotExist()
     {
-        $this->_requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
+        $this->_requestMock->expects($this->once())->method('getActionName')->willReturn('action_name');
         $this->_requestMock->expects($this->once())->method('getRouteName');
         $this->_requestMock->expects($this->once())->method('getControllerName');
         $this->assertEquals([], $this->_actionFlag->get(''));
@@ -61,15 +61,15 @@ class ActionFlagTest extends TestCase
             $this->exactly(3)
         )->method(
             'getRouteName'
-        )->will(
-            $this->returnValue('route')
+        )->willReturn(
+            'route'
         );
         $this->_requestMock->expects(
             $this->exactly(3)
         )->method(
             'getControllerName'
-        )->will(
-            $this->returnValue('controller')
+        )->willReturn(
+            'controller'
         );
         $this->_actionFlag->set('action', 'flag', 'value');
         $this->assertEquals('value', $this->_actionFlag->get('action', 'flag'));
@@ -82,15 +82,15 @@ class ActionFlagTest extends TestCase
             $this->once()
         )->method(
             'getRouteName'
-        )->will(
-            $this->returnValue('route')
+        )->willReturn(
+            'route'
         );
         $this->_requestMock->expects(
             $this->once()
         )->method(
             'getControllerName'
-        )->will(
-            $this->returnValue('controller')
+        )->willReturn(
+            'controller'
         );
         $this->assertEquals(false, $this->_actionFlag->get('action', 'flag'));
     }

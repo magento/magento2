@@ -93,10 +93,10 @@ class CronTest extends TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [ConfigLoaderInterface::class, $configLoader],
                 [ManagerInterface::class, $eventManagerMock]
-            ]));
+            ]);
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())
             ->method('load')

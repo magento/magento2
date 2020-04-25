@@ -69,7 +69,7 @@ class FormKeyTest extends TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(FormKey::COOKIE_NAME)
-            ->will($this->returnValue($formKey));
+            ->willReturn($formKey);
 
         $this->assertEquals($formKey, $this->formKey->get());
     }

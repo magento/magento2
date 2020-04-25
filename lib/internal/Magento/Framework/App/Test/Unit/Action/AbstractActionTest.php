@@ -40,7 +40,8 @@ class AbstractActionTest extends TestCase
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->response = $this->createMock(ResponseInterface::class);
 
         $this->redirect = $this->getMockBuilder(Redirect::class)

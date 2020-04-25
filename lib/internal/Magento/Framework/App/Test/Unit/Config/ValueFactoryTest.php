@@ -25,7 +25,7 @@ class ValueFactoryTest extends AbstractFactoryTestCase
         $this->expectException('InvalidArgumentException');
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('somethingElse'));
+            ->willReturn('somethingElse');
         $this->factory->create();
     }
 }

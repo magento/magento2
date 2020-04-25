@@ -30,7 +30,11 @@ class StateTest extends TestCase
     {
         $this->config = $this->createMock(DeploymentConfig::class);
         $this->writer =
-            $this->createPartialMock(Writer::class, ['update', 'saveConfig']);
+            $this->getMockBuilder(Writer::class)
+                ->addMethods(['update'])
+                ->onlyMethods(['saveConfig'])
+                ->disableOriginalConstructor()
+                ->getMock();
     }
 
     /**

@@ -27,7 +27,7 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->_metaDataProcessor = $this->createMock(MetadataProcessor::class);
-        $this->_metaDataProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
+        $this->_metaDataProcessor->expects($this->any())->method('process')->willReturnArgument(0);
         $this->_model = new Data($this->_metaDataProcessor, []);
     }
 

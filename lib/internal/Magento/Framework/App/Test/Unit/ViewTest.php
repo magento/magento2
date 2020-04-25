@@ -81,12 +81,13 @@ class ViewTest extends TestCase
         $this->_configScopeMock = $this->createMock(ScopeInterface::class);
         $this->_layoutProcessor = $this->createMock(Merge::class);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
-            ->will($this->returnValue($this->_layoutProcessor));
+            ->willReturn($this->_layoutProcessor);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
         $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $pageConfigMock = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $pageConfigMock->expects($this->any())
             ->method('publicBuild')
             ->willReturnSelf();
@@ -99,23 +100,23 @@ class ViewTest extends TestCase
         $this->resultPage = $this->getMockBuilder(Page::class)
             ->setConstructorArgs(
                 $helper->getConstructArguments(Page::class, [
-                'request' => $this->_requestMock,
-                'pageConfigRendererFactory' => $pageConfigRendererFactory,
-                'layout' => $this->_layoutMock
+                    'request' => $this->_requestMock,
+                    'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                    'layout' => $this->_layoutMock
                 ])
             )
             ->setMethods(['renderResult', 'getConfig'])
             ->getMock();
         $this->resultPage->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($pageConfigMock));
+            ->willReturn($pageConfigMock);
         $pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $pageFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPage));
+            ->willReturn($this->resultPage);
 
         $this->response = $this->createMock(Http::class);
 
@@ -153,8 +154,8 @@ class ViewTest extends TestCase
             $this->any()
         )->method(
             'getFullActionName'
-        )->will(
-            $this->returnValue('action_name')
+        )->willReturn(
+            'action_name'
         );
         $this->_view->loadLayout();
     }
@@ -173,7 +174,7 @@ class ViewTest extends TestCase
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('ExpectedValue'));
+            ->willReturn('ExpectedValue');
 
         $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
@@ -182,7 +183,7 @@ class ViewTest extends TestCase
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('Full_Action_Name'));
+            ->willReturn('Full_Action_Name');
 
         $this->_layoutProcessor->expects($this->once())
             ->method('addHandle')
@@ -196,7 +197,7 @@ class ViewTest extends TestCase
         $pageHandles = ['full_action_name', 'full_action_name_key_value'];
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
-            ->will($this->returnValue('Full_Action_Name'));
+            ->willReturn('Full_Action_Name');
 
         $this->_layoutProcessor->expects($this->once())
             ->method('addHandle')
@@ -210,7 +211,7 @@ class ViewTest extends TestCase
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
         ];
-        $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $this->_view->generateLayoutBlocks();
     }
 
@@ -220,7 +221,7 @@ class ViewTest extends TestCase
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
         ];
-        $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_view->generateLayoutBlocks();
@@ -235,8 +236,8 @@ class ViewTest extends TestCase
         )->with(
             '',
             'no-renderLayout'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_view->renderLayout();
@@ -247,7 +248,7 @@ class ViewTest extends TestCase
         $this->_actionFlagMock->expects($this->once())
             ->method('get')
             ->with('', 'no-renderLayout')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->_layoutMock->expects($this->once())->method('addOutputElement')->with('output');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
         $this->_view->renderLayout('output');
@@ -258,7 +259,7 @@ class ViewTest extends TestCase
         $this->_actionFlagMock->expects($this->once())
             ->method('get')
             ->with('', 'no-renderLayout')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->_layoutMock->expects($this->never())->method('addOutputElement');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);

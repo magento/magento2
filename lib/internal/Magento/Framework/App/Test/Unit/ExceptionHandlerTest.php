@@ -119,7 +119,7 @@ class ExceptionHandlerTest extends TestCase
     {
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->will($this->throwException(new \Exception('strange error')));
+            ->willThrowException(new \Exception('strange error'));
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(500);

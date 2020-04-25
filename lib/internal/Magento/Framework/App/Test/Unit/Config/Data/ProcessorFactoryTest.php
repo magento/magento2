@@ -73,7 +73,8 @@ class ProcessorFactoryTest extends TestCase
             \Magento\Framework\App\Config\Data\WrongBackendModel::class
         )->will(
             $this->returnValue(
-                $this->getMockBuilder('WrongBackendModel')->getMock()
+                $this->getMockBuilder('WrongBackendModel')
+                    ->getMock()
             )
         );
 

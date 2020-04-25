@@ -127,21 +127,21 @@ class KernelTest extends TestCase
             ->with(['context' => $this->contextMock])
             ->willReturn($this->httpResponseMock);
 
-        $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
-        $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
+        $this->requestMock->expects($this->once())->method('isGet')->willReturn($isGet);
+        $this->requestMock->expects($this->any())->method('isHead')->willReturn($isHead);
         $this->fullPageCacheMock->expects(
             $this->any()
         )->method(
             'load'
         )->with(
-            $this->equalTo($id)
-        )->will(
-            $this->returnValue(json_encode($cache))
+            $id
+        )->willReturn(
+            json_encode($cache)
         );
         $this->httpResponseMock->expects($this->once())->method('setStatusCode')->with($cache['status_code']);
         $this->httpResponseMock->expects($this->once())->method('setContent')->with($cache['content']);
         $this->httpResponseMock->expects($this->once())->method('setHeader')->with(0, 'header', true);
-        $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
+        $this->identifierMock->expects($this->any())->method('getValue')->willReturn($id);
         $this->assertEquals($this->httpResponseMock, $this->kernel->load());
     }
 
@@ -175,18 +175,18 @@ class KernelTest extends TestCase
      */
     public function testLoadWithoutCachedData($id, $cache, $isGet, $isHead)
     {
-        $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
-        $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
+        $this->requestMock->expects($this->once())->method('isGet')->willReturn($isGet);
+        $this->requestMock->expects($this->any())->method('isHead')->willReturn($isHead);
         $this->fullPageCacheMock->expects(
             $this->any()
         )->method(
             'load'
         )->with(
-            $this->equalTo($id)
-        )->will(
-            $this->returnValue(json_encode($cache))
+            $id
+        )->willReturn(
+            json_encode($cache)
         );
-        $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
+        $this->identifierMock->expects($this->any())->method('getValue')->willReturn($id);
         $this->assertEquals(false, $this->kernel->load());
     }
 
@@ -226,8 +226,8 @@ class KernelTest extends TestCase
             'getHeader'
         )->with(
             'Cache-Control'
-        )->will(
-            $this->returnValue($cacheControlHeader)
+        )->willReturn(
+            $cacheControlHeader
         );
         $this->responseMock->expects(
             $this->any()
@@ -244,10 +244,10 @@ class KernelTest extends TestCase
             ->with('X-Magento-Tags');
         $this->responseMock->expects($this->at($at[1]))
             ->method('clearHeader')
-            ->with($this->equalTo('Set-Cookie'));
+            ->with('Set-Cookie');
         $this->responseMock->expects($this->at($at[2]))
             ->method('clearHeader')
-            ->with($this->equalTo('X-Magento-Tags'));
+            ->with('X-Magento-Tags');
         $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
@@ -280,11 +280,11 @@ class KernelTest extends TestCase
             'getHeader'
         )->with(
             'Cache-Control'
-        )->will(
-            $this->returnValue($header)
+        )->willReturn(
+            $header
         );
-        $this->responseMock->expects($this->any())->method('getHttpResponseCode')->will($this->returnValue($httpCode));
-        $this->requestMock->expects($this->any())->method('isGet')->will($this->returnValue($isGet));
+        $this->responseMock->expects($this->any())->method('getHttpResponseCode')->willReturn($httpCode);
+        $this->requestMock->expects($this->any())->method('isGet')->willReturn($isGet);
         if ($overrideHeaders) {
             $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
         }

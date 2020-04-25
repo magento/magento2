@@ -31,10 +31,10 @@ class AggregateInvokerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_testCase = $this->createPartialMock(
-            Test::class,
-            ['run', 'count', 'fail', 'markTestIncomplete', 'markTestSkipped']
-        );
+        $this->_testCase = $this->getMockBuilder(Test::class)
+            ->addMethods(['fail', 'markTestIncomplete', 'markTestSkipped'])
+            ->onlyMethods(['run', 'count'])
+            ->getMock();
         $this->_invoker = new AggregateInvoker($this->_testCase, []);
     }
 

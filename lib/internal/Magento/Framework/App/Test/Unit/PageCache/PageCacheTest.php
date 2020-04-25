@@ -25,7 +25,7 @@ class PageCacheTest extends TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo($identifier)
+            $identifier
         )->willReturnArgument(
             0
         );

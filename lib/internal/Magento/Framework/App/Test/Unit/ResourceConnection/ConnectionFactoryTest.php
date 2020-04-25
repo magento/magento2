@@ -63,11 +63,11 @@ class ConnectionFactoryTest extends TestCase
             ->willReturnSelf();
         $connectionAdapterMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(ConnectionAdapterInterface::class)
-            ->will($this->returnValue($connectionAdapterMock));
+            ->willReturn($connectionAdapterMock);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(DdlCache::class)

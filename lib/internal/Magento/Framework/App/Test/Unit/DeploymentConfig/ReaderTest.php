@@ -94,7 +94,7 @@ class ReaderTest extends TestCase
         $this->configFilePool
             ->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValueMap($files));
+            ->willReturnMap($files);
         $object = new Reader($this->dirList, $this->driverPool, $this->configFilePool);
         $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar', 'envKey' => 'env'], $object->load());
     }
@@ -121,7 +121,7 @@ class ReaderTest extends TestCase
     public function testLoadInvalidConfigurationFileWithFileKey()
     {
         $this->expectException('Magento\Framework\Exception\RuntimeException');
-        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,7 +158,7 @@ class ReaderTest extends TestCase
     public function testLoadInvalidConfigurationFile(): void
     {
         $this->expectException('Magento\Framework\Exception\RuntimeException');
-        $this->expectExceptionMessageRegExp('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
+        $this->expectExceptionMessageMatches('/Invalid configuration file: \\\'.*\/\_files\/emptyConfig\.php\\\'/');
         $fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();

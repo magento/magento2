@@ -155,15 +155,15 @@ class FactoryTest extends TestCase
         };
         /** @var MockObject $objectManager */
         $objectManager = $this->createMock(ObjectManagerInterface::class);
-        $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
+        $objectManager->expects($this->any())->method('create')->willReturnCallback($processFrontendFunc);
 
         $dirMock = $this->getMockForAbstractClass(ReadInterface::class);
         $dirMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnValue('DIR'));
+            ->willReturn('DIR');
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
-        $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($dirMock);
+        $filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($dirMock);
 
         $resource = $this->createMock(ResourceConnection::class);
 

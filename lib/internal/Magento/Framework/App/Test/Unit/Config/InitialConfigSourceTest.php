@@ -29,7 +29,7 @@ class InitialConfigSourceTest extends TestCase
      */
     private $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()

@@ -169,7 +169,7 @@ class HttpTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(FrontControllerInterface::class)
-            ->will($this->returnValue($this->frontControllerMock));
+            ->willReturn($this->frontControllerMock);
         $this->frontControllerMock->expects($this->once())
             ->method('dispatch')
             ->with($this->requestMock)

@@ -36,7 +36,7 @@ class ProxyTest extends TestCase
         $objectManager->expects($this->once())
             ->method('get')
             ->with(ConfigInterface::class)
-            ->will($this->returnValue($this->_object));
+            ->willReturn($this->_object);
 
         $this->_proxy = new Proxy(
             $objectManager,

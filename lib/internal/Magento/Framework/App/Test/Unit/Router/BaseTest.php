@@ -70,7 +70,10 @@ class BaseTest extends BaseTestCase
         // Create mocks
         $this->requestMock = $this->basicMock(Http::class);
         $this->routeConfigMock = $this->basicMock(ConfigInterface::class);
-        $this->appStateMock = $this->createPartialMock(State::class, ['isInstalled']);
+        $this->appStateMock = $this->getMockBuilder(State::class)
+            ->addMethods(['isInstalled'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionListMock = $this->basicMock(ActionList::class);
         $this->actionFactoryMock = $this->basicMock(ActionFactory::class);
         $this->nameBuilderMock = $this->basicMock(NameBuilder::class);

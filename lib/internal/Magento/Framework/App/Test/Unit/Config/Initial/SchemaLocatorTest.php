@@ -37,7 +37,7 @@ class SchemaLocatorTest extends TestCase
         $this->_moduleReaderMock->expects($this->once())
             ->method('getModuleDir')
             ->with('etc', 'moduleName')
-            ->will($this->returnValue('schema_dir'));
+            ->willReturn('schema_dir');
         $this->_model = $this->objectManager->getObject(
             SchemaLocator::class,
             [

@@ -34,9 +34,11 @@ class ProductMetadataTest extends TestCase
     protected function setUp(): void
     {
         $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);

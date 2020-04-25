@@ -29,8 +29,8 @@ class AccessProxyTest extends TestCase
         $frontendMock = $this->createMock(FrontendInterface::class);
 
         $cacheEnabler = $this->createMock(StateInterface::class);
-        $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));
-        $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
+        $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->willReturn(false);
+        $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->willReturn(true);
 
         $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new ProxyTesting();

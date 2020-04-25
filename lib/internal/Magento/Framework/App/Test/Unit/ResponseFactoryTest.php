@@ -38,7 +38,8 @@ class ResponseFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $this->_expectedObject = $this->getMockBuilder(ResponseInterface::class)->getMock();
+        $this->_expectedObject = $this->getMockBuilder(ResponseInterface::class)
+            ->getMock();
         $arguments = [['property' => 'value']];
         $this->_objectManagerMock->expects(
             $this->once()
@@ -47,8 +48,8 @@ class ResponseFactoryTest extends TestCase
         )->with(
             ResponseInterface::class,
             $arguments
-        )->will(
-            $this->returnValue($this->_expectedObject)
+        )->willReturn(
+            $this->_expectedObject
         );
 
         $this->assertEquals($this->_expectedObject, $this->_model->create($arguments));

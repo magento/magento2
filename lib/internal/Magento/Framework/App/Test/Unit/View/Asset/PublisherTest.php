@@ -78,10 +78,10 @@ class PublisherTest extends TestCase
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->staticDirRead));
+            ->willReturn($this->staticDirRead);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->staticDirWrite));
+            ->willReturn($this->staticDirWrite);
         $this->writeFactory->expects($this->any())->method('create')->willReturn($this->sourceDirWrite);
     }
 
@@ -90,7 +90,7 @@ class PublisherTest extends TestCase
         $this->staticDirRead->expects($this->once())
             ->method('isExist')
             ->with('some/file.ext')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->object->publish($this->getAsset()));
     }
 
@@ -99,18 +99,18 @@ class PublisherTest extends TestCase
         $this->staticDirRead->expects($this->once())
             ->method('isExist')
             ->with('some/file.ext')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $materializationStrategy =
             $this->createMock(StrategyInterface::class);
 
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')
             ->with($this->getAsset())
-            ->will($this->returnValue($materializationStrategy));
+            ->willReturn($materializationStrategy);
         $materializationStrategy->expects($this->once())
             ->method('publishFile')
             ->with($this->sourceDirWrite, $this->staticDirWrite, 'file.ext', 'some/file.ext')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->object->publish($this->getAsset()));
     }
@@ -125,10 +125,10 @@ class PublisherTest extends TestCase
         $asset = $this->createMock(File::class);
         $asset->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue('some/file.ext'));
+            ->willReturn('some/file.ext');
         $asset->expects($this->any())
             ->method('getSourceFile')
-            ->will($this->returnValue('/root/some/file.ext'));
+            ->willReturn('/root/some/file.ext');
         return $asset;
     }
 }

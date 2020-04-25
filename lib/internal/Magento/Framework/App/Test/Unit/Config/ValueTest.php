@@ -71,8 +71,8 @@ class ValueTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue('old_value')
+        )->willReturn(
+            'old_value'
         );
 
         $this->assertEquals('old_value', $this->model->getOldValue());
@@ -93,8 +93,8 @@ class ValueTest extends TestCase
         )->with(
             null,
             'default'
-        )->will(
-            $this->returnValue($oldValue)
+        )->willReturn(
+            $oldValue
         );
 
         $this->model->setValue($value);

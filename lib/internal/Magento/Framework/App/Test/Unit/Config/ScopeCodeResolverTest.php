@@ -36,7 +36,7 @@ class ScopeCodeResolverTest extends TestCase
      */
     private $scopeCodeResolver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()

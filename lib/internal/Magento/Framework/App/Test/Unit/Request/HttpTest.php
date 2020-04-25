@@ -74,13 +74,13 @@ class HttpTest extends TestCase
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
         $this->infoProcessorMock = $this->createMock(PathInfoProcessorInterface::class);
-        $this->infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
+        $this->infoProcessorMock->expects($this->any())->method('process')->willReturnArgument(1);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $this->converterMock->expects($this->any())->method('cleanString')->will($this->returnArgument(0));
+        $this->converterMock->expects($this->any())->method('cleanString')->willReturnArgument(0);
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -89,7 +89,7 @@ class HttpTest extends TestCase
         $this->pathInfo =  $this->objectManager->getObject(PathInfo::class);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
@@ -149,7 +149,7 @@ class HttpTest extends TestCase
     public function testSetRouteNameWithRouter()
     {
         $router = $this->createMock(ConfigInterface::class);
-        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
+        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->willReturn($router);
         $this->model = $this->getModel();
         $this->model->setRouteName('RouterName');
         $this->assertEquals('RouterName', $this->model->getRouteName());
@@ -158,7 +158,7 @@ class HttpTest extends TestCase
     public function testSetRouteNameWithNullRouterValue()
     {
         $this->model = $this->getModel();
-        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
+        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->willReturn(null);
         $this->model->setRouteName('RouterName');
     }
 
