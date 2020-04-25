@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit\DataObject;
 
@@ -21,12 +22,10 @@ class GridTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->with(DataObject::class, [])
-            ->will(
-                $this->returnCallback(
-                    function () {
-                        return new DataObject();
-                    }
-                )
+            ->willReturnCallback(
+                function () {
+                    return new DataObject();
+                }
             );
 
         $gridFilter = new Grid($entityFactoryMock);
@@ -38,24 +37,20 @@ class GridTest extends TestCase
         /** @var \Zend_Filter_Interface $filterMock */
         /** This filter should be applied to all fields values */
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $filterMock->expects($this->exactly(4))->method('filter')->will(
-            $this->returnCallback(
-                function ($input) {
-                    return '(' . $input . ')';
-                }
-            )
+        $filterMock->expects($this->exactly(4))->method('filter')->willReturnCallback(
+            function ($input) {
+                return '(' . $input . ')';
+            }
         );
         $gridFilter->addFilter($filterMock);
 
         /** @var \Zend_Filter_Interface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
         $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
-        $fieldFilterMock->expects($this->exactly(2))->method('filter')->will(
-            $this->returnCallback(
-                function ($input) {
-                    return '[' . $input . ']';
-                }
-            )
+        $fieldFilterMock->expects($this->exactly(2))->method('filter')->willReturnCallback(
+            function ($input) {
+                return '[' . $input . ']';
+            }
         );
         $gridFilter->addFilter($fieldFilterMock, 'field2');
 

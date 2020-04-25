@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\Filter\Factory;
@@ -36,16 +38,19 @@ class FilterManagerTest extends TestCase
     protected function initMocks()
     {
         $factoryName = Factory::class;
-        $this->_factoryMock = $this->createPartialMock($factoryName, ['canCreateFilter', 'createFilter']);
+        $this->_factoryMock = $this->getMockBuilder($factoryName)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['canCreateFilter', 'createFilter'])
+            ->getMock();
         $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
             'create'
         )->with(
-            $this->equalTo($factoryName)
-        )->will(
-            $this->returnValue($this->_factoryMock)
+            $factoryName
+        )->willReturn(
+            $this->_factoryMock
         );
         $this->_config =
             $this->createPartialMock(Config::class, ['getFactories']);
@@ -53,8 +58,8 @@ class FilterManagerTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'getFactories'
-        )->will(
-            $this->returnValue([$factoryName])
+        )->willReturn(
+            [$factoryName]
         );
         $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
     }
@@ -82,9 +87,9 @@ class FilterManagerTest extends TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo($factoryName)
-        )->will(
-            $this->returnValue($this->_factoryMock)
+            $factoryName
+        )->willReturn(
+            $this->_factoryMock
         );
         $this->_config =
             $this->createPartialMock(Config::class, ['getFactories']);
@@ -92,8 +97,8 @@ class FilterManagerTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'getFactories'
-        )->will(
-            $this->returnValue([$factoryName])
+        )->willReturn(
+            [$factoryName]
         );
         $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
 
@@ -105,7 +110,8 @@ class FilterManagerTest extends TestCase
     public function testCreateFilterInstance()
     {
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')->getMock();
+        $filterMock = $this->getMockBuilder('FactoryInterface')
+            ->getMock();
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
@@ -167,15 +173,16 @@ class FilterManagerTest extends TestCase
     {
         $value = 'testValue';
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')->setMethods(['filter'])->getMock();
+        $filterMock = $this->getMockBuilder('FactoryInterface')
+            ->setMethods(['filter'])->getMock();
         $filterMock->expects(
             $this->atLeastOnce()
         )->method(
             'filter'
         )->with(
-            $this->equalTo($value)
-        )->will(
-            $this->returnValue($value)
+            $value
+        )->willReturn(
+            $value
         );
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
         $this->assertEquals($value, $this->_filterManager->alias($value, ['123']));

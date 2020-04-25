@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit;
 
@@ -21,11 +22,9 @@ class InputTest extends TestCase
         /** This filter should be applied to 'field1' field value only */
         $filterMock = $this->createMock(\Zend_Filter_Interface::class);
         $filterMock->expects($this->exactly(1))->method('filter')->willReturnCallback(
-            
-                function ($input) {
-                    return '(' . $input . ')';
-                }
-            
+            function ($input) {
+                return '(' . $input . ')';
+            }
         );
         $inputFilter->addFilter('field1', $filterMock);
 

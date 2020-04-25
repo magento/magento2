@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -68,9 +70,10 @@ class TranslitTest extends TestCase
     {
         $config = $this->getMockBuilder(
             ScopeConfigInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getValue', 'setValue', 'isSetFlag']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getValue', 'setValue', 'isSetFlag']
+            )->getMock();
 
         $config->expects(
             $this->once()
