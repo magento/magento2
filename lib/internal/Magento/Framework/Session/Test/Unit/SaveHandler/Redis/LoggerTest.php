@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
 use Cm\RedisSession\Handler\ConfigInterface;
@@ -39,7 +41,7 @@ class LoggerTest extends TestCase
      */
     protected $requestUri = 'customer/account/login';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->config = $this->createMock(ConfigInterface::class);
         $this->config->expects($this->once())

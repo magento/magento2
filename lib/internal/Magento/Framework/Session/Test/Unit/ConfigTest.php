@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\Session\Config
@@ -412,13 +413,13 @@ class ConfigTest extends TestCase
             Http::class,
             ['getBasePath', 'isSecure', 'getHttpHost']
         );
-        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
+        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->willReturn('/');
         $this->requestMock->expects(
             $this->atLeastOnce()
         )->method(
             'getHttpHost'
-        )->will(
-            $this->returnValue('init.host')
+        )->willReturn(
+            'init.host'
         );
 
         $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
@@ -438,13 +439,13 @@ class ConfigTest extends TestCase
             ['web/cookie/cookie_path', 'store', null, ''],
         ];
         $this->configMock->method('getValue')
-            ->will($this->returnValueMap($getValueReturnMap));
+            ->willReturnMap($getValueReturnMap);
 
         $filesystemMock = $this->createMock(Filesystem::class);
         $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($dirMock));
+            ->willReturn($dirMock);
 
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock

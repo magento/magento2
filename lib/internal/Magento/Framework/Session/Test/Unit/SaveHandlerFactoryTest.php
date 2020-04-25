@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Test\Unit;
 
 use Magento\Framework\DataObject;
@@ -25,10 +27,10 @@ class SaveHandlerFactoryTest extends TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo($saveClass),
-            $this->equalTo([])
-        )->will(
-            $this->returnValue($saveHandler)
+            $saveClass,
+            []
+        )->willReturn(
+            $saveHandler
         );
         $model = new SaveHandlerFactory($objectManager, $handlers);
         $result = $model->create($saveMethod);
