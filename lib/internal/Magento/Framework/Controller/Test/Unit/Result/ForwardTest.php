@@ -29,7 +29,8 @@ class ForwardTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->requestInterface = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->forward = $this->objectManagerHelper->getObject(
             Forward::class,
             [

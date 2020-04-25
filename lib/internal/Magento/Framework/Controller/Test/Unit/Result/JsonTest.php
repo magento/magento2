@@ -32,8 +32,8 @@ class JsonTest extends TestCase
          * $translateInline
          */
         $translateInline = $this->createMock(InlineInterface::class);
-        $translateInline->expects($this->any())->method('processResponseBody')->with($json, true)->will(
-            $this->returnValue($translatedJson)
+        $translateInline->expects($this->any())->method('processResponseBody')->with($json, true)->willReturn(
+            $translatedJson
         );
 
         $response = $this->createMock(HttpInterface::class);

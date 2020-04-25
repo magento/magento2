@@ -57,7 +57,7 @@ class FactoryTest extends TestCase
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with($routeClass, ['route' => $paramRoute])
-            ->will($this->returnValue($router));
+            ->willReturn($router);
 
         $result = $this->factory->createRoute($routeClass, $paramRoute);
 
@@ -74,7 +74,7 @@ class FactoryTest extends TestCase
         $this->expectException('LogicException');
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->will($this->returnValue(new \StdClass()));
+            ->willReturn(new \StdClass());
 
         $object = new Factory($this->objectManager);
         $object->createRoute(
