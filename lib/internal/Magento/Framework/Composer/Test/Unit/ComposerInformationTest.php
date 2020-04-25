@@ -45,10 +45,14 @@ class ComposerInformationTest extends TestCase
      */
     private $packageMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->composerMock = $this->getMockBuilder(Composer::class)->disableOriginalConstructor()->getMock();
-        $this->lockerMock = $this->getMockBuilder(Locker::class)->disableOriginalConstructor()->getMock();
+        $this->composerMock = $this->getMockBuilder(Composer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->lockerMock = $this->getMockBuilder(Locker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->lockerRepositoryMock = $this->getMockForAbstractClass(RepositoryInterface::class);
         $this->packageMock = $this->getMockForAbstractClass(CompletePackageInterface::class);
         $this->lockerMock->method('getLockedRepository')->willReturn($this->lockerRepositoryMock);

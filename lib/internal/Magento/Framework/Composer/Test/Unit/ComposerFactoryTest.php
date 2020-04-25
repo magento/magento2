@@ -29,14 +29,14 @@ class ComposerFactoryTest extends TestCase
     /** @var File */
     private $fileDriver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileDriver = new File();
         $this->originalComposerHome = getenv('COMPOSER_HOME');
         putenv('COMPOSER_HOME');
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if ($this->originalComposerHome) {
             putenv('COMPOSER_HOME=' . $this->originalComposerHome);
@@ -51,7 +51,9 @@ class ComposerFactoryTest extends TestCase
     public function testCreate()
     {
         $objectManager = new ObjectManager($this);
-        $dirListMock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->getMock();
+        $dirListMock = $this->getMockBuilder(DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $composerJsonFinderMock = $this->getMockBuilder(ComposerJsonFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
