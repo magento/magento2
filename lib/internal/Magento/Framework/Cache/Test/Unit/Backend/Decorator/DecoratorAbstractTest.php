@@ -74,7 +74,8 @@ class DecoratorAbstractTest extends TestCase
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')->getMock()]]
+            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')
+                ->getMock()]]
         ];
     }
 

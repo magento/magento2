@@ -161,23 +161,23 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue(\hash('sha256', (string)$remoteData)));
+            ->willReturn(\hash('sha256', (string)$remoteData));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
             ->with($remoteData)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -190,12 +190,12 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -208,17 +208,17 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }

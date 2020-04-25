@@ -111,7 +111,7 @@ class CoreTest extends TestCase
         $backendMock->expects($this->once())
             ->method('save')
             ->with($data, $this->anything(), $prefixedTags)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $frontend = new Core([
             'disable_save'              => false,
             'caching'                   => true,
@@ -136,7 +136,7 @@ class CoreTest extends TestCase
         $backendMock->expects($this->once())
             ->method('clean')
             ->with($mode, $prefixedTags)
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
         $frontend = new Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,
@@ -158,10 +158,10 @@ class CoreTest extends TestCase
         $backendMock->expects($this->once())
             ->method('getIdsMatchingTags')
             ->with($prefixedTags)
-            ->will($this->returnValue($ids));
+            ->willReturn($ids);
         $backendMock->expects($this->any())
             ->method('getCapabilities')
-            ->will($this->returnValue(['tags' => true]));
+            ->willReturn(['tags' => true]);
         $frontend = new Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,
@@ -183,10 +183,10 @@ class CoreTest extends TestCase
         $backendMock->expects($this->once())
             ->method('getIdsNotMatchingTags')
             ->with($prefixedTags)
-            ->will($this->returnValue($ids));
+            ->willReturn($ids);
         $backendMock->expects($this->any())
             ->method('getCapabilities')
-            ->will($this->returnValue(['tags' => true]));
+            ->willReturn(['tags' => true]);
         $frontend = new Core([
             'caching'         => true,
             'cache_id_prefix' => $prefix,

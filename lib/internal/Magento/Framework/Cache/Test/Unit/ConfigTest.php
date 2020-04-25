@@ -39,8 +39,8 @@ class ConfigTest extends TestCase
         )->with(
             'types',
             []
-        )->will(
-            $this->returnValue(['val1', 'val2'])
+        )->willReturn(
+            ['val1', 'val2']
         );
         $result = $this->_model->getTypes();
         $this->assertCount(2, $result);
@@ -55,8 +55,8 @@ class ConfigTest extends TestCase
         )->with(
             'types/someType',
             []
-        )->will(
-            $this->returnValue(['someTypeValue'])
+        )->willReturn(
+            ['someTypeValue']
         );
         $result = $this->_model->getType('someType');
         $this->assertCount(1, $result);

@@ -29,7 +29,7 @@ class MongoDbTest extends TestCase
             ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
             ->getMock();
         $this->_model = $this->createPartialMock(MongoDb::class, ['_getCollection']);
-        $this->_model->expects($this->any())->method('_getCollection')->will($this->returnValue($this->_collection));
+        $this->_model->expects($this->any())->method('_getCollection')->willReturn($this->_collection);
     }
 
     protected function tearDown(): void
@@ -46,7 +46,7 @@ class MongoDbTest extends TestCase
     public function testGetIds(array $ids, array $expected)
     {
         $result = new \ArrayIterator($ids);
-        $this->_collection->expects($this->once())->method('find')->will($this->returnValue($result));
+        $this->_collection->expects($this->once())->method('find')->willReturn($result);
         $actual = $this->_model->getIds();
         $this->assertEquals($expected, $actual);
     }
@@ -68,7 +68,7 @@ class MongoDbTest extends TestCase
      */
     public function testGetTags(array $tags)
     {
-        $this->_collection->expects($this->once())->method('distinct')->with('tags')->will($this->returnValue($tags));
+        $this->_collection->expects($this->once())->method('distinct')->with('tags')->willReturn($tags);
         $actual = $this->_model->getTags();
         $this->assertEquals($tags, $actual);
     }
@@ -97,8 +97,8 @@ class MongoDbTest extends TestCase
             'find'
         )->with(
             $expectedInput
-        )->will(
-            $this->returnValue($expectedOutput)
+        )->willReturn(
+            $expectedOutput
         );
         $actualIds = $this->_model->{$method}($tags);
         $this->assertEquals($expectedIds, $actualIds);
@@ -178,8 +178,8 @@ class MongoDbTest extends TestCase
             'findOne'
         )->with(
             $expectedInput
-        )->will(
-            $this->returnValue($mongoOutput)
+        )->willReturn(
+            $mongoOutput
         );
         $actual = $this->_model->getMetadatas($cacheId);
         $this->assertEquals($expected, $actual);
@@ -248,8 +248,8 @@ class MongoDbTest extends TestCase
             'findOne'
         )->with(
             $this->logicalAnd($this->arrayHasKey('_id'), $validityCondition)
-        )->will(
-            $this->returnValue(['data' => $binData])
+        )->willReturn(
+            ['data' => $binData]
         );
         $actual = $this->_model->load($cacheId, $doNotTestValidity);
         $this->assertSame($expected, $actual);
@@ -265,7 +265,7 @@ class MongoDbTest extends TestCase
 
     public function testLoadNoRecord()
     {
-        $this->_collection->expects($this->once())->method('findOne')->will($this->returnValue(null));
+        $this->_collection->expects($this->once())->method('findOne')->willReturn(null);
         $this->assertFalse($this->_model->load('test_id'));
     }
 
@@ -278,16 +278,16 @@ class MongoDbTest extends TestCase
         )->method(
             'findOne'
         )->with(
-            $this->logicalAnd($this->arrayHasKey('_id'), $this->contains($cacheId))
-        )->will(
-            $this->returnValue(['mtime' => $time])
+            $this->logicalAnd($this->arrayHasKey('_id'), $this->containsEqual($cacheId))
+        )->willReturn(
+            ['mtime' => $time]
         );
         $this->assertSame($time, $this->_model->test($cacheId));
     }
 
     public function testTestNotFound()
     {
-        $this->_collection->expects($this->once())->method('findOne')->will($this->returnValue(null));
+        $this->_collection->expects($this->once())->method('findOne')->willReturn(null);
         $this->assertFalse($this->_model->test('test_id'));
     }
 
@@ -308,8 +308,8 @@ class MongoDbTest extends TestCase
             'save'
         )->with(
             $inputAssertion
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_model->save('test data', 'test_id', ['tag1', 'tag2'], 100));
@@ -324,8 +324,8 @@ class MongoDbTest extends TestCase
             'remove'
         )->with(
             ['_id' => $cacheId]
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
         $this->assertTrue($this->_model->remove($cacheId));
     }
@@ -400,7 +400,7 @@ class MongoDbTest extends TestCase
 
     public function cleanAll()
     {
-        $this->_collection->expects($this->once())->method('drop')->will($this->returnValue(['ok' => true]));
+        $this->_collection->expects($this->once())->method('drop')->willReturn(['ok' => true]);
         $this->assertTrue($this->_model->clean(\Zend_Cache::CLEANING_MODE_ALL));
     }
 
