@@ -41,7 +41,8 @@ class CookieScopeTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $cookieMetadataFactory = $this
             ->getMockBuilder(CookieMetadataFactory::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $cookieMetadataFactory->expects($this->any())
             ->method('createSensitiveCookieMetadata')
             ->willReturnCallback([$this, 'createSensitiveMetadata']);

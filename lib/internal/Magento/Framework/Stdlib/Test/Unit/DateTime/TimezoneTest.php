@@ -67,9 +67,12 @@ class TimezoneTest extends TestCase
         $this->defaultTimezonePath = 'default/timezone/path';
 
         $this->objectManager = new ObjectManager($this);
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
-        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->getMock();
+        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
+            ->getMock();
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
     }
 
     /**
@@ -199,7 +202,10 @@ class TimezoneTest extends TestCase
         $this->localeResolver->method('getLocale')->willReturn('en_GB');
         $this->scopeConfigWillReturnConfiguredTimezone($timezone);
 
-        $this->assertEquals($expectedResult(), $this->getTimezone()->date($date, null, true), '', 1);
+        $this->assertEquals(
+            $expectedResult()->format('DATE_ISO8601'),
+            $this->getTimezone()->date($date)->format('DATE_ISO8601')
+        );
     }
 
     /**
